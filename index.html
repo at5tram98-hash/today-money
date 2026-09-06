@@ -544,24 +544,43 @@ function gmailStatusLabel(){if(gmailConnected())return data.gmailSettings.emailA
 function formatSyncTime(v){if(!v)return'未同期';try{return new Date(v).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return'未同期'}}
 function importTypeLabel(t){return ({credit_card:'クレジット',debit_card:'デビット',bank_debit:'口座引落',refund:'返金',card_statement:'カード請求',card_settlement:'カード引落',unknown:'不明'})[t]||'不明'}
 function normalizeMerchantKey(v){return String(v||'').toLowerCase().replace(/[\s　・･ー\-_/\\()（）\[\]【】]/g,'').trim()}
+const GMAIL_PARSER_VERSION=2;
+// 具体性の高い語を優先。特に交通は事業者名・IC・Tap to Payを広めに拾う。
 const MERCHANT_CATEGORY_RULES=[
-  ['コンビニ',['セブンイレブン','7-eleven','ファミリーマート','familymart','ローソン','lawson','ミニストップ']],
-  ['食費',['マクドナルド','mcdonald','スターバックス','starbucks','ドトール','tully','タリーズ','すき家','松屋','吉野家','モスバーガー','ケンタッキー','kfc','サイゼリヤ','ガスト','ココス','スシロー','くら寿司']],
-  ['交通',['jr西日本','jr東日本','jr東海','京都市交通局','京都市バス','icoca','suica','pasmo','阪急','京阪','近鉄','地下鉄','タクシー','uber taxi']],
-  ['衣服',['ジーユー','gu ','uniqlo','ユニクロ','しまむら','zara','h&m']],
-  ['日用品',['ダイソー','daiso','seria','セリア','キャンドゥ','コーナン','ニトリ','ドラッグ','スギ薬局','マツモトキヨシ','ウエルシア']],
+  ['交通',[
+    'tap to pay','taptopay','jr西日本','jr東日本','jr東海','jr北海道','jr九州','jr四国',
+    'jr west','jr east','jr central','west japan railway','east japan railway','central japan railway',
+    '西日本旅客鉄道','東日本旅客鉄道','東海旅客鉄道','京都市交通局','京都市営地下鉄','京都市バス','kyoto city bus','kyoto subway',
+    'icoca','smart icoca','suica','モバイルsuica','pasmo','pitapa','交通系ic','スマートex','smart ex','ex予約',
+    '阪急電鉄','hankyu','京阪電気鉄道','keihan','近畿日本鉄道','kintetsu','近鉄','阪神電車','hanshin','南海電鉄','nankai',
+    'osaka metro','大阪メトロ','大阪市高速電気軌道','神戸市交通局','神戸市営地下鉄','神姫バス','京都バス',
+    'タクシー','taxi','uber taxi','go taxi','diDi','高速バス','夜行バス'
+  ]],
+  ['コンビニ',['セブンイレブン','7-eleven','7eleven','ファミリーマート','familymart','ローソン','lawson','ミニストップ','daily yamazaki','デイリーヤマザキ']],
+  ['食費',['マクドナルド','mcdonald','スターバックス','starbucks','ドトール','tully','タリーズ','すき家','松屋','吉野家','モスバーガー','ケンタッキー','kfc','サイゼリヤ','ガスト','ココス','スシロー','くら寿司','餃子の王将','丸亀製麺','なか卯','ミスタードーナツ','ドミノピザ','ピザハット','uber eats','出前館']],
+  ['衣服',['ジーユー','gu ','uniqlo','ユニクロ','しまむら','zara','h&m','無印良品','muji']],
+  ['日用品',['ダイソー','daiso','seria','セリア','キャンドゥ','コーナン','ニトリ','ドンキホーテ','ドン・キホーテ','ドラッグ','スギ薬局','マツモトキヨシ','ウエルシア','ココカラファイン','サンドラッグ']],
   ['サブスク',['netflix','spotify','youtube premium','amazon prime','disney+','disney plus','icloud']],
-  ['娯楽',['tohoシネマ','イオンシネマ','ラウンドワン','round1','カラオケ','ジャンカラ','快活club']],
-  ['医療',['病院','クリニック','薬局','歯科','歯医者']],
-  ['教育',['大学','学校','紀伊國屋書店','丸善','ジュンク堂']],
-  ['住居',['家賃','賃料','電気','ガス','水道','関西電力','大阪ガス']]
+  ['娯楽',['tohoシネマ','イオンシネマ','ラウンドワン','round1','カラオケ','ジャンカラ','快活club','ユナイテッドシネマ']],
+  ['医療',['病院','クリニック','調剤薬局','歯科','歯医者']],
+  ['教育',['大学','学校','紀伊國屋書店','丸善','ジュンク堂','教科書']],
+  ['住居',['家賃','賃料','関西電力','大阪ガス','水道料金','電気料金','ガス料金']]
 ];
-function categoryForMerchant(merchant){
-  const key=normalizeMerchantKey(merchant);if(!key)return null;
-  const learned=Object.entries(data.merchantRules||{}).find(([k])=>key.includes(k)||k.includes(key));if(learned)return learned[1];
-  // Amazon / Apple / Googleは用途が広いため自動分類しない
-  if(/amazon|アマゾン|apple|アップル|google|グーグル/.test(key))return null;
-  for(const [cat,keys] of MERCHANT_CATEGORY_RULES){if(keys.some(k=>key.includes(normalizeMerchantKey(k))))return cat}
+function categoryForMerchant(merchant,context=''){
+  const key=normalizeMerchantKey(merchant);
+  const ctx=normalizeMerchantKey(context);
+  if(!key&&!ctx)return null;
+  // 学習済みルールは、短すぎる部分一致で誤爆しないよう厳格化。
+  const learned=Object.entries(data.merchantRules||{}).sort((a,b)=>String(b[0]).length-String(a[0]).length).find(([k])=>{
+    const nk=normalizeMerchantKey(k);if(!nk)return false;return key===nk||(nk.length>=4&&key.includes(nk));
+  });if(learned)return learned[1];
+  // Amazon / Apple / Googleは購入内容が広いため加盟店名だけでは自動分類しない。
+  if(key&&/amazon|アマゾン|apple|アップル|google|グーグル/.test(key))return null;
+  // 加盟店名を最優先。Tap to Payもここでは交通として扱う。
+  for(const [cat,keys] of MERCHANT_CATEGORY_RULES){if(key&&keys.some(k=>key.includes(normalizeMerchantKey(k))))return cat}
+  // 加盟店抽出に失敗しても、本文に具体的な交通事業者名があれば交通候補にする。
+  const transportContext=['jr西日本','jr東日本','jr東海','西日本旅客鉄道','東日本旅客鉄道','東海旅客鉄道','京都市交通局','京都市営地下鉄','京都市バス','icoca','suica','pasmo','pitapa','阪急電鉄','京阪電気鉄道','近畿日本鉄道','大阪メトロ','osaka metro','スマートex','ex予約'];
+  if(ctx&&transportContext.some(k=>ctx.includes(normalizeMerchantKey(k))))return'交通';
   return null;
 }
 function decodeBase64UrlUnicode(v){if(!v)return'';try{const b64=v.replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(v.length/4)*4,'=');const bin=atob(b64);const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder('utf-8').decode(bytes)}catch(e){return''}}
@@ -571,7 +590,7 @@ function gmailMessageText(payload){
 }
 function gmailHeaders(payload){const o={};for(const h of payload?.headers||[])o[String(h.name||'').toLowerCase()]=h.value||'';return o}
 function detectMailSource(from,subject,body){const t=`${from}\n${subject}\n${body}`.toLowerCase();if(/paypay.*カード|paypay card/.test(t))return'PayPayカード';if(/三井住友カード|vpass|smbc card/.test(t))return'三井住友カード';if(/paypay銀行|paypay bank/.test(t))return'PayPay銀行';if(/sbi新生|sbishinsei|新生銀行/.test(t))return'SBI新生銀行';if(/ゆうちょ|japan post bank/.test(t))return'ゆうちょ銀行';if(/三井住友銀行|smbc\.co\.jp/.test(t))return'三井住友銀行';if(/楽天カード/.test(t))return'楽天カード';if(/jcb/.test(t))return'JCB';const m=String(from||'').match(/^\s*"?([^"<]+?)"?\s*</);return (m?.[1]||String(from||'Gmail')).trim().slice(0,40)}
-function detectTransactionType(subject,body,source){const t=`${subject}\n${body}`.toLowerCase();if(/返金|取消|取り消し|キャンセル|refund/.test(t))return'refund';if(/請求額確定|ご請求額|請求金額のお知らせ|お支払い金額のお知らせ/.test(t)&&/カード|vpass|paypay/.test(t))return'card_statement';if(/デビット|debit/.test(t))return'debit_card';if(/カード利用|カードご利用|ご利用のお知らせ|利用速報|利用通知|クレジット/.test(t))return'credit_card';if(/口座振替|口座引落|口座引き落とし|自動引落|引落し|引き落とし|引落/.test(t))return'bank_debit';if(/カード/.test(source)&&/利用|決済/.test(t))return'credit_card';return'unknown'}
+function detectTransactionType(subject,body,source){const t=`${subject}\n${body}`.toLowerCase();if(/返金|取消|取り消し|キャンセル|refund/.test(t))return'refund';if(/請求額確定|ご請求額|請求金額のお知らせ|お支払い金額のお知らせ/.test(t)&&/カード|vpass|paypay/.test(t))return'card_statement';if(/デビット|debit/.test(t))return'debit_card';if(/cl利用|カード利用|カードご利用|ご利用のお知らせ|利用速報|利用通知|クレジット/.test(t))return'credit_card';if(/口座振替|口座引落|口座引き落とし|自動引落|引落し|引き落とし|引落/.test(t))return'bank_debit';if(/カード/.test(source)&&/利用|決済/.test(t))return'credit_card';return'unknown'}
 function extractAmount(text){
   const t=String(text||'').replace(/[，]/g,',').replace(/[￥]/g,'¥');
   const pats=[
@@ -588,12 +607,36 @@ function extractMerchant(subject,body){
   for(const p of pats){const m=t.match(p);if(m){const v=cleanMerchant(m[1]);if(v&&!/金額|日時|日付/.test(v))return v}}
   const sm=String(subject||'').match(/[「【\[]([^」】\]]{2,60})[」】\]]/);if(sm)return cleanMerchant(sm[1]);return'';
 }
+function validYmd(y,m,d){y=Number(y);m=Number(m);d=Number(d);if(y<2000||y>2100||m<1||m>12||d<1||d>31)return null;const x=new Date(y,m-1,d);if(x.getFullYear()!==y||x.getMonth()!==m-1||x.getDate()!==d)return null;return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+function referenceDateForMail(msg,headers={}){
+  const hd=Date.parse(headers.date||'');if(Number.isFinite(hd))return new Date(hd);
+  if(msg.internalDate&&Number.isFinite(Number(msg.internalDate)))return new Date(Number(msg.internalDate));
+  return new Date();
+}
+function inferYearForMonthDay(month,day,ref){
+  const base=ref instanceof Date&&!Number.isNaN(ref.getTime())?ref:new Date();let best=null,bestDiff=Infinity;
+  for(const y of [base.getFullYear()-1,base.getFullYear(),base.getFullYear()+1]){const ds=validYmd(y,month,day);if(!ds)continue;const dt=new Date(y,Number(month)-1,Number(day));const diff=Math.abs(dt-base);if(diff<bestDiff){best=ds;bestDiff=diff}}return best;
+}
+function extractTransactionDate(subject,body,msg,headers={}){
+  const text=`${subject||''}\n${body||''}`.replace(/\r/g,'');const ref=referenceDateForMail(msg,headers);
+  // 「利用日」など明確なラベルの付いた日付のみ拾い、請求日などの混入を避ける。
+  const labels='(?:ご利用日時|利用日時|ご利用日|利用日|決済日時|決済日|取引日時|取引日|お取引日|購入日時|購入日)';
+  let m=text.match(new RegExp(labels+'\\s*[：:]?\\s*(20\\d{2})[年\\/\\.\\-](\\d{1,2})[月\\/\\.\\-](\\d{1,2})(?:日)?','i'));
+  if(m){const ds=validYmd(m[1],m[2],m[3]);if(ds)return ds}
+  m=text.match(new RegExp(labels+'\\s*[：:]?\\s*(\\d{1,2})[月\\/\\.\\-](\\d{1,2})(?:日)?','i'));
+  if(m){const ds=inferYearForMonthDay(m[1],m[2],ref);if(ds)return ds}
+  // 一部の利用通知は「2026/09/06 18:20 ご利用」のように日付が先に来る。
+  m=text.match(/(20\d{2})[\/\.\-](\d{1,2})[\/\.\-](\d{1,2})[^\n]{0,28}(?:ご利用|利用|決済|取引)/i);
+  if(m){const ds=validYmd(m[1],m[2],m[3]);if(ds)return ds}
+  // 本文に利用日がなければ、メール自身のDateヘッダーを使う。
+  return todayStr(ref);
+}
 function parseFinancialMessage(msg){
   const h=gmailHeaders(msg.payload),subject=h.subject||'',from=h.from||'',body=gmailMessageText(msg.payload),sourceName=detectMailSource(from,subject,body),type=detectTransactionType(subject,body,sourceName),amount=extractAmount(`${subject}\n${body}`),merchant=extractMerchant(subject,body),combined=`${subject}\n${body}`;
-  const financeWords=/利用|決済|デビット|クレジット|カード|口座振替|引落|引き落とし|支払い|返金|取消|請求/;if(type==='unknown'&&!financeWords.test(combined))return null;if(!amount&&type==='unknown')return null;
+  const financeWords=/利用|決済|デビット|クレジット|カード|口座振替|引落|引き落とし|支払い|返金|取消|請求|cl利用/i;if(type==='unknown'&&!financeWords.test(combined))return null;if(!amount&&type==='unknown')return null;
   let finalType=type;if(type==='bank_debit'&&merchant&&/カード|vpass|paypayカード|visa.*カード/i.test(merchant))finalType='card_settlement';
-  const category=categoryForMerchant(merchant),date=msg.internalDate?todayStr(new Date(Number(msg.internalDate))):todayStr(),isIgnored=finalType==='card_statement'||finalType==='card_settlement';
-  return {id:uid('mail'),emailId:msg.id,threadId:msg.threadId||'',date,receivedAt:msg.internalDate?new Date(Number(msg.internalDate)).toISOString():new Date().toISOString(),from,subject,sourceName,type:finalType,amount:amount||0,merchant,category:category||'',status:isIgnored?'ignored':(amount&&category&&merchant?'imported':'pending'),direction:finalType==='refund'?'refund':'expense',createdAt:new Date().toISOString(),dailyEntryId:null};
+  const category=categoryForMerchant(merchant,combined),date=extractTransactionDate(subject,body,msg,h),refDate=referenceDateForMail(msg,h),isIgnored=finalType==='card_statement'||finalType==='card_settlement';
+  return {id:uid('mail'),emailId:msg.id,threadId:msg.threadId||'',date,receivedAt:refDate.toISOString(),from,subject,sourceName,type:finalType,amount:amount||0,merchant,category:category||'',status:isIgnored?'ignored':(amount&&category&&merchant?'imported':'pending'),direction:finalType==='refund'?'refund':'expense',createdAt:new Date().toISOString(),dailyEntryId:null,parserVersion:GMAIL_PARSER_VERSION};
 }
 function createDailyEntryFromMail(mi){
   if(mi.dailyEntryId)return;const signed=mi.direction==='refund'?-Math.abs(Number(mi.amount)||0):Math.abs(Number(mi.amount)||0);if(!signed||!mi.category)return;
@@ -619,8 +662,19 @@ function disconnectGmail(){const done=()=>{gmailAccessToken='';gmailTokenExpires
 async function syncGmail({silent=false}={}){
   ensureGmailData();if(gmailSyncing)return;if(!gmailTokenValid()){if(!silent)await connectGmail();return}gmailSyncing=true;renderAll();try{
     const q=String(data.gmailSettings.query||DEFAULT_DATA.gmailSettings.query).trim();let pageToken='',ids=[],pages=0;do{const u=new URL('https://gmail.googleapis.com/gmail/v1/users/me/messages');u.searchParams.set('maxResults','100');if(q)u.searchParams.set('q',q);if(pageToken)u.searchParams.set('pageToken',pageToken);const list=await gmailFetch(u.toString());ids.push(...(list.messages||[]).map(x=>x.id));pageToken=list.nextPageToken||'';pages++}while(pageToken&&pages<3);
-    const known=new Set(data.mailImports.map(x=>x.emailId)),fresh=ids.filter(id=>!known.has(id)).slice(0,200);let added=0;for(let i=0;i<fresh.length;i+=8){const batch=fresh.slice(i,i+8);const messages=await Promise.all(batch.map(id=>gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(id)}?format=full`)));for(const msg of messages){const p=parseFinancialMessage(msg);if(storeParsedMail(p))added++}}
-    rebuildGmailCardAggregates();data.gmailSettings.lastSyncAt=new Date().toISOString();save();if(!silent)sessionNotice=added?`Gmailから新しい金融メールを${added}件取り込みました。`:'Gmailは最新です。新しい金融メールはありません。';renderAll();
+    const byEmail=new Map(data.mailImports.map(x=>[x.emailId,x]));
+    // 新規メールに加え、旧パーサーで取り込んだメールも一度だけ再解析して利用日・カテゴリーを改善する。
+    const targets=ids.filter(id=>{const old=byEmail.get(id);return !old||Number(old.parserVersion||0)<GMAIL_PARSER_VERSION}).slice(0,200);let added=0,reparsed=0;
+    for(let i=0;i<targets.length;i+=8){const batch=targets.slice(i,i+8);const messages=await Promise.all(batch.map(id=>gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(id)}?format=full`)));for(const msg of messages){
+      const p=parseFinancialMessage(msg);if(!p)continue;const old=byEmail.get(msg.id);
+      if(!old){if(storeParsedMail(p)){added++;byEmail.set(msg.id,p)}continue}
+      // 手動で確定した内容は尊重し、利用日だけ最新の解析結果へ合わせる。旧版で手動確定されたデータは学習ルールから推定して保護する。
+      const oldMerchantKey=normalizeMerchantKey(old.merchant),wasProbablyManual=!!old.userResolved||!!(oldMerchantKey&&data.merchantRules?.[oldMerchantKey]&&data.merchantRules[oldMerchantKey]===old.category);
+      if(wasProbablyManual){old.userResolved=true;old.date=p.date;old.receivedAt=p.receivedAt;old.parserVersion=GMAIL_PARSER_VERSION;const e=old.dailyEntryId&&data.dailyEntries.find(x=>x.id===old.dailyEntryId);if(e)e.date=p.date;reparsed++;continue}
+      if(old.dailyEntryId)data.dailyEntries=data.dailyEntries.filter(e=>e.id!==old.dailyEntryId);
+      const keepId=old.id,keepCreated=old.createdAt||p.createdAt;Object.assign(old,p,{id:keepId,createdAt:keepCreated,dailyEntryId:null});if(old.status==='imported')createDailyEntryFromMail(old);reparsed++;
+    }}
+    rebuildGmailCardAggregates();data.gmailSettings.lastSyncAt=new Date().toISOString();save();if(!silent)sessionNotice=added||reparsed?`Gmailを更新しました。新規${added}件${reparsed?`・再判定${reparsed}件`:''}。`:'Gmailは最新です。新しい金融メールはありません。';renderAll();
   }catch(e){console.error(e);if(!silent)alert(`Gmail同期に失敗しました。\n${e.message}`)}finally{gmailSyncing=false;renderAll()}
 }
 function maybeAutoSyncGmail(force=false){ensureGmailData();if(!data.gmailSettings.autoSync||!gmailTokenValid()||gmailSyncing)return;const mins=Math.max(1,Number(data.gmailSettings.syncMinutes)||5),last=Date.parse(data.gmailSettings.lastSyncAt||0)||0;if(force||Date.now()-last>=mins*60000){if(Date.now()-gmailLastAutoAttempt<30000)return;gmailLastAutoAttempt=Date.now();syncGmail({silent:true})}}
@@ -632,7 +686,7 @@ function gmailTodayCardHtml(){
 function bindGmailTodayUI(){const b=document.getElementById('gmailTodaySync');if(b)b.onclick=()=>{if(gmailConnected())syncGmail();else switchTab('settings')};document.querySelectorAll('[data-fix-mail]').forEach(x=>x.onclick=()=>openMailResolve(x.dataset.fixMail))}
 function openMailResolve(id){
   const mi=data.mailImports.find(x=>x.id===id);if(!mi)return;let chosen=mi.category||'その他';showSheet(`<div class="sheet-head"><button class="sheet-btn" id="mailResolveCancel">キャンセル</button><div class="sheet-title">利用内容を確認</div><button class="sheet-btn bold" id="mailResolveSave">保存</button></div><div class="sheet-body"><div class="notice warn">メールだけでは確定できませんでした。分かる項目だけ入力してください。</div><div class="form-group"><label class="form-label">支払い種別</label><select class="select" id="mailResolveType"><option value="credit_card" ${mi.type==='credit_card'?'selected':''}>クレジットカード</option><option value="debit_card" ${mi.type==='debit_card'?'selected':''}>デビットカード</option><option value="bank_debit" ${mi.type==='bank_debit'?'selected':''}>銀行口座引落</option><option value="refund" ${mi.type==='refund'?'selected':''}>返金</option></select></div><div class="form-group"><label class="form-label">金額</label>${moneyFieldHtml('mailResolveAmount',mi.amount||0)}</div><div class="form-group"><label class="form-label">何に使ったか / 利用先</label><input class="input" id="mailResolveMerchant" value="${esc(mi.merchant||'')}" placeholder="例：Amazonで日用品、家賃"></div><div class="form-group"><label class="form-label">カテゴリー</label><div class="category-picker">${DAILY_CATEGORIES.map(c=>`<button class="category-option ${c.name===chosen?'active':''}" type="button" data-mail-category="${c.name}">${c.icon}<br>${c.name}</button>`).join('')}</div></div><button class="btn btn-secondary" id="mailResolveIgnore">このメールは支出として扱わない</button><div class="settings-note">元メール：${esc(mi.subject||'(件名なし)')}<br>${esc(mi.sourceName||'Gmail')}・${esc(mi.date||'')}</div></div>`);
-  bindMoneyField('mailResolveAmount','利用金額');document.getElementById('mailResolveCancel').onclick=hideSheet;document.querySelectorAll('[data-mail-category]').forEach(b=>b.onclick=()=>{chosen=b.dataset.mailCategory;document.querySelectorAll('[data-mail-category]').forEach(x=>x.classList.toggle('active',x===b))});document.getElementById('mailResolveIgnore').onclick=()=>{mi.status='ignored';if(mi.dailyEntryId)data.dailyEntries=data.dailyEntries.filter(e=>e.id!==mi.dailyEntryId);mi.dailyEntryId=null;save();hideSheet();rebuildGmailCardAggregates();save();renderAll()};document.getElementById('mailResolveSave').onclick=()=>{const amount=Math.max(0,Number(document.getElementById('mailResolveAmount').value)||0),merchant=document.getElementById('mailResolveMerchant').value.trim(),type=document.getElementById('mailResolveType').value;if(!amount){alert('金額を入力してください。');return}if(!merchant){alert('何に使ったか、または利用先を入力してください。');return}mi.amount=amount;mi.merchant=merchant;mi.type=type;mi.direction=type==='refund'?'refund':'expense';mi.category=chosen;mi.status='imported';if(mi.dailyEntryId){const e=data.dailyEntries.find(x=>x.id===mi.dailyEntryId);if(e){e.amount=mi.direction==='refund'?-amount:amount;e.category=chosen;e.memo=merchant;e.sourceType=type}}else createDailyEntryFromMail(mi);data.merchantRules[normalizeMerchantKey(merchant)]=chosen;rebuildGmailCardAggregates();save();hideSheet();renderAll()}
+  bindMoneyField('mailResolveAmount','利用金額');document.getElementById('mailResolveCancel').onclick=hideSheet;document.querySelectorAll('[data-mail-category]').forEach(b=>b.onclick=()=>{chosen=b.dataset.mailCategory;document.querySelectorAll('[data-mail-category]').forEach(x=>x.classList.toggle('active',x===b))});document.getElementById('mailResolveIgnore').onclick=()=>{mi.status='ignored';if(mi.dailyEntryId)data.dailyEntries=data.dailyEntries.filter(e=>e.id!==mi.dailyEntryId);mi.dailyEntryId=null;save();hideSheet();rebuildGmailCardAggregates();save();renderAll()};document.getElementById('mailResolveSave').onclick=()=>{const amount=Math.max(0,Number(document.getElementById('mailResolveAmount').value)||0),merchant=document.getElementById('mailResolveMerchant').value.trim(),type=document.getElementById('mailResolveType').value;if(!amount){alert('金額を入力してください。');return}if(!merchant){alert('何に使ったか、または利用先を入力してください。');return}mi.amount=amount;mi.merchant=merchant;mi.type=type;mi.direction=type==='refund'?'refund':'expense';mi.category=chosen;mi.status='imported';mi.userResolved=true;mi.parserVersion=GMAIL_PARSER_VERSION;if(mi.dailyEntryId){const e=data.dailyEntries.find(x=>x.id===mi.dailyEntryId);if(e){e.amount=mi.direction==='refund'?-amount:amount;e.category=chosen;e.memo=merchant;e.sourceType=type;e.date=mi.date||e.date}}else createDailyEntryFromMail(mi);data.merchantRules[normalizeMerchantKey(merchant)]=chosen;rebuildGmailCardAggregates();save();hideSheet();renderAll()}
 }
 function mailMonthSummaryHtml(){const list=monthMailImports(currentMonth),total=importedSpentForMonth(currentMonth),cats=DAILY_CATEGORIES.map(c=>({name:c.name,icon:c.icon,total:sum(list.filter(x=>x.category===c.name),x=>x.direction==='refund'?-Math.abs(x.amount):Math.abs(x.amount))})).filter(x=>x.total!==0);const recent=[...list].sort((a,b)=>String(b.receivedAt||'').localeCompare(String(a.receivedAt||''))).slice(0,12);return `<div class="section-head"><div class="section-title">Gmail自動取得</div><button class="section-action" id="outgoingGmailSync">${gmailSyncing?'同期中…':'同期'}</button></div><div class="mail-summary"><div class="mail-summary-top"><div class="mail-summary-amount">${yen(total)}</div><div class="mail-summary-sub">${monthLabel(currentMonth)}・${list.length}件（カード請求の口座引落は二重計上しません）</div></div>${cats.length?cats.map(x=>`<div class="mail-cat-row"><div>${x.icon}</div><div class="mail-cat-name">${esc(x.name)}</div><div class="mail-cat-val">${yen(x.total)}</div></div>`).join(''):'<div class="mail-cat-row"><div class="mail-cat-name">まだ自動取得された支出はありません。</div></div>'}</div>${recent.length?`<div class="list">${recent.map(x=>`<div class="today-entry-row"><div class="today-entry-icon">${categoryIcon(x.category||'その他')}</div><div class="today-entry-main"><div class="today-entry-name">${esc(x.merchant||x.sourceName)} <span class="mail-tx-source">${esc(importTypeLabel(x.type))}</span></div><div class="today-entry-sub">${esc(x.sourceName||'Gmail')}・${esc(x.date||'')}${x.status==='pending'?'・要確認':''}</div></div><div class="today-entry-amt">${yen(x.direction==='refund'?-x.amount:x.amount)}</div>${x.status==='pending'?`<button class="today-entry-del" data-fix-mail="${x.id}">確認</button>`:''}</div>`).join('')}</div>`:''}`}
 function bindOutgoingGmailUI(){const b=document.getElementById('outgoingGmailSync');if(b)b.onclick=()=>gmailConnected()?syncGmail():switchTab('settings');document.querySelectorAll('[data-fix-mail]').forEach(x=>x.onclick=()=>openMailResolve(x.dataset.fixMail))}
@@ -643,7 +697,7 @@ function openGmailSettingsSheet(){
 // Preserve the original UI and add Gmail sections without replacing the existing app.
 const _baseRenderToday=renderToday;renderToday=function(){_baseRenderToday();const hero=document.querySelector('#todayContent .today-hero');if(hero)hero.insertAdjacentHTML('afterend',gmailTodayCardHtml());bindGmailTodayUI()};
 const _baseRenderOutgoing=renderOutgoing;renderOutgoing=function(){_baseRenderOutgoing();const c=document.getElementById('outgoingContent');if(c)c.insertAdjacentHTML('beforeend',mailMonthSummaryHtml());bindOutgoingGmailUI()};
-const _baseRenderSettings=renderSettings;renderSettings=function(){_baseRenderSettings();const c=document.getElementById('settingsContent');if(!c)return;const anchor=c.querySelector('.section-head');c.insertAdjacentHTML('afterbegin',`<div class="section-head"><div class="section-title">メール自動取込</div></div><div class="setting-list"><div class="setting-row" id="gmailSettingsRow"><span>Gmail自動取得</span><span class="value"><span class="gmail-state-dot ${gmailConnected()?'on':data.gmailSettings.clientId?'warn':''}"></span>${gmailConnected()?'接続中':data.gmailSettings.clientId?'未接続':'未設定'} ›</span></div></div><div class="info-card"><strong>GitHub Pages版</strong><br>Gmail APIでクレジット・デビット・口座引落の利用通知を読み取り、金額・利用先・カテゴリーを自動登録します。判定できないメールだけ確認を求めます。カード利用額とカード請求の口座引落は二重計上しません。<br><br>アプリを閉じた状態の常時監視はGitHub Pages単体ではできません。</div>`);document.getElementById('gmailSettingsRow').onclick=openGmailSettingsSheet};
+const _baseRenderSettings=renderSettings;renderSettings=function(){_baseRenderSettings();const c=document.getElementById('settingsContent');if(!c)return;const anchor=c.querySelector('.section-head');c.insertAdjacentHTML('afterbegin',`<div class="section-head"><div class="section-title">メール自動取込</div></div><div class="setting-list"><div class="setting-row" id="gmailSettingsRow"><span>Gmail自動取得</span><span class="value"><span class="gmail-state-dot ${gmailConnected()?'on':data.gmailSettings.clientId?'warn':''}"></span>${gmailConnected()?'接続中':data.gmailSettings.clientId?'未接続':'未設定'} ›</span></div></div><div class="info-card"><strong>GitHub Pages版</strong><br>Gmail APIでクレジット・デビット・口座引落の利用通知を読み取り、金額・利用先・カテゴリーを自動登録します。利用日はメール本文の「利用日・利用日時・取引日」を優先し、見つからない場合だけメール受信日を使います。判定できないメールだけ確認を求めます。カード利用額とカード請求の口座引落は二重計上しません。<br><br>アプリを閉じた状態の常時監視はGitHub Pages単体ではできません。</div>`);document.getElementById('gmailSettingsRow').onclick=openGmailSettingsSheet};
 
 // Reset / migration safety for the new fields.
 const _baseResetAll=resetAll;resetAll=function(){_baseResetAll();ensureGmailData()};
