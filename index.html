@@ -397,6 +397,356 @@ html.motion-off .money-ticker-copy.money-ticker-duplicate{display:none}
 }
 /* === end ACF signed-balance / refined warning motion patch === */
 
+
+/* === My Money 3.0 Phase 1: Salary Home × Stocks === */
+#screen-pay .mm3-salary-topbar{padding-bottom:4px}
+#screen-pay .mm3-salary-topbar .icon-btn{border-radius:50%;background:rgba(0,122,255,.09)}
+html.dark #screen-pay .mm3-salary-topbar .icon-btn{background:rgba(10,132,255,.14)}
+#screen-pay .mm3-salary-shell{padding-bottom:8px}
+#screen-pay .mm3-salary-monthline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:1px 1px 0;min-height:34px}
+#screen-pay .mm3-salary-monthbtn{border:0;background:transparent;color:var(--label);font-size:13px;font-weight:650;display:inline-flex;align-items:center;gap:4px;padding:7px 0;text-align:left}
+#screen-pay .mm3-salary-monthbtn svg{width:12px;height:12px;fill:none;stroke:var(--label2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#screen-pay .mm3-salary-compare-label{font-size:10px;color:var(--label2)}
+#screen-pay .mm3-salary-primary{padding:8px 0 14px;border-bottom:.5px solid var(--sep)}
+#screen-pay .mm3-salary-primary-label{font-size:11px;color:var(--label2);font-weight:600}
+#screen-pay .mm3-salary-primary-value{font-size:40px;line-height:1.02;font-weight:770;letter-spacing:-1.35px;margin-top:4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#screen-pay .mm3-salary-primary-change{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:6px;font-size:12px;font-weight:650;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-primary-change small{font-size:10px;color:var(--label2);font-weight:520}
+#screen-pay .mm3-salary-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:17px 0 4px}
+#screen-pay .mm3-salary-section-title{font-size:15px;font-weight:700;letter-spacing:-.2px}
+#screen-pay .mm3-salary-pull{border:0;background:var(--fill);min-height:30px;border-radius:9px;padding:5px 8px;color:var(--label);font-size:11px;font-weight:650;display:inline-flex;align-items:center;gap:4px;transition:transform .12s,opacity .12s,background .12s}
+#screen-pay .mm3-salary-pull:active{transform:scale(.96);opacity:.72}
+#screen-pay .mm3-salary-pull svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--label2)}
+#screen-pay .mm3-salary-section-caption{font-size:10px;color:var(--label2);line-height:1.4;margin:0 0 7px}
+#screen-pay .mm3-salary-viz{min-height:158px;padding:4px 0 0}
+#screen-pay .mm3-salary-viz-switch{animation:mm3SalaryVizIn .24s cubic-bezier(.2,.8,.2,1)}
+#screen-pay .mm3-salary-composition{display:grid;grid-template-columns:minmax(126px,42%) 1fr;gap:12px;align-items:center;min-height:150px}
+#screen-pay .mm3-salary-donut{position:relative;width:min(142px,100%);aspect-ratio:1;margin:0 auto;display:grid;place-items:center}
+#screen-pay .mm3-salary-donut svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+#screen-pay .mm3-salary-donut-track{fill:none;stroke:var(--fill);stroke-width:18}
+#screen-pay .mm3-salary-donut-arc{fill:none;stroke-width:18;stroke-linecap:butt;animation:mm3SalaryDonutIn .55s cubic-bezier(.2,.8,.2,1) both}
+#screen-pay .mm3-salary-donut-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none}
+#screen-pay .mm3-salary-donut-center span{font-size:9px;color:var(--label2)}
+#screen-pay .mm3-salary-donut-center strong{font-size:17px;line-height:1.1;margin-top:2px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-legend{min-width:0;display:grid;gap:9px}
+#screen-pay .mm3-salary-legend-row{display:grid;grid-template-columns:9px minmax(0,1fr) auto;gap:7px;align-items:center;min-width:0}
+#screen-pay .mm3-salary-legend-dot{width:8px;height:8px;border-radius:50%}
+#screen-pay .mm3-salary-legend-main{min-width:0}
+#screen-pay .mm3-salary-legend-main b{display:block;font-size:11.5px;font-weight:620;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-legend-main small{display:block;font-size:9px;color:var(--label2);margin-top:1px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-legend-pct{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-empty-viz{min-height:145px;display:grid;place-items:center;text-align:center;color:var(--label2);font-size:12px;line-height:1.5;padding:20px}
+#screen-pay .mm3-salary-trend{padding-top:4px}
+#screen-pay .mm3-salary-trend svg{width:100%;height:135px;display:block;overflow:visible}
+#screen-pay .mm3-salary-grid{stroke:var(--sep);stroke-width:.7}
+#screen-pay .mm3-salary-trend-line{fill:none;stroke:var(--green);stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:800;stroke-dashoffset:800;animation:mm3SalaryLineIn .58s cubic-bezier(.2,.8,.2,1) forwards}
+#screen-pay .mm3-salary-trend-fill{fill:rgba(52,199,89,.065)}
+html.dark #screen-pay .mm3-salary-trend-fill{fill:rgba(48,209,88,.09)}
+#screen-pay .mm3-salary-axis{font-size:8px;fill:var(--label2);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif}
+#screen-pay .mm3-salary-range{display:flex;gap:2px;background:var(--fill);border-radius:9px;padding:2px;margin-top:2px}
+#screen-pay .mm3-salary-range button{flex:1;border:0;background:transparent;border-radius:7px;padding:5px 1px;font-size:9px;color:var(--label2);min-width:0}
+#screen-pay .mm3-salary-range button.on{background:var(--card);color:var(--label);font-weight:650;box-shadow:0 1px 4px rgba(0,0,0,.10)}
+#screen-pay .mm3-salary-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-top:8px}
+#screen-pay .mm3-salary-metric{min-width:0;padding:10px 8px 10px 0}
+#screen-pay .mm3-salary-metric+.mm3-salary-metric{padding-left:8px;border-left:.5px solid var(--sep)}
+#screen-pay .mm3-salary-metric span{display:block;font-size:9.5px;color:var(--label2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-metric strong{display:block;font-size:13px;margin-top:3px;font-weight:680;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-link{border:0;background:transparent;color:var(--blue);font-size:11px;font-weight:650;padding:5px 0}
+#screen-pay .mm3-salary-event{width:100%;border:0;background:transparent;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;padding:8px 0 10px;border-bottom:.5px solid var(--sep);transition:transform .11s,opacity .11s}
+#screen-pay .mm3-salary-event:active{transform:scale(.985);opacity:.62}
+#screen-pay .mm3-salary-event-icon{width:32px;height:32px;border-radius:10px;background:rgba(52,199,89,.12);color:var(--green);display:grid;place-items:center;font-size:16px;font-weight:800}
+#screen-pay .mm3-salary-event-main{min-width:0}
+#screen-pay .mm3-salary-event-main strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-event-main small{display:block;font-size:9.5px;color:var(--label2);margin-top:2px}
+#screen-pay .mm3-salary-event-value{text-align:right;white-space:nowrap}
+#screen-pay .mm3-salary-event-value strong{display:block;font-size:13px;color:var(--green);font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-event-value small{display:block;font-size:9px;color:var(--label2);margin-top:2px}
+#screen-pay .mm3-salary-watchlist{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-pay .mm3-salary-watchrow{width:100%;min-height:62px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:grid;grid-template-columns:minmax(0,1.08fr) 72px minmax(76px,.72fr);gap:8px;align-items:center;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s,background .11s}
+#screen-pay .mm3-salary-watchrow:last-child{border-bottom:0}
+#screen-pay .mm3-salary-watchrow:active{transform:scale(.985);opacity:.64;background:rgba(118,118,128,.04)}
+#screen-pay .mm3-salary-watch-main{min-width:0}
+#screen-pay .mm3-salary-watch-main strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-spark{width:72px;height:28px;display:grid;place-items:center;color:var(--green)}
+#screen-pay .mm3-salary-spark svg{width:100%;height:100%;overflow:visible}
+#screen-pay .mm3-salary-spark-line{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#screen-pay .mm3-salary-spark-empty{font-size:8px;color:var(--label3);text-align:center}
+#screen-pay .mm3-salary-watch-value{text-align:right;min-width:0}
+#screen-pay .mm3-salary-watch-value strong{display:block;font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-watch-value small{display:block;font-size:9px;color:var(--green);font-weight:650;margin-top:2px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-detail-group{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-pay .mm3-salary-detail-row{width:100%;min-height:48px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s}
+#screen-pay .mm3-salary-detail-row:last-child{border-bottom:0}
+#screen-pay .mm3-salary-detail-row:active{transform:scale(.985);opacity:.62}
+#screen-pay .mm3-salary-detail-row div{min-width:0;flex:1}
+#screen-pay .mm3-salary-detail-row strong{display:block;font-size:12.5px}
+#screen-pay .mm3-salary-detail-row small{display:block;font-size:9.5px;color:var(--label2);margin-top:2px}
+#screen-pay .mm3-salary-detail-row>span{font-size:18px;color:var(--label3)}
+#screen-pay .mm3-salary-record-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-pay .mm3-salary-record-row{width:100%;min-height:58px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0}
+#screen-pay .mm3-salary-record-row:last-child{border-bottom:0}
+#screen-pay .mm3-salary-record-row:active{opacity:.62}
+@keyframes mm3SalaryVizIn{from{opacity:.18;transform:translateY(3px) scale(.988)}to{opacity:1;transform:none}}
+@keyframes mm3SalaryDonutIn{from{opacity:.25;stroke-dashoffset:100}to{opacity:1}}
+@keyframes mm3SalaryLineIn{to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){#screen-pay .mm3-salary-viz-switch,#screen-pay .mm3-salary-donut-arc,#screen-pay .mm3-salary-trend-line{animation:none!important}}
+.motion-off #screen-pay .mm3-salary-viz-switch,.motion-off #screen-pay .mm3-salary-donut-arc,.motion-off #screen-pay .mm3-salary-trend-line{animation:none!important}
+@media(max-width:390px){
+ #screen-pay .mm3-salary-primary-value{font-size:37px}
+ #screen-pay .mm3-salary-composition{grid-template-columns:122px 1fr;gap:9px}
+ #screen-pay .mm3-salary-donut{width:122px}
+ #screen-pay .mm3-salary-watchrow{grid-template-columns:minmax(0,1fr) 62px 74px;gap:6px}
+ #screen-pay .mm3-salary-spark{width:62px}
+ #screen-pay .mm3-salary-watch-value strong{font-size:11.5px}
+}
+/* === end My Money 3.0 Phase 1 === */
+
+
+
+/* === My Money 3.0 Phase 2: Payments + ATF === */
+#screen-payments .mm3-payment-shell{padding-bottom:8px}
+#screen-payments .mm3-payment-topbar .date-line{display:none}
+#screen-payments .mm3-payment-monthline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 0;min-height:34px}
+#screen-payments .mm3-payment-monthbtn{border:0;background:transparent;color:var(--label);font-size:13px;font-weight:650;display:inline-flex;align-items:center;gap:4px;padding:5px 0;letter-spacing:-.1px}
+#screen-payments .mm3-payment-monthbtn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#screen-payments .mm3-payment-monthmeta{font-size:10px;color:var(--label2);white-space:nowrap}
+#screen-payments .mm3-payment-primary{padding:9px 0 15px;border-bottom:.5px solid var(--sep)}
+#screen-payments .mm3-payment-primary-label{font-size:11px;color:var(--label2);font-weight:560}
+#screen-payments .mm3-payment-primary-value{font-size:40px;line-height:1.04;font-weight:770;letter-spacing:-1.25px;margin-top:4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#screen-payments .mm3-payment-primary-change{display:flex;align-items:baseline;gap:7px;margin-top:5px;font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
+#screen-payments .mm3-payment-primary-change small{font-size:9.5px;color:var(--label2);font-weight:540}
+#screen-payments .mm3-payment-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:17px 0 4px}
+#screen-payments .mm3-payment-section-title{font-size:13.5px;font-weight:700;letter-spacing:-.15px;min-width:0}
+#screen-payments .mm3-payment-atf-title{display:flex;align-items:center;gap:6px}
+#screen-payments .mm3-payment-atf-chip{display:inline-flex;align-items:center;justify-content:center;min-height:19px;padding:2px 6px;border-radius:999px;background:rgba(0,122,255,.10);color:var(--blue);font-size:8px;font-weight:760;letter-spacing:.02em}
+#screen-payments .mm3-payment-link{border:0;background:transparent;color:var(--blue);font-size:11px;font-weight:650;padding:6px 0;white-space:nowrap}
+#screen-payments .mm3-payment-caption{font-size:9.5px;line-height:1.42;color:var(--label2);margin:0 0 4px}
+#screen-payments .mm3-atf-chart{position:relative;height:168px;margin-top:4px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#screen-payments .mm3-atf-chart svg{display:block;width:100%;height:150px;overflow:visible}
+#screen-payments .mm3-atf-grid{stroke:rgba(60,60,67,.105);stroke-width:1;vector-effect:non-scaling-stroke}
+html.dark #screen-payments .mm3-atf-grid{stroke:rgba(235,235,245,.12)}
+#screen-payments .mm3-atf-zero{stroke:rgba(255,59,48,.43);stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+#screen-payments .mm3-atf-segment{fill:none;stroke:var(--blue);stroke-width:2.15;stroke-linecap:round;vector-effect:non-scaling-stroke}
+#screen-payments .mm3-atf-segment.negative{stroke:var(--red)}
+#screen-payments .mm3-atf-area{fill:rgba(0,122,255,.045)}
+#screen-payments .mm3-atf-event-dot{fill:var(--card);stroke:var(--orange);stroke-width:2;vector-effect:non-scaling-stroke}
+#screen-payments .mm3-atf-event-dot.income{stroke:var(--green)}
+#screen-payments .mm3-atf-event-dot.card{stroke:var(--purple)}
+#screen-payments .mm3-atf-event-dot.negative{stroke:var(--red)}
+#screen-payments .mm3-atf-guide{stroke:var(--label3);stroke-width:1;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .1s}
+#screen-payments .mm3-atf-selected{fill:var(--card);stroke:var(--blue);stroke-width:2.3;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .1s}
+#screen-payments .mm3-atf-chart.scrubbing .mm3-atf-guide,#screen-payments .mm3-atf-chart.scrubbing .mm3-atf-selected{opacity:1}
+#screen-payments .mm3-atf-axis{fill:var(--label2);font-size:8px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif}
+#screen-payments .mm3-atf-tooltip{position:absolute;top:4px;left:50%;transform:translateX(-50%) translateY(-2px);max-width:180px;opacity:0;pointer-events:none;background:rgba(28,28,30,.90);color:#fff;border-radius:10px;padding:6px 8px;font-size:9px;line-height:1.3;box-shadow:0 4px 14px rgba(0,0,0,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .1s,transform .12s;z-index:4}
+#screen-payments .mm3-atf-tooltip strong{font-size:11px;font-variant-numeric:tabular-nums}
+#screen-payments .mm3-atf-tooltip small{display:block;color:rgba(255,255,255,.70);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-atf-chart.scrubbing .mm3-atf-tooltip{opacity:1;transform:translateX(-50%) translateY(0)}
+#screen-payments .mm3-atf-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-top:2px}
+#screen-payments .mm3-atf-metric{min-width:0;padding:10px 8px 10px 0}
+#screen-payments .mm3-atf-metric+.mm3-atf-metric{padding-left:8px;border-left:.5px solid var(--sep)}
+#screen-payments .mm3-atf-metric span{display:block;font-size:9px;color:var(--label2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-atf-metric strong{display:block;font-size:12.5px;margin-top:3px;font-weight:680;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-atf-empty{min-height:116px;border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);display:grid;place-items:center;text-align:center;padding:18px 12px;color:var(--label2);font-size:11px;line-height:1.45}
+#screen-payments .mm3-payment-event{width:100%;border:0;background:transparent;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;padding:9px 0 11px;border-bottom:.5px solid var(--sep);transition:transform .11s,opacity .11s,background .11s}
+#screen-payments .mm3-payment-event:active{transform:scale(.985);opacity:.62}
+#screen-payments .mm3-payment-event-icon{width:32px;height:32px;border-radius:10px;background:rgba(175,82,222,.11);color:var(--purple);display:grid;place-items:center}
+#screen-payments .mm3-payment-event-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#screen-payments .mm3-payment-event-main{min-width:0}
+#screen-payments .mm3-payment-event-main strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-event-main small{display:block;font-size:9px;color:var(--label2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-event-value{text-align:right;white-space:nowrap}
+#screen-payments .mm3-payment-event-value strong{display:block;font-size:12.5px;color:var(--red);font-variant-numeric:tabular-nums}
+#screen-payments .mm3-payment-event-value small{display:block;font-size:8.5px;color:var(--label2);margin-top:2px}
+#screen-payments .mm3-payment-watchlist{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-payments .mm3-payment-watchrow{width:100%;min-height:62px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:grid;grid-template-columns:minmax(0,1.08fr) 72px minmax(78px,.72fr);gap:8px;align-items:center;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s,background .11s}
+#screen-payments .mm3-payment-watchrow:last-child{border-bottom:0}
+#screen-payments .mm3-payment-watchrow:active{transform:scale(.985);opacity:.64;background:rgba(118,118,128,.04)}
+#screen-payments .mm3-payment-watch-main{min-width:0}
+#screen-payments .mm3-payment-watch-main strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-spark{width:72px;height:28px;color:var(--red);display:grid;place-items:center}
+#screen-payments .mm3-payment-spark svg{width:100%;height:100%;overflow:visible}
+#screen-payments .mm3-payment-spark-line{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#screen-payments .mm3-payment-spark-empty{font-size:8px;color:var(--label3)}
+#screen-payments .mm3-payment-watch-value{text-align:right;min-width:0}
+#screen-payments .mm3-payment-watch-value strong{display:block;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-watch-value small{display:block;font-size:8.5px;margin-top:2px;font-weight:650;font-variant-numeric:tabular-nums}
+#screen-payments .mm3-payment-detail-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-payments .mm3-payment-detail-row{width:100%;min-height:51px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s}
+#screen-payments .mm3-payment-detail-row:last-child{border-bottom:0}
+#screen-payments .mm3-payment-detail-row:active{transform:scale(.985);opacity:.62}
+#screen-payments .mm3-payment-detail-icon{width:29px;height:29px;border-radius:9px;background:var(--fill);display:grid;place-items:center;color:var(--blue);flex:0 0 auto}
+#screen-payments .mm3-payment-detail-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#screen-payments .mm3-payment-detail-main{min-width:0;flex:1}
+#screen-payments .mm3-payment-detail-main strong{display:block;font-size:12.5px}
+#screen-payments .mm3-payment-detail-main small{display:block;font-size:9px;color:var(--label2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-detail-value{font-size:11.5px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+#screen-payments .mm3-payment-detail-chev{font-size:18px;color:var(--label3)}
+.mm3-atf-sheet-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0 14px}
+.mm3-atf-sheet-summary>div{background:var(--fill);border-radius:11px;padding:9px;min-width:0}
+.mm3-atf-sheet-summary span{display:block;font-size:9px;color:var(--label2)}
+.mm3-atf-sheet-summary strong{display:block;font-size:12.5px;margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm3-atf-sheet-events{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+.mm3-atf-sheet-event{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:43px;border-bottom:.5px solid var(--sep);font-size:11px}
+.mm3-atf-sheet-event:last-child{border-bottom:0}
+.mm3-atf-sheet-event div{min-width:0}.mm3-atf-sheet-event strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mm3-atf-sheet-event small{display:block;font-size:8.5px;color:var(--label2);margin-top:2px}.mm3-atf-sheet-event>span{white-space:nowrap;font-weight:680;font-variant-numeric:tabular-nums}
+.mm3-payment-push-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+.mm3-payment-push-row{width:100%;min-height:56px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0}
+.mm3-payment-push-row:last-child{border-bottom:0}.mm3-payment-push-row:active{opacity:.62}.mm3-payment-push-row .row-value{max-width:38%}
+#screen-payments .mm3-payment-reveal{animation:mm3PaymentReveal .26s cubic-bezier(.2,.8,.2,1)}
+@keyframes mm3PaymentReveal{from{opacity:.25;transform:translateY(3px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#screen-payments .mm3-payment-reveal{animation:none!important}#screen-payments .mm3-atf-tooltip,#screen-payments .mm3-atf-guide,#screen-payments .mm3-atf-selected{transition:none!important}}
+.motion-off #screen-payments .mm3-payment-reveal{animation:none!important}.motion-off #screen-payments .mm3-atf-tooltip,.motion-off #screen-payments .mm3-atf-guide,.motion-off #screen-payments .mm3-atf-selected{transition:none!important}
+@media(max-width:390px){#screen-payments .mm3-payment-primary-value{font-size:37px}#screen-payments .mm3-payment-watchrow{grid-template-columns:minmax(0,1fr) 62px 74px;gap:6px}#screen-payments .mm3-payment-spark{width:62px}#screen-payments .mm3-payment-watch-value strong{font-size:11.5px}}
+/* === end My Money 3.0 Phase 2 CSS === */
+
+
+/* === My Money 3.0 Phase 3: Assets / Stocks UI === */
+#screen-assets .mm3-assets-shell{padding-bottom:8px}
+#screen-assets .mm3-assets-topbar .date-line{display:none}
+#screen-assets .mm3-assets-primary{padding:10px 1px 6px}
+#screen-assets .mm3-assets-primary-label{font-size:11px;color:var(--label2);font-weight:600}
+#screen-assets .mm3-assets-primary-value{font-size:40px;line-height:1.04;font-weight:780;letter-spacing:-1.15px;margin-top:4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#screen-assets .mm3-assets-primary-change{display:flex;align-items:baseline;gap:6px;margin-top:5px;font-size:12px;font-weight:680;font-variant-numeric:tabular-nums;flex-wrap:wrap}
+#screen-assets .mm3-assets-primary-change small{font-size:10px;color:var(--label2);font-weight:560}
+#screen-assets .mm3-assets-divider{height:.5px;background:var(--sep);margin:11px 0 0}
+#screen-assets .mm3-assets-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 1px 7px}
+#screen-assets .mm3-assets-section-title{font-size:14px;font-weight:700;letter-spacing:-.15px}
+#screen-assets .mm3-assets-caption{font-size:10.5px;line-height:1.4;color:var(--label2);margin:-2px 1px 7px}
+#screen-assets .mm3-assets-menu-btn{min-height:31px;border:0;border-radius:10px;background:var(--fill);padding:5px 9px;color:var(--label);font-size:11px;font-weight:650;display:inline-flex;align-items:center;gap:4px;transition:transform .12s,opacity .12s,background .12s;white-space:nowrap}
+#screen-assets .mm3-assets-menu-btn:active{transform:scale(.96);opacity:.7}
+#screen-assets .mm3-assets-menu-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--label2)}
+#screen-assets .mm3-assets-chart{position:relative;height:190px;margin:1px -1px 0;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+#screen-assets .mm3-assets-chart svg{width:100%;height:168px;display:block;overflow:visible}
+#screen-assets .mm3-assets-grid{stroke:var(--sep);stroke-width:.7;opacity:.62}
+#screen-assets .mm3-assets-zero{stroke:var(--red);stroke-width:.8;stroke-dasharray:4 4;opacity:.55}
+#screen-assets .mm3-assets-area{fill:var(--blue);opacity:.055}
+#screen-assets .mm3-assets-area.forecast{fill:var(--orange);opacity:.055}
+#screen-assets .mm3-assets-line{fill:none;stroke:var(--blue);stroke-width:2.15;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:800;stroke-dashoffset:800;animation:mm3AssetLineReveal .62s cubic-bezier(.2,.8,.2,1) forwards}
+#screen-assets .mm3-assets-line.forecast{stroke:var(--orange);stroke-dasharray:5 4;stroke-dashoffset:0;animation:none}
+#screen-assets .mm3-assets-axis{font-size:8.3px;fill:var(--label2)}
+#screen-assets .mm3-assets-guide{stroke:var(--label2);stroke-width:.8;opacity:0;transition:opacity .12s}
+#screen-assets .mm3-assets-selected{fill:var(--card);stroke:var(--blue);stroke-width:2.2;opacity:0;transition:opacity .12s}
+#screen-assets .mm3-assets-selected.forecast{stroke:var(--orange)}
+#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-guide,#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-selected{opacity:1}
+#screen-assets .mm3-assets-tooltip{position:absolute;top:5px;left:50%;transform:translateX(-50%);z-index:3;min-width:88px;max-width:150px;padding:6px 8px;border-radius:10px;background:rgba(28,28,30,.91);color:#fff;font-size:9px;line-height:1.25;text-align:center;opacity:0;pointer-events:none;transition:opacity .12s,transform .12s;box-shadow:0 4px 16px rgba(0,0,0,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#screen-assets .mm3-assets-tooltip strong{display:block;font-size:11.5px;margin-top:1px;font-variant-numeric:tabular-nums}
+#screen-assets .mm3-assets-tooltip small{display:block;font-size:8px;color:rgba(255,255,255,.7);margin-top:2px}
+#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-tooltip{opacity:1}
+#screen-assets .mm3-assets-range{display:flex;gap:2px;background:var(--fill);border-radius:9px;padding:2px;margin-top:0}
+#screen-assets .mm3-assets-range button{flex:1;min-width:0;border:0;background:transparent;border-radius:7px;min-height:28px;padding:4px 1px;font-size:9.5px;color:var(--label2);transition:transform .1s,background .14s,color .14s}
+#screen-assets .mm3-assets-range button.on{background:var(--card);color:var(--label);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.10)}
+#screen-assets .mm3-assets-range button:active{transform:scale(.95)}
+#screen-assets .mm3-assets-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:.5px solid var(--sep);margin-top:10px}
+#screen-assets .mm3-assets-metric{padding:10px 8px 1px 0;min-width:0}
+#screen-assets .mm3-assets-metric+.mm3-assets-metric{padding-left:8px;border-left:.5px solid var(--sep)}
+#screen-assets .mm3-assets-metric span{display:block;font-size:9.5px;color:var(--label2)}
+#screen-assets .mm3-assets-metric strong{display:block;font-size:12.5px;margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-assets .mm3-assets-watchlist{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-bottom:3px}
+#screen-assets .mm3-assets-watchrow{width:100%;min-height:64px;padding:8px 0;border:0;border-bottom:.5px solid var(--sep);background:transparent;color:inherit;display:grid;grid-template-columns:minmax(0,1.15fr) 72px minmax(78px,.78fr);align-items:center;gap:8px;text-align:left;position:relative;transition:background .12s,transform .11s,opacity .11s}
+#screen-assets .mm3-assets-watchrow:last-child{border-bottom:0}
+#screen-assets .mm3-assets-watchrow:active{background:rgba(118,118,128,.07);transform:scale(.985);opacity:.72}
+#screen-assets .mm3-assets-watch-main{min-width:0}
+#screen-assets .mm3-assets-watch-main strong{display:block;font-size:13px;font-weight:690;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-assets .mm3-assets-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-assets .mm3-assets-spark{width:72px;height:29px;display:grid;place-items:center;min-width:0}
+#screen-assets .mm3-assets-spark svg{width:100%;height:27px;overflow:visible}
+#screen-assets .mm3-assets-spark .spark-line{stroke-width:1.55}
+#screen-assets .mm3-assets-watch-value{text-align:right;min-width:0}
+#screen-assets .mm3-assets-watch-value strong{display:block;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+#screen-assets .mm3-assets-watch-value small{display:block;font-size:9px;color:var(--label2);margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap}
+#screen-assets .mm3-assets-detail-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-bottom:8px}
+#screen-assets .mm3-assets-detail-row{width:100%;min-height:54px;border:0;border-bottom:.5px solid var(--sep);background:transparent;color:inherit;padding:8px 1px;display:grid;grid-template-columns:31px 1fr auto;gap:9px;align-items:center;text-align:left}
+#screen-assets .mm3-assets-detail-row:last-child{border-bottom:0}
+#screen-assets .mm3-assets-detail-row:active{background:rgba(118,118,128,.07)}
+#screen-assets .mm3-assets-detail-icon{width:29px;height:29px;border-radius:9px;background:var(--fill);color:var(--blue);display:grid;place-items:center}
+#screen-assets .mm3-assets-detail-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#screen-assets .mm3-assets-detail-main strong{display:block;font-size:12px}#screen-assets .mm3-assets-detail-main small{display:block;font-size:9px;color:var(--label2);margin-top:2px}
+#screen-assets .mm3-assets-detail-chev{font-size:20px;color:var(--label3)}
+#screen-assets .mm3-assets-empty-chart{height:152px;display:grid;place-items:center;text-align:center;color:var(--label2);font-size:11px;line-height:1.45;border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-assets .mm3-assets-chart-switch{animation:mm3AssetSwitch .24s cubic-bezier(.2,.8,.2,1)}
+#screen-assets .mm3-assets-sort-flip{will-change:transform}
+html.dark #screen-assets .mm3-assets-tooltip{background:rgba(58,58,60,.94)}
+@keyframes mm3AssetLineReveal{to{stroke-dashoffset:0}}
+@keyframes mm3AssetSwitch{from{opacity:.22;transform:scale(.988) translateY(2px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#screen-assets .mm3-assets-line{animation:none;stroke-dashoffset:0}#screen-assets .mm3-assets-chart-switch{animation:none!important}#screen-assets .mm3-assets-guide,#screen-assets .mm3-assets-selected,#screen-assets .mm3-assets-tooltip{transition:none!important}}
+.motion-off #screen-assets .mm3-assets-line{animation:none;stroke-dashoffset:0}.motion-off #screen-assets .mm3-assets-chart-switch{animation:none!important}
+@media(max-width:390px){#screen-assets .mm3-assets-primary-value{font-size:37px}#screen-assets .mm3-assets-watchrow{grid-template-columns:minmax(0,1fr) 62px 76px;gap:6px}#screen-assets .mm3-assets-spark{width:62px}}
+/* === end My Money 3.0 Phase 3 CSS === */
+
+
+
+/* === My Money 3.0 Phase 4: Motion / Gesture / Unified polish === */
+:root{
+  --mm3-motion-tap:120ms;
+  --mm3-motion-menu:180ms;
+  --mm3-motion-chart:250ms;
+  --mm3-motion-month:290ms;
+  --mm3-motion-flip:360ms;
+  --mm3-ease:cubic-bezier(.2,.85,.2,1);
+  --mm3-ease-spring:cubic-bezier(.2,.95,.25,1.06)
+}
+#screen-pay .mm3-salary-shell,
+#screen-payments .mm3-payment-shell,
+#screen-assets .mm3-assets-shell{transform-origin:50% 15%;contain:layout style}
+#screen-pay .mm3-salary-topbar .icon-btn,
+#screen-payments .mm3-payment-topbar .icon-btn,
+#screen-assets .mm3-assets-topbar .icon-btn{transition:transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease}
+#screen-pay .mm3-salary-pull,
+#screen-assets .mm3-assets-menu-btn,
+#screen-pay .mm3-salary-monthbtn,
+#screen-payments .mm3-payment-monthbtn{transition:transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease}
+#screen-pay .mm3-salary-primary-value,
+#screen-payments .mm3-payment-primary-value,
+#screen-assets .mm3-assets-primary-value{font-variant-numeric:tabular-nums lining-nums;letter-spacing:-1.25px}
+.mm3-tab-enter{animation:mm3TabEnter 210ms var(--mm3-ease) both}
+@keyframes mm3TabEnter{from{opacity:.2;transform:translateY(3px)}to{opacity:1;transform:none}}
+
+/* Month swipe feedback: only the new salary/payment surfaces participate. */
+#payContent,#paymentsContent{touch-action:pan-y}
+.mm3-month-gesture{will-change:transform,opacity}
+
+/* Salary trend scrubber */
+#screen-pay .mm3-salary-trend{position:relative;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+#screen-pay .mm3-salary-scrub-guide{position:absolute;top:8px;bottom:37px;width:.5px;background:var(--label2);opacity:0;pointer-events:none;transition:opacity 120ms ease;z-index:4}
+#screen-pay .mm3-salary-scrub-dot{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--card);border:2px solid var(--green);transform:translate(-50%,-50%);opacity:0;pointer-events:none;transition:opacity 120ms ease;z-index:5}
+#screen-pay .mm3-salary-scrub-tip{position:absolute;top:2px;min-width:82px;max-width:140px;padding:5px 7px;border-radius:9px;background:rgba(28,28,30,.91);color:#fff;text-align:center;font-size:8.5px;line-height:1.25;transform:translateX(-50%);opacity:0;pointer-events:none;transition:opacity 120ms ease;z-index:6;box-shadow:0 5px 16px rgba(0,0,0,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#screen-pay .mm3-salary-scrub-tip strong{display:block;font-size:11px;margin-top:1px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-trend.scrubbing .mm3-salary-scrub-guide,
+#screen-pay .mm3-salary-trend.scrubbing .mm3-salary-scrub-dot,
+#screen-pay .mm3-salary-trend.scrubbing .mm3-salary-scrub-tip{opacity:1}
+
+/* Manual account reorder */
+#screen-assets .mm3-assets-watchlist.mm3-assets-manual{position:relative;touch-action:pan-y}
+#screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow{grid-template-columns:20px minmax(0,1.08fr) 62px minmax(76px,.76fr);cursor:grab;-webkit-user-select:none;user-select:none;touch-action:pan-y}
+#screen-assets .mm3-assets-reorder-handle{width:18px;height:34px;display:grid;place-items:center;color:var(--label3);font-size:18px;letter-spacing:-4px;transform:rotate(90deg);pointer-events:none}
+#screen-assets .mm3-assets-watchrow.mm3-assets-dragging{cursor:grabbing;background:var(--card);border-radius:13px;padding-left:7px;padding-right:7px;box-shadow:0 11px 28px rgba(0,0,0,.17);transform:scale(1.018);opacity:.985;transition:box-shadow 150ms ease,transform 150ms var(--mm3-ease);z-index:90}
+#screen-assets .mm3-assets-reorder-placeholder{border-radius:12px;background:rgba(0,122,255,.055);box-shadow:inset 0 0 0 1px rgba(0,122,255,.11);margin:1px 0}
+#screen-assets .mm3-assets-manual-hint{font-size:9.5px;color:var(--label2);margin:-2px 1px 7px;animation:mm3ManualHintIn 220ms var(--mm3-ease)}
+@keyframes mm3ManualHintIn{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:none}}
+
+/* Existing iOS menu is the shared menu component; polish the physics without changing structure. */
+.ios-menu{transition:opacity var(--mm3-motion-menu) ease,transform var(--mm3-motion-menu) var(--mm3-ease-spring)}
+.menu-item{transition:background var(--mm3-motion-tap) ease,transform var(--mm3-motion-tap) var(--mm3-ease)}
+.menu-item:active{transform:scale(.985)}
+
+/* Keep glass only on navigation/control layers. */
+#screen-pay .mm3-salary-pull,
+#screen-assets .mm3-assets-menu-btn{background:rgba(118,118,128,.11);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28)}
+html.dark #screen-pay .mm3-salary-pull,
+html.dark #screen-assets .mm3-assets-menu-btn{background:rgba(118,118,128,.18);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.07)}
+
+@media(max-width:390px){
+  #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow{grid-template-columns:18px minmax(0,1fr) 54px 72px;gap:5px}
+}
+@media(prefers-reduced-motion:reduce){
+  .mm3-tab-enter{animation:none!important}
+  #screen-pay .mm3-salary-scrub-guide,#screen-pay .mm3-salary-scrub-dot,#screen-pay .mm3-salary-scrub-tip{transition:none!important}
+  #screen-assets .mm3-assets-manual-hint{animation:none!important}
+}
+.motion-off .mm3-tab-enter{animation:none!important}
+/* === end My Money 3.0 Phase 4 CSS === */
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -1054,7 +1404,7 @@ function openMonthDayDetail(date){openFinancialDayInspector(date)}
 function bindMonth(){bindMoneyTicker('month');document.getElementById('monthSearch')?.addEventListener('click',()=>openSmartInputSearch('search'));document.getElementById('monthEventGoals')?.addEventListener('click',()=>openEventGoals(currentMonth));document.getElementById('monthReasonAnalysis')?.addEventListener('click',()=>openReasonAnalysis({kind:'expense',month:currentMonth}));document.getElementById('monthCloseReview')?.addEventListener('click',()=>openMonthCloseReview(currentMonth));document.getElementById('monthName').onclick=openMonthPicker;document.getElementById('monthGoal').onclick=()=>openMonthlyGoalPlanner(currentMonth);document.getElementById('monthHero').onclick=e=>{if(e.target.closest('.goal-plan-action'))openMonthlyGoalPlanner(currentMonth);else openMonthSummaryDetail()};document.getElementById('acfMonth')?.addEventListener('click',openAcf);document.getElementById('monthIncomeOpen')?.addEventListener('click',()=>{payViewMonth=currentMonth;switchTab('pay')});document.getElementById('largePlanAdd')?.addEventListener('click',()=>openLargeExpenseEditor(null,{after:()=>renderMonth()}));document.querySelectorAll('[data-large-plan]').forEach(b=>b.onclick=()=>openLargeExpenseDetail(b.dataset.largePlan));document.getElementById('monthAnalysis').onclick=()=>openMonthAnalysis(currentMonth);document.getElementById('monthTransactions').onclick=()=>openTransactionList({month:currentMonth,title:`${monthLabel(currentMonth)}の支払い`});document.getElementById('monthMail').onclick=openMailOverview;document.querySelectorAll('[data-month-cat]').forEach(b=>b.onclick=()=>{const selectedCategory=b.dataset.monthCat;openTransactionList({month:currentMonth,category:selectedCategory,title:`${selectedCategory}・${monthLabel(currentMonth)}`})});document.getElementById('monthPlanEdit')?.addEventListener('click',()=>{monthPlanEditMode=!monthPlanEditMode;renderMonth()});document.getElementById('monthMenu').onclick=e=>openMenu(e.currentTarget,[{label:'お金のタイムライン',icon:'chart',action:()=>openMoneyTimeline()},{label:'予算を立て直す',icon:'target',action:()=>openBudgetRebalance(currentMonth)},{label:'旅行・プレゼント目標',icon:'gift',action:()=>openEventGoals(currentMonth)},{label:'理由が分かる分析',icon:'chart',action:()=>openReasonAnalysis({kind:'expense',month})},{label:'月締めレビュー',icon:'check',action:()=>openMonthCloseReview(currentMonth)},{label:'横断検索',icon:'search',action:()=>openSmartInputSearch('search')},{label:'生活費の見通し',icon:'chart',action:openAcf},{label:'月間目標を見直す',icon:'target',action:()=>openMonthlyGoalPlanner(currentMonth)},{label:'前月',icon:'chevronLeft',action:()=>monthShift(-1)},{label:'次月',icon:'chevronRight',action:()=>monthShift(1)}]);installHorizontalSwipe(document.getElementById('monthContent'),()=>monthShift(1),()=>monthShift(-1),78);document.querySelectorAll('.day-cell:not(.out)').forEach(cell=>{cell.onclick=()=>{if(monthPlanEditMode)openDayPlanSheet(cell.dataset.date);else openFinancialDayInspector(cell.dataset.date)};installLongPress(cell,()=>openDayQuickMenu(cell.dataset.date),{delay:600,moveTolerance:10})})}
 function openDayPlanSheet(date){const month=date.slice(0,7),day=Number(date.slice(8,10)),mg=monthlyGoal(month),raw=data.dailyGoals[date],current=Number(raw?.total)||Number(mg.daily?.[day])||0;openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="dpClose">閉じる</button><div class="sheet-title">${parseYmd(date).getMonth()+1}月${day}日の計画</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="hero"><div class="hero-kicker">現在の計画</div><div class="hero-value">${current?yen(current):'未設定'}</div><div class="hero-sub">${raw?.origin==='daily'?'当日目標として固定':raw?.origin==='monthly'?'月間計画から設定':'月間計画の配分対象'}</div></div><div class="action-list"><button type="button" class="secondary" id="dpChange">金額を変更</button><button type="button" class="secondary" id="dpReset">月間おすすめに戻す</button><button type="button" class="secondary" id="dpFix">当日目標として固定</button></div></div>`,'half',root=>{root.querySelector('#dpClose').onclick=requestSheetClose;root.querySelector('#dpChange').onclick=()=>openCalculator('当日の目標',current,v=>{data.dailyGoals[date]={total:v,categories:raw?.categories||{},origin:'daily'};data.monthlyGoals[month]={...(data.monthlyGoals[month]||{}),daily:{...((data.monthlyGoals[month]||{}).daily||{}),[day]:v}};save();closeSheet();renderAll()});root.querySelector('#dpReset').onclick=()=>{if(raw?.origin==='daily')delete data.dailyGoals[date];const built=buildMonthlyDailyPlan(month,Number(mg.total)||0,mg.daily||{}),v=Number(built.plan?.[day])||0;if(v>0){data.dailyGoals[date]={total:v,categories:{},origin:'monthly'};data.monthlyGoals[month]={...(data.monthlyGoals[month]||{}),daily:{...((data.monthlyGoals[month]||{}).daily||{}),[day]:v}}}save();closeSheet();renderAll()};root.querySelector('#dpFix').onclick=()=>{if(!current)return showAlert('計画額がありません','先に金額を設定してください。');data.dailyGoals[date]={total:current,categories:raw?.categories||{},origin:'daily'};data.monthlyGoals[month]={...(data.monthlyGoals[month]||{}),daily:{...((data.monthlyGoals[month]||{}).daily||{}),[day]:current}};save();closeSheet();renderAll()}})}function resetMonthlyPlan(month){const mg=data.monthlyGoals[month];if(!mg)return;for(let d=1;d<=daysInMonth(month);d++){const ds=`${month}-${pad(d)}`;if(data.dailyGoals[ds]?.origin==='monthly')delete data.dailyGoals[ds]}delete data.monthlyGoals[month];save();renderAll()}function openDayQuickMenu(date){openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="dqmClose">閉じる</button><div class="sheet-title">${dayLabel(date)}</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="action-list"><button type="button" class="secondary" id="dqmExpense">支出を追加</button><button type="button" class="secondary" id="dqmIncome">臨時収入を追加</button><button type="button" class="secondary" id="dqmPlan">日別計画を調整</button></div></div>`,'half',root=>{root.querySelector('#dqmClose').onclick=requestSheetClose;root.querySelector('#dqmExpense').onclick=()=>{closeSheet();openQuickExpense(date)};root.querySelector('#dqmIncome').onclick=()=>{closeSheet();openTempIncome(date)};root.querySelector('#dqmPlan').onclick=()=>{closeSheet();openDayPlanSheet(date)}})}
 function openMonthPicker(){const list=Array.from({length:13},(_,i)=>addMonths(ym(),i-12));openSheet(`<div class="sheet-nav"><button class="nav-text" id="mpClose">閉じる</button><div class="sheet-title">表示月を変更</div><span style="width:60px"></span></div><div class="sheet-body"><div class="group">${list.map(m=>`<button class="row press" data-m="${m}" style="width:100%;border:0;text-align:left"><div class="row-main"><div class="row-title">${monthLabel(m)}</div></div>${m===currentMonth?`<span class="blue icon-only-inline">${icon('check')}</span>`:''}</button>`).join('')}</div><div class="row-sub">今月を含む過去12ヶ月から選択できます。左右スワイプでも前月・次月へ移動できます。</div></div>`,'half',()=>{document.getElementById('mpClose').onclick=requestSheetClose;document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{currentMonth=b.dataset.m;closeSheet();renderAll()})})}
-function openPayMonthPicker(){const now=ym(),months=Array.from({length:18},(_,i)=>addMonths(now,-12+i));openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="ppmClose">閉じる</button><div class="sheet-title">給与・支払の月</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="group">${months.map(m=>`<button type="button" class="row press" data-pay-month="${m}"><div class="row-main"><div class="row-title">${monthLabel(m)}</div></div>${m===payViewMonth?`<span class="blue">${icon('check')}</span>`:''}</button>`).join('')}</div></div>`,'half',root=>{root.querySelector('#ppmClose').onclick=requestSheetClose;root.querySelectorAll('[data-pay-month]').forEach(b=>b.onclick=()=>{payViewMonth=b.dataset.payMonth;closeSheet();renderAll()})})}
+function openPayMonthPicker(){const now=ym(),months=Array.from({length:18},(_,i)=>addMonths(now,-12+i));openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="ppmClose">閉じる</button><div class="sheet-title">給与の月</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="group">${months.map(m=>`<button type="button" class="row press" data-pay-month="${m}"><div class="row-main"><div class="row-title">${monthLabel(m)}</div></div>${m===payViewMonth?`<span class="blue">${icon('check')}</span>`:''}</button>`).join('')}</div></div>`,'half',root=>{root.querySelector('#ppmClose').onclick=requestSheetClose;root.querySelectorAll('[data-pay-month]').forEach(b=>b.onclick=()=>{payViewMonth=b.dataset.payMonth;closeSheet();renderAll()})})}
 function lineChart(points){if(!points.length)return'<div class="empty">データがありません。</div>';const w=320,h=130,p=18,max=Math.max(...points.map(x=>x.value),1),min=Math.min(...points.map(x=>x.value),0),range=max-min||1,coords=points.map((x,i)=>({x:p+i*(w-2*p)/Math.max(1,points.length-1),y:h-p-(x.value-min)/range*(h-2*p)})),path=coords.map((c,i)=>(i?'L':'M')+c.x.toFixed(1)+','+c.y.toFixed(1)).join(' ');return `<svg class="svg-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${path}" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${coords.map(c=>`<circle cx="${c.x}" cy="${c.y}" r="4" fill="var(--card)" stroke="var(--blue)" stroke-width="2"/>`).join('')}</svg><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--label2)">${points.map(x=>`<span>${esc(x.label)}</span>`).join('')}</div>`}
 function openMonthlyTrendAnalysis(){const months=Array.from({length:6},(_,i)=>addMonths(currentMonth,i-5)),pts=months.map(m=>({label:monthLabel(m).replace(/\d+年/,''),value:spentMonth(m)})),cur=spentMonth(currentMonth),prev=spentMonth(addMonths(currentMonth,-1)),yoy=spentMonth(addMonths(currentMonth,-12)),mom=prev?Math.round((cur-prev)/prev*100):null,yoyPct=yoy?Math.round((cur-yoy)/yoy*100):null;const changes=data.categories.map(c=>{const a=monthCategorySpent(currentMonth,c.name),b=monthCategorySpent(addMonths(currentMonth,-1),c.name);return{c,a,b,p:b?Math.round((a-b)/b*100):null}}).filter(x=>x.a||x.b).sort((a,b)=>Math.abs(b.p||0)-Math.abs(a.p||0));pushView('月次比較・トレンド',`<div class="hero"><div class="hero-kicker">${monthLabel(currentMonth)}の支出</div><div class="hero-value">${yen(cur)}</div><div class="hero-sub">前月比 ${mom==null?'—':(mom>=0?'+':'')+mom+'%'}・前年同月比 ${yoyPct==null?'—':(yoyPct>=0?'+':'')+yoyPct+'%'}</div></div><div class="chart-card"><div class="chart-title">6ヶ月トレンド</div>${lineChart(pts)}</div><div class="section-head">カテゴリ増減</div><div class="group">${changes.length?changes.map(x=>`<div class="row"><div class="settings-icon" style="background:${x.c.color}">${x.p!=null&&x.p>40?'!':x.c.icon}</div><div class="row-main"><div class="row-title">${esc(x.c.name)}</div><div class="row-sub">前月 ${yen(x.b)} → 今月 ${yen(x.a)}</div></div><div class="row-value ${x.p>0?'red':x.p<0?'green':''}">${x.p==null?'—':(x.p>=0?'+':'')+x.p+'%'}</div></div>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">比較できる記録がありません</div></div></div>'}</div>`)}
 function planVsActualForMonth(month){const g=monthlyGoal(month),actual=spentMonth(month),today=ymd(),limit=month<ym()?daysInMonth(month):month>ym()?0:parseYmd(today).getDate(),expected=limit?sum(Array.from({length:limit},(_,i)=>dayGoalForMonth(month,i+1))):0;return{plan:g.total,actual,expected,variance:expected?actual-expected:0}}
@@ -1103,7 +1453,7 @@ function refreshBankDetail(id,period='1m'){const top=pushStack[pushStack.length-
 function openBankDetail(id,period='1m'){const b=bankById(id);if(!b)return;const root=pushView(b.name,bankDetailHtml(id,period),r=>bindBankDetail(r,id,period),'<button id="bankEditNav">編集</button>');root.querySelector('#bankEditNav')?.addEventListener('click',()=>openAddBank(b))}
 function donutHtml(items){const vals=items.filter(x=>x.value>0),tot=sum(vals,x=>x.value);if(!tot)return'<div class="empty">データがありません。</div>';let acc=0,parts=vals.map(x=>{const a=acc/tot*360;acc+=x.value;const b=acc/tot*360;return `${x.color} ${a}deg ${b}deg`});return `<div class="donut-wrap"><div class="donut" style="border-radius:50%;background:conic-gradient(${parts.join(',')})"></div><div class="legend">${vals.map(x=>`<div class="legend-row"><span class="dot" style="background:${x.color}"></span><span style="flex:1">${esc(x.label)}</span><strong>${yen(x.value)}</strong></div>`).join('')}</div></div>`}
 function openCardBillingCorrection(cardId,month=assetBillingMonth){openQuickCardBilling(month,cardId)}
-function openAssetBillingMonthPicker(onChange=null){const months=Array.from({length:25},(_,i)=>addMonths(ym(),i-12));openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="abmClose">閉じる</button><div class="sheet-title">支払月を表示</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="group">${months.map(m=>`<button type="button" class="row press" data-asset-pay-month="${m}"><div class="row-main"><div class="row-title">${monthLabel(m)}</div></div>${m===assetBillingMonth?`<span class="blue">${icon('check')}</span>`:''}</button>`).join('')}</div></div>`,'half',root=>{root.querySelector('#abmClose').onclick=requestSheetClose;root.querySelectorAll('[data-asset-pay-month]').forEach(b=>b.onclick=()=>{const m=b.dataset.assetPayMonth;assetBillingMonth=m;closeSheet();if(typeof onChange==='function')onChange(m);else if(activeTab==='payments')renderPayments();else renderAssets()})})}
+function openAssetBillingMonthPicker(onChange=null){const months=Array.from({length:25},(_,i)=>addMonths(ym(),i-12));openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="abmClose">閉じる</button><div class="sheet-title">支払いの月</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="group">${months.map(m=>`<button type="button" class="row press" data-asset-pay-month="${m}"><div class="row-main"><div class="row-title">${monthLabel(m)}</div></div>${m===assetBillingMonth?`<span class="blue">${icon('check')}</span>`:''}</button>`).join('')}</div></div>`,'half',root=>{root.querySelector('#abmClose').onclick=requestSheetClose;root.querySelectorAll('[data-asset-pay-month]').forEach(b=>b.onclick=()=>{const m=b.dataset.assetPayMonth;assetBillingMonth=m;closeSheet();if(typeof onChange==='function')onChange(m);else if(activeTab==='payments')renderPayments();else renderAssets()})})}
 function openQuickCardBilling(paymentMonth=assetBillingMonth,preselectedCardId=''){if(!data.cards.length)return showAlert('カードがありません','先にクレジットカードを登録してください。');let cardId=preselectedCardId||data.cards[0].id,st=cardStatementForPaymentMonth(cardId,paymentMonth),amount=Number(st?.amount)||0,paymentDate=st?.paymentDate||`${paymentMonth}-01`,status=st?.status||'confirmed',handling=cardStatementBankHandling(cardId,st?.billingMonth||billingMonthForPaymentMonth(cardById(cardId),paymentMonth)),balanceMode=handling.mode==='apply'?'apply':handling.mode==='reconciled'?'reconciled':'none';openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="qcbCancel">キャンセル</button><div class="sheet-title">カード請求額を更新</div><button type="button" class="nav-text bold" id="qcbSave">保存</button></div><div class="sheet-body"><div class="form-group-title">請求</div><div class="form-card"><div class="form-section"><div class="form-label">カード</div><select class="field field-select" id="qcbCard">${data.cards.map(c=>`<option value="${c.id}" ${c.id===cardId?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="form-section"><div class="form-label">実際の支払日</div><input class="field" id="qcbDate" type="date" value="${esc(paymentDate)}"></div><div class="form-section">${moneyButton('qcbAmount','請求額',amount)}</div></div><div class="form-group-title">状態</div><div class="seg" id="qcbStatus"><button type="button" data-v="estimated" class="${status==='estimated'?'on':''}">見込み</button><button type="button" data-v="confirmed" class="${status==='confirmed'?'on':''}">確定</button><button type="button" data-v="paid" class="${status==='paid'?'on':''}">支払済み</button></div><div id="qcbBalanceWrap" class="${status==='paid'?'':'hidden'}"><div class="form-group-title">引落口座の現在残高</div><div class="seg" id="qcbBalanceMode"><button type="button" data-v="apply">残高にも反映</button><button type="button" data-v="reconciled">すでに反映済み</button></div><div class="form-helper" id="qcbBalanceHelp"></div></div><div class="card card-pad"><div class="row-title">反映内容</div><div class="hero-sub" id="qcbInfo"></div></div></div>`,'full',root=>{const amountBtn=root.querySelector('#qcbAmount'),saveBtn=root.querySelector('#qcbSave'),info=root.querySelector('#qcbInfo'),balanceWrap=root.querySelector('#qcbBalanceWrap'),balanceHelp=root.querySelector('#qcbBalanceHelp');const resolveBillingMonth=()=>billingMonthForPaymentDate(cardById(cardId),root.querySelector('#qcbDate').value||paymentDate);const updateBalanceUI=()=>{const card=cardById(cardId),bm=resolveBillingMonth(),h=cardStatementBankHandling(cardId,bm),bank=bankById(card?.bankId),existingPaid=cardAdjustmentInfo(cardId,bm)?.status==='paid';if(existingPaid){balanceMode=h.mode==='apply'?'apply':h.mode==='reconciled'?'reconciled':'none'}else if(!bank)balanceMode='none';else if(!['apply','reconciled'].includes(balanceMode))balanceMode='reconciled';balanceWrap.classList.toggle('hidden',status!=='paid');root.querySelectorAll('#qcbBalanceMode button').forEach(x=>{x.disabled=!bank||existingPaid;x.classList.toggle('on',x.dataset.v===balanceMode)});if(status!=='paid')return;if(!bank)balanceHelp.textContent='引落口座が未設定です。支払済み状態は保存できますが、銀行残高は変更しません。';else if(existingPaid)balanceHelp.textContent=`現在の記録：${h.label}。金額を修正しても残高への反映は二重実行しません。`;else if(balanceMode==='apply')balanceHelp.textContent=`${bank.name}の現在残高から請求額を1回だけ差し引きます。手動残高の基準日時より前の支払いは二重反映を避けます。`;else balanceHelp.textContent=`${bank.name}の現在残高にはすでにこの支払いが含まれているものとして、残高を変更しません。`};const loadCard=()=>{cardId=root.querySelector('#qcbCard').value;const pm=(root.querySelector('#qcbDate').value||paymentDate).slice(0,7)||paymentMonth,cur=cardStatementForPaymentMonth(cardId,pm);if(cur){amount=Number(cur.amount)||0;paymentDate=cur.paymentDate||paymentDate;status=cur.status||'confirmed';root.querySelector('#qcbDate').value=paymentDate;amountBtn.querySelector('.val').textContent=yen(amount);root.querySelectorAll('#qcbStatus button').forEach(x=>x.classList.toggle('on',x.dataset.v===status))}else{amount=0;status='confirmed';amountBtn.querySelector('.val').textContent=yen(amount);root.querySelectorAll('#qcbStatus button').forEach(x=>x.classList.toggle('on',x.dataset.v===status))}drawInfo();updateBalanceUI()};const drawInfo=()=>{paymentDate=root.querySelector('#qcbDate').value||paymentDate;const card=cardById(cardId),bm=billingMonthForPaymentDate(card,paymentDate),h=cardStatementBankHandling(cardId,bm);info.textContent=`${monthLabel(String(paymentDate).slice(0,7))}支払い・対象利用 ${monthLabel(bm)}・${cardStatementStatusLabel(status)}${status==='paid'?`・${h.label}`:''}`};amountBtn.onclick=()=>openCalculator('請求額',amount,v=>{amount=v;amountBtn.querySelector('.val').textContent=yen(v);drawInfo()});root.querySelector('#qcbCard').onchange=()=>{markSheetDirty();loadCard()};root.querySelector('#qcbDate').onchange=()=>{markSheetDirty();drawInfo();updateBalanceUI()};root.querySelectorAll('#qcbStatus button').forEach(b=>b.onclick=()=>{status=b.dataset.v;root.querySelectorAll('#qcbStatus button').forEach(x=>x.classList.toggle('on',x===b));markSheetDirty();updateBalanceUI();drawInfo()});root.querySelectorAll('#qcbBalanceMode button').forEach(b=>b.onclick=()=>{if(b.disabled)return;balanceMode=b.dataset.v;root.querySelectorAll('#qcbBalanceMode button').forEach(x=>x.classList.toggle('on',x===b));markSheetDirty();updateBalanceUI();drawInfo()});root.querySelector('#qcbCancel').onclick=requestSheetClose;saveBtn.onclick=()=>{paymentDate=root.querySelector('#qcbDate').value||paymentDate;const card=cardById(cardId),bm=billingMonthForPaymentDate(card,paymentDate);runSaveAction(saveBtn,()=>setCardStatement(cardId,bm,amount,{paymentDate,status,memo:'クイック請求額入力',balanceMode:status==='paid'?balanceMode:'keep'}),{render:true,label:'quick card billing',success:'カード請求額を保存しました',close:closeSheet})};updateBalanceUI();drawInfo()})}
 function cardDetailHtml(id,paymentMonth=assetBillingMonth){const c=cardById(id);if(!c)return'';const st=cardStatementForPaymentMonth(id,paymentMonth),billingMonth=st?.billingMonth||billingMonthForPaymentMonth(c,paymentMonth),list=cardTransactionsForBillingCycle(id,billingMonth).sort((a,b)=>b.date.localeCompare(a.date)),base=cardBaseUsage(id,billingMonth),adj=cardAdjustmentInfo(id,billingMonth),billing=Number(st?.amount)||0,newUse=st?.newUse||0,deltaAtEdit=adj?.deltaAtEdit||0,status=st?.status||'estimated',cycle=billingCycleForCard(c,billingMonth),handling=cardStatementBankHandling(id,billingMonth),history=cardMonthHistory(id,paymentMonth,6),unpaid=cardUnpaidEstimate(id),estimatedAvailable=Math.max(0,(Number(c.limit)||0)-unpaid),cats=data.categories.map(x=>({label:x.name,value:sum(list.filter(t=>t.category===x.name),t=>t.amount),color:x.color}));return `<div class="pro-finance-surface"><div class="card-statement-nav date-navigator"><button type="button" class="date-nav-btn" id="cardPrevPay" aria-label="前月">${icon('chevronLeft')}</button><div class="date-nav-label">${monthLabel(paymentMonth)}支払い</div><button type="button" class="date-nav-btn" id="cardNextPay" aria-label="次月">${icon('chevronRight')}</button></div><div class="pro-finance-head"><div class="pro-finance-eyebrow">CREDIT CARD</div><div class="pro-finance-title">${esc(c.name)}</div><div class="pro-finance-subtitle">${esc(c.company||'カード')}</div><div class="pro-finance-value">${yen(billing)}</div><div class="pro-finance-change ${status==='paid'?'green':status==='confirmed'?'':'muted'}">${esc(cardStatementStatusLabel(status))}${st?.paymentDate?`・${dayLabel(st.paymentDate)}`:''}</div><div class="pro-finance-subtitle">対象利用期間 ${esc(cycle.label)}</div></div><div class="pro-periods"><button type="button" class="pro-period on">6か月</button><button type="button" class="pro-period" id="cardBillingMonth">支払月を選ぶ</button></div>${cardBarChartHtml(history,paymentMonth)}<div class="pro-chart-readout"><span>選択月の請求額</span><strong>${yen(billing)}</strong></div><div class="pro-metrics"><div class="pro-metric"><span>未払い残高</span><strong>${yen(unpaid)}</strong></div><div class="pro-metric"><span>利用限度額</span><strong>${Number(c.limit)>0?yen(c.limit):'未設定'}</strong></div><div class="pro-metric"><span>利用可能額</span><strong>${Number(c.limit)>0?`${yen(estimatedAvailable)}（推定）`:'未確認'}</strong></div></div><div class="pro-action-row"><button type="button" class="pro-action-btn" id="cardBillingFix">請求額を更新</button><button type="button" class="pro-action-btn" id="cardPaidToggle">${status==='paid'?'未払いに戻す':'支払を確認'}</button><button type="button" class="pro-action-btn" id="cardReconcile">請求を確認</button></div><div class="pro-section-title">請求の内訳</div><div class="group"><div class="row"><div class="row-main"><div class="row-title">記録上の利用</div></div><div class="row-value">${yen(base)}</div></div><div class="row"><div class="row-main"><div class="row-title">確認時の修正差額</div></div><div class="row-value ${deltaAtEdit>0?'red':deltaAtEdit<0?'green':''}">${deltaAtEdit>0?'+':''}${yen(deltaAtEdit)}</div></div>${newUse?`<div class="row"><div class="row-main"><div class="row-title">確定後の新しい利用</div></div><div class="row-value">${yen(newUse)}</div></div>`:''}<div class="row"><div class="row-main"><div class="row-title">口座残高への反映</div></div><div class="row-value">${esc(handling.label)}</div></div></div><div class="pro-section-title">カテゴリ別</div><div class="chart-card">${donutHtml(cats)}</div><div class="pro-section-title">利用明細</div><div class="group">${list.length?list.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(x.merchant)}</div><div class="row-sub">${x.date}・${esc(x.category)}</div></div><div class="row-value">${yen(x.amount)}</div></div>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">対象期間の明細はありません</div></div></div>'}</div><div class="pro-section-title">カード設定</div><div class="group"><div class="row"><div class="row-main"><div class="row-title">締め日</div></div><div class="row-value">${c.closingDay==null?'未設定':esc(String(c.closingDay))}</div></div><div class="row"><div class="row-main"><div class="row-title">通常支払日</div></div><div class="row-value">${c.dueDay==null?'未設定':`${c.dueDay}日`}</div></div></div>${cardScheduleCalendar(c,billingMonth)}</div>`}
 function openCardBillingMonthPicker(cardId,selectedMonth=assetBillingMonth){const months=Array.from({length:25},(_,i)=>addMonths(ym(),i-12));openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="cbmClose">閉じる</button><div class="sheet-title">支払月を表示</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="group">${months.map(m=>{const st=cardStatementForPaymentMonth(cardId,m);return `<button type="button" class="row press" data-card-billing-month="${m}"><div class="row-main"><div class="row-title">${monthLabel(m)}</div><div class="row-sub">${st?.paymentDate?dayLabel(st.paymentDate):'支払日未設定'}・${cardStatementStatusLabel(st?.status||'estimated')}</div></div><div class="row-value">${yen(st?.amount||0)}</div>${m===selectedMonth?`<span class="blue">${icon('check')}</span>`:''}</button>`}).join('')}</div></div>`,'half',root=>{root.querySelector('#cbmClose').onclick=requestSheetClose;root.querySelectorAll('[data-card-billing-month]').forEach(b=>b.onclick=()=>{const m=b.dataset.cardBillingMonth;closeSheet();refreshCardDetail(cardId,m)})})}
@@ -1877,6 +2227,498 @@ openFinancialDayInspector=function(date){
 };
 /* === end ACF signed balances + shortage visibility final override === */
 
+
+
+/* === My Money 3.0 Phase 1: salary final active override === */
+let mm3SalaryChartMode='share';
+let mm3SalaryTrendRange='3M';
+
+function mm3SalaryMonthSummary(month){
+  const records=salaryMonthRows(month);
+  const temps=data.tempIncomes.filter(t=>String(t.date||'').slice(0,7)===month);
+  const received=sum(records.filter(r=>salaryRecordDisplayStatus(r)==='入金済み'),r=>salaryRecordCashAmount(r))
+    +sum(temps.filter(t=>tempIncomeDisplayStatus(t)==='入金済み'),t=>Math.max(0,Number(t.amount)||0));
+  const overdue=sum(records.filter(r=>salaryRecordDisplayStatus(r).includes('未確認')),r=>Math.max(0,Number(r.gross)||0))
+    +sum(temps.filter(t=>tempIncomeDisplayStatus(t).includes('未確認')),t=>Math.max(0,Number(t.amount)||0));
+  const planned=sum(records.filter(r=>salaryRecordDisplayStatus(r)==='入金予定'),r=>Math.max(0,Number(r.gross)||0))
+    +sum(temps.filter(t=>tempIncomeDisplayStatus(t)==='入金予定'),t=>Math.max(0,Number(t.amount)||0));
+  return{month,records,temps,received,overdue,planned,total:received+overdue+planned,tempTotal:sum(temps,t=>Math.max(0,Number(t.amount)||0))}
+}
+function mm3SalarySignedYen(value){
+  const n=Math.round(Number(value)||0);
+  if(n===0)return yen(0);
+  return `${n>0?'+':'−'}${yen(Math.abs(n))}`
+}
+function mm3SalaryMonthDelta(month,total){
+  const prev=mm3SalaryMonthSummary(addMonths(month,-1)).total,diff=total-prev;
+  return{prev,diff,pct:prev>0?diff/prev*100:null}
+}
+function mm3SalaryComposition(summary){
+  const items=data.employers.map((e,index)=>{
+    const recs=summary.records.filter(r=>r.employerId===e.id),amount=sum(recs,r=>salaryRecordExpectedOrReceivedAmount(r));
+    return{id:e.id,type:'employer',name:e.name,amount,recs,color:['var(--green)','var(--teal)','var(--purple)','var(--blue)','var(--orange)'][index%5]}
+  }).filter(x=>x.amount>0);
+  if(summary.tempTotal>0)items.push({id:'temp',type:'temp',name:'臨時収入',amount:summary.tempTotal,recs:[],color:'var(--purple)'});
+  const total=sum(items,x=>x.amount);
+  if(total<=0)return items.map(x=>({...x,pct:0,rawPct:0}));
+  const work=items.map((x,i)=>({...x,rawPct:x.amount/total*100,pct:Math.floor(x.amount/total*100),_i:i}));
+  let remain=100-sum(work,x=>x.pct);
+  [...work].sort((a,b)=>(b.rawPct-b.pct)-(a.rawPct-a.pct)||a._i-b._i).slice(0,remain).forEach(x=>x.pct++);
+  return work
+}
+function mm3SalaryDonutHtml(summary){
+  const items=mm3SalaryComposition(summary);
+  if(!items.length)return `<div class="mm3-salary-empty-viz">この月の給与予定はまだありません。<br>＋から給与記録を追加できます。</div>`;
+  let offset=0;
+  const arcs=items.map(x=>{const dash=Math.max(0,x.pct),html=`<circle class="mm3-salary-donut-arc" cx="60" cy="60" r="42" pathLength="100" style="stroke:${x.color};stroke-dasharray:${dash} ${100-dash};stroke-dashoffset:${-offset}"></circle>`;offset+=dash;return html}).join('');
+  return `<div class="mm3-salary-composition"><div class="mm3-salary-donut"><svg viewBox="0 0 120 120" role="img" aria-label="${esc(monthLabel(summary.month))}の勤務先別給与構成"><circle class="mm3-salary-donut-track" cx="60" cy="60" r="42" pathLength="100"></circle>${arcs}</svg><div class="mm3-salary-donut-center"><span>${summary.month===ym()?'今月':esc(monthLabel(summary.month).replace(/\d+年/,''))}</span><strong>100%</strong></div></div><div class="mm3-salary-legend">${items.map(x=>`<div class="mm3-salary-legend-row"><i class="mm3-salary-legend-dot" style="background:${x.color}"></i><div class="mm3-salary-legend-main"><b>${esc(x.name)}</b><small>${yen(x.amount)}</small></div><strong class="mm3-salary-legend-pct">${x.pct}%</strong></div>`).join('')}</div></div>`
+}
+function mm3SalaryRangeMonths(endMonth,range){
+  const fixed={"1M":1,"3M":3,"6M":6,"1Y":12};
+  let count=fixed[range]||3;
+  if(range==='ALL'){
+    const months=[...data.salaryRecords.map(r=>String(salaryRecordEffectiveDate(r)||'').slice(0,7)),...data.tempIncomes.map(t=>String(t.date||'').slice(0,7))].filter(Boolean).sort();
+    if(months.length){
+      const [ey,em]=endMonth.split('-').map(Number),[sy,sm]=months[0].split('-').map(Number);
+      count=Math.max(1,(ey-sy)*12+(em-sm)+1)
+    }
+  }
+  return Array.from({length:count},(_,i)=>addMonths(endMonth,i-count+1))
+}
+function mm3SalaryTrendHtml(summary){
+  const months=mm3SalaryRangeMonths(summary.month,mm3SalaryTrendRange),points=months.map(m=>({month:m,value:mm3SalaryMonthSummary(m).total}));
+  const w=330,h=132,l=7,r=8,t=9,b=24,vals=points.map(x=>x.value),max=Math.max(1,...vals),min=Math.min(0,...vals),range=Math.max(1,max-min),pw=w-l-r,ph=h-t-b;
+  const xy=points.map((p,i)=>({x:l+i*pw/Math.max(1,points.length-1),y:t+(max-p.value)/range*ph,...p}));
+  const line=xy.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' '),area=xy.length?`${line} L${xy.at(-1).x.toFixed(1)},${t+ph} L${xy[0].x.toFixed(1)},${t+ph} Z`:'';
+  const tickIds=[0,.5,1].map(q=>t+q*ph);
+  return `<div class="mm3-salary-trend"><svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="給与推移">${tickIds.map(y=>`<line class="mm3-salary-grid" x1="${l}" x2="${l+pw}" y1="${y}" y2="${y}"></line>`).join('')}${area?`<path class="mm3-salary-trend-fill" d="${area}"></path><path class="mm3-salary-trend-line" d="${line}"></path>`:''}${xy.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="2.8" fill="var(--green)"><title>${esc(monthLabel(p.month))} ${yen(p.value)}</title></circle>`).join('')}${points.length?`<text class="mm3-salary-axis" x="${l}" y="${h-5}">${esc(monthLabel(points[0].month).replace(/\d+年/,''))}</text><text class="mm3-salary-axis" text-anchor="end" x="${l+pw}" y="${h-5}">${esc(monthLabel(points.at(-1).month).replace(/\d+年/,''))}</text>`:''}</svg><div class="mm3-salary-range">${[['1M','1M'],['3M','3M'],['6M','6M'],['1Y','1Y'],['ALL','全期間']].map(([v,lbl])=>`<button type="button" data-mm3-salary-range="${v}" class="${mm3SalaryTrendRange===v?'on':''}">${lbl}</button>`).join('')}</div></div>`
+}
+function mm3SalaryVizHtml(summary){return mm3SalaryChartMode==='trend'?mm3SalaryTrendHtml(summary):mm3SalaryDonutHtml(summary)}
+function mm3SalaryEmployerSeries(employerId,endMonth,count=6){return Array.from({length:count},(_,i)=>{const m=addMonths(endMonth,i-count+1);return sum(salaryRecordsPayableInMonth(m).filter(r=>r.employerId===employerId),r=>salaryRecordExpectedOrReceivedAmount(r))})}
+function mm3SalarySparklineHtml(values,color='var(--green)'){
+  if(!values||values.length<2||values.every(v=>Number(v)===0))return `<span class="mm3-salary-spark-empty">履歴不足</span>`;
+  const w=72,h=28,p=2,min=Math.min(...values),max=Math.max(...values),range=max-min||1,pts=values.map((v,i)=>({x:p+i*(w-2*p)/Math.max(1,values.length-1),y:h-p-(v-min)/range*(h-2*p)})),d=pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="mm3-salary-spark-line" style="stroke:${color}" d="${d}"></path></svg>`
+}
+function mm3SalaryNextEvent(summary){
+  const today=ymd(),c=[];
+  for(const r of summary.records){const date=salaryRecordEffectiveDate(r)||r.date||'';if(date&&salaryRecordDisplayStatus(r)!=='入金済み'&&(summary.month>today.slice(0,7)||date>=today))c.push({type:'salary',id:r.id,date,amount:Math.max(0,Number(r.gross)||0),name:employerById(r.employerId)?.name||'給与'})}
+  for(const t of summary.temps){const date=t.date||'';if(date&&tempIncomeDisplayStatus(t)!=='入金済み'&&(summary.month>today.slice(0,7)||date>=today))c.push({type:'temp',id:t.id,date,amount:Math.max(0,Number(t.amount)||0),name:t.sourceName||t.source||'臨時収入'})}
+  return c.sort((a,b)=>a.date.localeCompare(b.date))[0]||null
+}
+function mm3SalaryDaysUntil(date){if(!date)return'';const a=parseYmd(ymd()),b=parseYmd(date);return Math.ceil((b-a)/86400000)}
+function mm3SalaryNextEventHtml(summary){
+  const e=mm3SalaryNextEvent(summary);
+  if(!e)return `<div class="mm3-salary-detail-group"><div class="mm3-salary-detail-row" style="pointer-events:none"><div><strong>この月の今後の入金予定はありません</strong><small>受取済み、または予定が未登録です</small></div></div></div>`;
+  const days=mm3SalaryDaysUntil(e.date),dayText=days===0?'今日':days>0?`あと${days}日`:'予定日超過';
+  return `<button type="button" class="mm3-salary-event" data-mm3-next-type="${e.type}" data-mm3-next-id="${esc(e.id)}"><div class="mm3-salary-event-icon">¥</div><div class="mm3-salary-event-main"><strong>${esc(e.name)}</strong><small>${dayLabel(e.date)}・${e.type==='salary'?'入金予定':'臨時収入'}</small></div><div class="mm3-salary-event-value"><strong>+${yen(e.amount)}</strong><small>${dayText}</small></div></button>`
+}
+function mm3SalaryWatchlistHtml(summary){
+  const composition=mm3SalaryComposition(summary),pctMap=new Map(composition.filter(x=>x.type==='employer').map(x=>[x.id,x.pct]));
+  const rows=data.employers.map((e,index)=>{const recs=summary.records.filter(r=>r.employerId===e.id),amount=sum(recs,r=>salaryRecordExpectedOrReceivedAmount(r)),status=salaryGroupDisplayStatus(recs),next=recs.find(r=>salaryRecordDisplayStatus(r)!=='入金済み')||recs[0],date=next?(salaryRecordEffectiveDate(next)||next.date):'',pct=pctMap.get(e.id)||0,color=['var(--green)','var(--teal)','var(--purple)','var(--blue)','var(--orange)'][index%5];return `<button type="button" class="mm3-salary-watchrow" data-emp="${e.id}"><div class="mm3-salary-watch-main"><strong>${esc(e.name)}</strong><small>${recs.length?(date?`${dayLabel(date)}・${esc(status)}`:esc(status)):'この月の給与は未登録'}</small></div><div class="mm3-salary-spark">${mm3SalarySparklineHtml(mm3SalaryEmployerSeries(e.id,summary.month),color)}</div><div class="mm3-salary-watch-value"><strong>${recs.length?yen(amount):'—'}</strong><small>${recs.length?`${pct}%`:'—'}</small></div></button>`}).join('');
+  return rows?`<div class="mm3-salary-watchlist">${rows}</div>`:`<div class="empty">勤務先がありません。</div>`
+}
+function mm3SalaryRecordsOpen(month){
+  const summary=mm3SalaryMonthSummary(month);
+  pushView(`${monthLabel(month)}の給与記録`,`<div class="mm3-salary-record-list">${summary.records.length?summary.records.map(r=>{const e=employerById(r.employerId),status=salaryRecordDisplayStatus(r),amount=salaryRecordExpectedOrReceivedAmount(r);return `<button type="button" class="mm3-salary-record-row" data-mm3-salary-record="${r.id}"><div class="row-main"><div class="row-title">${esc(e?.name||'勤務先')}</div><div class="row-sub">${esc(status)}・${dayLabel(salaryRecordEffectiveDate(r)||r.date)}</div></div><div class="row-value green">${yen(amount)}</div><span class="chev">›</span></button>`}).join(''):`<div class="empty">この月の給与記録はありません。</div>`}</div>`,root=>root.querySelectorAll('[data-mm3-salary-record]').forEach(b=>b.onclick=()=>openSalaryRecordEdit(b.dataset.mm3SalaryRecord)))
+}
+function mm3SalaryDetailHtml(summary){return `<div class="mm3-salary-detail-group"><button type="button" class="mm3-salary-detail-row" id="mm3SalaryRecords"><div><strong>給与記録</strong><small>${summary.records.length}件・編集と受取確認</small></div><span>›</span></button><button type="button" class="mm3-salary-detail-row" id="salaryTempHistory"><div><strong>臨時収入</strong><small>${summary.temps.length}件・${yen(summary.tempTotal)}</small></div><span>›</span></button><button type="button" class="mm3-salary-detail-row" id="salaryReasonAnalysis"><div><strong>給与分析</strong><small>勤務先別・入金月別を比較</small></div><span>›</span></button></div>`}
+function mm3RefreshSalaryViz(){
+  const root=document.getElementById('mm3SalaryViz');if(!root)return;
+  const summary=mm3SalaryMonthSummary(payViewMonth);
+  root.innerHTML=mm3SalaryVizHtml(summary);root.classList.remove('mm3-salary-viz-switch');void root.offsetWidth;root.classList.add('mm3-salary-viz-switch');
+  const title=document.getElementById('mm3SalaryVizTitle'),caption=document.getElementById('mm3SalaryVizCaption'),btn=document.getElementById('mm3SalaryVizMenu');
+  if(title)title.textContent=mm3SalaryChartMode==='trend'?'給与推移':'今月の給与構成';
+  if(caption)caption.textContent=mm3SalaryChartMode==='trend'?'月ごとの受取額を比較':'今月の受取見込みを100%として勤務先別に表示';
+  if(btn)btn.innerHTML=`${mm3SalaryChartMode==='trend'?'給与推移':'勤務先別'} ${icon('chevronDown')}`;
+  mm3BindSalaryTrendRange();
+}
+function mm3BindSalaryTrendRange(){document.querySelectorAll('[data-mm3-salary-range]').forEach(b=>b.onclick=()=>{mm3SalaryTrendRange=b.dataset.mm3SalaryRange;feedback?.selection?.();mm3RefreshSalaryViz()})}
+
+renderPay=function(){
+  const summary=mm3SalaryMonthSummary(payViewMonth),delta=mm3SalaryMonthDelta(payViewMonth,summary.total),top=document.getElementById('payTop'),content=document.getElementById('payContent');
+  top.classList.add('mm3-salary-topbar');
+  top.innerHTML=topbar('給与','',`<button class="icon-btn" id="salaryAddNav" aria-label="追加">${icon('plus')}</button><button class="icon-btn" id="salaryMenu" aria-label="メニュー">${icon('menu')}</button>`);
+  const compare=delta.pct==null?`<span class="mm3-salary-compare-label">前月比較なし</span>`:`<div class="mm3-salary-primary-change ${delta.diff>=0?'green':'red'}"><span>${mm3SalarySignedYen(delta.diff)}</span><span>${delta.pct>=0?'+':''}${delta.pct.toFixed(1)}%</span><small>前月比</small></div>`;
+  content.innerHTML=`<div class="mm3-salary-shell"><div class="mm3-salary-monthline"><button type="button" class="mm3-salary-monthbtn" id="mm3SalaryMonth">${esc(monthLabel(payViewMonth))}${icon('chevronDown')}</button><span class="mm3-salary-compare-label">${payViewMonth===ym()?'今月':'表示月'}</span></div><div class="mm3-salary-primary"><div class="mm3-salary-primary-label">${payViewMonth===ym()?'今月':'この月'}の受取見込み</div><div class="mm3-salary-primary-value">${yen(summary.total)}</div>${compare}</div><div class="mm3-salary-section-head"><span class="mm3-salary-section-title" id="mm3SalaryVizTitle">${mm3SalaryChartMode==='trend'?'給与推移':'今月の給与構成'}</span><button type="button" class="mm3-salary-pull" id="mm3SalaryVizMenu">${mm3SalaryChartMode==='trend'?'給与推移':'勤務先別'} ${icon('chevronDown')}</button></div><div class="mm3-salary-section-caption" id="mm3SalaryVizCaption">${mm3SalaryChartMode==='trend'?'月ごとの受取額を比較':'今月の受取見込みを100%として勤務先別に表示'}</div><div class="mm3-salary-viz" id="mm3SalaryViz">${mm3SalaryVizHtml(summary)}</div><div class="mm3-salary-metrics"><div class="mm3-salary-metric"><span>入金済み</span><strong>${yen(summary.received)}</strong></div><div class="mm3-salary-metric"><span>これから</span><strong>${yen(summary.planned)}</strong></div><div class="mm3-salary-metric"><span>未確認</span><strong>${yen(summary.overdue)}</strong></div></div><div class="mm3-salary-section-head"><span class="mm3-salary-section-title">次の入金</span></div>${mm3SalaryNextEventHtml(summary)}<div class="mm3-salary-section-head"><span class="mm3-salary-section-title">勤務先</span><button type="button" class="mm3-salary-link" id="mm3SalaryEmployerManage">分析 ›</button></div>${mm3SalaryWatchlistHtml(summary)}<div class="mm3-salary-section-head"><span class="mm3-salary-section-title">詳細</span></div>${mm3SalaryDetailHtml(summary)}</div>`;
+  bindSalaryHome()
+};
+
+function bindSalaryHome(){
+  const monthBtn=document.getElementById('mm3SalaryMonth');if(monthBtn)monthBtn.onclick=openPayMonthPicker;
+  const vizMenu=document.getElementById('mm3SalaryVizMenu');if(vizMenu)vizMenu.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3SalaryChartMode==='share'?'✓ ':''}勤務先別`,icon:mm3SalaryChartMode==='share'?'check':'chart',action:()=>{mm3SalaryChartMode='share';feedback?.selection?.();mm3RefreshSalaryViz()}},{label:`${mm3SalaryChartMode==='trend'?'✓ ':''}給与推移`,icon:mm3SalaryChartMode==='trend'?'check':'chart',action:()=>{mm3SalaryChartMode='trend';feedback?.selection?.();mm3RefreshSalaryViz()}}]);
+  mm3BindSalaryTrendRange();
+  const add=document.getElementById('salaryAddNav');if(add)add.onclick=()=>openSheet(`<div class="sheet-nav"><button class="nav-text" id="salaryAddClose">閉じる</button><div class="sheet-title">追加</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="action-list"><button class="secondary" id="salaryAddRecord">給与記録を追加</button><button class="secondary" id="salaryAddTemp">臨時収入を追加</button><button class="secondary" id="salaryAddEmployer">勤務先を追加</button></div></div>`,'half',root=>{root.querySelector('#salaryAddClose').onclick=requestSheetClose;root.querySelector('#salaryAddRecord').onclick=()=>{closeSheet();setTimeout(()=>openSalaryAdd(),320)};root.querySelector('#salaryAddTemp').onclick=()=>{closeSheet();setTimeout(()=>openTempIncome(ymd()),320)};root.querySelector('#salaryAddEmployer').onclick=()=>{closeSheet();setTimeout(()=>openEmployerCreate(),320)}});
+  const menu=document.getElementById('salaryMenu');if(menu)menu.onclick=e=>openMenu(e.currentTarget,[{label:'給与分析',icon:'chart',action:()=>openReasonAnalysis({kind:'salary',month:payViewMonth})},{label:'表示月を変更',icon:'calendar',action:openPayMonthPicker},{label:'臨時収入の履歴',icon:'list',action:openTempIncomeHistory}]);
+  document.querySelectorAll('#screen-pay [data-emp]').forEach(b=>b.onclick=()=>openEmployerDetail(b.dataset.emp));
+  document.querySelectorAll('#screen-pay [data-mm3-next-type]').forEach(b=>b.onclick=()=>b.dataset.mm3NextType==='salary'?openSalaryRecordEdit(b.dataset.mm3NextId):openTempIncomeHistory());
+  const records=document.getElementById('mm3SalaryRecords');if(records)records.onclick=()=>mm3SalaryRecordsOpen(payViewMonth);
+  const temp=document.getElementById('salaryTempHistory');if(temp)temp.onclick=openTempIncomeHistory;
+  const analysis=document.getElementById('salaryReasonAnalysis');if(analysis)analysis.onclick=()=>openReasonAnalysis({kind:'salary',month:payViewMonth});
+  const employerManage=document.getElementById('mm3SalaryEmployerManage');if(employerManage)employerManage.onclick=()=>openReasonAnalysis({kind:'salary',month:payViewMonth})
+}
+/* === end My Money 3.0 Phase 1 === */
+
+
+/* === My Money 3.0 Phase 2: Payments + ATF === */
+let mm3PaymentAtfState=null;
+
+function mm3PaymentSummary(month=paymentHomeMonth()){
+  const statements=cardPaymentStatementsInMonth(month,{includePaid:true});
+  const cardTotal=sum(statements,x=>x.amount),cardPaid=sum(statements.filter(x=>x.status==='paid'),x=>x.amount);
+  const fixedRows=fixedScheduledInMonth(month),fixedCashRows=fixedRows.filter(x=>x.f.paymentMethod!=='card');
+  const fixedTotal=sum(fixedCashRows,x=>x.f.amount*x.dates.length),fixedPaid=sum(fixedCashRows,x=>x.dates.filter(d=>data.transactions.some(t=>t.source==='fixed'&&t.fixedId===x.f.id&&t.date===d&&(t.bankApplied||t.bankReconciled||x.f.paymentMethod==='other'))).length*Number(x.f.amount||0));
+  const large=data.largeExpensePlans.filter(p=>String(p.date||'').slice(0,7)===month&&p.status!=='cancelled'&&p.status!=='postponed'),largeCash=large.filter(p=>p.paymentMethod!=='card');
+  const largeTotal=sum(largeCash,p=>p.amount),largePaid=sum(largeCash.filter(p=>p.status==='completed'),p=>p.amount);
+  const otherTx=txForMonth(month).filter(t=>t.paymentMethod!=='card'&&t.source!=='fixed'&&t.source!=='large_plan'),otherTotal=sum(otherTx,t=>t.amount),otherPaid=sum(otherTx.filter(t=>t.date<=ymd()&&(t.paymentMethod==='other'||t.bankApplied||t.bankReconciled)),t=>t.amount);
+  const total=cardTotal+fixedTotal+largeTotal+otherTotal,paid=cardPaid+fixedPaid+largePaid+otherPaid,remaining=Math.max(0,total-paid),pending=data.mailImports.filter(x=>x.status==='pending').length;
+  return{month,statements,cardTotal,cardPaid,fixedRows,fixedCashRows,fixedTotal,fixedPaid,large,largeCash,largeTotal,largePaid,otherTx,otherTotal,otherPaid,total,paid,remaining,pending}
+}
+function mm3PaymentSignedYen(value){value=Math.round(Number(value)||0);return value>0?`+${yen(value)}`:yen(value)}
+function mm3PaymentMonthDelta(month,current){const prev=mm3PaymentSummary(addMonths(month,-1)),diff=current-prev.remaining,pct=prev.remaining?diff/prev.remaining*100:null;return{diff,pct,prev}}
+function mm3PaymentDaysUntil(date){if(!date)return null;return Math.round((parseYmd(date)-parseYmd(ymd()))/86400000)}
+function mm3PaymentNextCard(summary){
+  const now=ymd(),isCurrent=summary.month===ym(),future=summary.month>ym();
+  return summary.statements.filter(x=>x.status!=='paid'&&x.amount>0&&(!x.paymentDate||future||!isCurrent||x.paymentDate>=now)).sort((a,b)=>String(a.paymentDate||'9999').localeCompare(String(b.paymentDate||'9999'))||String(a.cardName).localeCompare(String(b.cardName),'ja'))[0]||null
+}
+function mm3PaymentCardSeries(cardId,month,count=6){return Array.from({length:count},(_,i)=>{const m=addMonths(month,i-count+1),st=cardStatementForPaymentMonth(cardId,m);return Number(st?.amount)||0})}
+function mm3PaymentSparklineHtml(values){
+  if(!values||values.length<2||values.every(v=>Number(v)===0))return `<span class="mm3-payment-spark-empty">履歴不足</span>`;
+  const w=72,h=26,min=Math.min(...values),max=Math.max(...values),range=Math.max(1,max-min),d=values.map((v,i)=>`${i?'L':'M'}${(i*(w-2)/(values.length-1)+1).toFixed(1)},${(h-2-(Number(v)-min)/range*(h-6)).toFixed(1)}`).join(' ');
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="mm3-payment-spark-line" d="${d}"></path></svg>`
+}
+function mm3AtfForMonth(month){
+  if(month<ym())return{available:false,reason:'past',month,rows:[],events:[]};
+  let forecast=buildCashFlowForecast();
+  const monthEnd=monthEndDate(month),monthStart=`${month}-01`;
+  if((forecast.endDate||'')<monthEnd)forecast=buildCashFlowForecast({horizonEnd:monthEnd});
+  const rows=(forecast.rows||[]).filter(r=>String(r.date||'').slice(0,7)===month);
+  if(!rows.length)return{available:false,reason:'range',month,forecast,rows:[],events:[]};
+  const endRow=rows.find(r=>r.date===monthEnd)||rows.at(-1),minRow=rows.reduce((a,r)=>!a||Number(r.forecastBalance)<Number(a.forecastBalance)?r:a,null),reserve=Math.max(0,Number(forecast.reserveFloor)||0),min=Number(minRow?.forecastBalance)||0;
+  const status=min<0?'不足':min<reserve?'危険':min<reserve+5000?'注意':'安全';
+  const events=rows.flatMap(r=>(r.events||[]).map(e=>({date:r.date,label:e.label||'入出金',amount:Number(e.amount)||0,type:e.type||'info'}))).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  return{available:true,month,forecast,rows,events,monthEndForecast:Number(endRow?.forecastBalance)||0,minForecastBalance:min,minForecastDate:minRow?.date||rows[0].date,reserveFloor:reserve,safetyHeadroom:min-reserve,status}
+}
+function mm3AtfChartModel(atf){
+  const source=atf.rows||[],maxPoints=38,step=Math.max(1,Math.ceil(source.length/maxPoints)),rows=source.filter((_,i)=>i%step===0||i===source.length-1),w=340,h=150,l=4,r=38,t=15,b=22,vals=rows.map(x=>Number(x.forecastBalance)||0);
+  let min=Math.min(...vals),max=Math.max(...vals);if(min<0){min=Math.min(min,0);max=Math.max(max,0)};let span=Math.max(1,max-min),pad=span*.10;min-=pad;max+=pad;span=max-min;
+  const pw=w-l-r,ph=h-t-b,points=rows.map((row,i)=>({row,x:l+i*pw/Math.max(1,rows.length-1),y:t+(max-(Number(row.forecastBalance)||0))/span*ph,value:Number(row.forecastBalance)||0}));
+  const zeroY=min<=0&&max>=0?t+(max/span)*ph:null;
+  return{w,h,l,r,t,b,pw,ph,min,max,span,points,zeroY}
+}
+function mm3AtfSegmentHtml(model){
+  const out=[];for(let i=1;i<model.points.length;i++){
+    const a=model.points[i-1],b=model.points[i],av=a.value,bv=b.value;
+    if((av<0)===(bv<0))out.push(`<line class="mm3-atf-segment ${av<0?'negative':''}" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}"></line>`);
+    else{const ratio=Math.abs(av)/(Math.abs(av)+Math.abs(bv)),cx=a.x+(b.x-a.x)*ratio,cy=a.y+(b.y-a.y)*ratio;out.push(`<line class="mm3-atf-segment ${av<0?'negative':''}" x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${cx.toFixed(1)}" y2="${cy.toFixed(1)}"></line><line class="mm3-atf-segment ${bv<0?'negative':''}" x1="${cx.toFixed(1)}" y1="${cy.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}"></line>`)}
+  }return out.join('')
+}
+function mm3AtfEventClass(row){if((Number(row.forecastBalance)||0)<0)return'negative';const events=row.events||[];if(events.some(e=>e.type==='income'))return'income';if(events.some(e=>e.type==='card'))return'card';return''}
+function mm3AtfChartHtml(atf){
+  if(!atf.available)return `<div class="mm3-atf-empty">${atf.reason==='past'?'ATFは現在時点から先の資金見通しを表示します。<br>過去月は支払い実績をご確認ください。':'この月は現在のACF予測範囲外です。<br>予定を追加すると予測に反映されます。'}</div>`;
+  const m=mm3AtfChartModel(atf),ticks=[0,.5,1].map(q=>m.max-q*m.span),ys=[m.t,m.t+m.ph*.5,m.t+m.ph],line=mm3AtfSegmentHtml(m),area=m.points.length?`M${m.points[0].x.toFixed(1)},${(m.t+m.ph).toFixed(1)} L${m.points.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L')} L${m.points.at(-1).x.toFixed(1)},${(m.t+m.ph).toFixed(1)} Z`:'';
+  return `<div class="mm3-atf-chart" id="mm3AtfChart"><svg viewBox="0 0 ${m.w} ${m.h}" preserveAspectRatio="none" role="img" aria-label="${esc(monthLabel(atf.month))}のATF残高予測">${ys.map(y=>`<line class="mm3-atf-grid" x1="${m.l}" x2="${m.l+m.pw}" y1="${y}" y2="${y}"></line>`).join('')}${m.zeroY!=null?`<line class="mm3-atf-zero" x1="${m.l}" x2="${m.l+m.pw}" y1="${m.zeroY}" y2="${m.zeroY}"></line>`:''}${area?`<path class="mm3-atf-area" d="${area}"></path>`:''}${line}${m.points.filter(p=>(p.row.events||[]).length).map(p=>`<circle class="mm3-atf-event-dot ${mm3AtfEventClass(p.row)}" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.4"><title>${dayLabel(p.row.date)} ${(p.row.events||[]).map(e=>e.label).join(' / ')}</title></circle>`).join('')}<line class="mm3-atf-guide" data-mm3-atf-guide x1="0" x2="0" y1="${m.t}" y2="${m.t+m.ph}"></line><circle class="mm3-atf-selected" data-mm3-atf-selected cx="0" cy="0" r="4.3"></circle>${ticks.map((v,i)=>`<text class="mm3-atf-axis" x="${m.l+m.pw+4}" y="${ys[i]+3}">${esc(acfCompactSignedMoney?acfCompactSignedMoney(v):yen(v))}</text>`).join('')}<text class="mm3-atf-axis" x="${m.l}" y="${m.h-4}">${esc(m.points[0]?.row.date?.slice(5)||'')}</text><text class="mm3-atf-axis" text-anchor="end" x="${m.l+m.pw}" y="${m.h-4}">${esc(m.points.at(-1)?.row.date?.slice(5)||'')}</text></svg><div class="mm3-atf-tooltip" data-mm3-atf-tooltip></div></div>`
+}
+function mm3PaymentStatusClass(status){return status==='安全'?'green':status==='注意'?'orange':'red'}
+function mm3PaymentNextCardHtml(summary){
+  const st=mm3PaymentNextCard(summary);if(!st)return `<div class="mm3-payment-detail-list"><div class="mm3-payment-detail-row" style="pointer-events:none"><div class="mm3-payment-detail-main"><strong>この月の今後のカード引落はありません</strong><small>支払済み、または請求予定が未登録です</small></div></div></div>`;
+  const days=mm3PaymentDaysUntil(st.paymentDate),dayText=summary.month===ym()&&days!=null?(days===0?'今日':days>0?`あと${days}日`:'支払日超過'):'支払予定';
+  return `<button type="button" class="mm3-payment-event" data-mm3-next-card="${esc(st.cardId)}"><div class="mm3-payment-event-icon">${icon('card')}</div><div class="mm3-payment-event-main"><strong>${esc(st.cardName)}</strong><small>${st.paymentDate?`${dayLabel(st.paymentDate)}・${cardStatementStatusLabel(st.status)}`:cardStatementStatusLabel(st.status)}</small></div><div class="mm3-payment-event-value"><strong>−${yen(st.amount)}</strong><small>${dayText}</small></div></button>`
+}
+function mm3PaymentCardWatchlistHtml(summary){
+  if(!data.cards.length)return `<div class="empty">クレジットカードがありません。</div>`;
+  return `<div class="mm3-payment-watchlist">${data.cards.map(c=>{const st=cardStatementForPaymentMonth(c.id,summary.month),bill=Number(st?.amount)||0,prev=Number(cardStatementForPaymentMonth(c.id,addMonths(summary.month,-1))?.amount)||0,diff=bill-prev,pct=prev?diff/prev*100:null,status=st?.status||'estimated',sub=st?.paymentDate?`${dayLabel(st.paymentDate)}・${cardStatementStatusLabel(status)}`:(c.dueDay?`${c.dueDay}日・${cardStatementStatusLabel(status)}`:cardStatementStatusLabel(status));return `<button type="button" class="mm3-payment-watchrow" data-card="${c.id}"><div class="mm3-payment-watch-main"><strong>${esc(c.name)}</strong><small>${esc(sub)}</small></div><div class="mm3-payment-spark">${mm3PaymentSparklineHtml(mm3PaymentCardSeries(c.id,summary.month))}</div><div class="mm3-payment-watch-value"><strong>${bill?yen(bill):'—'}</strong><small class="${pct==null?'':diff<=0?'green':'red'}">${pct==null?'比較なし':`${diff>=0?'+':'−'}${Math.abs(pct).toFixed(1)}%`}</small></div></button>`}).join('')}</div>`
+}
+function mm3PaymentDetailHtml(summary){
+  const debitTotal=sum(data.debitCards,d=>debitUsage(d.id,summary.month)),fixedCount=summary.fixedRows.reduce((n,x)=>n+x.dates.length,0),largeCount=summary.large.length;
+  return `<div class="mm3-payment-detail-list"><button class="mm3-payment-detail-row" id="mm3PaymentDebit"><span class="mm3-payment-detail-icon">${icon('wallet')}</span><div class="mm3-payment-detail-main"><strong>デビットカード</strong><small>${data.debitCards.length}枚・即時引落</small></div><span class="mm3-payment-detail-value">${yen(debitTotal)}</span><span class="mm3-payment-detail-chev">›</span></button><button class="mm3-payment-detail-row" id="mm3PaymentFixed"><span class="mm3-payment-detail-icon" style="color:var(--orange)">${icon('repeat')}</span><div class="mm3-payment-detail-main"><strong>固定支払い</strong><small>${fixedCount}件・カード払いは請求日に集約</small></div><span class="mm3-payment-detail-value">${yen(summary.fixedTotal)}</span><span class="mm3-payment-detail-chev">›</span></button><button class="mm3-payment-detail-row" id="mm3PaymentLarge"><span class="mm3-payment-detail-icon" style="color:var(--orange)">${icon('ticket')}</span><div class="mm3-payment-detail-main"><strong>大型支出</strong><small>${largeCount}件・この月</small></div><span class="mm3-payment-detail-value">${yen(summary.largeTotal)}</span><span class="mm3-payment-detail-chev">›</span></button><button class="mm3-payment-detail-row" id="mm3PaymentHistory"><span class="mm3-payment-detail-icon">${icon('list')}</span><div class="mm3-payment-detail-main"><strong>支出履歴</strong><small>${summary.otherTx.length}件のその他取引</small></div><span class="mm3-payment-detail-chev">›</span></button><button class="mm3-payment-detail-row" id="mm3PaymentMail"><span class="mm3-payment-detail-icon" style="color:#EA4335">${icon('mail')}</span><div class="mm3-payment-detail-main"><strong>Gmail・未確認取引</strong><small>${gmailConnected()?'同期済み':'未接続'}・未確認 ${summary.pending}件</small></div>${summary.pending?`<span class="badge">${summary.pending}</span>`:''}<span class="mm3-payment-detail-chev">›</span></button></div>`
+}
+function mm3OpenDebitList(month){
+  pushView('デビットカード',`<div class="mm3-payment-push-list">${data.debitCards.length?data.debitCards.map(d=>`<button class="mm3-payment-push-row" data-mm3-debit="${d.id}"><div class="row-main"><div class="row-title">${esc(d.name)}</div><div class="row-sub">${esc(bankById(d.bankId)?.name||'口座未設定')}・即時引落</div></div><div class="row-value">${yen(debitUsage(d.id,month))}</div><span class="chev">›</span></button>`).join(''):`<div class="empty">デビットカードがありません。</div>`}</div>`,root=>root.querySelectorAll('[data-mm3-debit]').forEach(b=>b.onclick=()=>openDebitDetail(b.dataset.mm3Debit)))
+}
+function mm3OpenFixedList(summary){
+  const rows=summary.fixedRows.length?summary.fixedRows:data.fixedPayments.map(f=>({f,dates:[]}));
+  pushView('固定支払い',`<div class="mm3-payment-push-list">${rows.length?rows.map(x=>`<button class="mm3-payment-push-row" data-mm3-fixed="${x.f.id}"><div class="row-main"><div class="row-title">${esc(x.f.name)}</div><div class="row-sub">${x.dates.length?x.dates.map(dayLabel).join(' / '):`${x.f.frequency==='monthly'?'毎月':x.f.frequency==='yearly'?'毎年':'隔月'} ${x.f.day}日`}</div></div><div class="row-value">${yen(Number(x.f.amount||0)*Math.max(1,x.dates.length||1))}</div><span class="chev">›</span></button>`).join(''):`<div class="empty">固定支払いは未登録です。</div>`}</div>`,root=>root.querySelectorAll('[data-mm3-fixed]').forEach(b=>b.onclick=()=>openFixedPayment(data.fixedPayments.find(x=>x.id===b.dataset.mm3Fixed))))
+}
+function mm3OpenLargeList(summary){
+  pushView(`${monthLabel(summary.month)}の大型支出`,`<div class="mm3-payment-push-list">${summary.large.length?summary.large.map(p=>`<button class="mm3-payment-push-row" data-mm3-large="${p.id}"><div class="row-main"><div class="row-title">${esc(p.name)}</div><div class="row-sub">${dayLabel(p.date)}・${p.status==='completed'?'完了':p.priority==='required'?'必須':'検討中'}</div></div><div class="row-value">${yen(p.amount)}</div><span class="chev">›</span></button>`).join(''):`<div class="empty">この月の大型支出はありません。</div>`}</div>`,root=>root.querySelectorAll('[data-mm3-large]').forEach(b=>b.onclick=()=>openLargeExpenseDetail(b.dataset.mm3Large)))
+}
+function mm3OpenAtfSheet(atf){
+  if(!atf?.available)return openAcf();
+  const eventRows=atf.events.filter(e=>e.date>=ymd()).slice(0,6);
+  openSheet(`<div class="sheet-nav"><button class="nav-text" id="mm3AtfClose">閉じる</button><div class="sheet-title">ATF 資金見通し</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="hero-sub">ACFの予測結果を、支払いタブ向けに表示しています。ATF独自の再計算は行いません。</div><div class="mm3-atf-sheet-summary"><div><span>月末予測</span><strong class="${atf.monthEndForecast<0?'red':''}">${yen(atf.monthEndForecast)}</strong></div><div><span>最低残高</span><strong class="${atf.minForecastBalance<0?'red':''}">${yen(atf.minForecastBalance)}</strong></div><div><span>安全余力</span><strong class="${atf.safetyHeadroom<0?'red':''}">${yen(atf.safetyHeadroom)}</strong></div></div><div class="form-group-title">次の重要な入出金</div><div class="mm3-atf-sheet-events">${eventRows.length?eventRows.map(e=>`<div class="mm3-atf-sheet-event"><div><strong>${esc(e.label)}</strong><small>${dayLabel(e.date)}</small></div><span class="${e.amount>=0?'green':'red'}">${e.amount>0?'+':''}${yen(e.amount)}</span></div>`).join(''):`<div class="row"><div class="row-main"><div class="row-title">予定された入出金はありません</div></div></div>`}</div><button type="button" class="primary" id="mm3AtfDetail" style="margin-top:14px">詳しいATF分析</button></div>`,'half',root=>{root.querySelector('#mm3AtfClose').onclick=requestSheetClose;root.querySelector('#mm3AtfDetail').onclick=()=>{closeSheet();setTimeout(()=>openAcf(),320)}})
+}
+function mm3BindAtfScrubber(atf){
+  const root=document.getElementById('mm3AtfChart');if(!root||!atf?.available)return;
+  const svg=root.querySelector('svg'),guide=root.querySelector('[data-mm3-atf-guide]'),dot=root.querySelector('[data-mm3-atf-selected]'),tip=root.querySelector('[data-mm3-atf-tooltip]'),model=mm3AtfChartModel(atf);let active=false,last=-1;
+  const update=e=>{const rect=svg.getBoundingClientRect(),vx=Math.max(0,Math.min(model.w,(e.clientX-rect.left)/Math.max(1,rect.width)*model.w)),idx=model.points.reduce((best,p,i)=>Math.abs(p.x-vx)<Math.abs(model.points[best].x-vx)?i:best,0),p=model.points[idx];guide.setAttribute('x1',p.x);guide.setAttribute('x2',p.x);dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);dot.style.stroke=p.value<0?'var(--red)':'var(--blue)';const ev=(p.row.events||[])[0];tip.style.left=`${Math.max(12,Math.min(88,p.x/model.w*100))}%`;tip.innerHTML=`${esc(dayLabel(p.row.date))}<br><strong>${yen(p.value)}</strong>${ev?`<small>${esc(ev.label)} ${ev.amount>0?'+':''}${yen(ev.amount)}</small>`:''}`;if(idx!==last){last=idx;feedback?.selection?.()}root.classList.add('scrubbing')};
+  root.addEventListener('pointerdown',e=>{active=true;last=-1;root.setPointerCapture?.(e.pointerId);update(e)});root.addEventListener('pointermove',e=>{if(active)update(e)});const end=()=>{active=false;last=-1;root.classList.remove('scrubbing')};root.addEventListener('pointerup',end);root.addEventListener('pointercancel',end);root.addEventListener('lostpointercapture',end)
+}
+
+renderPayments=function(){
+  const summary=mm3PaymentSummary(paymentHomeMonth()),delta=mm3PaymentMonthDelta(summary.month,summary.remaining),atf=mm3AtfForMonth(summary.month);mm3PaymentAtfState=atf;
+  const top=document.getElementById('paymentsTop'),content=document.getElementById('paymentsContent');top.classList.add('mm3-payment-topbar');
+  top.innerHTML=topbar('支払い','',`${actionBtn('plus','paymentsAdd','追加')}<button class="icon-btn" id="paymentsMenu" aria-label="メニュー">${icon('menu')}</button>`);
+  const compare=delta.pct==null?`<span class="mm3-payment-monthmeta">前月比較なし</span>`:`<div class="mm3-payment-primary-change ${delta.diff<=0?'green':'red'}"><span>${mm3PaymentSignedYen(delta.diff)}</span><span>${delta.pct>=0?'+':''}${delta.pct.toFixed(1)}%</span><small>前月比</small></div>`;
+  content.innerHTML=`<div class="mm3-payment-shell mm3-payment-reveal"><div class="mm3-payment-monthline"><button type="button" class="mm3-payment-monthbtn" id="mm3PaymentMonth">${esc(monthLabel(summary.month))}${icon('chevronDown')}</button><span class="mm3-payment-monthmeta">${summary.month===ym()?'今月':summary.month<ym()?'過去月':'未来月'}</span></div><div class="mm3-payment-primary"><div class="mm3-payment-primary-label">これから支払う額</div><div class="mm3-payment-primary-value">${yen(summary.remaining)}</div>${compare}</div><div class="mm3-payment-section-head"><div class="mm3-payment-atf-title"><span class="mm3-payment-section-title">資金見通し</span><span class="mm3-payment-atf-chip">ATF</span></div><button type="button" class="mm3-payment-link" id="mm3AtfOpen">ATFを開く ›</button></div><div class="mm3-payment-caption">ACFの予測を支払い目線で表示。給与・カード引落・固定支払い・大型支出を日付順に反映します。</div>${mm3AtfChartHtml(atf)}${atf.available?`<div class="mm3-atf-metrics"><div class="mm3-atf-metric"><span>月末予測</span><strong class="${atf.monthEndForecast<0?'red':''}">${yen(atf.monthEndForecast)}</strong></div><div class="mm3-atf-metric"><span>最低残高</span><strong class="${atf.minForecastBalance<0?'red':''}">${yen(atf.minForecastBalance)}</strong></div><div class="mm3-atf-metric"><span>状態</span><strong class="${mm3PaymentStatusClass(atf.status)}">${atf.status}</strong></div></div>`:''}<div class="mm3-payment-section-head"><span class="mm3-payment-section-title">次の引落</span><button type="button" class="mm3-payment-link" id="mm3PaymentHistoryTop">予定一覧 ›</button></div>${mm3PaymentNextCardHtml(summary)}<div class="mm3-payment-section-head"><span class="mm3-payment-section-title">カード</span><button type="button" class="mm3-payment-link" id="mm3PaymentQuickBilling">請求額を更新 ›</button></div>${mm3PaymentCardWatchlistHtml(summary)}<div class="mm3-payment-section-head"><span class="mm3-payment-section-title">詳細</span></div>${mm3PaymentDetailHtml(summary)}</div>`;
+  bindPayments()
+};
+
+function bindPayments(){
+  const month=document.getElementById('mm3PaymentMonth');if(month)month.onclick=()=>openAssetBillingMonthPicker(()=>renderPayments());
+  const atfOpen=document.getElementById('mm3AtfOpen');if(atfOpen)atfOpen.onclick=()=>mm3OpenAtfSheet(mm3PaymentAtfState);
+  mm3BindAtfScrubber(mm3PaymentAtfState);
+  document.querySelectorAll('#screen-payments [data-card]').forEach(b=>b.onclick=()=>openCardDetail(b.dataset.card,paymentHomeMonth()));
+  const next=document.querySelector('#screen-payments [data-mm3-next-card]');if(next)next.onclick=()=>openCardDetail(next.dataset.mm3NextCard,paymentHomeMonth());
+  const quick=document.getElementById('mm3PaymentQuickBilling');if(quick)quick.onclick=()=>openQuickCardBilling(paymentHomeMonth());
+  const histTop=document.getElementById('mm3PaymentHistoryTop');if(histTop)histTop.onclick=()=>openTransactionList({month:paymentHomeMonth(),title:`${monthLabel(paymentHomeMonth())}の支払い`});
+  const debit=document.getElementById('mm3PaymentDebit');if(debit)debit.onclick=()=>mm3OpenDebitList(paymentHomeMonth());
+  const fixed=document.getElementById('mm3PaymentFixed');if(fixed)fixed.onclick=()=>mm3OpenFixedList(mm3PaymentSummary(paymentHomeMonth()));
+  const large=document.getElementById('mm3PaymentLarge');if(large)large.onclick=()=>mm3OpenLargeList(mm3PaymentSummary(paymentHomeMonth()));
+  const history=document.getElementById('mm3PaymentHistory');if(history)history.onclick=()=>openTransactionList({month:paymentHomeMonth(),title:`${monthLabel(paymentHomeMonth())}の支払い`});
+  const mail=document.getElementById('mm3PaymentMail');if(mail)mail.onclick=openMailOverview;
+  const add=document.getElementById('paymentsAdd');if(add)add.onclick=()=>openSheet(`<div class="sheet-nav"><button class="nav-text" id="paymentsAddClose">閉じる</button><div class="sheet-title">追加</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="action-list"><button class="secondary" id="paymentAddCard">クレジットカードを追加</button><button class="secondary" id="paymentAddDebit">デビットカードを追加</button><button class="secondary" id="paymentAddFixed">固定支払いを追加</button><button class="secondary" id="paymentAddLarge">大型支出を追加</button></div></div>`,'half',root=>{root.querySelector('#paymentsAddClose').onclick=requestSheetClose;root.querySelector('#paymentAddCard').onclick=()=>{closeSheet();setTimeout(()=>openAddCard(),320)};root.querySelector('#paymentAddDebit').onclick=()=>{closeSheet();setTimeout(()=>openAddDebit(),320)};root.querySelector('#paymentAddFixed').onclick=()=>{closeSheet();setTimeout(()=>openFixedPayment(),320)};root.querySelector('#paymentAddLarge').onclick=()=>{closeSheet();setTimeout(()=>openLargeExpenseEditor(null,{after:()=>renderAll()}),320)}});
+  const menu=document.getElementById('paymentsMenu');if(menu)menu.onclick=e=>openMenu(e.currentTarget,[{label:'表示する支払月を変更',icon:'calendar',action:()=>openAssetBillingMonthPicker(()=>renderPayments())},{label:'カード請求額を更新',icon:'card',action:()=>openQuickCardBilling(paymentHomeMonth())},{label:'Gmailを同期',icon:'mail',action:()=>gmailConnected()?syncGmail():openGmailSettings()}])
+}
+/* === end My Money 3.0 Phase 2 === */
+
+
+/* === My Money 3.0 Phase 3: Assets final active override === */
+let mm3AssetChartRange='1M';
+let mm3AssetChartMode='actual';
+let mm3AssetSortMode='balance-desc';
+let mm3AssetChartState=null;
+
+function mm3AssetRangeDays(range){return({"1W":7,"1M":31,"3M":93,"6M":186,"1Y":366})[range]||null}
+function mm3AssetDateCutoff(range){const days=mm3AssetRangeDays(range);if(!days)return null;const d=parseYmd(ymd());d.setDate(d.getDate()-days+1);return ymd(d)}
+function mm3AssetSignedYen(value){const n=Math.round(Number(value)||0);return n>0?`+${yen(n)}`:yen(n)}
+function mm3AssetCurrentDelta(){
+  const deltas=data.banks.map(b=>bankDeltaInfo(b.id,31)).filter(x=>x.known);
+  if(!deltas.length)return{known:false,delta:0,pct:null};
+  const delta=sum(deltas,x=>x.delta),current=totalDeposits(),base=current-delta;
+  return{known:true,delta,pct:base>0?delta/base*100:null}
+}
+function mm3AssetAllHistoryPoints(){
+  const bankIds=new Set(data.banks.map(b=>b.id)),latest=new Map(),events=[...(data.assetSnapshots||[])].filter(s=>s&&String(s.date||s.createdAt||'')).sort((a,b)=>String(a.date||a.createdAt||'').localeCompare(String(b.date||b.createdAt||''))||String(a.createdAt||'').localeCompare(String(b.createdAt||''))),points=[];
+  for(const s of events){
+    const date=String(s.date||String(s.createdAt||'').slice(0,10)).slice(0,10);if(!date)continue;
+    if(s.bankId&&bankIds.has(s.bankId)&&s.bankBalance!=null)latest.set(s.bankId,Number(s.bankBalance)||0);
+    let value=null;
+    if(s.bankTotal!=null)value=Number(s.bankTotal)||0;
+    else if(bankIds.size&&[...bankIds].every(id=>latest.has(id)))value=[...bankIds].reduce((a,id)=>a+(Number(latest.get(id))||0),0);
+    if(value==null)continue;
+    const last=points.at(-1);if(last&&last.date===date)last.value=value;else points.push({date,value});
+  }
+  const today=ymd(),current=totalDeposits();
+  if(!points.length||points.at(-1).date<today){points.push({date:today,value:current})}else if(points.at(-1).date===today){points.at(-1).value=current}
+  return points.sort((a,b)=>a.date.localeCompare(b.date))
+}
+function mm3AssetActualPoints(range=mm3AssetChartRange){
+  const all=mm3AssetAllHistoryPoints(),cutoff=mm3AssetDateCutoff(range);if(!cutoff)return all;
+  return all.filter(p=>p.date>=cutoff)
+}
+function mm3AssetForecastPoints(range=mm3AssetChartRange){
+  let forecast;try{forecast=buildCashFlowForecast()}catch(e){return[]}
+  let rows=(forecast?.rows||[]).filter(r=>r.date>=ymd()).map(r=>({date:r.date,value:Number(r.forecastBalance)||0,row:r}));
+  const days=mm3AssetRangeDays(range);if(days){const end=parseYmd(ymd());end.setDate(end.getDate()+days-1);const endDate=ymd(end);rows=rows.filter(r=>r.date<=endDate)}
+  return rows
+}
+function mm3AssetDisplayPoints(){return mm3AssetChartMode==='forecast'?mm3AssetForecastPoints(mm3AssetChartRange):mm3AssetActualPoints(mm3AssetChartRange)}
+function mm3AssetChartModel(points){
+  const source=points||[],maxPoints=52,step=Math.max(1,Math.ceil(source.length/maxPoints)),rows=source.filter((_,i)=>i%step===0||i===source.length-1),w=342,h=168,l=4,r=42,t=14,b=23,vals=rows.map(x=>Number(x.value)||0);
+  if(!rows.length)return{w,h,l,r,t,b,points:[],min:0,max:1,span:1,pw:w-l-r,ph:h-t-b,zeroY:null};
+  let min=Math.min(...vals),max=Math.max(...vals);if(min<0){min=Math.min(min,0);max=Math.max(max,0)};let span=Math.max(1,max-min),pad=Math.max(1,span*.09);min-=pad;max+=pad;span=max-min;
+  const pw=w-l-r,ph=h-t-b,xy=rows.map((row,i)=>({...row,x:l+i*pw/Math.max(1,rows.length-1),y:t+(max-(Number(row.value)||0))/span*ph})),zeroY=min<=0&&max>=0?t+(max/span)*ph:null;
+  return{w,h,l,r,t,b,pw,ph,min,max,span,points:xy,zeroY}
+}
+function mm3AssetCompactMoney(value){
+  const n=Number(value)||0,a=Math.abs(n),sign=n<0?'−':'';
+  if(a>=1000000)return `${sign}${(a/1000000).toFixed(a>=10000000?0:1)}M`;
+  if(a>=1000)return `${sign}${(a/1000).toFixed(a>=100000?0:1)}k`;
+  return `${sign}${Math.round(a)}`
+}
+function mm3AssetChartHtml(){
+  const points=mm3AssetDisplayPoints();mm3AssetChartState={points,mode:mm3AssetChartMode,range:mm3AssetChartRange};
+  if(points.length<2)return `<div class="mm3-assets-empty-chart">${mm3AssetChartMode==='forecast'?'ATF予測に必要な資金予測がまだありません。':'この期間の残高履歴が不足しています。'}<br>${mm3AssetChartMode==='forecast'?'ACFの予定を確認してください。':'残高を更新すると推移が蓄積されます。'}</div>`;
+  const m=mm3AssetChartModel(points),line=m.points.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '),area=`${line} L${m.points.at(-1).x.toFixed(1)},${(m.t+m.ph).toFixed(1)} L${m.points[0].x.toFixed(1)},${(m.t+m.ph).toFixed(1)} Z`,ys=[m.t,m.t+m.ph*.5,m.t+m.ph],ticks=[m.max,m.max-m.span*.5,m.min],modeClass=mm3AssetChartMode==='forecast'?'forecast':'';
+  return `<div class="mm3-assets-chart" id="mm3AssetChart"><svg viewBox="0 0 ${m.w} ${m.h}" preserveAspectRatio="none" role="img" aria-label="${mm3AssetChartMode==='forecast'?'ATF予測':'資産実績'}"><line class="mm3-assets-grid" x1="${m.l}" x2="${m.l+m.pw}" y1="${ys[0]}" y2="${ys[0]}"></line><line class="mm3-assets-grid" x1="${m.l}" x2="${m.l+m.pw}" y1="${ys[1]}" y2="${ys[1]}"></line><line class="mm3-assets-grid" x1="${m.l}" x2="${m.l+m.pw}" y1="${ys[2]}" y2="${ys[2]}"></line>${m.zeroY!=null?`<line class="mm3-assets-zero" x1="${m.l}" x2="${m.l+m.pw}" y1="${m.zeroY}" y2="${m.zeroY}"></line>`:''}<path class="mm3-assets-area ${modeClass}" d="${area}"></path><path class="mm3-assets-line ${modeClass}" d="${line}"></path><line class="mm3-assets-guide" data-mm3-assets-guide x1="0" x2="0" y1="${m.t}" y2="${m.t+m.ph}"></line><circle class="mm3-assets-selected ${modeClass}" data-mm3-assets-selected cx="0" cy="0" r="4.2"></circle>${ticks.map((v,i)=>`<text class="mm3-assets-axis" x="${m.l+m.pw+5}" y="${ys[i]+3}">${esc(mm3AssetCompactMoney(v))}</text>`).join('')}<text class="mm3-assets-axis" x="${m.l}" y="${m.h-4}">${esc(m.points[0].date.slice(5))}</text><text class="mm3-assets-axis" text-anchor="end" x="${m.l+m.pw}" y="${m.h-4}">${esc(m.points.at(-1).date.slice(5))}</text></svg><div class="mm3-assets-tooltip" data-mm3-assets-tooltip></div></div>`
+}
+function mm3AssetRangeHtml(){return `<div class="mm3-assets-range">${[['1W','1W'],['1M','1M'],['3M','3M'],['6M','6M'],['1Y','1Y'],['ALL','全期間']].map(([v,l])=>`<button type="button" data-mm3-asset-range="${v}" class="${mm3AssetChartRange===v?'on':''}">${l}</button>`).join('')}</div>`}
+function mm3AssetSortedBanks(){
+  const banks=[...data.banks];
+  if(mm3AssetSortMode==='balance-asc')banks.sort((a,b)=>(Number(a.balance)||0)-(Number(b.balance)||0));
+  else if(mm3AssetSortMode==='updated')banks.sort((a,b)=>String(b.balanceAsOf||'').localeCompare(String(a.balanceAsOf||''))||String(a.name).localeCompare(String(b.name),'ja'));
+  else if(mm3AssetSortMode==='name')banks.sort((a,b)=>String(a.name).localeCompare(String(b.name),'ja'));
+  else banks.sort((a,b)=>(Number(b.balance)||0)-(Number(a.balance)||0));
+  return banks
+}
+function mm3AssetSortLabel(){return({"balance-desc":'残高順 ↓',"balance-asc":'残高順 ↑',updated:'更新順',name:'名前順'})[mm3AssetSortMode]||'残高順 ↓'}
+function mm3AssetWatchlistHtml(){
+  const banks=mm3AssetSortedBanks();if(!banks.length)return `<div class="empty">銀行口座がありません。</div>`;
+  return `<div class="mm3-assets-watchlist" id="mm3AssetWatchlist">${banks.map(b=>{const pts=bankSnapshotSeries(b.id,31),d=bankDeltaInfo(b.id,31),change=d.known?`${d.delta>=0?'+':'−'}${yen(Math.abs(d.delta))}`:'比較不可',sub=b.balanceAsOf?`確認 ${compactDateTime(b.balanceAsOf)}`:(b.label||'残高未確認');return `<button type="button" class="mm3-assets-watchrow mm3-assets-sort-flip" data-bank="${b.id}" data-balance="${Number(b.balance)||0}" data-updated="${esc(b.balanceAsOf||'')}" data-name="${esc(b.name)}"><div class="mm3-assets-watch-main"><strong>${esc(b.name)}</strong><small>${esc(sub)}</small></div><div class="mm3-assets-spark">${miniSparklineHtml(pts.slice(-12))}</div><div class="mm3-assets-watch-value"><strong>${yen(b.balance)}</strong><small class="${d.known?(d.delta>=0?'green':'red'):''}">${change}</small></div></button>`}).join('')}</div>`
+}
+function mm3AssetDetailHtml(){return `<div class="mm3-assets-detail-list"><button type="button" class="mm3-assets-detail-row" id="mm3AssetQuick"><span class="mm3-assets-detail-icon">${icon('bank')}</span><div class="mm3-assets-detail-main"><strong>銀行残高を更新</strong><small>最新の残高を記録</small></div><span class="mm3-assets-detail-chev">›</span></button><button type="button" class="mm3-assets-detail-row" id="mm3AssetTimeline"><span class="mm3-assets-detail-icon">${icon('chart')}</span><div class="mm3-assets-detail-main"><strong>お金のタイムライン</strong><small>30 / 60 / 90日の資金推移</small></div><span class="mm3-assets-detail-chev">›</span></button><button type="button" class="mm3-assets-detail-row" id="mm3AssetTransfer"><span class="mm3-assets-detail-icon">${icon('repeat')}</span><div class="mm3-assets-detail-main"><strong>引落準備</strong><small>不足口座と振替計画</small></div><span class="mm3-assets-detail-chev">›</span></button><button type="button" class="mm3-assets-detail-row" id="mm3AssetAcf"><span class="mm3-assets-detail-icon">${icon('target')}</span><div class="mm3-assets-detail-main"><strong>生活費の見通し</strong><small>ACFで安全残高を確認</small></div><span class="mm3-assets-detail-chev">›</span></button></div>`}
+function mm3AssetForecastMetric(){const atf=mm3AtfForMonth(ym());return atf?.available?{known:true,value:atf.monthEndForecast}:{known:false,value:0}}
+function mm3RefreshAssetChart(){
+  const root=document.getElementById('mm3AssetChartBlock');if(!root)return;root.innerHTML=`${mm3AssetChartHtml()}${mm3AssetRangeHtml()}`;const caption=document.getElementById('mm3AssetCaption');if(caption)caption.textContent=mm3AssetChartMode==='forecast'?'既存ACFのforecastを使った未来残高。独自計算はしません。':'登録済みの残高履歴だけを使用。グラフをなぞると日付と残高を確認できます。';root.classList.remove('mm3-assets-chart-switch');void root.offsetWidth;root.classList.add('mm3-assets-chart-switch');mm3BindAssetChart();
+}
+function mm3BindAssetChart(){
+  document.querySelectorAll('#screen-assets [data-mm3-asset-range]').forEach(b=>b.onclick=()=>{mm3AssetChartRange=b.dataset.mm3AssetRange;feedback?.selection?.();mm3RefreshAssetChart()});
+  const root=document.getElementById('mm3AssetChart'),state=mm3AssetChartState;if(!root||!state?.points?.length||state.points.length<2)return;
+  const svg=root.querySelector('svg'),guide=root.querySelector('[data-mm3-assets-guide]'),dot=root.querySelector('[data-mm3-assets-selected]'),tip=root.querySelector('[data-mm3-assets-tooltip]'),model=mm3AssetChartModel(state.points);let active=false,last=-1;
+  const update=e=>{const rect=svg.getBoundingClientRect(),vx=Math.max(0,Math.min(model.w,(e.clientX-rect.left)/Math.max(1,rect.width)*model.w)),idx=model.points.reduce((best,p,i)=>Math.abs(p.x-vx)<Math.abs(model.points[best].x-vx)?i:best,0),p=model.points[idx];guide.setAttribute('x1',p.x);guide.setAttribute('x2',p.x);dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);tip.style.left=`${Math.max(14,Math.min(86,p.x/model.w*100))}%`;const ev=state.mode==='forecast'?(p.row?.events||[])[0]:null;tip.innerHTML=`${esc(dayLabel(p.date))}<strong>${yen(p.value)}</strong>${ev?`<small>${esc(ev.label)} ${Number(ev.amount)>0?'+':''}${yen(Number(ev.amount)||0)}</small>`:''}`;if(idx!==last){last=idx;feedback?.selection?.()}root.classList.add('scrubbing')};
+  root.addEventListener('pointerdown',e=>{active=true;last=-1;root.setPointerCapture?.(e.pointerId);update(e)});root.addEventListener('pointermove',e=>{if(active)update(e)});const end=()=>{active=false;last=-1;root.classList.remove('scrubbing')};root.addEventListener('pointerup',end);root.addEventListener('pointercancel',end);root.addEventListener('lostpointercapture',end)
+}
+function mm3AssetApplySort(mode){
+  mm3AssetSortMode=mode;const list=document.getElementById('mm3AssetWatchlist');if(!list)return renderAssets();
+  const rows=[...list.querySelectorAll('.mm3-assets-watchrow')],before=new Map(rows.map(r=>[r,r.getBoundingClientRect()])),order=mm3AssetSortedBanks().map(b=>b.id),map=new Map(rows.map(r=>[r.dataset.bank,r]));order.forEach(id=>{const row=map.get(id);if(row)list.appendChild(row)});const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.documentElement.classList.contains('motion-off');if(!reduce)requestAnimationFrame(()=>{rows.forEach(r=>{const first=before.get(r),last=r.getBoundingClientRect(),dy=first.top-last.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:360,easing:'cubic-bezier(.2,.85,.2,1)'})})});const btn=document.getElementById('mm3AssetSort');if(btn)btn.innerHTML=`${mm3AssetSortLabel()} ${icon('chevronDown')}`;feedback?.selection?.()
+}
+function mm3OpenAssetHistory(){
+  const history=[...(data.assetSnapshots||[])].sort((a,b)=>String(b.createdAt||b.date).localeCompare(String(a.createdAt||a.date))).slice(0,40);
+  pushView('残高履歴',`<div class="group">${history.length?history.map(s=>{const b=bankById(s.bankId);return `<div class="row"><div class="row-main"><div class="row-title">${esc(b?.name||'銀行残高')}</div><div class="row-sub">${esc(String(s.date||''))}・${esc(s.memo||'残高更新')}</div></div><div class="row-value">${yen(s.bankBalance??s.bankTotal??0)}</div></div>`}).join(''):`<div class="row"><div class="row-main"><div class="row-title">残高履歴はまだありません</div></div></div>`}</div>`)
+}
+function mm3BindAssets(){
+  const mode=document.getElementById('mm3AssetMode');if(mode)mode.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3AssetChartMode==='actual'?'✓ ':''}実績`,icon:mm3AssetChartMode==='actual'?'check':'chart',action:()=>{mm3AssetChartMode='actual';feedback?.selection?.();mode.innerHTML=`実績 ${icon('chevronDown')}`;mm3RefreshAssetChart()}},{label:`${mm3AssetChartMode==='forecast'?'✓ ':''}ATF予測`,icon:mm3AssetChartMode==='forecast'?'check':'chart',action:()=>{mm3AssetChartMode='forecast';feedback?.selection?.();mode.innerHTML=`ATF予測 ${icon('chevronDown')}`;mm3RefreshAssetChart()}}]);
+  const sort=document.getElementById('mm3AssetSort');if(sort)sort.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3AssetSortMode==='balance-desc'?'✓ ':''}残高が多い順`,icon:mm3AssetSortMode==='balance-desc'?'check':'list',action:()=>mm3AssetApplySort('balance-desc')},{label:`${mm3AssetSortMode==='balance-asc'?'✓ ':''}残高が少ない順`,icon:mm3AssetSortMode==='balance-asc'?'check':'list',action:()=>mm3AssetApplySort('balance-asc')},{label:`${mm3AssetSortMode==='updated'?'✓ ':''}更新が新しい順`,icon:mm3AssetSortMode==='updated'?'check':'calendar',action:()=>mm3AssetApplySort('updated')},{label:`${mm3AssetSortMode==='name'?'✓ ':''}名前順`,icon:mm3AssetSortMode==='name'?'check':'list',action:()=>mm3AssetApplySort('name')},{label:'手動（第4回）',icon:'menu',action:()=>showToast('手動並べ替えは第4回で仕上げます')}]);
+  mm3BindAssetChart();
+  document.querySelectorAll('#screen-assets [data-bank]').forEach(b=>b.onclick=()=>openBankDetail(b.dataset.bank));
+  const quick=document.getElementById('mm3AssetQuick');if(quick)quick.onclick=openQuickBank;
+  const timeline=document.getElementById('mm3AssetTimeline');if(timeline)timeline.onclick=()=>openMoneyTimeline();
+  const transfer=document.getElementById('mm3AssetTransfer');if(transfer)transfer.onclick=openTransferPlans;
+  const acf=document.getElementById('mm3AssetAcf');if(acf)acf.onclick=openAcf;
+  const add=document.getElementById('assetAddBankOnly');if(add)add.onclick=()=>openAddBank();
+  const menu=document.getElementById('assetMenuSimple');if(menu)menu.onclick=e=>openMenu(e.currentTarget,[{label:'銀行残高をクイック更新',icon:'bank',action:openQuickBank},{label:'残高履歴',icon:'list',action:mm3OpenAssetHistory},{label:'生活費の見通し',icon:'chart',action:openAcf},{label:'お知らせ',icon:'bell',action:openNotices}])
+}
+
+renderAssets=function(){
+  const deposits=totalDeposits(),delta=mm3AssetCurrentDelta(),forecastMetric=mm3AssetForecastMetric(),top=document.getElementById('assetsTop'),content=document.getElementById('assetsContent');
+  top.classList.add('mm3-assets-topbar');top.innerHTML=topbar('資産','',`${actionBtn('plus','assetAddBankOnly','追加')}<button class="icon-btn" id="assetMenuSimple" aria-label="メニュー">${icon('menu')}</button>`);
+  const change=delta.known?`<div class="mm3-assets-primary-change ${delta.delta>=0?'green':'red'}"><span>${mm3AssetSignedYen(delta.delta)}</span>${delta.pct==null?'':`<span>${delta.pct>=0?'+':''}${delta.pct.toFixed(1)}%</span>`}<small>直近30日</small></div>`:`<div class="mm3-assets-primary-change"><small>30日比較は履歴が増えると表示されます</small></div>`;
+  content.innerHTML=`<div class="mm3-assets-shell"><div class="mm3-assets-primary"><div class="mm3-assets-primary-label">現金・預金</div><div class="mm3-assets-primary-value">${yen(deposits)}</div>${change}</div><div class="mm3-assets-divider"></div><div class="mm3-assets-section-head"><span class="mm3-assets-section-title">資産推移</span><button type="button" class="mm3-assets-menu-btn" id="mm3AssetMode">${mm3AssetChartMode==='forecast'?'ATF予測':'実績'} ${icon('chevronDown')}</button></div><div class="mm3-assets-caption" id="mm3AssetCaption">${mm3AssetChartMode==='forecast'?'既存ACFのforecastを使った未来残高。独自計算はしません。':'登録済みの残高履歴だけを使用。グラフをなぞると日付と残高を確認できます。'}</div><div id="mm3AssetChartBlock">${mm3AssetChartHtml()}${mm3AssetRangeHtml()}</div><div class="mm3-assets-metrics"><div class="mm3-assets-metric"><span>今日</span><strong>${yen(deposits)}</strong></div><div class="mm3-assets-metric"><span>30日変化</span><strong class="${delta.known?(delta.delta>=0?'green':'red'):''}">${delta.known?mm3AssetSignedYen(delta.delta):'比較不可'}</strong></div><div class="mm3-assets-metric"><span>ATF月末予測</span><strong class="${forecastMetric.known&&forecastMetric.value<0?'red':''}">${forecastMetric.known?yen(forecastMetric.value):'未設定'}</strong></div></div><div class="mm3-assets-section-head"><span class="mm3-assets-section-title">口座</span><button type="button" class="mm3-assets-menu-btn" id="mm3AssetSort">${mm3AssetSortLabel()} ${icon('chevronDown')}</button></div>${mm3AssetWatchlistHtml()}<div class="mm3-assets-section-head"><span class="mm3-assets-section-title">詳細</span><button type="button" class="atf-open" id="mm3AssetHistoryTop">残高履歴 ›</button></div>${mm3AssetDetailHtml()}</div>`;
+  mm3BindAssets();const hist=document.getElementById('mm3AssetHistoryTop');if(hist)hist.onclick=mm3OpenAssetHistory
+};
+/* === end My Money 3.0 Phase 3 === */
+
+
+
+/* === My Money 3.0 Phase 4: Motion / Gesture / Unified final polish === */
+const MM3_UI_PREFS_KEY='mymoney3_ui_prefs_v1';
+function mm3MotionReduced(){return matchMedia('(prefers-reduced-motion: reduce)').matches||data.feedbackSettings?.motion===false||document.documentElement.classList.contains('motion-off')}
+function mm3LoadUiPrefs(){try{return JSON.parse(localStorage.getItem(MM3_UI_PREFS_KEY)||'{}')||{}}catch(e){return{}}}
+function mm3SaveUiPrefs(patch={}){try{const next={...mm3LoadUiPrefs(),...patch};localStorage.setItem(MM3_UI_PREFS_KEY,JSON.stringify(next));return next}catch(e){return mm3LoadUiPrefs()}}
+const mm3UiPrefs=mm3LoadUiPrefs();
+if(['share','trend'].includes(mm3UiPrefs.salaryChartMode))mm3SalaryChartMode=mm3UiPrefs.salaryChartMode;
+if(['1M','3M','6M','1Y','ALL'].includes(mm3UiPrefs.salaryTrendRange))mm3SalaryTrendRange=mm3UiPrefs.salaryTrendRange;
+if(['actual','forecast'].includes(mm3UiPrefs.assetChartMode))mm3AssetChartMode=mm3UiPrefs.assetChartMode;
+if(['1W','1M','3M','6M','1Y','ALL'].includes(mm3UiPrefs.assetChartRange))mm3AssetChartRange=mm3UiPrefs.assetChartRange;
+if(['balance-desc','balance-asc','updated','name','manual'].includes(mm3UiPrefs.assetSortMode))mm3AssetSortMode=mm3UiPrefs.assetSortMode;
+
+function mm3AnimateShellEntry(tab=activeTab){
+  if(mm3MotionReduced())return;
+  const selector=tab==='pay'?'.mm3-salary-shell':tab==='payments'?'.mm3-payment-shell':tab==='assets'?'.mm3-assets-shell':null;
+  if(!selector)return;const el=document.querySelector(`#screen-${tab} ${selector}`);if(!el)return;
+  el.classList.remove('mm3-tab-enter');void el.offsetWidth;el.classList.add('mm3-tab-enter');setTimeout(()=>el.classList.remove('mm3-tab-enter'),240)
+}
+
+function mm3MonthTransition(root,dir,commit){
+  if(typeof commit!=='function')return;
+  const shell=root?.querySelector('.mm3-salary-shell,.mm3-payment-shell');
+  if(!shell||mm3MotionReduced()){commit();return}
+  shell.classList.add('mm3-month-gesture');
+  const out=shell.animate([{opacity:1,transform:'translateX(0)'},{opacity:.12,transform:`translateX(${dir>0?-14:14}px)`}],{duration:135,easing:'cubic-bezier(.35,0,.65,1)',fill:'forwards'});
+  out.finished.catch(()=>{}).then(()=>{
+    commit();requestAnimationFrame(()=>{const fresh=root.querySelector('.mm3-salary-shell,.mm3-payment-shell');if(!fresh)return;fresh.animate([{opacity:.12,transform:`translateX(${dir>0?14:-14}px)`},{opacity:1,transform:'translateX(0)'}],{duration:235,easing:'cubic-bezier(.2,.85,.2,1)'});})
+  })
+}
+function mm3InstallMonthSwipe(root,commit){
+  if(!root)return;if(root._mm3MonthSwipeCleanup)root._mm3MonthSwipeCleanup();
+  let sx=0,sy=0,lastX=0,startAt=0,tracking=false,horizontal=false,pid=null,shell=null;
+  const interactive='button,input,select,textarea,a,.mm3-atf-chart,.mm3-salary-trend';
+  const resetVisual=()=>{if(shell){shell.style.transition='';shell.style.transform='';shell.style.opacity='';shell.classList.remove('mm3-month-gesture')}shell=null};
+  const down=e=>{if(e.button!=null&&e.button!==0)return;if(e.target.closest(interactive))return;sx=lastX=e.clientX;sy=e.clientY;startAt=performance.now();tracking=true;horizontal=false;pid=e.pointerId;shell=root.querySelector('.mm3-salary-shell,.mm3-payment-shell')};
+  const move=e=>{if(!tracking||e.pointerId!==pid)return;const dx=e.clientX-sx,dy=e.clientY-sy;lastX=e.clientX;if(!horizontal){if(Math.abs(dy)>10&&Math.abs(dy)>Math.abs(dx)*1.12){tracking=false;resetVisual();return}if(Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)*1.1){horizontal=true;root.setPointerCapture?.(pid)}}if(!horizontal)return;e.preventDefault();if(shell&&!mm3MotionReduced()){shell.classList.add('mm3-month-gesture');shell.style.transition='none';shell.style.transform=`translateX(${Math.max(-15,Math.min(15,dx*.16))}px)`;shell.style.opacity=String(Math.max(.78,1-Math.abs(dx)/700))}};
+  const end=e=>{if(!tracking&& !horizontal){resetVisual();return}const dx=(e.clientX??lastX)-sx,dt=Math.max(1,performance.now()-startAt),velocity=Math.abs(dx)/dt,go=horizontal&&(Math.abs(dx)>54||velocity>.62),dir=dx<0?1:-1;tracking=false;horizontal=false;try{root.releasePointerCapture?.(pid)}catch(_){}pid=null;if(go){resetVisual();feedback?.selection?.();mm3MonthTransition(root,dir,()=>commit(dir))}else if(shell&&!mm3MotionReduced()){shell.style.transition='transform 180ms cubic-bezier(.2,.85,.2,1),opacity 180ms ease';shell.style.transform='translateX(0)';shell.style.opacity='1';setTimeout(resetVisual,190)}else resetVisual()};
+  root.addEventListener('pointerdown',down);root.addEventListener('pointermove',move,{passive:false});root.addEventListener('pointerup',end);root.addEventListener('pointercancel',end);
+  root._mm3MonthSwipeCleanup=()=>{root.removeEventListener('pointerdown',down);root.removeEventListener('pointermove',move);root.removeEventListener('pointerup',end);root.removeEventListener('pointercancel',end);resetVisual()}
+}
+
+function mm3BindSalaryTrendScrub(){
+  const root=document.querySelector('#screen-pay .mm3-salary-trend');if(!root||root.dataset.mm3Scrub==='1')return;root.dataset.mm3Scrub='1';
+  const months=mm3SalaryRangeMonths(payViewMonth,mm3SalaryTrendRange),points=months.map(m=>({month:m,value:mm3SalaryMonthSummary(m).total}));if(points.length<2)return;
+  root.insertAdjacentHTML('beforeend','<i class="mm3-salary-scrub-guide"></i><i class="mm3-salary-scrub-dot"></i><div class="mm3-salary-scrub-tip"></div>');
+  const guide=root.querySelector('.mm3-salary-scrub-guide'),dot=root.querySelector('.mm3-salary-scrub-dot'),tip=root.querySelector('.mm3-salary-scrub-tip'),svg=root.querySelector('svg');
+  const vals=points.map(p=>p.value),max=Math.max(1,...vals),min=Math.min(0,...vals),range=Math.max(1,max-min);let active=false,last=-1;
+  const update=e=>{const r=svg.getBoundingClientRect(),x=Math.max(0,Math.min(r.width,e.clientX-r.left)),idx=Math.min(points.length-1,Math.max(0,Math.round(x/Math.max(1,r.width)*(points.length-1)))),p=points[idx],pct=points.length===1?0:idx/(points.length-1),yPct=(9+(max-p.value)/range*(132-9-24))/132;guide.style.left=`${pct*100}%`;dot.style.left=`${pct*100}%`;dot.style.top=`${Math.max(7,Math.min(89,yPct*100))}%`;tip.style.left=`${Math.max(13,Math.min(87,pct*100))}%`;tip.innerHTML=`${esc(monthLabel(p.month))}<strong>${yen(p.value)}</strong>`;if(idx!==last){last=idx;feedback?.selection?.()}root.classList.add('scrubbing')};
+  root.addEventListener('pointerdown',e=>{if(e.target.closest('button,[role=button],a,input,select,textarea'))return;active=true;last=-1;root.setPointerCapture?.(e.pointerId);update(e)});root.addEventListener('pointermove',e=>{if(active)update(e)});const finish=()=>{active=false;last=-1;root.classList.remove('scrubbing')};root.addEventListener('pointerup',finish);root.addEventListener('pointercancel',finish);root.addEventListener('lostpointercapture',finish)
+}
+
+const __mm3P4BindSalaryTrendRange=mm3BindSalaryTrendRange;
+mm3BindSalaryTrendRange=function(){
+  __mm3P4BindSalaryTrendRange();document.querySelectorAll('[data-mm3-salary-range]').forEach(b=>{const old=b.onclick;b.onclick=()=>{old?.();mm3SaveUiPrefs({salaryTrendRange:mm3SalaryTrendRange});requestAnimationFrame(mm3BindSalaryTrendScrub)}});requestAnimationFrame(mm3BindSalaryTrendScrub)
+};
+const __mm3P4BindSalaryHome=bindSalaryHome;
+bindSalaryHome=function(){
+  __mm3P4BindSalaryHome();
+  const vizMenu=document.getElementById('mm3SalaryVizMenu');if(vizMenu)vizMenu.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3SalaryChartMode==='share'?'✓ ':''}勤務先別`,icon:mm3SalaryChartMode==='share'?'check':'chart',action:()=>{mm3SalaryChartMode='share';mm3SaveUiPrefs({salaryChartMode:mm3SalaryChartMode});feedback?.selection?.();mm3RefreshSalaryViz()}},{label:`${mm3SalaryChartMode==='trend'?'✓ ':''}給与推移`,icon:mm3SalaryChartMode==='trend'?'check':'chart',action:()=>{mm3SalaryChartMode='trend';mm3SaveUiPrefs({salaryChartMode:mm3SalaryChartMode});feedback?.selection?.();mm3RefreshSalaryViz();requestAnimationFrame(mm3BindSalaryTrendScrub)}}]);
+  mm3InstallMonthSwipe(document.getElementById('payContent'),dir=>{payViewMonth=addMonths(payViewMonth,dir);renderPay()});requestAnimationFrame(mm3BindSalaryTrendScrub)
+};
+
+const __mm3P4BindPayments=bindPayments;
+bindPayments=function(){__mm3P4BindPayments();mm3InstallMonthSwipe(document.getElementById('paymentsContent'),dir=>{assetBillingMonth=addMonths(paymentHomeMonth(),dir);renderPayments()})};
+
+let mm3AssetSuppressClickUntil=0;
+function mm3AssetManualOrder(){const p=mm3LoadUiPrefs(),saved=Array.isArray(p.assetManualOrder)?p.assetManualOrder:[],ids=data.banks.map(b=>b.id);return [...saved.filter(id=>ids.includes(id)),...ids.filter(id=>!saved.includes(id))]}
+const __mm3P4AssetSortedBanks=mm3AssetSortedBanks;
+mm3AssetSortedBanks=function(){if(mm3AssetSortMode!=='manual')return __mm3P4AssetSortedBanks();const map=new Map(data.banks.map(b=>[b.id,b]));return mm3AssetManualOrder().map(id=>map.get(id)).filter(Boolean)};
+const __mm3P4AssetSortLabel=mm3AssetSortLabel;
+mm3AssetSortLabel=function(){return mm3AssetSortMode==='manual'?'手動':__mm3P4AssetSortLabel()};
+
+function mm3AssetExitManualMode(){
+  const list=document.getElementById('mm3AssetWatchlist');if(!list)return;if(list._mm3ManualCleanup)list._mm3ManualCleanup();list._mm3ManualCleanup=null;list.classList.remove('mm3-assets-manual');list.querySelectorAll('.mm3-assets-reorder-handle').forEach(x=>x.remove());document.querySelector('#screen-assets .mm3-assets-manual-hint')?.remove()
+}
+function mm3FlipRows(list,rows,before){if(mm3MotionReduced())return;requestAnimationFrame(()=>rows.forEach(r=>{const a=before.get(r),b=r.getBoundingClientRect();if(!a)return;const dy=a.top-b.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:300,easing:'cubic-bezier(.2,.85,.2,1)'})}))}
+function mm3AssetInstallManualReorder(){
+  const list=document.getElementById('mm3AssetWatchlist');if(!list||mm3AssetSortMode!=='manual')return;mm3AssetExitManualMode();list.classList.add('mm3-assets-manual');
+  const head=list.previousElementSibling;if(head?.classList.contains('mm3-assets-section-head')&&!document.querySelector('#screen-assets .mm3-assets-manual-hint'))head.insertAdjacentHTML('afterend','<div class="mm3-assets-manual-hint">口座を長押しして、そのまま上下に動かすと並べ替えられます。</div>');
+  [...list.querySelectorAll('.mm3-assets-watchrow')].forEach(row=>row.insertAdjacentHTML('afterbegin','<span class="mm3-assets-reorder-handle" aria-hidden="true">•••</span>'));
+  let state=null,timer=null,placeholder=null,dragRect=null;
+  const clearTimer=()=>{if(timer){clearTimeout(timer);timer=null}};
+  const cleanupRow=row=>{if(!row)return;row.classList.remove('mm3-assets-dragging');for(const k of ['position','left','top','width','height','zIndex','margin','transform'])row.style[k]=''};
+  const begin=()=>{if(!state?.row)return;const row=state.row;dragRect=row.getBoundingClientRect();placeholder=document.createElement('div');placeholder.className='mm3-assets-reorder-placeholder';placeholder.style.height=dragRect.height+'px';list.insertBefore(placeholder,row);row.classList.add('mm3-assets-dragging');Object.assign(row.style,{position:'fixed',left:dragRect.left+'px',top:dragRect.top+'px',width:dragRect.width+'px',height:dragRect.height+'px',zIndex:'999',margin:'0'});state.active=true;mm3AssetSuppressClickUntil=Date.now()+800;feedback?.selection?.()};
+  const down=e=>{if(e.button!=null&&e.button!==0)return;const row=e.target.closest('.mm3-assets-watchrow');if(!row||!list.contains(row))return;clearTimer();state={row,pid:e.pointerId,sx:e.clientX,sy:e.clientY,lastY:e.clientY,active:false};timer=setTimeout(begin,280)};
+  const move=e=>{if(!state||e.pointerId!==state.pid)return;state.lastY=e.clientY;const dx=e.clientX-state.sx,dy=e.clientY-state.sy;if(!state.active){if(Math.hypot(dx,dy)>10){clearTimer();state=null}return}e.preventDefault();state.row.style.top=(dragRect.top+dy)+'px';const others=[...list.querySelectorAll('.mm3-assets-watchrow')].filter(r=>r!==state.row),before=new Map(others.map(r=>[r,r.getBoundingClientRect()]));let target=null;for(const r of others){const rr=r.getBoundingClientRect();if(e.clientY<rr.top+rr.height/2){target=r;break}}const oldNext=placeholder?.nextElementSibling;if(target)list.insertBefore(placeholder,target);else list.appendChild(placeholder);if(placeholder?.nextElementSibling!==oldNext)mm3FlipRows(list,others,before)};
+  const end=e=>{clearTimer();if(!state)return;const row=state.row,wasActive=state.active;state=null;if(!wasActive){placeholder?.remove();placeholder=null;return}if(placeholder?.parentNode)placeholder.parentNode.insertBefore(row,placeholder);placeholder?.remove();placeholder=null;cleanupRow(row);const order=[...list.querySelectorAll('.mm3-assets-watchrow')].map(r=>r.dataset.bank).filter(Boolean);mm3SaveUiPrefs({assetManualOrder:order,assetSortMode:'manual'});mm3AssetSuppressClickUntil=Date.now()+500;feedback?.success?.()};
+  const clickCapture=e=>{if(mm3AssetSortMode==='manual'){e.preventDefault();e.stopImmediatePropagation()}};
+  list.addEventListener('pointerdown',down);list.addEventListener('pointermove',move,{passive:false});list.addEventListener('pointerup',end);list.addEventListener('pointercancel',end);list.addEventListener('click',clickCapture,true);
+  list._mm3ManualCleanup=()=>{clearTimer();if(state?.row)cleanupRow(state.row);placeholder?.remove();placeholder=null;state=null;list.removeEventListener('pointerdown',down);list.removeEventListener('pointermove',move);list.removeEventListener('pointerup',end);list.removeEventListener('pointercancel',end);list.removeEventListener('click',clickCapture,true)}
+}
+const __mm3P4AssetApplySort=mm3AssetApplySort;
+mm3AssetApplySort=function(mode){
+  if(mode==='manual'){
+    const prefs=mm3LoadUiPrefs(),hasSaved=Array.isArray(prefs.assetManualOrder)&&prefs.assetManualOrder.length;
+    if(!hasSaved){const current=[...document.querySelectorAll('#mm3AssetWatchlist .mm3-assets-watchrow')].map(r=>r.dataset.bank).filter(Boolean);if(current.length)mm3SaveUiPrefs({assetManualOrder:current})}
+  }else mm3AssetExitManualMode();
+  __mm3P4AssetApplySort(mode);mm3SaveUiPrefs({assetSortMode:mode});if(mode==='manual')requestAnimationFrame(mm3AssetInstallManualReorder)
+};
+
+const __mm3P4BindAssetChart=mm3BindAssetChart;
+mm3BindAssetChart=function(){
+  __mm3P4BindAssetChart();document.querySelectorAll('#screen-assets [data-mm3-asset-range]').forEach(b=>{const old=b.onclick;b.onclick=()=>{old?.();mm3SaveUiPrefs({assetChartRange:mm3AssetChartRange})}})
+};
+const __mm3P4BindAssets=mm3BindAssets;
+mm3BindAssets=function(){
+  __mm3P4BindAssets();
+  const mode=document.getElementById('mm3AssetMode');if(mode)mode.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3AssetChartMode==='actual'?'✓ ':''}実績`,icon:mm3AssetChartMode==='actual'?'check':'chart',action:()=>{mm3AssetChartMode='actual';mm3SaveUiPrefs({assetChartMode:mm3AssetChartMode});feedback?.selection?.();mode.innerHTML=`実績 ${icon('chevronDown')}`;mm3RefreshAssetChart()}},{label:`${mm3AssetChartMode==='forecast'?'✓ ':''}ATF予測`,icon:mm3AssetChartMode==='forecast'?'check':'chart',action:()=>{mm3AssetChartMode='forecast';mm3SaveUiPrefs({assetChartMode:mm3AssetChartMode});feedback?.selection?.();mode.innerHTML=`ATF予測 ${icon('chevronDown')}`;mm3RefreshAssetChart()}}]);
+  const sort=document.getElementById('mm3AssetSort');if(sort)sort.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3AssetSortMode==='balance-desc'?'✓ ':''}残高が多い順`,icon:mm3AssetSortMode==='balance-desc'?'check':'list',action:()=>mm3AssetApplySort('balance-desc')},{label:`${mm3AssetSortMode==='balance-asc'?'✓ ':''}残高が少ない順`,icon:mm3AssetSortMode==='balance-asc'?'check':'list',action:()=>mm3AssetApplySort('balance-asc')},{label:`${mm3AssetSortMode==='updated'?'✓ ':''}更新が新しい順`,icon:mm3AssetSortMode==='updated'?'check':'calendar',action:()=>mm3AssetApplySort('updated')},{label:`${mm3AssetSortMode==='name'?'✓ ':''}名前順`,icon:mm3AssetSortMode==='name'?'check':'list',action:()=>mm3AssetApplySort('name')},{label:`${mm3AssetSortMode==='manual'?'✓ ':''}手動`,icon:mm3AssetSortMode==='manual'?'check':'menu',action:()=>mm3AssetApplySort('manual')}]);
+  document.querySelectorAll('#screen-assets [data-bank]').forEach(b=>b.onclick=()=>{if(Date.now()<mm3AssetSuppressClickUntil||mm3AssetSortMode==='manual')return;openBankDetail(b.dataset.bank)});
+  if(mm3AssetSortMode==='manual')requestAnimationFrame(mm3AssetInstallManualReorder)
+};
+
+const __mm3P4SwitchTab=switchTab;
+switchTab=function(tab){const before=activeTab;__mm3P4SwitchTab(tab);if(before!==activeTab&&['pay','payments','assets'].includes(activeTab))requestAnimationFrame(()=>mm3AnimateShellEntry(activeTab))};
+
+/* Keep the already-stable Push, interactive-back and Sheet systems intact. Phase 4 only reuses them. */
+/* === end My Money 3.0 Phase 4 === */
 
 renderAll();renderLock();
 setTimeout(()=>maybeAutoSyncGmail(true),1800);setInterval(()=>maybeAutoSyncGmail(false),60000);
