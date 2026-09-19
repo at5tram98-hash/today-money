@@ -847,12 +847,25 @@ html.dark{
 .mail-section-title{font-size:17px;font-weight:650;margin:24px 2px 7px;color:var(--label)}
 .mail-section-note{font-size:12px;line-height:1.5;color:var(--label2);margin:0 2px 12px}
 .mail-items{display:grid;gap:8px;margin-bottom:14px}
-.mail-item{display:block;width:100%;min-width:0;text-align:left;border:0;border-radius:14px;padding:14px;background:var(--card);color:var(--label);animation:mailEnter .2s ease-out backwards;animation-delay:var(--mail-delay,0ms)}
+.mail-item{display:block;width:100%;min-width:0;overflow:hidden;border-radius:16px;background:var(--card);color:var(--label);animation:mailEnter .2s ease-out backwards;animation-delay:var(--mail-delay,0ms)}
+.mail-item-content{display:block;width:100%;min-width:0;min-height:44px!important;border:0;background:transparent;color:inherit;text-align:left;padding:12px 12px 0;border-radius:12px}
+.mail-item-state{min-width:0;flex:1}
+.mail-item-state .mail-caption{font-size:10px;line-height:1.4;margin-top:3px}
+.mail-inline-actions{display:flex;align-items:center;gap:0;flex:0 0 88px}
+.mail-inline-actions .mail-action{width:44px;height:44px;min-width:44px;min-height:44px!important;flex:0 0 44px;display:grid;place-items:center;border:0;border-radius:50%;padding:5px;background:transparent;font-size:0;overflow:hidden}
+.mail-action-disc{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:var(--fill);color:var(--label2)}
+.mail-action-approve .mail-action-disc{background:rgba(52,199,89,.14);color:var(--green)}
+.mail-action-match:disabled .mail-action-disc{background:rgba(255,149,0,.12);color:var(--orange)}
+.mail-inline-actions .mail-action svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.mail-inline-actions .mail-action:active{transform:scale(.94)!important;opacity:.85}
+.mail-action.saving .mail-action-disc{opacity:.5}
+.mail-count-updated{animation:mailFade .18s ease-out}
+.mail-preview-more{text-align:center}
 .mail-item-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px}
 .mail-item-name{font-size:15px;font-weight:600;line-height:1.4;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mail-item-amount{font-size:16px;font-weight:650;line-height:1.4;font-variant-numeric:tabular-nums;white-space:nowrap}
-.mail-item-meta{font-size:12px;line-height:1.5;color:var(--label2);margin-top:5px;overflow-wrap:anywhere}
-.mail-item-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:9px}
+.mail-item-meta{display:block;font-size:11px;line-height:1.4;color:var(--label2);margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.mail-item-bottom{display:flex;justify-content:space-between;align-items:center;gap:4px;padding:3px 8px 8px 12px;min-height:46px}
 .mail-state{display:inline-block;font-size:11px;font-weight:600;line-height:1.4;padding:4px 8px;border-radius:7px;background:var(--fill);color:var(--label2)}
 .mail-state.pending{color:var(--blue);background:rgba(0,122,255,.08)}
 .mail-state.duplicate{color:var(--label);background:var(--fill)}
@@ -873,14 +886,14 @@ html.dark{
 .mail-preview-icon{width:36px;height:36px;background:var(--fill);color:var(--blue);border-radius:10px;display:grid;place-items:center;margin:0 auto 11px}
 .mail-preview-icon svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7}
 .mail-preview-heading h2{font-size:22px;line-height:1.25;margin:0;font-weight:700;letter-spacing:-.4px}
-.mail-preview-heading .sheet-title{position:static;transform:none;max-width:none;white-space:normal;overflow:visible}
+.mail-preview-heading .sheet-title{position:static;transform:none;max-width:none;white-space:normal;overflow:visible;outline:none}
 .mail-preview-heading p{font-size:13px;color:var(--label2);margin:6px 0 0}
 .mail-preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex-shrink:0;padding:10px 16px calc(12px + var(--safe-b));border-top:.5px solid var(--sep);background:var(--bg)}
 .mail-preview-actions button{margin:0;font-size:15px;border-radius:12px}
-.mail-preview-sheet .mail-item{padding:11px 13px;animation:none}
+.mail-preview-sheet .mail-item{animation:none}
 .mail-preview-sheet .mail-item-name{font-size:14px}
 .mail-preview-sheet .mail-item-amount{font-size:15px}
-.mail-preview-sheet .mail-item-bottom{margin-top:6px}
+.mail-preview-sheet .mail-item-bottom{margin-top:0}
 .mail-editor-head{background:var(--card);padding:18px;border-radius:16px;margin-bottom:18px}
 .mail-editor-head h2{font-size:21px;font-weight:650;line-height:1.3;overflow-wrap:anywhere;margin:0 0 8px}
 .mail-editor-amount{font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;margin:6px 0 10px;letter-spacing:-.7px}
@@ -899,7 +912,13 @@ html.dark{
 .mail-detail-lines>div:last-child{border:0}
 .mail-detail-lines dt{font-size:12px;color:var(--label2);margin-bottom:4px}
 .mail-detail-lines dd{font-size:15px;line-height:1.5;margin:0;overflow-wrap:anywhere}
-.mail-center-history .filter-stack{margin-bottom:16px}
+.mail-center-history .mail-history-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;width:100%;min-width:0}
+.mail-center-history .mail-history-toolbar .searchbox{display:flex;align-items:center;gap:7px;flex:1 1 0;min-width:0;height:38px;min-height:38px;max-height:38px;padding:7px 9px;border:0;border-radius:11px;background:var(--fill);color:var(--label2);overflow:hidden}
+.mail-center-history .searchbox svg{width:18px;height:18px;min-width:18px;max-width:18px;max-height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.mail-center-history .mail-history-toolbar .searchbox input{display:block;flex:1 1 0;width:0;min-width:0;max-width:100%;height:24px;min-height:24px;max-height:24px;padding:0;border:0;background:transparent;color:var(--label);outline:none;font-size:16px!important;line-height:24px}
+.mail-center-history .mail-history-toolbar select{flex:0 0 112px;width:112px;max-width:112px;min-width:0;height:38px;min-height:38px;max-height:38px;padding:7px 22px 7px 9px;border-radius:11px;background-color:var(--fill);color:var(--label);font-size:13px!important;line-height:24px;align-self:center}
+@media(max-width:360px){.mail-center-history .mail-history-toolbar{flex-wrap:wrap}.mail-center-history .mail-history-toolbar .searchbox{flex-basis:100%}.mail-center-history .mail-history-toolbar select{margin-left:auto}}
+@media(prefers-reduced-motion:reduce){.mail-surface,.mail-surface *,.mail-preview-sheet *{animation:none!important;transition:none!important}}
 .mail-form-error{font-size:13px;color:var(--red);line-height:1.5;margin:8px 2px}
 @keyframes mailEnter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes mailFade{from{opacity:.55}to{opacity:1}}
@@ -2161,7 +2180,7 @@ function shortcutInfo(key){
  if(type==='employer'){const x=employerById(id);return x?{key,label:x.name,icon:'briefcase',open:()=>openEmployerDetail(id)}:null}
  return null
 }
-function favoriteKeyForView(title){if(title==='ACF')return'acf';if(title==='メール取引'||title==='メール取引履歴')return'gmail';if(title==='大型支出計画')return'large';if(title==='取引一覧'||title==='取引詳細')return'transactions';const b=data.banks.find(x=>x.name===title);if(b)return`bank:${b.id}`;const c=data.cards.find(x=>x.name===title);if(c)return`card:${c.id}`;const d=data.debitCards.find(x=>x.name===title);if(d)return`debit:${d.id}`;const e=data.employers.find(x=>x.name===title);if(e)return`employer:${e.id}`;return''}
+function favoriteKeyForView(title){if(title==='ACF')return'acf';if(['メール取引履歴','メール取引の詳細','メール取引を確認'].includes(title))return'';if(title==='メール取引'||title==='メール取引センター')return'gmail';if(title==='大型支出計画')return'large';if(title==='取引一覧'||title==='取引詳細')return'transactions';const b=data.banks.find(x=>x.name===title);if(b)return`bank:${b.id}`;const c=data.cards.find(x=>x.name===title);if(c)return`card:${c.id}`;const d=data.debitCards.find(x=>x.name===title);if(d)return`debit:${d.id}`;const e=data.employers.find(x=>x.name===title);if(e)return`employer:${e.id}`;return''}
 function openFavorite(key){const info=shortcutInfo(key);if(!info){showToast('このお気に入りは現在利用できません');return}closeSidebar();setTimeout(()=>info.open(),40)}
 
 function tagById(id){return (data.tags||[]).find(t=>t.id===id)}
@@ -3488,12 +3507,12 @@ mm3BindAssets=function(){
 
   function mm3MailInfoOnly(mi){return ['card_statement','card_settlement'].includes(mi.type)||['statement_confirmation','card_settlement'].includes(mi.mailRole)}
   function mm3MailUiMatch(mi){
-    const hit=mm3FindMailStatementMatch(mi),direct=data.transactions.find(t=>t.id===mi.transactionId||t.mailImportId===mi.id||t.id===mi.linkedTransactionIdCandidate);
-    if(direct)return{tx:direct,hit,linked:direct.id===mi.transactionId||direct.mailImportId===mi.id};
-    if(hit)return{tx:hit.tx||null,hit};
     const amount=Math.abs(Number(mi.amount)||0),merchant=normalizeMerchantKey(mi.merchant||'');
-    const tx=amount&&merchant?data.transactions.find(t=>t.date===mi.date&&Math.abs(Math.abs(Number(t.amount)||0)-amount)<1&&normalizeMerchantKey(t.merchant||'')===merchant&&t.paymentMethod===mi.paymentMethod&&t.paymentId===mi.paymentId&&(Number(t.amount)<0)===(mi.direction==='refund')):null;
-    return tx?{tx,hit:null}:null;
+    const exact=t=>!!t&&amount>0&&!!merchant&&t.date===mi.date&&Math.abs(Math.abs(Number(t.amount)||0)-amount)<1&&normalizeMerchantKey(t.merchant||'')===merchant&&t.paymentMethod===mi.paymentMethod&&t.paymentId===mi.paymentId&&(Number(t.amount)<0)===(mi.direction==='refund');
+    const exacts=data.transactions.filter(exact),hit=mm3FindMailStatementMatch(mi),direct=data.transactions.find(t=>(mi.transactionId&&t.id===mi.transactionId)||(mi.id&&t.mailImportId===mi.id)||(mi.linkedTransactionIdCandidate&&t.id===mi.linkedTransactionIdCandidate));
+    if(direct)return{tx:direct,hit,linked:direct.id===mi.transactionId||direct.mailImportId===mi.id,exact:exact(direct)&&exacts.length===1};
+    if(hit)return{tx:hit.tx||null,hit,exact:exact(hit.tx)&&exacts.length===1};
+    return exacts.length?{tx:exacts[0],hit:null,exact:exacts.length===1}:null;
   }
   function mm3MailHistoryStatus(mi){
     if(mi.status==='imported')return{key:'imported',label:'反映済み',note:'家計取引に反映済み。',linked:!!(mi.statementImportId||mi.statementRowId||mi.reconciliationStatus==='matched'),duplicate:mi.reconciliationStatus==='duplicate_candidate'};
@@ -3503,14 +3522,70 @@ mm3BindAssets=function(){
     const duplicate=!!mm3MailUiMatch(mi)||mi.reconciliationStatus==='duplicate_candidate';
     return{key:'pending',label:'確認待ち',note:'まだ家計には反映されていません。',duplicate};
   }
-  function mm3MailItemHtml(mi,index=0,preview=false){
-    const st=mm3MailHistoryStatus(mi),label=st.key==='pending'?(st.duplicate?'重複候補':mailReviewConfidence(mi).ready?'取引候補':'要確認'):st.label,tag=preview?'div':'button';
-    return `<${tag} class="mail-item" ${preview?'':`type="button" data-mail-id="${esc(mi.id)}"`} style="--mail-delay:${Math.min(index,6)*30}ms"><div class="mail-item-top"><span class="mail-item-name">${esc(mi.merchant||mi.subject||mi.sourceName||'利用先不明')}</span><span class="mail-item-amount">${Number(mi.amount)?yen(mi.direction==='refund'?-Math.abs(mi.amount):mi.amount):'金額不明'}</span></div><div class="mail-item-meta">${esc(mi.date||'日付不明')} · ${esc(mi.sourceName||'Gmail')}<br>${esc(paymentLabel(mi))}</div><div class="mail-item-bottom"><span class="mail-state ${st.duplicate?'duplicate':st.key}">${esc(label)}</span>${preview?'':'<span class="chev">›</span>'}</div>${preview?'':`<span class="mail-caption">${esc(st.note)}</span>`}</${tag}>`;
+  function mm3MailItemHtml(mi,index=0,options={}){
+    const preview=options===true||options.mode==='preview',st=mm3MailHistoryStatus(mi),pending=mi.status==='pending'&&st.key==='pending',match=pending?mm3MailUiMatch(mi):null;
+    const label=pending?(st.duplicate?'重複候補':mailReviewConfidence(mi).ready?'取引候補':'要確認'):st.label,ready=pending&&!mi.transactionId&&!mi.excludedByUser&&!mm3MailInfoOnly(mi)&&mailReviewConfidence(mi).ready&&validateFinancialPayment(mi.paymentMethod,mi.paymentId)&&(!st.duplicate||!!(match?.tx&&match.exact));
+    const note=pending?'まだ家計には反映されていません。':st.note,checkTitle=ready?(match?'既存取引に紐づける':'取引に反映'):'詳細を開いて内容・照合候補を確認してください';
+    return `<div class="mail-item ${preview?'mail-item-preview':''}" data-mail-card="${esc(mi.id)}" style="--mail-delay:${Math.min(index,6)*25}ms"><button type="button" class="mail-item-content" data-mail-id="${esc(mi.id)}"><span class="mail-item-top"><span class="mail-item-name">${esc(mi.merchant||mi.subject||mi.sourceName||'利用先不明')}</span><span class="mail-item-amount">${Number(mi.amount)?yen(mi.direction==='refund'?-Math.abs(mi.amount):mi.amount):'金額不明'}</span></span><span class="mail-item-meta">${esc(mi.date||'日付不明')} · ${esc(mi.sourceName||'Gmail')}</span><span class="mail-item-meta">${esc(paymentLabel(mi))}</span></button><div class="mail-item-bottom"><div class="mail-item-state"><span class="mail-state ${st.duplicate?'duplicate':st.key}">${esc(label)}</span><span class="mail-caption">${esc(note)}</span></div>${pending?`<div class="mail-inline-actions"><button type="button" class="mail-action mail-action-ignore" data-mail-ignore="${esc(mi.id)}" aria-label="${esc(mi.merchant||'このメール')}を対象外にする" ${mi.transactionId?'disabled':''}><span class="mail-action-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg></span></button><button type="button" class="mail-action mail-action-approve ${st.duplicate?'mail-action-match':''}" data-mail-approve="${esc(mi.id)}" aria-label="${esc(checkTitle)}" title="${esc(checkTitle)}" ${ready?'':'disabled'}><span class="mail-action-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 4 4 8-9"/></svg></span></button></div>`:''}</div></div>`;
   }
-  function mm3BindMailItems(root){root.querySelectorAll('[data-mail-id]').forEach(b=>b.onclick=()=>{const mi=data.mailImports.find(x=>x.id===b.dataset.mailId);if(!mi)return;mm3MailHistoryStatus(mi).key==='pending'?mm3OpenMailEditor(mi.id):mm3OpenMailHistoryDetail(mi)})}
+  const mm3MailInlineBusy=new Set();
+  const mm3MailViewRefreshers=new Set();
+  function mm3MailInlineEligible(mi){return !!mi&&mi.status==='pending'&&!mi.excludedByUser&&!mm3MailInfoOnly(mi)&&!mi.transactionId}
+  async function mm3MailInlineAction(btn,id,action){
+    if(btn.disabled||mm3MailInlineBusy.has(id)||btn.closest('#sheet')?.dataset.commitPending==='true')return;
+    let mi=data.mailImports.find(x=>x.id===id);if(!mm3MailInlineEligible(mi))return;
+    const card=btn.closest('.mail-item'),originalHtml=btn.innerHTML,peer=card?.querySelector(action==='approve'?'[data-mail-ignore]':'[data-mail-approve]'),peerDisabled=peer?.disabled;
+    mm3MailInlineBusy.add(id);if(peer)peer.disabled=true;
+    let success=false;
+    try{
+      let linkedId='',snapshot='';
+      const fingerprint=x=>JSON.stringify([x.merchant,x.amount,x.date,x.category,x.paymentMethod,x.paymentId,x.direction,x.transactionId,x.linkedTransactionIdCandidate,x.reconciliationStatus]);
+      if(action==='approve'){
+        if(!mailReviewConfidence(mi).ready||!validateFinancialPayment(mi.paymentMethod,mi.paymentId))return;
+        const match=mm3MailUiMatch(mi);
+        if(match||mi.reconciliationStatus==='duplicate_candidate'){
+          if(!match?.tx||!match.exact)return;
+          linkedId=match.tx.id;snapshot=fingerprint(mi);btn.disabled=true;
+          const ok=await showAlert('既存取引に紐づけますか？',`${match.tx.merchant||'既存取引'}・${match.tx.date||''}・${yen(Math.abs(match.tx.amount||0))}\n新しい取引は作成しません。`,{okText:'紐づける',cancelText:'キャンセル'});
+          btn.disabled=false;if(!ok||!btn.isConnected)return;
+        }
+      }
+      success=await runSaveAction(btn,()=>{
+        const current=data.mailImports.find(x=>x.id===id);
+        if(!mm3MailInlineEligible(current))throw new Error('メールの状態が変わりました。もう一度確認してください。');
+        if(action==='ignore'){Object.assign(current,{status:'ignored',excludedByUser:true,reviewPending:false,userResolved:true,ignoredReason:'ユーザーが対象外に設定'});return}
+        if(!mailReviewConfidence(current).ready)throw new Error('内容を確認してから反映してください。');
+        requireFinancialPayment(current.paymentMethod,current.paymentId);
+        const match=mm3MailUiMatch(current);
+        if(linkedId){if(fingerprint(current)!==snapshot||!match?.exact||match.tx?.id!==linkedId)throw new Error('照合候補が変わりました。詳細を確認してください。');current.linkedTransactionIdCandidate=linkedId}
+        else if(match||current.reconciliationStatus==='duplicate_candidate')throw new Error('重複候補があります。詳細で照合してください。');
+        if(mm3ApplyMailItems([current])!==1)throw new Error('取引に反映できませんでした。');
+      },{render:false,label:action==='ignore'?'gmail inline ignore':'gmail inline apply',success:action==='ignore'?'対象外にしました':linkedId?'既存取引に紐づけました':'取引に反映しました'});
+      btn.innerHTML=originalHtml;
+      if(success&&card?.isConnected){
+        card.querySelectorAll('button').forEach(b=>b.disabled=true);
+        const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches||document.documentElement.classList.contains('motion-off')||data.feedbackSettings?.motion===false;
+        if(!reduced&&card.animate){
+          const disc=btn.querySelector('.mail-action-disc');disc?.animate([{transform:'scale(.94)'},{transform:'scale(1.05)'},{transform:'scale(1)'}],{duration:200,easing:'ease-out'});
+          const height=card.getBoundingClientRect().height;
+          await card.animate([{height:height+'px',opacity:1,marginBottom:'0px'},{height:'0px',opacity:0,marginBottom:'-8px'}],{duration:200,easing:'ease-in-out',fill:'forwards'}).finished.catch(()=>{});
+        }
+      }
+    }finally{
+      btn.innerHTML=originalHtml;btn.disabled=false;if(peer)peer.disabled=peerDisabled;
+      mm3MailInlineBusy.delete(id);for(const refresh of mm3MailViewRefreshers)refresh(true);
+      if(success){renderAll();refreshFinancialViews()}
+    }
+  }
+  function mm3BindMailItems(root){
+    root.querySelectorAll('[data-mail-id]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(mm3MailInlineBusy.has(b.dataset.mailId))return;const mi=data.mailImports.find(x=>x.id===b.dataset.mailId);if(!mi)return;if(b.closest('.mail-preview-sheet')){closeSheet();openMailOverview()}mm3MailHistoryStatus(mi).key==='pending'?mm3OpenMailEditor(mi.id):mm3OpenMailHistoryDetail(mi)});
+    root.querySelectorAll('[data-mail-ignore],[data-mail-approve]').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();return mm3MailInlineAction(b,b.dataset.mailIgnore||b.dataset.mailApprove,b.dataset.mailIgnore?'ignore':'approve')});
+  }
   function mm3WatchMailView(root,draw){
-    let signature='';const refresh=()=>{if(document.hidden)return;const next=JSON.stringify([data.mailImports.map(x=>[x.id,x.status,x.merchant,x.amount,x.date,x.category,x.sourceName,x.paymentMethod,x.paymentId,x.transactionId,x.linkedTransactionIdCandidate,x.statementImportId,x.statementRowId,x.reconciliationStatus,x.excludedByUser,x.ignoredReason,x.type,x.mailRole]),data.transactions.map(x=>[x.id,x.date,x.amount,x.merchant,x.mailImportId]),data.cardStatementImports.map(x=>[x.id,(x.rows||[]).map(r=>[r.id,r.linkedTransactionId,r.included])]),gmailSyncing,gmailConnected(),data.gmailSettings.lastSyncAt]);if(next!==signature){signature=next;draw()}};
-    refresh();const timer=setInterval(()=>{if(!root.isConnected){clearInterval(timer);return}refresh()},700);
+    let signature='',stopped=false;
+    const refresh=(force=false)=>{if(stopped||!root.isConnected||document.hidden||mm3MailInlineBusy.size)return;const next=JSON.stringify([data.mailImports.map(x=>[x.id,x.status,x.merchant,x.amount,x.date,x.category,x.sourceName,x.paymentMethod,x.paymentId,x.transactionId,x.linkedTransactionIdCandidate,x.statementImportId,x.statementRowId,x.reconciliationStatus,x.excludedByUser,x.ignoredReason,x.type,x.mailRole]),data.transactions.map(x=>[x.id,x.date,x.amount,x.merchant,x.paymentMethod,x.paymentId,x.mailImportId]),data.cardStatementImports.map(x=>[x.id,(x.rows||[]).map(r=>[r.id,r.linkedTransactionId,r.included])]),gmailSyncing,gmailConnected(),data.gmailSettings.lastSyncAt]);if(force||next!==signature){signature=next;draw()}};
+    mm3MailViewRefreshers.add(refresh);refresh();const timer=setInterval(()=>{if(!root.isConnected){stop();return}refresh()},700);
+    function stop(){stopped=true;clearInterval(timer);mm3MailViewRefreshers.delete(refresh)}return stop;
   }
   openMailOverview=function(){
     mailForegroundDismissed=true;
@@ -3518,22 +3593,24 @@ mm3BindAssets=function(){
     return pushView('メール取引センター','<div class="mail-surface" id="mailCenterContent"></div>',root=>{
       root.classList.add('mail-center-view');const body=root.querySelector('#mailCenterContent');
       const draw=()=>{
-        const entries=data.mailImports.map(mi=>({mi,st:mm3MailHistoryStatus(mi)})),pending=entries.filter(x=>x.st.key==='pending'),duplicates=entries.filter(x=>x.st.duplicate),count=k=>entries.filter(x=>x.st.key===k).length;
+        const entries=data.mailImports.map(mi=>({mi,st:mm3MailHistoryStatus(mi)})),allPending=entries.filter(x=>x.st.key==='pending'),pending=allPending.filter(x=>!x.st.duplicate),duplicates=entries.filter(x=>x.st.duplicate),count=k=>entries.filter(x=>x.st.key===k).length;
         const last=data.gmailSettings.lastSyncAt,date=last?new Date(last):null,time=date&&Number.isFinite(date.getTime())?date.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}):'未同期';
-        body.innerHTML=`<div class="mail-panel"><div class="mail-status-head"><div><strong>メール取引</strong><span class="mail-caption">${gmailConnected()?'Gmail 接続済み':'Gmail 未接続'}</span></div><div class="mail-status-actions">${gmailSyncing?'<span class="mail-spinner" role="status" aria-label="同期中"></span>':''}<button type="button" id="mailSyncOverview" ${gmailSyncing?'disabled':''}>${gmailConnected()?'同期':'接続'}</button></div></div><div class="mail-metrics"><div><span>最終同期</span><strong>${esc(time)}</strong></div><div><span>確認待ち</span><strong>${pending.length}件</strong></div></div></div>${pending.length?`<h2 class="mail-section-title">要確認</h2><p class="mail-section-note">まだ家計には反映されていません。</p><div class="mail-items">${pending.map((x,i)=>mm3MailItemHtml(x.mi,i)).join('')}</div>`:'<div class="mail-empty">✓ すべて確認済み</div>'}<div class="mail-summary">${[['imported','反映済み'],['info','情報のみ'],['ignored','対象外']].map(([k,label])=>`<button type="button" data-mail-state="${k}"><span>${label}</span><strong>${count(k)}<small>件</small></strong></button>`).join('')}</div>${duplicates.length?`<h2 class="mail-section-title">カード明細との照合</h2><p class="mail-section-note">カード明細または既存取引との照合が必要です。</p><div class="mail-items">${duplicates.map((x,i)=>mm3MailItemHtml(x.mi,i)).join('')}</div>`:''}<button type="button" class="mail-history-link" id="mailHistoryOverview"><span>すべてのメール取引を見る</span><span class="chev">›</span></button>`;
+        body.innerHTML=`<div class="mail-panel"><div class="mail-status-head"><div><strong>メール取引</strong><span class="mail-caption">${gmailConnected()?'Gmail 接続済み':'Gmail 未接続'}</span></div><div class="mail-status-actions">${gmailSyncing?'<span class="mail-spinner" role="status" aria-label="同期中"></span>':''}<button type="button" id="mailSyncOverview" ${gmailSyncing?'disabled':''}>${gmailConnected()?'同期':'接続'}</button></div></div><div class="mail-metrics"><div><span>最終同期</span><strong>${esc(time)}</strong></div><div><span>確認待ち</span><strong>${allPending.length}件</strong></div></div></div>${allPending.length?`<h2 class="mail-section-title">要確認</h2><p class="mail-section-note">まだ家計には反映されていません。</p><div class="mail-items">${pending.map((x,i)=>mm3MailItemHtml(x.mi,i)).join('')}</div>`:'<div class="mail-empty">✓ すべて確認済み</div>'}<div class="mail-summary">${[['imported','反映済み'],['info','情報のみ'],['ignored','対象外']].map(([k,label])=>`<button type="button" data-mail-state="${k}"><span>${label}</span><strong>${count(k)}<small>件</small></strong></button>`).join('')}</div>${duplicates.length?`<h2 class="mail-section-title">カード明細との照合</h2><p class="mail-section-note">カード明細または既存取引との照合が必要です。</p><div class="mail-items">${duplicates.map((x,i)=>mm3MailItemHtml(x.mi,i)).join('')}</div>`:''}<button type="button" class="mail-history-link" id="mailHistoryOverview"><span>すべてのメール取引を見る</span><span class="chev">›</span></button>`;
         mm3BindMailItems(body);body.querySelectorAll('[data-mail-state]').forEach(b=>b.onclick=()=>openMailHistory(b.dataset.mailState));body.querySelector('#mailHistoryOverview').onclick=()=>openMailHistory();body.querySelector('#mailSyncOverview').onclick=async()=>{const work=gmailConnected()?syncGmail():openGmailSettings();draw();try{await work}finally{if(root.isConnected)draw()}};
       };mm3WatchMailView(root,draw);
     });
   };
   function mm3OpenMailReview(ids=[]){
     if(mailReviewOpen||mailReviewOpening||document.getElementById('sheet')?.classList.contains('show'))return;
-    const idSet=new Set(Array.isArray(ids)?ids:[]),items=data.mailImports.filter(mi=>mi.status==='pending'&&mm3MailHistoryStatus(mi).key==='pending'&&(!idSet.size||idSet.has(mi.id)));if(!items.length)return;
+    const idSet=new Set(Array.isArray(ids)?ids:[]),pending=()=>data.mailImports.filter(mi=>mi.status==='pending'&&mm3MailHistoryStatus(mi).key==='pending'&&(!idSet.size||idSet.has(mi.id)));if(!pending().length)return;
     mailReviewOpening=true;
-    openSheet(`<div class="sheet-body"><div class="mail-preview-heading"><div class="mail-preview-icon">${icon('mail')}</div><h2 class="sheet-title">新しいメール取引</h2><p>${items.length}件の確認が必要です</p></div><div class="mail-items">${items.slice(0,3).map((mi,i)=>mm3MailItemHtml(mi,i,true)).join('')}</div>${items.length>3?`<p class="mail-section-note" style="text-align:center">ほか${items.length-3}件</p>`:''}<p class="mail-section-note" style="text-align:center">まだ家計には反映されていません。</p></div><div class="mail-preview-actions"><button type="button" class="secondary" id="mailPreviewLater">あとで</button><button type="button" class="primary" id="mailPreviewReview">確認する</button></div>`,'half',root=>{
-      root.classList.add('mail-preview-sheet');mailReviewOpening=false;mailReviewOpen=true;
+    openSheet(`<div class="sheet-body"><div class="mail-preview-heading"><div class="mail-preview-icon">${icon('mail')}</div><h2 class="sheet-title">新しいメール取引</h2><p id="mailPreviewCount" aria-live="polite"></p></div><div id="mailPreviewItems"></div></div><div class="mail-preview-actions"><button type="button" class="secondary" id="mailPreviewLater">あとで</button><button type="button" class="primary" id="mailPreviewReview">センターを開く</button></div>`,'half',root=>{
+      root.classList.add('mail-preview-sheet');mailReviewOpening=false;mailReviewOpen=true;let closeTimer=null;
+      const draw=()=>{const items=pending(),count=root.querySelector('#mailPreviewCount');count.textContent=items.length?`${items.length}件の確認が必要です`:'すべて確認しました';count.classList.remove('mail-count-updated');void count.offsetWidth;count.classList.add('mail-count-updated');root.querySelector('#mailPreviewItems').innerHTML=items.length?`<div class="mail-items">${items.slice(0,3).map((mi,i)=>mm3MailItemHtml(mi,i,{mode:'preview'})).join('')}</div>${items.length>3?`<p class="mail-section-note mail-preview-more">ほか${items.length-3}件</p>`:''}`:'<div class="mail-empty">✓ すべて確認しました</div>';mm3BindMailItems(root);if(!items.length&&!closeTimer)closeTimer=setTimeout(()=>{if(root.classList.contains('show')&&root.classList.contains('mail-preview-sheet'))closeSheet()},700);else if(items.length&&closeTimer){clearTimeout(closeTimer);closeTimer=null}};
+      const stop=mm3WatchMailView(root,draw);
       root.querySelector('#mailPreviewLater').onclick=()=>{mailForegroundDismissed=true;closeSheet()};
       root.querySelector('#mailPreviewReview').onclick=()=>{mailForegroundDismissed=true;closeSheet();openMailOverview()};
-      return()=>{mailReviewOpen=false;mailReviewOpening=false;mailForegroundDismissed=true};
+      return()=>{stop();clearTimeout(closeTimer);mailReviewOpen=false;mailReviewOpening=false;mailForegroundDismissed=true};
     });
   }
   function mm3OpenMailEditor(id){
@@ -3554,7 +3631,7 @@ mm3BindAssets=function(){
     pushView('メール取引の詳細',`<div class="mail-surface"><div class="mail-editor-head"><h2>${esc(mi.merchant||mi.subject||'利用先不明')}</h2><div class="mail-editor-amount">${mi.amount?yen(mi.direction==='refund'?-Math.abs(mi.amount):mi.amount):'金額不明'}</div><span class="mail-state">${esc(st.label)}</span><p class="mail-caption">${esc(st.note)}</p>${st.duplicate?'<p class="mail-caption">重複候補：カード明細または既存取引との照合が必要です。</p>':''}</div><div class="mail-panel"><dl class="mail-detail-lines">${[['日付',mi.date||'日付不明'],['カテゴリ',mi.category||'未分類'],['支払い方法',paymentLabel(mi)],['種類',mm3MailInfoOnly(mi)?'通知のみ':mi.direction==='refund'?'返金':'支出'],['メモ',mi.memo||'—']].map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl></div><h2 class="mail-section-title">取得元メール</h2><div class="mail-panel"><strong>${esc(mi.subject||'件名なし')}</strong><span class="mail-caption">${esc(mi.sourceName||'Gmail')}<br>${esc(mi.from||'送信元不明')}<br>${mi.receivedAt?esc(compactDateTime(mi.receivedAt)):'受信日時不明'}</span></div>${row?`<h2 class="mail-section-title">照合済みのカード明細</h2><div class="mail-panel"><strong>${esc(row.merchant)}</strong><span class="mail-caption">${esc(row.transactionDate)} · ${yen(Math.abs(mm3RowContribution(row)))}</span></div>`:''}${tx?`<button type="button" class="mail-history-link" id="mm3MailHistoryTx"><span>反映済みの家計取引を見る</span><span class="chev">›</span></button>`:'<p class="mail-section-note">保存済みの家計取引はありません。</p>'}</div>`,root=>{root.classList.add('mail-detail-view');root.querySelector('#mm3MailHistoryTx')?.addEventListener('click',()=>openTransactionDetail(tx.id))});
   }
   openMailHistory=function(initialFilter='all'){
-    pushView('メール取引履歴',`<div class="mail-surface"><div class="filter-stack"><div class="searchbox">${icon('search')}<input id="mm3MailHistorySearch" aria-label="メール取引を検索" placeholder="利用先・件名・取得元を検索"></div><select class="field compact-select" id="mm3MailHistoryFilter" aria-label="メールの状態"><option value="all">すべて</option><option value="pending">確認待ち</option><option value="imported">反映済み</option><option value="info">情報のみ</option><option value="ignored">対象外</option><option value="linked">明細照合済み</option><option value="duplicate">重複候補</option></select></div><div id="mm3MailHistoryList"></div></div>`,root=>{
+    pushView('メール取引履歴',`<div class="mail-surface"><div class="mail-history-toolbar"><div class="searchbox">${icon('search')}<input id="mm3MailHistorySearch" aria-label="メール取引を検索" placeholder="利用先・件名・取得元を検索"></div><select class="field compact-select" id="mm3MailHistoryFilter" aria-label="メールの状態"><option value="all">すべて</option><option value="pending">確認待ち</option><option value="imported">反映済み</option><option value="info">情報のみ</option><option value="ignored">対象外</option><option value="linked">明細照合済み</option><option value="duplicate">重複候補</option></select></div><div id="mm3MailHistoryList"></div></div>`,root=>{
       root.classList.add('mail-center-history');let q='',filter=typeof initialFilter==='string'?initialFilter:'all';const draw=()=>{const needle=normalizeMerchantKey(q),items=[...data.mailImports].sort((a,b)=>String(b.receivedAt||b.date||'').localeCompare(String(a.receivedAt||a.date||''))).filter(mi=>{const st=mm3MailHistoryStatus(mi);return(filter==='all'||(filter==='duplicate'?st.duplicate:filter==='linked'?st.linked:st.key===filter))&&(!needle||normalizeMerchantKey(`${mi.merchant||''} ${mi.subject||''} ${mi.sourceName||''} ${mi.category||''}`).includes(needle))});root.querySelector('#mm3MailHistoryList').innerHTML=items.length?`<div class="mail-items">${items.map((mi,i)=>mm3MailItemHtml(mi,i)).join('')}</div>`:'<div class="mail-empty">該当するメール取引はありません。</div>';mm3BindMailItems(root)};const search=root.querySelector('#mm3MailHistorySearch'),select=root.querySelector('#mm3MailHistoryFilter');select.value=filter;search.oninput=()=>{q=search.value;draw()};select.onchange=()=>{filter=select.value;draw()};mm3WatchMailView(root,draw);
     });
   };
