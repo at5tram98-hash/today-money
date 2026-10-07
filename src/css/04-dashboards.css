@@ -1,0 +1,429 @@
+/* === My Money 3.0 Phase 1: Salary Home × Stocks === */
+#screen-pay .mm3-salary-topbar{padding-bottom:4px}
+#screen-pay .mm3-salary-topbar .icon-btn{border-radius:50%;background:rgba(0,122,255,.09)}
+html.dark #screen-pay .mm3-salary-topbar .icon-btn{background:rgba(10,132,255,.14)}
+#screen-pay .mm3-salary-shell{padding-bottom:8px}
+#screen-pay .mm3-salary-monthline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:1px 1px 0;min-height:34px}
+#screen-pay .mm3-salary-monthbtn{border:0;background:transparent;color:var(--label);font-size:13px;font-weight:650;display:inline-flex;align-items:center;gap:4px;padding:7px 0;text-align:left}
+#screen-pay .mm3-salary-monthbtn svg{width:12px;height:12px;fill:none;stroke:var(--label2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#screen-pay .mm3-salary-month-select-wrap{position:relative;display:inline-flex;align-items:center;min-width:0;max-width:70%}
+#screen-pay .mm3-salary-month-select{appearance:none;-webkit-appearance:none;min-height:44px;max-width:100%;padding:8px 28px 8px 8px;border:0;border-radius:10px;background:var(--card);color:var(--label);font-size:16px;font-weight:650;line-height:1.3}
+#screen-pay .mm3-salary-month-select-wrap svg{position:absolute;right:8px;width:12px;height:12px;fill:none;stroke:var(--label2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+#screen-pay .mm3-salary-compare-label{font-size:10px;color:var(--label2)}
+#screen-pay .mm3-salary-primary{padding:8px 0 14px;border-bottom:.5px solid var(--sep)}
+#screen-pay .mm3-salary-primary-label{font-size:11px;color:var(--label2);font-weight:600}
+#screen-pay .mm3-salary-primary-value{font-size:40px;line-height:1.02;font-weight:770;letter-spacing:-1.35px;margin-top:4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#screen-pay .mm3-salary-primary-change{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-top:6px;font-size:12px;font-weight:650;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-primary-change small{font-size:10px;color:var(--label2);font-weight:520}
+#screen-pay .mm3-salary-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:17px 0 4px}
+#screen-pay .mm3-salary-section-title{font-size:15px;font-weight:700;letter-spacing:-.2px}
+#screen-pay .mm3-salary-pull{border:0;background:var(--fill);min-height:30px;border-radius:9px;padding:5px 8px;color:var(--label);font-size:11px;font-weight:650;display:inline-flex;align-items:center;gap:4px;transition:transform .12s,opacity .12s,background .12s}
+#screen-pay .mm3-salary-pull:active{transform:scale(.96);opacity:.72}
+#screen-pay .mm3-salary-pull svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--label2)}
+#screen-pay .mm3-salary-section-caption{font-size:10px;color:var(--label2);line-height:1.4;margin:0 0 7px}
+#screen-pay .mm3-salary-viz{min-height:158px;padding:4px 0 0}
+#screen-pay .mm3-salary-viz-switch{animation:mm3SalaryVizIn .24s cubic-bezier(.2,.8,.2,1)}
+#screen-pay .mm3-salary-composition{display:grid;grid-template-columns:minmax(126px,42%) 1fr;gap:12px;align-items:center;min-height:150px}
+#screen-pay .mm3-salary-donut{position:relative;width:min(142px,100%);aspect-ratio:1;margin:0 auto;display:grid;place-items:center}
+#screen-pay .mm3-salary-donut svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+#screen-pay .mm3-salary-donut-track{fill:none;stroke:var(--fill);stroke-width:18}
+#screen-pay .mm3-salary-donut-arc{fill:none;stroke-width:18;stroke-linecap:butt;animation:mm3SalaryDonutIn .55s cubic-bezier(.2,.8,.2,1) both}
+#screen-pay .mm3-salary-donut-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center;pointer-events:none}
+#screen-pay .mm3-salary-donut-center span{font-size:9px;color:var(--label2)}
+#screen-pay .mm3-salary-donut-center strong{font-size:17px;line-height:1.1;margin-top:2px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-legend{min-width:0;display:grid;gap:9px}
+#screen-pay .mm3-salary-legend-row{display:grid;grid-template-columns:9px minmax(0,1fr) auto;gap:7px;align-items:center;min-width:0}
+#screen-pay .mm3-salary-legend-dot{width:8px;height:8px;border-radius:50%}
+#screen-pay .mm3-salary-legend-main{min-width:0}
+#screen-pay .mm3-salary-legend-main b{display:block;font-size:11.5px;font-weight:620;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-legend-main small{display:block;font-size:9px;color:var(--label2);margin-top:1px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-legend-pct{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-empty-viz{min-height:145px;display:grid;place-items:center;text-align:center;color:var(--label2);font-size:12px;line-height:1.5;padding:20px}
+#screen-pay .mm3-salary-trend{padding-top:4px}
+#screen-pay .mm3-salary-trend svg{width:100%;height:135px;display:block;overflow:visible}
+#screen-pay .mm3-salary-grid{stroke:var(--sep);stroke-width:.7}
+#screen-pay .mm3-salary-trend-line{fill:none;stroke:var(--green);stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:800;stroke-dashoffset:800;animation:mm3SalaryLineIn .58s cubic-bezier(.2,.8,.2,1) forwards}
+#screen-pay .mm3-salary-trend-fill{fill:rgba(52,199,89,.065)}
+html.dark #screen-pay .mm3-salary-trend-fill{fill:rgba(48,209,88,.09)}
+#screen-pay .mm3-salary-axis{font-size:8px;fill:var(--label2);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif}
+#screen-pay .mm3-salary-range{display:flex;gap:2px;background:var(--fill);border-radius:9px;padding:2px;margin-top:2px}
+#screen-pay .mm3-salary-range button{flex:1;border:0;background:transparent;border-radius:7px;padding:5px 1px;font-size:9px;color:var(--label2);min-width:0}
+#screen-pay .mm3-salary-range button.on{background:var(--card);color:var(--label);font-weight:650;box-shadow:0 1px 4px rgba(0,0,0,.10)}
+#screen-pay .mm3-salary-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-top:8px}
+#screen-pay .mm3-salary-metric{min-width:0;padding:10px 8px 10px 0}
+#screen-pay .mm3-salary-metric+.mm3-salary-metric{padding-left:8px;border-left:.5px solid var(--sep)}
+#screen-pay .mm3-salary-metric span{display:block;font-size:9.5px;color:var(--label2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-metric strong{display:block;font-size:13px;margin-top:3px;font-weight:680;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-link{border:0;background:transparent;color:var(--blue);font-size:11px;font-weight:650;padding:5px 0}
+#screen-pay .mm3-salary-event{width:100%;border:0;background:transparent;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;padding:8px 0 10px;border-bottom:.5px solid var(--sep);transition:transform .11s,opacity .11s}
+#screen-pay .mm3-salary-event:active{transform:scale(.985);opacity:.62}
+#screen-pay .mm3-salary-event-icon{width:32px;height:32px;border-radius:10px;background:rgba(52,199,89,.12);color:var(--green);display:grid;place-items:center;font-size:16px;font-weight:800}
+#screen-pay .mm3-salary-event-main{min-width:0}
+#screen-pay .mm3-salary-event-main strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-event-main small{display:block;font-size:9.5px;color:var(--label2);margin-top:2px}
+#screen-pay .mm3-salary-event-value{text-align:right;white-space:nowrap}
+#screen-pay .mm3-salary-event-value strong{display:block;font-size:13px;color:var(--green);font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-event-value small{display:block;font-size:9px;color:var(--label2);margin-top:2px}
+#screen-pay .mm3-salary-watchlist{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-pay .mm3-salary-watchrow{width:100%;min-height:62px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:grid;grid-template-columns:minmax(0,1.08fr) 72px minmax(76px,.72fr);gap:8px;align-items:center;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s,background .11s}
+#screen-pay .mm3-salary-watchrow:last-child{border-bottom:0}
+#screen-pay .mm3-salary-watchrow:active{transform:scale(.985);opacity:.64;background:rgba(118,118,128,.04)}
+#screen-pay .mm3-salary-watch-main{min-width:0}
+#screen-pay .mm3-salary-watch-main strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-spark{width:72px;height:28px;display:grid;place-items:center;color:var(--green)}
+#screen-pay .mm3-salary-spark svg{width:100%;height:100%;overflow:visible}
+#screen-pay .mm3-salary-spark-line{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#screen-pay .mm3-salary-spark-empty{font-size:8px;color:var(--label3);text-align:center}
+#screen-pay .mm3-salary-watch-value{text-align:right;min-width:0}
+#screen-pay .mm3-salary-watch-value strong{display:block;font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-watch-value small{display:block;font-size:9px;color:var(--green);font-weight:650;margin-top:2px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-detail-group{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-pay .mm3-salary-detail-row{width:100%;min-height:48px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s}
+#screen-pay .mm3-salary-detail-row:last-child{border-bottom:0}
+#screen-pay .mm3-salary-detail-row:active{transform:scale(.985);opacity:.62}
+#screen-pay .mm3-salary-detail-row div{min-width:0;flex:1}
+#screen-pay .mm3-salary-detail-row strong{display:block;font-size:12.5px}
+#screen-pay .mm3-salary-detail-row small{display:block;font-size:9.5px;color:var(--label2);margin-top:2px}
+#screen-pay .mm3-salary-detail-row>span{font-size:18px;color:var(--label3)}
+#screen-pay .mm3-salary-record-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-pay .mm3-salary-record-row{width:100%;min-height:58px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0}
+#screen-pay .mm3-salary-record-row:last-child{border-bottom:0}
+#screen-pay .mm3-salary-record-row:active{opacity:.62}
+@keyframes mm3SalaryVizIn{from{opacity:.18;transform:translateY(3px) scale(.988)}to{opacity:1;transform:none}}
+@keyframes mm3SalaryDonutIn{from{opacity:.25;stroke-dashoffset:100}to{opacity:1}}
+@keyframes mm3SalaryLineIn{to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){#screen-pay .mm3-salary-viz-switch,#screen-pay .mm3-salary-donut-arc,#screen-pay .mm3-salary-trend-line{animation:none!important}}
+.motion-off #screen-pay .mm3-salary-viz-switch,.motion-off #screen-pay .mm3-salary-donut-arc,.motion-off #screen-pay .mm3-salary-trend-line{animation:none!important}
+@media(max-width:390px){
+ #screen-pay .mm3-salary-primary-value{font-size:37px}
+ #screen-pay .mm3-salary-composition{grid-template-columns:122px 1fr;gap:9px}
+ #screen-pay .mm3-salary-donut{width:122px}
+ #screen-pay .mm3-salary-watchrow{grid-template-columns:minmax(0,1fr) 62px 74px;gap:6px}
+ #screen-pay .mm3-salary-spark{width:62px}
+ #screen-pay .mm3-salary-watch-value strong{font-size:11.5px}
+}
+/* === end My Money 3.0 Phase 1 === */
+
+
+
+/* === My Money 3.0 Phase 2: Payments + ATF === */
+#screen-payments .mm3-payment-shell{padding-bottom:8px}
+#screen-payments .mm3-payment-topbar .date-line{display:none}
+#screen-payments .mm3-payment-monthline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 0;min-height:34px}
+#screen-payments .mm3-payment-monthbtn{border:0;background:transparent;color:var(--label);font-size:13px;font-weight:650;display:inline-flex;align-items:center;gap:4px;padding:5px 0;letter-spacing:-.1px}
+#screen-payments .mm3-payment-monthbtn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#screen-payments .mm3-payment-monthmeta{font-size:10px;color:var(--label2);white-space:nowrap}
+#screen-payments .mm3-payment-primary{padding:9px 0 15px;border-bottom:.5px solid var(--sep)}
+#screen-payments .mm3-payment-primary-label{font-size:11px;color:var(--label2);font-weight:560}
+#screen-payments .mm3-payment-primary-value{font-size:40px;line-height:1.04;font-weight:770;letter-spacing:-1.25px;margin-top:4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#screen-payments .mm3-payment-primary-change{display:flex;align-items:baseline;gap:7px;margin-top:5px;font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
+#screen-payments .mm3-payment-primary-change small{font-size:9.5px;color:var(--label2);font-weight:540}
+#screen-payments .mm3-payment-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:17px 0 4px}
+#screen-payments .mm3-payment-section-title{font-size:13.5px;font-weight:700;letter-spacing:-.15px;min-width:0}
+#screen-payments .mm3-payment-atf-title{display:flex;align-items:center;gap:6px}
+#screen-payments .mm3-payment-atf-chip{display:inline-flex;align-items:center;justify-content:center;min-height:19px;padding:2px 6px;border-radius:999px;background:rgba(0,122,255,.10);color:var(--blue);font-size:8px;font-weight:760;letter-spacing:.02em}
+#screen-payments .mm3-payment-link{border:0;background:transparent;color:var(--blue);font-size:11px;font-weight:650;padding:6px 0;white-space:nowrap}
+#screen-payments .mm3-payment-caption{font-size:9.5px;line-height:1.42;color:var(--label2);margin:0 0 4px}
+#screen-payments .mm3-atf-chart{position:relative;height:168px;margin-top:4px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#screen-payments .mm3-atf-chart svg{display:block;width:100%;height:150px;overflow:visible}
+#screen-payments .mm3-atf-grid{stroke:rgba(60,60,67,.105);stroke-width:1;vector-effect:non-scaling-stroke}
+html.dark #screen-payments .mm3-atf-grid{stroke:rgba(235,235,245,.12)}
+#screen-payments .mm3-atf-zero{stroke:rgba(255,59,48,.43);stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+#screen-payments .mm3-atf-segment{fill:none;stroke:var(--blue);stroke-width:2.15;stroke-linecap:round;vector-effect:non-scaling-stroke}
+#screen-payments .mm3-atf-segment.negative{stroke:var(--red)}
+#screen-payments .mm3-atf-area{fill:rgba(0,122,255,.045)}
+#screen-payments .mm3-atf-event-dot{fill:var(--card);stroke:var(--orange);stroke-width:2;vector-effect:non-scaling-stroke}
+#screen-payments .mm3-atf-event-dot.income{stroke:var(--green)}
+#screen-payments .mm3-atf-event-dot.card{stroke:var(--purple)}
+#screen-payments .mm3-atf-event-dot.negative{stroke:var(--red)}
+#screen-payments .mm3-atf-guide{stroke:var(--label3);stroke-width:1;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .1s}
+#screen-payments .mm3-atf-selected{fill:var(--card);stroke:var(--blue);stroke-width:2.3;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .1s}
+#screen-payments .mm3-atf-chart.scrubbing .mm3-atf-guide,#screen-payments .mm3-atf-chart.scrubbing .mm3-atf-selected{opacity:1}
+#screen-payments .mm3-atf-axis{fill:var(--label2);font-size:8px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif}
+#screen-payments .mm3-atf-tooltip{position:absolute;top:4px;left:50%;transform:translateX(-50%) translateY(-2px);max-width:180px;opacity:0;pointer-events:none;background:rgba(28,28,30,.90);color:#fff;border-radius:10px;padding:6px 8px;font-size:9px;line-height:1.3;box-shadow:0 4px 14px rgba(0,0,0,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .1s,transform .12s;z-index:4}
+#screen-payments .mm3-atf-tooltip strong{font-size:11px;font-variant-numeric:tabular-nums}
+#screen-payments .mm3-atf-tooltip small{display:block;color:rgba(255,255,255,.70);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-atf-chart.scrubbing .mm3-atf-tooltip{opacity:1;transform:translateX(-50%) translateY(0)}
+#screen-payments .mm3-atf-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-top:2px}
+#screen-payments .mm3-atf-metric{min-width:0;padding:10px 8px 10px 0}
+#screen-payments .mm3-atf-metric+.mm3-atf-metric{padding-left:8px;border-left:.5px solid var(--sep)}
+#screen-payments .mm3-atf-metric span{display:block;font-size:9px;color:var(--label2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-atf-metric strong{display:block;font-size:12.5px;margin-top:3px;font-weight:680;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-atf-empty{min-height:116px;border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);display:grid;place-items:center;text-align:center;padding:18px 12px;color:var(--label2);font-size:11px;line-height:1.45}
+#screen-payments .mm3-payment-event{width:100%;border:0;background:transparent;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;padding:9px 0 11px;border-bottom:.5px solid var(--sep);transition:transform .11s,opacity .11s,background .11s}
+#screen-payments .mm3-payment-event:active{transform:scale(.985);opacity:.62}
+#screen-payments .mm3-payment-event-icon{width:32px;height:32px;border-radius:10px;background:rgba(175,82,222,.11);color:var(--purple);display:grid;place-items:center}
+#screen-payments .mm3-payment-event-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#screen-payments .mm3-payment-event-main{min-width:0}
+#screen-payments .mm3-payment-event-main strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-event-main small{display:block;font-size:9px;color:var(--label2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-event-value{text-align:right;white-space:nowrap}
+#screen-payments .mm3-payment-event-value strong{display:block;font-size:12.5px;color:var(--red);font-variant-numeric:tabular-nums}
+#screen-payments .mm3-payment-event-value small{display:block;font-size:8.5px;color:var(--label2);margin-top:2px}
+#screen-payments .mm3-payment-watchlist{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-payments .mm3-payment-watchrow{width:100%;min-height:62px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:grid;grid-template-columns:minmax(0,1.08fr) 72px minmax(78px,.72fr);gap:8px;align-items:center;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s,background .11s}
+#screen-payments .mm3-payment-watchrow:last-child{border-bottom:0}
+#screen-payments .mm3-payment-watchrow:active{transform:scale(.985);opacity:.64;background:rgba(118,118,128,.04)}
+#screen-payments .mm3-payment-watch-main{min-width:0}
+#screen-payments .mm3-payment-watch-main strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-spark{width:72px;height:28px;color:var(--red);display:grid;place-items:center}
+#screen-payments .mm3-payment-spark svg{width:100%;height:100%;overflow:visible}
+#screen-payments .mm3-payment-spark-line{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#screen-payments .mm3-payment-spark-empty{font-size:8px;color:var(--label3)}
+#screen-payments .mm3-payment-watch-value{text-align:right;min-width:0}
+#screen-payments .mm3-payment-watch-value strong{display:block;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-watch-value small{display:block;font-size:8.5px;margin-top:2px;font-weight:650;font-variant-numeric:tabular-nums}
+#screen-payments .mm3-payment-detail-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-payments .mm3-payment-detail-row{width:100%;min-height:51px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s}
+#screen-payments .mm3-payment-detail-row:last-child{border-bottom:0}
+#screen-payments .mm3-payment-detail-row:active{transform:scale(.985);opacity:.62}
+#screen-payments .mm3-payment-detail-icon{width:29px;height:29px;border-radius:9px;background:var(--fill);display:grid;place-items:center;color:var(--blue);flex:0 0 auto}
+#screen-payments .mm3-payment-detail-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#screen-payments .mm3-payment-detail-main{min-width:0;flex:1}
+#screen-payments .mm3-payment-detail-main strong{display:block;font-size:12.5px}
+#screen-payments .mm3-payment-detail-main small{display:block;font-size:9px;color:var(--label2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-detail-value{font-size:11.5px;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+#screen-payments .mm3-payment-detail-chev{font-size:18px;color:var(--label3)}
+.mm3-atf-sheet-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0 14px}
+.mm3-atf-sheet-summary>div{background:var(--fill);border-radius:11px;padding:9px;min-width:0}
+.mm3-atf-sheet-summary span{display:block;font-size:9px;color:var(--label2)}
+.mm3-atf-sheet-summary strong{display:block;font-size:12.5px;margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm3-atf-sheet-events{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+.mm3-atf-sheet-event{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:43px;border-bottom:.5px solid var(--sep);font-size:11px}
+.mm3-atf-sheet-event:last-child{border-bottom:0}
+.mm3-atf-sheet-event div{min-width:0}.mm3-atf-sheet-event strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mm3-atf-sheet-event small{display:block;font-size:8.5px;color:var(--label2);margin-top:2px}.mm3-atf-sheet-event>span{white-space:nowrap;font-weight:680;font-variant-numeric:tabular-nums}
+.mm3-payment-push-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+.mm3-payment-push-row{width:100%;min-height:56px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0}
+.mm3-payment-push-row:last-child{border-bottom:0}.mm3-payment-push-row:active{opacity:.62}.mm3-payment-push-row .row-value{max-width:38%}
+#screen-payments .mm3-payment-reveal{animation:mm3PaymentReveal .26s cubic-bezier(.2,.8,.2,1)}
+@keyframes mm3PaymentReveal{from{opacity:.25;transform:translateY(3px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#screen-payments .mm3-payment-reveal{animation:none!important}#screen-payments .mm3-atf-tooltip,#screen-payments .mm3-atf-guide,#screen-payments .mm3-atf-selected{transition:none!important}}
+.motion-off #screen-payments .mm3-payment-reveal{animation:none!important}.motion-off #screen-payments .mm3-atf-tooltip,.motion-off #screen-payments .mm3-atf-guide,.motion-off #screen-payments .mm3-atf-selected{transition:none!important}
+@media(max-width:390px){#screen-payments .mm3-payment-primary-value{font-size:37px}#screen-payments .mm3-payment-watchrow{grid-template-columns:minmax(0,1fr) 62px 74px;gap:6px}#screen-payments .mm3-payment-spark{width:62px}#screen-payments .mm3-payment-watch-value strong{font-size:11.5px}}
+/* === end My Money 3.0 Phase 2 CSS === */
+
+
+/* === My Money 3.0 Phase 3: Assets / Stocks UI === */
+#screen-assets .mm3-assets-shell{padding-bottom:8px}
+#screen-assets .mm3-assets-topbar .date-line{display:none}
+#screen-assets .mm3-assets-primary{padding:10px 1px 6px}
+#screen-assets .mm3-assets-primary-label{font-size:11px;color:var(--label2);font-weight:600}
+#screen-assets .mm3-assets-primary-value{font-size:40px;line-height:1.04;font-weight:780;letter-spacing:-1.15px;margin-top:4px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#screen-assets .mm3-assets-primary-change{display:flex;align-items:baseline;gap:6px;margin-top:5px;font-size:12px;font-weight:680;font-variant-numeric:tabular-nums;flex-wrap:wrap}
+#screen-assets .mm3-assets-primary-change small{font-size:10px;color:var(--label2);font-weight:560}
+#screen-assets .mm3-assets-divider{height:.5px;background:var(--sep);margin:11px 0 0}
+#screen-assets .mm3-assets-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 1px 7px}
+#screen-assets .mm3-assets-section-title{font-size:14px;font-weight:700;letter-spacing:-.15px}
+#screen-assets .mm3-assets-caption{font-size:10.5px;line-height:1.4;color:var(--label2);margin:-2px 1px 7px}
+#screen-assets .mm3-assets-menu-btn{min-height:31px;border:0;border-radius:10px;background:var(--fill);padding:5px 9px;color:var(--label);font-size:11px;font-weight:650;display:inline-flex;align-items:center;gap:4px;transition:transform .12s,opacity .12s,background .12s;white-space:nowrap}
+#screen-assets .mm3-assets-menu-btn:active{transform:scale(.96);opacity:.7}
+#screen-assets .mm3-assets-menu-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--label2)}
+#screen-assets .mm3-assets-chart{position:relative;height:190px;margin:1px -1px 0;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+#screen-assets .mm3-assets-chart svg{width:100%;height:168px;display:block;overflow:visible}
+#screen-assets .mm3-assets-grid{stroke:var(--sep);stroke-width:.7;opacity:.62}
+#screen-assets .mm3-assets-zero{stroke:var(--red);stroke-width:.8;stroke-dasharray:4 4;opacity:.55}
+#screen-assets .mm3-assets-area{fill:var(--blue);opacity:.055}
+#screen-assets .mm3-assets-area.forecast{fill:var(--orange);opacity:.055}
+#screen-assets .mm3-assets-line{fill:none;stroke:var(--blue);stroke-width:2.15;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:800;stroke-dashoffset:800;animation:mm3AssetLineReveal .62s cubic-bezier(.2,.8,.2,1) forwards}
+#screen-assets .mm3-assets-line.forecast{stroke:var(--orange);stroke-dasharray:5 4;stroke-dashoffset:0;animation:none}
+#screen-assets .mm3-assets-axis{font-size:8.3px;fill:var(--label2)}
+#screen-assets .mm3-assets-guide{stroke:var(--label2);stroke-width:.8;opacity:0;transition:opacity .12s}
+#screen-assets .mm3-assets-selected{fill:var(--card);stroke:var(--blue);stroke-width:2.2;opacity:0;transition:opacity .12s}
+#screen-assets .mm3-assets-selected.forecast{stroke:var(--orange)}
+#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-guide,#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-selected{opacity:1}
+#screen-assets .mm3-assets-tooltip{position:absolute;top:5px;left:50%;transform:translateX(-50%);z-index:3;min-width:88px;max-width:150px;padding:6px 8px;border-radius:10px;background:rgba(28,28,30,.91);color:#fff;font-size:9px;line-height:1.25;text-align:center;opacity:0;pointer-events:none;transition:opacity .12s,transform .12s;box-shadow:0 4px 16px rgba(0,0,0,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#screen-assets .mm3-assets-tooltip strong{display:block;font-size:11.5px;margin-top:1px;font-variant-numeric:tabular-nums}
+#screen-assets .mm3-assets-tooltip small{display:block;font-size:8px;color:rgba(255,255,255,.7);margin-top:2px}
+#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-tooltip{opacity:1}
+#screen-assets .mm3-assets-range{display:flex;gap:2px;background:var(--fill);border-radius:9px;padding:2px;margin-top:0}
+#screen-assets .mm3-assets-range button{flex:1;min-width:0;border:0;background:transparent;border-radius:7px;min-height:28px;padding:4px 1px;font-size:9.5px;color:var(--label2);transition:transform .1s,background .14s,color .14s}
+#screen-assets .mm3-assets-range button.on{background:var(--card);color:var(--label);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.10)}
+#screen-assets .mm3-assets-range button:active{transform:scale(.95)}
+#screen-assets .mm3-assets-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:.5px solid var(--sep);margin-top:10px}
+#screen-assets .mm3-assets-metric{padding:10px 8px 1px 0;min-width:0}
+#screen-assets .mm3-assets-metric+.mm3-assets-metric{padding-left:8px;border-left:.5px solid var(--sep)}
+#screen-assets .mm3-assets-metric span{display:block;font-size:9.5px;color:var(--label2)}
+#screen-assets .mm3-assets-metric strong{display:block;font-size:12.5px;margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-assets .mm3-assets-watchlist{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-bottom:3px}
+#screen-assets .mm3-assets-watchrow{width:100%;min-height:64px;padding:8px 0;border:0;border-bottom:.5px solid var(--sep);background:transparent;color:inherit;display:grid;grid-template-columns:minmax(0,1.15fr) 72px minmax(78px,.78fr);align-items:center;gap:8px;text-align:left;position:relative;transition:background .12s,transform .11s,opacity .11s}
+#screen-assets .mm3-assets-watchrow:last-child{border-bottom:0}
+#screen-assets .mm3-assets-watchrow:active{background:rgba(118,118,128,.07);transform:scale(.985);opacity:.72}
+#screen-assets .mm3-assets-watch-main{min-width:0}
+#screen-assets .mm3-assets-watch-main strong{display:block;font-size:13px;font-weight:690;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-assets .mm3-assets-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-assets .mm3-assets-spark{width:72px;height:29px;display:grid;place-items:center;min-width:0}
+#screen-assets .mm3-assets-spark svg{width:100%;height:27px;overflow:visible}
+#screen-assets .mm3-assets-spark .spark-line{stroke-width:1.55}
+#screen-assets .mm3-assets-watch-value{text-align:right;min-width:0}
+#screen-assets .mm3-assets-watch-value strong{display:block;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+#screen-assets .mm3-assets-watch-value small{display:block;font-size:9px;color:var(--label2);margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap}
+#screen-assets .mm3-assets-detail-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-bottom:8px}
+#screen-assets .mm3-assets-detail-row{width:100%;min-height:54px;border:0;border-bottom:.5px solid var(--sep);background:transparent;color:inherit;padding:8px 1px;display:grid;grid-template-columns:31px 1fr auto;gap:9px;align-items:center;text-align:left}
+#screen-assets .mm3-assets-detail-row:last-child{border-bottom:0}
+#screen-assets .mm3-assets-detail-row:active{background:rgba(118,118,128,.07)}
+#screen-assets .mm3-assets-detail-icon{width:29px;height:29px;border-radius:9px;background:var(--fill);color:var(--blue);display:grid;place-items:center}
+#screen-assets .mm3-assets-detail-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#screen-assets .mm3-assets-detail-main strong{display:block;font-size:12px}#screen-assets .mm3-assets-detail-main small{display:block;font-size:9px;color:var(--label2);margin-top:2px}
+#screen-assets .mm3-assets-detail-chev{font-size:20px;color:var(--label3)}
+#screen-assets .mm3-assets-empty-chart{height:152px;display:grid;place-items:center;text-align:center;color:var(--label2);font-size:11px;line-height:1.45;border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
+#screen-assets .mm3-assets-chart-switch{animation:mm3AssetSwitch .24s cubic-bezier(.2,.8,.2,1)}
+#screen-assets .mm3-assets-sort-flip{will-change:transform}
+html.dark #screen-assets .mm3-assets-tooltip{background:rgba(58,58,60,.94)}
+@keyframes mm3AssetLineReveal{to{stroke-dashoffset:0}}
+@keyframes mm3AssetSwitch{from{opacity:.22;transform:scale(.988) translateY(2px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#screen-assets .mm3-assets-line{animation:none;stroke-dashoffset:0}#screen-assets .mm3-assets-chart-switch{animation:none!important}#screen-assets .mm3-assets-guide,#screen-assets .mm3-assets-selected,#screen-assets .mm3-assets-tooltip{transition:none!important}}
+.motion-off #screen-assets .mm3-assets-line{animation:none;stroke-dashoffset:0}.motion-off #screen-assets .mm3-assets-chart-switch{animation:none!important}
+@media(max-width:390px){#screen-assets .mm3-assets-primary-value{font-size:37px}#screen-assets .mm3-assets-watchrow{grid-template-columns:minmax(0,1fr) 62px 76px;gap:6px}#screen-assets .mm3-assets-spark{width:62px}}
+/* === end My Money 3.0 Phase 3 CSS === */
+
+
+
+/* === My Money 3.0 Phase 4: Motion / Gesture / Unified polish === */
+:root{
+  --mm3-motion-tap:120ms;
+  --mm3-motion-menu:180ms;
+  --mm3-motion-chart:250ms;
+  --mm3-motion-month:290ms;
+  --mm3-motion-flip:360ms;
+  --mm3-ease:cubic-bezier(.2,.85,.2,1);
+  --mm3-ease-spring:cubic-bezier(.2,.95,.25,1.06)
+}
+#screen-pay .mm3-salary-shell,
+#screen-payments .mm3-payment-shell,
+#screen-assets .mm3-assets-shell{transform-origin:50% 15%;contain:layout style}
+#screen-pay .mm3-salary-topbar .icon-btn,
+#screen-payments .mm3-payment-topbar .icon-btn,
+#screen-assets .mm3-assets-topbar .icon-btn{transition:transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease}
+#screen-pay .mm3-salary-pull,
+#screen-assets .mm3-assets-menu-btn,
+#screen-pay .mm3-salary-monthbtn,
+#screen-payments .mm3-payment-monthbtn{transition:transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease}
+#screen-pay .mm3-salary-primary-value,
+#screen-payments .mm3-payment-primary-value,
+#screen-assets .mm3-assets-primary-value{font-variant-numeric:tabular-nums lining-nums;letter-spacing:-1.25px}
+
+/* Month swipe feedback: only the new salary/payment surfaces participate. */
+#payContent,#paymentsContent{touch-action:pan-y}
+.mm3-month-gesture{will-change:transform,opacity}
+
+/* Salary trend scrubber */
+#screen-pay .mm3-salary-trend{position:relative;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+#screen-pay .mm3-salary-scrub-guide{position:absolute;top:8px;bottom:37px;width:.5px;background:var(--label2);opacity:0;pointer-events:none;transition:opacity 120ms ease;z-index:4}
+#screen-pay .mm3-salary-scrub-dot{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--card);border:2px solid var(--green);transform:translate(-50%,-50%);opacity:0;pointer-events:none;transition:opacity 120ms ease;z-index:5}
+#screen-pay .mm3-salary-scrub-tip{position:absolute;top:2px;min-width:82px;max-width:140px;padding:5px 7px;border-radius:9px;background:rgba(28,28,30,.91);color:#fff;text-align:center;font-size:8.5px;line-height:1.25;transform:translateX(-50%);opacity:0;pointer-events:none;transition:opacity 120ms ease;z-index:6;box-shadow:0 5px 16px rgba(0,0,0,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#screen-pay .mm3-salary-scrub-tip strong{display:block;font-size:11px;margin-top:1px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-trend.scrubbing .mm3-salary-scrub-guide,
+#screen-pay .mm3-salary-trend.scrubbing .mm3-salary-scrub-dot,
+#screen-pay .mm3-salary-trend.scrubbing .mm3-salary-scrub-tip{opacity:1}
+
+/* Manual account reorder */
+#screen-assets .mm3-assets-watchlist.mm3-assets-manual{position:relative;touch-action:pan-y}
+#screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow{grid-template-columns:20px minmax(0,1.08fr) 62px minmax(76px,.76fr);cursor:grab;-webkit-user-select:none;user-select:none;touch-action:pan-y}
+#screen-assets .mm3-assets-reorder-handle{width:18px;height:34px;display:grid;place-items:center;color:var(--label3);font-size:18px;letter-spacing:-4px;transform:rotate(90deg);pointer-events:none}
+#screen-assets .mm3-assets-watchrow.mm3-assets-dragging{cursor:grabbing;background:var(--card);border-radius:13px;padding-left:7px;padding-right:7px;box-shadow:0 11px 28px rgba(0,0,0,.17);transform:scale(1.018);opacity:.985;transition:box-shadow 150ms ease,transform 150ms var(--mm3-ease);z-index:90}
+#screen-assets .mm3-assets-reorder-placeholder{border-radius:12px;background:rgba(0,122,255,.055);box-shadow:inset 0 0 0 1px rgba(0,122,255,.11);margin:1px 0}
+#screen-assets .mm3-assets-manual-hint{font-size:9.5px;color:var(--label2);margin:-2px 1px 7px;animation:mm3ManualHintIn 220ms var(--mm3-ease)}
+@keyframes mm3ManualHintIn{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:none}}
+
+/* Existing iOS menu is the shared menu component; polish the physics without changing structure. */
+.ios-menu{transition:opacity var(--mm3-motion-menu) ease,transform var(--mm3-motion-menu) var(--mm3-ease-spring)}
+.menu-item{transition:background var(--mm3-motion-tap) ease,transform var(--mm3-motion-tap) var(--mm3-ease)}
+.menu-item:active{transform:scale(.985)}
+
+/* Keep glass only on navigation/control layers. */
+#screen-pay .mm3-salary-pull,
+#screen-assets .mm3-assets-menu-btn{background:rgba(118,118,128,.11);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28)}
+html.dark #screen-pay .mm3-salary-pull,
+html.dark #screen-assets .mm3-assets-menu-btn{background:rgba(118,118,128,.18);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.07)}
+
+@media(max-width:390px){
+  #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow{grid-template-columns:18px minmax(0,1fr) 54px 72px;gap:5px}
+}
+@media(prefers-reduced-motion:reduce){
+  #screen-pay .mm3-salary-scrub-guide,#screen-pay .mm3-salary-scrub-dot,#screen-pay .mm3-salary-scrub-tip{transition:none!important}
+  #screen-assets .mm3-assets-manual-hint{animation:none!important}
+}
+/* === end My Money 3.0 Phase 4 CSS === */
+
+
+/* === My Money 3.0 Phase 5: Quiet iOS actions + UI bug fixes === */
+:root{
+  --mm3-action-icon:#5f636b;
+  --mm3-action-icon-bg:rgba(118,118,128,.075);
+  --mm3-action-blue-bg:rgba(0,122,255,.085)
+}
+html.dark{
+  --mm3-action-icon:#b2b2b7;
+  --mm3-action-icon-bg:rgba(118,118,128,.16);
+  --mm3-action-blue-bg:rgba(10,132,255,.15)
+}
+/* Keep the new areas deliberately quiet: monochrome + iOS blue, with green/red only for financial state. */
+.mm3-action-section-label{font-size:12px;color:var(--label2);font-weight:560;margin:18px 4px 7px;text-align:left}
+.mm3-action-group{background:var(--card);border-radius:13px;overflow:hidden;margin-bottom:13px}
+.mm3-action-row{width:100%;min-height:55px;border:0;border-bottom:.5px solid var(--sep);background:var(--card);color:var(--label);display:flex;align-items:center;gap:11px;padding:8px 12px;text-align:left;transition:background .11s,transform .11s,opacity .11s}
+.mm3-action-row:last-child{border-bottom:0}
+.mm3-action-row:active{background:var(--fill);transform:scale(.992);opacity:.82}
+.mm3-action-icon{width:29px;height:29px;border-radius:8px;background:var(--mm3-action-icon-bg);color:var(--mm3-action-icon);display:grid;place-items:center;flex:0 0 auto;box-shadow:inset 0 0 0 .5px rgba(118,118,128,.06)}
+.mm3-action-row.is-primary .mm3-action-icon{background:var(--mm3-action-blue-bg);color:var(--blue)}
+.mm3-action-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round}
+.mm3-action-main{min-width:0;flex:1}
+.mm3-action-main strong{display:block;font-size:14px;font-weight:560;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm3-action-main small{display:block;font-size:10.5px;color:var(--label2);line-height:1.35;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm3-action-trailing{display:flex;align-items:center;gap:7px;flex:0 0 auto;color:var(--label2);font-size:12px;font-weight:620;font-variant-numeric:tabular-nums;white-space:nowrap;max-width:34%;overflow:hidden;text-overflow:ellipsis}
+.mm3-action-chev{font-size:21px;line-height:1;color:var(--label3);font-weight:400}
+
+/* Salary record Push UI bug: these rows live in #pushLayer, not inside #screen-pay. */
+.mm3-salary-records-push{padding-top:2px}
+.mm3-salary-records-push .mm3-salary-record-list{background:var(--card);border-radius:13px;overflow:hidden;margin-bottom:14px}
+.mm3-salary-records-push .mm3-salary-record-row{width:100%;min-height:62px;border:0;border-bottom:.5px solid var(--sep);background:var(--card);display:flex;align-items:center;gap:10px;text-align:left;padding:9px 12px;color:var(--label);transition:background .11s,transform .11s,opacity .11s}
+.mm3-salary-records-push .mm3-salary-record-row:last-child{border-bottom:0}
+.mm3-salary-records-push .mm3-salary-record-row:active{background:var(--fill);transform:scale(.992);opacity:.8}
+.mm3-salary-records-push .mm3-salary-record-row .row-main{min-width:0;flex:1}
+.mm3-salary-records-push .mm3-salary-record-row .row-title{font-size:15px;font-weight:580}
+.mm3-salary-records-push .mm3-salary-record-row .row-sub{font-size:11px;color:var(--label2);margin-top:3px}
+.mm3-salary-records-push .mm3-salary-record-amount{text-align:right;white-space:nowrap;font-size:14px;font-weight:680;font-variant-numeric:tabular-nums}
+.mm3-salary-records-push .mm3-salary-record-state{display:inline-flex;align-items:center;min-height:21px;border-radius:999px;padding:2px 7px;background:var(--fill);color:var(--label2);font-size:9.5px;font-weight:650;margin-top:3px}
+.mm3-salary-records-push .mm3-salary-record-state.paid{background:rgba(52,199,89,.11);color:var(--green)}
+.mm3-salary-records-push .mm3-salary-record-state.overdue{background:rgba(255,59,48,.09);color:var(--red)}
+.mm3-salary-records-push .chev{font-size:20px;color:var(--label3)}
+
+/* Salary record editor: use a Settings-like grouped form without touching its data/save logic. */
+#sheet.mm3-salary-edit-sheet{background:var(--bg)}
+#sheet.mm3-salary-edit-sheet .sheet-nav{background:var(--card)}
+#sheet.mm3-salary-edit-sheet .sheet-body{background:var(--bg)}
+#sheet.mm3-salary-edit-sheet .form-group-title{margin:15px 4px 7px;font-size:12px;font-weight:560;color:var(--label2)}
+#sheet.mm3-salary-edit-sheet .form-card{background:var(--card);border-radius:13px;overflow:hidden;margin-bottom:14px;box-shadow:none}
+#sheet.mm3-salary-edit-sheet .form-card .form-section{padding:10px 13px;border-bottom:.5px solid var(--sep)}
+#sheet.mm3-salary-edit-sheet .form-card .form-section:last-child{border-bottom:0}
+#sheet.mm3-salary-edit-sheet .field,#sheet.mm3-salary-edit-sheet .money-field{background:transparent}
+#sheet.mm3-salary-edit-sheet .seg{background:var(--fill);border-radius:9px}
+#sheet.mm3-salary-edit-sheet .secondary.danger{background:var(--card);border-radius:13px;margin-top:18px}
+
+/* Quiet color pass on the refreshed surfaces. */
+#screen-pay .mm3-salary-event-icon{background:rgba(52,199,89,.09)}
+#screen-payments .mm3-payment-event-icon{background:var(--mm3-action-icon-bg);color:var(--red)}
+#screen-payments .mm3-atf-event-dot{stroke:var(--label3)}
+#screen-payments .mm3-atf-event-dot.income{stroke:var(--green)}
+#screen-payments .mm3-atf-event-dot.card{stroke:var(--blue)}
+#screen-payments .mm3-atf-event-dot.negative{stroke:var(--red)}
+#screen-assets .mm3-assets-area.forecast{fill:var(--blue);opacity:.035}
+#screen-assets .mm3-assets-line.forecast{stroke:var(--blue);opacity:.68}
+#screen-assets .mm3-assets-selected.forecast{stroke:var(--blue)}
+
+/* Old phase-specific detail lists are replaced by mm3-action-group, but keep fallbacks neutral. */
+#screen-payments .mm3-payment-detail-icon,#screen-assets .mm3-assets-detail-icon{background:var(--mm3-action-icon-bg);color:var(--mm3-action-icon)}
+
+@media(max-width:390px){
+  .mm3-action-row{min-height:54px;padding-left:10px;padding-right:10px;gap:10px}
+  .mm3-action-main strong{font-size:13.5px}
+  .mm3-action-main small{font-size:10px}
+  .mm3-action-trailing{font-size:11px;max-width:31%}
+  .mm3-salary-records-push .mm3-salary-record-row{padding-left:10px;padding-right:10px}
+}
+@media(prefers-reduced-motion:reduce){.mm3-action-row,.mm3-salary-record-row{transition:none!important}}
+.motion-off .mm3-action-row,.motion-off .mm3-salary-record-row{transition:none!important}
+/* === end My Money 3.0 Phase 5 CSS === */
+
+

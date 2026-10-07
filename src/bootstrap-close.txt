@@ -1,0 +1,1 @@
+})().catch(e=>{console.error('app boot failed',e);mm3BootLayer.textContent='読み込みに失敗しました。画面を再読み込みしてください。'});

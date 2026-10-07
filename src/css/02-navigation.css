@@ -1,0 +1,53 @@
+/* My Money navigation reorganization */
+.sidebar-layer{position:fixed;inset:0;z-index:720;pointer-events:none;max-width:480px;margin:auto;overflow:hidden}
+.sidebar-layer.open,.sidebar-layer.interactive{pointer-events:auto}
+.sidebar-backdrop{position:absolute;inset:0;border:0;background:rgba(0,0,0,.28);opacity:0;transition:opacity .26s cubic-bezier(.2,.8,.2,1)}
+.app-sidebar{position:absolute;left:0;top:0;bottom:0;width:min(286px,82vw);padding:calc(var(--safe-t) + 16px) 12px calc(var(--safe-b) + 14px);background:rgba(247,247,249,.92);border-right:.5px solid var(--sep);box-shadow:10px 0 34px rgba(0,0,0,.14);backdrop-filter:blur(30px) saturate(150%);-webkit-backdrop-filter:blur(30px) saturate(150%);transform:translateX(-102%);transition:transform .3s cubic-bezier(.22,.88,.22,1);overflow:auto;-webkit-overflow-scrolling:touch}
+html.dark .app-sidebar{background:rgba(28,28,30,.94)}
+.sidebar-layer.open .sidebar-backdrop{opacity:1}
+.sidebar-layer.open .app-sidebar{transform:translateX(0)}
+.sidebar-layer.interactive .app-sidebar,.sidebar-layer.interactive .sidebar-backdrop{transition:none}
+.sidebar-title{font-size:28px;font-weight:760;letter-spacing:-.7px;padding:4px 10px 17px}
+.sidebar-section{margin:5px 0 17px}
+.sidebar-section-head{display:flex;align-items:center;justify-content:space-between;padding:0 10px 6px;color:var(--label2);font-size:11.5px;font-weight:650}
+.sidebar-edit{border:0;background:transparent;color:var(--blue);font-size:11.5px;font-weight:650;padding:5px}
+.sidebar-list{background:rgba(118,118,128,.08);border-radius:12px;overflow:hidden}
+.sidebar-row{width:100%;min-height:44px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;padding:7px 10px;text-align:left}
+.sidebar-row:last-child{border-bottom:0}
+.sidebar-row:active{background:rgba(118,118,128,.12)}
+.sidebar-row.selected{background:rgba(0,122,255,.12);color:var(--blue)}
+.sidebar-symbol{width:24px;height:24px;display:grid;place-items:center;color:var(--blue);flex:0 0 auto}
+.sidebar-symbol svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round}
+.sidebar-row-label{flex:1;min-width:0;font-size:14px;font-weight:560;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-check{width:18px;color:var(--blue);display:grid;place-items:center}
+.sidebar-empty{font-size:11px;line-height:1.45;color:var(--label2);padding:10px 11px}
+.sidebar-tag-dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+.sidebar-nav-button{flex:0 0 auto;margin-left:-5px}
+.favorite-nav-btn{width:34px;height:34px;border:0;background:transparent;color:var(--blue);display:inline-grid;place-items:center;border-radius:10px;vertical-align:middle}
+.favorite-nav-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.favorite-nav-btn.on svg{fill:currentColor}
+.push-right{display:flex;align-items:center;justify-content:flex-end;gap:1px}
+.push-right>button{min-width:34px}
+.fav-editor-row{touch-action:none}
+.fav-grip{width:30px;height:36px;border:0;background:transparent;color:var(--label3);font-size:20px;display:grid;place-items:center;cursor:grab}
+.fav-editor-row.dragging{opacity:.45;background:var(--fill)}
+.tag-chip-row{display:flex;align-items:center;gap:8px}
+.tag-dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.home-marker-only .financial-event-value{color:var(--label2)}
+.payment-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 14px}
+.payment-summary-grid>div{background:var(--card);border-radius:12px;padding:11px}
+.payment-summary-grid span{display:block;font-size:10px;color:var(--label2)}
+.payment-summary-grid strong{display:block;font-size:16px;margin-top:2px;font-variant-numeric:tabular-nums}
+.simple-hero{padding:15px 2px 12px;margin-bottom:6px}
+.simple-hero .hero-value{font-size:38px}
+.entity-tag-summary{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.entity-tag-summary .pill{font-size:9.5px}
+.nav-month-switch{margin-bottom:10px}
+.settings-group-label:first-child{margin-top:7px}
+@media(prefers-reduced-motion:reduce){.sidebar-backdrop,.app-sidebar{transition:none!important}
+}
+
+.pay-rule-example{font-size:11px;color:var(--label2);line-height:1.45;margin-top:9px;padding:8px 9px;border-radius:9px;background:var(--fill)}
+.payment-summary-grid:has(>div:nth-child(3)){grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:350px){.payment-summary-grid{grid-template-columns:1fr}.row-value{max-width:46%}.pay-rule-example{font-size:10.5px}}
+
