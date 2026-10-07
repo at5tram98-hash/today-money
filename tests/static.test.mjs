@@ -5,7 +5,7 @@ import {parse} from 'acorn';
 import {Linter} from 'eslint';
 import globals from 'globals';
 import postcss from 'postcss';
-import {build, read, manifest, digest} from '../scripts/build.mjs';
+import {build, read, manifest} from '../scripts/build.mjs';
 
 const {javascript, styles, jsPath, cssPath} = build();
 
@@ -17,10 +17,10 @@ test('all JavaScript parses, including the preserved legacy page', () => {
   for (const [, script] of read('index 3.html').matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)) new vm.Script(script);
 });
 
-test('all CSS parses and the original cascade is preserved byte for byte', () => {
+test('all CSS parses and removed sidebar styles are absent', () => {
   for (const path of manifest.styles) postcss.parse(read(path), {from: path});
   postcss.parse(styles);
-  assert.equal(digest(styles), manifest.baseline.styleSha256);
+  assert.ok(!/sidebar-layer|app-sidebar|sidebar-nav-button/.test(styles));
 });
 
 test('all app scopes resolve; dynamically supplied SDK globals are explicit', () => {
@@ -70,4 +70,32 @@ test('debit plans normalize against the loaded accounts without boot state', () 
 
 test('baseline storage identities and data schema remain unchanged', () => {
   for (const text of ["APP_KEY='myMoney2_v1'", "LEGACY_KEY='moneyMarginApp_v1'", "DATA_VERSION=18", "MM3_STORAGE_DB='myMoney3_storage_v1'"]) assert.ok(javascript.includes(text));
+});
+
+test('notice retention uses Tokyo midnight and preserves today, future and non-system records', () => {
+  const result=vm.runInNewContext(read('src/js/00-data-model.js')+`\n(() => {
+    const notices=[
+      {id:'yesterday',date:'2026-10-07T14:59:59.999Z'},
+      {id:'today',date:'2026-10-07T15:00:00.000Z'},
+      {id:'future',date:'2026-10-10'},
+      {id:'legacy-createdAt',createdAt:'2026-10-06T23:00:00+09:00'},
+      {id:'legacy-key',key:'a|b|2026-10-07'},
+      {id:'manual',source:'user',date:'2026-01-01'},
+      {id:'undated',date:'not-a-date'},
+      {id:'invalid-calendar',date:'2026-02-31'}
+    ];
+    return {
+      ids:retainedSystemNotices(notices,new Date('2026-10-07T15:00:01Z')).map(n=>n.id),
+      before:retainedSystemNotices(notices,new Date('2026-10-07T14:59:59Z')).map(n=>n.id),
+      inputCount:notices.length
+    };
+  })()`);
+  assert.deepEqual(Array.from(result.ids),['today','future','manual','undated','invalid-calendar']);
+  assert.ok(result.before.includes('yesterday'));
+  assert.equal(result.inputCount,8);
+});
+
+test('sidebar UI, gestures and accessibility scope are fully removed', () => {
+  assert.ok(!/sidebarLayer|appSidebar|openSidebar|closeSidebar|renderSidebar|insertSidebarNav|installSidebarGestures/.test(javascript));
+  assert.ok(!/sidebarLayer|appSidebar/.test(read('src/index.html')));
 });

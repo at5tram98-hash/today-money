@@ -27,10 +27,35 @@ const LEGACY_ICON_MAP={'\u{1F37D}':'fork','\u{1F683}':'tram','\u{1F9F4}':'bag','
 function normalizeCategoryIcon(icon,id='other'){const v=String(icon||'');if(LEGACY_ICON_MAP[v])return LEGACY_ICON_MAP[v];const allowed=['fork','tram','bus','bag','cart','tshirt','ticket','game','repeat','book','bolt','ellipsis','house','heart','gift','phone','coffee','medical'];if(allowed.includes(v))return v;return ({food:'fork',transport:'tram',daily:'bag',clothes:'tshirt',fun:'ticket',subscription:'repeat',education:'book',utilities:'bolt',other:'ellipsis'})[id]||'ellipsis'}
 function categoryMapLegacy(v){return ({'交通':'交通費','衣服':'衣服費','娯楽':'娯楽費','教育':'教育費','住居':'光熱費','コンビニ':'食費','医療':'その他'})[v]||v||'その他'}
 function employerPayDate(e,workMonth){const target=addMonths(workMonth,Number(e?.payMonthOffset)||0),[y,m]=target.split('-').map(Number),last=new Date(y,m,0).getDate(),day=e?.payType==='month_end'?last:clamp(Number(e?.payDay)||1,1,last);return `${target}-${pad(day)}`}
+const SYSTEM_NOTICE_TIME_ZONE='Asia/Tokyo';
+function systemNoticeDay(value){
+  if(typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)){
+    const parsed=new Date(value+'T00:00:00Z');
+    return Number.isFinite(parsed.getTime())&&parsed.toISOString().slice(0,10)===value?value:'';
+  }
+  if(value==null||value==='')return '';
+  const date=new Date(value);if(!Number.isFinite(date.getTime()))return '';
+  const parts=new Intl.DateTimeFormat('en-US',{timeZone:SYSTEM_NOTICE_TIME_ZONE,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+  const part=type=>parts.find(p=>p.type===type)?.value;
+  return `${part('year')}-${part('month')}-${part('day')}`;
+}
+function systemNoticeRecordDay(notice){
+  return systemNoticeDay(notice?.date)||systemNoticeDay(notice?.createdAt)||systemNoticeDay(String(notice?.key||'').match(/\|(\d{4}-\d{2}-\d{2})$/)?.[1]);
+}
+function retainedSystemNotices(notices,now=new Date()){
+  const today=systemNoticeDay(now);
+  return notices.filter(notice=>{
+    if(notice?.source&&notice.source!=='system')return true;
+    const day=systemNoticeRecordDay(notice);
+    // An unknown date cannot safely establish that a record has expired.
+    return !day||!today||day>=today;
+  });
+}
 function normalizeData(raw){
   const d=raw&&typeof raw==='object'?raw:{},out=clone(DEFAULT_DATA);Object.assign(out,d);out.version=DATA_VERSION;out.profile={...DEFAULT_DATA.profile,...(d.profile||{})};
   out.categories=(Array.isArray(d.categories)&&d.categories.length?d.categories:CATEGORY_DEFAULTS).map(c=>{const fallback=CATEGORY_DEFAULTS.find(x=>x.name===c.name);const id=String(c.id||fallback?.id||uid('cat'));return {...c,id,icon:normalizeCategoryIcon(c.icon,id)}});
   ['transactions','incomes','banks','cards','debitCards','employers','salaryRecords','tempIncomes','fixedPayments','largeExpensePlans','assetSnapshots','mailImports','cardStatementImports','savedScenarios','salaryAllocations','transferPlans','statementReconciliations','budgetRebalanceHistory','eventGoals','reimbursements','savedSearches','notices'].forEach(k=>out[k]=Array.isArray(d[k])?d[k]:[]);
+  out.notices=retainedSystemNotices(out.notices);
   ['dailyGoals','monthlyGoals','dailyCorrections','monthlyCorrections','merchantRules','quickInputRules','monthReviews','cardAdjustments'].forEach(k=>out[k]=d[k]&&typeof d[k]==='object'&&!Array.isArray(d[k])?d[k]:{});
   const manualBalanceMemos=/クイック残高入力|現在値設定|口座登録|口座編集|手動残高/;
   out.banks=out.banks.map(b=>{const snaps=out.assetSnapshots.filter(x=>x.bankId===b.id&&manualBalanceMemos.test(String(x.memo||''))).sort((a,z)=>String(a.createdAt||a.date||'').localeCompare(String(z.createdAt||z.date||''))),last=snaps[snaps.length-1],baseline=b.balanceAsOf||last?.createdAt||b.updatedAt||null;return {...b,balance:Number(b.balance)||0,threshold:Number(b.threshold)||0,balanceAsOf:baseline,updatedAt:b.updatedAt||last?.createdAt||baseline||null}});

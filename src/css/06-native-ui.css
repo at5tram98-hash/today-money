@@ -19,8 +19,7 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text;
 .scroll,.sheet-body,.push-body{min-height:0;scrollbar-width:none;scroll-padding-top:16px;scroll-padding-bottom:32px;overflow-anchor:none}
 .scroll{padding:6px 16px 28px;touch-action:pan-y}
 .scroll::-webkit-scrollbar,.sheet-body::-webkit-scrollbar,.push-body::-webkit-scrollbar{display:none}
-#app .screen .topbar{display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:44px auto;grid-template-areas:none;gap:4px 8px;padding:calc(var(--safe-t) + 4px) 16px 12px;min-height:0;background:var(--native-glass);border-bottom:.5px solid transparent;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
-#app .screen .topbar>.sidebar-nav-button{grid-area:auto;grid-column:1;grid-row:1;margin:0}
+#app .screen .topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:44px auto;grid-template-areas:none;gap:4px 8px;padding:calc(var(--safe-t) + 4px) 16px 12px;min-height:0;background:var(--native-glass);border-bottom:.5px solid transparent;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
 #app .screen .topbar>.nav-actions{grid-area:auto;grid-column:2;grid-row:1;justify-self:end;gap:4px}
 #app .screen .topbar>.topbar-main{grid-area:auto;grid-row:2;grid-column:1/-1;min-width:0}
 .topbar.native-scrolled{border-bottom-color:var(--sep)}

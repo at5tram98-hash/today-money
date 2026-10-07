@@ -11,6 +11,9 @@ plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
 card:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 9h18"/></svg>',
 bank:'<svg viewBox="0 0 24 24"><path d="M3 9h18L12 4 3 9Z"/><path d="M5 10v7M9 10v7M15 10v7M19 10v7M3 20h18"/></svg>',
 person:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.7-4 3-6 7-6s6.3 2 7 6"/></svg>',
+star:'<svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.4 20.2 7.5 14 3 9.6l6.2-.9z"/></svg>',
+tag:'<svg viewBox="0 0 24 24"><path d="M3 3h8l10 10-8 8L3 11V3Z"/><circle cx="7.5" cy="7.5" r="1"/></svg>',
+wave:'<svg viewBox="0 0 24 24"><path d="M4 10v4M8 6v12M12 3v18M16 6v12M20 10v4"/></svg>',
 grid:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>',
 upload:'<svg viewBox="0 0 24 24"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M5 13v7h14v-7"/></svg>',
 download:'<svg viewBox="0 0 24 24"><path d="M12 4v12M8 12l4 4 4-4"/><path d="M5 13v7h14v-7"/></svg>',
@@ -50,7 +53,8 @@ coffee:'<svg viewBox="0 0 24 24"><path d="M4 8h13v7a5 5 0 0 1-5 5H9a5 5 0 0 1-5-
 medical:'<svg viewBox="0 0 24 24"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z"/></svg>'
 };return p[name]||p.ellipsis}
 function categoryIconHtml(category,cls='cat-icon'){const c=typeof category==='string'?catByName(category):category;const color=c?.color||'#8E8E93';return `<span class="${cls}" style="background:${color}">${icon(normalizeCategoryIcon(c?.icon,c?.id))}</span>`}
-function settingsIconHtml(symbol,color='var(--blue)'){return `<div class="settings-icon" style="background:${color}">${icon(symbol)}</div>`}function profileAvatarHtml(cls='settings-icon'){return data.profile.icon?`<div class="${cls} profile-avatar"><img src="${esc(data.profile.icon)}" alt=""></div>`:`<div class="${cls} profile-avatar">${icon('person')}</div>`}
+function settingsIconHtml(symbol,color='var(--blue)'){return `<div class="settings-icon" aria-hidden="true" style="background:${color}">${icon(symbol)}</div>`}
+function profileAvatarHtml(cls='settings-icon',profile=data.profile){return profile.icon?`<div class="${cls} profile-avatar"><img src="${esc(profile.icon)}" alt=""></div>`:`<div class="${cls} profile-avatar" aria-hidden="true">${icon('person')}</div>`}
 function menuSymbol(token){const map={'＋':'plus','↻':'repeat','⚙︎':'ellipsis','¥':'wallet','M':'mail','⇧':'upload','⇩':'download','◎':'target','!':'bell'};return icon(map[token]||token||'ellipsis')}
 function actionBtn(name,id,title=''){return `<button class="icon-btn" id="${id}" aria-label="${esc(title||name)}">${icon(name)}</button>`}
 function topbar(title,sub,actions=''){return `<div class="topbar-main"><div class="large-title">${title}</div>${sub?`<div class="date-line">${sub}</div>`:''}</div><div class="nav-actions">${actions}</div>`}
@@ -128,7 +132,23 @@ function installHorizontalSwipe(el,onNext,onPrev,threshold=56){
 function trackingDateBounds(){const today=ymd();return {min:addDays(today,-4),max:today}}
 function shiftTrackingDate(delta){const {min,max}=trackingDateBounds(),next=addDays(trackingDate,delta);if(next<min||next>max)return;trackingDate=next;renderAll()}
 function dateNavigatorHtml(date){const {min,max}=trackingDateBounds();return `<div class="date-navigator" id="todayDateNavigator"><button class="date-nav-btn" id="dayPrev" ${date<=min?'disabled':''}>${icon('chevronLeft')}</button><div class="date-nav-label">${date===ymd()?`今日・${parseYmd(date).getMonth()+1}月${parseYmd(date).getDate()}日`:dayLabel(date)}</div><button class="date-nav-btn" id="dayNext" ${date>=max?'disabled':''}>${icon('chevronRight')}</button></div>`}
-function addNotice(title,message,type='info',notify=true,options={}){const key=`${title}|${message}|${ymd()}`;if(data.notices.some(n=>n.key===key))return false;if(commitDepth===0)return safeCommit(()=>addNotice(title,message,type,notify,{...options,saveNow:false}),{label:'notice add',skipUnchanged:true});data.notices.unshift({id:uid('note'),key,title,message,type,date:new Date().toISOString(),read:false});data.notices=data.notices.slice(0,80);if(options?.saveNow!==false)save();if(notify&&(type==='warning'||/給料日|支払日|固定支払い/.test(title)))afterCommit(()=>sendBrowserNotice('My Money 2.0',`${title}：${message}`));return true}
+function pruneExpiredSystemNotices(){
+  if(mm3PendingAsyncCommit&&commitDepth===0)return false;
+  const notices=retainedSystemNotices(data.notices);
+  if(notices.length===data.notices.length)return false;
+  safeCommit(()=>{data.notices=notices},{label:'expired system notices',skipUnchanged:true,invalidateAcf:false});
+  return true;
+}
+function addNotice(title,message,type='info',notify=true,options={}){
+  const key=`${title}|${message}|${systemNoticeDay(new Date())}`;
+  if(data.notices.some(n=>n.key===key))return false;
+  if(commitDepth===0)return safeCommit(()=>addNotice(title,message,type,notify,{...options,saveNow:false}),{label:'notice add',skipUnchanged:true});
+  data.notices.unshift({id:uid('note'),key,title,message,type,source:'system',date:new Date().toISOString(),read:false});
+  data.notices=data.notices.slice(0,80);
+  if(options?.saveNow!==false)save();
+  if(notify&&(type==='warning'||/給料日|支払日|固定支払い/.test(title)))afterCommit(()=>sendBrowserNotice('My Money 2.0',`${title}：${message}`));
+  return true;
+}
 function unreadNotices(){return data.notices.filter(n=>!n.read).length}
 function showAlert(title,message,opts={}){return new Promise(resolve=>{const w=document.getElementById('alertWrap');document.getElementById('alertTitle').textContent=title;document.getElementById('alertMessage').textContent=message;const a=document.getElementById('alertActions');a.innerHTML='';const cancel=document.createElement('button');cancel.textContent=opts.cancelText||'キャンセル';cancel.onclick=()=>{w.classList.remove('show');resolve(false)};const ok=document.createElement('button');ok.textContent=opts.okText||'OK';if(opts.destructive)ok.className='destructive';ok.onclick=()=>{w.classList.remove('show');resolve(true)};a.append(cancel,ok);w.classList.add('show')})}
 function closeMenu(){const m=document.getElementById('menuLayer');m?.classList.remove('show')}function openMenu(anchor,items){const menu=document.getElementById('menuLayer');if(!menu||!anchor)return;closeMenu();const visible=items.filter(x=>!x.disabled),r=anchor.getBoundingClientRect(),width=Math.min(260,Math.max(220,...visible.map(x=>String(x.label||'').length*15+70)));menu.style.width=width+'px';menu.innerHTML=visible.map((x,i)=>`<button type="button" class="menu-item ${x.danger?'danger':''}" data-menu-index="${i}" role="menuitem"><span class="menu-label">${esc(x.label)}</span><span class="menu-icon">${menuSymbol(x.icon)}</span></button>`).join('');menu.style.visibility='hidden';menu.classList.add('show');const h=menu.offsetHeight,left=clamp(r.right-width,8,innerWidth-width-8),spaceBelow=innerHeight-r.bottom-8,top=spaceBelow>=h?Math.min(innerHeight-h-8,r.bottom+5):Math.max(8,r.top-h-5);menu.style.left=left+'px';menu.style.right='auto';menu.style.top=top+'px';menu.style.transformOrigin=`${clamp(r.left+r.width/2-left,18,width-18)}px ${spaceBelow>=h?'0':'100%'}`;menu.style.visibility='';menu.onclick=e=>{const b=e.target.closest('[data-menu-index]');if(!b)return;const item=visible[Number(b.dataset.menuIndex)];closeMenu();item?.action?.()}}document.addEventListener('pointerdown',e=>{const m=document.getElementById('menuLayer');if(m?.classList.contains('show')&&!m.contains(e.target)&&!e.target.closest('.icon-btn'))closeMenu()},{capture:true});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()})
@@ -177,4 +197,3 @@ document.getElementById('calcGrid').innerHTML=calcKeys.map(([l,k,c])=>`<button t
 document.getElementById('calcGrid').onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;calcKey(b.dataset.k)};
 document.getElementById('calcCancel').onclick=closeCalc;document.getElementById('calcDone').onclick=()=>{const cb=calcCb,v=calcFinalValue();if(v==null){showToast('計算式を確認してください',{tone:'error'});return}const sheetOpen=document.getElementById('sheet').classList.contains('show');closeCalc();if(sheetOpen)markSheetDirty();cb?.(v)};
 function moneyButton(id,label,value){return `<button class="field money-field press" id="${id}"><span class="hint">${esc(label)}</span><span class="val">${yen(value)}</span></button>`}
-

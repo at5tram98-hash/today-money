@@ -107,5 +107,5 @@ function bindInitialValues(root){root.querySelectorAll('[data-initial-bank]').fo
 function refreshInitialValuesView(){const top=pushStack[pushStack.length-1];if(!top||top.title!=='初期データ・現在値')return;const body=document.getElementById(top.id)?.querySelector('.push-body');if(!body)return;body.innerHTML=initialValuesHtml();bindInitialValues(body)}
 function openInitialValues(){pushView('初期データ・現在値',initialValuesHtml(),root=>bindInitialValues(root))}
 
-function bindSettings(){document.getElementById('profileSettings').onclick=openProfileEdit;document.getElementById('gmailSettings').onclick=openGmailSettings;document.getElementById('notificationSettings').onclick=openNotificationSettings;document.getElementById('categorySettings').onclick=openCategorySettings;document.getElementById('initialValuesSettings').onclick=openInitialValues;document.getElementById('acfSettingsRow').onclick=openAcfSettings;document.getElementById('dataSettings').onclick=openDataSettings;document.getElementById('appearanceSettings').onclick=openAppearanceSettings;document.getElementById('feedbackSettingsRow').onclick=openFeedbackSettings;document.getElementById('securitySettings').onclick=openSecuritySettings;document.getElementById('helpSettings').onclick=openHelp}
+
 

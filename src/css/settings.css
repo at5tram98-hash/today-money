@@ -1,0 +1,34 @@
+/* Grouped Settings and profile components. Icons are the app's SVG artwork. */
+#app #screen-settings .topbar{grid-template-rows:auto;padding-top:calc(var(--safe-t) + 24px)}
+#app #screen-settings .topbar>.topbar-main{grid-row:1}
+#app #screen-settings .topbar>.nav-actions{display:none}
+.settings-profile-card{display:flex;align-items:center;gap:16px;width:100%;padding:18px 16px;border:0;border-radius:12px;background:var(--card);text-align:left;color:var(--label);margin:6px 0 26px}
+.settings-profile-avatar,.profile-editor-avatar{display:grid;place-items:center;overflow:hidden;border-radius:50%;flex:0 0 auto;background:var(--fill2);color:var(--label2)}
+.settings-profile-avatar{width:60px;height:60px}
+.settings-profile-avatar svg{width:38px;height:38px}
+.settings-profile-avatar svg,.profile-editor-avatar svg{fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.settings-profile-copy{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}
+.settings-profile-name{font-size:21px;font-weight:600;line-height:1.25;overflow-wrap:anywhere;letter-spacing:-.3px}
+.settings-profile-caption{font-size:13px;color:var(--label2);line-height:1.4}
+.settings-section{margin:0 0 24px}
+.settings-section-title{margin:0 16px 7px;font-size:13px;line-height:1.4;font-weight:400;color:var(--label2)}
+.settings-list{border-radius:11px;background:var(--card);overflow:hidden}
+.settings-list-row{position:relative;display:flex;align-items:center;gap:12px;padding:11px 16px;width:100%;min-height:54px;border:0;background:transparent;text-align:left;color:var(--label)}
+.settings-list-row+.settings-list-row:before{content:"";position:absolute;top:0;left:57px;right:0;height:.5px;background:var(--sep)}
+.settings-row-copy{display:flex;flex:1;flex-direction:column;gap:3px;min-width:0}
+.settings-row-title{font-size:16px;line-height:1.35;font-weight:400;overflow-wrap:anywhere}
+.settings-row-detail{font-size:12px;line-height:1.4;color:var(--label2);overflow-wrap:anywhere}
+.settings-row-value{max-width:44%;font-size:14px;color:var(--label2);overflow-wrap:anywhere;text-align:right}
+.settings-chevron{display:grid;place-items:center;flex:0 0 auto;color:var(--label3)}
+.settings-chevron svg{width:13px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.settings-section-footer{margin:8px 16px 0;color:var(--label2);font-size:12px;line-height:1.5}
+.profile-photo-section{display:flex;align-items:center;flex-direction:column;gap:8px;margin:24px 0 18px}
+.profile-editor-avatar{width:96px;height:96px}
+.profile-editor-avatar svg{width:62px;height:62px}
+.profile-photo-action{display:block;padding:8px 12px;border:0;background:transparent;color:var(--blue);font-size:15px;margin:0 auto}
+.profile-photo-action.danger{color:var(--red);margin-top:16px}
+.profile-photo-action[hidden]{display:none}
+.profile-name-field{padding:0;border:0;background:transparent;width:100%}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.favorite-open{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:0;border:0;background:transparent;text-align:left;color:var(--label)}
+@media(max-width:350px){.settings-profile-card{gap:12px;padding:16px 12px}.settings-profile-avatar{width:54px;height:54px}.settings-profile-name{font-size:19px}.settings-list-row{gap:10px;padding-inline:12px}.settings-row-value{max-width:35%;font-size:12px}.settings-list-row+.settings-list-row:before{left:51px}}

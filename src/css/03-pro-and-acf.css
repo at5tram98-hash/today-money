@@ -176,18 +176,6 @@
   .sheet-title{font-size:16px;padding-left:2px;padding-right:2px}
 }
 @media(max-width:340px){
-  #screen-month .topbar{
-    display:grid;
-    grid-template-columns:38px minmax(0,1fr) auto;
-    grid-template-areas:"sidebar spacer actions" "title title title";
-    column-gap:8px;
-    row-gap:0;
-    align-items:center;
-    padding-bottom:8px;
-  }
-  #screen-month .sidebar-nav-button{grid-area:sidebar}
-  #screen-month .nav-actions{grid-area:actions}
-  #screen-month .topbar-main{grid-area:title;width:100%;min-width:0}
   #screen-month .month-name-btn{
     width:auto;
     max-width:100%;

@@ -48,7 +48,6 @@
   function decorate(tab){
     const root=$(`screen-${tab}`);if(!root)return;
     const top=root.querySelector('.topbar'),content=root.querySelector('.scroll');
-    insertSidebarNav(top);
     // Keep nodes and their existing handlers; moving them cannot register twice.
     if(tab==='today'||tab==='month'){
       const modes=document.createElement('div');modes.className='native-home-mode';modes.setAttribute('role','group');modes.setAttribute('aria-label','ホームの表示');
@@ -76,13 +75,12 @@
     $('tabbar').setAttribute('aria-label','メインナビゲーション');
     document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.tab===activeTab||(b.dataset.tab==='home'&&['today','month'].includes(activeTab));b.classList.toggle('active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   }
-  const dialogs=[$('sheet'),$('calculator'),$('alertWrap'),$('sidebarLayer')];
+  const dialogs=[$('sheet'),$('calculator'),$('alertWrap')];
   for(const el of dialogs){el.setAttribute('role',el.id==='alertWrap'?'alertdialog':'dialog');el.setAttribute('aria-modal','true');el.tabIndex=-1}
-  $('calculator').setAttribute('aria-labelledby','calcTitle');$('alertWrap').setAttribute('aria-labelledby','alertTitle');$('alertWrap').setAttribute('aria-describedby','alertMessage');$('sidebarLayer').setAttribute('aria-label','サイドバー');
+  $('calculator').setAttribute('aria-labelledby','calcTitle');$('alertWrap').setAttribute('aria-labelledby','alertTitle');$('alertWrap').setAttribute('aria-describedby','alertMessage');
   const visible=el=>el?.classList.contains('show');
   function activeScope(){
     if(visible($('lockScreen')))return $('lockScreen');
-    if($('sidebarLayer').classList.contains('open'))return $('sidebarLayer');
     if(visible($('alertWrap')))return $('alertWrap');
     if(visible($('calculator')))return $('calculator');
     if(visible($('menuLayer')))return $('menuLayer');
@@ -94,7 +92,7 @@
     const scope=activeScope();
     $('app').inert=!!scope;
     document.querySelectorAll('.push-view').forEach(el=>{el.inert=el!==scope});
-    for(const el of dialogs){const shown=el.id==='sidebarLayer'?el.classList.contains('open')||el.classList.contains('interactive'):visible(el);el.inert=!shown||(!!scope&&scope!==el);el.setAttribute('aria-hidden',String(!shown))}
+    for(const el of dialogs){const shown=visible(el);el.inert=!shown||(!!scope&&scope!==el);el.setAttribute('aria-hidden',String(!shown))}
     $('menuLayer').inert=!visible($('menuLayer'));
     $('sheet').setAttribute('aria-label',$('sheet').querySelector('.sheet-title')?.textContent.trim()||'入力');
     // The backdrop must always act on the topmost presentation.
@@ -123,7 +121,7 @@
       if(scope.id==='lockScreen')return;
       e.preventDefault();e.stopImmediatePropagation();
       if(scope.id==='alertWrap')$('alertActions').querySelector('button')?.click();
-      else if(scope.id==='calculator')closeCalc();else if(scope.id==='sheet')requestSheetClose();else if(scope.id==='sidebarLayer')closeSidebar();else if(scope.id==='menuLayer')closeMenu();else popView();return;
+      else if(scope.id==='calculator')closeCalc();else if(scope.id==='sheet')requestSheetClose();else if(scope.id==='menuLayer')closeMenu();else popView();return;
     }
     if(e.key==='Tab'){
       const list=[...scope.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),a[href],[tabindex="0"]')].filter(el=>!el.closest('[inert]')&&el.getClientRects().length);

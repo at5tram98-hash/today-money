@@ -17,6 +17,7 @@
     "src/js/13-settings-and-backup.js",
     "src/js/14-gmail.js",
     "src/js/15-pro-features.js",
+    "src/js/settings.js",
     "src/js/16-analysis-and-goals.js",
     "src/js/17-acf-refinements.js",
     "src/js/18-salary-dashboard.js",
@@ -37,7 +38,8 @@
     "src/css/04-dashboards.css",
     "src/css/05-statements.css",
     "src/css/06-native-ui.css",
-    "src/css/07-atf.css"
+    "src/css/07-atf.css",
+    "src/css/settings.css"
   ],
   "baseline": {
     "blob": "2a33e9e643db3c53347d211fa77b67c3ac580072",
@@ -47,6 +49,9 @@
   "fixes": [
     "Move employerPayDate into the normalization scope.",
     "Resolve normalized debit account IDs from the loaded record.",
-    "Use currentMonth in the month-menu reason analysis action."
+    "Use currentMonth in the month-menu reason analysis action.",
+    "Remove sidebar UI and gestures, retaining favorite/tag data and access in Settings.",
+    "Prune system notices before today in Asia/Tokyo on load, resume, and daily rollover.",
+    "Integrate a grouped Settings screen and circular profile editor."
   ]
 }
