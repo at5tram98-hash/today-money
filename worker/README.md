@@ -12,7 +12,7 @@ npx wrangler login
 npm run push:deploy
 ```
 
-`push:deploy`が認証、既存DBの確認、D1作成または再利用、スキーマ適用、Worker配備、初回の秘密鍵登録、DB疎通と公開鍵の一致を検証します。生成された`push-config.json`と`worker/wrangler.jsonc`をGitHubへ公開します。`worker/.dev.vars`は公開しません。秘密鍵はCloudflare Secretsで保持し、ローカルの初回生成ファイルも上書きしません。
+`push:deploy`が認証、既存DBの確認、D1作成または再利用、スキーマ適用、Worker配備、初回の秘密鍵登録、DB疎通と公開鍵の一致を検証します。生成された`push-config.json`と`worker/wrangler.jsonc`をGitHubへ公開します。配備スクリプトがJSONとして読むため、`worker/wrangler.jsonc`はコメント・末尾カンマなしのJSONを維持します。本番設定を読み込む回帰テストで検査します。`worker/.dev.vars`は公開しません。秘密鍵はCloudflare Secretsで保持し、ローカルの初回生成ファイルも上書きしません。
 
 端末では「設定→通知設定」で情報同期への同意と「通知を許可して接続」を操作します。iPhoneは追加済みのホーム画面アプリから実行します。接続コードの入力は不要です。初回の暗号化された確認通知をService Workerが受信して応答した端末だけを有効化します。通知許可は利用者本人の操作が必要です。
 
@@ -20,8 +20,8 @@ npm run push:deploy
 
 - PagesのURL、`sw.js`のURLとscope、公開鍵、Worker名、DB IDを維持します。通常のビルド・Pages公開で通知購読を消す処理はありません。
 - `push:deploy`は既存のD1・Secret・公開URLを再利用します。既存DBの不一致や鍵の不足・変更では停止し、別DBや新しい鍵へ自動で切り替えません。スキーマは追加のみで購読・配信履歴を維持します。
-- 現在のWorker自動配備にはCloudflare Buildsの初回GitHub承認が残っています。所有者がCloudflareのWorker→Settings→Builds→Connect→GitHubから、`today-money`だけへのアクセスを承認します。APIではGitアカウント未接続のエラーが返っています。初回承認後のリポジトリ・ビルド設定はAPIで構成できます。詳細は[Cloudflare Builds APIの前提条件](https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/)。
-- GitHub Actions配備を使う場合は`.github/workflows/push.yml`が代替手段です。Secret `CLOUDFLARE_API_TOKEN`、変数`CLOUDFLARE_ACCOUNT_ID`を登録し、最後に変数`CLOUDFLARE_PUSH_ENABLED=true`で有効化します。現段階は未設定で、自動配備ジョブは実行されません。トークンは対象アカウントのWorkers編集・D1編集など必要な範囲に制限します。通常のPages再公開にはこの承認は不要で、稼働中のWorkerと通知登録を維持します。
+- Cloudflare BuildsのGitHub初回承認は完了し、`at5tram98-hash/today-money`のmainへ接続済みです。Node.js 24、ルート`/`、build commandは`npm ci && npm run build && npm test && npm run test:worker`、deploy commandは`npm run push:deploy`。`worker/**`、`package.json`、`package-lock.json`、`tests/**`、`scripts/**`、`src/**`、`push-config.json`の更新を対象にします。実際のGitHub push eventから検証と本番配備が成功し、同じ公開鍵・DB・端末登録の維持を確認しました。Buildsの配備トークンを使用し、VAPID秘密鍵をGitHubやビルド変数へコピーしません。
+- GitHub Actions配備を使う場合は`.github/workflows/push.yml`が代替手段です。Secret `CLOUDFLARE_API_TOKEN`、変数`CLOUDFLARE_ACCOUNT_ID`を登録し、最後に変数`CLOUDFLARE_PUSH_ENABLED=true`で有効化します。Cloudflare Buildsを使用しているため、この代替ジョブは未設定のまま実行しません。トークンは対象アカウントのWorkers編集・D1編集など必要な範囲に制限します。通常のPages再公開にはこの承認は不要で、稼働中のWorkerと通知登録を維持します。
 - 再読み込み、画面復帰、オンライン復帰時に端末認証と購読を照合します。購読変更イベントでは、アプリを開いていなくても既存トークンで配信先を更新します。失敗時は再接続状態を保存し、次の起動で再試行します。
 - 購読が消えた・期限切れ・配信先が404/410になった場合は、許可が残っていれば同じ公開鍵で再購読します。端末認証と通知履歴を維持します。OSが新しいユーザー操作を求める場合は「接続を確認・復旧」から進めます。失効した認証は接続準備をリセットして再登録できます。
 - 通知認証は`myMoney3_pushDevice_v1`（localStorage）と`myMoney3_push_v1`（IndexedDB）に保存します。金融バックアップに秘密トークンを入れません。ページとService Workerは`src/js/push-connection.js`の共通実装を使います。ルートの同名ファイルはビルドで生成します。

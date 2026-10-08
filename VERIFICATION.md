@@ -4,13 +4,13 @@
 
 Cloudflare連携の認証を確認し、通知専用D1・Secret・Worker・1分間隔Cronを本番配備しました。通知APIは `https://today-money-push.at5tram98.workers.dev`。公開設定にURLと公開鍵を反映しました。以下の旧検証記録にある「未接続」「ログイン待ち」は、その検証時点の履歴です。
 
-- `npm test`: 27件成功。`npm run test:browser`: 74件成功。`npm run test:worker`: 本番向けbundleと実workerd/Miniflareで成功。ブラウザの金融・UI検証は独立環境で行い、本番通知設定を検証用の空設定に置き換えました。
+- `npm test`: 28件成功（本番配備設定の回帰検証を追加）。`npm run test:browser`: 74件成功。`npm run test:worker`: 本番向けbundleと実workerd/Miniflareで成功。ブラウザの金融・UI検証は独立環境で行い、本番通知設定を検証用の空設定に置き換えました。
 - 本番HTTPSのhealthが成功し、D1疎通と公開鍵の一致を確認。不正認証は401、許可外Originは403でした。
 - `npm run test:push-live`: 登録待ちの取消、受信確認前の認証拒否、所有者コードを使う一時端末の登録・認証・集計同期・購読更新・削除・削除後の認証拒否が成功。検証専用の合成した登録を使用し、全リマインドをオフにして、実端末へPushを送りませんでした。金融・Gmail情報は使用していません。
 - 本番Cronが期限切れの検証用行を実際に削除したことを確認。Cron設定を読み取っただけではなく、定期実行によるD1の更新まで確認しました。
 - `tests/push-redeploy.mjs`で一時端末を登録し、Workerを実際に再配備した後も同じ公開鍵・端末認証・登録が維持されることを確認。再配備では秘密値を再送せず、既存Secretを保持する設定を使用しました。CloudflareのWorkerバージョン1・2も確認しました。検証後に端末登録とローカルの秘密テストファイルを削除しました。
 - 通常のGitHub Pages更新と独立して通知Workerが稼働します。保存用D1、WorkerのURL、VAPID鍵、Service WorkerのURLとscopeを変更しません。
-- **未完了**: Worker自動配備の初回Cloudflare↔GitHub連携承認。APIは8000008（Gitアカウント未接続）を返しました。所有者がCloudflare GitHub Appに`today-money`へのアクセスを承認する必要があり、自動配備完了とは扱いません。GitHub Actionsの代替配備も認証未設定で停止中です。
+- **自動配備完了**: 所有者のCloudflare GitHub App承認後にCloudflare Buildsを接続。コミット`5eac689f38815883f4f89ec2914989324ebca8b0`のpush eventから、ビルド`df1bbcb9-e5cd-46fb-8b82-acfe209a3f53`が自動で始まり、静的28件・実workerd検証・D1スキーマ適用・本番配備・healthと鍵一致まで成功（2026-10-08 13:49:25 JST）。その後、更新前に用意した検証専用端末の認証・登録・公開鍵が維持されていることを確認し、検証登録と秘密ファイルを削除しました。GitHub Actionsは二重配備を避けるため停止中です。
 - **本人操作後の確認**: 追加済みホーム画面アプリで同期への同意・通知許可・端末接続が必要です。iPhoneのOS通知到達、閉じた実機への通知はまだ検証していません。ローカルの暗号化配信テストや本番Cronの確認を、実機での到達成功とは扱いません。
 
 ## 過去の改修・検証記録
@@ -71,3 +71,11 @@ READMEのコマンドを使用してください。独自のChromium実行ファ
 - ページとService Workerの接続処理を共通ファイルへ統合。補助機能を含め、金額計算・保存キー・Gmail/明細取込・照合を変更しない。
 - 本番`push:deploy`は所有者未認証のため、DB作成や配備前に停止した。Cloudflareのクラウドブラウザログイン画面は「There was a problem with verification. Please reload and try again.」を表示し、一度再読み込みしても解消しなかった。所有者によるログイン待ち。
 - `push-config.json`は未接続のまま。GitHub Actionsの通知サーバー自動配備は認証未登録・有効化変数未設定のため実行しない。本番Cron、iPhoneで閉じたアプリへの通知到達、通知許可後の端末接続は未検証。公開と本番通知接続を同一視しない。
+
+## 2026-10-08: GitHub連携後の自動配備
+
+所有者から連携完了画面を受領し、対象WorkerのGitHubリポジトリ・main・BuildsトークンをAPIでも確認しました。初期の`npx wrangler deploy`はルートにWorker設定がないため、検証後に既存設定を使う`npm run push:deploy`へ変更。Node.js 24を指定し、依存関係をlockfileからインストールします。
+
+実設定ファイルの整形で末尾カンマが入っていたため、JSON.parseを使う配備・本番検証の準備が失敗しました。稼働中のWorkerには影響しませんでした。末尾カンマを除去し、本番設定と公開設定を使った配備の回帰テストを追加。修正コミットのGitHub更新から自動配備が成功しました。
+
+今回の修正は配備設定・回帰テスト・運用文書のみ。保存層、台帳、ACF、Gmail取込、明細取込・照合の元ソースは変更前と一致し、公開JS/CSSの内容ハッシュも変わりません。今回UI変更はないため、前回成功したブラウザ操作74件を再実行していません。iPhoneへの実通知到達は未検証のままです。

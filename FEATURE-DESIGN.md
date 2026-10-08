@@ -49,6 +49,8 @@ AppleのLiquid Glassを参考にしたWeb表現。半透明の操作面と青い
 
 **本番接続**: 通知専用D1・Secret・Worker・Cronを配備し、公開設定を接続済み。Pagesの更新と独立して通知サーバーが稼働する。通常アップデートで鍵・DB・URLを変更しない。
 
-**残る本人操作**: ホーム画面アプリの通知許可・端末登録。Worker自動配備のCloudflare Buildsを開始するには、所有者がCloudflare GitHub Appを`today-money`へ初回承認する必要がある。APIはGitアカウント未接続のエラーを返したため、承認前に自動配備完了とは扱わない。詳細は`worker/README.md`。
+**自動配備**: Cloudflare GitHub Appの初回承認は完了。Cloudflare Buildsがmainの対象ファイルの更新を受け、ビルド・検証の成功後に`npm run push:deploy`で配備する。実際のGitHub更新による自動配備と、更新前の端末登録・公開鍵の維持を確認済み。詳細は`worker/README.md`。
+
+**残る本人操作**: ホーム画面アプリの通知許可・端末登録。iPhone実機への通知到達は許可後に確認する。
 
 公式資料: [Apple Liquid Glass](https://developer.apple.com/videos/play/wwdc2025/219/)、[WebKit iOS Web Push](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/)、[Cloudflare Cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/)、[web-push](https://github.com/web-push-libs/web-push)。
