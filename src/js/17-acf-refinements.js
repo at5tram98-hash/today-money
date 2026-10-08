@@ -129,7 +129,7 @@ function _openAcfDetailImmediate(){
     };draw()
   })
 }
-function openAcfDetail(){showBusy('ACFを更新中…','給与・カード・固定支払いを確認しています');requestAnimationFrame(()=>setTimeout(()=>{try{_openAcfDetailImmediate()}finally{hideBusy()}},36))}
+function openAcfDetail(){return runWithBusy(_openAcfDetailImmediate,{title:'ACFを更新中…',sub:'給与・カード・固定支払いを確認しています'}).catch(error=>{console.error('ACF view failed',error);showToast('ACFを表示できませんでした',{tone:'error'})})}
 
 function openAcfSettings(){
   const settings={...acfDefaultSettings(),creditAllowedCategoryIds:[...(acfDefaultSettings().creditAllowedCategoryIds||[])],creditAllowedMerchants:[...(acfDefaultSettings().creditAllowedMerchants||[])],creditBlockedMerchants:[...(acfDefaultSettings().creditBlockedMerchants||[])]};
@@ -169,11 +169,11 @@ async function syncGmail({silent=false}={}){
   if(!gmailTokenValid()){if(!silent)await connectGmail();return}
   gmailSyncing=true;
   const reviewIds=[];let added=0,reparsed=0;
-  if(!silent&&!document.querySelector('.mail-center-view'))showBusy('メールを確認しています…','Gmailから新しい金融メールを探しています');
+  const busyToken=!silent&&!document.querySelector('.mail-center-view')?beginBusy('メールを確認しています…','Gmailから新しい金融メールを探しています'):null;
   try{
     const q=String(data.gmailSettings.query||DEFAULT_DATA.gmailSettings.query).trim();let pageToken='',ids=[],pages=0;
     do{const u=new URL('https://gmail.googleapis.com/gmail/v1/users/me/messages');u.searchParams.set('maxResults','100');if(q)u.searchParams.set('q',q);if(pageToken)u.searchParams.set('pageToken',pageToken);const list=await gmailFetch(u.toString());ids.push(...(list.messages||[]).map(x=>x.id));pageToken=list.nextPageToken||'';pages++}while(pageToken&&pages<3);
-    if(!silent){if(!document.querySelector('.mail-center-view'))showBusy('金額と利用先を読み取っています…',`${Math.min(ids.length,200)}件まで確認します`);await new Promise(r=>requestAnimationFrame(r))}
+    if(!silent){if(busyToken)updateBusy(busyToken,'金額と利用先を読み取っています…',`${Math.min(ids.length,200)}件まで確認します`);await new Promise(r=>requestAnimationFrame(r))}
     const parsedMessages=[],byEmail=new Map(data.mailImports.map(x=>[x.emailId,x])),targets=ids.filter(id=>{const old=byEmail.get(id);return !old||Number(old.parserVersion||0)<GMAIL_PARSER_VERSION}).slice(0,200);
     for(let i=0;i<targets.length;i+=6){
       const batch=targets.slice(i,i+6),messages=await Promise.all(batch.map(id=>gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(id)}?format=full`)));
@@ -189,10 +189,10 @@ async function syncGmail({silent=false}={}){
         const keep={id:old.id,createdAt:old.createdAt||parsed.createdAt};Object.assign(old,parsed,keep,{transactionId:''});if(old.status!=='ignored'){prepareMailForReview(old);reviewIds.push(old.id)}reparsed++
 }data.gmailSettings.lastSyncAt=new Date().toISOString()},{label:'gmail sync'});
     refreshUnknownMailView();
-    if(!silent){if(!document.querySelector('.mail-center-view'))showBusy('読み取り結果を準備しています…',reviewIds.length?`${reviewIds.length}件を確認してください`:'新しい取引はありません');await new Promise(r=>setTimeout(r,80));hideBusy();if(reviewIds.length)openGmailReview(reviewIds);else await showAlert('メールを確認しました','新しい支払いメールはありませんでした。',{okText:'OK',cancelText:'閉じる'})}
+    if(!silent){if(busyToken){updateBusy(busyToken,'読み取り結果を準備しています…',reviewIds.length?`${reviewIds.length}件を確認してください`:'新しい取引はありません');await endBusy(busyToken)}if(reviewIds.length)openGmailReview(reviewIds);else await showAlert('メールを確認しました','新しい支払いメールはありませんでした。',{okText:'OK',cancelText:'閉じる'})}
     else if(reviewIds.length)addNotice('Gmailに確認待ちの取引があります',`${reviewIds.length}件の読み取り結果を確認してください。`,'warning',false);
     if(activeTab==='today')renderToday();else if(activeTab==='month')renderMonth();else if(activeTab==='settings')renderSettings()
-  }catch(e){console.error(e);hideBusy();if(!silent)showAlert('Gmail同期に失敗しました',e.message)}finally{gmailSyncing=false;hideBusy()}
+  }catch(e){console.error(e);if(busyToken)await endBusy(busyToken);if(!silent)showAlert('Gmail同期に失敗しました',e.message)}finally{gmailSyncing=false;for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();if(busyToken)await endBusy(busyToken)}
 };
 
 /* Pending now means any mail waiting for user review, not only an unknown category. */

@@ -1,6 +1,9 @@
 function applyAppearance(){const a=data.appearance||'system',dark=a==='dark'||(a==='system'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.classList.toggle('dark',dark);document.documentElement.classList.toggle('motion-off',data.feedbackSettings?.motion===false);document.querySelector('meta[name="theme-color"]').content=dark?'#000000':'#F2F2F7'}
 applyAppearance();matchMedia('(prefers-color-scheme:dark)').addEventListener?.('change',()=>{if(data.appearance==='system')applyAppearance()});
 function icon(name){const p={
+dayClose:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="m8 8 1 1 2-2M13 8h3m-8 5 1 1 2-2M13 13h3M8 18h8"/></svg>',
+journal:'<svg viewBox="0 0 24 24"><path d="M7 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3ZM7 3v18M11 8h5M11 12h5"/></svg>',
+
 search:'<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>',
 menu:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="1" fill="currentColor" stroke="none"/></svg>',
 target:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>',

@@ -3,12 +3,13 @@ import {createServer} from 'node:http';
 import {readFileSync, existsSync, statSync, mkdirSync, writeFileSync} from 'node:fs';
 import {resolve, extname} from 'node:path';
 import {chromium} from 'playwright';
+import {verifyDayClosingBrowser} from './day-closing-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
 build();
 const results = [];
 const passed = name => {results.push({name, status: 'passed'}); console.log(`PASS ${name}`);};
-const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openDayClosing,recordDayClosing,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
+const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,recordDayClosing,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
 const hookMarker = 'try{await saveAsync({snapshot:data})}catch';
 const baselineRoot = process.env.MM3_BASELINE_DIR;
 let workerRelease=1;
@@ -60,8 +61,24 @@ async function createPage(version = 'app', {width = 390, appearance = 'light', l
   return {page, context};
 }
 
+async function finishDayClosing(page){
+  const view=page.locator('.day-close-view').last();
+  assert.equal(await view.locator('.day-close-heading').innerText(),'日締め');
+  await view.locator('#dayCloseNext').click();
+  for(const label of ['収入の照合','メール取引の照合','普通取引の照合','銀行残高の照合']){
+    assert.equal(await view.locator('.day-close-heading').innerText(),label);
+    const checks=view.locator('[data-close-key], [data-empty-group]');
+    for(let i=0;i<await checks.count();i++)await checks.nth(i).check();
+    assert.equal(await view.locator('#dayCloseNext').isEnabled(),true);await view.locator('#dayCloseNext').click();
+  }
+  assert.equal(await view.locator('#dayReviewClose').isDisabled(),true);
+  await view.locator('#dayReviewConfirmed').check();await view.locator('#dayReviewClose').click();
+  await view.locator('.day-close-success').waitFor();await page.locator('.busy-overlay.show').waitFor({state:'hidden'});
+}
+
 try {
   mkdirSync(resolve(root,'test-results'),{recursive:true});
+  if(!process.env.MM3_DAY_CLOSING_ONLY){
   for (const width of [320, 390, 1440]) for (const appearance of ['light', 'dark']) {
     const candidate = await createPage('app', {width, appearance});
     const baseline = baselineRoot ? await createPage('baseline', {width, appearance}) : null;
@@ -326,14 +343,16 @@ try {
   // Replace through the normal durable path; no nested commit is permitted.
   await fp.evaluate(async date=>{const t=globalThis.__mm3Test,state=t.getData();state.transactions=[{id:'review-a',date,amount:1001,category:'食費',merchant:'検証',paymentMethod:'other',paymentId:'',memo:''}];state.dailyCorrections[date]=900;await t.replaceData(state);t.switchTab('today')},date);
   const beforeClose=await fp.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{transactions:d.transactions,banks:d.banks,cards:d.cards,dailyCorrections:d.dailyCorrections}});
-  await fp.locator('#todayDayClose').click();assert.equal(await fp.locator('#dayReviewClose').isDisabled(),true);assert.ok((await fp.locator('.day-review-hero').innerText()).includes('900'));await fp.locator('#dayReviewConfirmed').check();await fp.locator('#dayReviewClose').click();await fp.waitForFunction(date=>globalThis.__mm3Test.dayClosingStatus(date)==='closed',date);
-  await fp.waitForSelector('#dayReviewReopen');
-  const afterClose=await fp.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{transactions:d.transactions,banks:d.banks,cards:d.cards,dailyCorrections:d.dailyCorrections}});assert.deepEqual(afterClose,beforeClose);passed('daily close requires review, uses corrected spending and does not change ledger balances');
+  await fp.locator('#todayDayClose').click();assert.ok((await fp.locator('.day-close-totals').innerText()).includes('900'));await finishDayClosing(fp);
+  const afterClose=await fp.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{transactions:d.transactions,banks:d.banks,cards:d.cards,dailyCorrections:d.dailyCorrections}});assert.deepEqual(afterClose,beforeClose);passed('seven-step daily close requires all checks, uses corrected spending and preserves ledger balances');
   await fp.reload();await fp.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'closed');
   await fp.evaluate(async date=>{const t=globalThis.__mm3Test,state=t.getData();state.transactions[0].amount=2000;await t.replaceData(state);t.renderAll()},date);assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'changed');assert.ok((await fp.locator('#todayDayClose').innerText()).includes('再確認'));await fp.locator('.native-home-mode').getByText('今月',{exact:true}).click();assert.ok((await fp.locator('[data-date="2026-10-07"]').getAttribute('aria-label')).includes('再確認'));passed('day closing persists and detects later edits even when an override keeps the total unchanged');
-  await fp.locator('[data-date="2026-10-07"]').click();await fp.locator('#inspectDayClose').click();await fp.locator('#dayReviewConfirmed').check();await fp.locator('#dayReviewClose').click();await fp.waitForSelector('#dayReviewReopen');await fp.locator('#dayReviewReopen').click();await fp.waitForSelector('#dayReviewClose');passed('calendar opens daily review, allows re-confirmation and reopening');
+  await fp.locator('[data-date="2026-10-07"]').click();await fp.locator('#inspectDayClose').click();await finishDayClosing(fp);await fp.locator('.day-close-view').last().locator('#dayCloseNext').click();await fp.locator('#inspectDayClose').click();await fp.locator('#dayReviewReopen').click();await fp.waitForFunction(date=>globalThis.__mm3Test.dayClosingStatus(date)==='open',date);await fp.locator('.busy-overlay.show').waitFor({state:'hidden'});passed('calendar opens the seven-step review, supports re-approval and reopening');
   await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.switchTab('settings');globalThis.__mm3Test.openNotificationSettings()});await fp.waitForSelector('#pushEnable');assert.equal(await fp.locator('#pushEnable').isDisabled(),true);assert.ok((await fp.locator('.push-view.show').innerText()).includes('通知サーバー未接続'));const summary=await fp.evaluate(()=>globalThis.__mm3Test.buildPushSummary());assert.equal(summary.spending,null);assert.ok(!('transactions' in summary)&&!('gmailSettings' in summary));passed('unconfigured Push stays off and the default summary excludes amounts and Gmail credentials');
   await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.openCalculator('320px',999999999)});await fp.waitForTimeout(350);assert.ok(await fp.locator('#calcDone').isVisible());await fp.screenshot({path:resolve(root,'test-results/calculator-320-light.png')});await fp.locator('#calcCancel').click();await features.context.close();
+
+  }
+  await verifyDayClosingBrowser({createPage,passed,root,errors});
 
   const lifecycle=await createPage();const lp=lifecycle.page;
   const vapid=Buffer.concat([Buffer.from([4]),Buffer.alloc(64,1)]).toString('base64url'),device={apiBase:'https://money.push-test.example',vapidPublicKey:vapid,token:'test-device-token',endpoint:'https://web.push.apple.com/test-old'};
@@ -348,6 +367,6 @@ try {
   assert.deepEqual(errors, []);
   passed('no JavaScript exceptions or local HTTP failures in tested flows');
   mkdirSync(resolve(root, 'test-results'), {recursive: true});
-  writeFileSync(resolve(root, 'test-results/browser.json'), JSON.stringify({results, errors, externalAuthenticatedServicesTested: false}, null, 2));
+  writeFileSync(resolve(root, process.env.MM3_DAY_CLOSING_ONLY?'test-results/browser-day-closing.json':'test-results/browser.json'), JSON.stringify({results, errors, externalAuthenticatedServicesTested: false}, null, 2));
   console.log(`${results.length} browser checks passed`);
 } finally {await browser.close(); await new Promise(r => server.close(r));}

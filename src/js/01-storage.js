@@ -40,7 +40,7 @@ async function mm3MigrateRecovery(){if(!mm3Db)return;for(const key of storageRec
   let raw='';try{raw=localStorage.getItem(key)||''}catch(e){continue}if(!raw)continue;
   try{await mm3DbRequest('recovery','readwrite',store=>store.put({id:key,raw,createdAt:new Date().toISOString(),label:'legacy'},key));localStorage.removeItem(key)}catch(e){console.warn('recovery migration postponed',e)}
 }await mm3TrimRecovery()}
-async function loadDataAsync(){let localRaw='',localRecord=null,localRevision=0,idbRecord=null,recoveryProtected=true,corruptedSource=false,untrackedLocal=false;
+async function loadDataAsync(){updateBootMessage('データを読み込んでいます…','端末に保存した記録を確認しています');let localRaw='',localRecord=null,localRevision=0,idbRecord=null,recoveryProtected=true,corruptedSource=false,untrackedLocal=false;
   try{localRaw=localStorage.getItem(APP_KEY)||'';localRevision=Number(localStorage.getItem(MM3_STORAGE_REV_KEY))||0;const signature=localStorage.getItem(MM3_STORAGE_SIG_KEY);untrackedLocal=!!(localRaw&&signature&&signature!==mm3StorageSignature(localRaw));if(localRaw){const parsed=JSON.parse(localRaw);if(!validateStoredShape(parsed).ok)throw new Error('Invalid local data shape');localRecord=parsed}}catch(e){console.warn('local data unavailable',e)}
   try{mm3Db=await mm3OpenDatabase();mm3StorageMode='indexeddb';idbRecord=await mm3DbRequest('state','readonly',store=>store.get('main'))}catch(e){console.warn('IndexedDB unavailable; using local storage',e);try{mm3Db?.close()}catch(_){}mm3Db=null;mm3StorageMode='local'}
   if(localRaw&&!localRecord){corruptedSource=true;try{await writeRecoverySnapshotAsync('load_failure',localRaw)}catch(e){recoveryProtected=false;mm3LocalMirrorAllowed=false;console.error('corrupt local data could not be protected',e)}}
@@ -50,6 +50,7 @@ async function loadDataAsync(){let localRaw='',localRecord=null,localRevision=0,
   const source=chooseDb?idbRecord.data:localRecord;
   mm3StorageRevision=Math.max(localRevision,dbRevision);
   if(mm3Db){try{await mm3MigrateRecovery()}catch(e){console.warn('recovery migration postponed',e)}}
+  updateBootMessage('データを整理しています…','保存された取引と残高を準備しています');
   let loaded;
   if(source)loaded=prepareLoadedData(source,{applySeed:true,allowLegacy:true});
   else{loaded=prepareLoadedData({},{applySeed:true,allowLegacy:true});if(corruptedSource){loaded.meta.loadRecovery=true;loaded.notices.push({id:uid('notice'),title:'保存データを読み込めませんでした',detail:recoveryProtected?'復旧用データを確認してください。':'元データを保護できませんでした。旧データは上書きせず保持しています。',tone:'warning',read:false,createdAt:new Date().toISOString()})}}
@@ -58,4 +59,9 @@ async function loadDataAsync(){let localRaw='',localRecord=null,localRevision=0,
   mm3LastSavedRaw=mm3Db?(chooseDb?JSON.stringify(idbRecord.data):source?JSON.stringify(loaded):''):localRecord?JSON.stringify(localRecord):'';
   return loaded
 }
-const mm3BootLayer=document.createElement('div');mm3BootLayer.id='mm3StorageBoot';mm3BootLayer.setAttribute('role','status');mm3BootLayer.style.cssText='position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:var(--bg,#f5f5f7);color:var(--text,#111);font:600 16px -apple-system,BlinkMacSystemFont,sans-serif';mm3BootLayer.textContent='データを読み込んでいます…';document.body.appendChild(mm3BootLayer);
+const mm3BootStarted=performance.now();
+const mm3BootLayer=document.createElement('div');
+mm3BootLayer.id='mm3StorageBoot';mm3BootLayer.className='storage-boot';mm3BootLayer.setAttribute('role','status');mm3BootLayer.setAttribute('aria-live','polite');
+mm3BootLayer.innerHTML='<div class="busy-card"><div class="busy-orbit" aria-hidden="true"><span></span><span></span><span></span><div class="busy-core"></div></div><div class="busy-title" id="bootTitle">データを読み込んでいます…</div><div class="busy-sub" id="bootSub">端末に保存した記録を確認しています</div><div class="busy-track" aria-hidden="true"><span></span></div></div>';
+document.body.appendChild(mm3BootLayer);
+function updateBootMessage(title,sub){mm3BootLayer.querySelector('#bootTitle').textContent=title;mm3BootLayer.querySelector('#bootSub').textContent=sub}

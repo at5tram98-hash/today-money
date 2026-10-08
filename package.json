@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test tests/static.test.mjs tests/push.test.mjs tests/push-deploy.test.mjs tests/service-worker.test.mjs",
+    "test": "node --test tests/static.test.mjs tests/push.test.mjs tests/push-deploy.test.mjs tests/service-worker.test.mjs tests/day-closing.test.mjs",
     "test:browser": "node tests/browser.mjs",
     "test:worker": "wrangler deploy --config worker/wrangler.jsonc --dry-run --outdir ../test-results/worker-build && node tests/worker-runtime.mjs",
     "push:deploy": "node worker/deploy.mjs",

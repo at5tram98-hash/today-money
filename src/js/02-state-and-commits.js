@@ -108,31 +108,55 @@ function setButtonSaving(btn,on,label='保存中…'){if(!btn)return;btn.classLi
 async function runSaveAction(btn,mutator,{render=true,label='save',success='保存しました',successAction=null,close=null,afterCommit=null,busy=false,busyTitle='記録中…',busySub='保存内容と画面を更新しています'}={}){
  const ownerSheet=btn?.closest?.('#sheet');if(btn?.disabled||ownerSheet?.dataset.commitPending==='true')return false;
  if(ownerSheet)ownerSheet.dataset.commitPending='true';setButtonSaving(btn,true);
- if(busy){busyJobCount++;showBusy(busyTitle,busySub)}
+ const busyToken=busy?beginBusy(busyTitle,busySub):null;
  try{
    // Let the overlay paint before a costly commit or synchronous redraw.
-   await new Promise(resolve=>requestAnimationFrame(()=>busy?setTimeout(resolve,36):resolve()));
+   await waitForUiPaint();
    try{await safeCommitAsync(mutator,{render:false,label})}catch(e){feedback.error();return false}
    // A render failure must never roll back or retry an already persisted transaction.
    let uiError=null;
-   for(const effect of [render?renderAll:null,afterCommit,close])if(typeof effect==='function'){try{effect()}catch(e){uiError=e;console.error('post-commit UI failed',label,e)}}
+   for(const effect of [render?renderAll:null,afterCommit,close])if(typeof effect==='function'){try{await effect()}catch(e){uiError=e;console.error('post-commit UI failed',label,e)}}
    if(uiError)showToast('保存しましたが画面を更新できませんでした。再表示してください',{tone:'error'});
    else{feedback.success();showToast(success,successAction||{})}
    return true;
  }finally{
    setButtonSaving(btn,false);if(ownerSheet)delete ownerSheet.dataset.commitPending;
-   if(busy&&--busyJobCount===0)hideBusy();
+   if(busyToken)await endBusy(busyToken);
  }
 }
-function ensureBusyOverlay(){let el=document.getElementById('busyOverlay');if(el)return el;el=document.createElement('div');el.id='busyOverlay';el.className='busy-overlay';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.innerHTML='<div class="busy-card"><div class="busy-spinner" aria-hidden="true"></div><div class="busy-title" id="busyTitle">計算中…</div><div class="busy-sub" id="busySub">お金の流れを確認しています</div></div>';document.body.appendChild(el);return el}
-function showBusy(title='計算中…',sub='お金の流れを確認しています'){const el=ensureBusyOverlay();el.querySelector('#busyTitle').textContent=title;el.querySelector('#busySub').textContent=sub;el.classList.add('show');return el}
-function hideBusy(){document.getElementById('busyOverlay')?.classList.remove('show')}
-let busyJobCount=0;
-function runWithBusy(fn,{title='ACFを計算中…',sub='給与・カード・固定支払いを確認しています'}={}){
-  busyJobCount++;showBusy(title,sub);
-  return new Promise((resolve,reject)=>requestAnimationFrame(()=>setTimeout(()=>{
-    try{resolve(fn())}catch(error){reject(error)}finally{if(--busyJobCount===0)hideBusy()}
-  },36)));
+function busyAnimationHtml(){return '<div class="busy-orbit" aria-hidden="true"><span></span><span></span><span></span><div class="busy-core"></div></div>'}
+function ensureBusyOverlay(){
+  let el=document.getElementById('busyOverlay');if(el)return el;
+  el=document.createElement('div');el.id='busyOverlay';el.className='busy-overlay';
+  el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.setAttribute('aria-hidden','true');
+  el.innerHTML=`<div class="busy-card">${busyAnimationHtml()}<div class="busy-title" id="busyTitle">計算中…</div><div class="busy-sub" id="busySub">お金の流れを確認しています</div><div class="busy-track" aria-hidden="true"><span></span></div></div>`;
+  document.body.appendChild(el);return el;
+}
+function showBusy(title='計算中…',sub='お金の流れを確認しています'){
+  const el=ensureBusyOverlay();el.querySelector('#busyTitle').textContent=title;el.querySelector('#busySub').textContent=sub;
+  el.setAttribute('aria-hidden','false');el.classList.add('show');document.getElementById('app')?.setAttribute('aria-busy','true');return el;
+}
+function hideBusy(){const el=document.getElementById('busyOverlay');el?.classList.remove('show');el?.setAttribute('aria-hidden','true');document.getElementById('app')?.removeAttribute('aria-busy')}
+const busyJobs=new Map();
+function nextUiFrame(){
+  // Background tabs suspend animation frames. Keep a bounded fallback so a save can finish there too.
+  return new Promise(resolve=>{let finished=false,frame,timer;const done=()=>{if(finished)return;finished=true;clearTimeout(timer);cancelAnimationFrame(frame);resolve()};frame=requestAnimationFrame(done);timer=setTimeout(done,100)});
+}
+async function waitForUiPaint(){await nextUiFrame();await nextUiFrame()}
+function beginBusy(title,sub,{minimumMs=/ATF|ACF|予測/.test(title)?1100:700}={}){
+  const token=Symbol('busy');busyJobs.set(token,{title,sub,minimumMs,started:performance.now()});showBusy(title,sub);return token;
+}
+function updateBusy(token,title,sub){const job=busyJobs.get(token);if(!job)return;Object.assign(job,{title,sub});showBusy(title,sub)}
+async function endBusy(token){
+  const job=busyJobs.get(token);if(!job)return;
+  await waitForUiPaint();const remaining=job.minimumMs-(performance.now()-job.started);
+  if(remaining>0)await new Promise(resolve=>setTimeout(resolve,remaining));
+  await waitForUiPaint();busyJobs.delete(token);
+  const last=[...busyJobs.values()].at(-1);if(last)showBusy(last.title,last.sub);else hideBusy();
+}
+async function runWithBusy(fn,{title='ACFを計算中…',sub='給与・カード・固定支払いを確認しています',minimumMs}={}){
+  const token=beginBusy(title,sub,minimumMs==null?{}:{minimumMs});
+  try{await waitForUiPaint();return await fn()}finally{await endBusy(token)}
 }
 function installLongPress(el,onLong,{delay=600,moveTolerance=10,feedbackOn=true}={}){if(!el)return()=>{};let timer=null,longPressed=false,sx=0,sy=0;const clear=()=>{if(timer){clearTimeout(timer);timer=null}};const down=e=>{longPressed=false;el.__longPressed=false;sx=e.clientX;sy=e.clientY;clear();timer=setTimeout(()=>{timer=null;longPressed=true;el.__longPressed=true;if(feedbackOn)feedback.selection();onLong?.(e)},delay)};const move=e=>{if(timer&&(Math.abs(e.clientX-sx)>moveTolerance||Math.abs(e.clientY-sy)>moveTolerance))clear()};const suppress=e=>{if(longPressed||el.__longPressed){e.preventDefault();e.stopImmediatePropagation();longPressed=false;el.__longPressed=false}};el.addEventListener('pointerdown',down);el.addEventListener('pointermove',move);el.addEventListener('pointerup',clear);el.addEventListener('pointercancel',clear);el.addEventListener('pointerleave',clear);el.addEventListener('click',suppress,true);el.addEventListener('contextmenu',e=>e.preventDefault());el.addEventListener('selectstart',e=>e.preventDefault());return()=>{clear();el.removeEventListener('pointerdown',down);el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',clear);el.removeEventListener('pointercancel',clear);el.removeEventListener('pointerleave',clear);el.removeEventListener('click',suppress,true)}}
 

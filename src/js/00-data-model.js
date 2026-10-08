@@ -51,6 +51,11 @@ function retainedSystemNotices(notices,now=new Date()){
     return !day||!today||day>=today;
   });
 }
+/** Keep the same local calendar dates used by the ledger: today and the six preceding days. */
+function retainedDayClosings(records,today=ymd()){
+  const oldest=addDays(today,-6);
+  return Object.fromEntries(Object.entries(records||{}).filter(([date,record])=>systemNoticeDay(date)&&date>=oldest&&date<=today&&record&&typeof record==='object'&&!Array.isArray(record)));
+}
 function normalizeData(raw){
   const d=raw&&typeof raw==='object'?raw:{},out=clone(DEFAULT_DATA);Object.assign(out,d);out.version=DATA_VERSION;out.profile={...DEFAULT_DATA.profile,...(d.profile||{})};
   out.categories=(Array.isArray(d.categories)&&d.categories.length?d.categories:CATEGORY_DEFAULTS).map(c=>{const fallback=CATEGORY_DEFAULTS.find(x=>x.name===c.name);const id=String(c.id||fallback?.id||uid('cat'));return {...c,id,icon:normalizeCategoryIcon(c.icon,id)}});
@@ -58,6 +63,7 @@ function normalizeData(raw){
   out.notices=retainedSystemNotices(out.notices);
   out.pushPreferences={...DEFAULT_DATA.pushPreferences,...(d.pushPreferences&&typeof d.pushPreferences==='object'&&!Array.isArray(d.pushPreferences)?d.pushPreferences:{})};
   ['dailyGoals','monthlyGoals','dailyCorrections','monthlyCorrections','merchantRules','quickInputRules','monthReviews','dayClosings','cardAdjustments'].forEach(k=>out[k]=d[k]&&typeof d[k]==='object'&&!Array.isArray(d[k])?d[k]:{});
+  out.dayClosings=retainedDayClosings(out.dayClosings);
   const manualBalanceMemos=/クイック残高入力|現在値設定|口座登録|口座編集|手動残高/;
   out.banks=out.banks.map(b=>{const snaps=out.assetSnapshots.filter(x=>x.bankId===b.id&&manualBalanceMemos.test(String(x.memo||''))).sort((a,z)=>String(a.createdAt||a.date||'').localeCompare(String(z.createdAt||z.date||''))),last=snaps[snaps.length-1],baseline=b.balanceAsOf||last?.createdAt||b.updatedAt||null;return {...b,balance:Number(b.balance)||0,threshold:Number(b.threshold)||0,balanceAsOf:baseline,updatedAt:b.updatedAt||last?.createdAt||baseline||null}});
   out.cards=out.cards.map(c=>({...c,company:c.company||c.name||'カード',name:c.name||c.company||'カード',closingDay:c.closingDay===''?null:(c.closingDay??null),dueDay:c.dueDay===''||c.dueDay==null?null:clamp(Number(c.dueDay)||0,1,31),limit:Math.max(0,Number(c.limit)||0),bankId:c.bankId||''}));

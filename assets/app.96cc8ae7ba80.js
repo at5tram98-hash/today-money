@@ -51,6 +51,11 @@ function retainedSystemNotices(notices,now=new Date()){
     return !day||!today||day>=today;
   });
 }
+/** Keep the same local calendar dates used by the ledger: today and the six preceding days. */
+function retainedDayClosings(records,today=ymd()){
+  const oldest=addDays(today,-6);
+  return Object.fromEntries(Object.entries(records||{}).filter(([date,record])=>systemNoticeDay(date)&&date>=oldest&&date<=today&&record&&typeof record==='object'&&!Array.isArray(record)));
+}
 function normalizeData(raw){
   const d=raw&&typeof raw==='object'?raw:{},out=clone(DEFAULT_DATA);Object.assign(out,d);out.version=DATA_VERSION;out.profile={...DEFAULT_DATA.profile,...(d.profile||{})};
   out.categories=(Array.isArray(d.categories)&&d.categories.length?d.categories:CATEGORY_DEFAULTS).map(c=>{const fallback=CATEGORY_DEFAULTS.find(x=>x.name===c.name);const id=String(c.id||fallback?.id||uid('cat'));return {...c,id,icon:normalizeCategoryIcon(c.icon,id)}});
@@ -58,6 +63,7 @@ function normalizeData(raw){
   out.notices=retainedSystemNotices(out.notices);
   out.pushPreferences={...DEFAULT_DATA.pushPreferences,...(d.pushPreferences&&typeof d.pushPreferences==='object'&&!Array.isArray(d.pushPreferences)?d.pushPreferences:{})};
   ['dailyGoals','monthlyGoals','dailyCorrections','monthlyCorrections','merchantRules','quickInputRules','monthReviews','dayClosings','cardAdjustments'].forEach(k=>out[k]=d[k]&&typeof d[k]==='object'&&!Array.isArray(d[k])?d[k]:{});
+  out.dayClosings=retainedDayClosings(out.dayClosings);
   const manualBalanceMemos=/クイック残高入力|現在値設定|口座登録|口座編集|手動残高/;
   out.banks=out.banks.map(b=>{const snaps=out.assetSnapshots.filter(x=>x.bankId===b.id&&manualBalanceMemos.test(String(x.memo||''))).sort((a,z)=>String(a.createdAt||a.date||'').localeCompare(String(z.createdAt||z.date||''))),last=snaps[snaps.length-1],baseline=b.balanceAsOf||last?.createdAt||b.updatedAt||null;return {...b,balance:Number(b.balance)||0,threshold:Number(b.threshold)||0,balanceAsOf:baseline,updatedAt:b.updatedAt||last?.createdAt||baseline||null}});
   out.cards=out.cards.map(c=>({...c,company:c.company||c.name||'カード',name:c.name||c.company||'カード',closingDay:c.closingDay===''?null:(c.closingDay??null),dueDay:c.dueDay===''||c.dueDay==null?null:clamp(Number(c.dueDay)||0,1,31),limit:Math.max(0,Number(c.limit)||0),bankId:c.bankId||''}));
@@ -308,7 +314,7 @@ async function mm3MigrateRecovery(){if(!mm3Db)return;for(const key of storageRec
   let raw='';try{raw=localStorage.getItem(key)||''}catch(e){continue}if(!raw)continue;
   try{await mm3DbRequest('recovery','readwrite',store=>store.put({id:key,raw,createdAt:new Date().toISOString(),label:'legacy'},key));localStorage.removeItem(key)}catch(e){console.warn('recovery migration postponed',e)}
 }await mm3TrimRecovery()}
-async function loadDataAsync(){let localRaw='',localRecord=null,localRevision=0,idbRecord=null,recoveryProtected=true,corruptedSource=false,untrackedLocal=false;
+async function loadDataAsync(){updateBootMessage('データを読み込んでいます…','端末に保存した記録を確認しています');let localRaw='',localRecord=null,localRevision=0,idbRecord=null,recoveryProtected=true,corruptedSource=false,untrackedLocal=false;
   try{localRaw=localStorage.getItem(APP_KEY)||'';localRevision=Number(localStorage.getItem(MM3_STORAGE_REV_KEY))||0;const signature=localStorage.getItem(MM3_STORAGE_SIG_KEY);untrackedLocal=!!(localRaw&&signature&&signature!==mm3StorageSignature(localRaw));if(localRaw){const parsed=JSON.parse(localRaw);if(!validateStoredShape(parsed).ok)throw new Error('Invalid local data shape');localRecord=parsed}}catch(e){console.warn('local data unavailable',e)}
   try{mm3Db=await mm3OpenDatabase();mm3StorageMode='indexeddb';idbRecord=await mm3DbRequest('state','readonly',store=>store.get('main'))}catch(e){console.warn('IndexedDB unavailable; using local storage',e);try{mm3Db?.close()}catch(_){}mm3Db=null;mm3StorageMode='local'}
   if(localRaw&&!localRecord){corruptedSource=true;try{await writeRecoverySnapshotAsync('load_failure',localRaw)}catch(e){recoveryProtected=false;mm3LocalMirrorAllowed=false;console.error('corrupt local data could not be protected',e)}}
@@ -318,6 +324,7 @@ async function loadDataAsync(){let localRaw='',localRecord=null,localRevision=0,
   const source=chooseDb?idbRecord.data:localRecord;
   mm3StorageRevision=Math.max(localRevision,dbRevision);
   if(mm3Db){try{await mm3MigrateRecovery()}catch(e){console.warn('recovery migration postponed',e)}}
+  updateBootMessage('データを整理しています…','保存された取引と残高を準備しています');
   let loaded;
   if(source)loaded=prepareLoadedData(source,{applySeed:true,allowLegacy:true});
   else{loaded=prepareLoadedData({},{applySeed:true,allowLegacy:true});if(corruptedSource){loaded.meta.loadRecovery=true;loaded.notices.push({id:uid('notice'),title:'保存データを読み込めませんでした',detail:recoveryProtected?'復旧用データを確認してください。':'元データを保護できませんでした。旧データは上書きせず保持しています。',tone:'warning',read:false,createdAt:new Date().toISOString()})}}
@@ -326,7 +333,12 @@ async function loadDataAsync(){let localRaw='',localRecord=null,localRevision=0,
   mm3LastSavedRaw=mm3Db?(chooseDb?JSON.stringify(idbRecord.data):source?JSON.stringify(loaded):''):localRecord?JSON.stringify(localRecord):'';
   return loaded
 }
-const mm3BootLayer=document.createElement('div');mm3BootLayer.id='mm3StorageBoot';mm3BootLayer.setAttribute('role','status');mm3BootLayer.style.cssText='position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:var(--bg,#f5f5f7);color:var(--text,#111);font:600 16px -apple-system,BlinkMacSystemFont,sans-serif';mm3BootLayer.textContent='データを読み込んでいます…';document.body.appendChild(mm3BootLayer);
+const mm3BootStarted=performance.now();
+const mm3BootLayer=document.createElement('div');
+mm3BootLayer.id='mm3StorageBoot';mm3BootLayer.className='storage-boot';mm3BootLayer.setAttribute('role','status');mm3BootLayer.setAttribute('aria-live','polite');
+mm3BootLayer.innerHTML='<div class="busy-card"><div class="busy-orbit" aria-hidden="true"><span></span><span></span><span></span><div class="busy-core"></div></div><div class="busy-title" id="bootTitle">データを読み込んでいます…</div><div class="busy-sub" id="bootSub">端末に保存した記録を確認しています</div><div class="busy-track" aria-hidden="true"><span></span></div></div>';
+document.body.appendChild(mm3BootLayer);
+function updateBootMessage(title,sub){mm3BootLayer.querySelector('#bootTitle').textContent=title;mm3BootLayer.querySelector('#bootSub').textContent=sub}
 (async function startMyMoney(){
 let data=await loadDataAsync();
 let acfForecastCache=null;
@@ -437,31 +449,55 @@ function setButtonSaving(btn,on,label='保存中…'){if(!btn)return;btn.classLi
 async function runSaveAction(btn,mutator,{render=true,label='save',success='保存しました',successAction=null,close=null,afterCommit=null,busy=false,busyTitle='記録中…',busySub='保存内容と画面を更新しています'}={}){
  const ownerSheet=btn?.closest?.('#sheet');if(btn?.disabled||ownerSheet?.dataset.commitPending==='true')return false;
  if(ownerSheet)ownerSheet.dataset.commitPending='true';setButtonSaving(btn,true);
- if(busy){busyJobCount++;showBusy(busyTitle,busySub)}
+ const busyToken=busy?beginBusy(busyTitle,busySub):null;
  try{
    // Let the overlay paint before a costly commit or synchronous redraw.
-   await new Promise(resolve=>requestAnimationFrame(()=>busy?setTimeout(resolve,36):resolve()));
+   await waitForUiPaint();
    try{await safeCommitAsync(mutator,{render:false,label})}catch(e){feedback.error();return false}
    // A render failure must never roll back or retry an already persisted transaction.
    let uiError=null;
-   for(const effect of [render?renderAll:null,afterCommit,close])if(typeof effect==='function'){try{effect()}catch(e){uiError=e;console.error('post-commit UI failed',label,e)}}
+   for(const effect of [render?renderAll:null,afterCommit,close])if(typeof effect==='function'){try{await effect()}catch(e){uiError=e;console.error('post-commit UI failed',label,e)}}
    if(uiError)showToast('保存しましたが画面を更新できませんでした。再表示してください',{tone:'error'});
    else{feedback.success();showToast(success,successAction||{})}
    return true;
  }finally{
    setButtonSaving(btn,false);if(ownerSheet)delete ownerSheet.dataset.commitPending;
-   if(busy&&--busyJobCount===0)hideBusy();
+   if(busyToken)await endBusy(busyToken);
  }
 }
-function ensureBusyOverlay(){let el=document.getElementById('busyOverlay');if(el)return el;el=document.createElement('div');el.id='busyOverlay';el.className='busy-overlay';el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.innerHTML='<div class="busy-card"><div class="busy-spinner" aria-hidden="true"></div><div class="busy-title" id="busyTitle">計算中…</div><div class="busy-sub" id="busySub">お金の流れを確認しています</div></div>';document.body.appendChild(el);return el}
-function showBusy(title='計算中…',sub='お金の流れを確認しています'){const el=ensureBusyOverlay();el.querySelector('#busyTitle').textContent=title;el.querySelector('#busySub').textContent=sub;el.classList.add('show');return el}
-function hideBusy(){document.getElementById('busyOverlay')?.classList.remove('show')}
-let busyJobCount=0;
-function runWithBusy(fn,{title='ACFを計算中…',sub='給与・カード・固定支払いを確認しています'}={}){
-  busyJobCount++;showBusy(title,sub);
-  return new Promise((resolve,reject)=>requestAnimationFrame(()=>setTimeout(()=>{
-    try{resolve(fn())}catch(error){reject(error)}finally{if(--busyJobCount===0)hideBusy()}
-  },36)));
+function busyAnimationHtml(){return '<div class="busy-orbit" aria-hidden="true"><span></span><span></span><span></span><div class="busy-core"></div></div>'}
+function ensureBusyOverlay(){
+  let el=document.getElementById('busyOverlay');if(el)return el;
+  el=document.createElement('div');el.id='busyOverlay';el.className='busy-overlay';
+  el.setAttribute('role','status');el.setAttribute('aria-live','polite');el.setAttribute('aria-hidden','true');
+  el.innerHTML=`<div class="busy-card">${busyAnimationHtml()}<div class="busy-title" id="busyTitle">計算中…</div><div class="busy-sub" id="busySub">お金の流れを確認しています</div><div class="busy-track" aria-hidden="true"><span></span></div></div>`;
+  document.body.appendChild(el);return el;
+}
+function showBusy(title='計算中…',sub='お金の流れを確認しています'){
+  const el=ensureBusyOverlay();el.querySelector('#busyTitle').textContent=title;el.querySelector('#busySub').textContent=sub;
+  el.setAttribute('aria-hidden','false');el.classList.add('show');document.getElementById('app')?.setAttribute('aria-busy','true');return el;
+}
+function hideBusy(){const el=document.getElementById('busyOverlay');el?.classList.remove('show');el?.setAttribute('aria-hidden','true');document.getElementById('app')?.removeAttribute('aria-busy')}
+const busyJobs=new Map();
+function nextUiFrame(){
+  // Background tabs suspend animation frames. Keep a bounded fallback so a save can finish there too.
+  return new Promise(resolve=>{let finished=false,frame,timer;const done=()=>{if(finished)return;finished=true;clearTimeout(timer);cancelAnimationFrame(frame);resolve()};frame=requestAnimationFrame(done);timer=setTimeout(done,100)});
+}
+async function waitForUiPaint(){await nextUiFrame();await nextUiFrame()}
+function beginBusy(title,sub,{minimumMs=/ATF|ACF|予測/.test(title)?1100:700}={}){
+  const token=Symbol('busy');busyJobs.set(token,{title,sub,minimumMs,started:performance.now()});showBusy(title,sub);return token;
+}
+function updateBusy(token,title,sub){const job=busyJobs.get(token);if(!job)return;Object.assign(job,{title,sub});showBusy(title,sub)}
+async function endBusy(token){
+  const job=busyJobs.get(token);if(!job)return;
+  await waitForUiPaint();const remaining=job.minimumMs-(performance.now()-job.started);
+  if(remaining>0)await new Promise(resolve=>setTimeout(resolve,remaining));
+  await waitForUiPaint();busyJobs.delete(token);
+  const last=[...busyJobs.values()].at(-1);if(last)showBusy(last.title,last.sub);else hideBusy();
+}
+async function runWithBusy(fn,{title='ACFを計算中…',sub='給与・カード・固定支払いを確認しています',minimumMs}={}){
+  const token=beginBusy(title,sub,minimumMs==null?{}:{minimumMs});
+  try{await waitForUiPaint();return await fn()}finally{await endBusy(token)}
 }
 function installLongPress(el,onLong,{delay=600,moveTolerance=10,feedbackOn=true}={}){if(!el)return()=>{};let timer=null,longPressed=false,sx=0,sy=0;const clear=()=>{if(timer){clearTimeout(timer);timer=null}};const down=e=>{longPressed=false;el.__longPressed=false;sx=e.clientX;sy=e.clientY;clear();timer=setTimeout(()=>{timer=null;longPressed=true;el.__longPressed=true;if(feedbackOn)feedback.selection();onLong?.(e)},delay)};const move=e=>{if(timer&&(Math.abs(e.clientX-sx)>moveTolerance||Math.abs(e.clientY-sy)>moveTolerance))clear()};const suppress=e=>{if(longPressed||el.__longPressed){e.preventDefault();e.stopImmediatePropagation();longPressed=false;el.__longPressed=false}};el.addEventListener('pointerdown',down);el.addEventListener('pointermove',move);el.addEventListener('pointerup',clear);el.addEventListener('pointercancel',clear);el.addEventListener('pointerleave',clear);el.addEventListener('click',suppress,true);el.addEventListener('contextmenu',e=>e.preventDefault());el.addEventListener('selectstart',e=>e.preventDefault());return()=>{clear();el.removeEventListener('pointerdown',down);el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',clear);el.removeEventListener('pointercancel',clear);el.removeEventListener('pointerleave',clear);el.removeEventListener('click',suppress,true)}}
 
@@ -1188,6 +1224,9 @@ function openCreditUsageRules(settings,onChange){const merchants=[...new Set(dat
 function applyAppearance(){const a=data.appearance||'system',dark=a==='dark'||(a==='system'&&matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.classList.toggle('dark',dark);document.documentElement.classList.toggle('motion-off',data.feedbackSettings?.motion===false);document.querySelector('meta[name="theme-color"]').content=dark?'#000000':'#F2F2F7'}
 applyAppearance();matchMedia('(prefers-color-scheme:dark)').addEventListener?.('change',()=>{if(data.appearance==='system')applyAppearance()});
 function icon(name){const p={
+dayClose:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="m8 8 1 1 2-2M13 8h3m-8 5 1 1 2-2M13 13h3M8 18h8"/></svg>',
+journal:'<svg viewBox="0 0 24 24"><path d="M7 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3ZM7 3v18M11 8h5M11 12h5"/></svg>',
+
 search:'<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>',
 menu:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="1" fill="currentColor" stroke="none"/></svg>',
 target:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>',
@@ -1472,51 +1511,213 @@ function openDisplayMonthPicker({title,value,onApply}){
     return ()=>{timers.forEach(clearTimeout);ready=false};
   });
 }
-/* Review metadata never changes ledger amounts, balances or reconciliation. */
-function dayClosingSignature(date){
-  const transactions=txForDate(date).map(t=>({id:t.id,amount:t.amount,category:t.category,merchant:t.merchant,paymentMethod:t.paymentMethod,paymentId:t.paymentId,memo:t.memo||''})).sort((a,b)=>String(a.id).localeCompare(String(b.id)));
-  const goal=dailyGoal(date),categories=Object.entries(goal.categories||{}).sort(([a],[b])=>a.localeCompare(b));
-  return JSON.stringify({transactions,correction:data.dailyCorrections[date]??null,goal:goal.total,categories});
+
+/** An editor for received income. Linked salaries keep their existing payroll editor. */
+function openIncomeEditor(incomeId='',date=trackingDate){
+  const initial=incomeId?data.incomes.find(x=>x.id===incomeId):null;
+  if(incomeId&&!initial)return showToast('収入が見つかりません',{tone:'error'});
+  if(initial?.salaryRecordId&&data.salaryRecords.some(x=>x.id===initial.salaryRecordId))return openSalaryRecordEdit(initial.salaryRecordId);
+  let amount=Number(initial?.amount)||0,toType=initial?.toType==='bank'?'bank':'cash';
+  const temp=initial?data.tempIncomes.find(x=>x.id===initial.tempIncomeId||x.incomeId===initial.id):null;
+  const confirmed=initial?!!(initial.receivedConfirmed||temp?.receivedConfirmed||initial.bankApplied||initial.bankReconciled):true;
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="ieCancel">キャンセル</button><div class="sheet-title">${initial?'収入を編集':'収入を追加'}</div><button type="button" class="nav-text bold" id="ieSave">保存</button></div><div class="sheet-body"><div class="form-card"><div class="form-section"><label class="form-label" for="ieSource">収入源</label><input class="field" id="ieSource" value="${esc(initial?.sourceName||'')}" placeholder="例：臨時収入、売上"></div><div class="form-section">${moneyButton('ieAmount','金額',amount)}</div><div class="form-section"><label class="form-label" for="ieDate">日付</label><input class="field" id="ieDate" type="date" max="${ymd()}" value="${esc(initial?.date||date)}"></div></div><div class="form-card"><div class="form-section"><div class="form-label">受取先</div><div class="seg" id="ieType"><button type="button" data-type="cash" class="${toType==='cash'?'on':''}">現金・その他</button><button type="button" data-type="bank" class="${toType==='bank'?'on':''}">銀行口座</button></div></div><div class="form-section ${toType==='bank'?'':'hidden'}" id="ieBankWrap"><label class="form-label" for="ieBank">銀行口座</label><select class="field field-select" id="ieBank"><option value="">選択してください</option>${data.banks.map(b=>`<option value="${esc(b.id)}" ${b.id===initial?.bankId?'selected':''}>${esc(b.name)}</option>`).join('')}</select></div><div class="form-section"><label class="day-review-check"><input type="checkbox" id="ieReceived" ${confirmed?'checked':''}>実際に受け取りました</label></div></div><div class="form-card"><div class="form-section"><label class="form-label" for="ieMemo">メモ</label><input class="field" id="ieMemo" value="${esc(initial?.memo||'')}" placeholder="任意"></div></div><p class="form-helper">銀行への反映は既存の残高基準日時に従います。残高に含まれる過去の入金は二重に加算しません。</p></div>`,'full',root=>{
+    const amountButton=root.querySelector('#ieAmount');
+    amountButton.onclick=()=>openCalculator('収入額',amount,value=>{amount=value;amountButton.querySelector('.val').textContent=yen(value);markSheetDirty()});
+    root.querySelectorAll('#ieType button').forEach(button=>button.onclick=()=>{toType=button.dataset.type;markSheetDirty();root.querySelectorAll('#ieType button').forEach(x=>x.classList.toggle('on',x===button));root.querySelector('#ieBankWrap').classList.toggle('hidden',toType!=='bank')});
+    root.querySelector('#ieCancel').onclick=requestSheetClose;
+    root.querySelector('#ieSave').onclick=()=>{
+      const nextDate=root.querySelector('#ieDate').value,bankId=toType==='bank'?root.querySelector('#ieBank').value:'',received=root.querySelector('#ieReceived').checked;
+      if(!Number.isFinite(amount)||amount<=0)return showAlert('金額を確認してください','収入額は0円より大きい金額にしてください。');
+      if(!systemNoticeDay(nextDate)||nextDate>ymd())return showAlert('日付を確認してください','今日までの日付を入力してください。');
+      if(toType==='bank'&&!bankById(bankId))return showAlert('口座を選択してください','入金先の銀行口座が必要です。');
+      // Future schedules and unconfirmed receipts retain their existing dedicated workflow.
+      if(!received)return showAlert('入金状態を確認してください','日締めでは実際に受け取った収入を記録します。予定の編集は給与・臨時収入の画面で行ってください。');
+      const fields={date:nextDate,amount,sourceName:root.querySelector('#ieSource').value.trim()||'臨時収入',toType,bankId,memo:root.querySelector('#ieMemo').value.trim(),receivedConfirmed:true};
+      runSaveAction(root.querySelector('#ieSave'),()=>{
+        let income=incomeId?data.incomes.find(x=>x.id===incomeId):null;
+        if(incomeId&&!income)throw new Error('収入が見つかりません');
+        if(bankId)requireFinancialEntity('bank',bankId);
+        if(income){
+          const linked=data.tempIncomes.find(x=>x.id===income.tempIncomeId||x.incomeId===income.id);
+          reverseBankEffectForIncome(income);Object.assign(income,fields,{bankApplied:false,bankReconciled:false});
+          if(linked)Object.assign(linked,fields,{incomeId:income.id});
+          if(toType==='bank')applyBankEffectForIncome(income,{respectBalanceAsOf:true,eventAt:income.bankEffectAt||income.createdAt||`${nextDate}T00:00:00`});
+        }else{
+          const record={id:uid('tmp'),...fields,incomeId:''};
+          income=recordIncome({...fields,tempIncomeId:record.id,kind:'temporary',saveNow:false});
+          income.receivedConfirmed=true;record.incomeId=income.id;data.tempIncomes.push(record);
+        }
+      },{label:'received income edit',busy:true,success:initial?'収入を更新しました':'収入を追加しました',afterCommit:refreshFinancialViews,close:closeSheet});
+    };
+  });
 }
+/* Day closing records review evidence; approval never mutates the financial ledger. */
+const DAY_CLOSING_STEPS=['日締め','収入の照合','メール取引の照合','普通取引の照合','銀行残高の照合','承認','承認されました'];
+const DAY_CLOSING_GROUPS=['income','mail','ordinary','banks'];
+function dayClosingInRange(date){return !!systemNoticeDay(date)&&date<=ymd()&&date>=addDays(ymd(),-6)}
+function dayClosingMailForDate(date){
+  return data.mailImports.filter(mail=>{
+    const transaction=data.transactions.find(t=>t.id===mail.transactionId);
+    return mail.date===date||transaction?.date===date||(!mail.date&&mail.status==='pending'&&(date===ymd()||systemNoticeDay(mail.receivedAt||mail.createdAt)===date));
+  });
+}
+function dayClosingReviewItems(date){
+  const entry=(group,id,record,detail)=>({group,key:`${group}:${id}`,fingerprint:JSON.stringify(detail),record});
+  const income=incomesForDate(date).map(x=>entry('income',x.id,x,{id:x.id,date:x.date,amount:x.amount,sourceName:x.sourceName,toType:x.toType,bankId:x.bankId,memo:x.memo||'',receivedConfirmed:!!x.receivedConfirmed,bankApplied:!!x.bankApplied,bankReconciled:!!x.bankReconciled}));
+  const mail=dayClosingMailForDate(date).map(mi=>{
+    const tx=txForDate(date).find(t=>t.id===mi.transactionId||t.mailImportId===mi.id);
+    const item=entry('mail',mi.id,mi,{id:mi.id,date:mi.date||'',status:mi.status,amount:mi.amount,merchant:mi.merchant,category:mi.category,paymentMethod:mi.paymentMethod,paymentId:mi.paymentId,transactionId:mi.transactionId||'',direction:mi.direction||'expense',tx:tx?dayClosingTransactionFields(tx):null});
+    return {...item,transaction:tx,pending:mi.status==='pending'};
+  });
+  const mailIds=new Set(mail.map(x=>x.transaction?.id).filter(Boolean));
+  const ordinary=[];
+  for(const tx of txForDate(date)){
+    if(mailIds.has(tx.id))continue;
+    const isMail=tx.source==='gmail'||!!tx.mailImportId||data.mailImports.some(mi=>mi.transactionId===tx.id);
+    const item=entry(isMail?'mail':'ordinary',`tx:${tx.id}`,tx,dayClosingTransactionFields(tx));
+    if(isMail)mail.push({...item,transaction:tx,pending:false});else ordinary.push(item);
+  }
+  const banks=data.banks.map(bank=>entry('banks',bank.id,bank,{id:bank.id,name:bank.name,label:bank.label||'',balance:Number(bank.balance)||0,balanceAsOf:bank.balanceAsOf||''}));
+  return {income,mail,ordinary,banks};
+}
+function dayClosingTransactionFields(t){return {id:t.id,date:t.date,amount:t.amount,category:t.category,merchant:t.merchant,paymentMethod:t.paymentMethod,paymentId:t.paymentId,linkedBankId:t.linkedBankId||'',memo:t.memo||'',bankApplied:!!t.bankApplied,bankReconciled:!!t.bankReconciled}}
+function dayClosingSignature(date){
+  const items=dayClosingReviewItems(date),goal=dailyGoal(date);
+  const stable=list=>list.map(x=>({key:x.key,fingerprint:x.fingerprint})).sort((a,b)=>a.key.localeCompare(b.key));
+  return JSON.stringify({transactions:txForDate(date).map(dayClosingTransactionFields).sort((a,b)=>String(a.id).localeCompare(String(b.id))),incomes:stable(items.income),mail:stable(items.mail),correction:data.dailyCorrections[date]??null,goal:goal.total,categories:Object.entries(goal.categories||{}).sort(([a],[b])=>a.localeCompare(b))});
+}
+function dayClosingBankSignature(){return JSON.stringify(data.banks.map(b=>({id:b.id,name:b.name,label:b.label||'',balance:Number(b.balance)||0,balanceAsOf:b.balanceAsOf||''})).sort((a,b)=>String(a.id).localeCompare(String(b.id))))}
+function dayClosingApprovalSignature(date){return JSON.stringify({ledger:dayClosingSignature(date),banks:dayClosingBankSignature()})}
 function dayClosingStatus(date){
-  const record=data.dayClosings?.[date];
-  if(!record||record.status!=='closed')return 'open';
-  return record.signature===dayClosingSignature(date)?'closed':'changed';
+  const record=data.dayClosings?.[date];if(!record||record.status!=='closed')return 'open';
+  if(record.signature!==dayClosingSignature(date))return 'changed';
+  // A later day's bank movement must not invalidate an earlier day's approved snapshot.
+  return date===ymd()&&record.bankSignature&&record.bankSignature!==dayClosingBankSignature()?'changed':'closed';
 }
 function dayClosingLabel(date){return {closed:'締め済み',changed:'再確認が必要',open:''}[dayClosingStatus(date)]}
 function dayClosingMarkHtml(date){const status=dayClosingStatus(date);return status==='open'?'':`<span class="day-close-mark ${status}" aria-hidden="true">${status==='closed'?'✓':'!'}</span>`}
 function dayClosingCardHtml(date,id='todayDayClose'){
-  if(date>ymd())return '';
-  const status=dayClosingStatus(date),copy={open:'登録した支出を見直して、一日を締めましょう',closed:'確認済み。あとから取引を編集できます',changed:'締めた後に記録が変わっています'}[status];
-  return `<button type="button" class="day-closing-card ${status}" id="${id}"><span class="day-closing-symbol" aria-hidden="true">${status==='closed'?'✓':status==='changed'?'!':icon('check')}</span><span><strong>${status==='open'?'この日を締める':dayClosingLabel(date)}</strong><small>${copy}</small></span>${icon('chevronRight')}</button>`;
+  if(!dayClosingInRange(date))return '';
+  const status=dayClosingStatus(date),copy={open:'収入・取引・残高を順番に照合します',closed:'締め済み · 日締めジャーナルに保存しています',changed:'再確認が必要 · 承認後に記録が変わりました'}[status];
+  return `<button type="button" class="day-closing-card ${status}" id="${id}"><span class="day-closing-symbol" aria-hidden="true">${icon('dayClose')}</span><span><strong>日締め</strong><small>${copy}</small></span>${icon('chevronRight')}</button>`;
 }
-function recordDayClosing(date,{allowPending=false}={}){
-  requireStateCommit('recordDayClosing');
-  if(!systemNoticeDay(date)||date>ymd())throw new Error('未来の日付は締められません');
-  const pending=data.mailImports.filter(x=>x.status==='pending'&&(!x.date||x.date===date)).length;
-  if(pending&&!allowPending)throw new Error('未確認メールの確認が必要です');
-  const previous=data.dayClosings[date],categoryTotals={};
+function pruneDayClosingJournal(){
+  if(mm3PendingAsyncCommit)return false;
+  const kept=retainedDayClosings(data.dayClosings);if(Object.keys(kept).length===Object.keys(data.dayClosings).length)return false;
+  safeCommit(()=>{data.dayClosings=kept},{label:'day closing retention',invalidateAcf:false});return true;
+}
+function dayClosingGroupComplete(items,group,review){
+  const list=items[group];return list.length?list.every(x=>!x.pending&&review.checks?.[x.key]===x.fingerprint):review.emptyGroups?.includes(group);
+}
+function dayClosingReviewComplete(date,review){
+  if(!review||review.date!==date||review.signature!==dayClosingApprovalSignature(date))return false;
+  const items=dayClosingReviewItems(date);return DAY_CLOSING_GROUPS.every(group=>dayClosingGroupComplete(items,group,review));
+}
+function dayClosingSnapshot(date){
+  const items=dayClosingReviewItems(date),categoryTotals={};
   txForDate(date).forEach(t=>{categoryTotals[t.category]=(categoryTotals[t.category]||0)+(Number(t.amount)||0)});
-  data.dayClosings[date]={status:'closed',closedAt:new Date().toISOString(),signature:dayClosingSignature(date),snapshot:{total:spentDate(date),rawTotal:rawSpentDate(date),count:txForDate(date).length,goal:dailyGoal(date).total,categoryTotals,pendingCount:pending},history:[...(previous?.history||[]),...(previous?.closedAt?[{closedAt:previous.closedAt,snapshot:previous.snapshot}]:[])].slice(-5)};
+  const incomeTotal=sum(incomesForDate(date),x=>x.amount),banks=data.banks.map(b=>({id:b.id,name:b.name,label:b.label||'',balance:Number(b.balance)||0,balanceAsOf:b.balanceAsOf||''}));
+  return {total:spentDate(date),rawTotal:rawSpentDate(date),count:txForDate(date).length,incomeTotal,incomeCount:items.income.length,net:incomeTotal-spentDate(date),goal:dailyGoal(date).total,categoryTotals,pendingCount:items.mail.filter(x=>x.pending).length,banks,bankTotal:sum(banks,b=>b.balance),bankCheckedAt:new Date().toISOString(),incomes:incomesForDate(date).map(x=>({id:x.id,sourceName:x.sourceName,amount:x.amount,toType:x.toType,bankId:x.bankId,memo:x.memo||''})),transactions:txForDate(date).map(dayClosingTransactionFields),mail:items.mail.map(x=>({key:x.key,id:x.record.id,status:x.record.status||'imported',merchant:x.record.merchant||'',amount:x.record.amount,transactionId:x.transaction?.id||''})),reviewedCounts:Object.fromEntries(DAY_CLOSING_GROUPS.map(group=>[group,items[group].length]))};
+}
+function recordDayClosing(date,{review}={}){
+  requireStateCommit('recordDayClosing');
+  if(!dayClosingInRange(date))throw new Error('日締めは今日を含む直近7日間が対象です');
+  if(!dayClosingReviewComplete(date,review))throw new Error('未照合の項目、または確認後に変更された項目があります');
+  const previous=data.dayClosings[date];
+  data.dayClosings=retainedDayClosings(data.dayClosings);
+  data.dayClosings[date]={schemaVersion:2,status:'closed',closedAt:new Date().toISOString(),signature:dayClosingSignature(date),bankSignature:dayClosingBankSignature(),snapshot:dayClosingSnapshot(date),history:[...(previous?.history||[]),...(previous?.closedAt?[{closedAt:previous.closedAt,snapshot:previous.snapshot}]:[])].slice(-5)};
+}
+function dayClosingSummaryHtml(snapshot){
+  return `<div class="day-close-totals"><div><span>登録収入</span><strong class="green">${yen(snapshot.incomeTotal||0)}</strong></div><div><span>実質支出</span><strong>${yen(snapshot.total)}</strong></div><div><span>収支</span><strong class="${snapshot.net<0?'red':'green'}">${yen(snapshot.net??((snapshot.incomeTotal||0)-snapshot.total))}</strong></div><div><span>銀行残高合計</span><strong>${yen(snapshot.bankTotal||0)}</strong></div></div>${snapshot.rawTotal!==snapshot.total?`<p class="day-review-note">取引合計 ${yen(snapshot.rawTotal)} → 実質支出 ${yen(snapshot.total)}<br>既存の金額修正を反映しています。</p>`:''}`;
 }
 function openDayClosing(date=trackingDate){
-  if(!systemNoticeDay(date)||date>ymd())return showToast('今日までの日付を選んでください');
-  pushView('日締め','',root=>{
+  if(!dayClosingInRange(date))return showToast('日締めは今日を含む直近7日間が対象です');
+  return pushView('日締め','',root=>{
+    const state={step:0,checks:{},emptyGroups:[],confirmedSignature:'',saving:false};
+    root.classList.add('day-close-view');
+    const review=()=>({date,checks:{...state.checks},emptyGroups:[...state.emptyGroups],signature:dayClosingApprovalSignature(date)});
+    const complete=group=>dayClosingGroupComplete(dayClosingReviewItems(date),group,review());
+    const firstIncomplete=()=>DAY_CLOSING_GROUPS.findIndex(group=>!complete(group))+1;
+    const go=step=>{state.step=step;draw();root.querySelector('.push-body').scrollTop=0;root.querySelector('.day-close-heading')?.focus({preventScroll:true})};
+    const rowsHtml=(items,group)=>{
+      if(!items.length)return `<div class="day-close-empty">${icon(group==='banks'?'bank':group==='income'?'wallet':group==='mail'?'mail':'dayClose')}<strong>${group==='banks'?'登録された銀行口座はありません':group==='income'?'収入の記録はありません':group==='mail'?'この日のメール取引はありません':'普通取引の記録はありません'}</strong><p>${group==='banks'?'口座を追加するか、口座がないことを確認してください。':'入力漏れがないことを確認して次へ進みましょう。'}</p></div><label class="day-review-check"><input type="checkbox" data-empty-group="${group}" ${state.emptyGroups.includes(group)?'checked':''}>${group==='banks'?'銀行口座がないことを確認しました':'記録がないことを確認しました'}</label>`;
+      return `<div class="day-close-items">${items.map(item=>{
+        const record=item.record,tx=item.transaction||((group==='ordinary')?record:null),isBank=group==='banks',isIncome=group==='income';
+        const title=isBank?record.name:isIncome?record.sourceName:tx?.merchant||record.merchant||record.subject||'メール取引';
+        const amount=isBank?record.balance:isIncome?record.amount:tx?.amount??record.amount;
+        const subtitle=isBank?(record.label||'銀行口座'):isIncome?(record.toType==='bank'?bankById(record.bankId)?.name||'口座未設定':'現金・その他'):tx?`${tx.category} · ${paymentLabel(tx)}`:record.status==='ignored'?'対象外として確認済み':record.status==='info'?'情報のみ · 家計への反映なし':'まだ家計に反映されていません';
+        const checked=state.checks[item.key]===item.fingerprint;
+        return `<article class="day-close-item ${checked?'checked':''}"><label class="day-close-item-check"><input type="checkbox" data-close-key="${esc(item.key)}" ${checked?'checked':''} ${item.pending?'disabled':''} aria-label="${esc(title)}を照合"><span><strong>${esc(title||'収入')}</strong><small>${esc(subtitle)}</small>${item.pending?'<small class="orange">承認または対象外の確認が必要です</small>':''}</span><b class="${isIncome?'green':''}">${yen(amount)}</b></label><div class="day-close-item-actions"><span>${item.pending?'確認待ち':checked?'照合済み':'未照合'}</span><button type="button" class="day-close-edit" data-close-edit="${esc(item.key)}">${isBank?'残高を修正':item.pending?'確認する':tx||isIncome?'編集':'詳細'}</button></div></article>`;
+      }).join('')}</div>`;
+    };
     const draw=()=>{
-      const body=root.querySelector('.push-body'),status=dayClosingStatus(date),record=data.dayClosings[date],total=spentDate(date),raw=rawSpentDate(date),goal=dailyGoal(date).total,tx=txForDate(date),pending=data.mailImports.filter(x=>x.status==='pending'&&(!x.date||x.date===date)).length;
-      body.innerHTML=`<div class="day-review-date">${dayLabel(date)}</div><div class="day-review-hero"><span>${status==='closed'?'確認した登録支出':date===ymd()?'今日の登録支出を確認':'この日の登録支出を確認'}</span><strong>${yen(total)}</strong><small>${tx.length}件${goal?`・目標まで ${yen(goal-total)}`:'・目標未設定'}</small>${raw!==total?`<p>取引合計 ${yen(raw)} → 実質支出 ${yen(total)}<br>登録済みの金額修正を反映しています</p>`:''}</div>${status==='changed'?'<p class="day-review-warning">締めた後に取引・金額・目標が変わりました。もう一度確認してください。</p>':''}${record?.closedAt?`<p class="day-review-note">前回の確認 ${esc(new Date(record.closedAt).toLocaleString('ja-JP'))}・${yen(record.snapshot?.total||0)}</p>`:''}<div class="section-head">支出の内訳</div>${tx.length?`<div class="group">${tx.map(t=>`<button type="button" class="row press" data-review-tx="${esc(t.id)}"><span class="row-main"><span class="row-title">${esc(t.merchant||t.category)}</span><span class="row-sub">${esc(t.category)}・${esc(paymentLabel(t))}</span></span><span class="row-value">${yen(t.amount)}</span><span class="chev">›</span></button>`).join('')}</div>`:'<div class="empty">支出の記録はありません。使っていない日も確認できます。</div>'}<div class="day-review-actions"><button type="button" class="secondary" id="dayReviewAdd">支出を追加</button><button type="button" class="secondary" id="dayReviewCorrection">実質金額を確認</button></div>${pending?`<div class="day-review-warning"><button type="button" class="day-review-mail" id="dayReviewMail">未確認メール ${pending}件を確認 ›</button><label class="day-review-check"><input type="checkbox" id="dayReviewPending">未確認を残したまま締める</label></div>`:''}${status==='closed'?'<p class="day-review-note">締め済みです。編集すると再確認が必要になります。</p><button type="button" class="secondary" id="dayReviewReopen">締めを解除する</button>':`<label class="day-review-check"><input type="checkbox" id="dayReviewConfirmed">支出と入力漏れを確認しました</label><button type="button" class="primary" id="dayReviewClose" disabled>${status==='changed'?'確認し直して締める':'この日を締める'}</button>`}<p class="day-review-note">日締めは確認の記録です。残高・支払い・取引は変更しません。後から編集できます。</p>`;
-      body.querySelectorAll('[data-review-tx]').forEach(b=>b.onclick=()=>openTransactionEdit(b.dataset.reviewTx));
-      body.querySelector('#dayReviewAdd').onclick=()=>openQuickExpense(date);
-      body.querySelector('#dayReviewCorrection').onclick=()=>openDailyCorrectionDetail(date);
+      if(!root.isConnected)return;
+      const items=dayClosingReviewItems(date),snapshot=dayClosingSnapshot(date),body=root.querySelector('.push-body'),status=dayClosingStatus(date),record=data.dayClosings[date];
+      // Only a matching fingerprint can remain checked after edits, imports or balance changes.
+      const live=new Map(Object.values(items).flat().map(x=>[x.key,x.fingerprint]));
+      for(const key of Object.keys(state.checks))if(state.checks[key]!==live.get(key))delete state.checks[key];
+      state.emptyGroups=state.emptyGroups.filter(group=>!items[group].length);
+      if(state.confirmedSignature!==dayClosingApprovalSignature(date))state.confirmedSignature='';
+      if(state.step===6&&status!=='closed')state.step=5;
+      const header=`<div class="day-close-date">${dayLabel(date)}</div><ol class="day-close-progress" aria-label="日締めの進行状況">${DAY_CLOSING_STEPS.map((label,index)=>`<li class="${index<state.step?'done':index===state.step?'current':''}" ${index===state.step?'aria-current="step"':''}><span>${index<state.step?icon('check'):index+1}</span><span class="visually-hidden">${esc(label)}</span></li>`).join('')}</ol><div class="day-close-kicker">ステップ ${state.step+1} / 7</div><h2 class="day-close-heading" tabindex="-1">${DAY_CLOSING_STEPS[state.step]}</h2>`;
+      let content='';
+      if(state.step===0){
+        content=`<div class="day-close-opening"><div class="day-close-emblem">${icon('dayClose')}</div><h3>一日の記録を、ひとつずつ。</h3><p>収入、メール取引、普通取引、銀行残高を照合して、一日を締めましょう。</p></div>${dayClosingSummaryHtml(snapshot)}${status==='changed'?'<p class="day-review-warning">承認後に記録が変わりました。もう一度照合してください。</p>':''}${record?.closedAt?`<p class="day-review-note">前回の承認 ${esc(new Date(record.closedAt).toLocaleString('ja-JP'))} · ${dayClosingLabel(date)}</p>`:''}<button type="button" class="day-close-journal-link" id="dayCloseJournal">${icon('journal')}日締めジャーナル<span>›</span></button><p class="day-review-note">直近7日間の承認記録を保存します。締めたあとも取引を編集できます。</p>${status==='closed'?'<button type="button" class="secondary" id="dayReviewReopen">日締めを解除する</button>':''}`;
+      }else if(state.step>=1&&state.step<=4){
+        const group=DAY_CLOSING_GROUPS[state.step-1],notes={income:'この日の登録収入を確認します。入金予定と実際の入金を区別し、必要なら編集してください。',mail:'メールの内容と登録取引を照合します。確認待ちは既存の取込画面で承認・照合・対象外の処理をしてください。',ordinary:'手入力・固定支払い・明細取込など、メール以外の取引を確認します。返金はマイナスで表示します。',banks:'銀行アプリや通帳の残高と、登録残高を照合してください。確認時点の残高を保存します。'};
+        content=`<p class="day-close-description">${notes[group]}</p>${group==='banks'?`<div class="day-close-stage-total"><span>現在の銀行残高合計</span><strong>${yen(snapshot.bankTotal)}</strong></div><p class="day-review-note">${date===ymd()?'':'過去の日付を締める場合も、'}銀行残高は確認時点の値です。過去の一日の最終残高を推定しません。残高修正は既存の残高照合処理で記帳します。</p>`:`<div class="day-close-stage-total"><span>${group==='income'?'登録収入':group==='mail'?'メールの登録取引':'普通取引'} · ${items[group].length}件</span><strong>${yen(group==='income'?snapshot.incomeTotal:sum([...new Map(items[group].map(x=>[x.transaction?.id||x.record.id,x.transaction||(group==='ordinary'?x.record:null)])).values()].filter(Boolean),x=>x.amount))}</strong></div>`}${rowsHtml(items[group],group)}<div class="day-review-actions">${group==='income'?'<button type="button" class="secondary" id="dayCloseAddIncome">収入を追加</button>':group==='ordinary'?'<button type="button" class="secondary" id="dayReviewAdd">支出を追加</button><button type="button" class="secondary" id="dayReviewCorrection">実質金額を確認</button>':group==='mail'?'<button type="button" class="secondary" id="dayReviewMail">メール取引センター</button>':!items.banks.length?'<button type="button" class="secondary" id="dayCloseAddBank">銀行口座を追加</button>':''}</div>`;
+      }else if(state.step===5){
+        const missing=firstIncomplete();
+        content=`<p class="day-close-description">収入・支出・照合した銀行残高を最終確認して承認します。</p>${dayClosingSummaryHtml(snapshot)}<div class="day-close-bank-summary">${snapshot.banks.map(bank=>`<div><span>${esc(bank.name)}</span><strong>${yen(bank.balance)}</strong></div>`).join('')}</div><p class="day-review-note">銀行残高は確認時点の値です。収支と銀行残高の増減は、カード支払いや残高修正などにより一致しない場合があります。</p>${missing?'<div class="day-review-warning">未照合または変更された項目があります。<button type="button" class="day-review-mail" id="dayCloseMissing">未確認の項目に戻る ›</button></div>':''}<div class="day-review-actions"><button type="button" class="secondary" id="dayCloseAddIncome">収入を追加</button><button type="button" class="secondary" id="dayReviewAdd">支出を追加</button></div><label class="day-review-check"><input type="checkbox" id="dayReviewConfirmed" ${state.confirmedSignature?'checked':''} ${missing?'disabled':''}>照合結果を確認し、この内容で承認します</label><p class="day-review-note">承認は照合の記録です。取引や残高の金額は変更しません。</p>`;
+      }else{
+        content=`<div class="day-close-success"><div>${icon('check')}</div><h3>承認されました</h3><p>${dayLabel(date)}の日締めを保存しました。</p></div>${dayClosingSummaryHtml(record.snapshot)}<p class="day-review-note">承認 ${esc(new Date(record.closedAt).toLocaleString('ja-JP'))}<br>日締めジャーナルに7日間保存します。取引を変更した場合は再確認が必要です。</p><button type="button" class="secondary" id="dayCloseJournal">日締めジャーナルを見る</button>`;
+      }
+      const canNext=state.step===0||state.step===6||(state.step<5&&complete(DAY_CLOSING_GROUPS[state.step-1]));
+      body.innerHTML=`<div class="day-close-content">${header}${content}</div><div class="day-close-footer">${state.step>0&&state.step<6?'<button type="button" class="secondary" id="dayCloseBack">戻る</button>':''}<button type="button" class="primary" id="${state.step===5?'dayReviewClose':'dayCloseNext'}" ${state.saving||(!(state.step===5?state.confirmedSignature&&!firstIncomplete():canNext))?'disabled':''}>${state.step===0?'進む':state.step===5?'承認して日締め':state.step===6?'完了':'次へ'}</button></div>`;
+      body.querySelectorAll('[data-close-key]').forEach(input=>input.onchange=()=>{const item=Object.values(dayClosingReviewItems(date)).flat().find(x=>x.key===input.dataset.closeKey);if(item&&!item.pending&&input.checked)state.checks[item.key]=item.fingerprint;else delete state.checks[input.dataset.closeKey];draw()});
+      body.querySelectorAll('[data-empty-group]').forEach(input=>input.onchange=()=>{state.emptyGroups=state.emptyGroups.filter(g=>g!==input.dataset.emptyGroup);if(input.checked)state.emptyGroups.push(input.dataset.emptyGroup);draw()});
+      body.querySelectorAll('[data-close-edit]').forEach(button=>button.onclick=()=>{const item=Object.values(dayClosingReviewItems(date)).flat().find(x=>x.key===button.dataset.closeEdit);if(!item)return;if(item.group==='income')openIncomeEditor(item.record.id,date);else if(item.group==='banks')openQuickBank(item.record.id);else if(item.pending)openMailResolve(item.record.id);else if(item.transaction||item.group==='ordinary')openTransactionEdit((item.transaction||item.record).id);else openMailHistory(item.record.status==='ignored'?'ignored':'all')});
+      body.querySelector('#dayCloseBack')?.addEventListener('click',()=>go(state.step-1));
+      body.querySelector('#dayCloseNext')?.addEventListener('click',()=>{if(state.step===6)popView();else if(state.step===0||complete(DAY_CLOSING_GROUPS[state.step-1]))go(state.step+1)});
+      body.querySelector('#dayCloseJournal')?.addEventListener('click',openDayClosingJournal);
+      body.querySelector('#dayCloseAddIncome')?.addEventListener('click',()=>{if(state.step===5)go(1);openIncomeEditor('',date)});
+      body.querySelector('#dayReviewAdd')?.addEventListener('click',()=>{if(state.step===5)go(3);openQuickExpense(date)});
+      body.querySelector('#dayReviewCorrection')?.addEventListener('click',()=>openDailyCorrectionDetail(date));
       body.querySelector('#dayReviewMail')?.addEventListener('click',openMailOverview);
-      const confirm=body.querySelector('#dayReviewConfirmed'),allow=body.querySelector('#dayReviewPending'),close=body.querySelector('#dayReviewClose');
-      const update=()=>{if(close)close.disabled=!confirm.checked||!!(allow&&!allow.checked)};
-      confirm?.addEventListener('change',update);allow?.addEventListener('change',update);
-      if(close)close.onclick=async()=>{close.disabled=true;try{await runWithBusy(()=>safeCommitAsync(()=>recordDayClosing(date,{allowPending:!!allow?.checked}),{render:true,label:'day closing'}),{title:'日締めを保存中…'});showToast('一日の支出を確認しました')}catch{close.disabled=false}};
-      body.querySelector('#dayReviewReopen')?.addEventListener('click',async()=>{try{await runWithBusy(()=>safeCommitAsync(()=>{data.dayClosings[date]={...data.dayClosings[date],status:'open',reopenedAt:new Date().toISOString()}},{render:true,label:'reopen day'}),{title:'日締めを更新中…'})}catch{}});
+      body.querySelector('#dayCloseAddBank')?.addEventListener('click',()=>openAddBank());
+      body.querySelector('#dayCloseMissing')?.addEventListener('click',()=>go(firstIncomplete()));
+      body.querySelector('#dayReviewConfirmed')?.addEventListener('change',event=>{state.confirmedSignature=event.target.checked?dayClosingApprovalSignature(date):'';draw()});
+      body.querySelector('#dayReviewClose')?.addEventListener('click',async()=>{
+        if(state.saving||!state.confirmedSignature)return;
+        const approval={...review(),signature:state.confirmedSignature};state.saving=true;draw();
+        try{
+          await runWithBusy(()=>safeCommitAsync(()=>recordDayClosing(date,{review:approval}),{render:true,label:'day closing approval',invalidateAcf:false}),{title:'日締めを保存しています…',sub:'照合結果を端末に保存しています'});
+          state.saving=false;state.step=6;draw();feedback.approval();showToast('日締めを承認しました');
+        }catch(error){state.saving=false;state.confirmedSignature='';draw();showToast(error.message||'日締めを保存できませんでした',{tone:'error'})}
+      });
+      body.querySelector('#dayReviewReopen')?.addEventListener('click',async()=>{
+        if(state.saving)return;state.saving=true;draw();
+        try{await runWithBusy(()=>safeCommitAsync(()=>{const latest=data.dayClosings[date];if(latest)data.dayClosings[date]={...latest,status:'open',reopenedAt:new Date().toISOString()}},{render:true,label:'reopen day closing',invalidateAcf:false}),{title:'日締めを更新しています…'});showToast('日締めを解除しました')}catch{}
+        finally{state.saving=false;draw()}
+      });
+      const back=root.querySelector('.back-btn');if(back){back.disabled=state.saving;back.onclick=()=>{if(state.saving)return;if(state.step>0&&state.step<6)go(state.step-1);else popView()}}
     };
     root.__refreshDayClosing=draw;draw();
   });
+}
+function openDayClosingJournal(){
+  return pushView('日締めジャーナル','',root=>{
+    const draw=()=>{
+      const records=Object.entries(retainedDayClosings(data.dayClosings)).filter(([,record])=>record.closedAt&&record.snapshot).sort(([a],[b])=>b.localeCompare(a));
+      root.querySelector('.push-body').innerHTML=`<p class="day-close-description">今日を含む直近7日間の承認記録です。保存された照合結果と、現在の記録の変更状況を確認できます。</p>${records.length?records.map(([date,record])=>`<button type="button" class="day-close-journal-card" data-journal-date="${date}"><div><strong>${dayLabel(date)}</strong><span class="${dayClosingStatus(date)==='closed'?'green':'orange'}">${dayClosingLabel(date)||'解除済み'}</span></div><div><span>収入 ${yen(record.snapshot.incomeTotal||0)}</span><span>支出 ${yen(record.snapshot.total)}</span></div><small>承認 ${esc(new Date(record.closedAt).toLocaleString('ja-JP'))}</small><span class="chev">›</span></button>`).join(''):'<div class="day-close-empty">'+icon('journal')+'<strong>まだ承認記録はありません</strong><p>日締めを承認すると、ここに保存されます。</p></div>'}<p class="day-review-note">7日を過ぎた日締め記録は自動削除します。取引・収入・銀行口座のデータは保持します。</p>`;
+      root.querySelectorAll('[data-journal-date]').forEach(button=>button.onclick=()=>openDayClosingJournalDetail(button.dataset.journalDate));
+    };root.__refreshDayClosing=draw;draw();
+  });
+}
+function openDayClosingJournalDetail(date){
+  const record=data.dayClosings[date];if(!record?.snapshot)return;
+  const snapshot=clone(record.snapshot),approvedAt=record.closedAt;
+  return pushView(dayLabel(date),`<h2 class="day-close-heading">日締めジャーナル</h2><p class="day-close-description">承認した時点の照合結果です。</p>${dayClosingSummaryHtml(snapshot)}<div class="section-head">照合した銀行残高</div><div class="day-close-bank-summary">${(snapshot.banks||[]).map(bank=>`<div><span>${esc(bank.name)}</span><strong>${yen(bank.balance)}</strong></div>`).join('')||'<p class="day-review-note">口座の記録はありません。</p>'}</div><p class="day-review-note">残高の確認時点 ${esc(new Date(snapshot.bankCheckedAt||approvedAt).toLocaleString('ja-JP'))}</p><div class="section-head">収入</div><div class="group">${(snapshot.incomes||[]).map(x=>`<div class="row"><span class="row-main">${esc(x.sourceName)}</span><strong class="green">${yen(x.amount)}</strong></div>`).join('')||'<div class="row">記録なし</div>'}</div><div class="section-head">支出・返金</div><div class="group">${(snapshot.transactions||[]).map(t=>`<div class="row"><span class="row-main"><span class="row-title">${esc(t.merchant)}</span><span class="row-sub">${esc(t.category)}</span></span><strong>${yen(t.amount)}</strong></div>`).join('')||'<div class="row">記録なし</div>'}</div><p class="day-review-note">承認 ${esc(new Date(approvedAt).toLocaleString('ja-JP'))}</p><button type="button" class="secondary" id="journalReview">この日を確認し直す</button>`,root=>root.querySelector('#journalReview').onclick=()=>openDayClosing(date));
 }
 /* Credentials stay outside financial backups; publishing the UI does not enable Push. */
 const PUSH_DEVICE_KEY = "myMoney3_pushDevice_v1";
@@ -3792,7 +3993,7 @@ function openMonthCloseReview(month=currentMonth){pushView('月締めレビュ�
 
 
 
-function renderAll(){try{processScheduled()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('scheduled processing failed',e)}try{pruneExpiredSystemNotices();generateSystemNotices();for(const view of pushStack)document.getElementById(view.id)?.__refreshNotices?.()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('notice generation failed',e)}for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();applyAppearance();if(activeTab==='today')renderToday();else if(activeTab==='month')renderMonth();else if(activeTab==='pay')renderPay();else if(activeTab==='payments')renderPayments();else if(activeTab==='assets')renderAssets();else renderSettings();updateHomeTabButton();if(data.meta?.storageWriteError&&!storageErrorToastShown){storageErrorToastShown=true;setTimeout(()=>showToast('端末へ保存できません。空き容量やSafariのストレージ設定を確認してください。',{tone:'error',duration:7000}),0)}}
+function renderAll(){try{processScheduled()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('scheduled processing failed',e)}try{pruneDayClosingJournal();pruneExpiredSystemNotices();generateSystemNotices();for(const view of pushStack)document.getElementById(view.id)?.__refreshNotices?.()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('notice generation failed',e)}for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();applyAppearance();if(activeTab==='today')renderToday();else if(activeTab==='month')renderMonth();else if(activeTab==='pay')renderPay();else if(activeTab==='payments')renderPayments();else if(activeTab==='assets')renderAssets();else renderSettings();updateHomeTabButton();if(data.meta?.storageWriteError&&!storageErrorToastShown){storageErrorToastShown=true;setTimeout(()=>showToast('端末へ保存できません。空き容量やSafariのストレージ設定を確認してください。',{tone:'error',duration:7000}),0)}}
 updateHomeTabButton();
 /* === end IA patch === */
 
@@ -3929,7 +4130,7 @@ function _openAcfDetailImmediate(){
     };draw()
   })
 }
-function openAcfDetail(){showBusy('ACFを更新中…','給与・カード・固定支払いを確認しています');requestAnimationFrame(()=>setTimeout(()=>{try{_openAcfDetailImmediate()}finally{hideBusy()}},36))}
+function openAcfDetail(){return runWithBusy(_openAcfDetailImmediate,{title:'ACFを更新中…',sub:'給与・カード・固定支払いを確認しています'}).catch(error=>{console.error('ACF view failed',error);showToast('ACFを表示できませんでした',{tone:'error'})})}
 
 function openAcfSettings(){
   const settings={...acfDefaultSettings(),creditAllowedCategoryIds:[...(acfDefaultSettings().creditAllowedCategoryIds||[])],creditAllowedMerchants:[...(acfDefaultSettings().creditAllowedMerchants||[])],creditBlockedMerchants:[...(acfDefaultSettings().creditBlockedMerchants||[])]};
@@ -3969,11 +4170,11 @@ async function syncGmail({silent=false}={}){
   if(!gmailTokenValid()){if(!silent)await connectGmail();return}
   gmailSyncing=true;
   const reviewIds=[];let added=0,reparsed=0;
-  if(!silent&&!document.querySelector('.mail-center-view'))showBusy('メールを確認しています…','Gmailから新しい金融メールを探しています');
+  const busyToken=!silent&&!document.querySelector('.mail-center-view')?beginBusy('メールを確認しています…','Gmailから新しい金融メールを探しています'):null;
   try{
     const q=String(data.gmailSettings.query||DEFAULT_DATA.gmailSettings.query).trim();let pageToken='',ids=[],pages=0;
     do{const u=new URL('https://gmail.googleapis.com/gmail/v1/users/me/messages');u.searchParams.set('maxResults','100');if(q)u.searchParams.set('q',q);if(pageToken)u.searchParams.set('pageToken',pageToken);const list=await gmailFetch(u.toString());ids.push(...(list.messages||[]).map(x=>x.id));pageToken=list.nextPageToken||'';pages++}while(pageToken&&pages<3);
-    if(!silent){if(!document.querySelector('.mail-center-view'))showBusy('金額と利用先を読み取っています…',`${Math.min(ids.length,200)}件まで確認します`);await new Promise(r=>requestAnimationFrame(r))}
+    if(!silent){if(busyToken)updateBusy(busyToken,'金額と利用先を読み取っています…',`${Math.min(ids.length,200)}件まで確認します`);await new Promise(r=>requestAnimationFrame(r))}
     const parsedMessages=[],byEmail=new Map(data.mailImports.map(x=>[x.emailId,x])),targets=ids.filter(id=>{const old=byEmail.get(id);return !old||Number(old.parserVersion||0)<GMAIL_PARSER_VERSION}).slice(0,200);
     for(let i=0;i<targets.length;i+=6){
       const batch=targets.slice(i,i+6),messages=await Promise.all(batch.map(id=>gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(id)}?format=full`)));
@@ -3989,10 +4190,10 @@ async function syncGmail({silent=false}={}){
         const keep={id:old.id,createdAt:old.createdAt||parsed.createdAt};Object.assign(old,parsed,keep,{transactionId:''});if(old.status!=='ignored'){prepareMailForReview(old);reviewIds.push(old.id)}reparsed++
 }data.gmailSettings.lastSyncAt=new Date().toISOString()},{label:'gmail sync'});
     refreshUnknownMailView();
-    if(!silent){if(!document.querySelector('.mail-center-view'))showBusy('読み取り結果を準備しています…',reviewIds.length?`${reviewIds.length}件を確認してください`:'新しい取引はありません');await new Promise(r=>setTimeout(r,80));hideBusy();if(reviewIds.length)openGmailReview(reviewIds);else await showAlert('メールを確認しました','新しい支払いメールはありませんでした。',{okText:'OK',cancelText:'閉じる'})}
+    if(!silent){if(busyToken){updateBusy(busyToken,'読み取り結果を準備しています…',reviewIds.length?`${reviewIds.length}件を確認してください`:'新しい取引はありません');await endBusy(busyToken)}if(reviewIds.length)openGmailReview(reviewIds);else await showAlert('メールを確認しました','新しい支払いメールはありませんでした。',{okText:'OK',cancelText:'閉じる'})}
     else if(reviewIds.length)addNotice('Gmailに確認待ちの取引があります',`${reviewIds.length}件の読み取り結果を確認してください。`,'warning',false);
     if(activeTab==='today')renderToday();else if(activeTab==='month')renderMonth();else if(activeTab==='settings')renderSettings()
-  }catch(e){console.error(e);hideBusy();if(!silent)showAlert('Gmail同期に失敗しました',e.message)}finally{gmailSyncing=false;hideBusy()}
+  }catch(e){console.error(e);if(busyToken)await endBusy(busyToken);if(!silent)showAlert('Gmail同期に失敗しました',e.message)}finally{gmailSyncing=false;for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();if(busyToken)await endBusy(busyToken)}
 };
 
 /* Pending now means any mail waiting for user review, not only an unknown category. */
@@ -5346,9 +5547,11 @@ mm3BindAssets=function(){
 /* End UI-20260917 accessibility lifecycle. */
 
 try{await saveAsync({snapshot:data})}catch(e){console.warn('initial persistence unavailable',e);data.meta={...(data.meta||{}),storageWriteError:true}}
-renderAll();void initializeWebPush();renderLock();initializeTabIndicator();mm3BootLayer.remove();
+updateBootMessage('画面を準備しています…','集計結果を画面に反映しています');
+renderAll();void initializeWebPush();renderLock();initializeTabIndicator();
+await waitForUiPaint();const bootRemaining=700-(performance.now()-mm3BootStarted);if(bootRemaining>0)await new Promise(resolve=>setTimeout(resolve,bootRemaining));await waitForUiPaint();mm3BootLayer.remove();
 function appMaintenance(){
-  try{if(pruneExpiredSystemNotices())renderAll()}catch(e){console.error('notice expiry failed',e)}
+  try{const noticesChanged=pruneExpiredSystemNotices(),journalChanged=pruneDayClosingJournal();if(noticesChanged||journalChanged)renderAll()}catch(e){console.error('app maintenance failed',e)}
   queuePushSummary();maybeAutoSyncGmail(false);
 }
 setTimeout(()=>maybeAutoSyncGmail(true),1800);setInterval(appMaintenance,60000);

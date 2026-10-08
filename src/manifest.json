@@ -12,6 +12,7 @@
     "src/js/07-navigation.js",
     "src/js/calculator.js",
     "src/js/month-picker.js",
+    "src/js/income-editor.js",
     "src/js/day-closing.js",
     "src/js/web-push.js",
     "src/js/08-transactions.js",

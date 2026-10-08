@@ -1,4 +1,87 @@
-.day-closing-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--sep);background:var(--card);color:var(--label);padding:14px 16px;border-radius:20px;margin:12px 0;font:inherit}.day-closing-card>span:nth-child(2){flex:1;min-width:0}.day-closing-card strong{display:block;font-size:15px}.day-closing-card small{display:block;font-size:12px;color:var(--label2);margin-top:4px;line-height:1.5}.day-closing-card svg{width:18px;height:18px}.day-closing-symbol{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border-radius:50%;background:var(--fill2);color:var(--blue);font-size:21px}.day-closing-card.closed .day-closing-symbol{background:#34c75920;color:var(--green)}.day-closing-card.changed .day-closing-symbol{background:#ff950020;color:var(--orange)}.day-close-mark{font-size:9px;color:var(--green);margin-left:2px}.day-close-mark.changed{color:var(--orange)}
-.day-review-date{font-size:17px;font-weight:600;margin:4px 0 18px}.day-review-hero{display:flex;flex-direction:column;align-items:center;padding:24px 12px;background:var(--card);border-radius:24px;gap:8px}.day-review-hero>span{font-size:13px;color:var(--label2)}.day-review-hero>strong{font-size:40px;font-weight:500;max-width:100%;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}.day-review-hero small{color:var(--label2)}.day-review-hero p{font-size:12px;line-height:1.6;text-align:center}.day-review-note{font-size:12px;line-height:1.7;color:var(--label2);margin:16px 4px}.day-review-warning{padding:14px;border-radius:16px;background:#ff950014;color:var(--label);font-size:13px;line-height:1.6;margin:16px 0}.day-review-actions{display:flex;gap:10px;margin-top:14px}.day-review-actions button{flex:1;font-size:14px}.day-review-check{display:flex;align-items:center;gap:10px;min-height:52px;font-size:14px}.day-review-check input{width:22px;height:22px;accent-color:var(--blue)}.day-review-mail{border:0;background:transparent;color:var(--blue);font:inherit}.push-status-note{font-size:13px;line-height:1.7;color:var(--label2)}.push-status{font-size:15px;font-weight:600}.push-field-label{display:block;font-size:13px;color:var(--label2);margin-top:14px}.push-connection-input{width:100%;box-sizing:border-box;min-height:44px;border:1px solid var(--sep);background:var(--card);color:var(--label);border-radius:12px;padding:10px;font:inherit}.push-time-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}.push-time-row input{background:var(--card);color:var(--label);border:1px solid var(--sep);border-radius:10px;padding:10px;font:inherit;min-height:44px}
-
-.day-closing-card svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* Day closing uses the same cards, form sheets and system colours as the rest of My Money. */
+.day-closing-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--sep);background:var(--card);color:var(--label);padding:14px 16px;border-radius:20px;margin:12px 0;font:inherit}
+.day-closing-card>span:nth-child(2){flex:1;min-width:0}
+.day-closing-card strong{display:block;font-size:15px}
+.day-closing-card small{display:block;font-size:12px;color:var(--label2);margin-top:4px;line-height:1.5}
+.day-closing-card svg{width:18px;height:18px}
+.day-closing-symbol{display:grid;place-items:center;flex-shrink:0;width:38px;height:38px;border-radius:12px;background:#007aff12;color:var(--blue)}
+.day-closing-card.closed .day-closing-symbol{background:#34c75920;color:var(--green)}
+.day-closing-card.changed .day-closing-symbol{background:#ff950020;color:var(--orange)}
+.day-close-mark{font-size:9px;color:var(--green);margin-left:2px}
+.day-close-mark.changed{color:var(--orange)}
+.day-close-view .push-body{display:flex;flex-direction:column;gap:0;scroll-padding-bottom:120px}
+.day-close-content{flex:1;min-width:0;padding-bottom:12px}
+.day-close-progress svg{width:13px;height:13px}
+.day-close-date{font-size:13px;font-weight:500;color:var(--label2);margin:4px 0 18px}
+.day-close-progress{list-style:none;display:flex;justify-content:space-between;gap:7px;padding:0;margin:0 0 20px}
+.day-close-progress li{position:relative;flex:1;display:flex;align-items:center;justify-content:center}
+.day-close-progress li+li:before{content:'';position:absolute;height:1px;background:var(--sep);left:-50%;right:50%;z-index:0}
+.day-close-progress li>span:first-child{position:relative;display:grid;place-items:center;width:27px;height:27px;z-index:1;border-radius:50%;background:var(--fill2);color:var(--label2);font-size:11px;font-weight:650;box-shadow:0 0 0 5px var(--bg)}
+.day-close-progress .current>span:first-child{background:var(--blue);color:#fff;box-shadow:0 0 0 5px var(--bg),0 0 0 6px #007aff30}
+.day-close-progress .done>span:first-child{background:var(--green);color:#fff}
+.day-close-kicker{font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--blue);margin-bottom:8px}
+.day-close-heading{font-size:26px;font-weight:700;letter-spacing:-.04em;line-height:1.25;margin:0 0 14px;outline:none}
+.day-close-description{font-size:13px;color:var(--label2);line-height:1.8;margin:0 0 18px}
+.day-close-opening{padding:20px 8px 24px;text-align:center}
+.day-close-emblem{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 18px;background:linear-gradient(145deg,#007aff20,#5ac8fa0d);border:1px solid #007aff20;border-radius:21px;color:var(--blue)}
+.day-close-emblem svg{width:34px;height:34px}
+.day-close-opening h3{font-size:20px;letter-spacing:-.03em;margin:0 0 10px}
+.day-close-opening p{font-size:13px;line-height:1.8;color:var(--label2);margin:0 auto;max-width:290px}
+.day-close-totals{display:grid;grid-template-columns:1fr 1fr;gap:1px;overflow:hidden;border-radius:22px;border:1px solid var(--sep);background:var(--sep)}
+.day-close-totals>div{min-width:0;background:var(--card);padding:18px 14px;display:flex;flex-direction:column;gap:8px}
+.day-close-totals span{font-size:12px;color:var(--label2)}
+.day-close-totals strong{font-size:22px;font-weight:600;letter-spacing:-.035em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.day-close-stage-total{background:var(--card);border:1px solid var(--sep);border-radius:20px;padding:18px;margin:0 0 18px;display:flex;flex-direction:column;gap:8px}
+.day-close-stage-total span{font-size:12px;color:var(--label2)}
+.day-close-stage-total strong{font-size:32px;letter-spacing:-.04em;font-weight:600;overflow-wrap:anywhere}
+.day-close-items{display:grid;gap:10px}
+.day-close-item{background:var(--card);border:1px solid var(--sep);border-radius:19px;padding:14px 14px 6px;transition:border-color .15s}
+.day-close-item.checked{border-color:#34c75965}
+.day-close-item-check{display:flex;gap:11px;align-items:flex-start;min-height:44px}
+.day-close-item-check input{width:23px;height:23px;margin:2px 0 0;accent-color:var(--green);flex:0 0 23px}
+.day-close-item-check>span{flex:1;min-width:0;overflow-wrap:anywhere}
+.day-close-item-check strong{display:block;font-size:14px;font-weight:600;line-height:1.5}
+.day-close-item-check small{display:block;font-size:11px;line-height:1.7;color:var(--label2);margin-top:2px}
+.day-close-item-check b{font-size:15px;font-weight:600;max-width:42%;overflow-wrap:anywhere;text-align:right;font-variant-numeric:tabular-nums;padding-top:2px}
+.day-close-item-actions{display:flex;align-items:center;justify-content:space-between;padding-left:34px;gap:10px}
+.day-close-item-actions>span{font-size:11px;color:var(--label2)}
+.day-close-item.checked .day-close-item-actions>span{color:var(--green)}
+.day-close-edit{color:var(--blue);background:transparent;border:0;font:inherit;font-size:12px;min-height:44px;padding:8px}
+.day-close-empty{text-align:center;padding:28px 12px;color:var(--label2)}
+.day-close-empty>svg{width:34px;height:34px;margin-bottom:14px;color:var(--blue)}
+.day-close-empty strong{display:block;color:var(--label);font-size:15px}
+.day-close-empty p{font-size:12px;line-height:1.8}
+.day-close-bank-summary{border-radius:18px;background:var(--card);margin-top:16px;padding:4px 16px}
+.day-close-bank-summary>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--sep);font-size:13px}
+.day-close-bank-summary>div:last-child{border-bottom:0}
+.day-close-bank-summary span{min-width:0;overflow-wrap:anywhere}
+.day-close-bank-summary strong{white-space:nowrap;font-variant-numeric:tabular-nums}
+.day-close-footer{position:sticky;bottom:-18px;display:flex;gap:10px;z-index:2;background:var(--bg);border-top:1px solid var(--sep);padding:16px 0 max(18px,env(safe-area-inset-bottom));margin-top:20px}
+.day-close-footer>button{flex:1;margin:0;min-height:48px}
+.day-close-footer>button.primary{flex:2}
+.day-close-footer button:disabled{opacity:.4}
+.day-close-journal-link{display:flex;align-items:center;gap:10px;width:100%;background:var(--card);color:var(--blue);border:1px solid var(--sep);border-radius:16px;margin-top:18px;padding:12px 16px;min-height:48px;font:inherit;font-size:14px;text-align:left}
+.day-close-journal-link svg{width:20px;height:20px}
+.day-close-journal-link span{margin-left:auto}
+.day-close-success{text-align:center;padding:20px 8px 28px}
+.day-close-success>div{display:grid;place-items:center;width:68px;height:68px;background:#34c75918;color:var(--green);border:1px solid #34c75940;border-radius:50%;margin:0 auto 20px;animation:dayCloseApproved .35s ease-out}
+.day-close-success svg{width:32px;height:32px}
+.day-close-success h3{font-size:24px;letter-spacing:-.03em;margin:0 0 10px}
+.day-close-success p{font-size:13px;color:var(--label2)}
+.day-close-journal-card{position:relative;display:block;width:100%;border:1px solid var(--sep);background:var(--card);color:var(--label);border-radius:20px;padding:18px 34px 18px 16px;margin-bottom:12px;text-align:left;font:inherit}
+.day-close-journal-card>div{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px;margin-bottom:12px}
+.day-close-journal-card>div:first-child>span{font-size:11px}
+.day-close-journal-card small{font-size:11px;color:var(--label2)}
+.day-close-journal-card>.chev{position:absolute;right:14px;top:40%;color:var(--label2)}
+.day-review-note{font-size:12px;line-height:1.8;color:var(--label2);margin:16px 4px}
+.day-review-warning{padding:14px;border-radius:16px;background:#ff950014;color:var(--label);font-size:13px;line-height:1.7;margin:16px 0}
+.day-review-actions{display:flex;gap:10px;margin-top:14px}
+.day-review-actions button{flex:1;font-size:13px;min-height:44px}
+.day-review-check{display:flex;align-items:center;gap:10px;min-height:52px;font-size:13px;line-height:1.6}
+.day-review-check input{width:22px;height:22px;accent-color:var(--blue);flex-shrink:0}
+.day-review-mail{border:0;background:transparent;color:var(--blue);font:inherit;min-height:44px;padding:8px 0;text-align:left}
+.day-closing-card svg,.day-close-view svg,.day-close-empty svg,.day-close-success svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@keyframes dayCloseApproved{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.day-close-success>div{animation:none}.day-close-item{transition:none}}
+html.motion-off .day-close-success>div{animation:none}
+.push-status-note{font-size:13px;line-height:1.7;color:var(--label2)}.push-status{font-size:15px;font-weight:600}.push-field-label{display:block;font-size:13px;color:var(--label2);margin-top:14px}.push-connection-input{width:100%;box-sizing:border-box;min-height:44px;border:1px solid var(--sep);background:var(--card);color:var(--label);border-radius:12px;padding:10px;font:inherit}.push-time-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}.push-time-row input{background:var(--card);color:var(--label);border:1px solid var(--sep);border-radius:10px;padding:10px;font:inherit;min-height:44px}
