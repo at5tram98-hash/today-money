@@ -65,5 +65,37 @@ test('scheduler deduplicates calls, removes gone subscriptions and bounds retrie
   sql.prepare('INSERT INTO devices VALUES(?,?,?,?,?,?,0,?,0,1)').run('d','hash',subscription.endpoint,JSON.stringify(subscription),JSON.stringify({...summary,pendingCount:0,risk:null}),JSON.stringify({dayClose:true}),now);
   let sends=0;const deliver=async()=>{sends++;return new Response(null,{status:201})};await runScheduled(env,now,deliver);await runScheduled(env,now+60000,deliver);assert.equal(sends,1);
   sql.exec('DELETE FROM deliveries');await runScheduled(env,now,async()=>new Response(null,{status:503}));await runScheduled(env,now+60000,deliver);assert.equal(sends,1);await runScheduled(env,now+360000,deliver);assert.equal(sends,2);
-  sql.exec('DELETE FROM deliveries');await runScheduled(env,now,async()=>new Response(null,{status:410}));assert.equal(sql.prepare('SELECT count(*) AS n FROM devices').get().n,0);sql.close();
+  sql.exec('DELETE FROM deliveries');await runScheduled(env,now,async()=>new Response(null,{status:410}));assert.equal(sql.prepare('SELECT enabled FROM devices').get().enabled,0);sql.close();
+});
+
+test('automatic enrollment activates only after the device receives an encrypted proof',async()=>{
+  const {env,sql}=fixture();let proof;
+  const deliver=async(url,options)=>{proof=JSON.parse(ece.decrypt(options.body,{version:'aes128gcm',privateKey:ecdh,authSecret:auth}).toString());return new Response(null,{status:201})};
+  const response=await handleRequest(request('/v1/enroll','',{subscription,summary}),env,deliver);assert.equal(response.status,200);const {token,id}=await response.json();
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM devices').get().n,0);
+  assert.equal((await handleRequest(request('/v1/enroll/confirm','',{id,challenge:'0'.repeat(64)}),env)).status,401);
+  assert.equal((await handleRequest(request('/v1/enroll/send',token),env,deliver)).status,200);assert.equal(proof.kind,'connection-proof');
+  assert.equal((await handleRequest(request('/v1/enroll/confirm','',{id:proof.id,challenge:proof.challenge}),env)).status,200);
+  assert.equal((await handleRequest(request('/v1/status',token),env)).status,200);assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM enrollments').get().n,0);
+  const fresh={...subscription,endpoint:'https://web.push.apple.com/renewed'};
+  assert.equal((await handleRequest(request('/v1/subscription',token,{subscription:fresh}),env)).status,200);
+  assert.equal(sql.prepare('SELECT endpoint FROM devices').get().endpoint,fresh.endpoint);sql.close();
+});
+test('registration limits, expiry and wrong origins cannot enable another device',async()=>{
+  const {env,sql}=fixture();
+  assert.equal((await handleRequest(request('/v1/enroll','',{subscription,summary},'https://other.example'),env)).status,403);
+  let token;for(let i=0;i<5;i++){const response=await handleRequest(request('/v1/enroll','',{subscription,summary}),env);assert.equal(response.status,200);token=(await response.json()).token}
+  assert.equal((await handleRequest(request('/v1/enroll','',{subscription,summary}),env)).status,429);
+  sql.exec('UPDATE enrollments SET expires_at=0');assert.equal((await handleRequest(request('/v1/enroll/send',token),env)).status,401);
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM devices').get().n,0);sql.close();
+});
+test('code redeployment and subscription recovery preserve device tokens and schedule history',async()=>{
+  const {env,sql}=fixture(),now=Date.now();const paired=await handleRequest(request('/v1/pair',env.PAIRING_SECRET,{subscription,summary}),env),{token}=await paired.json();
+  const device=sql.prepare('SELECT * FROM devices').get();sql.prepare("INSERT INTO deliveries(device_id,notice_key,status,claimed_at,attempts) VALUES(?,?,'sent',?,1)").run(device.id,'kept',now);
+  sql.exec('UPDATE devices SET enabled=0');const result=await handleRequest(request('/v1/subscription',token,{subscription:{...subscription,endpoint:'https://web.push.apple.com/recovered'}}),{...env});assert.equal(result.status,200);
+  assert.equal(sql.prepare('SELECT enabled FROM devices').get().enabled,1);assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM deliveries').get().n,1);assert.equal((await handleRequest(request('/v1/status',token),{...env})).status,200);sql.close();
+});
+
+test('cancelling enrollment revokes a completed registration as well as an unconfirmed one',async()=>{
+  const {env,sql}=fixture();let proof;const deliver=async(url,options)=>{proof=JSON.parse(ece.decrypt(options.body,{version:'aes128gcm',privateKey:ecdh,authSecret:auth}));return new Response(null,{status:201})};const response=await handleRequest(request('/v1/enroll','',{subscription,summary}),env),{token}=await response.json();await handleRequest(request('/v1/enroll/send',token),env,deliver);await handleRequest(request('/v1/enroll/confirm','',{id:proof.id,challenge:proof.challenge}),env);assert.equal((await handleRequest(request('/v1/enroll/cancel',token),env)).status,200);assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM devices').get().n,0);assert.equal((await handleRequest(request('/v1/status',token),env)).status,401);sql.close();
 });

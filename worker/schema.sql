@@ -11,3 +11,12 @@ CREATE TABLE IF NOT EXISTS deliveries (
   PRIMARY KEY(device_id, notice_key)
 );
 CREATE INDEX IF NOT EXISTS delivery_cleanup ON deliveries(claimed_at);
+
+CREATE TABLE IF NOT EXISTS enrollments (
+  id TEXT PRIMARY KEY, token_hash TEXT NOT NULL UNIQUE, challenge TEXT NOT NULL,
+  subscription TEXT NOT NULL, summary TEXT NOT NULL, preferences TEXT NOT NULL,
+  expires_at INTEGER NOT NULL, sends INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS enrollment_limits (
+  ip_hash TEXT PRIMARY KEY, window INTEGER NOT NULL, count INTEGER NOT NULL
+);

@@ -25,6 +25,7 @@ export function build() {
   const html = read('src/index.html').replace('{{APP_CSS}}', `./${cssPath}`).replace('{{APP_JS}}', `./${jsPath}`);
   if (/\{\{APP_/.test(html)) throw new Error('Unresolved asset path');
   writeFileSync(resolve(root, 'index.html'), html);
+  writeFileSync(resolve(root, 'push-connection.js'), read('src/js/push-connection.js'));
   return {jsPath, cssPath, javascript, styles};
 }
 

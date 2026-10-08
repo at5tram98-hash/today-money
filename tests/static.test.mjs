@@ -14,6 +14,8 @@ test('all JavaScript parses, including the preserved legacy page', () => {
   for (const path of manifest.javascript.filter(p => p.endsWith('.js'))) {
     parse(read(path), {ecmaVersion: 'latest', sourceType: 'module'});
   }
+  for(const path of ['sw.js','worker/index.js','worker/enrollment.js','worker/deploy.mjs'])parse(read(path),{ecmaVersion:'latest',sourceType:'module'});
+  assert.equal(read('push-connection.js'),read('src/js/push-connection.js'));
   for (const [, script] of read('index 3.html').matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)) new vm.Script(script);
 });
 

@@ -1,6 +1,7 @@
 {
   "javascript": [
     "src/js/00-data-model.js",
+    "src/js/push-connection.js",
     "src/js/01-storage.js",
     "src/bootstrap-open.txt",
     "src/js/02-state-and-commits.js",
