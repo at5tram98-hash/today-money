@@ -1330,7 +1330,7 @@ function openDisplayMonthPicker({title,value,onApply}){
     function position(){for(const key of Object.keys(values)){const selected=Number(draft.slice(key==='year'?0:5,key==='year'?4:7));root.querySelector('#monthWheel-'+key).scrollTop=values[key].indexOf(selected)*44}paint()}
     for(const key of Object.keys(values)){
       const wheel=root.querySelector('#monthWheel-'+key);
-      wheel.onclick=e=>{const option=e.target.closest('[data-value]');if(!option)return;choose(key,Number(option.dataset.value));wheel.scrollTo({top:values[key].indexOf(Number(option.dataset.value))*44,behavior:mm3MotionReduced()?'auto':'smooth'})};
+      wheel.onclick=e=>{const option=e.target.closest('[data-value]');if(!option)return;choose(key,Number(option.dataset.value));wheel.scrollTo({top:values[key].indexOf(Number(option.dataset.value))*44,behavior:'instant'})};
       wheel.onscroll=()=>{if(!ready)return;clearTimeout(timers.get(key));timers.set(key,setTimeout(()=>settle(key),140))};
       wheel.onkeydown=e=>{
         const selected=Number(draft.slice(key==='year'?0:5,key==='year'?4:7)),index=values[key].indexOf(selected);
