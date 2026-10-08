@@ -57,27 +57,6 @@ function mm3SalaryRecordsOpen(month){
   pushView(`${monthLabel(month)}の給与記録`,`<div class="mm3-salary-records-push"><div class="mm3-salary-record-list">${summary.records.length?summary.records.map(r=>{const e=employerById(r.employerId),status=salaryRecordDisplayStatus(r),amount=salaryRecordExpectedOrReceivedAmount(r),paid=status==='入金済み',overdue=status.includes('未確認');return `<button type="button" class="mm3-salary-record-row" data-mm3-salary-record="${r.id}"><div class="row-main"><div class="row-title">${esc(e?.name||'勤務先')}</div><div class="row-sub">${dayLabel(salaryRecordEffectiveDate(r)||r.date)}</div><span class="mm3-salary-record-state ${paid?'paid':overdue?'overdue':''}">${esc(status)}</span></div><div class="mm3-salary-record-amount ${paid?'green':''}">${yen(amount)}</div><span class="chev">›</span></button>`}).join(''):`<div class="empty">この月の給与記録はありません。</div>`}</div></div>`,root=>{root.dataset.salaryListMonth=month;root.querySelectorAll('[data-mm3-salary-record]').forEach(b=>b.onclick=()=>openSalaryRecordEdit(b.dataset.mm3SalaryRecord))})
 }
 
-/* Keep existing logic, only add a visual class after the salary record editor opens. */
-const __mm3P5OpenSalaryRecordEdit=openSalaryRecordEdit;
-openSalaryRecordEdit=function(recordId){__mm3P5OpenSalaryRecordEdit(recordId);document.getElementById('sheet')?.classList.add('mm3-salary-edit-sheet')};
-
-/* Bind new restored rows after the already-final Phase 4 binders so swipe/scrub/reorder remain intact. */
-const __mm3P5BindSalaryHome=bindSalaryHome;
-bindSalaryHome=function(){
-  __mm3P5BindSalaryHome();
-  document.getElementById('mm3SalaryAllocation')?.addEventListener('click',openSalaryAllocationPicker);
-  document.getElementById('mm3SalaryRecon')?.addEventListener('click',mm3OpenReconPicker)
-};
-const __mm3P5BindPayments=bindPayments;
-bindPayments=function(){
-  __mm3P5BindPayments();
-  document.getElementById('mm3PaymentQuickBillingAction')?.addEventListener('click',()=>openQuickCardBilling(paymentHomeMonth()))
-};
-const __mm3P5BindAssets=mm3BindAssets;
-mm3BindAssets=function(){
-  __mm3P5BindAssets();
-  document.getElementById('mm3AssetHistoryRow')?.addEventListener('click',mm3OpenAssetHistory)
-};
 /* === end My Money 3.0 Phase 5 === */
 
 

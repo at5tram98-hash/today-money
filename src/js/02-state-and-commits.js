@@ -132,8 +132,9 @@ function ensureBusyOverlay(){
   el.innerHTML=`<div class="busy-card">${busyAnimationHtml()}<div class="busy-title" id="busyTitle">計算中…</div><div class="busy-sub" id="busySub">お金の流れを確認しています</div><div class="busy-track" aria-hidden="true"><span></span></div></div>`;
   document.body.appendChild(el);return el;
 }
-function showBusy(title='計算中…',sub='お金の流れを確認しています'){
+function showBusy(title='計算中…',sub='お金の流れを確認しています',phase='work'){
   const el=ensureBusyOverlay();el.querySelector('#busyTitle').textContent=title;el.querySelector('#busySub').textContent=sub;
+  el.dataset.phase=phase;
   el.setAttribute('aria-hidden','false');el.classList.add('show');document.getElementById('app')?.setAttribute('aria-busy','true');return el;
 }
 function hideBusy(){const el=document.getElementById('busyOverlay');el?.classList.remove('show');el?.setAttribute('aria-hidden','true');document.getElementById('app')?.removeAttribute('aria-busy')}
@@ -143,20 +144,24 @@ function nextUiFrame(){
   return new Promise(resolve=>{let finished=false,frame,timer;const done=()=>{if(finished)return;finished=true;clearTimeout(timer);cancelAnimationFrame(frame);resolve()};frame=requestAnimationFrame(done);timer=setTimeout(done,100)});
 }
 async function waitForUiPaint(){await nextUiFrame();await nextUiFrame()}
-function beginBusy(title,sub,{minimumMs=/ATF|ACF|予測/.test(title)?1100:700}={}){
-  const token=Symbol('busy');busyJobs.set(token,{title,sub,minimumMs,started:performance.now()});showBusy(title,sub);return token;
+function beginBusy(title,sub,{minimumMs=/ATF|ACF|予測/.test(title)?1800:700}={}){
+  const token=Symbol('busy');busyJobs.set(token,{title,sub,phase:'work',minimumMs,started:performance.now()});showBusy(title,sub);return token;
 }
-function updateBusy(token,title,sub){const job=busyJobs.get(token);if(!job)return;Object.assign(job,{title,sub});showBusy(title,sub)}
+function updateBusy(token,title,sub,phase='work'){const job=busyJobs.get(token);if(!job)return;Object.assign(job,{title,sub,phase});showBusy(title,sub,phase)}
 async function endBusy(token){
   const job=busyJobs.get(token);if(!job)return;
   await waitForUiPaint();const remaining=job.minimumMs-(performance.now()-job.started);
   if(remaining>0)await new Promise(resolve=>setTimeout(resolve,remaining));
   await waitForUiPaint();busyJobs.delete(token);
-  const last=[...busyJobs.values()].at(-1);if(last)showBusy(last.title,last.sub);else hideBusy();
+  const last=[...busyJobs.values()].at(-1);if(last)showBusy(last.title,last.sub,last.phase);else hideBusy();
 }
 async function runWithBusy(fn,{title='ACFを計算中…',sub='給与・カード・固定支払いを確認しています',minimumMs}={}){
   const token=beginBusy(title,sub,minimumMs==null?{}:{minimumMs});
-  try{await waitForUiPaint();return await fn()}finally{await endBusy(token)}
+  try{
+    await waitForUiPaint();const result=await fn();
+    updateBusy(token,title,/ATF|ACF|予測/.test(title)?'計算結果を画面に反映しています':sub,'paint');
+    return result;
+  }finally{await endBusy(token)}
 }
 function installLongPress(el,onLong,{delay=600,moveTolerance=10,feedbackOn=true}={}){if(!el)return()=>{};let timer=null,longPressed=false,sx=0,sy=0;const clear=()=>{if(timer){clearTimeout(timer);timer=null}};const down=e=>{longPressed=false;el.__longPressed=false;sx=e.clientX;sy=e.clientY;clear();timer=setTimeout(()=>{timer=null;longPressed=true;el.__longPressed=true;if(feedbackOn)feedback.selection();onLong?.(e)},delay)};const move=e=>{if(timer&&(Math.abs(e.clientX-sx)>moveTolerance||Math.abs(e.clientY-sy)>moveTolerance))clear()};const suppress=e=>{if(longPressed||el.__longPressed){e.preventDefault();e.stopImmediatePropagation();longPressed=false;el.__longPressed=false}};el.addEventListener('pointerdown',down);el.addEventListener('pointermove',move);el.addEventListener('pointerup',clear);el.addEventListener('pointercancel',clear);el.addEventListener('pointerleave',clear);el.addEventListener('click',suppress,true);el.addEventListener('contextmenu',e=>e.preventDefault());el.addEventListener('selectstart',e=>e.preventDefault());return()=>{clear();el.removeEventListener('pointerdown',down);el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',clear);el.removeEventListener('pointercancel',clear);el.removeEventListener('pointerleave',clear);el.removeEventListener('click',suppress,true)}}
 

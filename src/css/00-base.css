@@ -224,7 +224,7 @@ button:disabled{opacity:.38;cursor:default}button:not(:disabled){transition:tran
 .goal-review-meta>div{border-top:.5px solid var(--sep);padding-top:9px}
 .goal-review-meta span{font-size:10px;color:var(--label2);display:block}
 .goal-review-meta strong{font-size:15px;display:block;margin-top:2px}
-.goal-nav-actions{display:grid;grid-template-columns:1fr 1.4fr;gap:9px;margin-top:16px}
+.goal-nav-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:16px}
 .goal-nav-actions.single{grid-template-columns:1fr}
 .approval-slider.disabled{opacity:.42;pointer-events:none}
 .approval-slider{height:62px;border-radius:16px;background:var(--fill);position:relative;overflow:hidden;margin-top:18px;user-select:none;-webkit-user-select:none}
@@ -317,7 +317,7 @@ button:disabled{opacity:.38;cursor:default}button:not(:disabled){transition:tran
 .number-flash{animation:numberFlash .42s ease-out}
 @keyframes plannerDayPulse{0%{box-shadow:inset 0 0 0 1.5px var(--blue),0 0 0 0 rgba(0,122,255,.22)}100%{box-shadow:inset 0 0 0 1.5px var(--blue),0 0 0 9px rgba(0,122,255,0)}}@keyframes toastIn{to{opacity:1;transform:translateY(0) scale(1)}}@keyframes numberFlash{0%{background:rgba(255,149,0,.13)}100%{background:transparent}}
 @keyframes goalStepForward{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}@keyframes goalStepBack{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}@keyframes goalSpin{to{transform:rotate(360deg)}}@keyframes goalSuccessSpring{from{transform:scale(.72);opacity:.2}to{transform:scale(1);opacity:1}}@keyframes calendarPlanPulse{0%{box-shadow:0 0 0 0 rgba(0,122,255,.28)}100%{box-shadow:0 0 0 12px rgba(0,122,255,0)}}
-.calendar-grid>.day-cell.out{pointer-events:none}.account-card,.credit-card{position:relative}.push-body .secondary+.secondary{margin-top:10px}
+.calendar-grid>.day-cell.out{pointer-events:none}.account-card,.credit-card{position:relative}.push-body>.secondary+.secondary{margin-top:10px}
 .category-choice{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:64px}.choice-symbol{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;background:var(--blue)}.choice-symbol svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.category-choice-symbol{display:block}
 .financial-event-card{width:100%;min-height:52px;border:0;border-radius:13px;background:var(--card);display:flex;align-items:center;gap:10px;padding:10px 13px;text-align:left;margin:0 0 12px}
 .financial-event-card:active{background:var(--fill)}

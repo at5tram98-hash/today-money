@@ -118,7 +118,7 @@ html.dark .native-quick-action{background:#0a64d3}
 .push-body{padding-top:16px;overscroll-behavior:contain}
 .form-label{font-size:13px;line-height:1.4}
 .form-card .field{min-height:44px;font-size:16px}
-.primary,.secondary{font-size:16px;min-height:48px!important}
+.primary,.secondary{min-height:48px}
 
 .alert-box{max-width:100%}.alert-actions button{min-height:48px!important}
 .seg,.pro4-analysis-tabs,.pro4-search-filters{overflow-x:auto;scrollbar-width:none}

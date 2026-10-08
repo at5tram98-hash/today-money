@@ -101,26 +101,31 @@ function openAcfSetup(){
 }
 
 function _openAcfDetailImmediate(){
-  let important=false,month=ym();
+  let important=false,month=ym(),selectedDate=ymd(),viewMode=mm3LoadUiPrefs().acfFundsView==='calendar'?'calendar':'table';
   pushView('ACF','',root=>{
     const draw=()=>{
       const current=buildCashFlowForecast(),conf=current.confidence,body=root.querySelector('.push-body'),canApply=!!monthlyGoal(ym()).total,next=current.nextCardPayment;
       const visibleEnd=acfVisibleEnd(current.startDate),months=[...new Set(current.rows.filter(r=>r.date<=visibleEnd).map(r=>r.date.slice(0,7)))];
       if(!months.includes(month))month=months[0]||ym();
       const ratio=current.settings.creditFallbackEnabled===false?0:Math.round(Number(current.settings.creditAggressiveness)||0),cash=Number(current.safeCashBudget)||0,card=Number(current.safeCreditBudget)||0;
-      body.innerHTML=`<div class="hero"><div class="summary-hero-head"><div><div class="hero-kicker">ACF・生活費の見通し</div><div class="hero-value">${yen(current.safeTotalBudget)}</div><div class="hero-sub">今日使える目安</div></div><span class="status-chip ${acfStatusClass(current.status)}">${current.status}</span></div><div class="acf-home-split"><div><span>カードで支払う目安</span><strong>${yen(card)}</strong></div><div><span>現金で支払う目安</span><strong>${yen(cash)}</strong></div><div class="ratio"><span>カード比率</span><strong>${ratio}%</strong></div></div><div class="acf-plain-note">設定比率は支払い方法の希望です。カードの限度額・1日上限・禁止カテゴリ・将来の引落残高をACFが確認し、安全な範囲に制限します。</div></div>${acfShortageCalloutHtml(current)}<div class="section-head">日別資金表</div><div class="hero-sub">${dayLabel(current.startDate)}〜${dayLabel(visibleEnd)}を月ごとに表示。カード利用後の請求は${dayLabel(current.endDate)}まで確認します。</div><div class="acf-month-nav"><label for="acfMonthSelect">表示月<select id="acfMonthSelect" aria-label="日別資金表の表示月">${months.map(m=>`<option value="${m}" ${m===month?'selected':''}>${Number(m.slice(0,4))}年${Number(m.slice(5))}月</option>`).join('')}</select></label></div><div class="seg" id="acfTableMode"><button type="button" class="${!important?'on':''}" data-v="all" aria-pressed="${!important}">すべての日</button><button type="button" class="${important?'on':''}" data-v="important" aria-pressed="${important}">重要日のみ</button></div><div id="acfTablePanel">${acfTableHtml(current,important,month)}</div><div class="hero-sub">現金余力は、必須の入出金後に将来残せる最低残高と安全残高の差です。計画生活費は含めません。「計画支出（現金）」は実際の引落しではありません。ACFが想定した生活費を使う場合の金額を「計画後の残高」から引きます。カードで使う目安は利用日の現金からは引かず、後日の請求に反映します。日付列をタップすると詳細を開けます。</div>${cashFlowProChartHtml(current)}${acfBudgetTrendHtml(current)}${acfCashCardGraphHtml(current)}<div class="section-head">次の重要な資金イベント</div>${acfTimelineHtml(current)}<div class="section-head">計算内訳</div><div class="acf-summary-grid"><div class="acf-summary-tile"><span>現在預金</span><strong>${yen(current.currentDeposits)}</strong></div><button type="button" class="acf-summary-tile hero-button" id="acfProtected"><span>確保しておく金額</span><strong>${yen(current.protectedCashNow)}</strong></button><div class="acf-summary-tile"><span>最低残したい金額</span><strong>${yen(current.reserveFloor)}</strong></div><div class="acf-summary-tile"><span>月末予測</span><strong>${yen(current.monthEndForecast)}</strong></div></div><div class="section-head">もし使ったら？</div><div class="group"><button type="button" class="row press" id="acfSimulator"><div class="row-main"><div class="row-title">購入前シミュレーション</div><div class="row-sub">保存前に現在と使用後のお金の流れを比較</div></div><span class="chev">›</span></button></div>${canApply?`<button type="button" class="secondary" id="acfApplyGoal">ACFの安全予算を日別計画へ反映</button>`:''}<div class="section-head">予測の信頼度</div><div class="card card-pad"><div class="summary-hero-head"><div><div class="row-title">予測の信頼度 ${conf.label}</div><div class="row-sub">${conf.score}%・登録情報の鮮度と完全性から算出</div></div><strong>${conf.score}%</strong></div><div class="confidence-meter"><i style="width:${conf.score}%"></i></div>${conf.reasons.length?`<div class="group" style="margin-top:12px;margin-bottom:0">${conf.reasons.map((r,i)=>`<button type="button" class="row press" data-confidence="${i}"><div class="row-main"><div class="row-title">${esc(r.text)}</div></div><span class="chev">›</span></button>`).join('')}</div>`:'<div class="hero-sub">大きな未確認項目はありません。</div>'}</div><div class="section-head">注意点</div>${acfRiskHtml(current)}${next?`<div class="hero-sub" style="margin-top:8px">次のカード引落予定：${dayLabel(next.date)} ${yen(next.amount)}</div>`:''}<div class="section-head">設定</div><div class="group"><button type="button" class="row press" id="acfOpenSettings"><div class="row-main"><div class="row-title">ACF設定</div><div class="row-sub">最低残高・カード比率・詳細条件</div></div><span class="chev">›</span></button></div>`;
+      body.innerHTML=`<div class="hero"><div class="summary-hero-head"><div><div class="hero-kicker">ACF・生活費の見通し</div><div class="hero-value">${yen(current.safeTotalBudget)}</div><div class="hero-sub">今日使える目安</div></div><span class="status-chip ${acfStatusClass(current.status)}">${current.status}</span></div><div class="acf-home-split"><div><span>カードで支払う目安</span><strong>${yen(card)}</strong></div><div><span>現金で支払う目安</span><strong>${yen(cash)}</strong></div><div class="ratio"><span>カード比率</span><strong>${ratio}%</strong></div></div><div class="acf-plain-note">設定比率は支払い方法の希望です。カードの限度額・1日上限・禁止カテゴリ・将来の引落残高をACFが確認し、安全な範囲に制限します。</div></div>${acfShortageCalloutHtml(current)}<div class="section-head">日別資金表</div><div class="hero-sub">${dayLabel(current.startDate)}〜${dayLabel(visibleEnd)}を月ごとに表示。カード利用後の請求は${dayLabel(current.endDate)}まで確認します。</div><div class="seg acf-view-mode" id="acfViewMode" aria-label="日別資金表の表示形式"><button type="button" data-view="table" class="${viewMode==='table'?'on':''}" aria-pressed="${viewMode==='table'}">${icon('list')}表</button><button type="button" data-view="calendar" class="${viewMode==='calendar'?'on':''}" aria-pressed="${viewMode==='calendar'}">${icon('calendar')}カレンダー</button></div><div class="acf-month-nav"><label for="acfMonthSelect">表示月<select id="acfMonthSelect" aria-label="日別資金表の表示月">${months.map(m=>`<option value="${m}" ${m===month?'selected':''}>${Number(m.slice(0,4))}年${Number(m.slice(5))}月</option>`).join('')}</select></label></div><div class="seg" id="acfTableMode"><button type="button" class="${!important?'on':''}" data-v="all" aria-pressed="${!important}">すべての日</button><button type="button" class="${important?'on':''}" data-v="important" aria-pressed="${important}">重要日のみ</button></div><div id="acfTablePanel">${acfTableHtml(current,important,month)}</div><div class="hero-sub">現金余力は、必須の入出金後に将来残せる最低残高と安全残高の差です。計画生活費は含めません。「計画支出（現金）」は実際の引落しではありません。ACFが想定した生活費を使う場合の金額を「計画後の残高」から引きます。カードで使う目安は利用日の現金からは引かず、後日の請求に反映します。日付列をタップすると詳細を開けます。</div>${cashFlowProChartHtml(current)}${acfBudgetTrendHtml(current)}${acfCashCardGraphHtml(current)}<div class="section-head">次の重要な資金イベント</div>${acfTimelineHtml(current)}<div class="section-head">計算内訳</div><div class="acf-summary-grid"><div class="acf-summary-tile"><span>現在預金</span><strong>${yen(current.currentDeposits)}</strong></div><button type="button" class="acf-summary-tile hero-button" id="acfProtected"><span>確保しておく金額</span><strong>${yen(current.protectedCashNow)}</strong></button><div class="acf-summary-tile"><span>最低残したい金額</span><strong>${yen(current.reserveFloor)}</strong></div><div class="acf-summary-tile"><span>月末予測</span><strong>${yen(current.monthEndForecast)}</strong></div></div><div class="section-head">もし使ったら？</div><div class="group"><button type="button" class="row press" id="acfSimulator"><div class="row-main"><div class="row-title">購入前シミュレーション</div><div class="row-sub">保存前に現在と使用後のお金の流れを比較</div></div><span class="chev">›</span></button></div>${canApply?`<button type="button" class="secondary" id="acfApplyGoal">ACFの安全予算を日別計画へ反映</button>`:''}<div class="section-head">予測の信頼度</div><div class="card card-pad"><div class="summary-hero-head"><div><div class="row-title">予測の信頼度 ${conf.label}</div><div class="row-sub">${conf.score}%・登録情報の鮮度と完全性から算出</div></div><strong>${conf.score}%</strong></div><div class="confidence-meter"><i style="width:${conf.score}%"></i></div>${conf.reasons.length?`<div class="group" style="margin-top:12px;margin-bottom:0">${conf.reasons.map((r,i)=>`<button type="button" class="row press" data-confidence="${i}"><div class="row-main"><div class="row-title">${esc(r.text)}</div></div><span class="chev">›</span></button>`).join('')}</div>`:'<div class="hero-sub">大きな未確認項目はありません。</div>'}</div><div class="section-head">注意点</div>${acfRiskHtml(current)}${next?`<div class="hero-sub" style="margin-top:8px">次のカード引落予定：${dayLabel(next.date)} ${yen(next.amount)}</div>`:''}<div class="section-head">設定</div><div class="group"><button type="button" class="row press" id="acfOpenSettings"><div class="row-main"><div class="row-title">ACF設定</div><div class="row-sub">最低残高・カード比率・詳細条件</div></div><span class="chev">›</span></button></div>`;
       bindFinanceChart(body,cashFlowProChartPoints(current));
       body.querySelector('#acfProtected').onclick=()=>openProtectedCashDetail(current);
       const tablePanel=body.querySelector('#acfTablePanel');
       const updateTable=()=>{
-        tablePanel.innerHTML=acfTableHtml(current,important,month);
+        selectedDate=acfCalendarSelection(current,important,month,selectedDate);
+        tablePanel.innerHTML=viewMode==='calendar'?acfCalendarHtml(current,important,month,selectedDate):acfTableHtml(current,important,month);
+        body.querySelectorAll('#acfViewMode button').forEach(button=>{const on=button.dataset.view===viewMode;button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on))});
+        if(viewMode==='calendar')bindAcfCalendarKeyboard(tablePanel,current,important,month,(date,focus)=>{selectedDate=date;updateTable();if(focus)tablePanel.querySelector(`[data-acf-select="${date}"]`)?.focus()});else tablePanel.onkeydown=null;
         body.querySelector('#acfMonthSelect').value=month;
         body.querySelectorAll('#acfTableMode button').forEach(b=>{b.classList.toggle('on',(b.dataset.v==='important')===important);b.setAttribute('aria-pressed',String((b.dataset.v==='important')===important))});
       };
       body.querySelector('#acfMonthSelect').onchange=e=>{month=e.target.value;updateTable()};
+      body.querySelectorAll('#acfViewMode button').forEach(button=>button.onclick=()=>{viewMode=button.dataset.view;mm3SaveUiPrefs({acfFundsView:viewMode});feedback.selection();updateTable()});
       body.querySelector('#acfTableMode').onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;important=b.dataset.v==='important';updateTable()};
-      tablePanel.onclick=e=>{const b=e.target.closest('[data-acf-day]');if(b)openFinancialDayInspector(b.dataset.acfDay)};
-      tablePanel.onkeydown=e=>{if(e.key!=='Enter'&&e.key!==' ')return;const b=e.target.closest('[data-acf-day]');if(!b)return;e.preventDefault();openFinancialDayInspector(b.dataset.acfDay)};
+      tablePanel.onclick=e=>{const selected=e.target.closest('[data-acf-select]');if(selected){selectedDate=selected.dataset.acfSelect;updateTable();return}const b=e.target.closest('[data-acf-day]');if(b)openFinancialDayInspector(b.dataset.acfDay)};
+      tablePanel.addEventListener('keydown',e=>{if(viewMode!=='table'||(e.key!=='Enter'&&e.key!==' '))return;const b=e.target.closest('[data-acf-day]');if(!b)return;e.preventDefault();openFinancialDayInspector(b.dataset.acfDay)});
+      updateTable();
       body.querySelector('#acfSimulator').onclick=()=>openAcfSimulator();
       body.querySelector('#acfApplyGoal')?.addEventListener('click',()=>applyAcfSafeBudgetToMonthlyPlan());
       body.querySelector('#acfOpenSettings').onclick=openAcfSettings;
@@ -313,30 +318,16 @@ function acfShortageCalloutHtml(f,{compact=false}={}){
 }
 
 function acfTableHtml(f,importantOnly=false,month=''){
-  const rows=(importantOnly?acfImportantRows(f):f.rows).filter(r=>!month||r.date.slice(0,7)===month);
+  const rows=acfDisplayRows(f,importantOnly,month);
   if(!rows.length)return '<div class="acf-table-empty">この月に表示する日がありません。</div>';
   const firstDeficit=f.firstNegativeDate||rows.find(r=>(Number(r.forecastBalance)||0)<0)?.date||'';
-  const defs=[
-    ['開始残高','openingBalance','signed'],
-    ['入金予定','income','plus'],
-    ['カード引落','totalCardPayment','minus'],
-    ['その他必須支出','otherMandatory','minus'],
-    ['現金余力','cashHeadroom','signed'],
-    ['計画支出（現金）','flexibleCash','minus'],
-    ['現金で使う目安','safeCashBudgetRemaining','available'],
-    ['カードで使う目安','safeCreditBudgetRemaining','available'],
-    ['今日使える合計','safeBudgetRemaining','available'],
-    ['計画後の残高','forecastBalance','signed'],
-    ['安全余力','headroom','signed']
-  ];
+  const defs=ACF_DAY_FIELDS;
   const head=rows.map(r=>{
     const first=r.date===firstDeficit,actualDeficit=(Number(r.forecastBalance)||0)<0;
     return `<th class="cf-day ${r.date===ymd()?'cf-today':''} ${actualDeficit?'cf-deficit-day':''} ${first?'cf-first-deficit-day':''}" data-acf-day="${r.date}" tabindex="0" aria-label="${dayLabel(r.date)}の資金詳細"><div>${Number(r.date.slice(5,7))}/${Number(r.date.slice(8,10))}${first?'<span class="acf-deficit-marker">!</span>':''}</div><div class="cashflow-day-mark">${r.salary?'<span class="cf-marker salary">¥</span>':''}${r.card||r.cardPayment>0||r.flexibleCardDue>0?'<span class="cf-marker card">●</span>':''}${r.large?'<span class="cf-marker large">●</span>':''}<span>${'日月火水木金土'[parseYmd(r.date).getDay()]}</span></div></th>`
   }).join('');
   const body=defs.map(([label,key,kind])=>`<tr><td class="cf-label">${label}</td>${rows.map(r=>{
-    const value=key==='otherMandatory'
-      ?Math.max(0,(Number(r.mandatoryOutflow)||0)-(Number(r.cardPayment)||0))
-      :Number(r[key])||0;
+    const value=acfDisplayValue(r,key);
     const signedNegative=kind==='signed'&&value<0;
     const pulse=signedNegative&&(key==='openingBalance'||key==='forecastBalance')&&(Number(r.forecastBalance)||0)<0;
     const actualDeficit=(Number(r.forecastBalance)||0)<0;

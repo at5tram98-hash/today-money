@@ -4,28 +4,31 @@ import {readFileSync, existsSync, statSync, mkdirSync, writeFileSync} from 'node
 import {resolve, extname} from 'node:path';
 import {chromium} from 'playwright';
 import {verifyDayClosingBrowser} from './day-closing-browser.mjs';
+import {verifyFinalUiBrowser} from './final-ui-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
 build();
 const results = [];
 const passed = name => {results.push({name, status: 'passed'}); console.log(`PASS ${name}`);};
-const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,recordDayClosing,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
+const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,openAcfDetail,openDailyGoalPlanner,openMonthlyGoalPlanner,openFinancialUpdates,financialUpdateRows,acfDisplayRows,acfDisplayValue,ACF_DAY_FIELDS,buildCashFlowForecast,getGoalState:()=>clone(goalPlannerState),recordDayClosing,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
 const hookMarker = 'try{await saveAsync({snapshot:data})}catch';
 const baselineRoot = process.env.MM3_BASELINE_DIR;
+const financialBaselineRoot=process.env.MM3_FINANCIAL_BASELINE_DIR;
+const baselineHook=`globalThis.__mm3Test={getData:()=>clone(data),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),buildCashFlowForecastCore,buildCashFlowForecast};\n`;
 let workerRelease=1;
 const server = createServer((req, res) => {
   try {
     const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-    const base = pathname.startsWith('/baseline/') ? baselineRoot : root;
+    const base = pathname.startsWith('/baseline/') ? (baselineRoot||financialBaselineRoot) : root;
     if (!base) throw new Error('Baseline is unavailable');
     let file = resolve(base, '.' + pathname.replace(/^\/(app|baseline)/, ''));
     if (!file.startsWith(resolve(base) + '/') && file !== resolve(base)) throw new Error('Invalid path');
     if (statSync(file).isDirectory()) file = resolve(file, 'index.html');
     let text = ['.png'].includes(extname(file))?readFileSync(file):readFileSync(file, 'utf8');
     // Financial/UI fixtures must never connect to the production notification server.
-    if(file===resolve(root,'push-config.json'))text=JSON.stringify({apiBase:'',vapidPublicKey:''});
+    if(file===resolve(base,'push-config.json'))text=JSON.stringify({apiBase:'',vapidPublicKey:''});
     if(file===resolve(root,'sw.js'))text+='\n// test release '+workerRelease+'\n';
-    if (typeof text==='string' && text.includes(hookMarker)) text = text.replace(hookMarker, hook + hookMarker);
+    if (typeof text==='string' && text.includes(hookMarker)) text = text.replace(hookMarker, (pathname.startsWith('/baseline/')?baselineHook:hook) + hookMarker);
     res.setHeader('Content-Type', {'.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.svg':'image/svg+xml', '.png':'image/png', '.json':'application/json', '.webmanifest':'application/manifest+json'}[extname(file)] || 'text/plain');
     res.end(text);
   } catch {res.writeHead(404); res.end('Not found');}
@@ -78,7 +81,7 @@ async function finishDayClosing(page){
 
 try {
   mkdirSync(resolve(root,'test-results'),{recursive:true});
-  if(!process.env.MM3_DAY_CLOSING_ONLY){
+  if(!process.env.MM3_DAY_CLOSING_ONLY&&!process.env.MM3_FINAL_UI_ONLY){
   for (const width of [320, 390, 1440]) for (const appearance of ['light', 'dark']) {
     const candidate = await createPage('app', {width, appearance});
     const baseline = baselineRoot ? await createPage('baseline', {width, appearance}) : null;
@@ -347,12 +350,13 @@ try {
   const afterClose=await fp.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{transactions:d.transactions,banks:d.banks,cards:d.cards,dailyCorrections:d.dailyCorrections}});assert.deepEqual(afterClose,beforeClose);passed('seven-step daily close requires all checks, uses corrected spending and preserves ledger balances');
   await fp.reload();await fp.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'closed');
   await fp.evaluate(async date=>{const t=globalThis.__mm3Test,state=t.getData();state.transactions[0].amount=2000;await t.replaceData(state);t.renderAll()},date);assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'changed');assert.ok((await fp.locator('#todayDayClose').innerText()).includes('再確認'));await fp.locator('.native-home-mode').getByText('今月',{exact:true}).click();assert.ok((await fp.locator('[data-date="2026-10-07"]').getAttribute('aria-label')).includes('再確認'));passed('day closing persists and detects later edits even when an override keeps the total unchanged');
-  await fp.locator('[data-date="2026-10-07"]').click();await fp.locator('#inspectDayClose').click();await finishDayClosing(fp);await fp.locator('.day-close-view').last().locator('#dayCloseNext').click();await fp.locator('#inspectDayClose').click();await fp.locator('#dayReviewReopen').click();await fp.waitForFunction(date=>globalThis.__mm3Test.dayClosingStatus(date)==='open',date);await fp.locator('.busy-overlay.show').waitFor({state:'hidden'});passed('calendar opens the seven-step review, supports re-approval and reopening');
+  await fp.locator('[data-date="2026-10-07"]').click();await fp.locator('#inspectDayClose').click();await fp.locator('#dayCloseModify').click();await fp.locator('#alertActions').getByRole('button',{name:'修正を始める',exact:true}).click();await finishDayClosing(fp);await fp.locator('.day-close-view').last().locator('#dayCloseNext').click();await fp.locator('#inspectDayClose').click();assert.equal(await fp.locator('.day-close-view').last().locator('.day-close-heading').innerText(),'承認済');await fp.locator('#dayCloseModify').click();await fp.locator('#alertActions').getByRole('button',{name:'修正を始める',exact:true}).click();assert.equal(await fp.locator('.day-close-view').last().locator('.day-close-heading').innerText(),'日締め');assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'closed');passed('calendar opens the seven-step review and protects approved evidence until explicit revision');
   await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.switchTab('settings');globalThis.__mm3Test.openNotificationSettings()});await fp.waitForSelector('#pushEnable');assert.equal(await fp.locator('#pushEnable').isDisabled(),true);assert.ok((await fp.locator('.push-view.show').innerText()).includes('通知サーバー未接続'));const summary=await fp.evaluate(()=>globalThis.__mm3Test.buildPushSummary());assert.equal(summary.spending,null);assert.ok(!('transactions' in summary)&&!('gmailSettings' in summary));passed('unconfigured Push stays off and the default summary excludes amounts and Gmail credentials');
   await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.openCalculator('320px',999999999)});await fp.waitForTimeout(350);assert.ok(await fp.locator('#calcDone').isVisible());await fp.screenshot({path:resolve(root,'test-results/calculator-320-light.png')});await fp.locator('#calcCancel').click();await features.context.close();
 
   }
-  await verifyDayClosingBrowser({createPage,passed,root,errors});
+  if(!process.env.MM3_FINAL_UI_ONLY)await verifyDayClosingBrowser({createPage,passed,root,errors});
+  if(!process.env.MM3_DAY_CLOSING_ONLY)await verifyFinalUiBrowser({createPage,passed,root,financialBaselineRoot});
 
   const lifecycle=await createPage();const lp=lifecycle.page;
   const vapid=Buffer.concat([Buffer.from([4]),Buffer.alloc(64,1)]).toString('base64url'),device={apiBase:'https://money.push-test.example',vapidPublicKey:vapid,token:'test-device-token',endpoint:'https://web.push.apple.com/test-old'};
@@ -367,6 +371,6 @@ try {
   assert.deepEqual(errors, []);
   passed('no JavaScript exceptions or local HTTP failures in tested flows');
   mkdirSync(resolve(root, 'test-results'), {recursive: true});
-  writeFileSync(resolve(root, process.env.MM3_DAY_CLOSING_ONLY?'test-results/browser-day-closing.json':'test-results/browser.json'), JSON.stringify({results, errors, externalAuthenticatedServicesTested: false}, null, 2));
+  writeFileSync(resolve(root, process.env.MM3_DAY_CLOSING_ONLY?'test-results/browser-day-closing.json':process.env.MM3_FINAL_UI_ONLY?'test-results/browser-final-ui.json':'test-results/browser.json'), JSON.stringify({results, errors, externalAuthenticatedServicesTested: false}, null, 2));
   console.log(`${results.length} browser checks passed`);
 } finally {await browser.close(); await new Promise(r => server.close(r));}

@@ -1,0 +1,34 @@
+.acf-view-mode{margin:16px 0 12px}
+.acf-view-mode button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px}
+.acf-view-mode svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.acf-calendar{background:var(--card);border:1px solid var(--sep);border-radius:22px;padding:12px 8px;margin-bottom:16px}
+.acf-calendar-week,.acf-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.acf-calendar-week{font-size:11px;color:var(--label2);text-align:center;padding:3px 0 12px}
+.acf-calendar-day,.acf-calendar-unavailable,.acf-calendar-spacer{min-width:0;min-height:68px}
+.acf-calendar-day{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 1px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--label);font:inherit}
+.acf-calendar-number{display:grid;place-items:center;width:25px;height:25px;font-size:13px;font-weight:600;border-radius:50%}
+.acf-calendar-amount{font-size:10px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.acf-calendar-day.today .acf-calendar-number{color:var(--blue);background:#007aff14}
+.acf-calendar-day.selected{background:#007aff0b;border-color:var(--blue)}
+.acf-calendar-day.selected .acf-calendar-number{background:var(--blue);color:#fff}
+.acf-calendar-day.deficit .acf-calendar-amount{color:var(--red)}
+.acf-calendar-day.warning .acf-calendar-amount{color:var(--orange)}
+.acf-calendar-day:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.acf-calendar-unavailable{display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:12px;color:var(--label3);font-size:12px}
+.acf-calendar-marks{display:flex;justify-content:center;gap:3px;min-height:4px}
+.acf-calendar-marks i,.acf-calendar-legend i{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--orange)}
+.acf-calendar-marks .salary,.acf-calendar-legend .salary{background:var(--green)}
+.acf-calendar-marks .card,.acf-calendar-legend .card{background:var(--purple)}
+.acf-calendar-note{font-size:11px;color:var(--label2);line-height:1.7;margin:12px 6px 8px}
+.acf-calendar-legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:10px;color:var(--label2);margin:0 6px}
+.acf-calendar-legend span{display:flex;align-items:center;gap:4px}
+.acf-calendar-detail{border-radius:20px;background:var(--card);border:1px solid var(--sep);padding:4px 16px 10px;margin-bottom:14px}
+.acf-calendar-detail-head{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--sep);padding:8px 0}
+.acf-calendar-detail h3{font-size:15px;font-weight:600;margin:0}
+.acf-calendar-inspect{display:flex;align-items:center;gap:3px;background:transparent;border:0;color:var(--blue);font:inherit;font-size:12px;min-height:44px}
+.acf-calendar-inspect svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.8}
+.acf-calendar-detail dl{margin:0}
+.acf-calendar-detail dl>div{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px;border-bottom:.5px solid var(--sep)}
+.acf-calendar-detail dl>div:last-child{border-bottom:0}
+.acf-calendar-detail dt{font-size:12px;color:var(--label2)}
+.acf-calendar-detail dd{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;margin:0;overflow-wrap:anywhere}

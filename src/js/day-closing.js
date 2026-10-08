@@ -41,11 +41,11 @@ function dayClosingStatus(date){
   // A later day's bank movement must not invalidate an earlier day's approved snapshot.
   return date===ymd()&&record.bankSignature&&record.bankSignature!==dayClosingBankSignature()?'changed':'closed';
 }
-function dayClosingLabel(date){return {closed:'締め済み',changed:'再確認が必要',open:''}[dayClosingStatus(date)]}
+function dayClosingLabel(date){return {closed:'承認済',changed:'再確認が必要',open:''}[dayClosingStatus(date)]}
 function dayClosingMarkHtml(date){const status=dayClosingStatus(date);return status==='open'?'':`<span class="day-close-mark ${status}" aria-hidden="true">${status==='closed'?'✓':'!'}</span>`}
 function dayClosingCardHtml(date,id='todayDayClose'){
   if(!dayClosingInRange(date))return '';
-  const status=dayClosingStatus(date),copy={open:'収入・取引・残高を順番に照合します',closed:'締め済み · 日締めジャーナルに保存しています',changed:'再確認が必要 · 承認後に記録が変わりました'}[status];
+  const status=dayClosingStatus(date),copy={open:'収入・取引・残高を順番に照合します',closed:'承認済 · 日締めジャーナルに保存しています',changed:'再確認が必要 · 承認後に記録が変わりました'}[status];
   return `<button type="button" class="day-closing-card ${status}" id="${id}"><span class="day-closing-symbol" aria-hidden="true">${icon('dayClose')}</span><span><strong>日締め</strong><small>${copy}</small></span>${icon('chevronRight')}</button>`;
 }
 function pruneDayClosingJournal(){
@@ -80,12 +80,18 @@ function dayClosingSummaryHtml(snapshot){
 function openDayClosing(date=trackingDate){
   if(!dayClosingInRange(date))return showToast('日締めは今日を含む直近7日間が対象です');
   return pushView('日締め','',root=>{
-    const state={step:0,checks:{},emptyGroups:[],confirmedSignature:'',saving:false};
+    const state={step:0,checks:{},emptyGroups:[],confirmedSignature:'',saving:false,editing:false,direction:1};
     root.classList.add('day-close-view');
     const review=()=>({date,checks:{...state.checks},emptyGroups:[...state.emptyGroups],signature:dayClosingApprovalSignature(date)});
     const complete=group=>dayClosingGroupComplete(dayClosingReviewItems(date),group,review());
     const firstIncomplete=()=>DAY_CLOSING_GROUPS.findIndex(group=>!complete(group))+1;
-    const go=step=>{state.step=step;draw();root.querySelector('.push-body').scrollTop=0;root.querySelector('.day-close-heading')?.focus({preventScroll:true})};
+    const go=step=>{state.direction=step<state.step?-1:1;state.step=step;draw();root.querySelector('.push-body').scrollTop=0;root.querySelector('.day-close-heading')?.focus({preventScroll:true})};
+    const isApprovedView=()=>data.dayClosings[date]?.status==='closed'&&!!data.dayClosings[date]?.closedAt&&!state.editing&&state.step!==6;
+    const advance=()=>{
+      if(state.saving||isApprovedView()||state.step>=5)return;
+      if(state.step===0||complete(DAY_CLOSING_GROUPS[state.step-1]))go(state.step+1);
+      else showToast('このステップの照合を確認してから進んでください');
+    };
     const rowsHtml=(items,group)=>{
       if(!items.length)return `<div class="day-close-empty">${icon(group==='banks'?'bank':group==='income'?'wallet':group==='mail'?'mail':'dayClose')}<strong>${group==='banks'?'登録された銀行口座はありません':group==='income'?'収入の記録はありません':group==='mail'?'この日のメール取引はありません':'普通取引の記録はありません'}</strong><p>${group==='banks'?'口座を追加するか、口座がないことを確認してください。':'入力漏れがないことを確認して次へ進みましょう。'}</p></div><label class="day-review-check"><input type="checkbox" data-empty-group="${group}" ${state.emptyGroups.includes(group)?'checked':''}>${group==='banks'?'銀行口座がないことを確認しました':'記録がないことを確認しました'}</label>`;
       return `<div class="day-close-items">${items.map(item=>{
@@ -100,16 +106,28 @@ function openDayClosing(date=trackingDate){
     const draw=()=>{
       if(!root.isConnected)return;
       const items=dayClosingReviewItems(date),snapshot=dayClosingSnapshot(date),body=root.querySelector('.push-body'),status=dayClosingStatus(date),record=data.dayClosings[date];
+      root.onkeydown=null;
+      if(isApprovedView()){
+        body.innerHTML=`<div class="day-close-content"><div class="day-close-date">${dayLabel(date)}</div><div class="day-close-success day-close-approved"><div>${icon('check')}</div><h2 class="day-close-heading">承認済</h2><p>この日の日締めは承認されています。</p></div>${dayClosingSummaryHtml(record.snapshot)}${status==='changed'?'<p class="day-review-warning">承認後に記録が変わっています。「修正」から再照合してください。</p>':''}<p class="day-review-note">承認 ${esc(new Date(record.closedAt).toLocaleString('ja-JP'))}<br>表示している金額は承認時点の記録です。修正して再承認するまで、保存済みの承認記録を保持します。</p><button type="button" class="day-close-journal-link" id="dayCloseJournal">${icon('journal')}日締めジャーナル<span>›</span></button></div><div class="day-close-footer"><button type="button" class="secondary" id="dayCloseModify">修正</button><button type="button" class="primary" id="dayCloseDone">完了</button></div>`;
+        body.querySelector('#dayCloseJournal').onclick=openDayClosingJournal;
+        body.querySelector('#dayCloseDone').onclick=popView;
+        body.querySelector('#dayCloseModify').onclick=async()=>{
+          if(!await showAlert('日締めを修正しますか？','収入・取引・銀行残高をもう一度照合します。再承認するまで保存済みの承認記録は変更しません。',{okText:'修正を始める'}))return;
+          state.editing=true;state.checks={};state.emptyGroups=[];state.confirmedSignature='';go(0);
+        };
+        const back=root.querySelector('.back-btn');if(back){back.disabled=false;back.onclick=popView}
+        return;
+      }
       // Only a matching fingerprint can remain checked after edits, imports or balance changes.
       const live=new Map(Object.values(items).flat().map(x=>[x.key,x.fingerprint]));
       for(const key of Object.keys(state.checks))if(state.checks[key]!==live.get(key))delete state.checks[key];
       state.emptyGroups=state.emptyGroups.filter(group=>!items[group].length);
       if(state.confirmedSignature!==dayClosingApprovalSignature(date))state.confirmedSignature='';
       if(state.step===6&&status!=='closed')state.step=5;
-      const header=`<div class="day-close-date">${dayLabel(date)}</div><ol class="day-close-progress" aria-label="日締めの進行状況">${DAY_CLOSING_STEPS.map((label,index)=>`<li class="${index<state.step?'done':index===state.step?'current':''}" ${index===state.step?'aria-current="step"':''}><span>${index<state.step?icon('check'):index+1}</span><span class="visually-hidden">${esc(label)}</span></li>`).join('')}</ol><div class="day-close-kicker">ステップ ${state.step+1} / 7</div><h2 class="day-close-heading" tabindex="-1">${DAY_CLOSING_STEPS[state.step]}</h2>`;
+      const header=`<div class="day-close-date">${dayLabel(date)}</div><ol class="day-close-progress" aria-label="日締めの進行状況">${DAY_CLOSING_STEPS.map((label,index)=>`<li class="${index<state.step?'done':index===state.step?'current':''}" ${index===state.step?'aria-current="step"':''}><span>${index<state.step?icon('check'):index+1}</span><span class="visually-hidden">${esc(label)}</span></li>`).join('')}</ol><div class="day-close-kicker">ステップ ${state.step+1} / 7</div><h2 class="day-close-heading" tabindex="-1">${DAY_CLOSING_STEPS[state.step]}</h2>${state.step<5?'<p class="day-close-gesture-note">左右にスワイプして移動できます</p>':''}`;
       let content='';
       if(state.step===0){
-        content=`<div class="day-close-opening"><div class="day-close-emblem">${icon('dayClose')}</div><h3>一日の記録を、ひとつずつ。</h3><p>収入、メール取引、普通取引、銀行残高を照合して、一日を締めましょう。</p></div>${dayClosingSummaryHtml(snapshot)}${status==='changed'?'<p class="day-review-warning">承認後に記録が変わりました。もう一度照合してください。</p>':''}${record?.closedAt?`<p class="day-review-note">前回の承認 ${esc(new Date(record.closedAt).toLocaleString('ja-JP'))} · ${dayClosingLabel(date)}</p>`:''}<button type="button" class="day-close-journal-link" id="dayCloseJournal">${icon('journal')}日締めジャーナル<span>›</span></button><p class="day-review-note">直近7日間の承認記録を保存します。締めたあとも取引を編集できます。</p>${status==='closed'?'<button type="button" class="secondary" id="dayReviewReopen">日締めを解除する</button>':''}`;
+        content=`<div class="day-close-opening"><div class="day-close-emblem">${icon('dayClose')}</div><h3>一日の記録を、ひとつずつ。</h3><p>収入、メール取引、普通取引、銀行残高を照合して、一日を締めましょう。</p></div>${dayClosingSummaryHtml(snapshot)}${status==='changed'?'<p class="day-review-warning">承認後に記録が変わりました。もう一度照合してください。</p>':''}${record?.closedAt?`<p class="day-review-note">前回の承認 ${esc(new Date(record.closedAt).toLocaleString('ja-JP'))} · ${dayClosingLabel(date)}</p>`:''}<button type="button" class="day-close-journal-link" id="dayCloseJournal">${icon('journal')}日締めジャーナル<span>›</span></button><p class="day-review-note">直近7日間の承認記録を保存します。締めたあとも取引を編集できます。</p>`;
       }else if(state.step>=1&&state.step<=4){
         const group=DAY_CLOSING_GROUPS[state.step-1],notes={income:'この日の登録収入を確認します。入金予定と実際の入金を区別し、必要なら編集してください。',mail:'メールの内容と登録取引を照合します。確認待ちは既存の取込画面で承認・照合・対象外の処理をしてください。',ordinary:'手入力・固定支払い・明細取込など、メール以外の取引を確認します。返金はマイナスで表示します。',banks:'銀行アプリや通帳の残高と、登録残高を照合してください。確認時点の残高を保存します。'};
         content=`<p class="day-close-description">${notes[group]}</p>${group==='banks'?`<div class="day-close-stage-total"><span>現在の銀行残高合計</span><strong>${yen(snapshot.bankTotal)}</strong></div><p class="day-review-note">${date===ymd()?'':'過去の日付を締める場合も、'}銀行残高は確認時点の値です。過去の一日の最終残高を推定しません。残高修正は既存の残高照合処理で記帳します。</p>`:`<div class="day-close-stage-total"><span>${group==='income'?'登録収入':group==='mail'?'メールの登録取引':'普通取引'} · ${items[group].length}件</span><strong>${yen(group==='income'?snapshot.incomeTotal:sum([...new Map(items[group].map(x=>[x.transaction?.id||x.record.id,x.transaction||(group==='ordinary'?x.record:null)])).values()].filter(Boolean),x=>x.amount))}</strong></div>`}${rowsHtml(items[group],group)}<div class="day-review-actions">${group==='income'?'<button type="button" class="secondary" id="dayCloseAddIncome">収入を追加</button>':group==='ordinary'?'<button type="button" class="secondary" id="dayReviewAdd">支出を追加</button><button type="button" class="secondary" id="dayReviewCorrection">実質金額を確認</button>':group==='mail'?'<button type="button" class="secondary" id="dayReviewMail">メール取引センター</button>':!items.banks.length?'<button type="button" class="secondary" id="dayCloseAddBank">銀行口座を追加</button>':''}</div>`;
@@ -120,12 +138,14 @@ function openDayClosing(date=trackingDate){
         content=`<div class="day-close-success"><div>${icon('check')}</div><h3>承認されました</h3><p>${dayLabel(date)}の日締めを保存しました。</p></div>${dayClosingSummaryHtml(record.snapshot)}<p class="day-review-note">承認 ${esc(new Date(record.closedAt).toLocaleString('ja-JP'))}<br>日締めジャーナルに7日間保存します。取引を変更した場合は再確認が必要です。</p><button type="button" class="secondary" id="dayCloseJournal">日締めジャーナルを見る</button>`;
       }
       const canNext=state.step===0||state.step===6||(state.step<5&&complete(DAY_CLOSING_GROUPS[state.step-1]));
-      body.innerHTML=`<div class="day-close-content">${header}${content}</div><div class="day-close-footer">${state.step>0&&state.step<6?'<button type="button" class="secondary" id="dayCloseBack">戻る</button>':''}<button type="button" class="primary" id="${state.step===5?'dayReviewClose':'dayCloseNext'}" ${state.saving||(!(state.step===5?state.confirmedSignature&&!firstIncomplete():canNext))?'disabled':''}>${state.step===0?'進む':state.step===5?'承認して日締め':state.step===6?'完了':'次へ'}</button></div>`;
+      body.innerHTML=`<div class="day-close-content ${state.direction<0?'back':''}">${header}${content}</div><div class="day-close-footer">${state.step>0&&state.step<6?'<button type="button" class="secondary" id="dayCloseBack">戻る</button>':''}<button type="button" class="primary" id="${state.step===5?'dayReviewClose':'dayCloseNext'}" ${state.saving||(!(state.step===5?state.confirmedSignature&&!firstIncomplete():canNext))?'disabled':''}>${state.step===0?'進む':state.step===5?'承認して日締め':state.step===6?'完了':'次へ'}</button></div>`;
+      installHorizontalSwipe(body.querySelector('.day-close-content'),advance,()=>{if(!state.saving&&state.step>0&&state.step<6)go(state.step-1)});
+      root.onkeydown=event=>{if(event.target.closest('input,select,textarea,button')||state.saving)return;if(event.key==='ArrowRight'){event.preventDefault();advance()}else if(event.key==='ArrowLeft'&&state.step>0&&state.step<6){event.preventDefault();go(state.step-1)}};
       body.querySelectorAll('[data-close-key]').forEach(input=>input.onchange=()=>{const item=Object.values(dayClosingReviewItems(date)).flat().find(x=>x.key===input.dataset.closeKey);if(item&&!item.pending&&input.checked)state.checks[item.key]=item.fingerprint;else delete state.checks[input.dataset.closeKey];draw()});
       body.querySelectorAll('[data-empty-group]').forEach(input=>input.onchange=()=>{state.emptyGroups=state.emptyGroups.filter(g=>g!==input.dataset.emptyGroup);if(input.checked)state.emptyGroups.push(input.dataset.emptyGroup);draw()});
       body.querySelectorAll('[data-close-edit]').forEach(button=>button.onclick=()=>{const item=Object.values(dayClosingReviewItems(date)).flat().find(x=>x.key===button.dataset.closeEdit);if(!item)return;if(item.group==='income')openIncomeEditor(item.record.id,date);else if(item.group==='banks')openQuickBank(item.record.id);else if(item.pending)openMailResolve(item.record.id);else if(item.transaction||item.group==='ordinary')openTransactionEdit((item.transaction||item.record).id);else openMailHistory(item.record.status==='ignored'?'ignored':'all')});
       body.querySelector('#dayCloseBack')?.addEventListener('click',()=>go(state.step-1));
-      body.querySelector('#dayCloseNext')?.addEventListener('click',()=>{if(state.step===6)popView();else if(state.step===0||complete(DAY_CLOSING_GROUPS[state.step-1]))go(state.step+1)});
+      body.querySelector('#dayCloseNext')?.addEventListener('click',()=>{if(state.step===6)popView();else advance()});
       body.querySelector('#dayCloseJournal')?.addEventListener('click',openDayClosingJournal);
       body.querySelector('#dayCloseAddIncome')?.addEventListener('click',()=>{if(state.step===5)go(1);openIncomeEditor('',date)});
       body.querySelector('#dayReviewAdd')?.addEventListener('click',()=>{if(state.step===5)go(3);openQuickExpense(date)});
@@ -141,11 +161,6 @@ function openDayClosing(date=trackingDate){
           await runWithBusy(()=>safeCommitAsync(()=>recordDayClosing(date,{review:approval}),{render:true,label:'day closing approval',invalidateAcf:false}),{title:'日締めを保存しています…',sub:'照合結果を端末に保存しています'});
           state.saving=false;state.step=6;draw();feedback.approval();showToast('日締めを承認しました');
         }catch(error){state.saving=false;state.confirmedSignature='';draw();showToast(error.message||'日締めを保存できませんでした',{tone:'error'})}
-      });
-      body.querySelector('#dayReviewReopen')?.addEventListener('click',async()=>{
-        if(state.saving)return;state.saving=true;draw();
-        try{await runWithBusy(()=>safeCommitAsync(()=>{const latest=data.dayClosings[date];if(latest)data.dayClosings[date]={...latest,status:'open',reopenedAt:new Date().toISOString()}},{render:true,label:'reopen day closing',invalidateAcf:false}),{title:'日締めを更新しています…'});showToast('日締めを解除しました')}catch{}
-        finally{state.saving=false;draw()}
       });
       const back=root.querySelector('.back-btn');if(back){back.disabled=state.saving;back.onclick=()=>{if(state.saving)return;if(state.step>0&&state.step<6)go(state.step-1);else popView()}}
     };
