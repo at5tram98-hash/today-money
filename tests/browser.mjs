@@ -21,6 +21,8 @@ const server = createServer((req, res) => {
     if (!file.startsWith(resolve(base) + '/') && file !== resolve(base)) throw new Error('Invalid path');
     if (statSync(file).isDirectory()) file = resolve(file, 'index.html');
     let text = ['.png'].includes(extname(file))?readFileSync(file):readFileSync(file, 'utf8');
+    // Financial/UI fixtures must never connect to the production notification server.
+    if(file===resolve(root,'push-config.json'))text=JSON.stringify({apiBase:'',vapidPublicKey:''});
     if(file===resolve(root,'sw.js'))text+='\n// test release '+workerRelease+'\n';
     if (typeof text==='string' && text.includes(hookMarker)) text = text.replace(hookMarker, hook + hookMarker);
     res.setHeader('Content-Type', {'.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.svg':'image/svg+xml', '.png':'image/png', '.json':'application/json', '.webmanifest':'application/manifest+json'}[extname(file)] || 'text/plain');

@@ -1,10 +1,10 @@
 # Web Push 配信基盤
 
-GitHub Pagesは画面を配信し、閉じたアプリへの通知はCloudflare WorkersのCronとD1から送ります。現在の公開設定は未接続です。認証と本番配備が完了するまで通知は開始しません。
+GitHub Pagesは画面を配信し、閉じたアプリへの通知はCloudflare WorkersのCronとD1から送ります。2026-10-08に通知用D1・Secret・Worker・1分間隔Cronを本番配備し、`push-config.json`へ公開URLと公開鍵を接続しました。端末登録は利用者が通知を許可してから開始します。
 
-## 初回接続
+## 配備・再配備
 
-所有者のCloudflare認証を完了してから、次を実行します。
+今回の初回配備は認証済みCloudflare連携から実行済みです。CLIで更新する場合は、所有者のCloudflare認証を完了して次を実行します。Cloudflare連携とCLIの認証は別です。
 
 ```sh
 npm ci
@@ -20,7 +20,8 @@ npm run push:deploy
 
 - PagesのURL、`sw.js`のURLとscope、公開鍵、Worker名、DB IDを維持します。通常のビルド・Pages公開で通知購読を消す処理はありません。
 - `push:deploy`は既存のD1・Secret・公開URLを再利用します。既存DBの不一致や鍵の不足・変更では停止し、別DBや新しい鍵へ自動で切り替えません。スキーマは追加のみで購読・配信履歴を維持します。
-- Worker変更の自動配備は`.github/workflows/push.yml`に統合しています。所有者の認証後、GitHub Actions Secret `CLOUDFLARE_API_TOKEN`、変数`CLOUDFLARE_ACCOUNT_ID`を登録し、最後に変数`CLOUDFLARE_PUSH_ENABLED=true`で有効化します。現段階は未設定で、自動配備ジョブは実行されません。トークンは対象アカウントのWorkers編集・D1編集など必要な範囲に制限します。
+- 現在のWorker自動配備にはCloudflare Buildsの初回GitHub承認が残っています。所有者がCloudflareのWorker→Settings→Builds→Connect→GitHubから、`today-money`だけへのアクセスを承認します。APIではGitアカウント未接続のエラーが返っています。初回承認後のリポジトリ・ビルド設定はAPIで構成できます。詳細は[Cloudflare Builds APIの前提条件](https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/)。
+- GitHub Actions配備を使う場合は`.github/workflows/push.yml`が代替手段です。Secret `CLOUDFLARE_API_TOKEN`、変数`CLOUDFLARE_ACCOUNT_ID`を登録し、最後に変数`CLOUDFLARE_PUSH_ENABLED=true`で有効化します。現段階は未設定で、自動配備ジョブは実行されません。トークンは対象アカウントのWorkers編集・D1編集など必要な範囲に制限します。通常のPages再公開にはこの承認は不要で、稼働中のWorkerと通知登録を維持します。
 - 再読み込み、画面復帰、オンライン復帰時に端末認証と購読を照合します。購読変更イベントでは、アプリを開いていなくても既存トークンで配信先を更新します。失敗時は再接続状態を保存し、次の起動で再試行します。
 - 購読が消えた・期限切れ・配信先が404/410になった場合は、許可が残っていれば同じ公開鍵で再購読します。端末認証と通知履歴を維持します。OSが新しいユーザー操作を求める場合は「接続を確認・復旧」から進めます。失効した認証は接続準備をリセットして再登録できます。
 - 通知認証は`myMoney3_pushDevice_v1`（localStorage）と`myMoney3_push_v1`（IndexedDB）に保存します。金融バックアップに秘密トークンを入れません。ページとService Workerは`src/js/push-connection.js`の共通実装を使います。ルートの同名ファイルはビルドで生成します。
@@ -46,6 +47,8 @@ npm run test:browser
 npm run test:worker
 ```
 
-テストは登録確認の暗号化・復号、D1、認証・取消、重複・失効・復旧、実Service Worker更新後の保存維持を含みます。通知サービスのネットワークは検証用応答を使います。本番CronとiPhoneのOS通知到達は、所有者認証・本番接続・端末許可が済んでから確認します。
+テストは登録確認の暗号化・復号、D1、認証・取消、重複・失効・復旧、実Service Worker更新後の保存維持を含みます。ローカルの通知サービス通信は検証用応答です。本番ではHTTPS疎通、D1、鍵一致、登録待ちの取消、端末認証・同期・購読更新・削除、Cronによる検証用期限切れ行の削除を確認しました。iPhoneのOS通知到達は端末の許可後に確認します。
+
+所有者の`worker/.dev.vars`がある環境では`npm run test:push-live`で本番APIを検証できます。合成した通知登録だけを一時作成し、全通知をオフにして、終了時に削除します。実端末へPushは送りません。再配備の確認には`node tests/push-redeploy.mjs prepare`→再配備→`node tests/push-redeploy.mjs verify`を使用します。間の秘密テストトークンはgit対象外の`test-results`に置き、検証後に削除します。金融・Gmail情報は使いません。
 
 公式資料: [WebKit Web Push](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/)、[Cloudflare Secretsの維持](https://developers.cloudflare.com/workers/configuration/secrets/)、[Cloudflare Cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/)、[購読変更](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/pushsubscriptionchange_event)、[web-push](https://github.com/web-push-libs/web-push)。

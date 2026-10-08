@@ -1,4 +1,4 @@
 {
-  "apiBase": "",
-  "vapidPublicKey": ""
+  "apiBase": "https://today-money-push.at5tram98.workers.dev",
+  "vapidPublicKey": "BPQUIdrQzzH1kQnNlrAPeIvYdKMuTjed8JWFI555kIIFl227f2BWzl1ZJntmFBHt3RHTHpmrr2KTSs9XuLeyb5A"
 }

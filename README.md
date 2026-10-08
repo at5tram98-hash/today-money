@@ -45,6 +45,6 @@ Pro分析機能の提案は `PRO-PROPOSALS.md` にまとめています。
 
 ## 金額入力・日締め・通知基盤
 
-新しい電卓、給与/支払いの共通月ダイヤル、編集後の再確認を含む日締めを統合しています。設計と理由は`FEATURE-DESIGN.md`。Web PushのクライアントとCloudflare配信基盤は実装済みですが、`push-config.json`が未接続なので本番配信はオフです。接続手順は`worker/README.md`。追加検証は`npm run test:worker`で実行できます。
+新しい電卓、給与/支払いの共通月ダイヤル、編集後の再確認を含む日締めを統合しています。設計と理由は`FEATURE-DESIGN.md`。Cloudflareの通知用D1・Secret・Worker・Cronを本番接続し、`push-config.json`に公開URLと公開鍵を設定しています。端末では「設定→通知設定」で同期に同意し、通知を許可して接続します。OSへの通知到達は端末の許可後に確認します。運用手順は`worker/README.md`。
 
-通知は接続コード不要の端末到達確認、購読の自動復旧、Service Worker更新後の認証維持に対応しています。`npm run push:deploy`はCloudflare認証後にD1・Secret・配信URLを構成し、以後は既存設定を再利用します。通知サーバーのGitHub Actions自動配備は、所有者認証の登録後に有効化します。
+通知は接続コード不要の端末到達確認、購読の自動復旧、Service Worker更新後の認証維持に対応しています。`npm run push:deploy`は認証済みCloudflareで既存D1・Secret・配信URLを再利用します。通常のPages更新後も、独立した通知サーバーは稼働を続けます。Workerの自動更新にはCloudflareとGitHubの初回連携承認が残っています。GitHub Actionsによる配備は認証未設定のため停止中です。

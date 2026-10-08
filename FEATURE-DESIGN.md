@@ -47,6 +47,8 @@ AppleのLiquid Glassを参考にしたWeb表現。半透明の操作面と青い
 
 **制約**: Gmailの未確認とATFは最後にアプリから同期した状態。閉じている間にGmailの新着を取得する機能ではない。既存ATFの対象期間制限は維持し、期間外に警告を作らない。iPhoneはホーム画面への追加と利用者自身による通知許可が必要。OS、通信、Cronの設定反映によって通知は遅れる場合があり、時刻ぴったりの送達を保証しない。
 
-**残る接続作業**: Cloudflare所有者の認証。その後`npm run push:deploy`でD1・Secret・Worker・公開設定を構成し、GitHub Actions認証を接続して自動配備を有効にする。詳細は`worker/README.md`。本番の権限がない状態で配信完了とは表示しない。
+**本番接続**: 通知専用D1・Secret・Worker・Cronを配備し、公開設定を接続済み。Pagesの更新と独立して通知サーバーが稼働する。通常アップデートで鍵・DB・URLを変更しない。
+
+**残る本人操作**: ホーム画面アプリの通知許可・端末登録。Worker自動配備のCloudflare Buildsを開始するには、所有者がCloudflare GitHub Appを`today-money`へ初回承認する必要がある。APIはGitアカウント未接続のエラーを返したため、承認前に自動配備完了とは扱わない。詳細は`worker/README.md`。
 
 公式資料: [Apple Liquid Glass](https://developer.apple.com/videos/play/wwdc2025/219/)、[WebKit iOS Web Push](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/)、[Cloudflare Cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/)、[web-push](https://github.com/web-push-libs/web-push)。
