@@ -10,8 +10,10 @@
 .day-close-mark{font-size:9px;color:var(--green);margin-left:2px}
 .day-close-mark.changed{color:var(--orange)}
 .day-close-view .push-body{display:flex;flex-direction:column;gap:0;scroll-padding-bottom:120px}
-.day-close-content{flex:1;min-width:0;padding-bottom:12px;animation:dayCloseStage .22s ease-out;touch-action:pan-y}
-.day-close-content.back{animation-name:dayCloseStageBack}
+.day-close-view .push-nav{grid-template-columns:minmax(84px,1fr) minmax(0,2fr) minmax(44px,1fr)}
+.day-close-content{flex:1;min-width:0;padding-bottom:12px;touch-action:pan-y}
+.day-close-content.enter{animation:dayCloseStage .22s ease-out}
+.day-close-content.enter.back{animation-name:dayCloseStageBack}
 .day-close-gesture-note{font-size:11px;color:var(--label3);margin:-3px 0 18px}
 .day-close-progress svg{width:13px;height:13px}
 .day-close-date{font-size:13px;font-weight:500;color:var(--label2);margin:4px 0 18px}
@@ -63,6 +65,7 @@
 .day-close-footer>button{min-width:0;margin:0;min-height:48px}
 .day-close-footer>button:only-child{grid-column:1/-1}
 .day-close-footer button:disabled{opacity:.4}
+body:has(.day-close-view.show) .toast-layer{bottom:calc(120px + env(safe-area-inset-bottom))}
 .day-close-journal-link{display:flex;align-items:center;gap:10px;width:100%;background:var(--card);color:var(--blue);border:1px solid var(--sep);border-radius:16px;margin-top:18px;padding:12px 16px;min-height:48px;font:inherit;font-size:14px;text-align:left}
 .day-close-journal-link svg{width:20px;height:20px}
 .day-close-journal-link span{margin-left:auto}
@@ -86,6 +89,13 @@
 .day-review-mail{border:0;background:transparent;color:var(--blue);font:inherit;min-height:44px;padding:8px 0;text-align:left}
 .day-closing-card svg,.day-close-view svg,.day-close-empty svg,.day-close-success svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .day-close-approved{padding-top:28px}
+.day-close-cancel-link{display:block;width:100%;min-height:48px;margin-top:14px;padding:12px;border:0;background:transparent;color:var(--red);font:inherit;font-size:13px}
+.day-close-success.cancelled>div{color:var(--orange);background:#ff950014;border-color:#ff950040}
+.day-close-mark.cancelled{color:var(--orange)}
+.day-close-cancel-fields{padding:16px;background:var(--card);border:1px solid var(--sep);border-radius:20px;display:grid;gap:12px;margin:18px 0}
+.day-close-cancel-fields label{font-size:13px;color:var(--label2)}
+.day-close-cancel-fields select,.day-close-cancel-fields input{width:100%;min-height:48px;border:1px solid var(--sep);border-radius:12px;padding:12px;background:var(--fill2);color:var(--label);font:inherit}
+.day-close-footer .day-close-destructive{background:var(--red);color:#fff}
 .day-close-view .day-close-item-check input,.day-close-view .day-review-check input{appearance:none;-webkit-appearance:none;position:relative;border:1.5px solid var(--label3);border-radius:50%;background:var(--card);color:var(--green);cursor:pointer}
 .day-close-view .day-close-item-check input:checked,.day-close-view .day-review-check input:checked{background:var(--green);border-color:var(--green)}
 .day-close-view input[type="checkbox"]:checked:after{content:"";position:absolute;width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);left:5px;top:6px}

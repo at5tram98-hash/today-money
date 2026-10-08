@@ -25,10 +25,37 @@
 .profile-photo-section{display:flex;align-items:center;flex-direction:column;gap:8px;margin:24px 0 18px}
 .profile-editor-avatar{width:96px;height:96px}
 .profile-editor-avatar svg{width:62px;height:62px}
-.profile-photo-action{display:block;padding:8px 12px;border:0;background:transparent;color:var(--blue);font-size:15px;margin:0 auto}
+.profile-photo-action{display:block;min-height:44px;padding:10px 16px;border:0;background:transparent;color:var(--blue);font-size:15px;margin:0 auto}
 .profile-photo-action.danger{color:var(--red);margin-top:16px}
 .profile-photo-action[hidden]{display:none}
 .profile-name-field{padding:0;border:0;background:transparent;width:100%}
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .favorite-open{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:0;border:0;background:transparent;text-align:left;color:var(--label)}
+.settings-profile-card:active,.settings-list-row:active{background:var(--fill2)}
+.settings-profile-card:focus-visible,.settings-list-row:focus-visible{outline:2px solid var(--blue);outline-offset:-3px}
+.settings-detail-view .group{border-radius:18px;margin-bottom:20px}
+.settings-detail-view .push-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.settings-detail-view .row{min-height:56px;padding:14px 16px;color:var(--label)}
+.settings-detail-view .row-title{display:block;font-size:16px;font-weight:400;line-height:1.4}
+.settings-detail-view .row-sub{display:block;margin-top:4px;font-size:12px;line-height:1.65;color:var(--label2)}
+.settings-detail-view .pill{min-width:44px;min-height:44px;padding:8px}
+.settings-category-open{display:flex;align-items:center;gap:10px;flex:1;min-width:0;min-height:44px;padding:0;border:0;background:transparent;color:var(--label);text-align:left;font:inherit}
+.settings-category-order{display:flex;gap:6px;flex-shrink:0}
+.settings-detail-view .section-head,.settings-detail-view .form-group-title{font-size:13px;font-weight:400;color:var(--label2);margin:22px 16px 8px}
+.settings-detail-intro{padding:4px 4px 16px}
+.settings-detail-intro h2{font-size:25px;font-weight:700;letter-spacing:-.035em;line-height:1.3;margin:0 0 8px}
+.settings-detail-intro p{font-size:13px;line-height:1.7;color:var(--label2);margin:0}
+.settings-choice-mark{display:grid;place-items:center;flex:0 0 25px;width:25px;height:25px;border:1px solid var(--sep);border-radius:50%;color:transparent}
+.settings-choice-mark.selected{background:var(--blue);color:white;border-color:var(--blue)}
+.settings-choice-mark svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.settings-detail-view .feedback-volume{min-height:48px;gap:16px}
+.settings-detail-view .feedback-volume input{height:44px;accent-color:var(--blue);min-width:0;width:100%}
+.settings-detail-view .feedback-volume output{min-width:40px;color:var(--label2);font-size:15px;font-variant-numeric:tabular-nums;text-align:right}
+.settings-help-list{overflow:hidden;border-radius:18px;background:var(--card)}
+.settings-help-list details+details{border-top:.5px solid var(--sep)}
+.settings-help-list summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:14px 16px;font-size:15px;list-style:none;cursor:pointer}
+.settings-help-list summary::-webkit-details-marker{display:none}
+.settings-help-list summary svg{width:13px;height:16px;fill:none;stroke:var(--label3);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.settings-help-list details[open] summary svg{transform:rotate(90deg)}
+.settings-help-list details p{padding:0 16px 16px;margin:0;color:var(--label2);font-size:13px;line-height:1.8}
 @media(max-width:350px){.settings-profile-card{gap:12px;padding:16px 12px}.settings-profile-avatar{width:54px;height:54px}.settings-profile-name{font-size:19px}.settings-list-row{gap:10px;padding-inline:12px}.settings-row-value{max-width:35%;font-size:12px}.settings-list-row+.settings-list-row:before{left:51px}}

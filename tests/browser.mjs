@@ -5,12 +5,13 @@ import {resolve, extname} from 'node:path';
 import {chromium} from 'playwright';
 import {verifyDayClosingBrowser} from './day-closing-browser.mjs';
 import {verifyFinalUiBrowser} from './final-ui-browser.mjs';
+import {verifyClosingRefinements} from './closing-refinements-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
 build();
 const results = [];
 const passed = name => {results.push({name, status: 'passed'}); console.log(`PASS ${name}`);};
-const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,openAcfDetail,openDailyGoalPlanner,openMonthlyGoalPlanner,openFinancialUpdates,financialUpdateRows,acfDisplayRows,acfDisplayValue,ACF_DAY_FIELDS,buildCashFlowForecast,getGoalState:()=>clone(goalPlannerState),recordDayClosing,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
+const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,openAcfDetail,openDailyGoalPlanner,openMonthlyGoalPlanner,openFinancialUpdates,financialUpdateRows,acfDisplayRows,acfDisplayValue,ACF_DAY_FIELDS,buildCashFlowForecast,getGoalState:()=>clone(goalPlannerState),recordDayClosing,cancelDayClosing,dayClosingAvailable,openDayClosingCancellation,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
 const hookMarker = 'try{await saveAsync({snapshot:data})}catch';
 const baselineRoot = process.env.MM3_BASELINE_DIR;
 const financialBaselineRoot=process.env.MM3_FINANCIAL_BASELINE_DIR;
@@ -81,7 +82,7 @@ async function finishDayClosing(page){
 
 try {
   mkdirSync(resolve(root,'test-results'),{recursive:true});
-  if(!process.env.MM3_DAY_CLOSING_ONLY&&!process.env.MM3_FINAL_UI_ONLY){
+  if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_DAY_CLOSING_ONLY&&!process.env.MM3_FINAL_UI_ONLY){
   for (const width of [320, 390, 1440]) for (const appearance of ['light', 'dark']) {
     const candidate = await createPage('app', {width, appearance});
     const baseline = baselineRoot ? await createPage('baseline', {width, appearance}) : null;
@@ -355,8 +356,9 @@ try {
   await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.openCalculator('320px',999999999)});await fp.waitForTimeout(350);assert.ok(await fp.locator('#calcDone').isVisible());await fp.screenshot({path:resolve(root,'test-results/calculator-320-light.png')});await fp.locator('#calcCancel').click();await features.context.close();
 
   }
-  if(!process.env.MM3_FINAL_UI_ONLY)await verifyDayClosingBrowser({createPage,passed,root,errors});
-  if(!process.env.MM3_DAY_CLOSING_ONLY)await verifyFinalUiBrowser({createPage,passed,root,financialBaselineRoot});
+  if(!process.env.MM3_DAY_CLOSING_ONLY&&!process.env.MM3_FINAL_UI_ONLY)await verifyClosingRefinements({createPage,passed,root,errors});
+  if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_FINAL_UI_ONLY)await verifyDayClosingBrowser({createPage,passed,root,errors});
+  if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_DAY_CLOSING_ONLY)await verifyFinalUiBrowser({createPage,passed,root,financialBaselineRoot});
 
   const lifecycle=await createPage();const lp=lifecycle.page;
   const vapid=Buffer.concat([Buffer.from([4]),Buffer.alloc(64,1)]).toString('base64url'),device={apiBase:'https://money.push-test.example',vapidPublicKey:vapid,token:'test-device-token',endpoint:'https://web.push.apple.com/test-old'};
@@ -371,6 +373,6 @@ try {
   assert.deepEqual(errors, []);
   passed('no JavaScript exceptions or local HTTP failures in tested flows');
   mkdirSync(resolve(root, 'test-results'), {recursive: true});
-  writeFileSync(resolve(root, process.env.MM3_DAY_CLOSING_ONLY?'test-results/browser-day-closing.json':process.env.MM3_FINAL_UI_ONLY?'test-results/browser-final-ui.json':'test-results/browser.json'), JSON.stringify({results, errors, externalAuthenticatedServicesTested: false}, null, 2));
+  writeFileSync(resolve(root, process.env.MM3_CLOSING_REFINEMENTS_ONLY?'test-results/browser-closing-refinements.json':process.env.MM3_DAY_CLOSING_ONLY?'test-results/browser-day-closing.json':process.env.MM3_FINAL_UI_ONLY?'test-results/browser-final-ui.json':'test-results/browser.json'), JSON.stringify({results, errors, externalAuthenticatedServicesTested: false}, null, 2));
   console.log(`${results.length} browser checks passed`);
 } finally {await browser.close(); await new Promise(r => server.close(r));}

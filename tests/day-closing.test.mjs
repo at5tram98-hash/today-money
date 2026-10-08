@@ -74,3 +74,31 @@ test('seven calendar days are retained across month boundaries and expiry never 
   assert.equal(f.run("Object.keys(normalizeData({...data,dayClosings:{'2026-09-30':{},'2026-10-07':{status:'closed'}}}).dayClosings).length"),1);
   assert.throws(()=>f.run("safeCommit(()=>recordDayClosing('2026-09-30',{review:reviewed('2026-09-30')}))"),/7日/);
 });
+
+test('closing is gated at exactly 18:00 Tokyo time, while earlier dates remain available',()=>{
+  const f=fixture();f.clock.now=Date.parse('2026-10-07T08:59:59.999Z');
+  assert.equal(f.run("dayClosingAvailable('2026-10-07')"),false);
+  assert.equal(f.run("dayClosingAvailable('2026-10-06')"),true);
+  assert.equal(f.run("dayClosingAvailable('invalid')"),false);
+  assert.throws(()=>f.run('approve()'),/18:00/);assert.equal(f.run('Object.keys(data.dayClosings).length'),0);
+  f.clock.now=Date.parse('2026-10-07T09:00:00Z');f.run('approve()');
+  assert.equal(f.run("dayClosingStatus('2026-10-07')"),'closed');
+});
+test('cancellation requires deliberate confirmation and preserves approval evidence and every ledger field',()=>{
+  const f=fixture();f.run('approve();let expectedRecord=JSON.stringify(data.dayClosings["2026-10-07"]);let options={expectedRecord,reason:"誤って承認した",acknowledged:true,confirmation:"取消"}');
+  const before=f.run('financial()'),snapshot=f.run('JSON.stringify(data.dayClosings["2026-10-07"].snapshot)');
+  for(const patch of ['acknowledged:false','confirmation:""','reason:""'])assert.throws(()=>f.run(`safeCommit(()=>cancelDayClosing('2026-10-07',{...options,${patch}}))`),/最終確認/);
+  assert.throws(()=>f.run("cancelDayClosing('2026-10-07',options)"),/outside commit/);
+  f.run("safeCommit(()=>cancelDayClosing('2026-10-07',options))");
+  assert.equal(f.run('financial()'),before);assert.equal(f.run('JSON.stringify(data.dayClosings["2026-10-07"].snapshot)'),snapshot);
+  assert.equal(f.run("dayClosingStatus('2026-10-07')"),'cancelled');
+  assert.equal(f.run("dayClosingLabel('2026-10-07')"),'取消済');
+  assert.throws(()=>f.run("safeCommit(()=>cancelDayClosing('2026-10-07',options))"),/記録が変わりました/);
+  f.run('approve()');assert.equal(f.run('data.dayClosings["2026-10-07"].history.at(-1).cancellationReason'),'誤って承認した');assert.equal(f.run('financial()'),before);
+});
+test('cancellation rejects stale approvals, times before the cutoff and expired journal dates',()=>{
+  const f=fixture();f.run('approve();let options={expectedRecord:JSON.stringify(data.dayClosings["2026-10-07"]),reason:"誤って承認した",acknowledged:true,confirmation:"取消"}');
+  f.clock.now=Date.parse('2026-10-07T08:59:59Z');assert.throws(()=>f.run("safeCommit(()=>cancelDayClosing('2026-10-07',options))"),/18:00/);
+  f.clock.now=Date.parse('2026-10-07T12:00:01Z');f.run('approve()');assert.throws(()=>f.run("safeCommit(()=>cancelDayClosing('2026-10-07',options))"),/記録が変わりました/);
+  f.clock.now=Date.parse('2026-10-14T12:00:00Z');assert.throws(()=>f.run("safeCommit(()=>cancelDayClosing('2026-10-07',options))"),/7日/);
+});

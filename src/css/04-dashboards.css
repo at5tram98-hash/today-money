@@ -220,6 +220,8 @@ html.dark #screen-payments .mm3-atf-grid{stroke:rgba(235,235,245,.12)}
 #screen-assets .mm3-assets-menu-btn{min-height:31px;border:0;border-radius:10px;background:var(--fill);padding:5px 9px;color:var(--label);font-size:11px;font-weight:650;display:inline-flex;align-items:center;gap:4px;transition:transform .12s,opacity .12s,background .12s;white-space:nowrap}
 #screen-assets .mm3-assets-menu-btn:active{transform:scale(.96);opacity:.7}
 #screen-assets .mm3-assets-menu-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--label2)}
+#screen-assets .mm3-assets-history-btn{min-height:44px;padding:10px 12px;font-size:13px;color:var(--blue);gap:7px}
+#screen-assets .mm3-assets-history-btn svg{color:var(--blue)}
 #screen-assets .mm3-assets-chart{position:relative;height:190px;margin:1px -1px 0;touch-action:pan-y;-webkit-user-select:none;user-select:none}
 #screen-assets .mm3-assets-chart svg{width:100%;height:168px;display:block;overflow:visible}
 #screen-assets .mm3-assets-grid{stroke:var(--sep);stroke-width:.7;opacity:.62}
