@@ -127,3 +127,37 @@ test("unauthenticated provisioning stops before creating or changing resources",
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("published production configuration can be redeployed without changing connection identities", async () => {
+  const root = mkdtempSync(resolve(tmpdir(), "money-push-production-config-"));
+  try {
+    mkdirSync(resolve(root, "worker"));
+    const configText = readFileSync(new URL("../worker/wrangler.jsonc", import.meta.url), "utf8");
+    const publicText = readFileSync(new URL("../push-config.json", import.meta.url), "utf8");
+    const config = JSON.parse(configText);
+    const published = JSON.parse(publicText);
+    writeFileSync(resolve(root, "worker/wrangler.jsonc"), configText);
+    writeFileSync(resolve(root, "push-config.json"), publicText);
+    const binding = config.d1_databases.find(item => item.binding === "DB");
+    assert.ok(binding && published.apiBase && published.vapidPublicKey);
+    const result = await deployPush({
+      root,
+      run: async args => {
+        if (args[0] === "whoami") return "Authenticated";
+        if (args[0] === "d1" && args[1] === "list") return JSON.stringify([{name:binding.database_name,uuid:binding.database_id}]);
+        if (args[0] === "secret" && args[1] === "list") return JSON.stringify([{name:"VAPID_PUBLIC_KEY"},{name:"VAPID_PRIVATE_KEY"}]);
+        assert.ok(!(args[0] === "secret" && args[1] === "bulk"));
+        assert.ok(!(args[0] === "d1" && args[1] === "create"));
+        return published.apiBase;
+      },
+      fetcher: async () => Response.json({ok:true,apiVersion:2,vapidPublicKey:published.vapidPublicKey}),
+    });
+    assert.equal(result.publicConfigChanged, false);
+    assert.equal(result.databaseId, binding.database_id);
+    assert.equal(readFileSync(resolve(root, "push-config.json"), "utf8"), publicText);
+    assert.deepEqual(JSON.parse(readFileSync(resolve(root, "worker/wrangler.jsonc"), "utf8")), config);
+    assert.equal(existsSync(resolve(root, "worker/.dev.vars")), false);
+  } finally {
+    rmSync(root, {recursive:true,force:true});
+  }
+});

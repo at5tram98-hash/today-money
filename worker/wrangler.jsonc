@@ -3,21 +3,25 @@
   "name": "today-money-push",
   "main": "index.js",
   "compatibility_date": "2026-10-07",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "workers_dev": true,
   "triggers": {
-    "crons": ["* * * * *"],
+    "crons": [
+      "* * * * *"
+    ]
   },
   "vars": {
     "APP_URL": "https://at5tram98-hash.github.io/today-money/",
-    "VAPID_SUBJECT": "https://at5tram98-hash.github.io/today-money/",
+    "VAPID_SUBJECT": "https://at5tram98-hash.github.io/today-money/"
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "today-money-push",
-      "database_id": "16f91e89-fd74-49ac-8fc9-51c77239f3b0",
-    },
+      "database_id": "16f91e89-fd74-49ac-8fc9-51c77239f3b0"
+    }
   ],
-  "account_id": "0d4d5987a87111e25f34d17a07db4585",
+  "account_id": "0d4d5987a87111e25f34d17a07db4585"
 }
