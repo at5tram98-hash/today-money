@@ -1,0 +1,14 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "today-money-push",
+  "main": "index.js",
+  "compatibility_date": "2026-10-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "triggers": {"crons": ["* * * * *"]},
+  "vars": {
+    "APP_URL": "https://at5tram98-hash.github.io/today-money/",
+    "VAPID_SUBJECT": "https://at5tram98-hash.github.io/today-money/"
+  },
+  "d1_databases": [{"binding": "DB", "database_name": "today-money-push", "database_id": "REPLACE_WITH_CREATED_DATABASE_ID"}]
+}

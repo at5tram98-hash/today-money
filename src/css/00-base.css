@@ -157,7 +157,6 @@ html.dark .tab{color:#98989F}
 
 /* Spec-complete interactive components */
 button:disabled{opacity:.38;cursor:default}button:not(:disabled){transition:transform .11s cubic-bezier(.2,.8,.2,1),opacity .11s,background .11s}button:not(:disabled):active{transform:scale(.97);opacity:.66}
-.calc-key.op.active{background:#fff;color:#FF9F0A}
 .filter-stack{display:grid;grid-template-columns:minmax(0,1fr) 145px;gap:8px;margin-bottom:10px}
 .filter-stack .searchbox{margin:0}
 .compact-select{min-height:40px;padding:8px 10px;font-size:13px}

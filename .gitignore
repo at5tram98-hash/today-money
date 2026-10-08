@@ -1,2 +1,7 @@
 node_modules/
 test-results/
+
+.dev.vars
+.dev.vars.*
+.wrangler/
+worker/dist/

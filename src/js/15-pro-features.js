@@ -82,8 +82,7 @@ function scrollPaymentSection(id){document.getElementById(`paymentsSection-${id}
 
 
 
-const __rawSendBrowserNotice=sendBrowserNotice;
-sendBrowserNotice=async function(title,body){const level=data.notificationSettings?.level||'recommended',s=`${title} ${body}`;if(level==='minimal'&&!/残高|不足|危険|安全ライン|ACF/.test(s))return;if(level==='recommended'&&!/残高|不足|危険|安全ライン|ACF|カテゴリー不明|カード引落日/.test(s))return;return __rawSendBrowserNotice(title,body)};
+
 
 function updateHomeTabButton(){const b=document.getElementById('homeTab');if(b)b.querySelector('.tab-label').textContent='今日'}
 

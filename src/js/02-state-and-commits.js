@@ -35,7 +35,7 @@ function save(options={}){
   try{
     if(data.meta?.storageWriteError)mm3AllowInternalStateWrite(()=>{delete data.meta.storageWriteError});
     const revision=mm3StorageRevision+1,raw=JSON.stringify(data),snapshot=JSON.parse(raw);
-    mm3WriteLocal(raw,revision);mm3StorageRevision=revision;mm3LastSavedRaw=raw;storageErrorToastShown=false;
+    mm3WriteLocal(raw,revision);mm3StorageRevision=revision;mm3LastSavedRaw=raw;storageErrorToastShown=false;queuePushSummary();
     if(mm3Db)mm3WriteQueue=mm3WriteQueue.catch(()=>{}).then(()=>mm3DbPutMain(snapshot,revision)).catch(e=>console.warn('IndexedDB mirror pending; local data remains durable',e));
     return true
   }catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});try{e.__storageWriteError=true}catch(_){}console.error('save failed',e);throw e}
@@ -54,14 +54,14 @@ async function saveAsync({snapshot=data,invalidateAcf=true}={}){
     try{
       await mm3WriteQueue.catch(()=>{});
       try{await mm3DbPutMain(plain,revision)}catch(e){if(e?.name!=='QuotaExceededError')throw e;await mm3TrimRecovery(2);await mm3DbPutMain(plain,revision)}
-      mm3StorageRevision=revision;mm3LastSavedRaw=raw;mm3StorageMode='indexeddb';storageErrorToastShown=false;
+      mm3StorageRevision=revision;mm3LastSavedRaw=raw;mm3StorageMode='indexeddb';storageErrorToastShown=false;queuePushSummary();
       if(snapshot.meta?.storageWriteError)mm3AllowInternalStateWrite(()=>{delete snapshot.meta.storageWriteError});
       if(mm3LocalMirrorAllowed)try{mm3WriteLocal(raw,revision)}catch(e){console.warn('local fallback mirror unavailable; IndexedDB save succeeded',e);try{localStorage.removeItem(APP_KEY);localStorage.removeItem(MM3_STORAGE_REV_KEY);localStorage.removeItem(MM3_STORAGE_SIG_KEY)}catch(_){}}
       return true
     }catch(e){console.warn('IndexedDB save unavailable; trying local storage',e);try{mm3Db.close()}catch(_){}mm3Db=null;mm3StorageMode='local'}
   }
   if(!mm3LocalMirrorAllowed)throw new Error('破損した旧データの保護が完了せず、保存を停止しました');
-  try{mm3WriteLocal(raw,revision);mm3StorageRevision=revision;mm3LastSavedRaw=raw;storageErrorToastShown=false;if(snapshot.meta?.storageWriteError)mm3AllowInternalStateWrite(()=>{delete snapshot.meta.storageWriteError});return true}
+  try{mm3WriteLocal(raw,revision);mm3StorageRevision=revision;mm3LastSavedRaw=raw;storageErrorToastShown=false;queuePushSummary();if(snapshot.meta?.storageWriteError)mm3AllowInternalStateWrite(()=>{delete snapshot.meta.storageWriteError});return true}
   catch(e){try{e.__storageWriteError=true}catch(_){}throw e}
 }
 function safeCommit(mutator,{render=false,label='',skipUnchanged=false,invalidateAcf=true}={}){

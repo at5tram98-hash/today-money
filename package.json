@@ -5,14 +5,21 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test tests/static.test.mjs",
-    "test:browser": "node tests/browser.mjs"
+    "test": "node --test tests/static.test.mjs tests/push.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:worker": "wrangler deploy --config worker/wrangler.jsonc --dry-run --outdir ../test-results/worker-build && node tests/worker-runtime.mjs"
   },
   "devDependencies": {
     "acorn": "8.19.0",
     "eslint": "9.39.5",
     "globals": "17.13.0",
+    "http_ece": "1.2.1",
     "playwright": "1.62.1",
-    "postcss": "8.5.29"
+    "postcss": "8.5.29",
+    "wrangler": "4.148.0",
+    "miniflare": "5.20261006.0-alpha"
+  },
+  "dependencies": {
+    "web-push": "3.6.7"
   }
 }

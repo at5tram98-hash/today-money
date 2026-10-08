@@ -9,6 +9,10 @@
     "src/js/05-acf-engine.js",
     "src/js/06-acf-views.js",
     "src/js/07-navigation.js",
+    "src/js/calculator.js",
+    "src/js/month-picker.js",
+    "src/js/day-closing.js",
+    "src/js/web-push.js",
     "src/js/08-transactions.js",
     "src/js/09-accounts-and-payroll.js",
     "src/js/10-money-ticker.js",
@@ -39,7 +43,9 @@
     "src/css/05-statements.css",
     "src/css/06-native-ui.css",
     "src/css/07-atf.css",
-    "src/css/settings.css"
+    "src/css/settings.css",
+    "src/css/money-input.css",
+    "src/css/day-closing.css"
   ],
   "baseline": {
     "blob": "2a33e9e643db3c53347d211fa77b67c3ac580072",

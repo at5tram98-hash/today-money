@@ -8,7 +8,7 @@ import {build, root, digest} from '../scripts/build.mjs';
 build();
 const results = [];
 const passed = name => {results.push({name, status: 'passed'}); console.log(`PASS ${name}`);};
-const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView};\n`;
+const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openDayClosing,recordDayClosing,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
 const hookMarker = 'try{await saveAsync({snapshot:data})}catch';
 const baselineRoot = process.env.MM3_BASELINE_DIR;
 const server = createServer((req, res) => {
@@ -19,9 +19,9 @@ const server = createServer((req, res) => {
     let file = resolve(base, '.' + pathname.replace(/^\/(app|baseline)/, ''));
     if (!file.startsWith(resolve(base) + '/') && file !== resolve(base)) throw new Error('Invalid path');
     if (statSync(file).isDirectory()) file = resolve(file, 'index.html');
-    let text = readFileSync(file, 'utf8');
-    if (text.includes(hookMarker)) text = text.replace(hookMarker, hook + hookMarker);
-    res.setHeader('Content-Type', {'.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html'}[extname(file)] || 'text/plain');
+    let text = ['.png'].includes(extname(file))?readFileSync(file):readFileSync(file, 'utf8');
+    if (typeof text==='string' && text.includes(hookMarker)) text = text.replace(hookMarker, hook + hookMarker);
+    res.setHeader('Content-Type', {'.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.svg':'image/svg+xml', '.png':'image/png', '.json':'application/json', '.webmanifest':'application/manifest+json'}[extname(file)] || 'text/plain');
     res.end(text);
   } catch {res.writeHead(404); res.end('Not found');}
 });
@@ -93,12 +93,12 @@ try {
   }
   passed('tab buttons respond and keep exactly one active screen');
   await page.locator('[data-tab="pay"]').click();
-  await page.locator('#mm3SalaryMonth').selectOption('2026-11');
+  await page.locator('#mm3SalaryMonth').click();await page.locator('#monthWheel-month').focus();await page.keyboard.press('ArrowDown');await page.locator('#monthPickerApply').click();
   await page.waitForFunction(() => globalThis.__mm3Test.getState().payViewMonth === '2026-11');
   assert.ok((await page.locator('#screen-pay').innerText()).includes('¥48,810'));
-  await page.locator('#mm3SalaryMonth').selectOption('2026-10');
+  await page.locator('#mm3SalaryMonth').click();await page.locator('#monthWheel-month').focus();await page.keyboard.press('ArrowUp');await page.locator('#monthPickerApply').click();
   await page.waitForFunction(() => globalThis.__mm3Test.getState().payViewMonth === '2026-10');
-  passed('salary month dropdown updates immediately');
+  passed('salary month wheel confirms and updates the view');
 
   await page.evaluate(() => globalThis.__mm3Test.openSalaryRecordEdit('salary_seed_gu_202610'));
   await page.locator('#srGross').click();
@@ -301,6 +301,34 @@ try {
   assert.ok(!await noticePage.page.evaluate(()=>globalThis.__mm3Test.getData().notices.some(n=>n.id==='old'||n.id==='today'||n.title==='復帰検証')));
   passed('resume removes yesterday notices permanently and reload does not restore them');
   await noticePage.context.close();
+
+
+  const features=await createPage('app',{width:320});const fp=features.page;
+  await fp.evaluate(()=>globalThis.__mm3Test.openCalculator('家計の金額',1001,value=>globalThis.__usedAmount=value));
+  assert.equal(await fp.locator('[data-k="sign"]').count(),0);
+  await fp.locator('[data-calc-tool="split"]').click();await fp.locator('#calcToolValue').fill('3');
+  assert.ok((await fp.locator('#calcToolNote').innerText()).includes('334円 × 2人'));
+  await fp.locator('#calcToolApply').click();await fp.locator('#calcDone').click();
+  assert.equal(await fp.evaluate(()=>globalThis.__usedAmount),333);
+  passed('split assistance distributes every yen and uses the chosen amount at 320px');
+  await fp.evaluate(()=>globalThis.__mm3Test.openCalculator('割引',1000));await fp.locator('[data-calc-tool="discount"]').click();await fp.locator('#calcToolValue').fill('20');assert.equal(await fp.locator('#calcToolPreview').innerText(),'800円');await fp.locator('#calcToolCancel').click();assert.equal(await fp.evaluate(()=>globalThis.__mm3Test.calcFinalValue()),1000);await fp.locator('[data-calc-tool="add"]').click();await fp.locator('#calcToolValue').fill('10');await fp.locator('#calcToolApply').click();assert.equal(await fp.evaluate(()=>globalThis.__mm3Test.calcFinalValue()),1100);await fp.locator('#calcCancel').click();
+  passed('discount/addition assistance previews rounding and cancel preserves the original');
+  const arithmetic=await fp.evaluate(()=>{
+    const t=globalThis.__mm3Test;t.openCalculator('計算',0);['clear','1','0','0','op:+','2','0','done','done'].forEach(t.calcKey);const repeated=t.calcFinalValue();t.closeCalc();t.openCalculator('負の金額',-100,null,{allowNegative:true});const negative=t.calcFinalValue();t.closeCalc();t.openCalculator('0で割る',0);['clear','1','op:/','0'].forEach(t.calcKey);const zero=t.calcFinalValue();t.closeCalc();return{repeated,negative,zero};
+  });assert.deepEqual(arithmetic,{repeated:140,negative:-100,zero:null});passed('existing repeated equals, signed context and division-by-zero arithmetic are preserved');
+  await fp.locator('[data-tab="payments"]').click();const originalMonth=await fp.evaluate(()=>globalThis.__mm3Test.getState().assetBillingMonth);await fp.locator('#mm3PaymentMonth').click();await fp.locator('#monthWheel-month').focus();await fp.keyboard.press('ArrowDown');await fp.locator('#monthPickerCancel').click();assert.equal(await fp.evaluate(()=>globalThis.__mm3Test.getState().assetBillingMonth),originalMonth);await fp.locator('#mm3PaymentMonth').click();await fp.locator('#monthWheel-month').focus();await fp.keyboard.press('ArrowDown');await fp.locator('#monthPickerApply').click();await fp.waitForFunction(()=>globalThis.__mm3Test.getState().assetBillingMonth==='2026-11');passed('payments uses the same month wheel; cancel cannot change the visible month');
+  const date='2026-10-07';
+  // Replace through the normal durable path; no nested commit is permitted.
+  await fp.evaluate(async date=>{const t=globalThis.__mm3Test,state=t.getData();state.transactions=[{id:'review-a',date,amount:1001,category:'食費',merchant:'検証',paymentMethod:'other',paymentId:'',memo:''}];state.dailyCorrections[date]=900;await t.replaceData(state);t.switchTab('today')},date);
+  const beforeClose=await fp.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{transactions:d.transactions,banks:d.banks,cards:d.cards,dailyCorrections:d.dailyCorrections}});
+  await fp.locator('#todayDayClose').click();assert.equal(await fp.locator('#dayReviewClose').isDisabled(),true);assert.ok((await fp.locator('.day-review-hero').innerText()).includes('900'));await fp.locator('#dayReviewConfirmed').check();await fp.locator('#dayReviewClose').click();await fp.waitForFunction(date=>globalThis.__mm3Test.dayClosingStatus(date)==='closed',date);
+  await fp.waitForSelector('#dayReviewReopen');
+  const afterClose=await fp.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{transactions:d.transactions,banks:d.banks,cards:d.cards,dailyCorrections:d.dailyCorrections}});assert.deepEqual(afterClose,beforeClose);passed('daily close requires review, uses corrected spending and does not change ledger balances');
+  await fp.reload();await fp.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'closed');
+  await fp.evaluate(async date=>{const t=globalThis.__mm3Test,state=t.getData();state.transactions[0].amount=2000;await t.replaceData(state);t.renderAll()},date);assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'changed');assert.ok((await fp.locator('#todayDayClose').innerText()).includes('再確認'));await fp.locator('.native-home-mode').getByText('今月',{exact:true}).click();assert.ok((await fp.locator('[data-date="2026-10-07"]').getAttribute('aria-label')).includes('再確認'));passed('day closing persists and detects later edits even when an override keeps the total unchanged');
+  await fp.locator('[data-date="2026-10-07"]').click();await fp.locator('#inspectDayClose').click();await fp.locator('#dayReviewConfirmed').check();await fp.locator('#dayReviewClose').click();await fp.waitForSelector('#dayReviewReopen');await fp.locator('#dayReviewReopen').click();await fp.waitForSelector('#dayReviewClose');passed('calendar opens daily review, allows re-confirmation and reopening');
+  await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.switchTab('settings');globalThis.__mm3Test.openNotificationSettings()});await fp.waitForSelector('#pushEnable');assert.equal(await fp.locator('#pushEnable').isDisabled(),true);assert.ok((await fp.locator('.push-view.show').innerText()).includes('通知サーバー未接続'));const summary=await fp.evaluate(()=>globalThis.__mm3Test.buildPushSummary());assert.equal(summary.spending,null);assert.ok(!('transactions' in summary)&&!('gmailSettings' in summary));passed('unconfigured Push stays off and the default summary excludes amounts and Gmail credentials');
+  await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.openCalculator('320px',999999999)});await fp.waitForTimeout(350);assert.ok(await fp.locator('#calcDone').isVisible());await fp.screenshot({path:resolve(root,'test-results/calculator-320-light.png')});await fp.locator('#calcCancel').click();await features.context.close();
 
   assert.deepEqual(errors, []);
   passed('no JavaScript exceptions or local HTTP failures in tested flows');

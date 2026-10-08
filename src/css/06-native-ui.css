@@ -119,14 +119,7 @@ html.dark .native-quick-action{background:#0a64d3}
 .form-label{font-size:13px;line-height:1.4}
 .form-card .field{min-height:44px;font-size:16px}
 .primary,.secondary{font-size:16px;min-height:48px!important}
-.native-calc-dim{z-index:410}
-#calculator{height:min(560px,calc(100dvh - max(var(--safe-t),8px)));max-height:calc(100dvh - max(var(--safe-t),8px));padding-bottom:calc(12px + var(--safe-b))}
-.calc-grid{grid-template-rows:repeat(5,minmax(44px,1fr));gap:8px}
-.calc-key{min-height:44px!important;border-radius:15px;font-size:32px}
-.calc-display{height:86px;min-height:48px;flex-shrink:1}
-.calc-number{max-width:100%;font-size:clamp(30px,10vw,56px)}
-.calc-top>div{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.calc-top button{flex-shrink:0;font-size:15px;padding-inline:4px}
+
 .alert-box{max-width:100%}.alert-actions button{min-height:48px!important}
 .seg,.pro4-analysis-tabs,.pro4-search-filters{overflow-x:auto;scrollbar-width:none}
 .seg button{flex-shrink:0}
@@ -143,7 +136,7 @@ html.native-keyboard .sheet.full{height:calc(var(--native-viewport-height,100dvh
  .row{padding-inline:12px}.row-value{font-size:14px}.filter-stack{grid-template-columns:1fr}
  .mm3-action-trailing{font-size:12px}.push-nav{grid-template-columns:64px minmax(0,1fr) 88px}
 }
-@media(max-height:450px){#app .screen .topbar{display:flex;padding-top:var(--safe-t);padding-bottom:4px;min-height:48px}.topbar .topbar-main{flex:1}.large-title,.month-name-btn{font-size:24px}.calc-display{height:50px}.calc-grid{gap:4px}.calc-key{font-size:23px}#calculator{padding-top:0}.sheet .grabber{height:16px;flex-basis:16px}}
+@media(max-height:450px){#app .screen .topbar{display:flex;padding-top:var(--safe-t);padding-bottom:4px;min-height:48px}.topbar .topbar-main{flex:1}.large-title,.month-name-btn{font-size:24px}.sheet .grabber{height:16px;flex-basis:16px}}
 @media(prefers-contrast:more){:root{--label2:#44444b;--label3:#616168}html.dark{--label2:#dedee5;--label3:#b6b6bd}.group,.card,.hero,.mm3-action-group{box-shadow:inset 0 0 0 1px var(--sep)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
 html.motion-off *,html.motion-off *::before,html.motion-off *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}

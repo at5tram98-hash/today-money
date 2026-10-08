@@ -9,6 +9,8 @@
 <meta name="color-scheme" content="light dark">
 <meta name="apple-mobile-web-app-title" content="My Money">
 <title>My Money 3.0</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/app-192.png">
 <link rel="stylesheet" href="{{APP_CSS}}">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -32,7 +34,7 @@
 <div class="dim" id="dim"></div><div class="sheet" id="sheet"></div><div id="pushLayer"></div><div class="ios-menu" id="menuLayer" role="menu"></div>
 <div id="toastLayer" class="toast-layer" aria-live="polite" aria-atomic="true"></div>
 <div class="alert-wrap" id="alertWrap"><div class="alert-box"><div class="alert-content"><div class="alert-title" id="alertTitle"></div><div class="alert-message" id="alertMessage"></div></div><div class="alert-actions" id="alertActions"></div></div></div>
-<div id="calculator"><div class="calc-top"><button type="button" class="calc-cancel" id="calcCancel">キャンセル</button><div id="calcTitle">金額</div><button type="button" id="calcDone">完了</button></div><div class="calc-display" id="calcDisplay"><span class="calc-number" id="calcNumber">0</span><span class="calc-unit">円</span></div><div class="calc-grid" id="calcGrid"></div></div>
+<div id="calculator"><div class="calc-top"><button type="button" class="calc-cancel" id="calcCancel">キャンセル</button><div id="calcTitle">金額</div><span class="calc-top-spacer"></span></div><div class="calc-expression" id="calcExpression">金額を入力</div><div class="calc-display" id="calcDisplay"><span class="calc-number" id="calcNumber">0</span><span class="calc-unit">円</span></div><div class="calc-assists" aria-label="家計の入力補助"><button type="button" data-calc-tool="discount" aria-expanded="false">割引</button><button type="button" data-calc-tool="add" aria-expanded="false">割合を加算</button><button type="button" data-calc-tool="split" aria-expanded="false">割り勘</button></div><div id="calcTools" class="calc-tools-panel" hidden><h2 id="calcToolHeading"></h2><p id="calcToolBase"></p><label for="calcToolValue" id="calcToolLabel">割合（%）</label><input type="number" inputmode="numeric" id="calcToolValue" min="0" max="100" step="1"><output id="calcToolPreview" aria-live="polite"></output><p id="calcToolNote"></p><div class="calc-tool-actions"><button type="button" id="calcToolCancel">戻る</button><button type="button" id="calcToolApply">計算結果を使う</button></div></div><div class="calc-grid" id="calcGrid"></div><button type="button" class="calc-use" id="calcDone">この金額を使う</button></div>
 <div id="lockScreen"><div class="lock-title">My Money 3.0</div><div class="row-sub" style="margin-top:8px">パスコードを入力</div><div class="lock-dots" id="lockDots"></div><div class="lock-pad" id="lockPad"></div></div>
 <script src="{{APP_JS}}"></script>
 </body>
