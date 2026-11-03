@@ -5,6 +5,7 @@ import {resolve, extname} from 'node:path';
 import {chromium} from 'playwright';
 import {verifyDayClosingBrowser} from './day-closing-browser.mjs';
 import {verifyFinalUiBrowser} from './final-ui-browser.mjs';
+import {verifyUiUpdate} from './ui-update-browser.mjs';
 import {verifyClosingRefinements} from './closing-refinements-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
@@ -42,8 +43,8 @@ const browser = await chromium.launch({
 });
 const errors = [];
 
-async function createPage(version = 'app', {width = 390, appearance = 'light', localOnly = false, stored = null, timezoneId = 'Asia/Tokyo'} = {}) {
-  const context = await browser.newContext({viewport: {width, height: 844}, timezoneId, colorScheme: appearance});
+async function createPage(version = 'app', {width = 390, height = 844, mobile = false, appearance = 'light', localOnly = false, stored = null, timezoneId = 'Asia/Tokyo'} = {}) {
+  const context = await browser.newContext({viewport: {width, height}, isMobile:mobile, hasTouch:mobile, timezoneId, colorScheme: appearance});
   // OAuth account access requires the user's session; these tests cover local app behavior.
   await context.route('https://accounts.google.com/**', route => route.fulfill({body: '', contentType: 'text/javascript'}));
   await context.addInitScript(({appearance, localOnly, stored}) => {
@@ -359,6 +360,8 @@ try {
   if(!process.env.MM3_DAY_CLOSING_ONLY&&!process.env.MM3_FINAL_UI_ONLY)await verifyClosingRefinements({createPage,passed,root,errors});
   if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_FINAL_UI_ONLY)await verifyDayClosingBrowser({createPage,passed,root,errors});
   if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_DAY_CLOSING_ONLY)await verifyFinalUiBrowser({createPage,passed,root,financialBaselineRoot});
+
+  await verifyUiUpdate({createPage,passed,root});
 
   const lifecycle=await createPage();const lp=lifecycle.page;
   const vapid=Buffer.concat([Buffer.from([4]),Buffer.alloc(64,1)]).toString('base64url'),device={apiBase:'https://money.push-test.example',vapidPublicKey:vapid,token:'test-device-token',endpoint:'https://web.push.apple.com/test-old'};

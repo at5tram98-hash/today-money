@@ -232,9 +232,9 @@ html.motion-off .money-ticker-copy.money-ticker-duplicate{display:none}
 .acf-home-amount{font-size:35px;line-height:1.08;font-weight:760;letter-spacing:-1px;margin-top:10px;font-variant-numeric:tabular-nums}
 .acf-home-caption{font-size:11px;color:var(--label2);margin-top:3px}
 .acf-home-split{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:stretch;margin-top:13px}
-.acf-home-split>div{background:var(--fill);border-radius:11px;padding:9px 10px;min-width:0}
-.acf-home-split span{display:block;font-size:9.5px;color:var(--label2)}
-.acf-home-split strong{display:block;font-size:14px;margin-top:2px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acf-home-split>div{border-left:.5px solid var(--sep);padding:4px 10px;min-width:0}
+.acf-home-split span{display:block;font-size:11px;color:var(--label2)}
+.acf-home-split strong{display:block;font-family:var(--font-rounded);font-size:16px;margin-top:2px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .acf-home-split .ratio{display:flex;flex-direction:column;justify-content:center;text-align:center;min-width:69px}
 .acf-home-split .ratio strong{color:var(--blue)}
 .acf-plain-note{font-size:11px;color:var(--label2);line-height:1.45;margin-top:10px}

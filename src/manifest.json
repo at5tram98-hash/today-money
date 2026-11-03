@@ -39,6 +39,7 @@
     "src/bootstrap-close.txt"
   ],
   "styles": [
+    "src/css/tokens.css",
     "src/css/00-base.css",
     "src/css/01-forms.css",
     "src/css/02-navigation.css",

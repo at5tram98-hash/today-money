@@ -5,7 +5,7 @@
 .acf-calendar-week,.acf-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
 .acf-calendar-week{font-size:11px;color:var(--label2);text-align:center;padding:3px 0 12px}
 .acf-calendar-day,.acf-calendar-unavailable,.acf-calendar-spacer{min-width:0;min-height:68px}
-.acf-calendar-day{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 1px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--label);font:inherit}
+.acf-calendar-day{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 1px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--label);font:inherit;min-width:0}
 .acf-calendar-number{display:grid;place-items:center;width:25px;height:25px;font-size:13px;font-weight:600;border-radius:50%}
 .acf-calendar-amount{font-size:10px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .acf-calendar-day.today .acf-calendar-number{color:var(--blue);background:#007aff14}

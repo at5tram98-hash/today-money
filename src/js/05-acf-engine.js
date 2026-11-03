@@ -72,11 +72,12 @@ function buildCashFlowForecastCore(options={}){
   const settings={...acfDefaultSettings(),...(options.settings||{})};
   const scenario=options.scenario||null;
   const cacheable=!scenario&&!options.horizonEnd&&!options.largeExpensePlans&&!options.settings&&
-    !options.flexibleBudgetPlan&&(options.startDate||ymd())===ymd();
+    !options.flexibleBudgetPlan&&!options.budgetEnd&&!options.includeOptional&&
+    (options.startDate||ymd())===ymd();
   const settingsKey=JSON.stringify([settings.reserveFloor,settings.horizon,settings.creditFallbackEnabled,
     settings.creditDailyLimit,settings.creditAggressiveness,settings.creditAllowAllCategories,
     settings.creditAllowedCategoryIds,settings.creditAllowedMerchants,settings.creditBlockedMerchants,
-    settings.preferredCardId,settings.useWeekdayWeights,settings.includeRequiredLargeExpenses]);
+    settings.preferredCardId,settings.useWeekdayWeights,settings.includeRequiredLargeExpenses,lightweight]);
   const cacheKey=cacheable?`${ymd()}|${settingsKey}`:'';
   if(cacheable&&acfForecastCache?.key===cacheKey)return acfForecastCache.value;
   const ctx=buildAcfBaseContext({...options,settings});

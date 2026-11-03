@@ -47,7 +47,7 @@ function openAcfAction(action){if(!action)return;if(action.type==='bank')openBan
 function acfPlansWithScenario(plans,scenario){const out=(plans||data.largeExpensePlans).map(clone);if(scenario?.amount>0)out.push({id:'scenario',name:scenario.name||'What-if',date:scenario.date||ymd(),amount:Number(scenario.amount)||0,category:scenario.category||'その他',priority:'required',paymentMethod:scenario.paymentMethod||'other',paymentId:scenario.paymentId||'',linkedBankId:scenario.linkedBankId||'',status:'planned',memo:'simulation',splits:[]});return out}
 function acfEffectiveCardPaymentDate(card,billingMonth){if(!card||!billingMonth)return null;const adj=cardAdjustmentInfo(card.id,billingMonth);return adj?.paymentDateOverride||cardPaymentDateForBillingMonth(card,billingMonth)}
 function acfVisibleEnd(start=ymd()){return monthEndDate(addMonths(start.slice(0,7),2))}
-function acfHorizonEnd({start=ymd(),settings=acfDefaultSettings(),plans=data.largeExpensePlans,scenario=null}={}){
+function acfHorizonEnd({start=ymd(),settings=acfDefaultSettings(),plans=data.largeExpensePlans,scenario=null,includeOptional=false}={}){
   const visibleEnd=acfVisibleEnd(start),startMonth=start.slice(0,7);
   let lastDue=visibleEnd;
   const consider=due=>{if(due&&due>lastDue)lastDue=due};
@@ -73,18 +73,20 @@ function acfHorizonEnd({start=ymd(),settings=acfDefaultSettings(),plans=data.lar
       const bm=cardBillingMonthForPurchase(c,date);consider(acfEffectiveCardPaymentDate(c,bm));
     }
   }
-  const all=acfPlansWithScenario(plans,scenario),includePlan=p=>p?.status==='planned'&&((p.id==='scenario')||(p.priority==='required'&&settings.includeRequiredLargeExpenses!==false));
+  const all=acfPlansWithScenario(plans,scenario),includePlan=p=>p?.status==='planned'&&((p.id==='scenario')||(p.priority==='required'&&settings.includeRequiredLargeExpenses!==false)||(p.priority==='optional'&&includeOptional));
   for(const p of all.filter(p=>includePlan(p)&&p.date>=start&&p.date<=visibleEnd)){
     for(const part of largeExpensePendingParts(p)){
       if(part.paymentMethod!=='card')continue;
       const c=cardById(part.paymentId);if(!c)continue;
-      const bm=cardBillingMonthForPurchase(c,p.date);consider(acfEffectiveCardPaymentDate(c,bm)||nextCardDueDate(c,p.date));
+      const bm=cardBillingMonthForPurchase(c,p.date);
+      const count=Math.max(1,Math.min(6,Number(p.atfInstallments?.[part.paymentId])||1));
+      for(let installment=0;installment<count;installment++)consider(acfEffectiveCardPaymentDate(c,addMonths(bm,installment))||nextCardDueDate(c,p.date));
     }
   }
   return lastDue
 }
 function addCashFlowEvent(map,date,patch){if(!date||!map.has(date))return;const e=map.get(date);for(const k of ['income','mandatoryOutflow','cardPayment','largeExpense','largeExpenseCash','fixedPayment'])e[k]+=Number(patch[k])||0;if(patch.label)e.events.push({label:patch.label,amount:Number(patch.amount)||0,type:patch.type||'info'});if(patch.salary)e.salary=true;if(patch.card)e.card=true;if(patch.large)e.large=true}
-function buildAcfBaseContext(options={}){const scenario=options.scenario||null,settings={...acfDefaultSettings(),...(options.settings||{})},plans=acfPlansWithScenario(options.largeExpensePlans||data.largeExpensePlans,scenario),start=options.startDate||ymd(),end=options.horizonEnd||acfHorizonEnd({start,settings,plans,scenario:null}),dates=dateRange(start,end,370),events=new Map(dates.map(d=>[d,{income:0,mandatoryOutflow:0,cardPayment:0,largeExpense:0,largeExpenseCash:0,fixedPayment:0,events:[],salary:false,card:false,large:false}]));
+function buildAcfBaseContext(options={}){const scenario=options.scenario||null,settings={...acfDefaultSettings(),...(options.settings||{})},plans=acfPlansWithScenario(options.largeExpensePlans||data.largeExpensePlans,scenario),start=options.startDate||ymd(),end=options.horizonEnd||acfHorizonEnd({start,settings,plans,scenario:null,includeOptional:options.includeOptional===true}),dates=dateRange(start,end,370),events=new Map(dates.map(d=>[d,{income:0,mandatoryOutflow:0,cardPayment:0,largeExpense:0,largeExpenseCash:0,fixedPayment:0,events:[],salary:false,card:false,large:false}]));
   for(const r of data.salaryRecords){if(!r.date||r.date<start||r.date>end)continue;const inc=data.incomes.find(x=>x.salaryRecordId===r.id),received=r.status==='入金済'||inc?.bankApplied||inc?.bankReconciled;if(!received)addCashFlowEvent(events,r.date,{income:r.gross,label:`${employerById(r.employerId)?.name||'給与'} 給与`,amount:r.gross,type:'income',salary:true})}
   for(const t of data.tempIncomes){if(!t.date||t.date<start||t.date>end)continue;const inc=linkedIncomeForTemp(t);if(inc?.bankApplied||inc?.bankReconciled)continue;addCashFlowEvent(events,t.date,{income:t.amount,label:t.sourceName||'臨時収入',amount:t.amount,type:'income'})}
   for(const x of data.incomes){if(!x.date||x.date<start||x.date>end||x.salaryRecordId||x.tempIncomeId||x.bankApplied||x.bankReconciled)continue;addCashFlowEvent(events,x.date,{income:x.amount,label:x.sourceName||'予定収入',amount:x.amount,type:'income'})}

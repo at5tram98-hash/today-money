@@ -714,7 +714,7 @@ function openAcfAction(action){if(!action)return;if(action.type==='bank')openBan
 function acfPlansWithScenario(plans,scenario){const out=(plans||data.largeExpensePlans).map(clone);if(scenario?.amount>0)out.push({id:'scenario',name:scenario.name||'What-if',date:scenario.date||ymd(),amount:Number(scenario.amount)||0,category:scenario.category||'その他',priority:'required',paymentMethod:scenario.paymentMethod||'other',paymentId:scenario.paymentId||'',linkedBankId:scenario.linkedBankId||'',status:'planned',memo:'simulation',splits:[]});return out}
 function acfEffectiveCardPaymentDate(card,billingMonth){if(!card||!billingMonth)return null;const adj=cardAdjustmentInfo(card.id,billingMonth);return adj?.paymentDateOverride||cardPaymentDateForBillingMonth(card,billingMonth)}
 function acfVisibleEnd(start=ymd()){return monthEndDate(addMonths(start.slice(0,7),2))}
-function acfHorizonEnd({start=ymd(),settings=acfDefaultSettings(),plans=data.largeExpensePlans,scenario=null}={}){
+function acfHorizonEnd({start=ymd(),settings=acfDefaultSettings(),plans=data.largeExpensePlans,scenario=null,includeOptional=false}={}){
   const visibleEnd=acfVisibleEnd(start),startMonth=start.slice(0,7);
   let lastDue=visibleEnd;
   const consider=due=>{if(due&&due>lastDue)lastDue=due};
@@ -740,18 +740,20 @@ function acfHorizonEnd({start=ymd(),settings=acfDefaultSettings(),plans=data.lar
       const bm=cardBillingMonthForPurchase(c,date);consider(acfEffectiveCardPaymentDate(c,bm));
     }
   }
-  const all=acfPlansWithScenario(plans,scenario),includePlan=p=>p?.status==='planned'&&((p.id==='scenario')||(p.priority==='required'&&settings.includeRequiredLargeExpenses!==false));
+  const all=acfPlansWithScenario(plans,scenario),includePlan=p=>p?.status==='planned'&&((p.id==='scenario')||(p.priority==='required'&&settings.includeRequiredLargeExpenses!==false)||(p.priority==='optional'&&includeOptional));
   for(const p of all.filter(p=>includePlan(p)&&p.date>=start&&p.date<=visibleEnd)){
     for(const part of largeExpensePendingParts(p)){
       if(part.paymentMethod!=='card')continue;
       const c=cardById(part.paymentId);if(!c)continue;
-      const bm=cardBillingMonthForPurchase(c,p.date);consider(acfEffectiveCardPaymentDate(c,bm)||nextCardDueDate(c,p.date));
+      const bm=cardBillingMonthForPurchase(c,p.date);
+      const count=Math.max(1,Math.min(6,Number(p.atfInstallments?.[part.paymentId])||1));
+      for(let installment=0;installment<count;installment++)consider(acfEffectiveCardPaymentDate(c,addMonths(bm,installment))||nextCardDueDate(c,p.date));
     }
   }
   return lastDue
 }
 function addCashFlowEvent(map,date,patch){if(!date||!map.has(date))return;const e=map.get(date);for(const k of ['income','mandatoryOutflow','cardPayment','largeExpense','largeExpenseCash','fixedPayment'])e[k]+=Number(patch[k])||0;if(patch.label)e.events.push({label:patch.label,amount:Number(patch.amount)||0,type:patch.type||'info'});if(patch.salary)e.salary=true;if(patch.card)e.card=true;if(patch.large)e.large=true}
-function buildAcfBaseContext(options={}){const scenario=options.scenario||null,settings={...acfDefaultSettings(),...(options.settings||{})},plans=acfPlansWithScenario(options.largeExpensePlans||data.largeExpensePlans,scenario),start=options.startDate||ymd(),end=options.horizonEnd||acfHorizonEnd({start,settings,plans,scenario:null}),dates=dateRange(start,end,370),events=new Map(dates.map(d=>[d,{income:0,mandatoryOutflow:0,cardPayment:0,largeExpense:0,largeExpenseCash:0,fixedPayment:0,events:[],salary:false,card:false,large:false}]));
+function buildAcfBaseContext(options={}){const scenario=options.scenario||null,settings={...acfDefaultSettings(),...(options.settings||{})},plans=acfPlansWithScenario(options.largeExpensePlans||data.largeExpensePlans,scenario),start=options.startDate||ymd(),end=options.horizonEnd||acfHorizonEnd({start,settings,plans,scenario:null,includeOptional:options.includeOptional===true}),dates=dateRange(start,end,370),events=new Map(dates.map(d=>[d,{income:0,mandatoryOutflow:0,cardPayment:0,largeExpense:0,largeExpenseCash:0,fixedPayment:0,events:[],salary:false,card:false,large:false}]));
   for(const r of data.salaryRecords){if(!r.date||r.date<start||r.date>end)continue;const inc=data.incomes.find(x=>x.salaryRecordId===r.id),received=r.status==='入金済'||inc?.bankApplied||inc?.bankReconciled;if(!received)addCashFlowEvent(events,r.date,{income:r.gross,label:`${employerById(r.employerId)?.name||'給与'} 給与`,amount:r.gross,type:'income',salary:true})}
   for(const t of data.tempIncomes){if(!t.date||t.date<start||t.date>end)continue;const inc=linkedIncomeForTemp(t);if(inc?.bankApplied||inc?.bankReconciled)continue;addCashFlowEvent(events,t.date,{income:t.amount,label:t.sourceName||'臨時収入',amount:t.amount,type:'income'})}
   for(const x of data.incomes){if(!x.date||x.date<start||x.date>end||x.salaryRecordId||x.tempIncomeId||x.bankApplied||x.bankReconciled)continue;addCashFlowEvent(events,x.date,{income:x.amount,label:x.sourceName||'予定収入',amount:x.amount,type:'income'})}
@@ -928,11 +930,12 @@ function buildCashFlowForecastCore(options={}){
   const settings={...acfDefaultSettings(),...(options.settings||{})};
   const scenario=options.scenario||null;
   const cacheable=!scenario&&!options.horizonEnd&&!options.largeExpensePlans&&!options.settings&&
-    !options.flexibleBudgetPlan&&(options.startDate||ymd())===ymd();
+    !options.flexibleBudgetPlan&&!options.budgetEnd&&!options.includeOptional&&
+    (options.startDate||ymd())===ymd();
   const settingsKey=JSON.stringify([settings.reserveFloor,settings.horizon,settings.creditFallbackEnabled,
     settings.creditDailyLimit,settings.creditAggressiveness,settings.creditAllowAllCategories,
     settings.creditAllowedCategoryIds,settings.creditAllowedMerchants,settings.creditBlockedMerchants,
-    settings.preferredCardId,settings.useWeekdayWeights,settings.includeRequiredLargeExpenses]);
+    settings.preferredCardId,settings.useWeekdayWeights,settings.includeRequiredLargeExpenses,lightweight]);
   const cacheKey=cacheable?`${ymd()}|${settingsKey}`:'';
   if(cacheable&&acfForecastCache?.key===cacheKey)return acfForecastCache.value;
   const ctx=buildAcfBaseContext({...options,settings});
@@ -1120,7 +1123,7 @@ function openAcfSimulator(defaultDate=ymd(),loadId=''){
     };
     const scenarioFor=(m,p,d=date,label='')=>({name:label||name,date:d,amount,category,paymentMethod:m,paymentId:p||'',linkedBankId:m==='debit'?paymentBankId(m,p):'',_label:label});
     const compareOne=sc=>{
-      const card=sc.paymentMethod==='card'?cardById(sc.paymentId):null,bm=card?cardBillingMonthForPurchase(card,sc.date):'',due=card?acfEffectiveCardPaymentDate(card,bm):'',baseEnd=addDays(ymd(),89),horizonEnd=due&&due>baseEnd?due:baseEnd,before=buildCashFlowForecast({horizonEnd}),after=buildCashFlowForecast({scenario:sc,horizonEnd}),dueRow=due?after.rows.find(r=>r.date===due):null,purchaseRow=after.rows.find(r=>r.date===sc.date)||after.rows[0],nextIncome=after.rows.find(r=>r.date>=sc.date&&Number(r.income)>0),until=nextIncome?after.rows.filter(r=>r.date>=sc.date&&r.date<=nextIncome.date):after.rows.filter(r=>r.date>=sc.date).slice(0,31),minUntil=until.reduce((a,r)=>!a||r.forecastBalance<a.forecastBalance?r:a,null),allowed=sc.paymentMethod!=='card'||isCreditAllowedForExpense(category,name),dailyImpact=(Number(after.safeTotalBudget)||0)-(Number(before.safeTotalBudget)||0);
+      const card=sc.paymentMethod==='card'?cardById(sc.paymentId):null,bm=card?cardBillingMonthForPurchase(card,sc.date):'',due=card?acfEffectiveCardPaymentDate(card,bm):'',baseEnd=acfHorizonEnd(),horizonEnd=[baseEnd,sc.date,due||''].sort().at(-1),before=buildCashFlowForecast({horizonEnd,lightweight:true}),after=buildCashFlowForecast({scenario:sc,horizonEnd,lightweight:true}),dueRow=due?after.rows.find(r=>r.date===due):null,purchaseRow=after.rows.find(r=>r.date===sc.date)||after.rows[0],nextIncome=after.rows.find(r=>r.date>=sc.date&&Number(r.income)>0),until=nextIncome?after.rows.filter(r=>r.date>=sc.date&&r.date<=nextIncome.date):after.rows.filter(r=>r.date>=sc.date).slice(0,31),minUntil=until.reduce((a,r)=>!a||r.forecastBalance<a.forecastBalance?r:a,null),allowed=sc.paymentMethod!=='card'||isCreditAllowedForExpense(category,name),dailyImpact=(Number(after.safeTotalBudget)||0)-(Number(before.safeTotalBudget)||0);
       return{sc,after,allowed,due,dueRow,purchaseRow,minUntil,nextIncome,dailyImpact,score:(after.minMandatoryBalance>=after.reserveFloor?2:0)+(allowed?1:0)+(after.planShortageTotal<=0?1:0)}
     };
     const buildCandidates=()=>{
@@ -1159,6 +1162,10 @@ function openAcfSimulator(defaultDate=ymd(),loadId=''){
     };
     const renderResult=({alert=false}={})=>{
       read();
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date<ymd()||date>addDays(ymd(),180)){
+        result.innerHTML='<div class="impact-card" role="status">購入予定日は今日から180日以内を選んでください。</div>';
+        return;
+      }
       if(amount<=0){
         result.innerHTML='<div class="impact-card"><div class="impact-title">比較結果</div><div class="hero-sub">金額を入力すると、支払い方法と購入日の違いを比較します。</div></div>';
         if(alert)showAlert('金額を入力してください','試算する金額を入力してください。');
@@ -1166,7 +1173,7 @@ function openAcfSimulator(defaultDate=ymd(),loadId=''){
       }const rows=buildCandidates(),best=[...rows].sort((a,b)=>b.score-a.score||b.after.minMandatoryBalance-a.after.minMandatoryBalance)[0];
       result.innerHTML=`<div class="form-group-title">比較結果</div><div class="pro3-scenario-grid">${rows.map((x,i)=>{
         const sc=x.sc,card=sc.paymentMethod==='card'?cardById(sc.paymentId):null,payLabel=sc._label||paymentLabel(sc),purchaseAfter=x.purchaseRow?.forecastBalance??x.after.currentDeposits,minimum=x.minUntil?.forecastBalance??x.after.minForecastBalance,dueText=card?(x.due?dayLabel(x.due):'支払日未設定'):(sc.date===date?'購入時に支払い':'購入時に支払い'),danger=x.after.minMandatoryBalance<x.after.reserveFloor||!x.allowed;
-        return `<div class="pro3-scenario ${x===best?'recommended':''}"><div class="pro3-scenario-head"><div><div class="pro3-scenario-title">${esc(payLabel)}</div><div class="pro3-scenario-status">${x===best?'登録内容上の比較候補':'比較案'}${!x.allowed?'・カード利用ルール対象外':''}</div></div><span class="status-chip ${danger?'warning':'good'}">${danger?'要確認':'見込みOK'}</span></div><div class="pro3-scenario-metrics"><div><span>購入直後の予測残高</span><strong>${yen(purchaseAfter)}</strong></div><div><span>次の入金前の最低残高</span><strong class="${minimum<x.after.reserveFloor?'red':''}">${yen(minimum)}</strong></div><div><span>実際のカード支払日</span><strong>${esc(dueText)}</strong></div><div><span>支払後の予測残高</span><strong class="${x.dueRow&&x.dueRow.forecastBalance<x.after.reserveFloor?'red':''}">${x.dueRow?yen(x.dueRow.forecastBalance):'—'}</strong></div><div><span>今日の1日予算への影響</span><strong class="${x.dailyImpact<0?'red':x.dailyImpact>0?'green':''}">${x.dailyImpact>0?'+':''}${yen(x.dailyImpact)}</strong></div><div><span>90日または支払日までの最低残高</span><strong class="${x.after.minMandatoryBalance<x.after.reserveFloor?'red':''}">${yen(x.after.minMandatoryBalance)}</strong></div></div><div class="pro3-scenario-actions"><button type="button" class="pro3-mini-btn" data-save-candidate="${i}">比較案に保存</button><button type="button" class="pro3-mini-btn" data-plan-candidate="${i}">予定に追加</button>${sc.date<=ymd()?`<button type="button" class="pro3-mini-btn" data-tx-candidate="${i}">支出として記録</button>`:''}</div></div>`
+        return `<div class="pro3-scenario ${x===best?'recommended':''}"><div class="pro3-scenario-head"><div><div class="pro3-scenario-title">${esc(payLabel)}</div><div class="pro3-scenario-status">${x===best?'登録内容上の比較候補':'比較案'}${!x.allowed?'・カード利用ルール対象外':''}</div></div><span class="status-chip ${danger?'warning':'good'}">${danger?'要確認':'見込みOK'}</span></div><div class="pro3-scenario-metrics"><div><span>購入直後の予測残高</span><strong>${yen(purchaseAfter)}</strong></div><div><span>次の入金前の最低残高</span><strong class="${minimum<x.after.reserveFloor?'red':''}">${yen(minimum)}</strong></div><div><span>実際のカード支払日</span><strong>${esc(dueText)}</strong></div><div><span>支払後の予測残高</span><strong class="${x.dueRow&&x.dueRow.forecastBalance<x.after.reserveFloor?'red':''}">${x.dueRow?yen(x.dueRow.forecastBalance):'—'}</strong></div><div><span>今日の1日予算への影響</span><strong class="${x.dailyImpact<0?'red':x.dailyImpact>0?'green':''}">${x.dailyImpact>0?'+':''}${yen(x.dailyImpact)}</strong></div><div><span>予測期間の最低残高</span><strong class="${x.after.minMandatoryBalance<x.after.reserveFloor?'red':''}">${yen(x.after.minMandatoryBalance)}</strong></div></div><div class="pro3-scenario-actions"><button type="button" class="pro3-mini-btn" data-save-candidate="${i}">比較案に保存</button><button type="button" class="pro3-mini-btn" data-plan-candidate="${i}">予定に追加</button>${sc.date<=ymd()?`<button type="button" class="pro3-mini-btn" data-tx-candidate="${i}">支出として記録</button>`:''}</div></div>`
       }).join('')}</div><div class="hero-sub" style="margin-top:9px">比較案は実際の残高や請求へ反映しません。「予定に追加」または「支出として記録」を明示的に選んだときだけ保存します。</div>`;
       result.querySelectorAll('[data-save-candidate]').forEach(b=>b.onclick=()=>{
         const x=rows[Number(b.dataset.saveCandidate)]?.sc;
@@ -1308,6 +1315,44 @@ function initializeTabIndicator(){
   syncTabIndicator(true);
   if(typeof ResizeObserver==='function')new ResizeObserver(()=>syncTabIndicator(true)).observe(bar);
   else window.addEventListener('resize',()=>syncTabIndicator(true),{passive:true});
+  installTabSlide(bar);
+}
+/* Follow the finger, committing once on release. Vertical/canceled gestures keep the current tab. */
+function installTabSlide(bar){
+  let gesture=null,suppressUntil=0;
+  const buttons=()=>[...bar.querySelectorAll('.tab')];
+  const buttonAt=x=>buttons().reduce((nearest,b)=>Math.abs(b.getBoundingClientRect().left+b.offsetWidth/2-x)<Math.abs(nearest.getBoundingClientRect().left+nearest.offsetWidth/2-x)?b:nearest);
+  const finish=(event,commit)=>{
+    if(!gesture||gesture.id!==event.pointerId)return;
+    const moved=gesture.moved;gesture=null;
+    bar.classList.remove('tab-dragging');
+    if(moved){
+      suppressUntil=performance.now()+400;
+      const rect=bar.getBoundingClientRect();
+      if(commit&&event.clientY>=rect.top-24&&event.clientY<=rect.bottom+24)switchTab(buttonAt(event.clientX).dataset.tab);
+      syncTabIndicator();
+    }
+  };
+  bar.addEventListener('pointerdown',event=>{
+    if(event.button!==0||event.isPrimary===false)return;
+    gesture={id:event.pointerId,x:event.clientX,y:event.clientY,moved:false};
+  });
+  bar.addEventListener('pointermove',event=>{
+    if(!gesture||gesture.id!==event.pointerId)return;
+    const dx=Math.abs(event.clientX-gesture.x),dy=Math.abs(event.clientY-gesture.y);
+    if(!gesture.moved){
+      if(dy>24&&dy>dx){gesture=null;return}
+      if(dx<6)return;
+      gesture.moved=true;bar.setPointerCapture(event.pointerId);bar.classList.add('tab-dragging');
+    }
+    const indicator=bar.querySelector('.tab-selection'),rect=bar.getBoundingClientRect(),button=buttonAt(event.clientX);
+    indicator.style.width=`${button.offsetWidth}px`;
+    indicator.style.transform=`translate3d(${clamp(event.clientX-rect.left-button.offsetWidth/2,5,rect.width-button.offsetWidth-5)}px,0,0)`;
+  });
+  bar.addEventListener('pointerup',event=>finish(event,true));
+  bar.addEventListener('pointercancel',event=>finish(event,false));
+  bar.addEventListener('lostpointercapture',event=>{if(event.target===bar)finish(event,false)});
+  bar.addEventListener('click',event=>{if(performance.now()<suppressUntil){event.preventDefault();event.stopImmediatePropagation()}},true);
 }
 function switchTab(tab){
   if(goalPlannerState?.locked)return;
@@ -4154,7 +4199,7 @@ function openMonthCloseReview(month=currentMonth){pushView('月締めレビュ�
 
 
 
-function renderAll(){try{processScheduled()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('scheduled processing failed',e)}try{pruneDayClosingJournal();pruneExpiredSystemNotices();generateSystemNotices();for(const view of pushStack)document.getElementById(view.id)?.__refreshNotices?.()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('notice generation failed',e)}for(const view of pushStack){const root=document.getElementById(view.id);root?.__refreshDayClosing?.();root?.__refreshFinancialUpdates?.()}applyAppearance();if(activeTab==='today')renderToday();else if(activeTab==='month')renderMonth();else if(activeTab==='pay')renderPay();else if(activeTab==='payments')renderPayments();else if(activeTab==='assets')renderAssets();else renderSettings();updateHomeTabButton();if(data.meta?.storageWriteError&&!storageErrorToastShown){storageErrorToastShown=true;setTimeout(()=>showToast('端末へ保存できません。空き容量やSafariのストレージ設定を確認してください。',{tone:'error',duration:7000}),0)}}
+function renderAll(){try{processScheduled()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('scheduled processing failed',e)}try{pruneDayClosingJournal();pruneExpiredSystemNotices();generateSystemNotices();for(const view of pushStack)document.getElementById(view.id)?.__refreshNotices?.()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('notice generation failed',e)}for(const view of pushStack){const root=document.getElementById(view.id);root?.__refreshDayClosing?.();root?.__refreshFinancialUpdates?.();root?.__refreshAcf?.()}applyAppearance();if(activeTab==='today')renderToday();else if(activeTab==='month')renderMonth();else if(activeTab==='pay')renderPay();else if(activeTab==='payments')renderPayments();else if(activeTab==='assets')renderAssets();else renderSettings();updateHomeTabButton();if(data.meta?.storageWriteError&&!storageErrorToastShown){storageErrorToastShown=true;setTimeout(()=>showToast('端末へ保存できません。空き容量やSafariのストレージ設定を確認してください。',{tone:'error',duration:7000}),0)}}
 updateHomeTabButton();
 /* === end IA patch === */
 
@@ -4251,7 +4296,7 @@ function acfCashCardGraphHtml(f){
 
 
 function openAcfSetup(){
-  let reserve=Math.max(0,Number(data.acfSettings.reserveFloor)||30000),useCard=data.acfSettings.creditFallbackEnabled!==false,ratio=clamp(Number(data.acfSettings.creditAggressiveness??100)||0,0,100);
+  let reserve=acfDefaultSettings().reserveFloor,useCard=data.acfSettings.creditFallbackEnabled!==false,ratio=clamp(Number(data.acfSettings.creditAggressiveness??100)||0,0,100);
   openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="acfSetupCancel">閉じる</button><div class="sheet-title">ACFを設定</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="goal-intro-card"><div class="goal-intro-icon">${icon('chart')}</div><div class="goal-intro-title">ACF</div><div class="goal-intro-copy">給与・カード引落・固定支払い・大型支出を日付順に見て、今日使える生活費を予測します。</div></div><div class="form-group-title">基本設定</div><div class="form-card"><div class="form-section">${moneyButton('acfSetupReserve','最低残したい金額',reserve)}</div><div class="form-section"><div class="inline-value-row"><div><div class="form-label">カードを利用</div><div class="row-sub">対象支出をカード比率に合わせて配分</div></div><button type="button" class="switch ${useCard?'on':''}" id="acfSetupUseCard"></button></div></div><div class="form-section"><div class="acf-credit-head"><span>カードで支払う割合</span><strong id="acfSetupRatioText">${Math.round(ratio)}%</strong></div><input type="range" class="acf-credit-range" id="acfSetupRatio" min="0" max="100" step="1" value="${ratio}" ${useCard?'':'disabled'}></div></div><div class="group"><div class="row"><div class="row-main"><div class="row-title">現在の全銀行預金</div></div><div class="row-value">${yen(totalDeposits())}</div></div><div class="row"><div class="row-main"><div class="row-title">カード1日上限</div><div class="row-sub">詳細設定で変更できます</div></div><div class="row-value">${yen(acfDefaultSettings().creditDailyLimit)}</div></div></div><button type="button" class="primary" id="acfSetupStart">設定して開始</button></div>`,'full',root=>{
     const reserveBtn=root.querySelector('#acfSetupReserve'),toggle=root.querySelector('#acfSetupUseCard'),range=root.querySelector('#acfSetupRatio'),txt=root.querySelector('#acfSetupRatioText');
     reserveBtn.onclick=()=>openCalculator('最低残したい金額',reserve,v=>{reserve=v;reserveBtn.querySelector('.val').textContent=yen(v)});
@@ -4286,14 +4331,14 @@ function _openAcfDetailImmediate(){
       body.querySelectorAll('#acfViewMode button').forEach(button=>button.onclick=()=>{viewMode=button.dataset.view;mm3SaveUiPrefs({acfFundsView:viewMode});feedback.selection();updateTable()});
       body.querySelector('#acfTableMode').onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;important=b.dataset.v==='important';updateTable()};
       tablePanel.onclick=e=>{const selected=e.target.closest('[data-acf-select]');if(selected){selectedDate=selected.dataset.acfSelect;updateTable();return}const b=e.target.closest('[data-acf-day]');if(b)openFinancialDayInspector(b.dataset.acfDay)};
-      tablePanel.addEventListener('keydown',e=>{if(viewMode!=='table'||(e.key!=='Enter'&&e.key!==' '))return;const b=e.target.closest('[data-acf-day]');if(!b)return;e.preventDefault();openFinancialDayInspector(b.dataset.acfDay)});
+      tablePanel.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const b=e.target.closest('[data-acf-day]');if(!b||b.tagName==='BUTTON')return;e.preventDefault();openFinancialDayInspector(b.dataset.acfDay)});
       updateTable();
       body.querySelector('#acfSimulator').onclick=()=>openAcfSimulator();
       body.querySelector('#acfApplyGoal')?.addEventListener('click',()=>applyAcfSafeBudgetToMonthlyPlan());
       body.querySelector('#acfOpenSettings').onclick=openAcfSettings;
       body.querySelectorAll('[data-confidence]').forEach(b=>b.onclick=()=>openAcfAction(conf.reasons[Number(b.dataset.confidence)]?.action));
       body.querySelectorAll('[data-risk-index]').forEach(b=>b.onclick=()=>openAcfAction(current.risks[Number(b.dataset.riskIndex)]?.action))
-    };draw()
+    };root.__refreshAcf=draw;draw()
   })
 }
 function openAcfDetail(){return runWithBusy(_openAcfDetailImmediate,{title:'ACFを更新中…',sub:'給与・カード・固定支払いを確認しています'}).catch(error=>{console.error('ACF view failed',error);showToast('ACFを表示できませんでした',{tone:'error'})})}
@@ -4303,7 +4348,7 @@ function openAcfSettings(){
   let timer=0,detailsOpen=false;
   pushView('ACF設定',`<div class="form-group-title">基本設定</div><div class="acf-settings-summary"><div class="row"><div class="row-main"><div class="row-title">最低残したい金額</div><div class="row-sub">この金額を将来もできるだけ維持します</div></div><button type="button" class="row-value mini-action" id="acfReserve">${yen(settings.reserveFloor)}</button></div><div class="row"><div class="row-main"><div class="row-title">カードを利用</div><div class="row-sub">カード利用可能な支出を比率で配分</div></div><button type="button" class="switch ${settings.creditFallbackEnabled?'on':''}" id="acfFallback"></button></div><div class="row" style="display:block"><div class="acf-credit-control"><div class="acf-credit-head"><span>カードで支払う割合</span><strong class="acf-ratio-value" id="acfCreditValue">${settings.creditFallbackEnabled?Math.round(settings.creditAggressiveness)+'%':'OFF'}</strong></div><input type="range" class="acf-credit-range" id="acfCredit" min="0" max="100" step="1" value="${settings.creditAggressiveness}" ${settings.creditFallbackEnabled?'':'disabled'} aria-label="カード支払い比率"><div class="hero-sub">100%なら、カードで支払える生活費は安全な範囲で原則100%カードになります。</div></div></div></div><div class="card card-pad"><div class="row-title">リアルタイム試算</div><div class="acf-credit-preview" id="acfCreditPreview" style="margin-top:10px"><div class="acf-preview-loading">計算中…</div></div></div><button type="button" class="form-link" id="acfDetailsToggle"><span>詳細設定</span><span id="acfDetailsChev">›</span></button><div class="acf-details-panel hidden" id="acfDetailsPanel"><div class="form-group-title">安全条件</div><div class="form-card"><div class="form-section"><div class="form-label">安全確認期間</div><div class="row-sub">日別表は翌々月末まで表示し、その後に到来するカード支払日も確認します。</div></div></div><div class="form-group-title">カード詳細</div><div class="group"><button type="button" class="row press" id="acfDailyLimit"><div class="row-main"><div class="row-title">カード1日上限</div></div><div class="row-value val">${yen(settings.creditDailyLimit)}</div><span class="chev">›</span></button><div class="row"><div class="row-main"><div class="row-title">優先して使うカード</div></div><select class="field field-select" id="acfPreferred" style="width:48%;min-height:38px"><option value="">自動</option>${data.cards.map(c=>`<option value="${c.id}" ${settings.preferredCardId===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><button type="button" class="row press" id="acfCreditPlaces"><div class="row-main"><div class="row-title">カードを使っていい場所</div><div class="row-sub" id="acfPlacesSummary">${esc(acfAllowedCategorySummary(settings))}</div></div><span class="chev">›</span></button></div><div class="form-group-title">予測</div><div class="group"><div class="row"><div class="row-main"><div class="row-title">曜日傾向を利用</div></div><button type="button" class="switch ${settings.useWeekdayWeights?'on':''}" id="acfWeights"></button></div><div class="row"><div class="row-main"><div class="row-title">必須の大型支出を含める</div></div><button type="button" class="switch ${settings.includeRequiredLargeExpenses?'on':''}" id="acfRequired"></button></div><div class="row"><div class="row-main"><div class="row-title">予測リスク通知</div></div><button type="button" class="switch ${settings.riskNotifications?'on':''}" id="acfRiskNoti"></button></div></div></div><button type="button" class="primary" id="acfSettingsSave" style="margin-top:14px">保存</button>`,root=>{
     const reserveBtn=root.querySelector('#acfReserve'),limitBtn=root.querySelector('#acfDailyLimit'),creditRange=root.querySelector('#acfCredit'),preview=root.querySelector('#acfCreditPreview'),saveBtn=root.querySelector('#acfSettingsSave'),panel=root.querySelector('#acfDetailsPanel');
-    const draw=()=>{preview.innerHTML='<div class="acf-preview-loading">ACFを計算中…</div>';clearTimeout(timer);timer=setTimeout(()=>{try{const f=buildCashFlowForecast({settings}),ratio=settings.creditFallbackEnabled?Math.round(settings.creditAggressiveness):0;root.querySelector('#acfCreditValue').textContent=settings.creditFallbackEnabled?`${ratio}%`:'OFF';root.querySelector('#acfPlacesSummary')&&(root.querySelector('#acfPlacesSummary').textContent=acfAllowedCategorySummary(settings));preview.innerHTML=`<div><span>今日使える</span><strong>${yen(f.safeTotalBudget)}</strong></div><div><span>カード</span><strong>${yen(f.safeCreditBudget||0)}</strong></div><div><span>現金</span><strong>${yen(f.safeCashBudget||0)}</strong></div>`}catch(e){preview.innerHTML='<div class="acf-preview-loading">計算できませんでした</div>'}},170)};
+    const draw=()=>{preview.innerHTML='<div class="acf-preview-loading">ACFを計算中…</div>';clearTimeout(timer);timer=setTimeout(()=>{try{const f=buildCashFlowForecast({settings,lightweight:true}),ratio=settings.creditFallbackEnabled?Math.round(settings.creditAggressiveness):0;root.querySelector('#acfCreditValue').textContent=settings.creditFallbackEnabled?`${ratio}%`:'OFF';root.querySelector('#acfPlacesSummary')&&(root.querySelector('#acfPlacesSummary').textContent=acfAllowedCategorySummary(settings));preview.innerHTML=`<div><span>今日使える</span><strong>${yen(f.safeTotalBudget)}</strong></div><div><span>カード</span><strong>${yen(f.safeCreditBudget||0)}</strong></div><div><span>現金</span><strong>${yen(f.safeCashBudget||0)}</strong></div>`}catch(e){preview.innerHTML='<div class="acf-preview-loading">計算できませんでした</div>'}},170)};
     reserveBtn.onclick=()=>openCalculator('最低残したい金額',settings.reserveFloor,v=>{settings.reserveFloor=v;reserveBtn.textContent=yen(v);draw()});
     root.querySelector('#acfFallback').onclick=e=>{settings.creditFallbackEnabled=!settings.creditFallbackEnabled;e.currentTarget.classList.toggle('on',settings.creditFallbackEnabled);creditRange.disabled=!settings.creditFallbackEnabled;draw()};
     creditRange.oninput=e=>{settings.creditAggressiveness=Number(e.target.value)||0;root.querySelector('#acfCreditValue').textContent=`${Math.round(settings.creditAggressiveness)}%`;const tick=Math.round(settings.creditAggressiveness/25);if(tick!==creditRange.__tick){creditRange.__tick=tick;feedback.sliderTick()}};

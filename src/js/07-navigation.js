@@ -80,6 +80,44 @@ function initializeTabIndicator(){
   syncTabIndicator(true);
   if(typeof ResizeObserver==='function')new ResizeObserver(()=>syncTabIndicator(true)).observe(bar);
   else window.addEventListener('resize',()=>syncTabIndicator(true),{passive:true});
+  installTabSlide(bar);
+}
+/* Follow the finger, committing once on release. Vertical/canceled gestures keep the current tab. */
+function installTabSlide(bar){
+  let gesture=null,suppressUntil=0;
+  const buttons=()=>[...bar.querySelectorAll('.tab')];
+  const buttonAt=x=>buttons().reduce((nearest,b)=>Math.abs(b.getBoundingClientRect().left+b.offsetWidth/2-x)<Math.abs(nearest.getBoundingClientRect().left+nearest.offsetWidth/2-x)?b:nearest);
+  const finish=(event,commit)=>{
+    if(!gesture||gesture.id!==event.pointerId)return;
+    const moved=gesture.moved;gesture=null;
+    bar.classList.remove('tab-dragging');
+    if(moved){
+      suppressUntil=performance.now()+400;
+      const rect=bar.getBoundingClientRect();
+      if(commit&&event.clientY>=rect.top-24&&event.clientY<=rect.bottom+24)switchTab(buttonAt(event.clientX).dataset.tab);
+      syncTabIndicator();
+    }
+  };
+  bar.addEventListener('pointerdown',event=>{
+    if(event.button!==0||event.isPrimary===false)return;
+    gesture={id:event.pointerId,x:event.clientX,y:event.clientY,moved:false};
+  });
+  bar.addEventListener('pointermove',event=>{
+    if(!gesture||gesture.id!==event.pointerId)return;
+    const dx=Math.abs(event.clientX-gesture.x),dy=Math.abs(event.clientY-gesture.y);
+    if(!gesture.moved){
+      if(dy>24&&dy>dx){gesture=null;return}
+      if(dx<6)return;
+      gesture.moved=true;bar.setPointerCapture(event.pointerId);bar.classList.add('tab-dragging');
+    }
+    const indicator=bar.querySelector('.tab-selection'),rect=bar.getBoundingClientRect(),button=buttonAt(event.clientX);
+    indicator.style.width=`${button.offsetWidth}px`;
+    indicator.style.transform=`translate3d(${clamp(event.clientX-rect.left-button.offsetWidth/2,5,rect.width-button.offsetWidth-5)}px,0,0)`;
+  });
+  bar.addEventListener('pointerup',event=>finish(event,true));
+  bar.addEventListener('pointercancel',event=>finish(event,false));
+  bar.addEventListener('lostpointercapture',event=>{if(event.target===bar)finish(event,false)});
+  bar.addEventListener('click',event=>{if(performance.now()<suppressUntil){event.preventDefault();event.stopImmediatePropagation()}},true);
 }
 function switchTab(tab){
   if(goalPlannerState?.locked)return;
