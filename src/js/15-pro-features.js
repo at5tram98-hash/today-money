@@ -62,6 +62,12 @@ function openTagAssignment(tagId,after){const tag=tagById(tagId);if(!tag)return;
 const __basePushView=pushView;
 pushView=function(title,html,binder,right='',backOverride=null){const tabLabels={today:'今日',month:'今月',pay:'給与',payments:'支払い',assets:'資産',settings:'設定'};if(!backOverride&&!pushStack.length)backOverride=tabLabels[activeTab]||'戻る';const v=__basePushView(title,html,binder,right,backOverride),key=favoriteKeyForView(title);if(key){const area=v.querySelector('.push-right'),btn=document.createElement('button');btn.type='button';btn.className='favorite-nav-btn '+(isFavorite(key)?'on':'');btn.setAttribute('aria-label',isFavorite(key)?'お気に入りから削除':'お気に入りに追加');btn.innerHTML=starSvg();btn.onclick=()=>{toggleFavorite(key);btn.classList.toggle('on',isFavorite(key));btn.setAttribute('aria-label',isFavorite(key)?'お気に入りから削除':'お気に入りに追加');feedback.selection()};area.appendChild(btn)}return v};
 
+const __baseRenderToday=renderToday,__baseRenderMonth=renderMonth;
+function removeRenderedSection(container,label){const heads=[...container.querySelectorAll('.section-head')],h=heads.find(x=>x.textContent.trim()===label);if(!h)return;const next=h.nextElementSibling;h.remove();next?.remove()}
+
+renderToday=function(){__baseRenderToday();const content=document.getElementById('todayContent');removeRenderedSection(content,'本日の収入');removeRenderedSection(content,'メール取引');const evt=nextFinancialEvent();if(evt?.type==='income'){const card=content.querySelector('#nextMoneyEvent');if(card){card.classList.add('home-marker-only');const val=card.querySelector('.financial-event-value');if(val)val.textContent='入金日'}}updateHomeTabButton()};
+renderMonth=function(){__baseRenderMonth();const content=document.getElementById('monthContent');removeRenderedSection(content,'今月の収入');removeRenderedSection(content,'大型支出計画');removeRenderedSection(content,'メール取引');updateHomeTabButton()};
+
 function salaryMonthRows(month){return salaryRecordsPayableInMonth(month).sort((a,b)=>String(salaryRecordEffectiveDate(a)||a.date||'').localeCompare(String(salaryRecordEffectiveDate(b)||b.date||'')))}
 
 
@@ -78,7 +84,7 @@ function scrollPaymentSection(id){document.getElementById(`paymentsSection-${id}
 
 
 
-function updateHomeTabButton(){const b=document.getElementById('homeTab');if(b)b.querySelector('.tab-label').textContent='ホーム'}
+function updateHomeTabButton(){const b=document.getElementById('homeTab');if(b)b.querySelector('.tab-label').textContent='今日'}
 
 
 

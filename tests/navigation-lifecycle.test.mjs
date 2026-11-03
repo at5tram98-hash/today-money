@@ -31,3 +31,13 @@ test('new navigation removes only retired animation views and preserves the live
   assert.equal(run('document.querySelectorAll().length'),2);assert.equal(run('pushStack[0].title'),'親');
   assert.equal(run('pushStack[1].title'),'新しい画面');
 });
+
+test('original five tabs and today/month mode stay in their familiar locations',()=>{
+  const html=readFileSync(new URL('../src/index.html',import.meta.url),'utf8');
+  assert.deepEqual([...html.matchAll(/data-tab="([^"]+)"/g)].map(m=>m[1]),['home','pay','payments','assets','settings']);
+  const accessibility=readFileSync(new URL('../src/js/24-accessibility.js',import.meta.url),'utf8');
+  assert.ok(accessibility.includes("[['today','今日'],['month','今月']]"));
+  const settings=readFileSync(new URL('../src/js/settings.js',import.meta.url),'utf8');
+  assert.ok(!settings.includes('finance-pay'));
+  assert.ok(!settings.includes('allFeatures'));
+});
