@@ -22,6 +22,7 @@
   const resizer=typeof ResizeObserver==='function'?new ResizeObserver(entries=>entries.forEach(x=>enqueueFit(x.target))):null;
   function enhance(root){
     if(!root?.querySelectorAll)return;if(root.matches?.(amountSelector))enqueueFit(root);
+    root.querySelectorAll('.chev,.mm3-action-chev').forEach(el=>{if(el.textContent.trim()==='›'){el.innerHTML=icon('chevronRight');el.setAttribute('aria-hidden','true')}});
     root.querySelectorAll('input,select,textarea').forEach(el=>{
       if(!el.getAttribute('aria-label')&&!el.getAttribute('aria-labelledby')&&!el.labels?.length){
         const row=el.closest('.form-section,.form-row,.pro4-parse-row,.goal-category-row');
@@ -49,31 +50,23 @@
     const root=$(`screen-${tab}`);if(!root)return;
     const top=root.querySelector('.topbar'),content=root.querySelector('.scroll');
     // Keep nodes and their existing handlers; moving them cannot register twice.
-    if(tab==='today'||tab==='month'){
-      const modes=document.createElement('div');modes.className='native-home-mode';modes.setAttribute('role','group');modes.setAttribute('aria-label','ホームの表示');
-      for(const [mode,label] of [['today','今日'],['month','今月']]){const b=document.createElement('button');b.type='button';b.textContent=label;b.setAttribute('aria-pressed',String(tab===mode));b.onclick=()=>{if(activeTab!==mode)switchTab(mode)};modes.appendChild(b)}
-      content.querySelector('.native-home-mode')?.remove();content.prepend(modes);
-      if(tab==='today'){
-        const quick=content.querySelector('.quick-grid'),hero=content.querySelector('.today-goal-hero');if(quick&&hero)hero.after(quick);
-        for(const [id,label] of [['quickExpense','支出を入力'],['quickBank','残高を更新'],['quickIncome','臨時収入']]){const span=$(id)?.querySelector('span');if(span)span.textContent=label}
-      }else addShortcut(content,content.querySelector('#monthHero'),'今日の支出を入力',()=>openQuickExpense(ymd()));
-    }else if(tab==='pay')addShortcut(content,content.querySelector('.mm3-salary-primary'),'給与を登録',openSalaryAdd);
-    else if(tab==='payments')addShortcut(content,content.querySelector('.mm3-payment-primary'),'請求額を更新',()=>openQuickCardBilling(paymentHomeMonth()));
-    else if(tab==='assets')addShortcut(content,content.querySelector('.mm3-assets-primary'),'残高を更新',openQuickBank);
     if(!content.dataset.nativeScrollBound){content.dataset.nativeScrollBound='true';content.addEventListener('scroll',()=>top.classList.toggle('native-scrolled',content.scrollTop>4),{passive:true})}
     top.classList.toggle('native-scrolled',content.scrollTop>4);
+    root.querySelector('[data-finance-back]')?.addEventListener('click',()=>switchTab('settings'));
     enhance(root);syncTabState();
   }
-  const renders={today:renderToday,month:renderMonth,pay:renderPay,payments:renderPayments,assets:renderAssets,settings:renderSettings};
+  const renders={today:renderToday,month:renderMonth,pay:renderPay,payments:renderPayments,assets:renderAssets,settings:renderSettings,ledger:renderLedger,insights:renderInsights};
   renderToday=function(...args){const r=renders.today.apply(this,args);decorate('today');return r};
   renderMonth=function(...args){const r=renders.month.apply(this,args);decorate('month');return r};
   renderPay=function(...args){const r=renders.pay.apply(this,args);decorate('pay');return r};
   renderPayments=function(...args){const r=renders.payments.apply(this,args);decorate('payments');return r};
   renderAssets=function(...args){const r=renders.assets.apply(this,args);decorate('assets');return r};
   renderSettings=function(...args){const r=renders.settings.apply(this,args);decorate('settings');return r};
+  renderLedger=function(...args){const r=renders.ledger.apply(this,args);decorate('ledger');return r};
+  renderInsights=function(...args){const r=renders.insights.apply(this,args);decorate('insights');return r};
   function syncTabState(){
     $('tabbar').setAttribute('aria-label','メインナビゲーション');
-    document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.tab===activeTab||(b.dataset.tab==='home'&&['today','month'].includes(activeTab));b.classList.toggle('active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+    document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.tab===navigationTab(activeTab);b.classList.toggle('active',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   }
   const dialogs=[$('sheet'),$('calculator'),$('alertWrap')];
   for(const el of dialogs){el.setAttribute('role',el.id==='alertWrap'?'alertdialog':'dialog');el.setAttribute('aria-modal','true');el.tabIndex=-1}

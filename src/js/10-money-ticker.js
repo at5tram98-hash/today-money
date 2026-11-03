@@ -111,7 +111,7 @@ function bindMoneyTicker(context='today'){
   viewport.addEventListener('scroll',()=>{if(performance.now()<ctl.pausedUntil)ctl.position=viewport.scrollLeft},{passive:true});
   const tick=now=>{
     if(ctl.stopped||!document.body.contains(viewport)){if(ctl.raf)cancelAnimationFrame(ctl.raf);return}
-    const screen=viewport.closest('.screen'),active=!!screen?.classList.contains('active');
+    const screen=viewport.closest('.screen,.push-view'),active=!!screen&&(screen.classList.contains('active')||screen.classList.contains('show'));
     const firstWidth=first.getBoundingClientRect().width;
     const canMove=firstWidth>viewport.clientWidth+8;
     if(active&&document.visibilityState==='visible'&&canMove&&now>=ctl.pausedUntil){

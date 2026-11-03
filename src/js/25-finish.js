@@ -1,4 +1,5 @@
 try{await saveAsync({snapshot:data})}catch(e){console.warn('initial persistence unavailable',e);data.meta={...(data.meta||{}),storageWriteError:true}}
+initializeMainNavigation();
 updateBootMessage('画面を準備しています…','集計結果を画面に反映しています');
 renderAll();void initializeWebPush();renderLock();initializeTabIndicator();
 await waitForUiPaint();const bootRemaining=700-(performance.now()-mm3BootStarted);if(bootRemaining>0)await new Promise(resolve=>setTimeout(resolve,bootRemaining));await waitForUiPaint();mm3BootLayer.remove();

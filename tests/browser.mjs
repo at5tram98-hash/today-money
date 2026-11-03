@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {navigateMoney} from './navigation.mjs';
 import {createServer} from 'node:http';
 import {readFileSync, existsSync, statSync, mkdirSync, writeFileSync} from 'node:fs';
 import {resolve, extname} from 'node:path';
@@ -6,13 +7,14 @@ import {chromium} from 'playwright';
 import {verifyDayClosingBrowser} from './day-closing-browser.mjs';
 import {verifyFinalUiBrowser} from './final-ui-browser.mjs';
 import {verifyUiUpdate} from './ui-update-browser.mjs';
+import {verifyWorkspace} from './workspace-browser.mjs';
 import {verifyClosingRefinements} from './closing-refinements-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
 build();
 const results = [];
 const passed = name => {results.push({name, status: 'passed'}); console.log(`PASS ${name}`);};
-const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,openAcfDetail,openDailyGoalPlanner,openMonthlyGoalPlanner,openFinancialUpdates,financialUpdateRows,acfDisplayRows,acfDisplayValue,ACF_DAY_FIELDS,buildCashFlowForecast,getGoalState:()=>clone(goalPlannerState),recordDayClosing,cancelDayClosing,dayClosingAvailable,openDayClosingCancellation,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
+const hook = `globalThis.__mm3Test={setWorkspaceDate:value=>{trackingDate=value;moneyHomeMonth=value.slice(0,7);currentMonth=value.slice(0,7);moneyCalendarDate=value;moneyInsightMonth=value.slice(0,7);moneyLedgerMonth=value.slice(0,7)},moneyFeatureGroups,getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,openAcfDetail,openDailyGoalPlanner,openMonthlyGoalPlanner,openFinancialUpdates,financialUpdateRows,acfDisplayRows,acfDisplayValue,ACF_DAY_FIELDS,buildCashFlowForecast,getGoalState:()=>clone(goalPlannerState),recordDayClosing,cancelDayClosing,dayClosingAvailable,openDayClosingCancellation,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
 const hookMarker = 'try{await saveAsync({snapshot:data})}catch';
 const baselineRoot = process.env.MM3_BASELINE_DIR;
 const financialBaselineRoot=process.env.MM3_FINANCIAL_BASELINE_DIR;
@@ -101,7 +103,7 @@ try {
       assert.equal(await candidate.page.locator('#sidebarLayer').count(),0);
       const dimensions=await candidate.page.locator(`#screen-${tab} .scroll`).evaluate(el=>({width:el.clientWidth,scroll:el.scrollWidth}));
       assert.ok(dimensions.scroll<=dimensions.width+1,`${width}px ${appearance} ${tab} overflows horizontally`);
-      if(tab==='today'||tab==='month')assert.equal(await candidate.page.locator(`#screen-${tab} .native-home-mode`).count(),1);
+      if(tab==='today')assert.equal(await candidate.page.locator('#homeSplitter').count(),1);if(tab==='month')assert.equal(await candidate.page.locator('#screen-month .money-calendar-grid').count(),1);
       if(tab==='settings'){
         const radius=await candidate.page.locator('.settings-profile-avatar').evaluate(el=>getComputedStyle(el).borderRadius);
         assert.equal(radius,'50%');
@@ -114,11 +116,11 @@ try {
 
   const {page, context} = await createPage();
   for (const tab of ['pay', 'payments', 'assets', 'settings', 'home']) {
-    await page.locator(`[data-tab="${tab}"]`).click();
+    await navigateMoney(page,tab);
     await page.waitForFunction(() => document.querySelectorAll('.screen.active').length === 1);
   }
   passed('tab buttons respond and keep exactly one active screen');
-  await page.locator('[data-tab="pay"]').click();
+  await navigateMoney(page,'pay');
   await page.locator('#mm3SalaryMonth').click();await page.locator('#monthWheel-month').focus();await page.keyboard.press('ArrowDown');await page.locator('#monthPickerApply').click();
   await page.waitForFunction(() => globalThis.__mm3Test.getState().payViewMonth === '2026-11');
   assert.ok((await page.locator('#screen-pay').innerText()).includes('¥48,810'));
@@ -146,7 +148,7 @@ try {
   passed('month menu reason analysis opens without an undefined month');
   await page.evaluate(() => globalThis.__mm3Test.popView());
 
-  await page.locator('[data-tab="payments"]').click();
+  await navigateMoney(page,'payments');
   await page.locator('#mm3AtfOpen').click();
   await page.waitForFunction(() => document.getElementById('sheet').classList.contains('show'));
   assert.ok(await page.locator('#sheet .mm3-atf-dayrow').count() > 0);
@@ -342,7 +344,7 @@ try {
   const arithmetic=await fp.evaluate(()=>{
     const t=globalThis.__mm3Test;t.openCalculator('計算',0);['clear','1','0','0','op:+','2','0','done','done'].forEach(t.calcKey);const repeated=t.calcFinalValue();t.closeCalc();t.openCalculator('負の金額',-100,null,{allowNegative:true});const negative=t.calcFinalValue();t.closeCalc();t.openCalculator('0で割る',0);['clear','1','op:/','0'].forEach(t.calcKey);const zero=t.calcFinalValue();t.closeCalc();return{repeated,negative,zero};
   });assert.deepEqual(arithmetic,{repeated:140,negative:-100,zero:null});passed('existing repeated equals, signed context and division-by-zero arithmetic are preserved');
-  await fp.locator('[data-tab="payments"]').click();const originalMonth=await fp.evaluate(()=>globalThis.__mm3Test.getState().assetBillingMonth);await fp.locator('#mm3PaymentMonth').click();await fp.locator('#monthWheel-month').focus();await fp.keyboard.press('ArrowDown');await fp.locator('#monthPickerCancel').click();assert.equal(await fp.evaluate(()=>globalThis.__mm3Test.getState().assetBillingMonth),originalMonth);await fp.locator('#mm3PaymentMonth').click();await fp.locator('#monthWheel-month').focus();await fp.keyboard.press('ArrowDown');await fp.locator('#monthPickerApply').click();await fp.waitForFunction(()=>globalThis.__mm3Test.getState().assetBillingMonth==='2026-11');passed('payments uses the same month wheel; cancel cannot change the visible month');
+  await navigateMoney(fp,'payments');const originalMonth=await fp.evaluate(()=>globalThis.__mm3Test.getState().assetBillingMonth);await fp.locator('#mm3PaymentMonth').click();await fp.locator('#monthWheel-month').focus();await fp.keyboard.press('ArrowDown');await fp.locator('#monthPickerCancel').click();assert.equal(await fp.evaluate(()=>globalThis.__mm3Test.getState().assetBillingMonth),originalMonth);await fp.locator('#mm3PaymentMonth').click();await fp.locator('#monthWheel-month').focus();await fp.keyboard.press('ArrowDown');await fp.locator('#monthPickerApply').click();await fp.waitForFunction(()=>globalThis.__mm3Test.getState().assetBillingMonth==='2026-11');passed('payments uses the same month wheel; cancel cannot change the visible month');
   await fp.locator('#mm3PaymentMonth').click();await fp.locator('#month-month-12').click();await fp.locator('#monthPickerApply').click();await fp.waitForFunction(()=>globalThis.__mm3Test.getState().assetBillingMonth==='2026-12');passed('tapping a month and immediately confirming uses the tapped month');
   const date='2026-10-07';
   // Replace through the normal durable path; no nested commit is permitted.
@@ -351,8 +353,8 @@ try {
   await fp.locator('#todayDayClose').click();assert.ok((await fp.locator('.day-close-totals').innerText()).includes('900'));await finishDayClosing(fp);
   const afterClose=await fp.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{transactions:d.transactions,banks:d.banks,cards:d.cards,dailyCorrections:d.dailyCorrections}});assert.deepEqual(afterClose,beforeClose);passed('seven-step daily close requires all checks, uses corrected spending and preserves ledger balances');
   await fp.reload();await fp.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'closed');
-  await fp.evaluate(async date=>{const t=globalThis.__mm3Test,state=t.getData();state.transactions[0].amount=2000;await t.replaceData(state);t.renderAll()},date);assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'changed');assert.ok((await fp.locator('#todayDayClose').innerText()).includes('再確認'));await fp.locator('.native-home-mode').getByText('今月',{exact:true}).click();assert.ok((await fp.locator('[data-date="2026-10-07"]').getAttribute('aria-label')).includes('再確認'));passed('day closing persists and detects later edits even when an override keeps the total unchanged');
-  await fp.locator('[data-date="2026-10-07"]').click();await fp.locator('#inspectDayClose').click();await fp.locator('#dayCloseModify').click();await fp.locator('#alertActions').getByRole('button',{name:'修正を始める',exact:true}).click();await finishDayClosing(fp);await fp.locator('.day-close-view').last().locator('#dayCloseNext').click();await fp.locator('#inspectDayClose').click();assert.equal(await fp.locator('.day-close-view').last().locator('.day-close-heading').innerText(),'承認済');await fp.locator('#dayCloseModify').click();await fp.locator('#alertActions').getByRole('button',{name:'修正を始める',exact:true}).click();assert.equal(await fp.locator('.day-close-view').last().locator('.day-close-heading').innerText(),'日締め');assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'closed');passed('calendar opens the seven-step review and protects approved evidence until explicit revision');
+  await fp.evaluate(async date=>{const t=globalThis.__mm3Test,state=t.getData();state.transactions[0].amount=2000;await t.replaceData(state);t.renderAll()},date);assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'changed');assert.ok((await fp.locator('#todayDayClose').innerText()).includes('再確認'));await fp.locator('[data-tab="month"]').click();assert.ok((await fp.locator('#screen-month [data-date="2026-10-07"]').getAttribute('aria-label')).includes('再確認'));passed('day closing persists and detects later edits even when an override keeps the total unchanged');
+  await fp.locator('#screen-month [data-date="2026-10-07"]').click();await fp.locator('#screen-month .money-day-detail [data-money-inspect]').first().click();await fp.locator('#inspectDayClose').click();await fp.locator('#dayCloseModify').click();await fp.locator('#alertActions').getByRole('button',{name:'修正を始める',exact:true}).click();await finishDayClosing(fp);await fp.locator('.day-close-view').last().locator('#dayCloseNext').click();await fp.locator('#inspectDayClose').click();assert.equal(await fp.locator('.day-close-view').last().locator('.day-close-heading').innerText(),'承認済');await fp.locator('#dayCloseModify').click();await fp.locator('#alertActions').getByRole('button',{name:'修正を始める',exact:true}).click();assert.equal(await fp.locator('.day-close-view').last().locator('.day-close-heading').innerText(),'日締め');assert.equal(await fp.evaluate(date=>globalThis.__mm3Test.dayClosingStatus(date),date),'closed');passed('calendar opens the seven-step review and protects approved evidence until explicit revision');
   await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.switchTab('settings');globalThis.__mm3Test.openNotificationSettings()});await fp.waitForSelector('#pushEnable');assert.equal(await fp.locator('#pushEnable').isDisabled(),true);assert.ok((await fp.locator('.push-view.show').innerText()).includes('通知サーバー未接続'));const summary=await fp.evaluate(()=>globalThis.__mm3Test.buildPushSummary());assert.equal(summary.spending,null);assert.ok(!('transactions' in summary)&&!('gmailSettings' in summary));passed('unconfigured Push stays off and the default summary excludes amounts and Gmail credentials');
   await fp.evaluate(()=>{while(document.querySelector('.push-view.show'))globalThis.__mm3Test.popView();globalThis.__mm3Test.openCalculator('320px',999999999)});await fp.waitForTimeout(350);assert.ok(await fp.locator('#calcDone').isVisible());await fp.screenshot({path:resolve(root,'test-results/calculator-320-light.png')});await fp.locator('#calcCancel').click();await features.context.close();
 
@@ -362,6 +364,7 @@ try {
   if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_DAY_CLOSING_ONLY)await verifyFinalUiBrowser({createPage,passed,root,financialBaselineRoot});
 
   await verifyUiUpdate({createPage,passed,root});
+  await verifyWorkspace({createPage,passed,root});
 
   const lifecycle=await createPage();const lp=lifecycle.page;
   const vapid=Buffer.concat([Buffer.from([4]),Buffer.alloc(64,1)]).toString('base64url'),device={apiBase:'https://money.push-test.example',vapidPublicKey:vapid,token:'test-device-token',endpoint:'https://web.push.apple.com/test-old'};

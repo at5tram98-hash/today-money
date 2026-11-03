@@ -14,6 +14,12 @@ function renderSettings(){
   const level={many:'多め',minimal:'最小限',recommended:'おすすめ'}[data.notificationSettings.level]||'おすすめ';
   const appearance={system:'システム',dark:'ダーク',light:'ライト'}[data.appearance]||'システム';
   const groups=[
+    ['機能一覧',[{id:'allFeatures',symbol:'grid',color:'var(--blue)',title:'すべての機能',detail:'記録・計画・見通し・分析から探す'}]],
+    ['お金の管理',[
+      {id:'finance-pay',symbol:'briefcase',color:'var(--green)',title:'給与',detail:'勤務先・入金予定・給与記録'},
+      {id:'finance-payments',symbol:'card',color:'var(--purple)',title:'支払い',detail:'カード・固定支払い・大型支出'},
+      {id:'finance-assets',symbol:'bank',color:'var(--blue)',title:'口座・資産',detail:'銀行残高・カード利用枠'}
+    ]],
     ['連携',[{id:'gmailSettings',symbol:'mail',color:'#EA4335',title:'Gmail連携',detail:gmailStatusLabel()}]],
     ['お金',[
       {id:'categorySettings',symbol:'grid',color:'var(--orange)',title:'カテゴリ',value:`${data.categories.length}件`},
@@ -33,7 +39,7 @@ function renderSettings(){
     ]],
     ['データ',[{id:'dataSettings',symbol:'upload',color:'var(--green)',title:'データ管理',detail:'PDF・バックアップ・削除'}]]
   ];
-  document.getElementById('settingsTop').innerHTML=topbar('設定','');
+  document.getElementById('settingsTop').innerHTML=topbar('その他','');
   document.getElementById('settingsContent').innerHTML=`
     <button type="button" class="settings-profile-card" id="profileSettings">
       ${profileAvatarHtml('settings-profile-avatar')}
@@ -43,7 +49,8 @@ function renderSettings(){
   bindSettings();
 }
 function bindSettings(){
-  const actions={
+  const actions={allFeatures:openMoneyFeatureDirectory,
+    'finance-pay':()=>switchTab('pay'),'finance-payments':()=>switchTab('payments'),'finance-assets':()=>switchTab('assets'),
     profileSettings:openProfileEdit,gmailSettings:openGmailSettings,
     categorySettings:openCategorySettings,initialValuesSettings:openInitialValues,
     acfSettingsRow:openAcfSettings,favoriteSettings:openFavoritesEditor,tagSettings:openTagsManager,

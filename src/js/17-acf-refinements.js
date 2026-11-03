@@ -151,7 +151,7 @@ function openAcfSettings(){
     root.querySelector('#acfPreferred').onchange=e=>{settings.preferredCardId=e.target.value;draw()};
     root.querySelector('#acfCreditPlaces').onclick=()=>openCreditUsageRules(settings,draw);
     for(const [id,key] of [['acfWeights','useWeekdayWeights'],['acfRequired','includeRequiredLargeExpenses'],['acfRiskNoti','riskNotifications']])root.querySelector(`#${id}`).onclick=e=>{settings[key]=!settings[key];e.currentTarget.classList.toggle('on',settings[key]);draw()};
-    saveBtn.onclick=()=>runSaveAction(saveBtn,()=>{data.acfSettings={...data.acfSettings,...settings,initialized:true}},{render:true,label:'acf settings',success:'ACF設定を保存しました',close:popView});draw();return()=>clearTimeout(timer)
+    saveBtn.onclick=()=>runSaveAction(saveBtn,()=>{data.acfSettings={...data.acfSettings,...settings,initialized:true}},{render:true,label:'acf settings',success:'ACF設定を保存しました',close:popView});draw();root.__dispose=()=>clearTimeout(timer)
   })
 }
 

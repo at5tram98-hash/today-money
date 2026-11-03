@@ -65,7 +65,7 @@ export async function verifyClosingRefinements({createPage,passed,root,errors}){
 
   await page.evaluate(()=>{globalThis.__mm3Test.popView();globalThis.__mm3Test.popView();globalThis.__mm3TestClock.now=Date.parse('2026-10-07T08:59:59.999Z');globalThis.__mm3Test.openDayClosing('2026-10-07')});
   assert.ok((await page.locator('.day-close-view').last().innerText()).includes('この日の日締めは18:00以降に可能です'));
-  assert.equal(await page.locator('#dayCloseModify,#dayReviewClose,#dayCloseNext,#dayCloseCancel').count(),0);
+  assert.equal(await page.locator('.day-close-view.show').last().locator('#dayCloseModify,#dayReviewClose,#dayCloseNext,#dayCloseCancel').count(),0);
   await page.locator('#dayCloseJournal').click();assert.equal(await page.locator('[data-journal-date]').count(),1);
   await page.locator('[data-journal-date]').click();assert.ok((await page.locator('.push-view').last().innerText()).includes('取消済'));
   await page.evaluate(()=>{globalThis.__mm3Test.popView();globalThis.__mm3Test.popView();globalThis.__mm3Test.popView();globalThis.__mm3TestClock.now=Date.parse('2026-10-07T09:00:00Z');globalThis.__mm3Test.openDayClosing('2026-10-07')});
