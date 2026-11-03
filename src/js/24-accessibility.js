@@ -30,7 +30,7 @@
         if(name)el.setAttribute('aria-label',name);
       }
       if(el.type==='number'&&!el.inputMode)el.inputMode=el.step&&el.step!=='1'?'decimal':'numeric';
-      if(el.type==='search'&&!el.enterKeyHint)el.enterKeyHint='search';
+      if(!el.enterKeyHint&&el.tagName!=='TEXTAREA')el.enterKeyHint=el.type==='search'?'search':'done';
     });
     root.querySelectorAll('button.switch').forEach(el=>{
       el.setAttribute('role','switch');el.setAttribute('aria-checked',String(el.classList.contains('on')));
@@ -39,6 +39,15 @@
     root.querySelectorAll('.date-nav-btn').forEach(el=>{if(!el.getAttribute('aria-label'))el.setAttribute('aria-label',/prev/i.test(el.id)?'前へ':'次へ')});
     root.querySelectorAll('.large-title,.month-name-btn').forEach(el=>{if(el.tagName!=='BUTTON'){el.setAttribute('role','heading');el.setAttribute('aria-level','1')}});
     root.querySelectorAll(amountSelector).forEach(el=>{if(!fitted.has(el)){fitted.add(el);resizer?.observe(el)}enqueueFit(el)});
+    // A disclosure is artwork, not a font-dependent text character.
+    root.querySelectorAll('.chev,.mm3-action-chev,.goal-plan-action>span:last-child').forEach(el=>{
+      if(/^[›»]$/.test(el.textContent.trim())&&!el.querySelector('svg'))el.innerHTML=icon('chevronRight');
+    });
+    root.querySelectorAll('.acf-link').forEach(el=>{
+      if(el.childElementCount||!/[›»]\s*$/.test(el.textContent))return;
+      const label=document.createElement('span');label.textContent=el.textContent.replace(/\s*[›»]\s*$/,'');
+      el.replaceChildren(label);el.insertAdjacentHTML('beforeend',icon('chevronRight'));
+    });
     root.querySelectorAll('button svg').forEach(el=>{if(!el.hasAttribute('aria-label')){el.setAttribute('aria-hidden','true');el.setAttribute('focusable','false')}});
   }
   function addShortcut(content,after,label,action){

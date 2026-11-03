@@ -7,6 +7,7 @@ import {verifyDayClosingBrowser} from './day-closing-browser.mjs';
 import {verifyFinalUiBrowser} from './final-ui-browser.mjs';
 import {verifyUiUpdate} from './ui-update-browser.mjs';
 import {verifyClosingRefinements} from './closing-refinements-browser.mjs';
+import {verifyNativeUi} from './native-ui-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
 build();
@@ -362,6 +363,7 @@ try {
   if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_DAY_CLOSING_ONLY)await verifyFinalUiBrowser({createPage,passed,root,financialBaselineRoot});
 
   await verifyUiUpdate({createPage,passed,root});
+  await verifyNativeUi({createPage,passed});
 
   const lifecycle=await createPage();const lp=lifecycle.page;
   const vapid=Buffer.concat([Buffer.from([4]),Buffer.alloc(64,1)]).toString('base64url'),device={apiBase:'https://money.push-test.example',vapidPublicKey:vapid,token:'test-device-token',endpoint:'https://web.push.apple.com/test-old'};

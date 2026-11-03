@@ -1235,6 +1235,7 @@ function openCreditUsageRules(settings,onChange){const merchants=[...new Set(dat
 
 /* 24-point symbols shared with My Time; financial symbols use the same geometry. */
 const MONEY_SYMBOLS=Object.freeze({
+  "settings": "<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.7 1.7 0 0 0 .4 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.4 1.7 1.7 0 0 0-1 1.6V21h-4v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.4l-.1.1L4.3 17l.1-.1a1.7 1.7 0 0 0 .4-1.9 1.7 1.7 0 0 0-1.6-1H3v-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.4-1.9L4.3 7l2.8-2.8.1.1a1.7 1.7 0 0 0 1.9.4 1.7 1.7 0 0 0 1-1.6V3h4v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.4l.1-.1L19.9 7l-.1.1a1.7 1.7 0 0 0-.4 1.9 1.7 1.7 0 0 0 1.6 1h.1v4H21a1.7 1.7 0 0 0-1.6 1z\"/>",
   "dayClose": "<path d=\"M10 7h10M10 12h10M10 17h10M4 7l1.3 1.3L7.6 6M4 12l1.3 1.3L7.6 11M4.8 17h.01\"/>",
   "journal": "<path d=\"M7 3.5h7.5L19 8v11.5a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1ZM14.5 3.5V8H19M9 12.5h7M9 16h5\"/>",
   "search": "<path d=\"M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13ZM15.3 15.3 20 20\"/>",
@@ -4616,7 +4617,7 @@ function cashFlowProChartHtml(forecast){
 }
 
 function acfMiniCardHtml(){
-  if(!data.acfSettings.initialized)return `<button type="button" class="acf-card acf-home-card hero-button" id="acfToday"><div class="acf-home-name">ACF</div><div class="acf-home-sub">生活費の見通し</div><div class="acf-home-amount">設定する</div><div class="acf-plain-note">最低残したい金額とカードで支払う割合を設定すると、今日使える目安を計算します。</div><div class="acf-link">ACFを設定する ›</div></button>`;
+  if(!data.acfSettings.initialized)return `<button type="button" class="acf-card acf-home-card hero-button" id="acfToday"><div class="acf-home-name">ACF</div><div class="acf-home-sub">生活費の見通し</div><div class="acf-home-amount">設定する${icon('chevronRight')}</div><div class="acf-plain-note">最低残したい金額とカードで支払う割合を設定すると、今日使える目安を計算します。</div></button>`;
   const f=buildCashFlowForecast(),ratio=f.settings.creditFallbackEnabled===false?0:Math.round(Number(f.settings.creditAggressiveness)||0),cash=Number(f.safeCashBudget)||0,card=Number(f.safeCreditBudget)||0;
   const note=f.status==='安全'?`次の支払いを含めても最低残高を維持できる見込みです。`:f.status==='注意'?'支払い予定を確認しながら使うのがおすすめです。':f.status==='危険'?'残高は残る見込みですが、最低残したい金額を下回ります。':'確定支払いに対して資金不足が発生する見込みです。';
   const statusClass=f.status==='不足'?'acf-status-critical':'';
@@ -5336,26 +5337,7 @@ mm3BindAssets=function(){
 
 
 /* === My Money 3.0 Phase 5: Quiet iOS actions + bug fixes === */
-function mm3QuietIconSvg(kind){
-  const p={
-    records:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="5" cy="6" r="1.4"/><circle cx="5" cy="12" r="1.4"/><circle cx="5" cy="18" r="1.4"/>',
-    split:'<path d="M4 7h16"/><path d="M8 7v10"/><path d="M16 7v10"/><path d="M6 17l2 2 2-2"/><path d="M14 15l2-2 2 2"/>',
-    plus:'<path d="M12 5v14M5 12h14"/><circle cx="18" cy="6" r="2"/>',
-    chart:'<path d="M5 19V9"/><path d="M12 19V5"/><path d="M19 19v-7"/>',
-    reconcile:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M15.5 15.5l1.8 1.8 3.2-4"/>',
-    card:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M18 4v4M16 6h4"/>',
-    wallet:'<path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H19v14H6.5A2.5 2.5 0 0 1 4 16.5v-9Z"/><path d="M15 11h6v5h-6a2.5 2.5 0 0 1 0-5Z"/>',
-    calendar:'<path d="M7 3v4M17 3v4"/><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16"/><path d="M9 15h6"/>',
-    bag:'<path d="M6 7h13l-1.3 7.2a2 2 0 0 1-2 1.6H9a2 2 0 0 1-2-1.6L6 7Z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/>',
-    history:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/><path d="M18 6l2-2"/>',
-    mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
-    bank:'<path d="M3 9h18"/><path d="M5 19h14"/><path d="M6 9v10M10 9v10M14 9v10M18 9v10"/><path d="M4 9 12 4l8 5"/>',
-    timeline:'<path d="M4 18h16"/><path d="M6 15V9"/><path d="M12 15V5"/><path d="M18 15v-7"/>',
-    transfer:'<path d="M8 7H5v3"/><path d="M16 17h3v-3"/><path d="M5 10c1.5-3 4-4 7-4s5.5 1 7 4"/><path d="M19 14c-1.5 3-4 4-7 4s-5.5-1-7-4"/>',
-    target:'<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>'
-  };
-  return `<svg viewBox="0 0 24 24" aria-hidden="true">${p[kind]||p.records}</svg>`
-}
+function mm3QuietIconSvg(kind){const names={records:'list',split:'arrowUpDown',reconcile:'check',bag:'cart',history:'clock',timeline:'chart',transfer:'repeat'};return icon(names[kind]||kind)}
 function mm3QuietActionRow({id,title,sub,kind='records',primary=false,trailing=''}){
   return `<button type="button" class="mm3-action-row ${primary?'is-primary':''}" id="${id}"><span class="mm3-action-icon">${mm3QuietIconSvg(kind)}</span><span class="mm3-action-main"><strong>${esc(title)}</strong><small>${esc(sub||'')}</small></span>${trailing?`<span class="mm3-action-trailing">${trailing}</span>`:''}<span class="mm3-action-chev">›</span></button>`
 }
@@ -5712,7 +5694,7 @@ function mm3SalaryRecordsOpen(month){
         if(name)el.setAttribute('aria-label',name);
       }
       if(el.type==='number'&&!el.inputMode)el.inputMode=el.step&&el.step!=='1'?'decimal':'numeric';
-      if(el.type==='search'&&!el.enterKeyHint)el.enterKeyHint='search';
+      if(!el.enterKeyHint&&el.tagName!=='TEXTAREA')el.enterKeyHint=el.type==='search'?'search':'done';
     });
     root.querySelectorAll('button.switch').forEach(el=>{
       el.setAttribute('role','switch');el.setAttribute('aria-checked',String(el.classList.contains('on')));
@@ -5721,6 +5703,15 @@ function mm3SalaryRecordsOpen(month){
     root.querySelectorAll('.date-nav-btn').forEach(el=>{if(!el.getAttribute('aria-label'))el.setAttribute('aria-label',/prev/i.test(el.id)?'前へ':'次へ')});
     root.querySelectorAll('.large-title,.month-name-btn').forEach(el=>{if(el.tagName!=='BUTTON'){el.setAttribute('role','heading');el.setAttribute('aria-level','1')}});
     root.querySelectorAll(amountSelector).forEach(el=>{if(!fitted.has(el)){fitted.add(el);resizer?.observe(el)}enqueueFit(el)});
+    // A disclosure is artwork, not a font-dependent text character.
+    root.querySelectorAll('.chev,.mm3-action-chev,.goal-plan-action>span:last-child').forEach(el=>{
+      if(/^[›»]$/.test(el.textContent.trim())&&!el.querySelector('svg'))el.innerHTML=icon('chevronRight');
+    });
+    root.querySelectorAll('.acf-link').forEach(el=>{
+      if(el.childElementCount||!/[›»]\s*$/.test(el.textContent))return;
+      const label=document.createElement('span');label.textContent=el.textContent.replace(/\s*[›»]\s*$/,'');
+      el.replaceChildren(label);el.insertAdjacentHTML('beforeend',icon('chevronRight'));
+    });
     root.querySelectorAll('button svg').forEach(el=>{if(!el.hasAttribute('aria-label')){el.setAttribute('aria-hidden','true');el.setAttribute('focusable','false')}});
   }
   function addShortcut(content,after,label,action){

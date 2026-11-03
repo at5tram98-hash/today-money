@@ -1,24 +1,5 @@
 /* === My Money 3.0 Phase 5: Quiet iOS actions + bug fixes === */
-function mm3QuietIconSvg(kind){
-  const p={
-    records:'<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="5" cy="6" r="1.4"/><circle cx="5" cy="12" r="1.4"/><circle cx="5" cy="18" r="1.4"/>',
-    split:'<path d="M4 7h16"/><path d="M8 7v10"/><path d="M16 7v10"/><path d="M6 17l2 2 2-2"/><path d="M14 15l2-2 2 2"/>',
-    plus:'<path d="M12 5v14M5 12h14"/><circle cx="18" cy="6" r="2"/>',
-    chart:'<path d="M5 19V9"/><path d="M12 19V5"/><path d="M19 19v-7"/>',
-    reconcile:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M15.5 15.5l1.8 1.8 3.2-4"/>',
-    card:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M18 4v4M16 6h4"/>',
-    wallet:'<path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H19v14H6.5A2.5 2.5 0 0 1 4 16.5v-9Z"/><path d="M15 11h6v5h-6a2.5 2.5 0 0 1 0-5Z"/>',
-    calendar:'<path d="M7 3v4M17 3v4"/><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16"/><path d="M9 15h6"/>',
-    bag:'<path d="M6 7h13l-1.3 7.2a2 2 0 0 1-2 1.6H9a2 2 0 0 1-2-1.6L6 7Z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/>',
-    history:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/><path d="M18 6l2-2"/>',
-    mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
-    bank:'<path d="M3 9h18"/><path d="M5 19h14"/><path d="M6 9v10M10 9v10M14 9v10M18 9v10"/><path d="M4 9 12 4l8 5"/>',
-    timeline:'<path d="M4 18h16"/><path d="M6 15V9"/><path d="M12 15V5"/><path d="M18 15v-7"/>',
-    transfer:'<path d="M8 7H5v3"/><path d="M16 17h3v-3"/><path d="M5 10c1.5-3 4-4 7-4s5.5 1 7 4"/><path d="M19 14c-1.5 3-4 4-7 4s-5.5-1-7-4"/>',
-    target:'<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>'
-  };
-  return `<svg viewBox="0 0 24 24" aria-hidden="true">${p[kind]||p.records}</svg>`
-}
+function mm3QuietIconSvg(kind){const names={records:'list',split:'arrowUpDown',reconcile:'check',bag:'cart',history:'clock',timeline:'chart',transfer:'repeat'};return icon(names[kind]||kind)}
 function mm3QuietActionRow({id,title,sub,kind='records',primary=false,trailing=''}){
   return `<button type="button" class="mm3-action-row ${primary?'is-primary':''}" id="${id}"><span class="mm3-action-icon">${mm3QuietIconSvg(kind)}</span><span class="mm3-action-main"><strong>${esc(title)}</strong><small>${esc(sub||'')}</small></span>${trailing?`<span class="mm3-action-trailing">${trailing}</span>`:''}<span class="mm3-action-chev">›</span></button>`
 }

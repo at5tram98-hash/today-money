@@ -363,7 +363,7 @@ function cashFlowProChartHtml(forecast){
 }
 
 function acfMiniCardHtml(){
-  if(!data.acfSettings.initialized)return `<button type="button" class="acf-card acf-home-card hero-button" id="acfToday"><div class="acf-home-name">ACF</div><div class="acf-home-sub">生活費の見通し</div><div class="acf-home-amount">設定する</div><div class="acf-plain-note">最低残したい金額とカードで支払う割合を設定すると、今日使える目安を計算します。</div><div class="acf-link">ACFを設定する ›</div></button>`;
+  if(!data.acfSettings.initialized)return `<button type="button" class="acf-card acf-home-card hero-button" id="acfToday"><div class="acf-home-name">ACF</div><div class="acf-home-sub">生活費の見通し</div><div class="acf-home-amount">設定する${icon('chevronRight')}</div><div class="acf-plain-note">最低残したい金額とカードで支払う割合を設定すると、今日使える目安を計算します。</div></button>`;
   const f=buildCashFlowForecast(),ratio=f.settings.creditFallbackEnabled===false?0:Math.round(Number(f.settings.creditAggressiveness)||0),cash=Number(f.safeCashBudget)||0,card=Number(f.safeCreditBudget)||0;
   const note=f.status==='安全'?`次の支払いを含めても最低残高を維持できる見込みです。`:f.status==='注意'?'支払い予定を確認しながら使うのがおすすめです。':f.status==='危険'?'残高は残る見込みですが、最低残したい金額を下回ります。':'確定支払いに対して資金不足が発生する見込みです。';
   const statusClass=f.status==='不足'?'acf-status-critical':'';

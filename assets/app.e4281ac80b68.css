@@ -2010,31 +2010,166 @@ html.motion-off .day-close-success>div,html.motion-off .day-close-content{animat
 .financial-update-row b{font-size:17px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;font-weight:600;overflow-wrap:anywhere;text-align:right;max-width:130px}
 .financial-update-row svg{width:12px;height:14px;fill:none;stroke:var(--label3);stroke-width:1.8}
 .financial-update-row:active,.financial-update-access:active{background:var(--fill)}
-/* Presentation only: retain original five tabs and every original action. */
+/* Native presentation contract. Navigation, financial models and saved records are unchanged. */
+:root{
+ --native-gutter:16px;--native-radius:20px;--native-control:14px;
+ --native-ease:cubic-bezier(.2,.8,.2,1);--native-secondary:#e9e9ee;
+ --native-caption:13px;--native-body:17px;--native-title:34px;
+}
+html.dark{--native-secondary:#2c2c2e}
 .money-symbol{display:block;flex:none}
-#app .screen{background:var(--card)}
-#app .screen>.topbar{background:var(--card);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:.5px solid var(--sep);padding-bottom:14px}
-#app .large-title{font-size:32px;letter-spacing:-.7px;line-height:1.2}
-#app .screen>.scroll{padding-inline:16px}
-#app .native-home-mode{margin:2px 0 18px;border-radius:22px;padding:4px}
-#app .native-home-mode button{border-radius:18px;min-height:38px}
-#app .section-head{color:var(--label);font-size:17px;font-weight:650;letter-spacing:-.2px;margin:26px 0 8px}
-#app .group{border-radius:0;box-shadow:none;background:transparent;border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
-#app .group>.row{background:transparent;padding-left:0;padding-right:0;min-height:60px}
-#app .group>.row:after{left:0}
-#app .hero,#app .card{box-shadow:none}
-#app .quick-grid{gap:10px;margin:16px 0 20px}
-#app .quick-btn{border-radius:16px;min-height:64px;background:var(--fill);box-shadow:none}
-#app .quick-btn svg{stroke-width:1.9}
-#app .nav-actions .icon-btn{border-radius:50%;background:var(--fill);width:38px;height:38px;min-width:38px}
-#app .nav-actions{gap:8px}
-#app .today-goal-hero{border-radius:20px;background:var(--fill);box-shadow:none}
-#app .pro4-command-strip{gap:10px}
-#app .pro4-command{border-radius:20px;background:var(--fill)}
-#app .settings-icon{border-radius:50%}
-#app .mm3-action-group{border-radius:0;box-shadow:none;border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
-#app .mm3-action-row{background:transparent}
-#app .calendar-card{box-shadow:none;border-radius:16px}
-@media(max-width:350px){#app .large-title{font-size:28px}#app .nav-actions{gap:4px}#app .nav-actions .icon-btn{width:34px;min-width:34px}}
-#app .quick-btn{color:var(--blue)}
-#app #quickExpense{background:var(--blue);color:#fff}
+#app .screen{background:var(--bg)}
+#app .screen>.topbar{padding:calc(var(--safe-t) + 10px) var(--native-gutter) 10px;min-height:64px;background:var(--bg);border-bottom:.5px solid transparent;transition:background .18s,border-color .18s}
+#app .screen>.topbar.native-scrolled{background:var(--native-glass);border-bottom-color:var(--sep);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+#app .large-title{font-size:var(--native-title);font-weight:700;letter-spacing:-.9px;line-height:1.2;transform-origin:left center;transition:transform .18s var(--native-ease)}
+#app .native-scrolled .large-title{transform:scale(.82)}
+#app .screen>.scroll{padding:4px var(--native-gutter) 28px;scroll-padding-bottom:28px}
+#app .nav-actions{gap:4px}
+#app .nav-actions .icon-btn{width:44px;height:44px;min-width:44px;background:transparent!important;box-shadow:none;color:var(--label)}
+#app .nav-actions .icon-btn svg{width:22px;height:22px}
+#app .native-home-mode{margin:0 0 12px;padding:3px;border-radius:24px;background:var(--fill)}
+#app .native-home-mode button{border-radius:21px;font-size:15px;font-weight:600;color:var(--label2)}
+#app .native-home-mode button[aria-pressed=true]{background:var(--blue);color:#fff;box-shadow:0 2px 5px #0000000d}
+#app .date-navigator{margin:4px 0 8px;min-height:44px;grid-template-columns:44px minmax(0,1fr) 44px}
+#app .date-nav-btn{width:44px;height:44px;border-radius:50%;background:transparent}
+#app .date-nav-label{font-size:15px;font-weight:650}
+/* The overview stays legible without making the budget ring the entire screen. */
+#app .today-goal-hero{border-radius:var(--native-radius);background:var(--card);box-shadow:0 2px 8px #00000003;margin:0 0 10px;overflow:hidden}
+#app .today-spend-tap{padding:12px 16px;width:100%;background:transparent}
+#app .daily-goal{grid-template-columns:108px minmax(0,1fr);gap:18px}
+#app .ring,#app .ring svg{width:108px;height:108px;aspect-ratio:1}
+#app .ring circle{stroke-width:11}
+#app .ring-center{width:83%}
+#app .ring-amount{font-size:24px;font-weight:700;letter-spacing:-.5px}
+#app .ring-caption{font-size:10px;line-height:1.4;margin-top:3px}
+#app .goal-side-title{font-size:12px;font-weight:400;color:var(--label2)}
+#app .goal-side-value{font-size:24px;font-weight:650;margin-top:2px}
+#app .goal-rate{font-size:15px;margin-top:3px}
+#app .compare-mini{font-size:11px;line-height:1.5;margin-top:6px;padding-top:6px}
+#app .goal-plan-action{min-height:44px;padding:10px 16px;font-size:15px;font-weight:600;border-top:.5px solid var(--sep);background:transparent}
+#app .goal-plan-action>.money-symbol{width:13px;height:13px}
+#app .quick-grid{gap:8px;margin:0 0 12px}
+#app .quick-btn{border-radius:var(--native-control);min-height:44px!important;justify-content:center;background:var(--native-secondary);color:var(--blue);padding:10px 12px;box-shadow:none;font-size:15px;font-weight:600}
+#app #quickExpense{min-height:48px!important;background:var(--blue);color:#fff;font-size:17px}
+#app .quick-btn.small{font-size:15px}
+#app .quick-btn svg{width:19px;height:19px}
+#app .day-closing-card{border:0;border-radius:var(--native-radius);background:var(--card);gap:12px;padding:12px 14px;margin:0 0 12px;box-shadow:none}
+#app .day-closing-card strong{font-size:16px;font-weight:600}
+#app .day-closing-card small{font-size:12px;margin-top:3px;line-height:1.4}
+#app .day-closing-symbol{width:32px;height:32px;border-radius:10px}
+#app .acf-home-card{border:0;padding:16px;border-radius:var(--native-radius);margin-bottom:12px}
+#app .acf-home-name{font-size:12px;font-weight:600;color:var(--green);letter-spacing:.2px}
+#app .acf-home-sub{font-size:17px;font-weight:600;color:var(--label);margin-top:3px}
+#app .acf-home-amount{font-size:30px;font-weight:700;letter-spacing:-.6px;line-height:1.2;margin-top:10px}
+#app .acf-home-caption,#app .acf-plain-note{font-size:12px;line-height:1.5;color:var(--label2)}
+#app .acf-link{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:500;min-height:44px;padding:10px 0 0;margin-top:10px}
+#app .acf-link>.money-symbol{width:13px;height:13px}
+#app #acfToday:not(:has(.acf-head)){display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;text-align:left}
+#app #acfToday:not(:has(.acf-head)) .acf-home-name{grid-column:1;grid-row:1;margin:0}
+#app #acfToday:not(:has(.acf-head)) .acf-home-sub{grid-column:1;grid-row:2;margin:0}
+#app #acfToday:not(:has(.acf-head)) .acf-home-amount{grid-column:2;grid-row:1/3;align-self:center;font-size:17px;color:var(--blue);margin:0}
+#app #acfToday:not(:has(.acf-head)) .acf-plain-note{grid-column:1/-1;margin-top:3px}
+#app #acfToday:not(:has(.acf-head)) .acf-link{grid-column:1/-1;margin-top:2px;padding-top:8px;min-height:36px}
+/* Lists share a single row anatomy across all five tabs. */
+#app .section-head,#app .mm3-action-section-label{font-size:17px;font-weight:600;letter-spacing:-.2px;line-height:1.35;color:var(--label);margin:24px 4px 10px}
+#app .group,#app .mm3-action-group{background:var(--card);border:0;border-radius:var(--native-radius);box-shadow:none;overflow:hidden}
+#app .group>.row{background:transparent;padding:12px 16px;min-height:56px;gap:12px}
+#app .row-title,#app .mm3-action-main strong{font-size:16px;font-weight:500;line-height:1.4}
+#app .row-sub,#app .mm3-action-main small{font-size:12px;line-height:1.45;margin-top:3px}
+#app .chev>.money-symbol,.mm3-action-chev>.money-symbol{width:13px;height:13px}
+#app .native-quick-action{border-radius:var(--native-control);font-size:16px;min-height:48px!important}
+#app #todayRepeat{justify-content:flex-start;background:var(--card);color:var(--blue);padding:12px 16px;margin:12px 0 8px;font-size:15px;font-weight:500}
+#app #todayRepeat>.money-symbol{width:20px;height:20px}
+#app .pro4-command-strip{gap:8px;margin:0 0 16px}
+#app .pro4-command{background:var(--card);border-radius:var(--native-control);font-size:14px}
+#app .category-grid{gap:8px}
+#app .cat-card{border-radius:16px;background:var(--card);padding:14px}
+#app .cat-icon{border-radius:9px}
+#app .calendar-card{border-radius:var(--native-radius);padding:12px 2px;box-shadow:none}
+#app .day-cell{min-width:0}
+#app .day-num.today{background:var(--blue)}
+#app .mm3-salary-shell,#app .mm3-payment-shell,#app .mm3-assets-shell{background:transparent}
+#app #screen-pay .mm3-salary-primary,#app #screen-payments .mm3-payment-primary,#app #screen-assets .mm3-assets-primary{background:var(--card);border-radius:var(--native-radius);padding:18px;margin-top:4px}
+#app .mm3-action-row{background:var(--card)}
+#app .mm3-salary-section,#app .mm3-payment-section,#app .mm3-assets-section{margin-top:22px}
+#app .settings-profile-card{border-radius:var(--native-radius);padding:18px 16px;margin:4px 0 24px}
+#app .settings-list{border-radius:var(--native-radius)}
+#app .settings-list-row{min-height:60px;padding:12px 16px}
+#app .settings-row-title{font-size:17px}
+#app .settings-row-detail{font-size:12px}
+#app .settings-icon{border-radius:9px}
+#app #screen-settings .topbar{padding-top:calc(var(--safe-t) + 10px)}
+/* Sheets, pushed details and calculator use the same materials as the app. */
+.sheet,.push-view{background:var(--bg)}
+.sheet{border-radius:28px 28px 0 0;box-shadow:0 -8px 48px #00000018}
+.sheet-nav,.push-nav{background:var(--native-glass);border-bottom:.5px solid var(--sep);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.sheet-nav{padding-inline:16px}
+.sheet-title,.push-title{font-size:17px;font-weight:600;letter-spacing:-.3px}
+.sheet-nav .nav-text,.push-right .nav-text{font-size:16px}
+.sheet-body,.push-body{padding:16px 16px calc(24px + var(--safe-b))}
+.form-card{background:var(--card);border-radius:18px;overflow:hidden}
+.form-section{padding:12px 16px}
+.form-label{font-size:13px;line-height:1.4;color:var(--label2);font-weight:400}
+.field{font-size:17px;line-height:1.45;background:transparent}
+.field::placeholder{color:var(--label3);opacity:1}
+.form-group-title{font-size:13px;font-weight:400;letter-spacing:0;margin:22px 16px 8px;color:var(--label2)}
+.form-helper{font-size:13px;line-height:1.6;color:var(--label2);padding-inline:4px}
+.primary,.secondary{border-radius:var(--native-control);font-size:17px;min-height:50px}
+#calculator,html.dark #calculator,body.dark #calculator{background:var(--bg);color:var(--label);border:0;border-radius:28px 28px 0 0;box-shadow:0 -8px 48px #00000026}
+.calc-key,html.dark .calc-key,body.dark .calc-key{border:0;box-shadow:none;background:var(--card);color:var(--label);border-radius:16px;font-weight:400}
+.calc-key.util,html.dark .calc-key.util{background:var(--native-secondary);color:var(--label)}
+.calc-key.op,html.dark .calc-key.op,body.dark .calc-key.op{background:color-mix(in srgb,var(--blue) 12%,var(--card));color:var(--blue)}
+.calc-key.op.active,html.dark .calc-key.op.active,body.dark .calc-key.op.active{background:var(--blue);color:#fff}
+.calc-assists button,html.dark .calc-assists button,body.dark .calc-assists button{background:var(--native-secondary);border:0;backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--label);border-radius:12px}
+.calc-assists button[aria-expanded=true],html.dark .calc-assists button[aria-expanded=true]{background:var(--blue);color:#fff}
+.calc-expression,.calc-unit,.calc-tools-panel p,html.dark .calc-expression,html.dark .calc-unit,html.dark .calc-tools-panel p{color:var(--label2)}
+.calc-tools-panel input{background:var(--card);color:var(--label);border-color:var(--sep)}
+.calc-use{background:var(--blue);color:#fff;border:0;box-shadow:none;border-radius:var(--native-control)}
+/* Press feedback changes paint, never layout or the hit target. */
+button:not(:disabled):active{opacity:.65}
+.row.press:active,.settings-list-row:active,.mm3-action-row:active{background:var(--fill)}
+html.native-keyboard .tabbar{visibility:hidden;pointer-events:none}
+html.native-keyboard .push-view{bottom:var(--native-keyboard-inset,0px)}
+html.native-keyboard #calculator{bottom:var(--native-keyboard-inset,0px);max-height:var(--native-viewport-height,100dvh)}
+@media(max-width:350px){
+ :root{--native-title:30px;--native-gutter:12px}
+ #app .nav-actions{gap:0}
+ #app .nav-actions .icon-btn{width:44px;min-width:44px}
+ #app .daily-goal{grid-template-columns:96px minmax(0,1fr);gap:14px}
+ #app .ring,#app .ring svg{width:96px;height:96px}
+ #app .goal-side-value{font-size:22px}
+ #app .ring-amount{font-size:22px}
+ #app .calendar-card{margin-inline:-8px;padding-inline:0}
+}
+@media(prefers-contrast:more){.form-card,#app .group,#app .today-goal-hero,#app .acf-card,#app .settings-list{box-shadow:inset 0 0 0 1px var(--sep)}}
+@media(prefers-reduced-transparency:reduce){.sheet-nav,.push-nav,#app .screen>.topbar.native-scrolled{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}}
+/* Edge-to-edge carousel uses the same gutter at every width. */
+#app .money-ticker-shell{margin:0 calc(-1 * var(--native-gutter)) 8px}
+#app .money-ticker-viewport{padding:2px var(--native-gutter) 4px}
+#app .money-ticker-card{border-radius:18px;box-shadow:none;min-height:90px}
+#app .money-ticker-name{font-size:11px;font-weight:600}
+#app .money-ticker-value{font-size:21px;font-weight:700}
+#app .money-ticker-meta,#app .money-ticker-meta strong{font-size:10px;line-height:1.35}
+#app .money-ticker-spark-empty{font-size:9px}
+/* Existing expense fields become aligned rows; their controls and handlers stay intact. */
+.sheet:has(#qeMerchant) .form-section{display:grid;grid-template-columns:104px minmax(0,1fr);align-items:center;gap:8px;padding:8px 16px;min-height:60px}
+.sheet:has(#qeMerchant) .form-label{font-size:16px;color:var(--label);margin:0}
+.sheet:has(#qeMerchant) .field{min-width:0;width:100%;font-size:16px;padding-inline:0}
+.sheet:has(#qeMerchant) .field-select{padding-right:20px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='18' viewBox='0 0 12 18'%3E%3Cpath d='m4 5 4 4-4 4' fill='none' stroke='%238e8e93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-position:right center;background-repeat:no-repeat}
+.sheet:has(#qeMerchant) .form-section:has(#qeAmount){display:block;padding:8px 16px}
+.sheet:has(#qeMerchant) #qeAmount{display:flex;align-items:center;justify-content:space-between;background:transparent;margin:0;gap:12px}
+.sheet:has(#qeMerchant) #qeAmount .hint{font-size:16px;font-weight:400;color:var(--label)}
+.sheet:has(#qeMerchant) #qeAmount .val{font-size:22px;font-weight:600;color:var(--blue)}
+.sheet:has(#qeMerchant) .form-section:has(#qeMemo){display:block}
+.sheet:has(#qeMerchant) #qeMemo{min-height:44px}
+.sheet:has(#qeMerchant) #qeMerchant{background:var(--fill);border-radius:8px;padding-inline:10px}
+@media(max-width:350px){.sheet:has(#qeMerchant) .form-section{grid-template-columns:88px minmax(0,1fr);gap:6px}}
+.sheet:has(#qeMerchant) .field-select{text-align:right;text-align-last:right}
+#app .daily-goal>div:last-child{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 8px}
+#app .goal-side-title{grid-column:1/-1}
+#app .goal-side-value{grid-column:1;line-height:1.2}
+#app .goal-rate{grid-column:2;text-align:right;margin:0;line-height:1.2}
+#app .compare-mini{grid-column:1/-1}
+#app .goal-plan-action>span:last-child{font-size:15px;line-height:1}
+#app #acfToday:not(:has(.acf-head)) .acf-home-amount{display:flex;align-items:center;gap:4px}
+#app #acfToday:not(:has(.acf-head)) .acf-home-amount>.money-symbol{width:12px;height:12px}
