@@ -101,3 +101,22 @@ test('sidebar UI, gestures and accessibility scope are fully removed', () => {
   assert.ok(!/sidebarLayer|appSidebar|openSidebar|closeSidebar|renderSidebar|insertSidebarNav|installSidebarGestures/.test(javascript));
   assert.ok(!/sidebarLayer|appSidebar/.test(read('src/index.html')));
 });
+
+test('Phase 8 native action tokens, role states and 44px month control remain defined', () => {
+  const tokens=read('src/css/tokens.css');
+  const native=read('src/css/06-native-ui.css');
+  const layout=read('src/css/workspace.css');
+  for (const name of ['action-soft','action-soft-border','action-pressed','action-hover','action-toolbar','action-danger-soft','action-focus','action-primary-shadow']) {
+    assert.match(tokens,new RegExp('--'+name+':'));
+  }
+  assert.match(native,/\.month-name-btn\{min-height:44px!important/);
+  assert.match(layout,/button\[aria-busy=true\]/);
+  assert.match(layout,/button:focus-visible/);
+  assert.match(layout,/button\[aria-disabled=true\]/);
+  assert.match(layout,/\.alert-actions \.destructive/);
+  assert.match(layout,/\.seg button\[aria-pressed=true\]/);
+  assert.match(layout,/@media\(prefers-contrast:more\)/);
+  assert.match(layout,/@media\(prefers-reduced-transparency:reduce\)/);
+  assert.match(layout,/@media\(prefers-reduced-motion:reduce\)/);
+  assert.doesNotMatch(layout,/button:not\(:disabled\):active\{opacity:\.65\}/);
+});
