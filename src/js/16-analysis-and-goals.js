@@ -170,7 +170,7 @@ function openGoalItemEditor(item,deadline,onSave){
       amount=value;
       amountBtn.querySelector('.val').textContent=yen(value);
       childDirty=true
-    });
+    },{affectsSheet:false});
     root.querySelector('#goalItemSave').onclick=()=>{
       const name=root.querySelector('#goalItemName').value.trim(),date=root.querySelector('#goalItemDate').value;
       const [pm,pid]=root.querySelector('#goalItemPay').value.split('|');
