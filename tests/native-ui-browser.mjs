@@ -64,4 +64,63 @@ export async function verifyNativeUi({createPage,passed}){
     await audit.context.close();
     passed(`${settings.width}px ${settings.appearance} top-level buttons retain 44px targets, five-tab navigation and unmodified financial data`);
   }
+
+  // P0 / C01: zero daily and monthly goals may not block expense entry.
+  const noGoal=await createPage('app',{width:393,height:852,mobile:true});
+  await noGoal.page.evaluate(async()=>{
+    const state=globalThis.__mm3Test.getData();
+    state.dailyGoals={};state.monthlyGoals={};
+    await globalThis.__mm3Test.replaceData(state);
+  });
+  const emptyBudget=await noGoal.page.evaluate(()=>globalThis.__mm3Test.getData());
+  await noGoal.page.locator('#quickExpense').click();
+  await noGoal.page.locator('#qeMerchant').waitFor();
+  assert.equal(await noGoal.page.locator('#qeSave').count(),1);
+  await noGoal.page.locator('#qeCancel').click();
+  await noGoal.page.locator('#qeMerchant').waitFor({state:'detached'});
+  assert.deepEqual(await noGoal.page.evaluate(()=>globalThis.__mm3Test.getData()),emptyBudget);
+  passed('P0 quick expense opens and cancels without a daily/monthly goal or financial writes');
+  await noGoal.context.close();
+
+  // P0 / C02: a travel goal's child item editor must preserve the live
+  // unsaved parent form on cancel, save and return (including calculator use).
+  const travel=await createPage('app',{width:393,height:852,mobile:true});
+  const beforeTravel=await travel.page.evaluate(()=>globalThis.__mm3Test.getData());
+  await travel.page.evaluate(()=>globalThis.__mm3Test.switchTab('month'));
+  await travel.page.locator('#monthEventGoals').click();
+  await travel.page.locator('#eventGoalAdd').click();
+  await travel.page.locator('#eventGoalName').fill('未保存の旅行計画');
+  const deadline=await travel.page.locator('#eventGoalDeadline').inputValue();
+  const parentNode=await travel.page.locator('#eventGoalName').evaluate(el=>{el.dataset.parentMarker='preserved';return el.dataset.parentMarker});
+  assert.equal(parentNode,'preserved');
+
+  await travel.page.locator('#eventGoalAddItem').click();
+  await travel.page.locator('#goalItemName').fill('キャンセルする費目');
+  assert.equal(await travel.page.locator('#sheet #eventGoalName').inputValue(),'未保存の旅行計画');
+  await travel.page.locator('#goalItemCancel').click();
+  await travel.page.locator('#alertWrap.show').waitFor();
+  await travel.page.locator('#alertActions button').filter({hasText:'費目の変更を破棄'}).click();
+  await travel.page.locator('#goalItemName').waitFor({state:'detached'});
+  assert.equal(await travel.page.locator('#eventGoalName').inputValue(),'未保存の旅行計画');
+  assert.equal(await travel.page.locator('#eventGoalName').getAttribute('data-parent-marker'),'preserved');
+  assert.equal(await travel.page.locator('#eventGoalDeadline').inputValue(),deadline);
+
+  await travel.page.locator('#eventGoalAddItem').click();
+  await travel.page.locator('#goalItemName').fill('宿泊費');
+  await travel.page.locator('#goalItemAmount').click();
+  await travel.page.locator('#calcGrid [data-k="1"]').click();
+  await travel.page.locator('#calcGrid [data-k="00"]').click();
+  await travel.page.locator('#calcDone').click();
+  await travel.page.locator('#goalItemSave').click();
+  await travel.page.locator('#goalItemName').waitFor({state:'detached'});
+  assert.equal(await travel.page.locator('#eventGoalName').inputValue(),'未保存の旅行計画');
+  assert.match(await travel.page.locator('#eventGoalItems').innerText(),/宿泊費/);
+  assert.match(await travel.page.locator('#eventGoalItems').innerText(),/100/);
+  await travel.page.locator('#eventGoalCancel').click();
+  await travel.page.locator('#alertWrap.show').waitFor();
+  await travel.page.locator('#alertActions button').filter({hasText:'破棄'}).last().click();
+  await travel.page.locator('#eventGoalName').waitFor({state:'detached'});
+  assert.deepEqual(await travel.page.evaluate(()=>globalThis.__mm3Test.getData()),beforeTravel);
+  passed('P0 child expense editor returns to live parent draft on cancel/save, and discarding parent never writes financial records');
+  await travel.context.close();
 }
