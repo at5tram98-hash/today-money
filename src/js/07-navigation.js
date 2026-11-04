@@ -148,7 +148,7 @@ function openNestedSheet(html,binder,options={}){
   if(nestedSheetState)throw new Error('別の子編集を閉じてください');
   const sheet=document.getElementById('sheet');
   if(!sheet?.classList.contains('show'))throw new Error('親の編集画面がありません');
-  const returnFocus=document.activeElement;
+  const returnFocus=options.returnFocus?.isConnected?options.returnFocus:document.activeElement;
   const parent=document.createElement('div'),child=document.createElement('div');
   parent.className='sheet-nested-parent';
   parent.hidden=true;
