@@ -22,7 +22,7 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text;
 #app .screen .topbar>.topbar-main{grid-area:auto;grid-row:1;grid-column:1;min-width:0}
 .topbar.native-scrolled{border-bottom-color:var(--sep)}
 .large-title,.month-name-btn{font-size:34px;line-height:1.18;letter-spacing:-.8px;font-weight:700;white-space:normal;overflow:visible;text-overflow:clip}
-.month-name-btn{min-height:40px!important;gap:8px;white-space:nowrap}
+.month-name-btn{min-height:44px!important;gap:8px;white-space:nowrap}
 .month-name-btn svg{width:18px;height:18px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2}
 .date-line{font-size:13px;line-height:1.4;margin-top:3px}
 .topbar .icon-btn{width:44px;height:44px;min-width:44px;background:var(--glass-bg)!important;box-shadow:inset 0 0 0 .5px var(--glass-edge),0 2px 8px #00000008;border-radius:50%;color:var(--label)}
