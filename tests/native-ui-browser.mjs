@@ -123,4 +123,22 @@ export async function verifyNativeUi({createPage,passed}){
   assert.deepEqual(await travel.page.evaluate(()=>globalThis.__mm3Test.getData()),beforeTravel);
   passed('P0 child expense editor returns to live parent draft on cancel/save, and discarding parent never writes financial records');
   await travel.context.close();
+
+  // P0 / C03: a previously registered required plan must never be re-added
+  // as a second scenario when its detail shows the ACF forecast.
+  const acfDetail=await createPage('app',{width:393,height:852,mobile:true});
+  const financialBefore=await acfDetail.page.evaluate(()=>globalThis.__mm3Test.getData());
+  const plannedRequired=financialBefore.largeExpensePlans.find(p=>p.status==='planned'&&p.priority==='required');
+  assert.ok(plannedRequired,'seed must contain a planned required large expense');
+  const expectedForecast=await acfDetail.page.evaluate(()=>globalThis.__mm3Test.buildCashFlowForecast());
+  await acfDetail.page.evaluate(id=>globalThis.__mm3Test.openLargeExpenseDetail(id),plannedRequired.id);
+  await acfDetail.page.locator('#leEditDetail').waitFor();
+  const detailText=await acfDetail.page.locator('#pushLayer .push-view:last-child').innerText();
+  assert.match(detailText,/現在のACF予測/);
+  const shownMin=await acfDetail.page.locator('#pushLayer .push-view:last-child .acf-plan-compare').nth(1).locator('strong').innerText();
+  assert.equal(Number(shownMin.replace(/[^0-9-]/g,'')),Math.round(expectedForecast.minMandatoryBalance),
+    'detail must agree with canonical ACF, not charge a required plan a second time');
+  assert.deepEqual(await acfDetail.page.evaluate(()=>globalThis.__mm3Test.getData()),financialBefore);
+  passed('P0 registered required large expense uses the exact canonical ACF forecast without double-counting');
+  await acfDetail.context.close();
 }
