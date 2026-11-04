@@ -26,7 +26,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      - run: npx playwright install --with-deps chromium
+      - name: Install browser binary (Ubuntu runner already has system dependencies)
+        run: npx playwright install chromium
       - name: Native-sheet and button smoke tests
         run: MM3_NATIVE_ONLY=1 node tests/browser.mjs
       - run: npm run test:browser
@@ -35,5 +36,7 @@ jobs:
         if: always()
         with:
           name: phase8-browser-results
-          path: test-results/browser.json
+          path: |
+            test-results/browser.json
+            test-results/phase8-screenshots/
           if-no-files-found: ignore
