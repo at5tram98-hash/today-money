@@ -170,6 +170,9 @@ function openNestedSheet(html,binder,options={}){
     const cleanup=binder?.(child);
     if(typeof cleanup==='function'){const before=state.cleanup;state.cleanup=()=>{before();cleanup()}}
   }catch(error){closeNestedSheet();throw error}
+  // Transfer keyboard / VoiceOver focus into the visible child. Keep the
+  // originating parent control for focus restoration on exit.
+  if(!child.contains(document.activeElement))child.querySelector('.sheet-nav button, input, select, textarea')?.focus({preventScroll:true});
   return child
 }
 function closeNestedSheet(){
