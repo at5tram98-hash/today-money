@@ -100,12 +100,14 @@ export async function verifyNativeUi({createPage,passed}){
   assert.equal(parentNode,'preserved');
 
   await travel.page.locator('#eventGoalAddItem').click();
+  assert.equal(await travel.page.evaluate(()=>document.activeElement?.id),'goalItemCancel','child sheet must receive initial focus');
   await travel.page.locator('#goalItemName').fill('キャンセルする費目');
   assert.equal(await travel.page.locator('#sheet #eventGoalName').inputValue(),'未保存の旅行計画');
   await travel.page.locator('#goalItemCancel').click();
   await travel.page.locator('#alertWrap.show').waitFor();
   await travel.page.locator('#alertActions button').filter({hasText:'費目の変更を破棄'}).click();
   await travel.page.locator('#goalItemName').waitFor({state:'detached'});
+  assert.equal(await travel.page.evaluate(()=>document.activeElement?.id),'eventGoalAddItem','parent focus must be restored on child cancel');
   assert.equal(await travel.page.locator('#eventGoalName').inputValue(),'未保存の旅行計画');
   assert.equal(await travel.page.locator('#eventGoalName').getAttribute('data-parent-marker'),'preserved');
   assert.equal(await travel.page.locator('#eventGoalDeadline').inputValue(),deadline);
