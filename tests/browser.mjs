@@ -83,6 +83,9 @@ async function finishDayClosing(page){
 }
 
 try {
+  if(process.env.MM3_NATIVE_ONLY==='1'){
+    await verifyNativeUi({createPage,passed});
+  }else{
   mkdirSync(resolve(root,'test-results'),{recursive:true});
   if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_DAY_CLOSING_ONLY&&!process.env.MM3_FINAL_UI_ONLY){
   for (const width of [320, 390, 1440]) for (const appearance of ['light', 'dark']) {
@@ -374,6 +377,8 @@ try {
   let renewals=0;await lifecycle.context.route('https://money.push-test.example/v1/subscription',route=>{renewals++;assert.equal(route.request().headers().authorization,'Bearer test-device-token');return route.fulfill({json:{ok:true}})});
   const recovered=await lp.evaluate(async connection=>{const subscription={endpoint:'https://web.push.apple.com/test-new',options:{},toJSON(){return{endpoint:this.endpoint,keys:{}}}};const registration={pushManager:{getSubscription:async()=>null,subscribe:async()=>subscription}};return(await globalThis.MoneyPushConnection.reconcile(registration,connection)).connection},device);assert.equal(recovered.endpoint,'https://web.push.apple.com/test-new');assert.equal(recovered.token,device.token);assert.equal(renewals,1);passed('expired or missing subscriptions reconnect with the existing device token');
   const keyGuard=await lp.evaluate(async connection=>{let unsubscribed=false,subscribed=false;const old={endpoint:connection.endpoint,options:{applicationServerKey:new Uint8Array(65).fill(7).buffer},unsubscribe:async()=>{unsubscribed=true}};try{await globalThis.MoneyPushConnection.reconcile({pushManager:{getSubscription:async()=>old,subscribe:async()=>{subscribed=true}}},connection)}catch(error){return{error:error.message,unsubscribed,subscribed}}},device);assert.ok(keyGuard.error.includes('公開鍵'));assert.equal(keyGuard.unsubscribed,false);assert.equal(keyGuard.subscribed,false);assert.equal(renewals,1);passed('a changed VAPID key cannot silently destroy or redirect a working subscription');await lifecycle.context.close();
+
+  }
 
   assert.deepEqual(errors, []);
   passed('no JavaScript exceptions or local HTTP failures in tested flows');
