@@ -85,8 +85,10 @@ export async function verifyNativeUi({createPage,passed}){
   // P0 / C02: a travel goal's child item editor must preserve the live
   // unsaved parent form on cancel, save and return (including calculator use).
   const travel=await createPage('app',{width:393,height:852,mobile:true});
-  const beforeTravel=await travel.page.evaluate(()=>globalThis.__mm3Test.getData());
   await travel.page.evaluate(()=>globalThis.__mm3Test.switchTab('month'));
+  // Opening the month screen legitimately updates homeViewMode; keep that
+  // navigation preference out of the draft-cancellation comparison.
+  const beforeTravel=await travel.page.evaluate(()=>globalThis.__mm3Test.getData());
   await travel.page.locator('#monthEventGoals').click();
   await travel.page.locator('#eventGoalAdd').click();
   await travel.page.locator('#eventGoalName').fill('未保存の旅行計画');
