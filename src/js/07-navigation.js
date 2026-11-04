@@ -148,6 +148,7 @@ function openNestedSheet(html,binder,options={}){
   if(nestedSheetState)throw new Error('別の子編集を閉じてください');
   const sheet=document.getElementById('sheet');
   if(!sheet?.classList.contains('show'))throw new Error('親の編集画面がありません');
+  const returnFocus=document.activeElement;
   const parent=document.createElement('div'),child=document.createElement('div');
   parent.className='sheet-nested-parent';
   parent.hidden=true;
@@ -159,7 +160,7 @@ function openNestedSheet(html,binder,options={}){
   sheet.appendChild(child);
   const state={sheet,parent,child,dirty:false,pending:false,parentDirty:sheetDirtyState,
     parentMode:sheet.classList.contains('full')?'full':'half',
-    returnFocus:document.activeElement,cleanup:null,options};
+    returnFocus,cleanup:null,options};
   nestedSheetState=state;
   const dirty=e=>{if(e.target.matches('input,select,textarea,[type=range]'))markNestedSheetDirty()};
   child.addEventListener('input',dirty,true);
