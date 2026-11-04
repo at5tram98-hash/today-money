@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {mkdirSync} from 'node:fs';
 export async function verifyNativeUi({createPage,passed}){
   const {page,context}=await createPage('app',{width:393,height:852,mobile:true});
   const original=await page.evaluate(()=>globalThis.__mm3Test.getData());
@@ -27,6 +28,7 @@ export async function verifyNativeUi({createPage,passed}){
   passed('393×852 native form keeps 44px toolbar targets and Save above simulated keyboard, restores tabs and cancels without data writes');
   await context.close();
 
+  mkdirSync('test-results/phase8-screenshots',{recursive:true});
   // Phase 8: exercise every rendered button on all five top-level screens,
   // in two viewport/appearance combinations without writing financial data.
   for(const settings of [
@@ -53,6 +55,7 @@ export async function verifyNativeUi({createPage,passed}){
       }
       checked+=results.length;
       assert.equal(await audit.page.locator('.screen.active').count(),1);
+      await audit.page.screenshot({path:`test-results/phase8-screenshots/${settings.width}-${settings.appearance}-${tab}.png`,animations:'disabled'});
     }
     assert.ok(checked>=75,`expected most top-level button renders to be inspected; got ${checked}`);
     assert.deepEqual(await audit.page.evaluate(()=>globalThis.__mm3Test.getData()),initial);
