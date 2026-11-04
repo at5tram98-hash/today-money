@@ -26,4 +26,42 @@ export async function verifyNativeUi({createPage,passed}){
   assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),original);
   passed('393×852 native form keeps 44px toolbar targets and Save above simulated keyboard, restores tabs and cancels without data writes');
   await context.close();
+
+  // Phase 8: exercise every rendered button on all five top-level screens,
+  // in two viewport/appearance combinations without writing financial data.
+  for(const settings of [
+    {width:320,height:568,mobile:true,appearance:'light'},
+    {width:393,height:852,mobile:true,appearance:'dark'}
+  ]) {
+    const audit=await createPage('app',settings);
+    const initial=await audit.page.evaluate(()=>globalThis.__mm3Test.getData());
+    let checked=0;
+    for(const tab of ['home','pay','payments','assets','settings','home']) {
+      await audit.page.locator(`#tabbar [data-tab="${tab}"]`).click();
+      const results=await audit.page.evaluate(()=>{
+        const screen=document.querySelector('.screen.active');
+        return [...screen.querySelectorAll('button')].map(el=>{
+          const r=el.getBoundingClientRect(),style=getComputedStyle(el);
+          return {name:el.id||el.getAttribute('aria-label')||el.textContent.trim().slice(0,32),
+            visible:r.width>0&&r.height>0&&style.visibility!=='hidden'&&style.display!=='none',
+            width:r.width,height:r.height};
+        }).filter(item=>item.visible);
+      });
+      for(const item of results) {
+        assert.ok(item.width>=43.5,`${settings.width}px ${tab}: button width <44px: ${item.name} (${item.width})`);
+        assert.ok(item.height>=43.5,`${settings.width}px ${tab}: button height <44px: ${item.name} (${item.height})`);
+      }
+      checked+=results.length;
+      assert.equal(await audit.page.locator('.screen.active').count(),1);
+    }
+    assert.ok(checked>=75,`expected most top-level button renders to be inspected; got ${checked}`);
+    assert.deepEqual(await audit.page.evaluate(()=>globalThis.__mm3Test.getData()),initial);
+    const tokens=await audit.page.evaluate(()=>({
+      soft:getComputedStyle(document.documentElement).getPropertyValue('--action-soft').trim(),
+      focus:getComputedStyle(document.documentElement).getPropertyValue('--action-focus').trim()
+    }));
+    assert.ok(tokens.soft&&tokens.focus,'semantic control tokens must resolve for both appearances');
+    await audit.context.close();
+    passed(`${settings.width}px ${settings.appearance} top-level buttons retain 44px targets, five-tab navigation and unmodified financial data`);
+  }
 }
