@@ -99,6 +99,10 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text;
 #screen-pay .mm3-salary-watch-value strong,#screen-assets .mm3-assets-watch-value strong{font-size:15px}
 #screen-pay .mm3-salary-watch-value small,#screen-assets .mm3-assets-watch-value small{font-size:12px}
 .sheet{background:var(--bg);box-shadow:0 -8px 32px #00000020}
+.sheet-nested-parent[hidden]{display:none!important}
+.sheet-nested-content{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;overflow:hidden}
+.sheet-nested-content>.sheet-nav{flex-shrink:0}
+.sheet-nested-content>.sheet-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
 .sheet.half{max-height:min(82dvh,720px);min-height:min(300px,80dvh)}
 .sheet.full{height:calc(100dvh - max(var(--safe-t),8px))}
 .grabber{position:relative;width:72px;height:24px;margin:0 auto;background:transparent;border-radius:0;opacity:1;flex:0 0 24px;cursor:ns-resize;touch-action:none}
