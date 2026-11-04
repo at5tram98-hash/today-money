@@ -13,11 +13,11 @@ html.dark{--native-secondary:#2c2c2e}
 #app .native-scrolled .large-title{transform:scale(.82)}
 #app .screen>.scroll{padding:4px var(--native-gutter) 28px;scroll-padding-bottom:28px}
 #app .nav-actions{gap:4px}
-#app .nav-actions .icon-btn{width:44px;height:44px;min-width:44px;background:transparent!important;box-shadow:none;color:var(--label)}
+#app .nav-actions .icon-btn{width:44px;height:44px;min-width:44px;border-radius:50%;background:var(--action-toolbar)!important;box-shadow:inset 0 0 0 .5px var(--action-toolbar-border);color:var(--label)}
 #app .nav-actions .icon-btn svg{width:22px;height:22px}
 #app .native-home-mode{margin:0 0 12px;padding:3px;border-radius:24px;background:var(--fill)}
 #app .native-home-mode button{border-radius:21px;font-size:15px;font-weight:600;color:var(--label2)}
-#app .native-home-mode button[aria-pressed=true]{background:var(--blue);color:#fff;box-shadow:0 2px 5px #0000000d}
+#app .native-home-mode button[aria-pressed=true]{background:var(--blue);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 6px var(--action-primary-shadow)}
 #app .date-navigator{margin:4px 0 8px;min-height:44px;grid-template-columns:44px minmax(0,1fr) 44px}
 #app .date-nav-btn{width:44px;height:44px;border-radius:50%;background:transparent}
 #app .date-nav-label{font-size:15px;font-weight:650}
@@ -37,8 +37,8 @@ html.dark{--native-secondary:#2c2c2e}
 #app .goal-plan-action{min-height:44px;padding:10px 16px;font-size:15px;font-weight:600;border-top:.5px solid var(--sep);background:transparent}
 #app .goal-plan-action>.money-symbol{width:13px;height:13px}
 #app .quick-grid{gap:8px;margin:0 0 12px}
-#app .quick-btn{border-radius:var(--native-control);min-height:44px!important;justify-content:center;background:var(--native-secondary);color:var(--blue);padding:10px 12px;box-shadow:none;font-size:15px;font-weight:600}
-#app #quickExpense{min-height:48px!important;background:var(--blue);color:#fff;font-size:17px}
+#app .quick-btn{border:1px solid var(--action-soft-border);border-radius:var(--native-control);min-height:44px!important;justify-content:center;background:var(--action-soft);color:var(--blue);padding:10px 12px;box-shadow:inset 0 1px 0 var(--action-highlight);font-size:15px;font-weight:600}
+#app #quickExpense{min-height:48px!important;background:var(--blue);border-color:transparent;color:#fff;font-size:17px;box-shadow:inset 0 1px 0 rgba(255,255,255,.19),0 4px 12px var(--action-primary-shadow)}
 #app .quick-btn.small{font-size:15px}
 #app .quick-btn svg{width:19px;height:19px}
 #app .day-closing-card{border:0;border-radius:var(--native-radius);background:var(--card);gap:12px;padding:12px 14px;margin:0 0 12px;box-shadow:none}
@@ -113,9 +113,160 @@ html.dark{--native-secondary:#2c2c2e}
 .calc-expression,.calc-unit,.calc-tools-panel p,html.dark .calc-expression,html.dark .calc-unit,html.dark .calc-tools-panel p{color:var(--label2)}
 .calc-tools-panel input{background:var(--card);color:var(--label);border-color:var(--sep)}
 .calc-use{background:var(--blue);color:#fff;border:0;box-shadow:none;border-radius:var(--native-control)}
-/* Press feedback changes paint, never layout or the hit target. */
-button:not(:disabled):active{opacity:.65}
-.row.press:active,.settings-list-row:active,.mm3-action-row:active{background:var(--fill)}
+/* Phase 8 native button contract.
+   Core controls retain their existing layout and actions. Only role, material,
+   selection, keyboard focus and pressed feedback are coordinated here. */
+button,[role=button]{
+ -webkit-tap-highlight-color:transparent;
+ font-family:inherit;
+}
+button{
+ cursor:pointer;
+ transition:background-color var(--action-speed) ease,color var(--action-speed) ease,
+   border-color var(--action-speed) ease,box-shadow var(--action-speed) ease,
+   opacity var(--action-speed) ease,filter var(--action-speed) ease;
+}
+button:disabled,button[aria-disabled=true]{
+ opacity:.46;
+ cursor:default;
+ filter:saturate(.7);
+ box-shadow:none;
+}
+button:focus-visible,[role=button]:focus-visible{
+ outline:3px solid var(--action-focus)!important;
+ outline-offset:2px;
+}
+button:not(:disabled):active{opacity:.86}
+button[aria-busy=true]{cursor:progress;opacity:.72;pointer-events:none}
+
+/* Filled CTA: one clear call to action; financial values remain content. */
+#app #quickExpense,#app .native-quick-action,.calc-use,
+button.primary,button.btn-primary,button.primary-btn{
+ border-color:transparent;
+ background:var(--blue);
+ color:#fff;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 4px 12px var(--action-primary-shadow);
+ font-weight:650;
+}
+#app #quickExpense:not(:disabled):active,
+#app .native-quick-action:not(:disabled):active,.calc-use:not(:disabled):active,
+button.primary:not(:disabled):active,button.btn-primary:not(:disabled):active{
+ filter:brightness(.92);
+ opacity:1;
+ box-shadow:inset 0 1px 2px rgba(0,0,0,.11),0 2px 5px var(--action-primary-shadow);
+}
+
+/* Secondary actions look intentional, rather than like disabled CTAs. */
+#app .quick-btn:not(#quickExpense),.pro4-command,.calc-assists button,
+.mm3-salary-pull,.mm3-assets-menu-btn{
+ border-color:var(--action-soft-border);
+}
+#app .quick-btn:not(#quickExpense):not(:disabled):active,
+.pro4-command:not(:disabled):active,.calc-assists button:not(:disabled):active{
+ background:var(--action-pressed);
+ opacity:1;
+}
+
+/* Navigation stays on the interaction layer, not on each data card. */
+#app .nav-actions .icon-btn,.date-nav-btn,.back-btn,
+.sheet-nav .nav-text,.push-right .nav-text{
+ -webkit-tap-highlight-color:transparent;
+}
+#app .nav-actions .icon-btn:not(:disabled):active,
+.date-nav-btn:not(:disabled):active,.back-btn:not(:disabled):active,
+.sheet-nav .nav-text:not(:disabled):active,.push-right .nav-text:not(:disabled):active{
+ background:var(--action-pressed)!important;
+ opacity:1;
+}
+.month-name-btn{min-height:44px!important}
+#app .tabbar .tab:not(:disabled):active{
+ background:var(--action-hover);
+ opacity:1;
+}
+
+/* Segmented controls have stable bounds and explicit selected state. */
+.seg button,.acf-view-mode button,.native-home-mode button,
+#screen-pay .mm3-salary-range button,#screen-assets .mm3-assets-range button{
+ transition:background-color var(--action-speed) ease,color var(--action-speed) ease,
+   box-shadow var(--action-speed) ease,border-color var(--action-speed) ease;
+}
+.seg button.on,.seg button[aria-pressed=true],
+.acf-view-mode button[aria-pressed=true]{
+ box-shadow:inset 0 0 0 .5px var(--action-toolbar-border),0 1px 3px rgba(0,0,0,.08);
+ font-weight:650;
+}
+.seg button:not(.on):not([aria-pressed=true]):not(:disabled):active,
+.acf-view-mode button[aria-pressed=false]:not(:disabled):active{
+ background:var(--action-pressed);
+ opacity:1;
+}
+
+/* Grouped rows and calendar choices preserve their entire hit regions. */
+.row.press,.settings-list-row,.mm3-action-row,.day-cell,.acf-calendar-day{
+ transition:background-color var(--action-speed) ease,box-shadow var(--action-speed) ease,
+   opacity var(--action-speed) ease;
+}
+.row.press:not(:disabled):active,.settings-list-row:not(:disabled):active,
+.mm3-action-row:not(:disabled):active{
+ background:var(--fill);
+ opacity:1;
+}
+.day-cell:not(:disabled):active,.acf-calendar-day:not(:disabled):active{
+ box-shadow:inset 0 0 0 2px var(--action-soft-border);
+ opacity:1;
+}
+
+/* Dangerous actions keep a distinct red role, including confirmation alerts. */
+button.danger,button[data-destructive=true],.alert-actions .destructive,
+.profile-photo-action.danger{
+ color:var(--red);
+}
+button.danger:not(:disabled):active,button[data-destructive=true]:not(:disabled):active,
+.alert-actions .destructive:not(:disabled):active{
+ background:var(--action-danger-soft);
+ opacity:1;
+}
+.alert-actions button:not(:disabled):active,.ios-menu button:not(:disabled):active{
+ background:var(--fill);
+ opacity:1;
+}
+
+/* Buttons within money tools and sheets get focus without moving the layout. */
+.calc-key:focus-visible,.calc-assists button:focus-visible,
+.sheet button:focus-visible,.push-view button:focus-visible{
+ outline:3px solid var(--action-focus)!important;
+ outline-offset:2px;
+}
+@media(hover:hover) and (pointer:fine){
+ #app .nav-actions .icon-btn:not(:disabled):hover,
+ .date-nav-btn:not(:disabled):hover,.back-btn:not(:disabled):hover{
+  background:var(--action-hover)!important;
+ }
+ #app .quick-btn:not(#quickExpense):not(:disabled):hover,
+ .pro4-command:not(:disabled):hover,.settings-list-row:not(:disabled):hover,
+ .mm3-action-row:not(:disabled):hover,.row.press:not(:disabled):hover{
+  background:var(--action-hover);
+ }
+ #app #quickExpense:not(:disabled):hover,.calc-use:not(:disabled):hover,
+ .native-quick-action:not(:disabled):hover{
+  filter:brightness(1.04);
+ }
+}
+@media(prefers-contrast:more){
+ #app .quick-btn,.native-quick-action,.seg button.on,.acf-view-mode button[aria-pressed=true],
+ .calc-use,button.primary,button.btn-primary{outline:1px solid currentColor;outline-offset:-1px}
+ #app .nav-actions .icon-btn{background:var(--card)!important;box-shadow:inset 0 0 0 1px var(--sep)}
+}
+@media(prefers-reduced-transparency:reduce){
+ #app .nav-actions .icon-btn{background:var(--card)!important}
+}
+@media(prefers-reduced-motion:reduce){
+ button,[role=button],.row.press,.settings-list-row,.mm3-action-row{transition:none!important}
+}
+html.motion-off button,html.motion-off [role=button],
+html.motion-off .row.press,html.motion-off .settings-list-row{
+ transition:none!important;
+}
 html.native-keyboard .tabbar{visibility:hidden;pointer-events:none}
 html.native-keyboard .push-view{bottom:var(--native-keyboard-inset,0px)}
 html.native-keyboard #calculator{bottom:var(--native-keyboard-inset,0px);max-height:var(--native-viewport-height,100dvh)}
