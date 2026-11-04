@@ -143,7 +143,7 @@ function eventGoalSummary(g){const total=sum(g.items.filter(i=>i.status!=='cance
 function syncEventGoalPlans(goalId){requireStateCommit('syncEventGoalPlans');const g=data.eventGoals.find(x=>x.id===goalId);if(!g)throw new Error('目標が見つかりません');const keep=new Set();for(const item of g.items){let p=data.largeExpensePlans.find(x=>x.goalId===g.id&&x.goalItemId===item.id);if(item.status==='cancelled'){if(p&&p.status!=='completed')data.largeExpensePlans=data.largeExpensePlans.filter(x=>x.id!==p.id);continue}if(item.status==='paid'){if(p){p.status='completed';p.linkedTransactionId=item.transactionId||p.linkedTransactionId||'';p.updatedAt=new Date().toISOString();item.largePlanId=p.id}continue}const obj={id:p?.id||uid('large'),name:`${g.name}・${item.name}`,date:item.plannedDate||g.deadline,amount:item.budget,category:item.category||'その他',priority:'required',paymentMethod:item.paymentMethod||'other',paymentId:item.paymentId||'',linkedBankId:item.linkedBankId||(item.paymentMethod==='bank'?item.paymentId:'')||(item.paymentMethod==='debit'?paymentBankId('debit',item.paymentId):''),status:'planned',memo:`目標「${g.name}」の費目`,splits:[],goalId:g.id,goalItemId:item.id,createdAt:p?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};if(p)Object.assign(p,obj);else data.largeExpensePlans.push(obj);item.largePlanId=obj.id;keep.add(obj.id)}data.largeExpensePlans=data.largeExpensePlans.filter(p=>p.goalId!==g.id||p.status==='completed'||keep.has(p.id))}
 function eventGoalMonthBannerHtml(month){const goals=data.eventGoals.filter(g=>g.status!=='cancelled'&&(String(g.deadline).slice(0,7)===month||g.items.some(i=>String(i.plannedDate).slice(0,7)===month))),total=sum(goals,g=>eventGoalSummary(g).ownShare);return `<button class="pro4-goal-banner" id="monthEventGoals"><div class="settings-icon" style="background:var(--purple)">${icon('gift')}</div><div class="row-main"><strong>旅行・プレゼントの目標</strong><span>${goals.length?`${goals.length}件・自分の負担予定 ${yen(total)}`:'割り勘・立替・回収までまとめて管理'}</span></div><span class="chev">›</span></button>`}
 function openEventGoals(month=currentMonth){const render=()=>{const list=data.eventGoals.filter(g=>g.status!=='cancelled').sort((a,b)=>a.deadline.localeCompare(b.deadline)),html=`<button class="primary" id="eventGoalAdd" style="margin-bottom:13px">旅行・プレゼント目標を追加</button>${list.length?list.map(g=>{const s=eventGoalSummary(g);return `<button class="pro4-goal-card" data-event-goal="${g.id}" style="width:100%;border:0;text-align:left;color:inherit"><div class="pro4-goal-title"><div><strong>${esc(g.name)}</strong><div class="row-sub">期限 ${dayLabel(g.deadline)}・${g.items.length}費目</div></div><span class="status-chip ${s.unrecovered?'warning':'good'}">${s.unrecovered?'未回収あり':g.status==='completed'?'完了':'計画中'}</span></div><div class="pro4-goal-metrics"><div><span>総費用</span><strong>${yen(s.total)}</strong></div><div><span>自分の最終負担</span><strong>${yen(s.ownShare)}</strong></div><div><span>支払済み</span><strong>${yen(s.paid)}</strong></div><div><span>未回収</span><strong>${yen(s.unrecovered)}</strong></div></div></button>`}).join(''):'<div class="empty">旅行・プレゼントの目標はありません。</div>'}`,bind=root=>{root.querySelector('#eventGoalAdd').onclick=()=>openEventGoalEditor(null,{after:render});root.querySelectorAll('[data-event-goal]').forEach(b=>b.onclick=()=>openEventGoalDetail(b.dataset.eventGoal))};if(pushStack.at(-1)?.title==='旅行・プレゼント')replaceTopPush('旅行・プレゼント',html,bind);else pushView('旅行・プレゼント',html,bind)};render()}
-function openGoalItemEditor(item,deadline,onSave){
+function openGoalItemEditor(item,deadline,onSave,trigger=null){
   const draft=clone(item||{id:uid('goalitem'),name:'',budget:0,plannedDate:deadline||ymd(),category:data.categories[0]?.name||'その他',paymentMethod:'other',paymentId:'',status:'planned'});
   let amount=Number(draft.budget)||0;
   // Keep the parent travel-goal form, its unsaved fields, scroll position and
@@ -164,7 +164,7 @@ function openGoalItemEditor(item,deadline,onSave){
       closeNestedSheet();
       onSave(next)
     }
-  },{discardTitle:'費目の変更を破棄しますか？',discardMessage:'旅行・プレゼント目標の編集中の内容は保持します。',discardOk:'費目の変更を破棄'})
+  },{discardTitle:'費目の変更を破棄しますか？',discardMessage:'旅行・プレゼント目標の編集中の内容は保持します。',discardOk:'費目の変更を破棄',returnFocus:trigger})
 }
 function openEventGoalEditor(existing,{after=null}={}){
   let draft=clone(existing||{id:uid('goal'),name:'',type:'travel',deadline:addDays(ymd(),30),splitMode:'self',participants:2,ownShareAmount:0,status:'active',items:[],createdAt:new Date().toISOString()}),itemHost=null;
@@ -176,7 +176,7 @@ function openEventGoalEditor(existing,{after=null}={}){
         draft.items[Number(b.dataset.itemEdit)]=x;
         markSheetDirty();
         drawItems()
-      }));
+      },b));
       itemHost.querySelectorAll('[data-item-delete]').forEach(b=>b.onclick=()=>{
         draft.items.splice(Number(b.dataset.itemDelete),1);
         markSheetDirty();
@@ -202,7 +202,7 @@ function openEventGoalEditor(existing,{after=null}={}){
       draft.items.push(x);
       markSheetDirty();
       drawItems()
-    });
+    },root.querySelector('#eventGoalAddItem'));
     root.querySelector('#eventGoalCancel').onclick=requestSheetClose;
     root.querySelector('#eventGoalSave').onclick=()=>{
       draft.name=root.querySelector('#eventGoalName').value.trim();
