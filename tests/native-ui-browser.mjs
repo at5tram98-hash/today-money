@@ -107,6 +107,9 @@ export async function verifyNativeUi({createPage,passed}){
   await travel.page.locator('#alertWrap.show').waitFor();
   await travel.page.locator('#alertActions button').filter({hasText:'費目の変更を破棄'}).click();
   await travel.page.locator('#goalItemName').waitFor({state:'detached'});
+  // Focus restoration follows the alert's next paint; wait for the actual
+  // accessible focus target instead of racing its animation frame.
+  await travel.page.waitForFunction(()=>document.activeElement?.id==='eventGoalAddItem',null,{timeout:2200});
   assert.equal(await travel.page.evaluate(()=>document.activeElement?.id),'eventGoalAddItem','parent focus must be restored on child cancel');
   assert.equal(await travel.page.locator('#eventGoalName').inputValue(),'未保存の旅行計画');
   assert.equal(await travel.page.locator('#eventGoalName').getAttribute('data-parent-marker'),'preserved');
