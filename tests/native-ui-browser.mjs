@@ -121,7 +121,14 @@ export async function verifyNativeUi({createPage,passed}){
       targetDisplay:css?.display,targetVisibility:css?.visibility,
       sheetClass:document.getElementById('sheet')?.className,
       nestedState:typeof nestedSheetState==='undefined'?'unavailable':!!nestedSheetState,
-      alertClass:document.getElementById('alertWrap')?.className
+      alertClass:document.getElementById('alertWrap')?.className,
+      activeHtml:active?.outerHTML?.slice(0,240),
+      ancestorHidden:target?.closest('[hidden],[inert],[aria-hidden="true"]')?.outerHTML?.slice(0,160),
+      manualFocusSucceeded:(()=>{
+        if(!target)return false;
+        target.focus({preventScroll:true});
+        return document.activeElement===target
+      })()
     };
   })));
   // Focus restoration follows the alert's next paint; wait for the actual
