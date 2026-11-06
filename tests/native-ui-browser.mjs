@@ -37,6 +37,15 @@ export async function verifyNativeUi({createPage,passed}){
   ]) {
     const audit=await createPage('app',settings);
     const initial=await audit.page.evaluate(()=>globalThis.__mm3Test.getData());
+    if(settings.width===320){
+      const primary=await audit.page.locator('#quickExpense').boundingBox();
+      const goal=await audit.page.locator('.today-goal-hero').boundingBox();
+      const dock=await audit.page.locator('#tabbar').boundingBox();
+      assert.ok(primary&&goal&&dock,'320px primary control, goal and dock should render');
+      assert.ok(primary.y+primary.height<goal.y,'main expense control must precede secondary goal details');
+      assert.ok(primary.y+primary.height<=dock.y-8,'entire 320px expense button must stay above the fixed tabbar');
+      passed('320px primary expense action stays fully visible and above the goal card');
+    }
     let checked=0;
     for(const tab of ['home','pay','payments','assets','settings','home']) {
       await audit.page.locator(`#tabbar [data-tab="${tab}"]`).click();
