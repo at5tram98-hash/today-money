@@ -107,6 +107,23 @@ export async function verifyNativeUi({createPage,passed}){
   await travel.page.locator('#alertWrap.show').waitFor();
   await travel.page.locator('#alertActions button').filter({hasText:'費目の変更を破棄'}).click();
   await travel.page.locator('#goalItemName').waitFor({state:'detached'});
+  console.log('NESTED_FOCUS_DIAGNOSTIC',JSON.stringify(await travel.page.evaluate(()=>{
+    const target=document.getElementById('eventGoalAddItem');
+    const active=document.activeElement;
+    const r=target?.getBoundingClientRect();
+    const css=target?getComputedStyle(target):null;
+    return {
+      activeId:active?.id||'',activeTag:active?.tagName,
+      targetExists:!!target,targetConnected:target?.isConnected,
+      targetDisabled:target?.disabled,
+      targetTabIndex:target?.tabIndex,
+      targetRect:r?{w:r.width,h:r.height,x:r.x,y:r.y}:null,
+      targetDisplay:css?.display,targetVisibility:css?.visibility,
+      sheetClass:document.getElementById('sheet')?.className,
+      nestedState:typeof nestedSheetState==='undefined'?'unavailable':!!nestedSheetState,
+      alertClass:document.getElementById('alertWrap')?.className
+    };
+  })));
   // Focus restoration follows the alert's next paint; wait for the actual
   // accessible focus target instead of racing its animation frame.
   await travel.page.waitForFunction(()=>document.activeElement?.id==='eventGoalAddItem',null,{timeout:2200});
