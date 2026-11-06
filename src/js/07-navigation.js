@@ -195,9 +195,9 @@ function closeNestedSheet(){
   };
   restore();
   requestAnimationFrame(()=>{
-    const alert=document.getElementById('alertWrap');
-    const active=document.activeElement;
-    if(active===document.body||alert?.contains(active))restore()
+    // Hidden alert buttons may hand focus to a generic DIV, not <body>.
+    // Do not assume that only document.body represents lost focus.
+    if(document.activeElement!==origin)restore()
   });
   return true
 }
