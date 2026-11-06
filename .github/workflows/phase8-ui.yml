@@ -28,6 +28,15 @@ jobs:
       - run: npm test
       - name: Install browser binary (Ubuntu runner already has system dependencies)
         run: npx playwright install chromium
+      - name: Install Japanese font for reliable visual screenshots
+        timeout-minutes: 5
+        run: |
+          if ! fc-list :lang=ja | grep -q .; then
+            sudo apt-get update -qq
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends fonts-noto-cjk
+          fi
+          fc-cache -f
+          fc-list :lang=ja | grep -m 1 .
       - name: Native-sheet and button smoke tests
         run: MM3_NATIVE_ONLY=1 node tests/browser.mjs
       - run: npm run test:browser
