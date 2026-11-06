@@ -185,7 +185,20 @@ function closeNestedSheet(){
   state.sheet.classList.toggle('half',state.parentMode==='half');
   state.sheet.style.transform='';
   sheetDirtyState=state.parentDirty;
-  if(state.returnFocus?.isConnected)state.returnFocus.focus({preventScroll:true});
+  // A destructive-confirmation alert is hidden immediately, but its former
+  // focused button may still own focus until the browser's next paint.
+  // Restore now and again after paint only if focus is still stranded.
+  const origin=state.returnFocus;
+  const restore=()=>{
+    if(nestedSheetState||!state.sheet.classList.contains('show')||!origin?.isConnected)return;
+    origin.focus({preventScroll:true});
+  };
+  restore();
+  requestAnimationFrame(()=>{
+    const alert=document.getElementById('alertWrap');
+    const active=document.activeElement;
+    if(active===document.body||alert?.contains(active))restore()
+  });
   return true
 }
 async function requestNestedSheetClose(){
