@@ -151,4 +151,29 @@ export async function verifyNativeUi({createPage,passed}){
   assert.deepEqual(await acfDetail.page.evaluate(()=>globalThis.__mm3Test.getData()),financialBefore);
   passed('P0 registered required large expense uses the exact canonical ACF forecast without double-counting');
   await acfDetail.context.close();
+
+  // P1 / C08: the ATF calendar must not expire on 2026-11-30.
+  // Shift only the isolated test clock; no real balances or stored records change.
+  const atfRolling=await createPage('app',{width:393,height:852,mobile:true});
+  const atfBefore=await atfRolling.page.evaluate(()=>globalThis.__mm3Test.getData());
+  const atfWindow=await atfRolling.page.evaluate(()=>{
+    globalThis.__mm3TestClock.now=new Date('2026-12-05T12:00:00+09:00').getTime();
+    const api=globalThis.__mm3Test;
+    return {
+      end:api.mm3AtfHorizonEnd(),
+      december:api.mm3AtfForMonth('2026-12'),
+      january:api.mm3AtfForMonth('2027-01'),
+      february:api.mm3AtfForMonth('2027-02'),
+      march:api.mm3AtfForMonth('2027-03')
+    };
+  });
+  assert.equal(atfWindow.end,'2027-02-28');
+  for(const [month,result] of [['2026-12',atfWindow.december],['2027-01',atfWindow.january],['2027-02',atfWindow.february]]){
+    assert.equal(result.available,true,`ATF must include ${month} after the original deadline`);
+    assert.ok(result.rows.length>0,`ATF should produce dated rows for ${month}`);
+  }
+  assert.equal(atfWindow.march.available,false,'ATF ends after the rolling three-month window');
+  assert.deepEqual(await atfRolling.page.evaluate(()=>globalThis.__mm3Test.getData()),atfBefore);
+  passed('P1 ATF rolling forecast remains usable after 2026-11-30, rolls into 2027 and preserves financial records');
+  await atfRolling.context.close();
 }
