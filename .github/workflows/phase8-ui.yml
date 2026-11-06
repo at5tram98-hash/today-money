@@ -48,4 +48,6 @@ jobs:
           path: |
             test-results/browser.json
             test-results/phase8-screenshots/
+            test-results/phase8-ui-depth/
+            test-results/phase8-304-controls-audit.json
           if-no-files-found: ignore
