@@ -176,4 +176,53 @@ export async function verifyNativeUi({createPage,passed}){
   assert.deepEqual(await atfRolling.page.evaluate(()=>globalThis.__mm3Test.getData()),atfBefore);
   passed('P1 ATF rolling forecast remains usable after 2026-11-30, rolls into 2027 and preserves financial records');
   await atfRolling.context.close();
+
+  // P0 / C04: dangerous financial reset requires mode, exact phrase and
+  // a separate destructive confirmation; every cancellation preserves data.
+  const deleteReview=await createPage('app',{width:393,height:852,mobile:true});
+  const snapshotBefore=await deleteReview.page.evaluate(()=>globalThis.__mm3Test.getData());
+  await deleteReview.page.evaluate(()=>globalThis.__mm3Test.openDataSettings());
+  await deleteReview.page.locator('#deleteAll').click();
+  assert.equal(await deleteReview.page.locator('#deleteConfirmProceed').isDisabled(),true);
+  assert.equal(await deleteReview.page.locator('#deleteModeKeep').getAttribute('aria-pressed'),'true');
+  await deleteReview.page.locator('#deleteModeEmpty').click();
+  assert.equal(await deleteReview.page.locator('#deleteModeEmpty').getAttribute('aria-pressed'),'true');
+  await deleteReview.page.locator('#deleteConfirmPhrase').fill('消去');
+  assert.equal(await deleteReview.page.locator('#deleteConfirmProceed').isDisabled(),true);
+  await deleteReview.page.locator('#deleteConfirmPhrase').fill('削除');
+  assert.equal(await deleteReview.page.locator('#deleteConfirmProceed').isEnabled(),true);
+  const destructiveBounds=await deleteReview.page.locator('#deleteConfirmProceed').boundingBox();
+  assert.ok(destructiveBounds.width>=44&&destructiveBounds.height>=44);
+  await deleteReview.page.locator('#deleteConfirmProceed').click();
+  await deleteReview.page.locator('#alertWrap.show').waitFor();
+  assert.match(await deleteReview.page.locator('#alertMessage').innerText(),/取引.*Gmail認証.*復旧コピー/);
+  await deleteReview.page.locator('#alertActions button').filter({hasText:'戻る'}).click();
+  assert.deepEqual(await deleteReview.page.evaluate(()=>globalThis.__mm3Test.getData()),snapshotBefore);
+  await deleteReview.page.locator('#deleteAllCancel').click();
+  await deleteReview.page.locator('#alertWrap.show').waitFor();
+  await deleteReview.page.locator('#alertActions button').filter({hasText:'破棄'}).click();
+  await deleteReview.page.locator('#deleteConfirmPhrase').waitFor({state:'detached'});
+  assert.deepEqual(await deleteReview.page.evaluate(()=>globalThis.__mm3Test.getData()),snapshotBefore);
+  passed('P0 delete-all requires mode and exact phrase; final cancel and sheet cancel preserve all stored financial records');
+  await deleteReview.context.close();
+
+  // The actual destructive path is permitted only within this throwaway
+  // isolated Playwright profile, never against the published application.
+  const deleteFixture=await createPage('app',{width:393,height:852,mobile:true});
+  const seeded=await deleteFixture.page.evaluate(()=>globalThis.__mm3Test.getData());
+  assert.ok(seeded.banks.length>0,'fixture must start with sample bank records');
+  await deleteFixture.page.evaluate(()=>globalThis.__mm3Test.openDataSettings());
+  await deleteFixture.page.locator('#deleteAll').click();
+  await deleteFixture.page.locator('#deleteModeEmpty').click();
+  await deleteFixture.page.locator('#deleteConfirmPhrase').fill('削除');
+  await deleteFixture.page.locator('#deleteConfirmProceed').click();
+  await deleteFixture.page.locator('#alertWrap.show').waitFor();
+  await deleteFixture.page.locator('#alertActions button').filter({hasText:'全データを削除'}).click();
+  await deleteFixture.page.locator('#sheet.show').waitFor({state:'hidden'});
+  const erased=await deleteFixture.page.evaluate(()=>globalThis.__mm3Test.getData());
+  for(const key of ['transactions','incomes','banks','cards','debitCards','salaryRecords','fixedPayments','largeExpensePlans']){
+    assert.equal(erased[key].length,0,`complete reset should clear ${key}`);
+  }
+  passed('P0 complete reset erases financial fixture data only after exact phrase and destructive approval');
+  await deleteFixture.context.close();
 }
