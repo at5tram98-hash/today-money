@@ -19,7 +19,7 @@ const routes=[
   ['new-event-item','month','#monthEventGoals',null,'#eventGoalAdd','#eventGoalAddItem'],
   ['daily-budget','home',null,'openDailyGoalPlanner'],
   ['acf','home',null,'openAcf'],
-  ['financial-update','assets',null,'openFinancialUpdates',['banks','2026-10']]
+  ['financial-update','assets',null,'openFinancialUpdates']
 ];
 function inspectAll(catalog){
  const matched=[];
