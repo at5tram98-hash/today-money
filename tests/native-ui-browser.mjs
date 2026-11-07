@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
 export async function verifyNativeUi({createPage,passed}){
   const {page,context}=await createPage('app',{width:393,height:852,mobile:true});
+  await page.waitForFunction(()=>document.getElementById('quickExpense')?.dataset.uiInventory==='HOME-004');
+  assert.equal(await page.locator('#quickExpense').getAttribute('data-ui-role'),'primary');
+  assert.equal(await page.locator('#todaySearch').getAttribute('data-ui-inventory'),'HOME-001');
+  assert.equal(await page.locator('#todaySearch').getAttribute('data-ui-priority'),'P1');
   const original=await page.evaluate(()=>globalThis.__mm3Test.getData());
   assert.deepEqual(await page.locator('#tabbar .tab-label').allTextContents(),['今日','給与','支払い','資産','設定']);
   const primary=await page.locator('#quickExpense').boundingBox();assert.ok(primary.y+primary.height<650);
@@ -207,6 +211,7 @@ export async function verifyNativeUi({createPage,passed}){
   const deleteReview=await createPage('app',{width:393,height:852,mobile:true});
   const snapshotBefore=await deleteReview.page.evaluate(()=>globalThis.__mm3Test.getData());
   await deleteReview.page.evaluate(()=>globalThis.__mm3Test.openDataSettings());
+  assert.equal(await deleteReview.page.locator('#deleteAll').getAttribute('data-ui-role'),'danger');
   await deleteReview.page.locator('#deleteAll').click();
   assert.equal(await deleteReview.page.locator('#deleteConfirmProceed').isDisabled(),true);
   assert.equal(await deleteReview.page.locator('#deleteModeKeep').getAttribute('aria-pressed'),'true');
