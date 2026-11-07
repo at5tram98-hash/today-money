@@ -156,4 +156,49 @@ export async function verifyAuditFixes({createPage,passed}){
     passed('AUD8-009: impossible redistribution explains locked days without changing drafts; unlocking one day balances every yen');
   }finally{await lockedPlan.context.close()}
 
+
+  const keyboard=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    const page=keyboard.page;
+    await page.evaluate(()=>globalThis.__mm3Test.openDailyGoalPlanner('2026-10-07'));
+    const saved=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    await page.locator('#goalStart').click();await page.locator('#goalNext').click();await page.locator('#goalNext').click();
+    const handle=page.locator('#goalApproval .approval-handle');
+    await handle.scrollIntoViewIfNeeded();
+    const b=await handle.boundingBox(),rail=await page.locator('#goalApproval').boundingBox();
+    await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();
+    await page.mouse.move(rail.x+rail.width-8,b.y+b.height/2,{steps:12});
+    await handle.dispatchEvent('pointercancel',{pointerId:1,pointerType:'mouse'});await page.mouse.up();
+    await page.waitForTimeout(350);
+    assert.equal(await page.locator('#goalDone').count(),0);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),saved);
+    await handle.focus();await page.keyboard.press('Enter');
+    await page.locator('#alertWrap.show').waitFor();
+    assert.equal(await page.locator('#alertTitle').innerText(),'この目標を承認しますか？');
+    await page.locator('#alertActions button').first().click();
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),saved);
+    await handle.focus();await page.keyboard.press('Space');
+    await page.locator('#alertWrap.show').waitFor();
+    await page.locator('#alertActions button').last().click();
+    await page.locator('#goalDone').waitFor({timeout:15000});
+    const after=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    assert.ok(after.dailyGoals['2026-10-07'].total>0);
+    assert.deepEqual(after.banks,saved.banks);
+    passed('AUD8-010: pointer cancellation saves nothing; keyboard approval supports cancel and explicit confirmation');
+  }finally{await keyboard.context.close()}
+
+  const disabledApproval=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    const page=disabledApproval.page;
+    await page.evaluate(()=>globalThis.__mm3Test.openDailyGoalPlanner('2026-10-07'));
+    const saved=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    await page.locator('#goalStart').click();
+    await page.locator('#goalAmountEdit').click();await page.locator('#calcGrid [data-k="clear"]').click();await page.locator('#calcDone').click();
+    await page.locator('#goalNext').click();await page.locator('#goalNext').click();
+    assert.equal(await page.locator('#goalApproval').getAttribute('aria-disabled'),'true');
+    assert.equal(await page.locator('#goalApproval .approval-handle').isDisabled(),true);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),saved);
+    passed('AUD8-011: invalid budgets disable the actual approval button for keyboard and assistive technology');
+  }finally{await disabledApproval.context.close()}
+
 }
