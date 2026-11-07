@@ -124,4 +124,36 @@ export async function verifyAuditFixes({createPage,passed}){
     passed('AUD8-008: setup card-ratio slider retains its accessible name while disabled');
   }finally{await ratio.context.close()}
 
+
+  const lockedPlan=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    const page=lockedPlan.page;
+    await page.evaluate(async()=>{
+      const api=globalThis.__mm3Test,d=api.getData();
+      d.monthlyGoals['2026-10']={total:30000,categories:{'食費':30000}};
+      d.dailyGoals={};
+      for(let day=7;day<=31;day++)d.dailyGoals[`2026-10-${String(day).padStart(2,'0')}`]={total:1000,categories:{},origin:'daily'};
+      await api.replaceData(d);api.openMonthlyGoalPlanner('2026-10');
+    });
+    const saved=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    await page.locator('#goalStart').click();
+    for(let step=1;step<5;step++)await page.locator('#goalNext').click();
+    const draft=await page.evaluate(()=>globalThis.__mm3Test.getGoalState().draft);
+    await page.locator('#goalAutoBalance').click();
+    await page.locator('#alertWrap.show').waitFor();
+    assert.equal(await page.locator('#alertTitle').innerText(),'自動調整できません');
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getGoalState().draft),draft);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),saved);
+    await page.locator('#alertActions button').last().click();
+    await page.locator('[data-goal-day="2026-10-08"]').click({delay:700});
+    await page.locator('#menuLayer button').filter({hasText:'固定を解除'}).click();
+    await page.locator('#goalAutoBalance').click();
+    const adjusted=await page.evaluate(()=>globalThis.__mm3Test.getGoalState().draft);
+    assert.equal(Object.values(adjusted.dailyPlan).reduce((a,b)=>a+Number(b||0),0),30000);
+    assert.equal(adjusted.dailyPlan[8],6000);
+    assert.equal(Object.keys(adjusted.dailyLocks).length,24);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),saved);
+    passed('AUD8-009: impossible redistribution explains locked days without changing drafts; unlocking one day balances every yen');
+  }finally{await lockedPlan.context.close()}
+
 }
