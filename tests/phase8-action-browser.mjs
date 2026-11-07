@@ -34,7 +34,7 @@ const cases=[
   {id:'PAY-082',tab:'pay',target:'#menuLayer.show'},
   {id:'PAYMENTS-088',tab:'payments',target:'#menuLayer.show'},
   {id:'PAYMENTS-089',tab:'payments',target:'#monthPickerCancel'},
-  {id:'PAYMENTS-090',tab:'payments',target:'#atfApply'},
+  {id:'PAYMENTS-090',tab:'payments',target:'#mm3AtfClose'},
   {id:'PAYMENTS-091',tab:'payments',target:'#txSearch'},
   {id:'PAYMENTS-092',tab:'payments',target:'#qcbCancel'},
   {id:'ASSETS-101',tab:'assets',target:'#menuLayer.show'},
@@ -85,6 +85,7 @@ export async function verifyPerControlActions({createPage,passed,root}){
      entry.beforeTargetVisible=beforeTarget;
      await clickable.click({timeout:4500});
      entry.clicked=true;
+     await page.locator('.busy-overlay.show').waitFor({state:'hidden',timeout:10000});
      await page.waitForTimeout(130);
      entry.afterVisible=await targetVisible(page,item.target);
      if(item.requireDisabled&&!await page.locator(item.requireDisabled).isDisabled())throw Error('expected follow-up confirmation to be disabled');
