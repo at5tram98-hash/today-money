@@ -58,6 +58,9 @@ export async function verifyNativeUi({createPage,passed}){
       assert.ok(monthGoalAction&&title.box.right+6<=monthGoalAction.x,
         '320px month title must leave a meaningful gap before the first toolbar icon');
       passed('320px full month title does not overlap the adjacent toolbar icons');
+      // Restore the visible Today mode before comparing the saved data to the
+      // pre-audit snapshot; month-switching intentionally persists a UI preference.
+      await audit.page.locator('#screen-month .native-home-mode button').first().click();
     }
     let checked=0;
     for(const tab of ['home','pay','payments','assets','settings','home']) {
