@@ -59,4 +59,57 @@ export async function verifyAuditFixes({createPage,passed}){
     assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
     passed('AUD8-003: daily budget preserves exact yen in calculator and reversible +/-100 steps without saving');
   }finally{await budget.context.close()}
+
+  const filters=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    await filters.page.locator('#todayTransactions').click();
+    const category=filters.page.getByRole('combobox',{name:'カテゴリで絞り込み',exact:true});
+    assert.equal(await category.count(),1);
+    await category.selectOption('食費');
+    assert.equal(await category.inputValue(),'食費');
+    passed('AUD8-004: transaction category filter exposes its purpose to assistive technology');
+  }finally{await filters.context.close()}
+
+  const preferred=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    await preferred.page.evaluate(()=>globalThis.__mm3Test.openAcfSettings());
+    await preferred.page.locator('#acfDetailsToggle').click();
+    const card=preferred.page.getByRole('combobox',{name:'優先して使うカード',exact:true});
+    assert.equal(await card.count(),1);
+    assert.equal(await card.isVisible(),true);
+    passed('AUD8-005: ACF preferred-card selector has a meaningful accessible name');
+  }finally{await preferred.context.close()}
+
+
+  const icons=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    await icons.page.evaluate(()=>globalThis.__mm3Test.switchTab('settings'));
+    await icons.page.locator('#categorySettings').click();
+    await icons.page.locator('#catAdd').click();
+    const choices=icons.page.locator('.icon-picker button');
+    assert.equal(await choices.count(),18);
+    const iconData=await icons.page.evaluate(()=>globalThis.__mm3Test.getData());
+    for(const button of await choices.all()){
+      assert.ok(await button.getAttribute('aria-label'));
+      await button.click();
+      assert.equal(await button.getAttribute('aria-pressed'),'true');
+      assert.equal(await icons.page.locator('.icon-picker [aria-pressed="true"]').count(),1);
+    }
+    assert.deepEqual(await icons.page.evaluate(()=>globalThis.__mm3Test.getData()),iconData);
+    const coffee=icons.page.getByRole('button',{name:'コーヒー',exact:true});
+    await coffee.click();
+    assert.equal(await coffee.getAttribute('aria-pressed'),'true');
+    assert.equal(await icons.page.getByRole('button',{name:'食事',exact:true}).getAttribute('aria-pressed'),'false');
+    passed('AUD8-006: all category icons have meaningful names and expose their selection state');
+  }finally{await icons.context.close()}
+
+  const timeline=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    await timeline.page.evaluate(()=>globalThis.__mm3Test.openMoneyTimeline());
+    const scope=timeline.page.getByRole('combobox',{name:'表示する口座',exact:true});
+    assert.equal(await scope.count(),1);
+    assert.equal(await scope.isVisible(),true);
+    passed('AUD8-007: money timeline account filter exposes its purpose to assistive technology');
+  }finally{await timeline.context.close()}
+
 }

@@ -3,11 +3,12 @@
 
 function openCategoryEdit(index,after){
   const existing=index>=0?data.categories[index]:null,icons=['fork','tram','bus','bag','cart','tshirt','ticket','game','repeat','book','bolt','house','heart','gift','phone','coffee','medical','ellipsis'];
+  const iconNames={fork:'食事',tram:'電車',bus:'バス',bag:'バッグ',cart:'買い物',tshirt:'衣服',ticket:'チケット',game:'ゲーム',repeat:'定期支払い',book:'本',bolt:'電気',house:'住まい',heart:'ハート',gift:'プレゼント',phone:'電話',coffee:'コーヒー',medical:'医療',ellipsis:'その他'};
   let selected=normalizeCategoryIcon(existing?.icon,existing?.id);
-  openSheet(`<div class="sheet-nav"><button class="nav-text" id="ceCancel">キャンセル</button><div class="sheet-title">カテゴリ編集</div><button class="nav-text bold" id="ceSave">保存</button></div><div class="sheet-body"><div class="form-group-title">カテゴリ</div><div class="form-card"><div class="form-section"><div class="form-label">名前</div><input class="field" id="ceName" value="${esc(existing?.name||'')}"></div><div class="form-section"><div class="form-label">カラー</div><input class="field" id="ceColor" type="color" value="${esc(existing?.color||'#007AFF')}"></div></div><div class="form-group-title">アイコン</div><div class="icon-picker">${icons.map(x=>`<button class="icon-choice ${x===selected?'on':''}" data-sym="${x}">${icon(x)}</button>`).join('')}</div>${existing&&data.categories.length>1?'<button class="secondary danger" id="ceDelete" style="margin-top:16px">カテゴリを削除</button>':''}</div>`,'full',()=>{
+  openSheet(`<div class="sheet-nav"><button class="nav-text" id="ceCancel">キャンセル</button><div class="sheet-title">カテゴリ編集</div><button class="nav-text bold" id="ceSave">保存</button></div><div class="sheet-body"><div class="form-group-title">カテゴリ</div><div class="form-card"><div class="form-section"><div class="form-label">名前</div><input class="field" id="ceName" value="${esc(existing?.name||'')}"></div><div class="form-section"><div class="form-label">カラー</div><input class="field" id="ceColor" type="color" value="${esc(existing?.color||'#007AFF')}"></div></div><div class="form-group-title">アイコン</div><div class="icon-picker">${icons.map(x=>`<button class="icon-choice ${x===selected?'on':''}" data-sym="${x}" aria-label="${esc(iconNames[x])}" aria-pressed="${x===selected}">${icon(x)}</button>`).join('')}</div>${existing&&data.categories.length>1?'<button class="secondary danger" id="ceDelete" style="margin-top:16px">カテゴリを削除</button>':''}</div>`,'full',()=>{
     document.querySelectorAll('[data-sym]').forEach(b=>b.onclick=()=>{
       selected=b.dataset.sym;
-      document.querySelectorAll('[data-sym]').forEach(x=>x.classList.toggle('on',x===b))
+      document.querySelectorAll('[data-sym]').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',String(x===b))})
     });
     document.getElementById('ceCancel').onclick=requestSheetClose;
     document.getElementById('ceSave').onclick=()=>{
