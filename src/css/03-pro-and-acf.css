@@ -179,10 +179,13 @@
   #screen-month .month-name-btn{
     width:auto;
     max-width:100%;
-    overflow:visible;
-    text-overflow:clip;
-    font-size:32px;
-    line-height:1.05;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    font-size:23px;
+    line-height:1.1;
+    letter-spacing:-.8px;
+    gap:4px;
   }
 }
 /* === end Final UI verification patch === */
