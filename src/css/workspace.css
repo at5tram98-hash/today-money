@@ -29,7 +29,7 @@ html.dark{--native-secondary:#2c2c2e}
 #app .ring circle{stroke-width:11}
 #app .ring-center{width:83%}
 #app .ring-amount{font-size:24px;font-weight:700;letter-spacing:-.5px}
-#app .ring-caption{font-size:10px;line-height:1.4;margin-top:3px}
+#app .ring-caption{font-size:12px;line-height:1.4;margin-top:3px}
 #app .goal-side-title{font-size:12px;font-weight:400;color:var(--label2)}
 #app .goal-side-value{font-size:24px;font-weight:650;margin-top:2px}
 #app .goal-rate{font-size:15px;margin-top:3px}
@@ -288,8 +288,8 @@ html.native-keyboard #calculator{bottom:var(--native-keyboard-inset,0px);max-hei
 #app .money-ticker-card{border-radius:18px;box-shadow:none;min-height:90px}
 #app .money-ticker-name{font-size:11px;font-weight:600}
 #app .money-ticker-value{font-size:21px;font-weight:700}
-#app .money-ticker-meta,#app .money-ticker-meta strong{font-size:10px;line-height:1.35}
-#app .money-ticker-spark-empty{font-size:9px}
+#app .money-ticker-meta,#app .money-ticker-meta strong{font-size:12px;line-height:1.35}
+#app .money-ticker-spark-empty{font-size:11px}
 /* Existing expense fields become aligned rows; their controls and handlers stay intact. */
 .sheet:has(#qeMerchant) .form-section{display:grid;grid-template-columns:104px minmax(0,1fr);align-items:center;gap:8px;padding:8px 16px;min-height:60px}
 .sheet:has(#qeMerchant) .form-label{font-size:16px;color:var(--label);margin:0}
