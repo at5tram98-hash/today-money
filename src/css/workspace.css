@@ -117,7 +117,7 @@ html.dark{--native-secondary:#2c2c2e}
    All 304 legacy control IDs are assigned a per-control UI role in the existing
    accessibility lifecycle; their actions and financial models remain untouched.
    A registered ID is not assumed to have passed an interaction test. */
-button[data-ui-inventory]{
+button[data-ui-inventory],button[data-ui-extra]{
  min-block-size:44px;
  touch-action:manipulation;
 }
