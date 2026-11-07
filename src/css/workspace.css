@@ -114,8 +114,31 @@ html.dark{--native-secondary:#2c2c2e}
 .calc-tools-panel input{background:var(--card);color:var(--label);border-color:var(--sep)}
 .calc-use{background:var(--blue);color:#fff;border:0;box-shadow:none;border-radius:var(--native-control)}
 /* Phase 8 native button contract.
-   Core controls retain their existing layout and actions. Only role, material,
-   selection, keyboard focus and pressed feedback are coordinated here. */
+   All 304 legacy control IDs are assigned a per-control UI role in the existing
+   accessibility lifecycle; their actions and financial models remain untouched.
+   A registered ID is not assumed to have passed an interaction test. */
+button[data-ui-inventory]{
+ min-block-size:44px;
+ touch-action:manipulation;
+}
+button[data-ui-role=primary]:not(.icon-btn):not(.nav-text):not(.tab):not(.hero):not(.row){
+ font-weight:650;
+ border-radius:var(--native-control);
+}
+button[data-ui-role=danger]{
+ color:var(--red);
+}
+button[data-ui-role=danger]:not(:disabled):active{
+ background:var(--action-danger-soft);
+}
+button[data-ui-role=selection][aria-pressed=true],
+button[data-ui-role=selection][aria-selected=true]{
+ font-weight:650;
+}
+button[data-ui-inventory]:focus-visible{
+ outline:3px solid var(--action-focus)!important;
+ outline-offset:2px;
+}
 button,[role=button]{
  -webkit-tap-highlight-color:transparent;
  font-family:inherit;
