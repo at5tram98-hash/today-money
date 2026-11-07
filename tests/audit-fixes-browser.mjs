@@ -112,4 +112,16 @@ export async function verifyAuditFixes({createPage,passed}){
     passed('AUD8-007: money timeline account filter exposes its purpose to assistive technology');
   }finally{await timeline.context.close()}
 
+
+  const ratio=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    await ratio.page.evaluate(()=>globalThis.__mm3Test.openAcfSetup());
+    const slider=ratio.page.getByRole('slider',{name:'カードで支払う割合',exact:true});
+    assert.equal(await slider.count(),1);
+    await ratio.page.locator('#acfSetupUseCard').click();
+    assert.equal(await slider.count(),1);
+    assert.equal(await slider.isDisabled(),true);
+    passed('AUD8-008: setup card-ratio slider retains its accessible name while disabled');
+  }finally{await ratio.context.close()}
+
 }
