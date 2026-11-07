@@ -52,10 +52,10 @@ export async function verifyNativeUi({createPage,passed}){
         text:el.textContent.trim(),fontSize:getComputedStyle(el).fontSize,
         box:el.getBoundingClientRect().toJSON()
       }));
-      const goal=await audit.page.locator('#monthGoal').boundingBox();
+      const monthGoalAction=await audit.page.locator('#monthGoal').boundingBox();
       assert.ok(title.scrollWidth<=title.innerWidth+1,
         `320px month title overflows into adjacent action: ${JSON.stringify(title)}`);
-      assert.ok(goal&&title.box.right+6<=goal.x,
+      assert.ok(monthGoalAction&&title.box.right+6<=monthGoalAction.x,
         '320px month title must leave a meaningful gap before the first toolbar icon');
       passed('320px full month title does not overlap the adjacent toolbar icons');
     }
