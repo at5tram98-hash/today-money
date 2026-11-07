@@ -19,7 +19,19 @@ const routes=[
   ['new-event-item','month','#monthEventGoals',null,'#eventGoalAdd','#eventGoalAddItem'],
   ['daily-budget','home',null,'openDailyGoalPlanner'],
   ['acf','home',null,'openAcf'],
-  ['financial-update','assets',null,'openFinancialUpdates']
+  ['financial-update','assets',null,'openFinancialUpdates'],
+  ['today-repeat','home','#todayRepeat'],['today-one-line','home','#todayOneLine'],
+  ['today-cross-search','home','#todayCrossSearch'],['today-analysis','home','#todayAnalysis'],
+  ['today-transactions','home','#todayTransactions'],['today-mail','home','#todayMail'],
+  ['month-selector','month','#monthName'],['month-hero','month','#monthHero'],
+  ['month-search','month','#monthSearch'],['month-menu','month','#monthMenu'],
+  ['month-analysis','month','#monthAnalysis'],['month-reason','month','#monthReasonAnalysis'],
+  ['month-review','month','#monthCloseReview'],['month-transactions','month','#monthTransactions'],
+  ['month-goal','month','#monthGoal'],['salary-month','pay','#mm3SalaryMonth'],
+  ['salary-viz','pay','#mm3SalaryVizMenu'],['payment-month','payments','#mm3PaymentMonth'],
+  ['payment-card-update','payments','#mm3PaymentQuickBilling'],
+  ['payment-history','payments','#mm3PaymentHistoryTop'],
+  ['asset-history','assets','#mm3AssetHistoryTop']
 ];
 function inspectAll(catalog){
  const matched=[];
