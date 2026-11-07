@@ -6,6 +6,16 @@ export async function verifyNativeUi({createPage,passed}){
   assert.equal(await page.locator('#quickExpense').getAttribute('data-ui-role'),'primary');
   assert.equal(await page.locator('#todaySearch').getAttribute('data-ui-inventory'),'HOME-001');
   assert.equal(await page.locator('#todaySearch').getAttribute('data-ui-priority'),'P1');
+  await page.waitForFunction(()=>document.getElementById('homeTab')?.dataset.uiExtra==='dynamic');
+  assert.equal(await page.locator('#homeTab').getAttribute('data-ui-role'),'navigation');
+  assert.equal(await page.locator('.money-ticker-card').first().getAttribute('data-ui-role'),'navigation');
+  assert.equal(await page.locator('.native-home-mode button').first().getAttribute('data-ui-role'),'selection');
+  const visibleExtraTargets=await page.evaluate(()=>[...document.querySelectorAll('button[data-ui-extra]')]
+    .filter(el=>el.getBoundingClientRect().width>0&&el.getBoundingClientRect().height>0)
+    .map(el=>({name:el.id||el.className,width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height})));
+  assert.ok(visibleExtraTargets.length>=12,'dynamic controls must be registered, too');
+  assert.equal(visibleExtraTargets.filter(el=>el.width<43.5||el.height<43.5).length,0);
+
   const original=await page.evaluate(()=>globalThis.__mm3Test.getData());
   assert.deepEqual(await page.locator('#tabbar .tab-label').allTextContents(),['今日','給与','支払い','資産','設定']);
   const primary=await page.locator('#quickExpense').boundingBox();assert.ok(primary.y+primary.height<650);
