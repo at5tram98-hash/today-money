@@ -9,6 +9,7 @@ import {verifyUiUpdate} from './ui-update-browser.mjs';
 import {verifyClosingRefinements} from './closing-refinements-browser.mjs';
 import {verifyNativeUi} from './native-ui-browser.mjs';
 import {verifyPhase8Inventory} from './phase8-control-audit-browser.mjs';
+import {verifyPerControlActions} from './phase8-action-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
 build();
@@ -87,6 +88,7 @@ try {
   if(process.env.MM3_NATIVE_ONLY==='1'){
     await verifyNativeUi({createPage,passed});
     await verifyPhase8Inventory({createPage,passed,root});
+    await verifyPerControlActions({createPage,passed,root});
   }else{
   mkdirSync(resolve(root,'test-results'),{recursive:true});
   if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_DAY_CLOSING_ONLY&&!process.env.MM3_FINAL_UI_ONLY){
