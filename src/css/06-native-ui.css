@@ -91,7 +91,7 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text;
 #screen-pay .mm3-salary-legend-main small,#screen-pay .mm3-salary-legend-pct{font-size:12px}
 #screen-pay .mm3-salary-metric span,#screen-payments .mm3-atf-metric span,#screen-assets .mm3-assets-metric span{font-size:12px;white-space:normal}
 #screen-pay .mm3-salary-metric strong,#screen-payments .mm3-atf-metric strong,#screen-assets .mm3-assets-metric strong{font-size:15px}
-#screen-pay .mm3-salary-range button,#screen-assets .mm3-assets-range button{font-size:11px}
+#screen-pay .mm3-salary-range button,#screen-assets .mm3-assets-range button{font-size:12px}
 #screen-pay .mm3-salary-watchrow,#screen-assets .mm3-assets-watchrow{min-height:72px;padding:12px 0;grid-template-columns:minmax(0,1fr) 54px minmax(88px,auto)}
 #screen-pay .mm3-salary-spark,#screen-assets .mm3-assets-spark{width:54px}
 #screen-pay .mm3-salary-watch-main strong,#screen-assets .mm3-assets-watch-main strong{font-size:15px;white-space:normal;overflow-wrap:anywhere;line-height:1.4}
@@ -129,7 +129,9 @@ html.native-keyboard .sheet{bottom:var(--native-keyboard-inset,0px);max-height:c
 html.native-keyboard .sheet.full{height:calc(var(--native-viewport-height,100dvh) - 12px)}
 @media(max-width:374px){
  .calendar-card{margin-inline:-12px}.day-cell{min-width:44px}
- .large-title,.month-name-btn{font-size:32px}
+ .large-title{font-size:32px}
+ .month-name-btn{font-size:23px;letter-spacing:-.8px;gap:4px;overflow:hidden;text-overflow:ellipsis}
+ .month-name-btn svg{width:14px;height:14px}
  .daily-goal{gap:12px;grid-template-columns:minmax(112px,45%) minmax(0,1fr)}
  .today-spend-tap{padding:14px}.ring-amount{font-size:23px}.goal-side-value{font-size:20px}
  #screen-pay .mm3-salary-watchrow,#screen-assets .mm3-assets-watchrow{grid-template-columns:minmax(0,1fr) minmax(94px,auto);gap:12px}
