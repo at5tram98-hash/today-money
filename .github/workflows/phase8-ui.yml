@@ -50,4 +50,5 @@ jobs:
             test-results/phase8-screenshots/
             test-results/phase8-ui-depth/
             test-results/phase8-304-controls-audit.json
+            test-results/phase8-action-evidence.json
           if-no-files-found: ignore
