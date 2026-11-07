@@ -74,7 +74,7 @@ input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text;
 .calendar-card{padding:8px 0;overflow:visible}
 .day-cell{margin:0;min-width:44px;height:70px;grid-template-rows:26px 16px 15px 7px}
 .day-num{font-size:14px;width:26px;height:26px}.day-date-slot{width:26px;height:26px}
-.day-money{font-size:10px;line-height:16px;height:16px}.day-plan{font-size:9px;line-height:15px;height:15px}
+.day-money{font-size:10.5px;line-height:16px;height:16px}.day-plan{font-size:10px;line-height:15px;height:15px}
 .week-head div{font-size:12px;padding-bottom:8px}
 .mm3-action-row{padding:12px 14px;min-height:60px}
 .mm3-action-trailing{max-width:40%;font-size:13px}
