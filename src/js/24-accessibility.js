@@ -23,6 +23,20 @@
         for(const el of nodes)if(el.id?.startsWith(prefix))tag(el,[id,priority,role,label]);
       }else{try{for(const el of root.querySelectorAll(selector))tag(el,[id,priority,role,label])}catch{}}
     }
+    // The 304-item source catalog is not the entire UI: list rows, date cells,
+    // generated search filters, accounts and modal controls are dynamic.
+    // Include them in visual standards but never mark them as audited 304 IDs.
+    const dynamicNodes=[...(root.matches?.('button,[role="button"]')?[root]:[]),...root.querySelectorAll('button,[role="button"]')];
+    for(const el of dynamicNodes){
+      if(el.dataset.uiInventory)continue;
+      let role='secondary';
+      if(el.matches('.tab,.back-btn,.date-nav-btn,.money-ticker-card,.day-cell,.acf-calendar-day,.cat-card,.row.press,.menu-item,.financial-event-card,.today-spend-tap,.day-closing-card,.mm3-action-row'))role='navigation';
+      if(el.matches('.pro4-search-chip,.seg button,.native-home-mode button,.mm3-salary-range button,.mm3-assets-range button'))role='selection';
+      if(el.matches('.native-quick-action,.financial-update-access'))role='primary';
+      if(el.matches('.destructive,.danger,[data-destructive=true]'))role='danger';
+      el.dataset.uiExtra='dynamic';
+      el.dataset.uiRole=role;
+    }
   }
   const amountSelector='.hero-value,.ring-amount,.goal-side-value,.summary-value,.account-balance,.row-value,.money-ticker-value,.mm3-salary-primary-value,.mm3-payment-primary-value,.mm3-assets-primary-value,.mm3-salary-metric strong,.mm3-atf-metric strong,.mm3-assets-metric strong,.mm3-salary-watch-value strong,.mm3-assets-watch-value strong,.mm3-payment-watch-value strong,.calc-number';
   const fitted=new WeakSet(),fitQueue=new Set();let fitFrame=0;
