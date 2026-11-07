@@ -13,7 +13,7 @@
 .row.press:active{background:var(--fill)}
 .row-main{min-width:0;flex:1}
 .row-title{font-size:15.5px;font-weight:520;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
-.row-sub{font-size:11.5px;color:var(--label2);margin-top:2px;line-height:1.35;text-align:left}
+.row-sub{font-size:13px;color:var(--label2);margin-top:2px;line-height:1.35;text-align:left}
 .row-value{font-size:15px;font-weight:620;text-align:right;font-variant-numeric:tabular-nums;max-width:42%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .chev{font-size:21px;color:var(--label3);margin-left:1px}
 .badge{min-width:20px;height:20px;border-radius:10px;padding:0 6px;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
