@@ -54,7 +54,22 @@ function inspectAll(catalog){
      under44:!!visible&&(rect.width<43.5||rect.height<43.5),
      missingLabel:!!visible&&!label});
  }
- const listedIDs=new Set(catalog.filter(x=>!x.domIdentifier.startsWith('[')&&!x.domIdentifier.includes('
+ const ids=new Set(catalog.filter(item=>item.domIdentifier[0]!=='[').map(item=>item.domIdentifier));
+ const unregistered=[...document.querySelectorAll('button,[role=button]')]
+   .filter(el=>{
+     const rect=el.getBoundingClientRect(),css=getComputedStyle(el);
+     return rect.width>0&&rect.height>0&&css.display!=='none'
+       &&css.visibility!=='hidden'&&!el.closest('[hidden],[inert],[aria-hidden=true]')
+       &&!ids.has(el.id);
+   })
+   .map(el=>{
+     const r=el.getBoundingClientRect();
+     return {id:el.id||'',className:String(el.className||'').slice(0,85),
+       label:(el.getAttribute('aria-label')||el.textContent||'').trim().slice(0,65),
+       width:+r.width.toFixed(1),height:+r.height.toFixed(1),
+       under44:r.width<43.5||r.height<43.5};
+   });
+ const smallText=[];
  const check=[...document.querySelectorAll('.screen.active *, #sheet.show *, .push-view:last-child *, #menuLayer.show *')];
  for(const el of check){
    if(el.children.length||!el.textContent?.trim())continue;
@@ -133,6 +148,7 @@ export async function verifyPhase8Inventory({createPage,passed,root}){
    under44:controls.filter(x=>x.observed.some(y=>y.under44)).map(x=>x.id),
    missingLabel:controls.filter(x=>x.observed.some(y=>y.missingLabel)).map(x=>x.id),
    sceneFailures:scenes.filter(x=>x.error).map(x=>({name:x.name,error:x.error})),
+   unregistered:scenes.flatMap(x=>x.unregistered.map(y=>({...y,scene:x.name}))),
    unregistered:scenes.flatMap(x=>x.unregistered.map(y=>({...y,scene:x.name})) ),
    scenes:scenes.map(x=>({name:x.name,tab:x.tab,viewport:x.viewport,
      actions:x.actions,screenshot:x.screenshot,error:x.error,smallText:x.smallText,
@@ -224,7 +240,8 @@ export async function verifyPhase8Inventory({createPage,passed,root}){
    missingLabel:controls.filter(x=>x.observed.some(y=>y.missingLabel)).map(x=>x.id),
    sceneFailures:scenes.filter(x=>x.error).map(x=>({name:x.name,error:x.error})),
    scenes:scenes.map(x=>({name:x.name,tab:x.tab,viewport:x.viewport,
-     actions:x.actions,screenshot:x.screenshot,error:x.error,smallText:x.smallText})),
+     actions:x.actions,screenshot:x.screenshot,error:x.error,smallText:x.smallText,
+     unregisteredTotal:x.unregisteredTotal,unregistered:x.unregistered})),
    controls
  };
  writeFileSync(resolve(dir,'phase8-304-controls-audit.json'),JSON.stringify(output,null,2));
