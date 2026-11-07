@@ -34,7 +34,7 @@
   function enqueueFit(el){fitQueue.add(el);if(!fitFrame)fitFrame=requestAnimationFrame(fitAmounts)}
   const resizer=typeof ResizeObserver==='function'?new ResizeObserver(entries=>entries.forEach(x=>enqueueFit(x.target))):null;
   function enhance(root){
-    if(!root?.querySelectorAll)return;if(root.matches?.(amountSelector))enqueueFit(root);
+    if(!root?.querySelectorAll)return;enhancePhase8Controls(root);if(root.matches?.(amountSelector))enqueueFit(root);
     root.querySelectorAll('input,select,textarea').forEach(el=>{
       if(!el.getAttribute('aria-label')&&!el.getAttribute('aria-labelledby')&&!el.labels?.length){
         const row=el.closest('.form-section,.form-row,.pro4-parse-row,.goal-category-row');
