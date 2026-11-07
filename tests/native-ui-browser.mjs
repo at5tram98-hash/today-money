@@ -45,6 +45,19 @@ export async function verifyNativeUi({createPage,passed}){
       assert.ok(primary.y+primary.height<goal.y,'main expense control must precede secondary goal details');
       assert.ok(primary.y+primary.height<=dock.y-8,'entire 320px expense button must stay above the fixed tabbar');
       passed('320px primary expense action stays fully visible and above the goal card');
+      await audit.page.locator('#tabbar [data-tab="home"]').click();
+      await audit.page.locator('#screen-today .native-home-mode button').last().click();
+      const title=await audit.page.locator('#monthName').evaluate(el=>({
+        innerWidth:el.clientWidth,scrollWidth:el.scrollWidth,
+        text:el.textContent.trim(),fontSize:getComputedStyle(el).fontSize,
+        box:el.getBoundingClientRect().toJSON()
+      }));
+      const goal=await audit.page.locator('#monthGoal').boundingBox();
+      assert.ok(title.scrollWidth<=title.innerWidth+1,
+        `320px month title overflows into adjacent action: ${JSON.stringify(title)}`);
+      assert.ok(goal&&title.box.right+6<=goal.x,
+        '320px month title must leave a meaningful gap before the first toolbar icon');
+      passed('320px full month title does not overlap the adjacent toolbar icons');
     }
     let checked=0;
     for(const tab of ['home','pay','payments','assets','settings','home']) {
