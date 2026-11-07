@@ -175,19 +175,6 @@
   .sheet-nav{grid-template-columns:80px minmax(0,1fr) 80px}
   .sheet-title{font-size:16px;padding-left:2px;padding-right:2px}
 }
-@media(max-width:340px){
-  #screen-month .month-name-btn{
-    width:auto;
-    max-width:100%;
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    font-size:23px;
-    line-height:1.1;
-    letter-spacing:-.8px;
-    gap:4px;
-  }
-}
 /* === end Final UI verification patch === */
 
 /* === end Final 5/5 hardening === */

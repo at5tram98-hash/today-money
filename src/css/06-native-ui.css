@@ -130,7 +130,7 @@ html.native-keyboard .sheet.full{height:calc(var(--native-viewport-height,100dvh
 @media(max-width:374px){
  .calendar-card{margin-inline:-12px}.day-cell{min-width:44px}
  .large-title{font-size:32px}
- .month-name-btn{font-size:23px;letter-spacing:-.8px;gap:4px;overflow:hidden;text-overflow:ellipsis}
+ .month-name-btn{font-size:clamp(21px,6.5vw,23px);letter-spacing:-.8px;gap:4px;overflow:hidden;text-overflow:ellipsis}
  .month-name-btn svg{width:14px;height:14px}
  .daily-goal{gap:12px;grid-template-columns:minmax(112px,45%) minmax(0,1fr)}
  .today-spend-tap{padding:14px}.ring-amount{font-size:23px}.goal-side-value{font-size:20px}

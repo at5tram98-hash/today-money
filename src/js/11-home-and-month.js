@@ -63,7 +63,7 @@ function openGoalPlannerDaySheet(state,date){
       previewEl.innerHTML=delta&&maintain?`<div class="rebalance-preview"><strong>${delta>0?`+${yen(delta)}`:yen(delta)}</strong> を他の未来日から再配分します。${top.length?`<br>${top.map(x=>`${Number(x.date.slice(5,7))}/${Number(x.date.slice(8,10))} ${yen(x.delta)}`).join('・')}`:''}</div>`:!maintain&&delta?`<div class="rebalance-preview">月間日常予算も ${delta>0?'+':''}${yen(delta)} 変更します。</div>`:''
     };
     const setValue=v=>{
-      value=Math.max(0,Math.round(Number(v||0)/100)*100);
+      value=Math.max(0,Math.round(Number(v)||0));
       const tick=Math.floor(value/1000);
       if(tick!==lastTick){
         lastTick=tick;

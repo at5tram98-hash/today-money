@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import {mkdirSync} from 'node:fs';
+import {verifyAuditFixes} from './audit-fixes-browser.mjs';
 export async function verifyNativeUi({createPage,passed}){
+  await verifyAuditFixes({createPage,passed});
   const {page,context}=await createPage('app',{width:393,height:852,mobile:true});
   await page.waitForFunction(()=>document.getElementById('quickExpense')?.dataset.uiInventory==='HOME-004');
   assert.equal(await page.locator('#quickExpense').getAttribute('data-ui-role'),'primary');
