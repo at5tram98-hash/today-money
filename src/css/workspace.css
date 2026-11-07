@@ -17,7 +17,7 @@ html.dark{--native-secondary:#2c2c2e}
 #app .nav-actions .icon-btn svg{width:22px;height:22px}
 #app .native-home-mode{margin:0 0 12px;padding:3px;border-radius:24px;background:var(--fill)}
 #app .native-home-mode button{border-radius:21px;font-size:15px;font-weight:600;color:var(--label2)}
-#app .native-home-mode button[aria-pressed=true]{background:var(--blue);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 2px 6px var(--action-primary-shadow)}
+#app .native-home-mode button[aria-pressed=true]{background:var(--card);color:var(--label);box-shadow:inset 0 0 0 .5px var(--action-toolbar-border),0 1px 3px rgba(0,0,0,.10)}
 #app .date-navigator{margin:4px 0 8px;min-height:44px;grid-template-columns:44px minmax(0,1fr) 44px}
 #app .date-nav-btn{width:44px;height:44px;border-radius:50%;background:transparent}
 #app .date-nav-label{font-size:15px;font-weight:650}
