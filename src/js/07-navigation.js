@@ -139,10 +139,84 @@ function unreadNotices(){return data.notices.filter(n=>!n.read).length}
 function showAlert(title,message,opts={}){return new Promise(resolve=>{const w=document.getElementById('alertWrap');document.getElementById('alertTitle').textContent=title;document.getElementById('alertMessage').textContent=message;const a=document.getElementById('alertActions');a.innerHTML='';const cancel=document.createElement('button');cancel.textContent=opts.cancelText||'キャンセル';cancel.onclick=()=>{w.classList.remove('show');resolve(false)};const ok=document.createElement('button');ok.textContent=opts.okText||'OK';if(opts.destructive)ok.className='destructive';ok.onclick=()=>{w.classList.remove('show');resolve(true)};a.append(cancel,ok);w.classList.add('show')})}
 function closeMenu(){const m=document.getElementById('menuLayer');m?.classList.remove('show')}function openMenu(anchor,items){const menu=document.getElementById('menuLayer');if(!menu||!anchor)return;closeMenu();const visible=items.filter(x=>!x.disabled),r=anchor.getBoundingClientRect(),width=Math.min(260,Math.max(220,...visible.map(x=>String(x.label||'').length*15+70)));menu.style.width=width+'px';menu.innerHTML=visible.map((x,i)=>`<button type="button" class="menu-item ${x.danger?'danger':''}" data-menu-index="${i}" role="menuitem"><span class="menu-label">${esc(x.label)}</span><span class="menu-icon">${menuSymbol(x.icon)}</span></button>`).join('');menu.style.visibility='hidden';menu.classList.add('show');const h=menu.offsetHeight,left=clamp(r.right-width,8,innerWidth-width-8),spaceBelow=innerHeight-r.bottom-8,top=spaceBelow>=h?Math.min(innerHeight-h-8,r.bottom+5):Math.max(8,r.top-h-5);menu.style.left=left+'px';menu.style.right='auto';menu.style.top=top+'px';menu.style.transformOrigin=`${clamp(r.left+r.width/2-left,18,width-18)}px ${spaceBelow>=h?'0':'100%'}`;menu.style.visibility='';menu.onclick=e=>{const b=e.target.closest('[data-menu-index]');if(!b)return;const item=visible[Number(b.dataset.menuIndex)];closeMenu();item?.action?.()}}document.addEventListener('pointerdown',e=>{const m=document.getElementById('menuLayer');if(m?.classList.contains('show')&&!m.contains(e.target)&&!e.target.closest('.icon-btn'))closeMenu()},{capture:true});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()})
 function markSheetDirty(value=true){sheetDirtyState=!!value}
+/* A nested editor keeps its parent sheet's DOM and event listeners alive.
+   It never commits the parent draft, changes its saved data, or opens a second
+   global sheet. The parent remains hidden, not destroyed, until the child exits. */
+let nestedSheetState=null;
+function markNestedSheetDirty(value=true){if(nestedSheetState)nestedSheetState.dirty=!!value}
+function openNestedSheet(html,binder,options={}){
+  if(nestedSheetState)throw new Error('別の子編集を閉じてください');
+  const sheet=document.getElementById('sheet');
+  if(!sheet?.classList.contains('show'))throw new Error('親の編集画面がありません');
+  const returnFocus=options.returnFocus?.isConnected?options.returnFocus:document.activeElement;
+  const parent=document.createElement('div'),child=document.createElement('div');
+  parent.className='sheet-nested-parent';
+  parent.hidden=true;
+  const controls=[...sheet.children].filter(el=>!el.classList.contains('grabber'));
+  for(const el of controls)parent.appendChild(el);
+  sheet.appendChild(parent);
+  child.className='sheet-nested-content';
+  child.innerHTML=html;
+  sheet.appendChild(child);
+  const state={sheet,parent,child,dirty:false,pending:false,parentDirty:sheetDirtyState,
+    parentMode:sheet.classList.contains('full')?'full':'half',
+    returnFocus,cleanup:null,options};
+  nestedSheetState=state;
+  const dirty=e=>{if(e.target.matches('input,select,textarea,[type=range]'))markNestedSheetDirty()};
+  child.addEventListener('input',dirty,true);
+  child.addEventListener('change',dirty,true);
+  state.cleanup=()=>{child.removeEventListener('input',dirty,true);child.removeEventListener('change',dirty,true)};
+  try{
+    const cleanup=binder?.(child);
+    if(typeof cleanup==='function'){const before=state.cleanup;state.cleanup=()=>{before();cleanup()}}
+  }catch(error){closeNestedSheet();throw error}
+  // Transfer keyboard / VoiceOver focus into the visible child. Keep the
+  // originating parent control for focus restoration on exit.
+  if(!child.contains(document.activeElement))child.querySelector('.sheet-nav button, input, select, textarea')?.focus({preventScroll:true});
+  return child
+}
+function closeNestedSheet(){
+  const state=nestedSheetState;if(!state)return false;
+  nestedSheetState=null;
+  try{state.cleanup?.()}catch(error){console.error('nested sheet cleanup failed',error)}
+  state.child.remove();
+  state.parent.replaceWith(...Array.from(state.parent.childNodes));
+  state.sheet.classList.toggle('full',state.parentMode==='full');
+  state.sheet.classList.toggle('half',state.parentMode==='half');
+  state.sheet.style.transform='';
+  sheetDirtyState=state.parentDirty;
+  // A destructive-confirmation alert is hidden immediately, but its former
+  // focused button may still own focus until the browser's next paint.
+  // Restore now and again after paint only if focus is still stranded.
+  const origin=state.returnFocus;
+  const restore=()=>{
+    if(nestedSheetState||!state.sheet.classList.contains('show')||!origin?.isConnected)return;
+    origin.focus({preventScroll:true});
+  };
+  restore();
+  requestAnimationFrame(()=>{
+    // Hidden alert buttons may hand focus to a generic DIV, not <body>.
+    // Do not assume that only document.body represents lost focus.
+    if(document.activeElement!==origin)restore()
+  });
+  return true
+}
+async function requestNestedSheetClose(){
+  const state=nestedSheetState;if(!state||state.pending)return;
+  state.pending=true;
+  try{
+    if(state.dirty&&!await showAlert(
+      state.options.discardTitle||'子編集の変更を破棄しますか？',
+      state.options.discardMessage||'元の編集内容は保持されます。',
+      {destructive:true,okText:state.options.discardOk||'変更を破棄',cancelText:'編集を続ける'}))return;
+    if(nestedSheetState===state)closeNestedSheet()
+  }finally{state.pending=false}
+}
 let nativeSheetClosePending=false;
 async function requestSheetClose(){
   if(nativeSheetClosePending)return;
   if(document.getElementById('calculator').classList.contains('show')){closeCalc();return}
+  if(nestedSheetState)return requestNestedSheetClose();
   const sheet=document.getElementById('sheet');if(!sheet.classList.contains('show')||sheet.dataset.commitPending==='true')return;
   nativeSheetClosePending=true;const revision=sheet.dataset.nativeRevision;
   try{if(sheetDirtyState&&!await showAlert('変更を破棄しますか？','まだ保存していない変更があります。',{destructive:true,okText:'破棄',cancelText:'戻る'}))return;if(sheet.dataset.nativeRevision===revision)closeSheet()}finally{nativeSheetClosePending=false}
@@ -158,8 +232,8 @@ function installSheetDrag(sheet){
   grabber.addEventListener('pointerdown',down);grabber.addEventListener('pointermove',move);grabber.addEventListener('pointerup',finish);grabber.addEventListener('pointercancel',cancel);
   return()=>{cancel();grabber.removeEventListener('pointerdown',down);grabber.removeEventListener('pointermove',move);grabber.removeEventListener('pointerup',finish);grabber.removeEventListener('pointercancel',cancel)}
 }
-function openSheet(html,mode='half',binder){if(sheetCleanup)try{sheetCleanup()}catch(e){}if(sheetDragCleanup)try{sheetDragCleanup()}catch(e){}const s=document.getElementById('sheet'),d=document.getElementById('dim');sheetDirtyState=false;s.dataset.nativeRevision=String((Number(s.dataset.nativeRevision)||0)+1);s.className=`sheet ${mode}`;s.style.transform='';s.innerHTML=`<div class="grabber"></div>${html}`;d.classList.add('show');s.classList.add('show');d.onclick=requestSheetClose;const cleanup=binder?.(s),dirty=e=>{if(e.target.closest('.sheet-nav'))return;if(e.target.matches('input,select,textarea,[type=range]'))sheetDirtyState=true};s.addEventListener('input',dirty,true);s.addEventListener('change',dirty,true);sheetDragCleanup=installSheetDrag(s);sheetCleanup=()=>{s.removeEventListener('input',dirty,true);s.removeEventListener('change',dirty,true);try{cleanup?.()}catch(e){}}}
-function closeSheet(){const s=document.getElementById('sheet');sheetDirtyState=false;s.classList.remove('show');s.style.transform='';if(!document.getElementById('calculator').classList.contains('show'))document.getElementById('dim').classList.remove('show');if(sheetDragCleanup)try{sheetDragCleanup()}catch(e){}sheetDragCleanup=null;if(sheetCleanup)try{sheetCleanup()}catch(e){}sheetCleanup=null;setTimeout(()=>{if(!s.classList.contains('show'))s.innerHTML=''},310)}
+function openSheet(html,mode='half',binder){if(nestedSheetState)closeNestedSheet();if(sheetCleanup)try{sheetCleanup()}catch(e){}if(sheetDragCleanup)try{sheetDragCleanup()}catch(e){}const s=document.getElementById('sheet'),d=document.getElementById('dim');sheetDirtyState=false;s.dataset.nativeRevision=String((Number(s.dataset.nativeRevision)||0)+1);s.className=`sheet ${mode}`;s.style.transform='';s.innerHTML=`<div class="grabber"></div>${html}`;d.classList.add('show');s.classList.add('show');d.onclick=requestSheetClose;const cleanup=binder?.(s),dirty=e=>{if(e.target.closest('.sheet-nav'))return;if(e.target.matches('input,select,textarea,[type=range]'))sheetDirtyState=true};s.addEventListener('input',dirty,true);s.addEventListener('change',dirty,true);sheetDragCleanup=installSheetDrag(s);sheetCleanup=()=>{s.removeEventListener('input',dirty,true);s.removeEventListener('change',dirty,true);try{cleanup?.()}catch(e){}}}
+function closeSheet(){if(nestedSheetState)closeNestedSheet();const s=document.getElementById('sheet');sheetDirtyState=false;s.classList.remove('show');s.style.transform='';if(!document.getElementById('calculator').classList.contains('show'))document.getElementById('dim').classList.remove('show');if(sheetDragCleanup)try{sheetDragCleanup()}catch(e){}sheetDragCleanup=null;if(sheetCleanup)try{sheetCleanup()}catch(e){}sheetCleanup=null;setTimeout(()=>{if(!s.classList.contains('show'))s.innerHTML=''},310)}
 function pruneRetiredPushViews(){const retained=new Set(pushStack.map(view=>view.id));document.querySelectorAll('#pushLayer .push-view').forEach(view=>{if(!retained.has(view.id))view.remove()})}
 function pushView(title,html,binder,right='',backOverride=null){pruneRetiredPushViews();const id=uid('view'),v=document.createElement('section'),tabNames={today:'今日',month:'今月',pay:'給与',payments:'支払い',assets:'資産',settings:'設定'},parent=pushStack[pushStack.length-1],backLabel=backOverride||parent?.title||tabNames[activeTab]||'戻る';v.className='push-view';if(activeTab==='settings')v.classList.add('settings-detail-view');v.id=id;v.innerHTML=`<div class="push-nav"><button class="back-btn" aria-label="${esc(backLabel)}に戻る">${icon('chevronLeft')}<span>${esc(backLabel)}</span></button><div class="push-title">${esc(title)}</div><div class="push-right">${right}</div></div><div class="push-body">${html}</div>`;document.getElementById('pushLayer').appendChild(v);pushStack.push({id,binder,title,backLabel});v.querySelector('.back-btn').onclick=()=>{if(pushStack.at(-1)?.id===id)popView()};requestAnimationFrame(()=>v.classList.add('show'));installInteractiveBack(v,id);binder?.(v);return v}
 function popView(){if(goalPlannerState?.locked)return false;const x=pushStack.pop();if(!x)return false;const v=document.getElementById(x.id);v?.classList.remove('show');if(v){v.style.pointerEvents='none';v.inert=true;v.setAttribute('aria-hidden','true');if(typeof v.__dispose==='function')v.__dispose()}if(goalPlannerState?.viewId===x.id)goalPlannerState=null;setTimeout(()=>v?.remove(),300);return true}

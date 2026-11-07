@@ -101,7 +101,69 @@ async function resetAllData({keepSeed=true}={}){
     trackingDate=ymd();currentMonth=payViewMonth=assetBillingMonth=ym();monthPlanEditMode=false
   }finally{mm3PendingAsyncCommit=false}
 }
-async function openDataSettings(){const recoveryCount=(await mm3RecoveryList()).length;pushView('データ管理',`<div class="group"><button class="row press" id="pdfExport">${settingsIconHtml('upload','var(--red)')}<div class="row-main"><div class="row-title">PDFで書き出す</div><div class="row-sub">PDFを生成して共有</div></div><span class="chev">›</span></button><button class="row press" id="backupExport">${settingsIconHtml('upload','var(--green)')}<div class="row-main"><div class="row-title">バックアップ作成</div><div class="row-sub">JSONで全データを保存</div></div><span class="chev">›</span></button><button class="row press" id="backupImport">${settingsIconHtml('download','var(--blue)')}<div class="row-main"><div class="row-title">バックアップを復元</div><div class="row-sub">復元前の現在データは自動保護</div></div><span class="chev">›</span></button>${recoveryCount?`<button class="row press" id="recoveryExport">${settingsIconHtml('download','var(--orange)')}<div class="row-main"><div class="row-title">復旧用データを書き出す</div><div class="row-sub">端末内に ${recoveryCount}件の保護コピーがあります</div></div><span class="chev">›</span></button>`:''}</div><div class="group"><button class="row press" id="deleteAll">${settingsIconHtml('trash','var(--red)')}<div class="row-main"><div class="row-title red">全データ削除</div><div class="row-sub">取引・設定・Gmail認証・復旧コピーを削除</div></div></button></div><input type="file" id="importFile" accept="application/json,.json" class="hidden">`,root=>{root.querySelector('#pdfExport').onclick=exportPdf;root.querySelector('#backupExport').onclick=exportBackup;root.querySelector('#backupImport').onclick=()=>root.querySelector('#importFile').click();root.querySelector('#recoveryExport')?.addEventListener('click',exportLatestRecovery);root.querySelector('#importFile').onchange=importBackup;root.querySelector('#deleteAll').onclick=async()=>{if(!await showAlert('すべてのデータを削除しますか？','Gmail認証と復旧用コピーを含む端末内データを削除します。',{destructive:true,okText:'続ける'}))return;const keep=await showAlert('初期登録データを残しますか？','「初期データを残す」ではGU・無印良品・銀行・カード等を再作成します。「完全に空にする」では空の状態にします。',{okText:'初期データを残す',cancelText:'完全に空にする'});try{await resetAllData({keepSeed:keep})}catch(e){console.error(e);showAlert('削除できませんでした','保存処理に失敗したため、元のデータを保持しています。');return}while(pushStack.length){const x=pushStack.pop();document.getElementById(x.id)?.remove()}renderAll()}})}
+function openDeleteAllConfirmation(){
+  // One modal owns the entire destructive decision. Cancelling or closing it
+  // must never be interpreted as choosing an alternative deletion mode.
+  let keepSeed=true;
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="deleteAllCancel">キャンセル</button><div class="sheet-title">全データ削除</div><span style="width:64px"></span></div>
+    <div class="sheet-body">
+      <div class="form-group-title">削除する内容</div>
+      <div class="form-card"><div class="form-section"><strong class="red">この端末の家計データを削除します</strong><p class="form-helper">取引・給与・銀行・カード・設定・Gmail認証と復旧用コピーが対象です。削除前に必要なバックアップを保存してください。</p></div></div>
+      <div class="form-group-title">削除後の初期状態</div>
+      <div class="seg" id="deleteMode" aria-label="削除後の初期状態">
+        <button type="button" id="deleteModeKeep" aria-pressed="true">初期データを残す</button>
+        <button type="button" id="deleteModeEmpty" aria-pressed="false">完全に空にする</button>
+      </div>
+      <p class="form-helper" id="deleteModeDescription">初期登録用の勤務先・口座・カードの例を再作成します。現在の実績は削除されます。</p>
+      <div class="form-group-title">最終確認</div>
+      <div class="form-card"><div class="form-section">
+        <label class="form-label" for="deleteConfirmPhrase">続行する場合は「削除」と入力</label>
+        <input type="text" class="field" id="deleteConfirmPhrase" autocomplete="off" autocapitalize="off" placeholder="削除" aria-describedby="deleteModeDescription">
+      </div></div>
+      <button type="button" class="secondary danger" id="deleteConfirmProceed" disabled>選択した方法で全データを削除</button>
+    </div>`,'full',panel=>{
+    const keep=panel.querySelector('#deleteModeKeep'),empty=panel.querySelector('#deleteModeEmpty'),
+      phrase=panel.querySelector('#deleteConfirmPhrase'),submit=panel.querySelector('#deleteConfirmProceed'),
+      description=panel.querySelector('#deleteModeDescription');
+    const redraw=()=>{
+      keep.setAttribute('aria-pressed',String(keepSeed));
+      empty.setAttribute('aria-pressed',String(!keepSeed));
+      keep.classList.toggle('on',keepSeed);
+      empty.classList.toggle('on',!keepSeed);
+      description.textContent=keepSeed
+        ?'初期登録用の勤務先・口座・カードの例を再作成します。現在の実績は削除されます。'
+        :'取引や設定を含む全データを削除し、初期登録の例も再作成しません。';
+      submit.disabled=phrase.value.trim()!=='削除';
+    };
+    keep.onclick=()=>{keepSeed=true;markSheetDirty();redraw()};
+    empty.onclick=()=>{keepSeed=false;markSheetDirty();redraw()};
+    panel.querySelector('#deleteAllCancel').onclick=requestSheetClose;
+    phrase.oninput=redraw;
+    submit.onclick=async()=>{
+      if(phrase.value.trim()!=='削除'||submit.disabled)return;
+      const mode=keepSeed?'初期データを残して初期化':'完全に空にする';
+      const approved=await showAlert('全データ削除の最終確認',
+        `端末内の取引・入出金・銀行・カード・設定・Gmail認証と復旧コピーを削除します。削除方法：${mode}。この操作は取り消せません。`,
+        {destructive:true,okText:'全データを削除',cancelText:'戻る'});
+      if(!approved)return;
+      submit.disabled=true;
+      try{
+        await resetAllData({keepSeed});
+        closeSheet();
+        while(pushStack.length){const view=pushStack.pop();document.getElementById(view.id)?.remove()}
+        renderAll();
+        feedback.success();
+      }catch(error){
+        console.error('reset all data failed',error);
+        showAlert('削除できませんでした','保存に失敗したため、元のデータを保持しています。');
+      }finally{
+        if(submit.isConnected)redraw()
+      }
+    };
+    redraw()
+  })
+}
+async function openDataSettings(){const recoveryCount=(await mm3RecoveryList()).length;pushView('データ管理',`<div class="group"><button class="row press" id="pdfExport">${settingsIconHtml('upload','var(--red)')}<div class="row-main"><div class="row-title">PDFで書き出す</div><div class="row-sub">PDFを生成して共有</div></div><span class="chev">›</span></button><button class="row press" id="backupExport">${settingsIconHtml('upload','var(--green)')}<div class="row-main"><div class="row-title">バックアップ作成</div><div class="row-sub">JSONで全データを保存</div></div><span class="chev">›</span></button><button class="row press" id="backupImport">${settingsIconHtml('download','var(--blue)')}<div class="row-main"><div class="row-title">バックアップを復元</div><div class="row-sub">復元前の現在データは自動保護</div></div><span class="chev">›</span></button>${recoveryCount?`<button class="row press" id="recoveryExport">${settingsIconHtml('download','var(--orange)')}<div class="row-main"><div class="row-title">復旧用データを書き出す</div><div class="row-sub">端末内に ${recoveryCount}件の保護コピーがあります</div></div><span class="chev">›</span></button>`:''}</div><div class="group"><button class="row press" id="deleteAll">${settingsIconHtml('trash','var(--red)')}<div class="row-main"><div class="row-title red">全データ削除</div><div class="row-sub">取引・設定・Gmail認証・復旧コピーを削除</div></div></button></div><input type="file" id="importFile" accept="application/json,.json" class="hidden">`,root=>{root.querySelector('#pdfExport').onclick=exportPdf;root.querySelector('#backupExport').onclick=exportBackup;root.querySelector('#backupImport').onclick=()=>root.querySelector('#importFile').click();root.querySelector('#recoveryExport')?.addEventListener('click',exportLatestRecovery);root.querySelector('#importFile').onchange=importBackup;root.querySelector('#deleteAll').onclick=openDeleteAllConfirmation})}
 async function exportPdf(){try{const blob=await buildPdfReport(ym()),file=new File([blob],`MyMoney2-${ym()}.pdf`,{type:'application/pdf'});if(navigator.canShare?.({files:[file]})){await navigator.share({title:`My Money 2.0 ${monthLabel(ym())} 家計レポート`,files:[file]});return}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}catch(e){console.error(e);showAlert('PDFを作成できませんでした','ブラウザの共有機能またはファイル保存を利用できませんでした。')}}
 async function canvasJpegBytes(canvas){const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('JPEG変換失敗')),'image/jpeg',.9));return new Uint8Array(await blob.arrayBuffer())}
 function pdfAscii(str){return new TextEncoder().encode(str)}

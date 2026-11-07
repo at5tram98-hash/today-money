@@ -8,12 +8,14 @@ import {verifyFinalUiBrowser} from './final-ui-browser.mjs';
 import {verifyUiUpdate} from './ui-update-browser.mjs';
 import {verifyClosingRefinements} from './closing-refinements-browser.mjs';
 import {verifyNativeUi} from './native-ui-browser.mjs';
+import {verifyPhase8Inventory} from './phase8-control-audit-browser.mjs';
+import {verifyPerControlActions} from './phase8-action-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
 build();
 const results = [];
 const passed = name => {results.push({name, status: 'passed'}); console.log(`PASS ${name}`);};
-const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,openAcfDetail,openDailyGoalPlanner,openMonthlyGoalPlanner,openFinancialUpdates,financialUpdateRows,acfDisplayRows,acfDisplayValue,ACF_DAY_FIELDS,buildCashFlowForecast,getGoalState:()=>clone(goalPlannerState),recordDayClosing,cancelDayClosing,dayClosingAvailable,openDayClosingCancellation,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
+const hook = `globalThis.__mm3Test={getData:()=>clone(data),getState:()=>({activeTab,currentMonth,payViewMonth,assetBillingMonth}),getGuardViolations:()=>clone(mm3StateGuardViolations),replaceData:snapshot=>safeCommitAsync(()=>restoreDataSnapshot(normalizeData(snapshot))),configureAcf:settings=>safeCommitAsync(()=>Object.assign(data.acfSettings,settings)),safeCommitAsync,safeCommit,saveAsync,normalizeData,recordExpense,recordRefund,recordIncome,buildCashFlowForecastCore,buildAcfBaseContext,acfSimulateFlexiblePlan,simulateCombinedSpendCore,acfAllocateFlexiblePlan,acfDefaultSettings,switchTab,renderAll,openSalaryRecordEdit,openQuickExpense,openBankDetail,openAddCard,openAcf,openNotices,addNotice,appMaintenance,openDataSettings,buildPdfReport,enableMM3StateGuard,closeSheet,popView,openCalculator,closeCalc,calcKey,calcFinalValue,calcAssistResult,openDisplayMonthPicker,openQuickBank,openIncomeEditor,openDayClosingJournal,dayClosingReviewItems,dayClosingApprovalSignature,runWithBusy,beginBusy,endBusy,openDayClosing,openAcfDetail,openLargeExpenseDetail,openQuickRepeat,openAddBank,openAddCard,openAddDebit,openSalaryAdd,openFixedPayment,openDailyCorrectionDetail,openTempIncomeHistory,openQuickCardBilling,openInitialValues,openSmartInputSearch,openEventGoals,openEventGoalEditor,openReasonAnalysis,openMonthCloseReview,openFavoritesEditor,openTagsManager,openTagEdit,openMoneyTimeline,openSalaryAllocationPicker,openTransferPlans,openTransferPlanEditor,openBudgetRebalance,openAcfSetup,openAcfSimulator,openAcfSettings,openDayClosingJournal,openAssetBillingMonthPicker,mm3AtfForMonth,mm3AtfHorizonEnd,openDailyGoalPlanner,openMonthlyGoalPlanner,openFinancialUpdates,financialUpdateRows,acfDisplayRows,acfDisplayValue,ACF_DAY_FIELDS,buildCashFlowForecast,getGoalState:()=>clone(goalPlannerState),recordDayClosing,cancelDayClosing,dayClosingAvailable,openDayClosingCancellation,dayClosingStatus,dayClosingSignature,buildPushSummary,openNotificationSettings};\n`;
 const hookMarker = 'try{await saveAsync({snapshot:data})}catch';
 const baselineRoot = process.env.MM3_BASELINE_DIR;
 const financialBaselineRoot=process.env.MM3_FINANCIAL_BASELINE_DIR;
@@ -83,6 +85,11 @@ async function finishDayClosing(page){
 }
 
 try {
+  if(process.env.MM3_NATIVE_ONLY==='1'){
+    await verifyNativeUi({createPage,passed});
+    await verifyPhase8Inventory({createPage,passed,root});
+    await verifyPerControlActions({createPage,passed,root});
+  }else{
   mkdirSync(resolve(root,'test-results'),{recursive:true});
   if(!process.env.MM3_CLOSING_REFINEMENTS_ONLY&&!process.env.MM3_DAY_CLOSING_ONLY&&!process.env.MM3_FINAL_UI_ONLY){
   for (const width of [320, 390, 1440]) for (const appearance of ['light', 'dark']) {
@@ -374,6 +381,8 @@ try {
   let renewals=0;await lifecycle.context.route('https://money.push-test.example/v1/subscription',route=>{renewals++;assert.equal(route.request().headers().authorization,'Bearer test-device-token');return route.fulfill({json:{ok:true}})});
   const recovered=await lp.evaluate(async connection=>{const subscription={endpoint:'https://web.push.apple.com/test-new',options:{},toJSON(){return{endpoint:this.endpoint,keys:{}}}};const registration={pushManager:{getSubscription:async()=>null,subscribe:async()=>subscription}};return(await globalThis.MoneyPushConnection.reconcile(registration,connection)).connection},device);assert.equal(recovered.endpoint,'https://web.push.apple.com/test-new');assert.equal(recovered.token,device.token);assert.equal(renewals,1);passed('expired or missing subscriptions reconnect with the existing device token');
   const keyGuard=await lp.evaluate(async connection=>{let unsubscribed=false,subscribed=false;const old={endpoint:connection.endpoint,options:{applicationServerKey:new Uint8Array(65).fill(7).buffer},unsubscribe:async()=>{unsubscribed=true}};try{await globalThis.MoneyPushConnection.reconcile({pushManager:{getSubscription:async()=>old,subscribe:async()=>{subscribed=true}}},connection)}catch(error){return{error:error.message,unsubscribed,subscribed}}},device);assert.ok(keyGuard.error.includes('公開鍵'));assert.equal(keyGuard.unsubscribed,false);assert.equal(keyGuard.subscribed,false);assert.equal(renewals,1);passed('a changed VAPID key cannot silently destroy or redirect a working subscription');await lifecycle.context.close();
+
+  }
 
   assert.deepEqual(errors, []);
   passed('no JavaScript exceptions or local HTTP failures in tested flows');

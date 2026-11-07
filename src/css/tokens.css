@@ -3,7 +3,7 @@
   color-scheme: light;
   --bg: #f2f2f7; --card: #fff;
   --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2);
-  --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4);
+  --label: #000; --label2: #62626a; --label3: #73737d;
   --sep: rgba(60,60,67,.18);
   --blue: #007aff; --green: #34c759; --yellow: #ffcc00;
   --orange: #ff9500; --red: #ff3b30; --purple: #af52de; --teal: #30b0c7;
@@ -17,12 +17,24 @@
   --glass-shadow: 0 10px 30px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.06),0 0 0 .5px rgba(0,0,0,.08);
   --capsule-bg: rgba(120,120,128,.16); --tab-inactive: #48484d;
   --native-glass: rgba(249,249,249,.86);
+  /* Phase 8: button roles share tokens, never a single universal fill. */
+  --action-soft: rgba(0,122,255,.085);
+  --action-soft-border: rgba(0,122,255,.16);
+  --action-pressed: rgba(0,122,255,.13);
+  --action-hover: rgba(0,122,255,.07);
+  --action-toolbar: rgba(255,255,255,.66);
+  --action-toolbar-border: rgba(60,60,67,.11);
+  --action-primary-shadow: rgba(0,122,255,.19);
+  --action-danger-soft: rgba(255,59,48,.085);
+  --action-focus: #007aff;
+  --action-highlight: rgba(255,255,255,.78);
+  --action-speed: .16s;
 }
 html.dark {
   color-scheme: dark;
   --bg: #000; --card: #1c1c1e;
   --fill: rgba(118,118,128,.24); --fill2: rgba(118,118,128,.36);
-  --label: #fff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.4);
+  --label: #fff; --label2: #bdbdc6; --label3: #a4a4af;
   --sep: rgba(84,84,88,.6);
   --blue: #0a84ff; --green: #30d158; --yellow: #ffd60a;
   --orange: #ff9f0a; --red: #ff453a; --purple: #bf5af2; --teal: #64d2ff;
@@ -31,4 +43,14 @@ html.dark {
   --glass-shadow: 0 10px 30px rgba(0,0,0,.55),0 0 0 .5px rgba(0,0,0,.6);
   --capsule-bg: rgba(255,255,255,.14); --tab-inactive: #c7c7cc;
   --native-glass: rgba(22,22,24,.88);
+  --action-soft: rgba(10,132,255,.16);
+  --action-soft-border: rgba(10,132,255,.25);
+  --action-pressed: rgba(10,132,255,.23);
+  --action-hover: rgba(10,132,255,.13);
+  --action-toolbar: rgba(44,44,46,.78);
+  --action-toolbar-border: rgba(255,255,255,.15);
+  --action-primary-shadow: rgba(10,132,255,.23);
+  --action-danger-soft: rgba(255,69,58,.14);
+  --action-focus: #0a84ff;
+  --action-highlight: rgba(255,255,255,.11);
 }
