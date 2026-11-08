@@ -140,3 +140,12 @@ test('304 original memory controls are present with explicit UI roles and priori
   assert.deepEqual(byId.get('BACKUP-210').slice(2,4),['P0','danger']);
   assert.match(read('src/css/workspace.css'),/button\[data-ui-inventory\]/);
 });
+
+
+test('backup validation rejects version-only files while retaining empty and older financial backups', () => {
+  const validate=vm.runInNewContext(read('src/js/00-data-model.js')+'\nvalidateBackupPayload');
+  for(const payload of [{version:18},{version:18,unrelated:[]},{version:18,profile:{name:'not a backup'}},{version:18,transactions:'invalid'}]){
+    const result=validate(payload);assert.equal(result.ok,false,JSON.stringify(payload));
+  }
+  for(const payload of [{version:18,transactions:[]},{version:1,banks:[]},{version:18,banks:[{id:'b',name:'Bank',balance:12345}],transactions:[]}])assert.equal(validate(payload).ok,true);
+});

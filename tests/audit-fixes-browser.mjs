@@ -201,4 +201,35 @@ export async function verifyAuditFixes({createPage,passed}){
     passed('AUD8-011: invalid budgets disable the actual approval button for keyboard and assistive technology');
   }finally{await disabledApproval.context.close()}
 
+  const backup=await createPage('app',{width:393,height:852,mobile:true,localOnly:true});
+  try{
+    const page=backup.page;await page.evaluate(()=>globalThis.__mm3Test.openDataSettings());
+    await page.locator('#backupImport').waitFor();
+    const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    const choose=async payload=>{
+      const chooser=page.waitForEvent('filechooser');await page.locator('#backupImport').click();
+      await(await chooser).setFiles({name:'audit-backup.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(payload))});
+      await page.locator('#alertWrap.show').waitFor();
+    };
+    await choose({version:before.version});
+    assert.equal(await page.locator('#alertTitle').innerText(),'復元できませんでした');
+    assert.match(await page.locator('#alertMessage').innerText(),/バックアップデータがありません/);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+    await page.keyboard.press('Escape');
+    const payload=structuredClone(before);payload.profile.name='Backup regression fixture';
+    await choose(payload);assert.equal(await page.locator('#alertTitle').innerText(),'バックアップを復元しますか？');
+    await page.keyboard.press('Escape');
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+    await choose(payload);await page.locator('#alertActions').getByRole('button',{name:'復元',exact:true}).click();
+    await page.waitForFunction(()=>globalThis.__mm3Test.getData().profile.name==='Backup regression fixture');
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData().banks),before.banks);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData().transactions),before.transactions);
+    const recovery=await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith('myMoney2_recovery_v1_')).map(k=>JSON.parse(localStorage.getItem(k))));
+    assert.ok(recovery.some(x=>JSON.stringify(x)===JSON.stringify(before)));
+    await page.reload();await page.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));
+    assert.equal(await page.evaluate(()=>globalThis.__mm3Test.getData().profile.name),'Backup regression fixture');
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData().banks),before.banks);
+    passed('AUD8-012: version-only backups are rejected without writes; valid restore cancels safely, protects the original and persists every bank balance');
+  }finally{await backup.context.close()}
+
 }
