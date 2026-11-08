@@ -3,6 +3,17 @@ const MM3_UI_PREFS_KEY='mymoney3_ui_prefs_v1';
 function mm3MotionReduced(){return matchMedia('(prefers-reduced-motion: reduce)').matches||data.feedbackSettings?.motion===false||document.documentElement.classList.contains('motion-off')}
 function mm3LoadUiPrefs(){try{return JSON.parse(localStorage.getItem(MM3_UI_PREFS_KEY)||'{}')||{}}catch(e){return{}}}
 function mm3SaveUiPrefs(patch={}){try{const next={...mm3LoadUiPrefs(),...patch};localStorage.setItem(MM3_UI_PREFS_KEY,JSON.stringify(next));return next}catch(e){return mm3LoadUiPrefs()}}
+const MM3_UI_PREF_DEFAULTS=Object.freeze({salaryChartMode:mm3SalaryChartMode,salaryTrendRange:mm3SalaryTrendRange,assetChartMode:mm3AssetChartMode,assetChartRange:mm3AssetChartRange,assetSortMode:mm3AssetSortMode});
+function mm3ResetUiPrefs(){
+  mm3AssetExitManualMode();
+  mm3SalaryChartMode=MM3_UI_PREF_DEFAULTS.salaryChartMode;
+  mm3SalaryTrendRange=MM3_UI_PREF_DEFAULTS.salaryTrendRange;
+  mm3AssetChartMode=MM3_UI_PREF_DEFAULTS.assetChartMode;
+  mm3AssetChartRange=MM3_UI_PREF_DEFAULTS.assetChartRange;
+  mm3AssetSortMode=MM3_UI_PREF_DEFAULTS.assetSortMode;
+  mm3AssetChartState=null;
+  localStorage.removeItem(MM3_UI_PREFS_KEY);
+}
 const mm3UiPrefs=mm3LoadUiPrefs();
 if(['share','trend'].includes(mm3UiPrefs.salaryChartMode))mm3SalaryChartMode=mm3UiPrefs.salaryChartMode;
 if(['1M','3M','6M','1Y','ALL'].includes(mm3UiPrefs.salaryTrendRange))mm3SalaryTrendRange=mm3UiPrefs.salaryTrendRange;

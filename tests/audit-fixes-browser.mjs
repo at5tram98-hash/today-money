@@ -289,4 +289,27 @@ export async function verifyAuditFixes({createPage,passed}){
     passed('AUD8-014: canceled manual account drags preserve DOM order and preferences; released drops persist without changing balances');
   }finally{await assetDrag.context.close()}
 
+  const resetPrefs=await createPage('app',{width:393,height:852,mobile:true,localOnly:true});
+  try{
+    const page=resetPrefs.page;await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));
+    await page.locator('#mm3AssetSort').click();await page.locator('#menuLayer button').filter({hasText:'手動'}).click();
+    assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem('mymoney3_ui_prefs_v1')).assetManualOrder.length>0));
+    await page.reload();await page.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));
+    await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));assert.match(await page.locator('#mm3AssetSort').innerText(),/手動/);
+    await page.evaluate(()=>{localStorage.setItem('audit_unrelated_app_key','keep');return globalThis.__mm3Test.openDataSettings()});
+    await page.locator('#deleteAll').click();await page.locator('#deleteModeKeep').click();await page.locator('#deleteConfirmPhrase').fill('削除');
+    await page.locator('#deleteConfirmProceed').click();await page.locator('#alertWrap.show').waitFor();
+    await page.locator('#alertActions').getByRole('button',{name:'全データを削除',exact:true}).click();
+    await page.locator('#sheet.show').waitFor({state:'hidden'});
+    assert.equal(await page.evaluate(()=>localStorage.getItem('mymoney3_ui_prefs_v1')),null);
+    assert.equal(await page.evaluate(()=>localStorage.getItem('audit_unrelated_app_key')),'keep');
+    assert.ok(await page.evaluate(()=>globalThis.__mm3Test.getData().banks.length>0));
+    assert.equal(await page.evaluate(()=>globalThis.__mm3Test.getData().transactions.length),0);
+    await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));assert.match(await page.locator('#mm3AssetSort').innerText(),/残高順/);
+    await page.reload();await page.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));
+    assert.equal(await page.evaluate(()=>localStorage.getItem('mymoney3_ui_prefs_v1')),null);
+    assert.equal(await page.evaluate(()=>localStorage.getItem('audit_unrelated_app_key')),'keep');
+    passed('AUD8-015: reset with sample data removes old UI preferences, restores live defaults and preserves unrelated storage');
+  }finally{await resetPrefs.context.close()}
+
 }

@@ -94,6 +94,7 @@ async function resetAllData({keepSeed=true}={}){
     data=mm3StateGuardMode?mm3GuardData(fresh):fresh;
     if(mm3Db){try{localStorage.removeItem(APP_KEY);localStorage.removeItem(MM3_STORAGE_REV_KEY);localStorage.removeItem(MM3_STORAGE_SIG_KEY);mm3LocalMirrorAllowed=true}catch(e){console.warn('old local backup cleanup failed',e)}}
     try{await mm3ClearRecovery()}catch(e){console.error('recovery deletion failed',e);showToast('データは削除しましたが、復旧用コピーを削除できませんでした',{tone:'error'})}
+    try{mm3ResetUiPrefs()}catch(e){console.error('display settings deletion failed',e);showToast('データは削除しましたが、表示設定を削除できませんでした。再度削除をお試しください',{tone:'error',duration:7000})}
     try{localStorage.removeItem(LEGACY_KEY)}catch(e){}
     const token=gmailAccessToken;
     gmailAccessToken='';gmailTokenExpiresAt=0;

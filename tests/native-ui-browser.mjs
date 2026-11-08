@@ -221,6 +221,10 @@ export async function verifyNativeUi({createPage,passed}){
   // P0 / C04: dangerous financial reset requires mode, exact phrase and
   // a separate destructive confirmation; every cancellation preserves data.
   const deleteReview=await createPage('app',{width:393,height:852,mobile:true});
+  await deleteReview.page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));
+  await deleteReview.page.locator('#mm3AssetSort').click();await deleteReview.page.locator('#menuLayer button').filter({hasText:'手動'}).click();
+  const reviewPrefs=await deleteReview.page.evaluate(()=>localStorage.getItem('mymoney3_ui_prefs_v1'));
+  assert.ok(JSON.parse(reviewPrefs).assetManualOrder.length>0);
   const snapshotBefore=await deleteReview.page.evaluate(()=>globalThis.__mm3Test.getData());
   await deleteReview.page.evaluate(()=>globalThis.__mm3Test.openDataSettings());
   assert.equal(await deleteReview.page.locator('#deleteAll').getAttribute('data-ui-role'),'danger');
@@ -245,6 +249,7 @@ export async function verifyNativeUi({createPage,passed}){
   await deleteReview.page.locator('#alertActions button').filter({hasText:'破棄'}).click();
   await deleteReview.page.locator('#deleteConfirmPhrase').waitFor({state:'detached'});
   assert.deepEqual(await deleteReview.page.evaluate(()=>globalThis.__mm3Test.getData()),snapshotBefore);
+  assert.equal(await deleteReview.page.evaluate(()=>localStorage.getItem('mymoney3_ui_prefs_v1')),reviewPrefs);
   passed('P0 delete-all requires mode and exact phrase; final cancel and sheet cancel preserve all stored financial records');
   await deleteReview.context.close();
 
@@ -253,6 +258,9 @@ export async function verifyNativeUi({createPage,passed}){
   const deleteFixture=await createPage('app',{width:393,height:852,mobile:true});
   const seeded=await deleteFixture.page.evaluate(()=>globalThis.__mm3Test.getData());
   assert.ok(seeded.banks.length>0,'fixture must start with sample bank records');
+  await deleteFixture.page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));
+  await deleteFixture.page.locator('#mm3AssetSort').click();await deleteFixture.page.locator('#menuLayer button').filter({hasText:'手動'}).click();
+  assert.ok(await deleteFixture.page.evaluate(()=>JSON.parse(localStorage.getItem('mymoney3_ui_prefs_v1')).assetManualOrder.length>0));
   await deleteFixture.page.evaluate(()=>globalThis.__mm3Test.openDataSettings());
   await deleteFixture.page.locator('#deleteAll').click();
   await deleteFixture.page.locator('#deleteModeEmpty').click();
@@ -265,6 +273,12 @@ export async function verifyNativeUi({createPage,passed}){
   for(const key of ['transactions','incomes','banks','cards','debitCards','salaryRecords','fixedPayments','largeExpensePlans']){
     assert.equal(erased[key].length,0,`complete reset should clear ${key}`);
   }
+  assert.equal(await deleteFixture.page.evaluate(()=>localStorage.getItem('mymoney3_ui_prefs_v1')),null);
+  await deleteFixture.page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));
+  assert.match(await deleteFixture.page.locator('#mm3AssetSort').innerText(),/残高順/);
+  await deleteFixture.page.reload();await deleteFixture.page.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));
+  assert.equal(await deleteFixture.page.evaluate(()=>globalThis.__mm3Test.getData().banks.length),0);
+  assert.equal(await deleteFixture.page.evaluate(()=>localStorage.getItem('mymoney3_ui_prefs_v1')),null);
   passed('P0 complete reset erases financial fixture data only after exact phrase and destructive approval');
   await deleteFixture.context.close();
 
