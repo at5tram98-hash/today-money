@@ -325,6 +325,7 @@ export async function verifyAuditFixes({createPage,passed}){
       });
       await page.locator('[data-temp="audit-nav-target"]').click();
       const button=page.locator('.push-view.show #tempEditNav');await button.waitFor();
+      await page.waitForFunction(()=>{const view=document.querySelector('.push-view.show #tempEditNav')?.closest('.push-view');return view&&getComputedStyle(view).transform==='matrix(1, 0, 0, 1, 0, 0)'});
       const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
       const targets=await button.locator('..').locator(':scope > button').evaluateAll(es=>es.map(e=>{
         const b=e.getBoundingClientRect();return {id:e.id,width:b.width,height:b.height,left:b.left,right:b.right};
