@@ -55,7 +55,7 @@
 .pro4-parse-row{display:grid;grid-template-columns:86px minmax(0,1fr);gap:9px;align-items:center;min-height:48px;padding:7px 12px;border-bottom:.5px solid var(--sep)}
 .pro4-parse-row:last-child{border-bottom:0}
 .pro4-parse-row label{font-size:10.5px;color:var(--label2)}
-.pro4-parse-row .field{min-height:36px;font-size:13px;padding:7px 8px}
+.pro4-parse-row .field{min-height:44px;font-size:13px;padding:7px 8px}
 .pro4-amount-edit{border:0;background:transparent;text-align:right;font-size:15px;font-weight:700;min-height:36px;color:var(--blue)}
 .pro4-note{font-size:10.5px;line-height:1.4;color:var(--label2);padding:9px 12px;background:var(--fill)}
 .pro4-note.warning{color:var(--orange)}

@@ -341,4 +341,56 @@ export async function verifyAuditFixes({createPage,passed}){
     }finally{await navTarget.context.close()}
   }
 
+
+  for(const width of [320,393]){
+    const mailFields=await createPage('app',{width,height:852,mobile:true});
+    try{
+      const page=mailFields.page;
+      await page.evaluate(async()=>{
+        const api=globalThis.__mm3Test,state=api.getData();
+        state.mailImports=[{id:'audit-hit-pending',date:'2026-10-07',amount:450,merchant:'架空の確認待ち',status:'pending',direction:'expense',paymentMethod:'other',paymentId:'',category:'食費',categorySource:'manual'},
+          {id:'audit-hit-ignored',date:'2026-10-07',amount:777,merchant:'対象外の記録',status:'ignored',direction:'expense',paymentMethod:'other',paymentId:'',category:'食費',categorySource:'manual'}];
+        await api.replaceData(state);api.renderAll();
+      });
+      const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+      await page.locator('#todayMenu').click();
+      await page.locator('#menuLayer').getByRole('menuitem',{name:'メール取引',exact:true}).click();
+      await page.locator('#mailHistoryOverview').click();await page.locator('#mm3MailHistorySearch').waitFor();
+      for(const selector of ['#mm3MailHistorySearch','#mm3MailHistoryFilter']){
+        const b=await page.locator(selector).boundingBox();assert.ok(b&&b.width>=44&&b.height>=44,JSON.stringify({selector,b}));
+      }
+      const search=page.locator('#mm3MailHistorySearch');await search.click({position:{x:30,y:1}});
+      assert.equal(await page.evaluate(()=>document.activeElement?.id),'mm3MailHistorySearch');
+      assert.equal(await page.locator('#mm3MailHistoryList [data-mail-id]').count(),2);
+      await search.fill('架空');assert.equal(await page.locator('#mm3MailHistoryList [data-mail-id="audit-hit-pending"]').count(),1);
+      await page.locator('#mm3MailHistoryFilter').selectOption('ignored');assert.equal(await page.locator('#mm3MailHistoryList [data-mail-id]').count(),0);
+      await search.fill('');assert.equal(await page.locator('#mm3MailHistoryList [data-mail-id="audit-hit-ignored"]').count(),1);
+      assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      const history=page.locator('.mail-center-history');const id=await history.getAttribute('id');
+      await history.locator('.back-btn').click();await page.locator('#'+id).waitFor({state:'detached'});
+      assert.ok(await page.locator('#mailHistoryOverview').isVisible());
+      assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      passed(`AUD8-017: ${width}px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back`);
+    }finally{await mailFields.context.close()}
+
+    const parsedFields=await createPage('app',{width,height:852,mobile:true});
+    try{
+      const page=parsedFields.page;const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+      await page.evaluate(()=>globalThis.__mm3Test.openSmartInputSearch('input'));
+      await page.locator('#pro4Lines').fill('今日 操作領域テスト 650円');await page.locator('#pro4Parse').click();
+      await page.locator('[data-draft-cat="0"]').waitFor();
+      for(const selector of ['[data-draft-cat="0"]','[data-draft-pay="0"]']){
+        const b=await page.locator(selector).boundingBox();assert.ok(b&&b.width>=44&&b.height>=44,JSON.stringify({selector,b}));
+      }
+      await page.locator('[data-draft-cat="0"]').selectOption('交通費');
+      assert.equal(await page.locator('[data-draft-cat="0"]').inputValue(),'交通費');
+      await page.locator('[data-draft-pay="0"]').selectOption('other|');
+      assert.equal(await page.locator('[data-draft-pay="0"]').inputValue(),'other|');
+      const view=page.locator('.push-view.show').last(),id=await view.getAttribute('id');
+      await view.locator('.back-btn').click();await page.locator('#'+id).waitFor({state:'detached'});
+      assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      passed(`AUD8-018: ${width}px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger`);
+    }finally{await parsedFields.context.close()}
+  }
+
 }
