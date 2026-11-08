@@ -5976,6 +5976,15 @@ function mm3SalaryRecordsOpen(month){
     const view=pushStack.at(-1);return (view&&$(view.id))||null;
   }
   const returns=new WeakMap();let previousScope=null,scheduled=false;const added=new Set();
+  // Calculator opening blurs the current control before the layer observer runs.
+  // Retain that control here so cancel can restore its exact parent context.
+  const calculatorOpen=openCalculator;
+  openCalculator=function(...args){
+    const calculator=$('calculator'),origin=document.activeElement;
+    if(!visible(calculator)&&origin instanceof HTMLElement&&origin!==document.body)returns.set(calculator,origin);
+    return calculatorOpen.apply(this,args);
+  };
+
   function syncLayers(){
     const scope=activeScope();
     $('app').inert=!!scope;

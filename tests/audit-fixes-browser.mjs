@@ -393,4 +393,38 @@ export async function verifyAuditFixes({createPage,passed}){
     }finally{await parsedFields.context.close()}
   }
 
+
+  for(const width of [320,393]){
+    const calculatorFocus=await createPage('app',{width,height:852,mobile:true});
+    try{
+      const page=calculatorFocus.page;const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+      await page.locator('#quickExpense').click();await page.locator('#qeAmount').waitFor();
+      const value=await page.locator('#qeAmount .val').innerText();
+      for(const mode of ['tap','keyboard']){
+        if(mode==='tap')await page.locator('#qeAmount').click();
+        else{await page.locator('#qeAmount').focus();await page.keyboard.press('Enter')}
+        await page.locator('#calculator.show').waitFor();
+        await page.locator('#calcGrid [data-k="clear"]').click();
+        for(let i=0;i<3;i++)await page.locator('#calcGrid [data-k="7"]').click();
+        if(mode==='tap')await page.locator('#calcCancel').click();else await page.keyboard.press('Escape');
+        await page.locator('#calculator.show').waitFor({state:'hidden'});
+        await page.waitForFunction(()=>document.activeElement?.id==='qeAmount');
+        assert.equal(await page.locator('#qeAmount .val').innerText(),value);
+        assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      }
+      await page.locator('#qeCancel').click();await page.locator('#sheet.show').waitFor({state:'hidden'});
+      await page.evaluate(()=>globalThis.__mm3Test.openEventGoalEditor(null));
+      await page.locator('#eventGoalAddItem').click();await page.locator('#goalItemAmount').click();
+      await page.locator('#calculator.show').waitFor();
+      await page.locator('#calcGrid [data-k="7"]').click();await page.locator('#calcCancel').click();
+      await page.locator('#calculator.show').waitFor({state:'hidden'});
+      await page.waitForFunction(()=>document.activeElement?.id==='goalItemAmount');
+      await page.locator('#goalItemCancel').click();
+      await page.waitForFunction(()=>document.activeElement?.id==='eventGoalAddItem');
+      await page.locator('#eventGoalCancel').click();await page.locator('#sheet.show').waitFor({state:'hidden'});
+      assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      passed(`AUD8-019: ${width}px calculator cancel restores the originating amount control for tap, keyboard and nested editors without writes`);
+    }finally{await calculatorFocus.context.close()}
+  }
+
 }
