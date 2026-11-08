@@ -232,4 +232,61 @@ export async function verifyAuditFixes({createPage,passed}){
     passed('AUD8-012: version-only backups are rejected without writes; valid restore cancels safely, protects the original and persists every bank balance');
   }finally{await backup.context.close()}
 
+  const favoriteDrag=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    const page=favoriteDrag.page;
+    await page.evaluate(async()=>{const api=globalThis.__mm3Test,d=api.getData();d.sidebarFavorites=['quickExpense','quickBank','salary'];d.sidebarFavoriteOrder=[...d.sidebarFavorites];await api.replaceData(d);api.openFavoritesEditor()});
+    const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    const drag=async cancel=>{
+      const grip=page.locator('[data-fav-grip="quickExpense"]');
+      const a=await grip.boundingBox(),b=await page.locator('[data-fav-row="salary"]').boundingBox();assert.ok(a&&b);
+      await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(a.x+a.width/2,b.y+b.height-4,{steps:12});
+      if(cancel)await grip.dispatchEvent('pointercancel',{pointerId:1,pointerType:'mouse',isPrimary:true});
+      await page.mouse.up();await page.waitForTimeout(350);
+    };
+    await drag(true);
+    assert.deepEqual(await page.locator('[data-fav-row]').evaluateAll(es=>es.map(e=>e.dataset.favRow)),['quickExpense','quickBank','salary']);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+    assert.equal(await page.locator('.fav-editor-row.dragging').count(),0);
+    await drag(false);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData().sidebarFavoriteOrder),['quickBank','salary','quickExpense']);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData().banks),before.banks);
+    await page.reload();await page.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData().sidebarFavoriteOrder),['quickBank','salary','quickExpense']);
+    passed('AUD8-013: canceled favorite drags preserve order and data; only a released drop persists the new order');
+  }finally{await favoriteDrag.context.close()}
+
+  const assetDrag=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    const page=assetDrag.page;await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));
+    await page.locator('#mm3AssetSort').click();await page.locator('#menuLayer button').filter({hasText:'手動'}).click();
+    await page.locator('#mm3AssetWatchlist.mm3-assets-manual').waitFor();
+    const rows=page.locator('#mm3AssetWatchlist .mm3-assets-watchrow');
+    const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    const order=await rows.evaluateAll(es=>es.map(e=>e.dataset.bank));
+    const prefs=await page.evaluate(()=>localStorage.getItem('mymoney3_ui_prefs_v1'));
+    const drag=async cancel=>{
+      await rows.last().scrollIntoViewIfNeeded();await rows.first().scrollIntoViewIfNeeded();
+      const grip=rows.first(),a=await grip.boundingBox(),b=await rows.nth(2).boundingBox();assert.ok(a&&b&&b.y+b.height-4<852);
+      await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.waitForTimeout(400);
+      assert.equal(await page.locator('.mm3-assets-dragging').count(),1);
+      await page.mouse.move(a.x+a.width/2,b.y+b.height-4,{steps:12});
+      if(cancel)await grip.dispatchEvent('pointercancel',{pointerId:1,pointerType:'mouse',isPrimary:true});
+      await page.mouse.up();await page.waitForTimeout(350);
+    };
+    await drag(true);
+    assert.deepEqual(await rows.evaluateAll(es=>es.map(e=>e.dataset.bank)),order);
+    assert.equal(await page.evaluate(()=>localStorage.getItem('mymoney3_ui_prefs_v1')),prefs);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+    assert.equal(await page.locator('.mm3-assets-dragging,.mm3-assets-reorder-placeholder').count(),0);
+    await drag(false);
+    const expected=[...order];expected.splice(0,1);expected.splice(2,0,order[0]);
+    assert.deepEqual(await rows.evaluateAll(es=>es.map(e=>e.dataset.bank)),expected);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+    await page.reload();await page.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));
+    assert.deepEqual(await rows.evaluateAll(es=>es.map(e=>e.dataset.bank)),expected);
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData().banks),before.banks);
+    passed('AUD8-014: canceled manual account drags preserve DOM order and preferences; released drops persist without changing balances');
+  }finally{await assetDrag.context.close()}
+
 }
