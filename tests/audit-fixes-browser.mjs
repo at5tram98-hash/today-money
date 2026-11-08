@@ -312,4 +312,32 @@ export async function verifyAuditFixes({createPage,passed}){
     passed('AUD8-015: reset with sample data removes old UI preferences, restores live defaults and preserves unrelated storage');
   }finally{await resetPrefs.context.close()}
 
+
+  for(const width of [320,393]){
+    const navTarget=await createPage('app',{width,height:852,mobile:true});
+    try{
+      const page=navTarget.page;
+      await page.evaluate(async()=>{
+        const api=globalThis.__mm3Test,state=api.getData();
+        state.tempIncomes.push({id:'audit-nav-target',date:'2026-10-07',amount:2500,
+          sourceName:'操作領域テスト',toType:'cash',bankId:'',memo:'',receivedConfirmed:false});
+        await api.replaceData(state);api.openTempIncomeHistory();
+      });
+      await page.locator('[data-temp="audit-nav-target"]').click();
+      const button=page.locator('.push-view.show #tempEditNav');await button.waitFor();
+      const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+      const targets=await button.locator('..').locator(':scope > button').evaluateAll(es=>es.map(e=>{
+        const b=e.getBoundingClientRect();return {id:e.id,width:b.width,height:b.height,left:b.left,right:b.right};
+      }));
+      assert.ok(targets.length>0);
+      for(const b of targets)assert.ok(b.width>=44&&b.height>=44&&b.left>=0&&b.right<=width,JSON.stringify(b));
+      await button.click({position:{x:1,y:22}});await page.locator('#teSave').waitFor();
+      assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      await page.locator('#teCancel').click();await page.locator('#sheet.show').waitFor({state:'hidden'});
+      assert.ok(await button.isVisible());
+      assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      passed(`AUD8-016: ${width}px temporary-income Edit and adjacent navigation targets are at least 44px; edge tap opens editor and cancel preserves data`);
+    }finally{await navTarget.context.close()}
+  }
+
 }
