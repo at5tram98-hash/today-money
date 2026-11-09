@@ -646,4 +646,20 @@ export async function verifyAuditFixes({createPage,passed}){
     }finally{await touch.detach();await context.close()}
   }
 
+  const fixedPaymentLabel=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    const {page}=fixedPaymentLabel;
+    const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    await page.evaluate(()=>globalThis.__mm3Test.openFixedPayment());
+    const payment=page.getByRole('combobox',{name:'支払い方法',exact:true});
+    assert.equal(await payment.getAttribute('id'),'fpPay');
+    await payment.selectOption(`bank|${before.banks[0].id}`);
+    assert.equal(await payment.inputValue(),`bank|${before.banks[0].id}`);
+    await page.locator('#fpCancel').click();
+    if(await page.locator('#alertWrap.show').count())await page.locator('#alertActions button').last().click();
+    await page.locator('#sheet.show').waitFor({state:'hidden'});
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+    passed('AUD8-026: fixed payment method has its visible accessible name and cancel preserves data');
+  }finally{await fixedPaymentLabel.context.close()}
+
 }
