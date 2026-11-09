@@ -29,7 +29,14 @@ function calcAssistResult(base,kind,value){
   return {amount:Math.round(base*(kind==='discount'?1-value/100:1+value/100)),copy:kind==='discount'?`${value}%引き`:`${value}%を加算（1円単位で四捨五入）`};
 }
 let calcToolBase=0,calcToolKind='discount';
-function closeCalcTools(){document.getElementById('calcDone').disabled=false;document.getElementById('calcTools').hidden=true;document.getElementById('calcGrid').hidden=false;document.querySelectorAll('[data-calc-tool]').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function closeCalcTools(restoreFocus=false){
+  document.getElementById('calcDone').disabled=false;
+  document.getElementById('calcTools').hidden=true;
+  document.getElementById('calcGrid').hidden=false;
+  const tools=document.querySelectorAll('[data-calc-tool]');
+  tools.forEach(button=>button.setAttribute('aria-expanded','false'));
+  if(restoreFocus)document.querySelector(`[data-calc-tool="${calcToolKind}"]`)?.focus({preventScroll:true});
+}
 function renderCalcAssist(){
   const value=(document.getElementById('calcToolValue').value===''?NaN:Number(document.getElementById('calcToolValue').value)),result=calcAssistResult(calcToolBase,calcToolKind,value);
   document.getElementById('calcToolPreview').textContent=result?`${result.amount.toLocaleString('ja-JP')}円`:'入力を確認してください';
@@ -48,13 +55,13 @@ function openCalcAssist(kind){
 }
 document.querySelectorAll('[data-calc-tool]').forEach(b=>b.onclick=()=>openCalcAssist(b.dataset.calcTool));
 document.getElementById('calcToolValue').oninput=renderCalcAssist;
-document.getElementById('calcToolCancel').onclick=closeCalcTools;
+document.getElementById('calcToolCancel').onclick=()=>closeCalcTools(true);
 document.getElementById('calcToolApply').onclick=()=>{
   const result=calcAssistResult(calcToolBase,calcToolKind,(document.getElementById('calcToolValue').value===''?NaN:Number(document.getElementById('calcToolValue').value)));if(!result||result.amount>999999999)return;
-  calcValue=String(result.amount);calcStored=null;calcOp=null;calcWaiting=false;calcLastOperand=null;calcReplaceOnNextDigit=true;closeCalcTools();updateCalc();
+  calcValue=String(result.amount);calcStored=null;calcOp=null;calcWaiting=false;calcLastOperand=null;calcReplaceOnNextDigit=true;closeCalcTools(true);updateCalc();
 };
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('calculator').classList.contains('show')||/INPUT|TEXTAREA|SELECT/.test(e.target?.tagName||'')||e.ctrlKey||e.metaKey||e.altKey)return;
   const key=/^[0-9]$/.test(e.key)?e.key:({Backspace:'back',Delete:'clear','+':'op:+','-':'op:-','*':'op:*','/':'op:/','%':'percent','=':'done'})[e.key];
-  if(key){e.preventDefault();calcKey(key)}else if(e.key==='Enter'){e.preventDefault();document.getElementById('calcDone').click()}
+  if(key){e.preventDefault();calcKey(key)}else if(e.key==='Enter'&&!e.target?.closest?.('button')){e.preventDefault();document.getElementById('calcDone').click()}
 });

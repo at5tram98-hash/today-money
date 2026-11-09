@@ -557,4 +557,37 @@ export async function verifyAuditFixes({createPage,passed}){
     passed('AUD8-022: native details and scrolling previews retain forward keyboard navigation without writes');
   }finally{await focusAudit.context.close()}
 
+  for(const [width,height] of [[320,568],[393,852]]){
+    const {page,context}=await createPage('app',{width,height,mobile:true});
+    try{
+      const read=()=>page.evaluate(()=>globalThis.__mm3Test.getData());
+      const before=await read();
+      await page.locator('#quickExpense').tap();
+      await page.locator('#qeAmount').tap();
+      await page.waitForFunction(()=>document.activeElement.id==='calcTitle');
+      await page.keyboard.type('101');
+      const split=page.locator('[data-calc-tool="split"]');
+      await split.press('Enter');
+      assert.equal(await split.getAttribute('aria-expanded'),'true');
+      await page.locator('#calcToolValue').fill('1');
+      assert.equal(await page.locator('#calcToolApply').isDisabled(),true);
+      await page.locator('#calcToolCancel').press('Enter');
+      assert.equal(await page.locator('#calcTools').isVisible(),false);
+      assert.equal(await split.evaluate(button=>button===document.activeElement),true);
+      assert.equal(await page.locator('#calcNumber').innerText(),'101');
+      await page.keyboard.press('Enter');
+      await page.locator('#calcToolValue').fill('3');
+      await page.locator('#calcToolApply').press('Enter');
+      assert.equal(await page.locator('#calcTools').isVisible(),false);
+      assert.equal(await split.evaluate(button=>button===document.activeElement),true);
+      assert.equal(await page.locator('#calcNumber').innerText(),'33');
+      await page.locator('#calcDone').press('Enter');
+      assert.match(await page.locator('#qeAmount').innerText(),/¥33/);
+      await page.locator('#qeCancel').tap();
+      await page.locator('#alertActions button').last().tap();
+      assert.deepEqual(await read(),before);
+      passed(`AUD8-023: ${width}px calculator Enter activates the focused tool and returns focus after Back or Apply`);
+    }finally{await context.close()}
+  }
+
 }
