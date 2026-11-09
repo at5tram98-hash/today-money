@@ -172,7 +172,7 @@
       if(scope.id==='lockScreen')return;
       e.preventDefault();e.stopImmediatePropagation();
       if(scope.id==='alertWrap')$('alertActions').querySelector('button')?.click();
-      else if(scope.id==='calculator')closeCalc();else if(scope.id==='sheet')requestSheetClose();else if(scope.id==='menuLayer')closeMenu();else popView();return;
+      else if(scope.id==='calculator')closeCalc();else if(scope.id==='sheet')requestSheetClose();else if(scope.id==='menuLayer')closeMenu();else requestPushBack();return;
     }
     if(e.key==='Tab'){
       const list=[...scope.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),a[href],[tabindex="0"]')].filter(el=>!el.closest('[inert]')&&el.getClientRects().length);

@@ -427,4 +427,62 @@ export async function verifyAuditFixes({createPage,passed}){
     }finally{await calculatorFocus.context.close()}
   }
 
+  for(const width of [320,393]){
+    const {page,context}=await createPage('app',{width,height:852,mobile:true});
+    try{
+      await page.getByRole('button',{name:'今月',exact:true}).click();
+      const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+      const entry=page.getByRole('button',{name:'月間目標',exact:true});
+      await entry.tap();
+      const planner=page.locator('.push-view.show').last();
+      const back=planner.getByRole('button',{name:'今月に戻る'});
+      const prompt=page.getByRole('alertdialog',{name:'変更を破棄しますか？'});
+      await back.tap();
+      await planner.waitFor({state:'hidden'});
+      assert.equal(await prompt.isVisible(),false);
+
+      await entry.tap();
+      await planner.locator('#goalStart').tap();
+      await planner.locator('#goalNext').tap();
+      await planner.locator('#goalLargeAdd').tap();
+      await page.locator('#leName').fill('監査用大型支出');
+      await page.locator('#leAmount').tap();
+      await page.locator('#calculator.show').waitFor();
+      for(const key of ['4','5','0','0'])await page.locator(`#calcGrid [data-k="${key}"]`).tap();
+      await page.locator('#calcDone').tap();
+      await page.locator('#leSave').tap();
+      const draft=planner.getByRole('button',{name:/監査用大型支出.*¥4,500/});
+      await draft.waitFor();
+      await planner.locator('#goalBack').tap();
+      await planner.locator('#goalNext').tap();
+      await draft.waitFor();
+
+      await back.tap();
+      await prompt.getByRole('button',{name:'編集を続ける'}).tap();
+      await draft.waitFor();
+      await page.keyboard.press('Escape');
+      await prompt.waitFor();
+      await page.keyboard.press('Escape');
+      await prompt.waitFor({state:'hidden'});
+      assert.equal(await draft.count(),1);
+
+      const touch=await context.newCDPSession(page);
+      try{
+        await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:8,y:250}]});
+        for(const x of [30,55,80,110,145,180]){
+          await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:250}]});
+        }
+        await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      }finally{await touch.detach()}
+      await prompt.getByRole('button',{name:'破棄',exact:true}).tap();
+      await planner.waitFor({state:'hidden'});
+      await entry.tap();
+      await planner.locator('#goalStart').tap();
+      await planner.locator('#goalNext').tap();
+      assert.equal(await draft.count(),0);
+      assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      passed(`AUD8-020: ${width}px monthly expense drafts survive Back, Escape and swipe cancellation until confirmed discard; saved data is unchanged`);
+    }finally{await context.close()}
+  }
+
 }
