@@ -485,4 +485,41 @@ export async function verifyAuditFixes({createPage,passed}){
     }finally{await context.close()}
   }
 
+  for(const width of [320,393]){
+    const height=width===320?568:852;
+    const {page,context}=await createPage('app',{width,height,mobile:true});
+    const touch=await context.newCDPSession(page);
+    try{
+      await page.getByRole('button',{name:'今月',exact:true}).tap();
+      const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+      await page.getByRole('button',{name:'月間目標',exact:true}).tap();
+      await page.locator('#goalStart').tap();
+      await page.locator('#goalNext').tap();
+      await page.locator('#goalLargeAdd').tap();
+      const editor=page.locator('#leAmount');
+      for(const motion of ['no-preference','reduce']){
+        await page.emulateMedia({reducedMotion:motion});
+        await editor.tap();
+        const early=await page.evaluate(()=>{
+          const calculator=document.getElementById('calculator');
+          const key=calculator.querySelector('[data-k="2"]');
+          const rect=key.getBoundingClientRect();
+          const x=rect.x+rect.width/2,y=rect.y+rect.height/2;
+          return {x,y,target:document.elementFromPoint(x,y)?.closest('[data-k]')?.dataset.k,
+            moving:calculator.getAnimations().some(animation=>animation.transitionProperty==='transform')};
+        });
+        assert.equal(early.moving,false);
+        assert.equal(early.target,'2');
+        await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:early.x,y:early.y}]});
+        await page.waitForTimeout(60);
+        await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+        assert.equal(await page.locator('#calcNumber').innerText(),'2');
+        await page.locator('#calcCancel').tap();
+        assert.equal(await editor.locator('.val').innerText(),'¥0');
+        assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      }
+      passed(`AUD8-021: ${width}px calculator keys stay at their hit positions while opening, with and without motion`);
+    }finally{await touch.detach();await context.close()}
+  }
+
 }
