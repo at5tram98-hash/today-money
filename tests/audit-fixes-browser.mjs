@@ -590,4 +590,60 @@ export async function verifyAuditFixes({createPage,passed}){
     }finally{await context.close()}
   }
 
+  const planModeAudit=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    const {page}=planModeAudit;
+    await page.getByRole('button',{name:'今月',exact:true}).tap();
+    await page.evaluate(async()=>{
+      const api=globalThis.__mm3Test,state=api.getData();
+      state.monthlyGoals={'2026-10':{total:30000,categories:{'食費':30000},daily:{8:1500}}};
+      await api.replaceData(state);
+      api.renderAll();
+    });
+    const read=()=>page.evaluate(()=>globalThis.__mm3Test.getData());
+    const before=await read();
+    await page.locator('#monthPlanEdit').tap();
+    assert.equal(await page.locator('#monthPlanEdit').innerText(),'調整を終了');
+    await page.locator('#monthMenu').tap();
+    await page.getByRole('menuitem',{name:'次月',exact:true}).tap();
+    assert.equal(await page.locator('#monthPlanEdit').count(),0);
+    await page.locator('#monthCalendar [data-date="2026-11-08"]').tap();
+    await page.locator('.push-view.show #inspectLarge').waitFor({timeout:5000});
+    assert.equal(await page.locator('.push-view.show .push-title').innerText(),'その日の資金詳細');
+    assert.equal(await page.locator('#sheet.show').count(),0);
+    await page.locator('.push-view.show .back-btn').tap();
+    await page.locator('#monthMenu').tap();
+    await page.getByRole('menuitem',{name:'前月',exact:true}).tap();
+    assert.equal(await page.locator('#monthPlanEdit').innerText(),'日別計画を調整');
+    assert.deepEqual(await read(),before);
+    passed('AUD8-024: leaving a planned month clears adjustment mode when the new month has no plan');
+  }finally{await planModeAudit.context.close()}
+
+  for(const [width,height] of [[320,568],[393,852]]){
+    const {page,context}=await createPage('app',{width,height,mobile:true});
+    const touch=await context.newCDPSession(page);
+    try{
+      await page.getByRole('button',{name:'今月',exact:true}).tap();
+      const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+      const day=page.locator('#monthCalendar [data-date="2026-10-08"]');
+      await day.scrollIntoViewIfNeeded();
+      const rect=await day.boundingBox();
+      assert.ok(rect);
+      const points=[{x:Math.round(rect.x+rect.width/2),y:Math.round(rect.y+rect.height/2)}];
+      await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:points});
+      const menu=page.locator('#sheet.show #dqmClose');
+      await menu.waitFor();
+      await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+      assert.equal(await menu.isVisible(),true);
+      assert.equal(await page.locator('.push-view.show').count(),0);
+      await menu.tap();
+      await menu.waitFor({state:'hidden'});
+      await day.press('Enter');
+      await page.locator('.push-view.show #inspectExpense').waitFor({timeout:5000});
+      await page.locator('.push-view.show .back-btn').tap();
+      assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+      passed(`AUD8-025: ${width}px calendar long-touch release preserves its menu and the day still works with Enter`);
+    }finally{await touch.detach();await context.close()}
+  }
+
 }
