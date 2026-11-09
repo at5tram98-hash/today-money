@@ -34,7 +34,9 @@ export async function verifyNativeUi({createPage,passed}){
   });
   await page.waitForFunction(()=>document.documentElement.classList.contains('native-keyboard'));
   assert.equal(await page.locator('#tabbar').evaluate(el=>getComputedStyle(el).visibility),'hidden');
-  const save=await page.locator('#qeSave').boundingBox();assert.ok(save.y>=0&&save.y+save.height<=532,'save remains above the keyboard');
+  await page.waitForFunction(()=>document.getElementById('sheet').getAnimations().every(animation=>animation.playState!=='running'&&!animation.pending));
+  const save=await page.locator('#qeSave').boundingBox();
+  assert.ok(save&&save.y>=0&&save.y+save.height<=532,`save remains above the keyboard after the sheet settles: ${JSON.stringify(save)}`);
   const dimensions=await page.locator('#sheet').evaluate(el=>({width:el.clientWidth,scroll:el.scrollWidth}));assert.ok(dimensions.scroll<=dimensions.width+1);
   await page.evaluate(()=>{document.activeElement.blur();delete window.visualViewport.height;window.visualViewport.dispatchEvent(new Event('resize'))});
   await page.waitForFunction(()=>!document.documentElement.classList.contains('native-keyboard'));

@@ -175,9 +175,21 @@
       else if(scope.id==='calculator')closeCalc();else if(scope.id==='sheet')requestSheetClose();else if(scope.id==='menuLayer')closeMenu();else requestPushBack();return;
     }
     if(e.key==='Tab'){
-      const list=[...scope.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),a[href],[tabindex="0"]')].filter(el=>!el.closest('[inert]')&&el.getClientRects().length);
+      const selector='button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),a[href],summary,[tabindex="0"]';
+      const list=[...scope.querySelectorAll(selector)].filter(el=>{
+        if(el.tabIndex<0||el.closest('[inert],[hidden],[aria-hidden="true"]')||!el.getClientRects().length||getComputedStyle(el).visibility!=='visible')return false;
+        const closed=el.closest('details:not([open])');
+        return !closed||closed.querySelector(':scope > summary')?.contains(el);
+      });
       if(!list.length){e.preventDefault();scope.focus();return}
-      const index=list.indexOf(document.activeElement);if(index<0||(e.shiftKey&&index===0)||(!e.shiftKey&&index===list.length-1)){e.preventDefault();list[e.shiftKey?list.length-1:0].focus()}
+      const focused=document.activeElement;
+      const atTitle=focused===scope||focused.matches('.sheet-title,.push-title,#calcTitle,#alertTitle');
+      const boundary=e.shiftKey?list[0]:list.at(-1);
+      // Native stops such as scrollable regions can sit between listed controls.
+      if(!scope.contains(focused)||atTitle||focused===boundary){
+        e.preventDefault();
+        (e.shiftKey?list.at(-1):list[0]).focus();
+      }
     }
   },true);
   // Track the visible viewport only while editing, preserving pinch zoom.

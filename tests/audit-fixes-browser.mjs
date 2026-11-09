@@ -522,4 +522,39 @@ export async function verifyAuditFixes({createPage,passed}){
     }finally{await touch.detach();await context.close()}
   }
 
+  const focusAudit=await createPage('app',{width:393,height:852,mobile:true});
+  try{
+    const {page}=focusAudit;
+    await page.evaluate(()=>globalThis.__mm3Test.switchTab('payments'));
+    await page.locator('#mm3AtfOpen').click();
+    const summary=page.locator('.mm3-atf-settings > summary');
+    await summary.focus();
+    await page.keyboard.press('Tab');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'mm3AtfClose');
+    await summary.focus();
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Tab');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'atfDaily');
+    await page.keyboard.press('Escape');
+    await page.evaluate(async()=>{
+      const api=globalThis.__mm3Test,state=api.getData();
+      state.monthlyGoals['2026-10']={total:30000,categories:{'食費':30000}};
+      await api.replaceData(state);
+      api.switchTab('month');
+      api.openBudgetRebalance();
+    });
+    const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
+    await page.locator('[data-rebalance-mode="selected"]').focus();
+    const forward=[];
+    for(let i=0;i<3;i++){
+      await page.keyboard.press('Tab');
+      forward.push(await page.evaluate(()=>document.activeElement.id));
+      if(forward.at(-1)==='rebalanceApply')break;
+    }
+    assert.ok(forward.includes('rebalanceApply'),JSON.stringify(forward));
+    await page.keyboard.press('Escape');
+    assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData()),before);
+    passed('AUD8-022: native details and scrolling previews retain forward keyboard navigation without writes');
+  }finally{await focusAudit.context.close()}
+
 }
