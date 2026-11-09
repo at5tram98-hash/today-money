@@ -590,18 +590,20 @@ export async function verifyAuditFixes({createPage,passed}){
     }finally{await context.close()}
   }
 
-  const planModeAudit=await createPage('app',{width:393,height:852,mobile:true});
+  const planFixture=await createPage('app',{width:393,height:852,mobile:true});
+  let storedPlan;
+  try{
+    storedPlan=await planFixture.page.evaluate(()=>globalThis.__mm3Test.getData());
+  }finally{await planFixture.context.close()}
+  storedPlan.monthlyGoals={'2026-10':{total:30000,categories:{'食費':30000},daily:{8:1500}}};
+  const planModeAudit=await createPage('app',{width:393,height:852,mobile:true,stored:storedPlan});
   try{
     const {page}=planModeAudit;
     await page.getByRole('button',{name:'今月',exact:true}).tap();
-    await page.evaluate(async()=>{
-      const api=globalThis.__mm3Test,state=api.getData();
-      state.monthlyGoals={'2026-10':{total:30000,categories:{'食費':30000},daily:{8:1500}}};
-      await api.replaceData(state);
-      api.renderAll();
-    });
     const read=()=>page.evaluate(()=>globalThis.__mm3Test.getData());
     const before=await read();
+    assert.equal(before.monthlyGoals['2026-10'].total,30000);
+    assert.equal(before.monthlyGoals['2026-11'],undefined);
     await page.locator('#monthPlanEdit').tap();
     assert.equal(await page.locator('#monthPlanEdit').innerText(),'調整を終了');
     await page.locator('#monthMenu').tap();
