@@ -198,7 +198,7 @@ ${grouped(todoIds)}
 
 阻害要因:
 ${Object.entries(reasons).filter(([k])=>todoIds.some(r=>r.id.startsWith(k))).map(([k,v])=>`- ${k}: ${v}`).join('\n')}
-- その他（HOME-012・MONTH-045・MONTH-050・LARGE-068/069・PAY-086・PAYMENTS-098/100・SET-114・BANK-172・BACKUP-209・ACF-257・SIM-270）: メニューの中の項目や、特定の状態（補正あり・復旧コピーあり・ACF設定済み等）でだけ出るボタン
+${todoIds.some(r=>!Object.keys(reasons).some(k=>r.id.startsWith(k)))?'- その他: メニューの中の項目や、特定の状態でだけ出るボタン（`docs/v11/screen-routes.json` に入口を足す）':''}
 
 ## 未検証の遷移（${unverifiedTr.length}）とアニメーション（${unverifiedMo.length}）、未照合の追加UI（${unmatchedExtra.length}）
 
@@ -216,10 +216,12 @@ ${commits.map(c=>`- ${c}`).join('\n')}
 
 ## 次に着手する作業
 
-1. 未完了IDのうちP0（${todoIds.filter(r=>r.priority==='P0').map(r=>r.id).join(' ')||'なし'}）を、事前データを用意したブラウザテストで1件ずつ確認する（明細取込→確定→解除、メール取引の反映、割り勘回収、給与振り分けの解除、予算再配分）。
-2. 日締めの流れの中の操作（DAYCLOSE-130〜146）を、既存の日締めテストにIDごとの確認として追加する。
-3. 巡回の直接の入口（\`docs/v11/screen-routes.json\`）に、メニュー内の項目と特定状態の画面を足して未到達の操作を減らす。
-4. 物理的なiPhone（Safari・ホーム画面に追加したPWA）とVoiceOver・文字拡大での確認（人の手で行う）。
+${[
+  todoIds.length?`1. 未完了ID（${todoIds.map(r=>r.id).join(' ')}）を確認する。${todoIds.every(r=>r.id.startsWith('GMAIL'))?'Googleアカウントを接続した端末で、手動で「今すぐ同期」と「接続を解除」を確かめる（自動検証では外部認証を通せない）。':'事前データを用意したブラウザテストで1件ずつ。'}`:'1. 304操作はすべて検証済み。',
+  `2. 追加UIの未照合${unmatchedExtra.length}件（巡回で同じ要素を確認できない${count(unmatchedExtra,r=>r.basis.startsWith('巡回で'))}件、観測時のテスト用データの行${count(unmatchedExtra,r=>r.basis.startsWith('観測時'))}件）を画面ごとに照合し、304操作の別名か新しいIDかを決める。`,
+  '3. 物理的なiPhone（Safari・ホーム画面に追加したPWA）で、VoiceOver・文字拡大・Reduce Motionを人の手で確認する。',
+  '4. 仕様で任意とされたジェスチャー（一覧行の長押しメニュー等）を採用するかを決める。採用する場合も、見えるボタンの代替を必ず残す。',
+].join('\n')}
 `;
 writeFileSync(resolve(root,'docs/v11/PROGRESS.md'),md);
 console.log('wrote docs/v11/PROGRESS.md');

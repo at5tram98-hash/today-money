@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-10T18:51:11.215Z",
+ "generatedAt": "2026-11-10T19:22:45.582Z",
  "table": [
   {
    "name": "ボタン・操作",
@@ -60,7 +60,7 @@
    "summary": {
     "states": 752,
     "wroteOnTap": 0,
-    "doubleSave": 1,
+    "doubleSave": 0,
     "operationsReached": 257,
     "operationsTotal": 304,
     "notReached": 47,
@@ -86,7 +86,7 @@
    "summary": {
     "states": 752,
     "wroteOnTap": 0,
-    "doubleSave": 1,
+    "doubleSave": 0,
     "operationsReached": 257,
     "operationsTotal": 304,
     "notReached": 47,

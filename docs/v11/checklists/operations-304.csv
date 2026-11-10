@@ -290,7 +290,7 @@ PRO-288,P0,保存,transferSave,確定,実装済み,,src/js/15-pro-features.js,�
 PRO-289,P1,新しい振替計画,transferAdd,画面へ移動,実装済み,,src/js/15-pro-features.js,○,巡回で操作（393-light・320-dark）,変更なし,
 PRO-290,P0,請求額を更新,reconAmount,画面へ移動,実装済み,,src/js/15-pro-features.js,○,巡回で操作（393-light・320-dark）,変更なし,
 PRO-291,P0,照合状態を保存,reconSave,確定,実装済み,,src/js/15-pro-features.js,○,巡回で操作（393-light・320-dark）,変更（statementReconciliations）,1回分のみ
-PRO-292,P0,この内容を適用,rebalanceApply,確定,実装済み,,src/js/15-pro-features.js,○,巡回で操作（393-light・320-dark）／tests/p0-flows.mjs,変更（dailyGoals monthlyGoals budgetRebalanceHistory）,要確認
+PRO-292,P0,この内容を適用,rebalanceApply,確定,実装済み,,src/js/15-pro-features.js,○,巡回で操作（393-light・320-dark）／tests/p0-flows.mjs,変更（dailyGoals monthlyGoals budgetRebalanceHistory）,1回分のみ
 GMAIL-293,P2,閉じる,gsCancel,閉じる,実装済み,,src/js/14-gmail.js,○,巡回で操作（393-light・320-dark）,変更なし,
 GMAIL-294,P0,保存,gsSave,確定,実装済み,,src/js/14-gmail.js,○,巡回で操作（393-light・320-dark）,変更なし,
 GMAIL-295,P1,自動同期,gsAuto,切替・選択,実装済み,,src/js/14-gmail.js,○,巡回で操作（393-light・320-dark）,変更なし,

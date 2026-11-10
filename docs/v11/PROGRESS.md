@@ -1,6 +1,6 @@
 # 第11版 進捗と再開用の記録
 
-最終更新: 2026-11-10 18:51 UTC ／ ブランチ `claude/approve-all-permissions-3i1w3q` ／ HEAD `42da12c`
+最終更新: 2026-11-10 19:22 UTC ／ ブランチ `claude/approve-all-permissions-3i1w3q` ／ HEAD `1388ac4`
 
 集計は `node scripts/v11/progress.mjs <仕様書パッケージのフォルダ>` で再生成できます。監査記録は同じ部品・同じ遷移の重複を含むため、件数は重複をまとめた後の数です。
 
@@ -22,7 +22,7 @@
 
 | 検証 | 内容 | 結果 |
 |---|---|---|
-| `tests/crawl.mjs` | 全タブと直接の入口94画面から操作を押して巡回（393-light 752状態、320-dark 752状態） | 44pt未満・読み上げ名なし・はみ出し・重なり・11px未満の文字・表示/取消での会計データ書き込み・二重保存・エラー：指摘あり（progress.json参照） |
+| `tests/crawl.mjs` | 全タブと直接の入口94画面から操作を押して巡回（393-light 752状態、320-dark 752状態） | 44pt未満・読み上げ名なし・はみ出し・重なり・11px未満の文字・表示/取消での会計データ書き込み・二重保存・エラー：すべて0件 |
 | `tests/scenarios.mjs` | 仕様書の81画面シナリオ | 81/81 合格（`scenarios-81.csv`） |
 | `tests/amount-fields.mjs` | 金額欄→電卓→777入力→取消（46種×タップ/Enter×2条件） | 164/164 合格（`amount-fields.csv`） |
 | `tests/p0-flows.mjs` | 巡回で届きにくいP0の流れ（メール反映・割り勘回収・給与振り分け・予算立て直し・月間計画リセット・目標の日別調整・一行入力・ACF反映・日締めの内訳・明細取込〜確定） | 10/10 合格（`p0-flows.csv`） |
@@ -63,7 +63,7 @@
 
 阻害要因:
 - GMAIL: Googleアカウントへの接続が前提（外部認証のため自動検証できない）
-- その他（HOME-012・MONTH-045・MONTH-050・LARGE-068/069・PAY-086・PAYMENTS-098/100・SET-114・BANK-172・BACKUP-209・ACF-257・SIM-270）: メニューの中の項目や、特定の状態（補正あり・復旧コピーあり・ACF設定済み等）でだけ出るボタン
+
 
 ## 未検証の遷移（0）とアニメーション（0）、未照合の追加UI（96）
 
@@ -77,6 +77,7 @@
 
 ## 最近のコミット
 
+- 1388ac4 2026-11-10 Finish edition 11 interactions and verify every screen, transition, motion and gesture
 - 42da12c 2026-11-10 Record the live-site check of the published build
 - 53520e7 2026-11-10 Merge main (wallet icon update) and keep the icon links in the page template
 - 49949d2 2026-11-10 Rebuild stylesheets by component, verify every screen by crawling, and finish edition 11 alternatives
@@ -88,11 +89,10 @@
 - 61f340c 2026-10-09 Protect day closing with 18:00 gating and deliberate cancellation; unify Settings UI
 - 5eadef2 2026-10-09 Unify ACF calendar, approved day closing and frequent amount updates
 - 5b0cd00 2026-10-08 Implement seven-step day closing, seven-day journal and accurate calculation waiting
-- 5eac689 2026-10-08 Fix production push configuration parsing and verify the deployed config
 
 ## 次に着手する作業
 
-1. 未完了IDのうちP0（GMAIL-297）を、事前データを用意したブラウザテストで1件ずつ確認する（明細取込→確定→解除、メール取引の反映、割り勘回収、給与振り分けの解除、予算再配分）。
-2. 日締めの流れの中の操作（DAYCLOSE-130〜146）を、既存の日締めテストにIDごとの確認として追加する。
-3. 巡回の直接の入口（`docs/v11/screen-routes.json`）に、メニュー内の項目と特定状態の画面を足して未到達の操作を減らす。
-4. 物理的なiPhone（Safari・ホーム画面に追加したPWA）とVoiceOver・文字拡大での確認（人の手で行う）。
+1. 未完了ID（GMAIL-296 GMAIL-297）を確認する。Googleアカウントを接続した端末で、手動で「今すぐ同期」と「接続を解除」を確かめる（自動検証では外部認証を通せない）。
+2. 追加UIの未照合96件（巡回で同じ要素を確認できない56件、観測時のテスト用データの行40件）を画面ごとに照合し、304操作の別名か新しいIDかを決める。
+3. 物理的なiPhone（Safari・ホーム画面に追加したPWA）で、VoiceOver・文字拡大・Reduce Motionを人の手で確認する。
+4. 仕様で任意とされたジェスチャー（一覧行の長押しメニュー等）を採用するかを決める。採用する場合も、見えるボタンの代替を必ず残す。
