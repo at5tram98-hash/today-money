@@ -1,0 +1,261 @@
+/* タブバー、上部ナビゲーション、大見出し、今日／今月の切替。 */
+.nav-actions { display: flex; align-items: center; gap: 2px; flex: 0 0 auto }
+.icon-btn:active { transform: scale(.97); opacity: .58 }
+.icon-btn svg { fill: none; stroke: currentColor; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round }
+.nav-badge { position: absolute; right: 0; top: 0; transform: translate(1px,-1px) }
+.tabbar.tab-ready .tab-selection { opacity: 1 }
+.tabbar.tab-instant .tab-selection { transition: none }
+.tabbar.tab-dragging .tab-selection { transition: none; scale: 1.04 }
+.pill.green { background: rgba(52,199,89,.13); color: var(--green) }
+.pill.orange { background: rgba(255,149,0,.13); color: var(--orange) }
+.pill.red { background: rgba(255,59,48,.12); color: var(--red) }
+.tab.active { color: var(--blue) }
+.tab.active .tab-label { font-weight: 700 }
+.tab:focus-visible { outline: 2px solid var(--blue); outline-offset: -2px }
+.tab svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .16s var(--spring) }
+.tab:active svg { transform: scale(.86) }
+.motion-off .tab-selection,
+.motion-off .tab,
+.motion-off .tab svg { transition: none !important }
+.motion-off * { scroll-behavior: auto }
+.goal-step-frame.back { animation-name: goalStepBack }
+.motion-off .goal-step-frame,
+.motion-off .calendar-highlight,
+.motion-off .goal-success-mark { animation: none }
+.date-navigator { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; margin: 1px 0 10px; min-height: 48px; margin-bottom: 12px }
+.date-nav-btn:disabled { opacity: .25 }
+.quick-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto }
+.cat-icon svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.goal-intro-icon svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.goal-step-node svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
+.approval-handle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
+.goal-success-mark svg { width: 35px; height: 35px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round }
+.day-lock svg { width: 7px; height: 7px; fill: none; stroke: var(--blue); stroke-width: 2 }
+.date-nav-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.date-nav-label { text-align: center; font-weight: 600; font-size: 15px; line-height: 1.4; min-width: 0 }
+.icon-picker { display: grid; grid-template-columns: repeat(5,1fr); gap: 9px }
+.pill.blue { background: rgba(0,122,255,.12); color: var(--blue) }
+.goal-step-node.current { background: var(--blue); color: #fff }
+.goal-step-node.done { background: rgba(52,199,89,.15); color: var(--green) }
+.day-num.today { background: var(--red); color: #fff }
+.goal-allocation-summary .over { color: var(--red) }
+.month-progress-fill.over { background: var(--red) }
+.day-cell.good { background: rgba(52,199,89,.035) }
+.day-cell.warn { background: rgba(255,149,0,.045) }
+.day-cell.bad { background: rgba(255,59,48,.045) }
+.goal-step-line.done { background: rgba(52,199,89,.45) }
+.row:last-child { border-bottom: 0 }
+.goal-recommend.selected { background: rgba(0,122,255,.08); border-color: rgba(0,122,255,.45) }
+.safety-strip .safe { background: rgba(52,199,89,.75) }
+.safety-strip .watch { background: rgba(255,149,0,.8) }
+.safety-strip .danger { background: rgba(255,59,48,.8) }
+.icon-choice.on { background: rgba(0,122,255,.14); color: var(--blue); box-shadow: inset 0 0 0 1px rgba(0,122,255,.25) }
+.icon-choice svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.icon-only-inline { display: inline-grid; place-items: center }
+.source-check svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.2 }
+.icon-only-inline svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
+.quick-repeat-list .row-value { max-width: 36% }
+.large-plan-list .row-value { max-width: 35% }
+.toast.error { background: rgba(120,28,25,.94) }
+.status-chip.good { background: rgba(52,199,89,.13); color: var(--green) }
+.status-chip.warn { background: rgba(255,149,0,.13); color: var(--orange) }
+.status-chip.bad { background: rgba(255,59,48,.12); color: var(--red) }
+.cashflow-table .cf-today { background: rgba(0,122,255,.055) }
+.large-plan-badge.optional { background: var(--label3) }
+.nav-text:last-child { text-align: right }
+.nav-text.bold { font-weight: 650 }
+@media (max-width:340px) {
+  .back-btn { font-size: 15px }
+}
+.back-btn { border: 0; background: transparent; color: var(--blue); padding: 9px 6px; text-align: left; white-space: nowrap; text-overflow: ellipsis; transition: transform .1s,opacity .1s; display: inline-flex; align-items: center; width: 100%; min-width: 0; max-width: none; font-size: 16px; overflow: hidden; min-height: 44px !important }
+@media (max-width:390px) {
+  .ring svg { width: 136px; height: 136px; transform: rotate(-90deg) }
+}
+.back-btn svg { width: 12px; height: 18px; vertical-align: -4px; margin-right: 2px; fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round }
+.nav-text:active,
+.back-btn:active { transform: scale(.97); opacity: .6 }
+.favorite-nav-btn { width: 34px; height: 34px; border: 0; background: transparent; color: var(--blue); display: inline-grid; place-items: center; border-radius: 10px; vertical-align: middle; min-width: 44px; min-height: 44px }
+.menu-icon svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round }
+.settings-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
+@media (max-width:370px) {
+  .ring svg { width: 128px; height: 128px }
+}
+.shortcut-symbol svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round }
+.shortcut-check svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round }
+.favorite-nav-btn svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.favorite-nav-btn.on svg { fill: currentColor }
+.fav-editor-row { touch-action: none }
+.toast .toast-action { border: 0; background: transparent; color: #5AC8FA; font-weight: 700; font-size: 13px }
+.field:focus { box-shadow: inset 0 0 0 1.5px var(--blue) }
+.ring .progress { stroke: var(--green); stroke-linecap: round; transition: stroke-dashoffset .35s,stroke .2s }
+.sheet.dragging { transition: none }
+.cashflow-table .cf-day { cursor: pointer; transition: background .12s,opacity .12s }
+.push-view.interactive { transition: none }
+.sheet.half { height: auto; border-radius: 22px 22px 0 0; transition: transform .28s cubic-bezier(.22,.88,.22,1),height .28s cubic-bezier(.22,.88,.22,1),max-height .28s cubic-bezier(.22,.88,.22,1),border-radius .28s }
+.sheet.full { border-radius: 18px 18px 0 0; transition: transform .28s cubic-bezier(.22,.88,.22,1),height .28s cubic-bezier(.22,.88,.22,1),max-height .28s cubic-bezier(.22,.88,.22,1),border-radius .28s }
+.form-card .field { background: transparent; border-radius: 0; padding: 4px 0 }
+.form-card .money-field { background: transparent; padding: 2px 0; min-height: 38px }
+.today-spend-tap:active { background: var(--fill) }
+.money-field .hint { font-size: 13px; color: var(--label2) }
+.day-dot.salary { background: var(--green) }
+.day-dot.fixed { background: var(--orange) }
+.day-dot.over { background: var(--red) }
+.day-finmark.salary { color: var(--green) }
+.day-finmark.card { color: var(--purple) }
+.day-dot.large { background: var(--orange); box-shadow: 0 0 0 1px var(--card) }
+.pay-rule-panel .field { margin-top: 8px; background: var(--fill) }
+.financial-event-card:active { background: var(--fill) }
+.financial-event-symbol.income { color: var(--green) }
+.financial-event-symbol.card { color: var(--purple) }
+.financial-event-symbol.large,
+.financial-event-symbol.fixed { color: var(--orange) }
+.cashflow-table .cf-label { width: 108px; min-width: 108px; position: sticky; left: 0; z-index: 3; text-align: left; background: var(--card); font-weight: 600; color: var(--label2) }
+.choice.on { background: rgba(0,122,255,.13); color: var(--blue); box-shadow: inset 0 0 0 1px rgba(0,122,255,.25) }
+.busy-overlay.show { opacity: 1; pointer-events: auto }
+.approval-slider.disabled { opacity: .42; pointer-events: none }
+.day-cell:active { transform: scale(.97); opacity: .62 }
+.day-cell.out { opacity: .25 }
+.goal-calendar-preview .day-cell { cursor: default; pointer-events: none }
+.dim.show { opacity: 1; pointer-events: auto }
+.sheet.show { transform: translate(-50%,0) }
+.push-view.show { transform: translateX(0) }
+.hero-button:active { transform: scale(.985); opacity: .72 }
+.quick-btn:active { transform: scale(.97); opacity: .62 }
+.ios-menu.show { opacity: 1; transform: scale(1); pointer-events: auto }
+.choice:active { transform: scale(.97); opacity: .6 }
+.fav-editor-row.dragging { opacity: .45; background: var(--fill) }
+.motion-off .acf-negative-value.acf-pulse .acf-negative-sign,
+.motion-off .acf-status-critical,
+.motion-off .acf-shortage-callout,
+.motion-off .cf-first-deficit-day,
+.motion-off .acf-chart-first-negative,
+.motion-off .acf-risk-reveal,
+.motion-off #screen-pay .mm3-salary-viz-switch,
+.motion-off #screen-pay .mm3-salary-donut-arc,
+.motion-off #screen-pay .mm3-salary-trend-line,
+.motion-off #screen-payments .mm3-payment-reveal { animation: none !important }
+.motion-off #screen-payments .mm3-atf-tooltip,
+.motion-off #screen-payments .mm3-atf-guide,
+.motion-off #screen-payments .mm3-atf-selected { transition: none !important }
+.motion-off #screen-assets .mm3-assets-line { animation: none; stroke-dashoffset: 0 }
+.motion-off #screen-assets .mm3-assets-chart-switch { animation: none !important }
+.motion-off .mm3-action-row,
+.motion-off .mm3-salary-record-row { transition: none !important }
+.motion-off .mail-surface,
+.motion-off .mail-surface *,
+.motion-off .mail-preview-sheet * { animation: none !important; transition: none !important }
+.topbar.native-scrolled { border-bottom-color: var(--sep) }
+.topbar .icon-btn { width: 44px; height: 44px; min-width: 44px; background: var(--glass-bg) !important; box-shadow: inset 0 0 0 .5px var(--glass-edge),0 2px 8px #00000008; border-radius: 50%; color: var(--label) }
+.pro3-fchart svg { width: 100%; height: 210px; display: block; overflow: visible; touch-action: pan-y }
+.pro4-command svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.9 }
+.pro4-searchbar svg { width: 18px; height: 18px; color: var(--label2); fill: none; stroke: currentColor; stroke-width: 2 }
+.money-ticker-spark svg { display: block; width: 52px; height: 31px; overflow: visible }
+@media (max-width:340px) {
+  .money-ticker-spark svg { width: 44px }
+}
+.mm3-action-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round }
+.stmt-import-icon svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.8 }
+.stmt-file-picker svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.8 }
+.stmt-row-check svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.4 }
+.mail-preview-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.7 }
+.month-name-btn svg { stroke-linecap: round; stroke-linejoin: round; width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 2 }
+.icon-btn svg { width: 23px; height: 23px; flex: 0 0 auto }
+.native-home-mode { display: flex; gap: 2px; background: var(--fill); border-radius: 10px; padding: 3px; margin: 2px 0 14px }
+html.dark .busy-overlay { background: rgba(0,0,0,.68) }
+html.dark .busy-card { border-color: rgba(255,255,255,.12); box-shadow: 0 18px 60px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08) }
+html.dark .storage-boot { background: rgba(0,0,0,.68) }
+.seg button.on { background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.12); font-weight: 650 }
+html.dark .push-nav { background: rgba(0,0,0,.9) }
+html.dark .alert-box { background: rgba(44,44,46,.98) }
+html.dark .ios-menu { background: rgba(44,44,46,.88); border-color: rgba(255,255,255,.09) }
+html.dark .stock-detail-view { background: #000 }
+.pro3-legend i.forecast { border-top-style: dashed }
+.pro3-legend i.floor { border-color: var(--orange); border-top-style: dotted }
+.pro4-dup-toggle.on i { background: var(--blue); border-color: var(--blue); color: white }
+html.dark .money-ticker-card { background: #1C1C1E; box-shadow: inset 0 0 0 .5px #2C2C2E }
+.stmt-filterbar button.on { background: var(--label); color: var(--bg) }
+html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,0,0),var(--bg) 20%) }
+.native-home-mode button[aria-pressed=true] { background: var(--card); color: var(--label); box-shadow: 0 1px 3px #00000014 }
+.back-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.favorite-open { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; padding: 0; border: 0; background: transparent; text-align: left; color: var(--label) }
+.account-balance { font-variant-numeric: tabular-nums lining-nums }
+.display-month-button { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--label); border: 0; border-radius: 14px; padding: 0 8px; font: inherit; font-weight: 600 }
+.ring svg { transform: rotate(-90deg); width: 100%; height: auto; aspect-ratio: 1 }
+.native-quick-action svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
+.mm3-atf-daytoggle svg { width: 16px; height: 16px; flex: none; color: var(--label2); transition: transform .18s; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.mm3-atf-next-event-icon svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: 21px; height: 21px }
+.settings-profile-avatar svg { width: 38px; height: 38px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round }
+.profile-editor-avatar svg { fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round }
+.settings-chevron svg { width: 13px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.profile-editor-avatar svg { width: 62px; height: 62px }
+.settings-choice-mark svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.display-month-button svg { width: 15px; height: 15px }
+#assetsTop .large-title { font-size: 34px; white-space: nowrap; letter-spacing: -1px }
+#app .large-title { font-size: var(--native-title); font-weight: 600; letter-spacing: -.9px; line-height: 1.2; transform-origin: left center; transition: transform .18s var(--native-ease) }
+#app .nav-actions { gap: 4px }
+#app .nav-actions .icon-btn { width: 44px; height: 44px; min-width: 44px; background: transparent !important; box-shadow: none; color: var(--label) }
+#app .nav-actions .icon-btn svg { width: 22px; height: 22px }
+#screen-pay .mm3-salary-topbar { padding-bottom: 4px }
+#screen-pay .mm3-salary-range { display: flex; gap: 2px; background: var(--fill); border-radius: 9px; padding: 2px; margin-top: 2px }
+#screen-pay .mm3-salary-link { border: 0; background: transparent; color: var(--blue); font-weight: 650; padding: 5px 0; font-size: 13px }
+#lockScreen.show { display: flex }
+#screen-pay .mm3-salary-event { width: 100%; border: 0; background: transparent; display: grid; grid-template-columns: 34px minmax(0,1fr) auto; gap: 10px; align-items: center; text-align: left; padding: 8px 0 10px; border-bottom: .5px solid var(--sep); transition: transform .11s,opacity .11s }
+#screen-pay .mm3-salary-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; display: grid; gap: 8px; align-items: center; text-align: left; transition: transform .11s,opacity .11s,background .11s }
+#screen-pay .mm3-salary-detail-row { width: 100%; min-height: 48px; border: 0; border-bottom: .5px solid var(--sep); background: transparent; display: flex; align-items: center; gap: 10px; text-align: left; padding: 8px 0; transition: transform .11s,opacity .11s }
+#screen-pay .mm3-salary-record-row { width: 100%; min-height: 58px; border: 0; border-bottom: .5px solid var(--sep); background: transparent; display: flex; align-items: center; gap: 10px; text-align: left; padding: 8px 0 }
+#screen-pay .mm3-salary-scrub-guide { position: absolute; top: 8px; bottom: 37px; width: .5px; background: var(--label2); opacity: 0; pointer-events: none; transition: opacity 120ms ease; z-index: 4 }
+#screen-pay .mm3-salary-scrub-dot { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--card); border: 2px solid var(--green); transform: translate(-50%,-50%); opacity: 0; pointer-events: none; transition: opacity 120ms ease; z-index: 5 }
+#screen-pay .mm3-salary-scrub-tip { position: absolute; top: 2px; min-width: 82px; max-width: 140px; padding: 5px 7px; border-radius: 9px; background: rgba(28,28,30,.91); color: #fff; text-align: center; font-size: 8.5px; line-height: 1.25; transform: translateX(-50%); opacity: 0; pointer-events: none; transition: opacity 120ms ease; z-index: 6; box-shadow: 0 5px 16px rgba(0,0,0,.16); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px) }
+#screen-payments .mm3-payment-atf-chip { display: inline-flex; align-items: center; justify-content: center; min-height: 19px; padding: 2px 6px; border-radius: 999px; background: rgba(0,122,255,.10); color: var(--blue); font-size: 8px; font-weight: 760; letter-spacing: .02em }
+#screen-payments .mm3-payment-link { border: 0; background: transparent; color: var(--blue); font-weight: 650; padding: 6px 0; white-space: nowrap; font-size: 13px }
+#screen-payments .mm3-atf-tooltip { position: absolute; top: 4px; left: 50%; transform: translateX(-50%) translateY(-2px); opacity: 0; pointer-events: none; background: rgba(28,28,30,.90); color: #fff; border-radius: 10px; padding: 6px 8px; line-height: 1.3; box-shadow: 0 4px 14px rgba(0,0,0,.14); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: opacity .1s,transform .12s; z-index: 4; font-size: 12px; max-width: 250px }
+#screen-payments .mm3-payment-event { width: 100%; border: 0; background: transparent; display: grid; grid-template-columns: 34px minmax(0,1fr) auto; gap: 10px; align-items: center; text-align: left; padding: 9px 0 11px; border-bottom: .5px solid var(--sep); transition: transform .11s,opacity .11s,background .11s }
+#screen-payments .mm3-payment-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; display: grid; gap: 8px; align-items: center; text-align: left; transition: transform .11s,opacity .11s,background .11s }
+#screen-payments .mm3-payment-detail-row { width: 100%; min-height: 51px; border: 0; border-bottom: .5px solid var(--sep); background: transparent; display: flex; align-items: center; gap: 10px; text-align: left; padding: 8px 0; transition: transform .11s,opacity .11s }
+#screen-assets .mm3-assets-divider { height: .5px; background: var(--sep); margin: 11px 0 0 }
+#screen-assets .mm3-assets-tooltip { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); z-index: 3; min-width: 88px; max-width: 150px; padding: 6px 8px; border-radius: 10px; background: rgba(28,28,30,.91); color: #fff; font-size: 9px; line-height: 1.25; text-align: center; opacity: 0; pointer-events: none; transition: opacity .12s,transform .12s; box-shadow: 0 4px 16px rgba(0,0,0,.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px) }
+#screen-assets .mm3-assets-range { display: flex; gap: 2px; background: var(--fill); border-radius: 9px; padding: 2px; margin-top: 0 }
+#screen-assets .mm3-assets-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; color: inherit; display: grid; align-items: center; gap: 8px; text-align: left; position: relative; transition: background .12s,transform .11s,opacity .11s }
+#screen-assets .mm3-assets-reorder-placeholder { border-radius: 12px; background: rgba(0,122,255,.055); box-shadow: inset 0 0 0 1px rgba(0,122,255,.11); margin: 1px 0 }
+#sheet.mm3-salary-edit-sheet { background: var(--bg) }
+#app .native-home-mode { margin: 0 0 12px; padding: 3px; border-radius: 24px; background: var(--fill) }
+#screen-pay .mm3-salary-range button { flex: 1; border: 0; background: transparent; border-radius: 7px; padding: 5px 1px; color: var(--label2); min-width: 0; font-size: 11px }
+#screen-assets .mm3-assets-range button { flex: 1; min-width: 0; border: 0; background: transparent; border-radius: 7px; min-height: 28px; padding: 4px 1px; color: var(--label2); transition: transform .1s,background .14s,color .14s; font-size: 11px }
+#app .native-home-mode button { border-radius: 21px; font-size: 15px; font-weight: 600; color: var(--label2) }
+#screen-pay .mm3-salary-range button.on { background: var(--card); color: var(--label); font-weight: 650; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
+#screen-assets .mm3-assets-range button.on { background: var(--card); color: var(--label); font-weight: 700; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
+html.dark #screen-pay .mm3-salary-pull { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
+html.dark #screen-assets .mm3-assets-tooltip { background: rgba(58,58,60,.94) }
+html.dark #screen-assets .mm3-assets-menu-btn { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
+#app .native-home-mode button[aria-pressed=true] { background: var(--blue); color: #fff; box-shadow: 0 2px 5px #0000000d }
+#app .date-navigator { margin: 4px 0 8px; min-height: 44px; grid-template-columns: 44px minmax(0,1fr) 44px }
+#app .date-nav-btn { width: 44px; height: 44px; border-radius: 50%; background: transparent }
+#app .date-nav-label { font-size: 15px; font-weight: 650 }
+html.native-keyboard .tabbar { visibility: hidden; pointer-events: none }
+@media (prefers-contrast:more) {
+  .tab-selection { box-shadow: inset 0 0 0 1.5px var(--blue) }
+}
+@media (prefers-reduced-motion:reduce) {
+  .tab-selection,
+  .tab,
+  .tab svg { transition: none !important }
+  .tabbar.tab-dragging .tab-selection { scale: 1 }
+}
+@media (max-width:390px) {
+  .icon-btn { width: 36px; height: 38px }
+}
+@media (max-width:370px) {
+  .nav-actions { gap: 0 }
+  .icon-btn { width: 35px }
+}
+@media (max-width:350px) {
+  #app .nav-actions { gap: 0 }
+  #app .nav-actions .icon-btn { width: 44px; min-width: 44px }
+}
+@media (max-width:374px) {
+  .large-title { font-size: 32px }
+}
+@media (max-height:450px) {
+  .topbar .topbar-main { flex: 1 }
+  .large-title { font-size: 24px }
+}

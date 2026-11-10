@@ -1,0 +1,193 @@
+/* 資産の画面、口座・カードの詳細。 */
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block }
+.pro-finance-surface { background: var(--bg); min-height: 100% }
+.pro-finance-head { padding: 7px 1px 14px; border-bottom: .5px solid var(--sep) }
+.pro-periods { display: flex; gap: 5px; overflow-x: auto; padding: 9px 0 8px; scrollbar-width: none }
+.pro-periods::-webkit-scrollbar { display: none }
+.pro-chart-wrap { position: relative; margin: 0 -2px 6px; min-height: 230px; border-top: .5px solid transparent }
+.pro-chart-grid { stroke: var(--sep); stroke-width: .7; vector-effect: non-scaling-stroke }
+.pro-chart-line { fill: none; stroke: var(--blue); stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
+.pro-chart-fill { fill: var(--blue); opacity: .08 }
+.pro-chart-point { fill: var(--card); stroke: var(--blue); stroke-width: 1.6; vector-effect: non-scaling-stroke }
+.pro-chart-guide { stroke: var(--label2); stroke-width: .8; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke }
+.pro-chart-selected { fill: var(--blue); stroke: var(--card); stroke-width: 2; vector-effect: non-scaling-stroke }
+.pro-chart-readout strong { font-variant-numeric: tabular-nums; text-align: right }
+.pro-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-bottom: .5px solid var(--sep); margin: 0 0 12px }
+.pro-metric { padding: 11px 10px 12px 0; min-width: 0 }
+.pro-metric+.pro-metric { padding-left: 10px; border-left: .5px solid var(--sep) }
+.pro-action-row { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 14px 0 18px }
+.pro-bar-chart { height: 220px; display: flex; align-items: stretch; gap: 7px; padding: 15px 0 2px; border-bottom: .5px solid var(--sep) }
+.pro-bar-track { height: 155px; width: 100%; display: flex; align-items: flex-end; justify-content: center }
+.pro-bar { width: min(29px,70%); min-height: 2px; border-radius: 5px 5px 2px 2px; background: var(--blue) }
+.pro-bar-col.selected .pro-bar { background: var(--label) }
+.stock-detail-view .push-nav { background: rgba(242,242,247,.90) }
+html.dark .stock-detail-view .pro-period.on { background: #2C2C2E }
+html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
+.pro3-toolbar { display: flex; gap: 7px; align-items: center; margin: 0 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch }
+.pro3-toolbar::-webkit-scrollbar { display: none }
+.pro3-forecast-card { background: var(--card); border-radius: 18px; padding: 15px; margin-bottom: 12px }
+.pro3-forecast-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start }
+.confidence-meter>i { display: block; height: 100%; background: var(--blue); border-radius: 999px }
+.pro3-legend i { display: inline-block; width: 14px; border-top: 2px solid var(--blue); vertical-align: middle; margin-right: 4px }
+.pro3-fchart { margin-top: 12px; position: relative }
+.pro3-fgrid { stroke: var(--sep); stroke-width: .8 }
+.pro3-fline { fill: none; stroke: var(--blue); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 5 5 }
+.pro3-ffill { fill: color-mix(in srgb,var(--blue) 10%,transparent) }
+.pro3-ffloor { stroke: var(--orange); stroke-width: 1; stroke-dasharray: 2 4 }
+.pro3-fpoint { fill: var(--blue) }
+.pro3-factual { fill: var(--label); stroke: var(--card); stroke-width: 2 }
+.pro3-freadout { min-height: 38px; display: flex; justify-content: space-between; gap: 10px; align-items: center; border-top: .5px solid var(--sep); padding-top: 9px; margin-top: 5px }
+.pro3-event { display: grid; grid-template-columns: 58px 1fr auto; gap: 8px; align-items: start; padding: 10px 12px; border-bottom: .5px solid var(--sep) }
+.pro3-event:last-child { border-bottom: 0 }
+.pro3-scenario-grid { display: grid; gap: 8px; margin-top: 10px }
+.pro3-scenario.recommended { border-color: rgba(0,122,255,.42); box-shadow: inset 0 0 0 .5px rgba(0,122,255,.18) }
+.pro3-scenario-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start }
+.pro3-scenario-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px }
+.pro3-scenario-actions { display: flex; gap: 7px; margin-top: 9px }
+.pro3-allocation { background: var(--card); border-radius: 18px; padding: 15px; margin-bottom: 12px }
+.pro3-allocation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px }
+.pro3-allocation-btn { border: 0; background: var(--fill); border-radius: 12px; padding: 10px; text-align: left }
+.pro3-allocation-sum strong { font-variant-numeric: tabular-nums }
+.pro3-transfer-card { background: var(--card); border-radius: 15px; padding: 12px; margin-bottom: 9px }
+.pro3-check-row { display: grid; grid-template-columns: 26px 1fr auto; gap: 9px; align-items: center; min-height: 54px; padding: 8px 12px; border-bottom: .5px solid var(--sep); background: var(--card) }
+.pro3-check-row:last-child { border-bottom: 0 }
+.pro3-check.on:after { content: '✓'; font-size: 13px; font-weight: 800 }
+.pro3-check-main { min-width: 0 }
+.pro3-day-picks { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 6px; margin: 9px 0 }
+.pro3-preview-row:last-child { border-bottom: 0 }
+.pro3-preview-row strong { font-variant-numeric: tabular-nums }
+.pro3-allocation-ranges { margin-top: 12px; border-top: .5px solid var(--sep); padding-top: 8px }
+.pro4-command-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: -2px 0 12px }
+.pro4-command { border: 0; border-radius: 13px; background: var(--card); color: var(--blue); font-weight: 680; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 13px; min-height: 46px !important }
+.pro4-mode { margin: 2px 0 12px }
+.pro4-editor { background: var(--card); border-radius: 16px; padding: 12px; margin-bottom: 12px }
+.pro4-editor textarea { width: 100%; min-height: 92px; resize: vertical; border: 0; background: transparent; outline: none; font-size: 15px; line-height: 1.5; color: var(--label) }
+.pro4-editor textarea::placeholder { color: var(--label3) }
+.pro4-parse-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 8px }
+.pro4-parse-card.warn { box-shadow: inset 0 0 0 1px rgba(255,149,0,.28) }
+.pro4-parse-row { display: grid; grid-template-columns: 86px minmax(0,1fr); gap: 9px; align-items: center; min-height: 48px; padding: 7px 12px; border-bottom: .5px solid var(--sep) }
+.pro4-parse-row:last-child { border-bottom: 0 }
+.pro4-dup-toggle i { width: 20px; height: 20px; border: 1.5px solid var(--fill2); border-radius: 6px; display: grid; place-items: center; font-style: normal }
+.pro4-dup-toggle.on i:after { content: '✓'; font-weight: 800 }
+.pro4-searchbar { display: flex; align-items: center; gap: 8px; background: var(--card); border-radius: 13px; padding: 0 11px; margin-bottom: 8px; min-height: 44px }
+.pro4-search-filters { display: flex; gap: 7px; margin-bottom: 11px; overflow-x: auto; scrollbar-width: none }
+.pro4-search-filters::-webkit-scrollbar { display: none }
+.pro4-result-section { margin-bottom: 12px }
+.pro4-goal-banner { width: 100%; border: 0; background: var(--card); border-radius: 15px; padding: 12px 13px; margin: 0 0 12px; display: flex; align-items: center; gap: 11px; text-align: left }
+.pro4-goal-card { background: var(--card); border-radius: 17px; padding: 14px; margin-bottom: 10px }
+.pro4-goal-title { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start }
+.pro4-goal-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 11px }
+.pro4-goal-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 9px; padding: 10px 12px; border-bottom: .5px solid var(--sep); background: var(--card) }
+.pro4-goal-item:last-child { border-bottom: 0 }
+.pro4-item-actions { display: flex; gap: 6px; margin-top: 6px }
+.pro4-analysis-tabs { display: flex; gap: 6px; margin-bottom: 10px; overflow-x: auto; scrollbar-width: none }
+.pro4-analysis-tabs::-webkit-scrollbar { display: none }
+.pro4-analysis-row { width: 100%; border: 0; background: var(--card); padding: 10px 12px; text-align: left; border-bottom: .5px solid var(--sep) }
+.pro4-analysis-row:last-child { border-bottom: 0 }
+.pro4-analysis-bar i { display: block; height: 100%; border-radius: 99px; background: var(--blue) }
+.pro4-insight { background: var(--card); border-radius: 15px; padding: 13px; margin-bottom: 9px }
+.pro4-review-state { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--card); border-radius: 15px; padding: 13px; margin-bottom: 10px }
+.pro4-review-issue { display: grid; grid-template-columns: 30px minmax(0,1fr) auto; gap: 9px; align-items: center; padding: 10px 12px; background: var(--card); border-bottom: .5px solid var(--sep) }
+.pro4-review-issue:last-child { border-bottom: 0 }
+.pro4-review-issue .chev { font-size: 20px }
+.pro-chart-point.acf-chart-negative { fill: var(--red); stroke: var(--card) }
+.pro-chart-point.acf-chart-first-negative { animation: acfGraphPointPulse 2.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center }
+.pro-chart-axis.acf-zero-axis { fill: var(--red); font-weight: 700 }
+#screen-assets .mm3-assets-shell { padding-bottom: 8px; transform-origin: 50% 15%; contain: layout style }
+#screen-assets .mm3-assets-topbar .date-line { display: none }
+#screen-assets .mm3-assets-primary-label { color: var(--label2); font-size: 13px; font-weight: 500 }
+@media (max-width:390px) {
+  #screen-assets .mm3-assets-primary-value { font-size: 37px }
+}
+#screen-assets .mm3-assets-primary-value { margin-top: 4px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums lining-nums; font-size: 38px; font-weight: 700; line-height: 1.16; letter-spacing: -.9px; white-space: nowrap }
+#screen-assets .mm3-assets-section-title { letter-spacing: -.15px; font-size: 17px; line-height: 1.35; font-weight: 600 }
+#screen-assets .mm3-assets-caption { color: var(--label2); margin: -2px 1px 7px; font-size: 12px; line-height: 1.5 }
+#screen-assets .mm3-assets-menu-btn { min-height: 31px; border: 0; border-radius: 10px; color: var(--label); font-weight: 650; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; transition: transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease }
+#screen-assets .mm3-assets-menu-btn:active { transform: scale(.96); opacity: .7 }
+#screen-assets .mm3-assets-history-btn { min-height: 44px; padding: 10px 12px; font-size: 13px; color: var(--blue); gap: 7px }
+#screen-assets .mm3-assets-chart { position: relative; height: 190px; margin: 1px -1px 0; touch-action: pan-y; -webkit-user-select: none; user-select: none }
+#screen-assets .mm3-assets-grid { stroke: var(--sep); stroke-width: .7; opacity: .62 }
+#screen-assets .mm3-assets-zero { stroke: var(--red); stroke-width: .8; stroke-dasharray: 4 4; opacity: .55 }
+#screen-assets .mm3-assets-area { fill: var(--blue); opacity: .055 }
+#screen-assets .mm3-assets-line { fill: none; stroke: var(--blue); stroke-width: 2.15; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 800; stroke-dashoffset: 800; animation: mm3AssetLineReveal .62s cubic-bezier(.2,.8,.2,1) forwards }
+#screen-assets .mm3-assets-line.forecast { stroke-dasharray: 5 4; stroke-dashoffset: 0; animation: none; stroke: var(--blue); opacity: .68 }
+#screen-assets .mm3-assets-axis { font-size: 8.3px; fill: var(--label2) }
+#screen-assets .mm3-assets-guide { stroke: var(--label2); stroke-width: .8; opacity: 0; transition: opacity .12s }
+#screen-assets .mm3-assets-selected { fill: var(--card); stroke: var(--blue); stroke-width: 2.2; opacity: 0; transition: opacity .12s }
+#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-guide,
+#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-selected,
+#screen-assets .mm3-assets-chart.scrubbing .mm3-assets-tooltip { opacity: 1 }
+#screen-assets .mm3-assets-range button:active { transform: scale(.95) }
+#screen-assets .mm3-assets-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: .5px solid var(--sep); margin-top: 10px }
+#screen-assets .mm3-assets-metric { padding: 10px 8px 1px 0; min-width: 0 }
+#screen-assets .mm3-assets-metric+.mm3-assets-metric { padding-left: 8px; border-left: .5px solid var(--sep) }
+#screen-assets .mm3-assets-watchlist { border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep); margin-bottom: 3px }
+#screen-assets .mm3-assets-watchrow:last-child { border-bottom: 0 }
+#screen-assets .mm3-assets-watchrow:active { background: rgba(118,118,128,.07); transform: scale(.985); opacity: .72 }
+#screen-assets .mm3-assets-watch-main { min-width: 0 }
+@media (max-width:390px) {
+  #screen-assets .mm3-assets-spark { width: 62px }
+}
+#screen-assets .mm3-assets-spark { height: 29px; display: grid; place-items: center; min-width: 0; width: 54px }
+#screen-assets .mm3-assets-spark .spark-line { stroke-width: 1.55 }
+#screen-assets .mm3-assets-watch-value { text-align: right; min-width: 0 }
+#screen-assets .mm3-assets-empty-chart { height: 152px; display: grid; place-items: center; text-align: center; color: var(--label2); font-size: 11px; line-height: 1.45; border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep) }
+#screen-assets .mm3-assets-chart-switch { animation: mm3AssetSwitch .24s cubic-bezier(.2,.8,.2,1) }
+#screen-assets .mm3-assets-sort-flip { will-change: transform }
+#screen-assets .mm3-assets-topbar .icon-btn { transition: transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease }
+#screen-assets .mm3-assets-watchlist.mm3-assets-manual { position: relative; touch-action: pan-y }
+#screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow { grid-template-columns: 20px minmax(0,1.08fr) 62px minmax(76px,.76fr); cursor: grab; -webkit-user-select: none; user-select: none; touch-action: pan-y }
+#screen-assets .mm3-assets-watchrow.mm3-assets-dragging { cursor: grabbing; background: var(--card); border-radius: 13px; padding-left: 7px; padding-right: 7px; box-shadow: 0 11px 28px rgba(0,0,0,.17); transform: scale(1.018); opacity: .985; transition: box-shadow 150ms ease,transform 150ms var(--mm3-ease); z-index: 90 }
+#screen-assets .mm3-assets-manual-hint { font-size: 9.5px; color: var(--label2); margin: -2px 1px 7px; animation: mm3ManualHintIn 220ms var(--mm3-ease) }
+#screen-assets .mm3-assets-area.forecast { fill: var(--blue); opacity: .035 }
+#screen-assets .mm3-assets-selected.forecast { stroke: var(--blue) }
+@media (max-width:350px) {
+  .pro3-recon-summary { grid-template-columns: 1fr }
+}
+.pro3-recon-summary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin-bottom: 12px }
+#screen-assets .mm3-assets-primary { padding: 16px 18px; background: var(--card); border: 0; border-radius: 16px; margin-top: 6px }
+#screen-assets .mm3-assets-menu-btn { font-size: 13px; padding: 8px 12px; background: var(--fill); box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none }
+@media (max-width:390px) {
+  #screen-assets .mm3-assets-watchrow { grid-template-columns: minmax(0,1fr) 62px 76px; gap: 6px }
+}
+#screen-assets .mm3-assets-watchrow { min-height: 72px; padding: 12px 0; grid-template-columns: minmax(0,1fr) 54px minmax(88px,auto) }
+html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
+.profile-photo-section { display: flex; align-items: center; flex-direction: column; gap: 8px; margin: 24px 0 18px }
+.profile-photo-action { display: block; min-height: 44px; padding: 10px 16px; border: 0; background: transparent; color: var(--blue); font-size: 15px; margin: 0 auto }
+.profile-photo-action[hidden] { display: none }
+.profile-name-field { padding: 0; border: 0; background: transparent; width: 100% }
+#app .pro4-command-strip { gap: 8px; margin: 0 0 16px }
+#app .pro4-command { background: var(--card); border-radius: var(--native-control); font-size: 14px }
+#app .mm3-assets-shell { background: transparent }
+@media (prefers-reduced-motion:reduce) {
+  #screen-assets .mm3-assets-line { animation: none; stroke-dashoffset: 0 }
+  #screen-assets .mm3-assets-chart-switch { animation: none !important }
+  #screen-assets .mm3-assets-guide,
+  #screen-assets .mm3-assets-selected,
+  #screen-assets .mm3-assets-tooltip { transition: none !important }
+  #screen-assets .mm3-assets-manual-hint { animation: none !important }
+  .mm3-assets-line { stroke-dashoffset: 0 !important }
+}
+@media (max-width:390px) {
+  .pro-metrics { grid-template-columns: 1fr 1fr }
+  .pro-metric:nth-child(3) { border-left: 0; border-top: .5px solid var(--sep); padding-left: 0; grid-column: 1/-1 }
+  .pro-action-row { grid-template-columns: 1fr 1fr }
+  .pro-action-row .pro-action-btn:last-child { grid-column: 1/-1 }
+  .pro-chart-svg { height: 214px }
+  .pro-chart-wrap { min-height: 214px }
+  #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow { grid-template-columns: 18px minmax(0,1fr) 54px 72px; gap: 5px }
+}
+@media (max-width:350px) {
+  .pro3-allocation-grid,
+  .pro3-scenario-metrics { grid-template-columns: 1fr }
+  .pro3-day-picks { grid-template-columns: repeat(3,minmax(0,1fr)) }
+  .pro4-command-strip { grid-template-columns: 1fr }
+  .pro4-parse-row { grid-template-columns: 74px minmax(0,1fr) }
+  .pro4-goal-metrics { grid-template-columns: 1fr }
+  .pro4-review-issue { grid-template-columns: 28px minmax(0,1fr) auto }
+}
+@media (max-width:374px) {
+  #screen-assets .mm3-assets-watchrow { grid-template-columns: minmax(0,1fr) minmax(94px,auto); gap: 12px }
+  #screen-assets .mm3-assets-spark { display: none }
+  #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow { grid-template-columns: 20px minmax(0,1fr) minmax(90px,auto) }
+}

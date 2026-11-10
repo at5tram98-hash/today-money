@@ -1265,6 +1265,7 @@ const MONEY_SYMBOLS=Object.freeze({
   "chevronLeft": "<path d=\"m15 5-7 7 7 7\"/>",
   "chevronRight": "<path d=\"m9 5 7 7-7 7\"/>",
   "chevronDown": "<path d=\"m6 9 6 6 6-6\"/>",
+  "chevronUp": "<path d=\"m6 15 6-6 6 6\"/>",
   "check": "<path d=\"m5 12.5 4.5 4.5L19 7.5\"/>",
   "trash": "<path d=\"M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5\"/>",
   "edit": "<path d=\"M15 5.5 18.5 9M4.5 19.5l1-4.5L16 4.5a1.4 1.4 0 0 1 2 0l1.5 1.5a1.4 1.4 0 0 1 0 2L9 18.5l-4.5 1Z\"/>",
@@ -1481,7 +1482,7 @@ async function requestSheetClose(){
   if(document.getElementById('calculator').classList.contains('show')){closeCalc();return}
   const sheet=document.getElementById('sheet');if(!sheet.classList.contains('show')||sheet.dataset.commitPending==='true')return;
   nativeSheetClosePending=true;const revision=sheet.dataset.nativeRevision;
-  try{if(sheetDirtyState&&!await showAlert('変更を破棄しますか？','まだ保存していない変更があります。',{destructive:true,okText:'破棄',cancelText:'戻る'}))return;if(sheet.dataset.nativeRevision===revision)closeSheet()}finally{nativeSheetClosePending=false}
+  try{if(sheetDirtyState&&!await showAlert('変更を破棄しますか？','まだ保存していない変更があります。保存済みの記録は変わりません。',{destructive:true,okText:'変更を破棄',cancelText:'編集を続ける'}))return;if(sheet.dataset.nativeRevision===revision)closeSheet()}finally{nativeSheetClosePending=false}
 }
 function installSheetDrag(sheet){
   const grabber=sheet?.querySelector('.grabber');if(!grabber)return()=>{};
@@ -3269,10 +3270,10 @@ function openFinancialUpdates(kind,month=ym()){
 function openCategoryEdit(index,after){
   const existing=index>=0?data.categories[index]:null,icons=['fork','tram','bus','bag','cart','tshirt','ticket','game','repeat','book','bolt','house','heart','gift','phone','coffee','medical','ellipsis'];
   let selected=normalizeCategoryIcon(existing?.icon,existing?.id);
-  openSheet(`<div class="sheet-nav"><button class="nav-text" id="ceCancel">キャンセル</button><div class="sheet-title">カテゴリ編集</div><button class="nav-text bold" id="ceSave">保存</button></div><div class="sheet-body"><div class="form-group-title">カテゴリ</div><div class="form-card"><div class="form-section"><div class="form-label">名前</div><input class="field" id="ceName" value="${esc(existing?.name||'')}"></div><div class="form-section"><div class="form-label">カラー</div><input class="field" id="ceColor" type="color" value="${esc(existing?.color||'#007AFF')}"></div></div><div class="form-group-title">アイコン</div><div class="icon-picker">${icons.map(x=>`<button class="icon-choice ${x===selected?'on':''}" data-sym="${x}">${icon(x)}</button>`).join('')}</div>${existing&&data.categories.length>1?'<button class="secondary danger" id="ceDelete" style="margin-top:16px">カテゴリを削除</button>':''}</div>`,'full',()=>{
+  openSheet(`<div class="sheet-nav"><button class="nav-text" id="ceCancel">キャンセル</button><div class="sheet-title">カテゴリ編集</div><button class="nav-text bold" id="ceSave">保存</button></div><div class="sheet-body"><div class="form-group-title">カテゴリ</div><div class="form-card"><div class="form-section"><div class="form-label">名前</div><input class="field" id="ceName" value="${esc(existing?.name||'')}"></div><div class="form-section"><div class="form-label">カラー</div><input class="field" id="ceColor" type="color" value="${esc(existing?.color||'#007AFF')}"></div></div><div class="form-group-title">アイコン</div><div class="icon-picker">${icons.map(x=>`<button type="button" class="icon-choice ${x===selected?'on':''}" data-sym="${x}" aria-label="アイコン ${esc(x)}" aria-pressed="${x===selected}">${icon(x)}</button>`).join('')}</div>${existing&&data.categories.length>1?'<button class="secondary danger" id="ceDelete" style="margin-top:16px">カテゴリを削除</button>':''}</div>`,'full',()=>{
     document.querySelectorAll('[data-sym]').forEach(b=>b.onclick=()=>{
       selected=b.dataset.sym;
-      document.querySelectorAll('[data-sym]').forEach(x=>x.classList.toggle('on',x===b))
+      document.querySelectorAll('[data-sym]').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',String(x===b))});markSheetDirty()
     });
     document.getElementById('ceCancel').onclick=requestSheetClose;
     document.getElementById('ceSave').onclick=()=>{
@@ -3352,6 +3353,7 @@ async function resetAllData({keepSeed=true}={}){
   const fresh=normalizeData({meta:{legacyMigrated:true,seedVersion:keepSeed?0:SEED_VERSION}});
   fresh.meta.legacyMigrated=true;fresh.meta.seedVersion=keepSeed?0:SEED_VERSION;
   if(keepSeed)applyFirstRunSeed(fresh);
+  ensureInformationArchitecture(fresh);
   mm3PendingAsyncCommit=true;
   try{
     await saveAsync({snapshot:fresh});
@@ -3501,6 +3503,7 @@ async function restoreBackupPayload(obj){
   mm3PendingAsyncCommit=true;
   try{
     const next=prepareLoadedData(obj,{applySeed:false,allowLegacy:false});
+    ensureInformationArchitecture(next);
     await writeRecoverySnapshotAsync('before_import',data);
     await saveAsync({snapshot:next});
     data=mm3StateGuardMode?mm3GuardData(next):next;
@@ -3606,18 +3609,21 @@ function renderLock(){const l=document.getElementById('lockScreen');if(!data.sec
 let appHiddenAt=0;function handleVisibilityChange(){if(document.hidden){appHiddenAt=Date.now();return}if(data.security.enabled&&data.security.relock!=='never'&&appHiddenAt){const elapsed=Date.now()-appHiddenAt,delay=data.security.relock==='5m'?300000:data.security.relock==='1m'?60000:0;if(elapsed>=delay)renderLock()}if(document.visibilityState==='visible'){try{if(pruneExpiredSystemNotices())renderAll()}catch(e){console.error('notice expiry failed',e)}maybeAutoSyncGmail(true)}}document.addEventListener('visibilitychange',handleVisibilityChange)
 
 /* === My Money 2.0 information architecture / Favorites / Tags === */
-;(function installInformationArchitecture(){
+;/* 起動時だけでなく、全データ削除やバックアップ復元で作った新しいデータにも同じ補完を行う */
+function ensureInformationArchitecture(target=data){
  let changed=false;
- if(!['today','month'].includes(data.homeViewMode)){data.homeViewMode='today';changed=true}
- if(!Array.isArray(data.sidebarFavorites)){data.sidebarFavorites=[];changed=true}
- if(!Array.isArray(data.sidebarFavoriteOrder)){data.sidebarFavoriteOrder=[...data.sidebarFavorites];changed=true}
- if(!Array.isArray(data.tags)){data.tags=[];changed=true}
- if(!data.favoriteTagMap||typeof data.favoriteTagMap!=='object'||Array.isArray(data.favoriteTagMap)){data.favoriteTagMap={};changed=true}
- if(!['recommended','many','minimal'].includes(data.notificationSettings?.level)){data.notificationSettings={...(data.notificationSettings||{}),level:'recommended'};changed=true}
- for(const list of [data.banks,data.cards,data.debitCards,data.employers,data.fixedPayments,data.largeExpensePlans])for(const x of list){if(!Array.isArray(x.tagIds)){x.tagIds=[];changed=true}}
- tabScrollPositions.payments=Number(tabScrollPositions.payments)||0;
- // Boot persists the final normalized state once, after all startup migrations.
-})();
+ if(!['today','month'].includes(target.homeViewMode)){target.homeViewMode='today';changed=true}
+ if(!Array.isArray(target.sidebarFavorites)){target.sidebarFavorites=[];changed=true}
+ if(!Array.isArray(target.sidebarFavoriteOrder)){target.sidebarFavoriteOrder=[...target.sidebarFavorites];changed=true}
+ if(!Array.isArray(target.tags)){target.tags=[];changed=true}
+ if(!target.favoriteTagMap||typeof target.favoriteTagMap!=='object'||Array.isArray(target.favoriteTagMap)){target.favoriteTagMap={};changed=true}
+ if(!['recommended','many','minimal'].includes(target.notificationSettings?.level)){target.notificationSettings={...(target.notificationSettings||{}),level:'recommended'};changed=true}
+ for(const list of [target.banks,target.cards,target.debitCards,target.employers,target.fixedPayments,target.largeExpensePlans])for(const x of list){if(!Array.isArray(x.tagIds)){x.tagIds=[];changed=true}}
+ return changed;
+}
+ensureInformationArchitecture();
+tabScrollPositions.payments=Number(tabScrollPositions.payments)||0;
+// Boot persists the final normalized state once, after all startup migrations.
 
 
 const starSvg=()=>'<svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.4 20.2 7.5 14 3 9.6l6.2-.9z"/></svg>';
@@ -4031,7 +4037,7 @@ function openAppearanceSettings(){
 }
 function openFeedbackSettings(){
   let draft=feedbackSettings();
-  const draw=()=>settingsDetailView('操作フィードバック',`<div class="settings-detail-intro"><h2>操作フィードバック</h2><p>音・触覚・動きを、自分に合う使い心地に。</p></div><div class="group">${settingsToggleHtml('fbSound','操作音','保存・承認・同期などの重要操作で再生',draft.sound)}${settingsToggleHtml('fbHaptic','触覚','対応する端末で軽い振動を返します',draft.haptic)}${settingsToggleHtml('fbMotion','アニメーション','画面の移動や承認の動きを表示',draft.motion)}</div><div class="section-head">音量</div><div class="card card-pad"><div class="feedback-volume"><input type="range" id="fbVolume" min="0" max="100" step="5" value="${Math.round(draft.volume*100)}" aria-label="操作音の音量"><output id="fbVolumeLabel" for="fbVolume">${Math.round(draft.volume*100)}%</output></div></div><p class="settings-section-footer">変更は自動保存されます。端末の「視差効果を減らす」設定を優先します。</p>`,root=>{
+  const draw=()=>settingsDetailView('操作フィードバック',`<div class="settings-detail-intro"><h2>操作フィードバック</h2><p>音・触覚・動きを、自分に合う使い心地に。</p></div><div class="group">${settingsToggleHtml('fbSound','操作音','保存・承認・同期などの重要操作で再生',draft.sound)}${settingsToggleHtml('fbHaptic','触覚','対応する端末で軽い振動を返します',draft.haptic)}${settingsToggleHtml('fbMotion','アニメーション','画面の移動や承認の動きを表示',draft.motion)}</div><div class="section-head">音量</div><div class="card card-pad"><div class="feedback-volume"><button type="button" class="v11-step-btn" id="fbVolumeDown" aria-label="音量を下げる">−</button><input type="range" id="fbVolume" min="0" max="100" step="5" value="${Math.round(draft.volume*100)}" aria-label="操作音の音量"><button type="button" class="v11-step-btn" id="fbVolumeUp" aria-label="音量を上げる">＋</button><output id="fbVolumeLabel" for="fbVolume">${Math.round(draft.volume*100)}%</output></div></div><p class="settings-section-footer">変更は自動保存されます。端末の「視差効果を減らす」設定を優先します。</p>`,root=>{
     const persist=()=>{
       try{safeCommit(()=>{data.feedbackSettings={...draft}},{label:'feedback settings'})}catch(error){draft=feedbackSettings();draw();return false}
       applyAppearance();renderSettings();return true;
@@ -4043,6 +4049,9 @@ function openFeedbackSettings(){
     const range=root.querySelector('#fbVolume');
     range.oninput=event=>{draft.volume=clamp(Number(event.target.value)/100,0,1);root.querySelector('#fbVolumeLabel').textContent=`${Math.round(draft.volume*100)}%`};
     range.onchange=()=>{if(persist()&&draft.sound)feedback.selection()};
+    /* 第11版 SET-111: スライダーの代替として5%刻みのボタンを併設 */
+    const stepVolume=delta=>{range.value=String(clamp(Number(range.value)+delta,0,100));range.oninput({target:range});range.onchange()};
+    root.querySelector('#fbVolumeDown').onclick=()=>stepVolume(-5);root.querySelector('#fbVolumeUp').onclick=()=>stepVolume(5);
   });draw();
 }
 function openHelp(){
@@ -4387,7 +4396,7 @@ function acfCashCardGraphHtml(f){
 
 function openAcfSetup(){
   let reserve=acfDefaultSettings().reserveFloor,useCard=data.acfSettings.creditFallbackEnabled!==false,ratio=clamp(Number(data.acfSettings.creditAggressiveness??100)||0,0,100);
-  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="acfSetupCancel">閉じる</button><div class="sheet-title">ACFを設定</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="goal-intro-card"><div class="goal-intro-icon">${icon('chart')}</div><div class="goal-intro-title">ACF</div><div class="goal-intro-copy">給与・カード引落・固定支払い・大型支出を日付順に見て、今日使える生活費を予測します。</div></div><div class="form-group-title">基本設定</div><div class="form-card"><div class="form-section">${moneyButton('acfSetupReserve','最低残したい金額',reserve)}</div><div class="form-section"><div class="inline-value-row"><div><div class="form-label">カードを利用</div><div class="row-sub">対象支出をカード比率に合わせて配分</div></div><button type="button" class="switch ${useCard?'on':''}" id="acfSetupUseCard"></button></div></div><div class="form-section"><div class="acf-credit-head"><span>カードで支払う割合</span><strong id="acfSetupRatioText">${Math.round(ratio)}%</strong></div><input type="range" class="acf-credit-range" id="acfSetupRatio" min="0" max="100" step="1" value="${ratio}" ${useCard?'':'disabled'}></div></div><div class="group"><div class="row"><div class="row-main"><div class="row-title">現在の全銀行預金</div></div><div class="row-value">${yen(totalDeposits())}</div></div><div class="row"><div class="row-main"><div class="row-title">カード1日上限</div><div class="row-sub">詳細設定で変更できます</div></div><div class="row-value">${yen(acfDefaultSettings().creditDailyLimit)}</div></div></div><button type="button" class="primary" id="acfSetupStart">設定して開始</button></div>`,'full',root=>{
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="acfSetupCancel">閉じる</button><div class="sheet-title">ACFを設定</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="goal-intro-card"><div class="goal-intro-icon">${icon('chart')}</div><div class="goal-intro-title">ACF</div><div class="goal-intro-copy">給与・カード引落・固定支払い・大型支出を日付順に見て、今日使える生活費を予測します。</div></div><div class="form-group-title">基本設定</div><div class="form-card"><div class="form-section">${moneyButton('acfSetupReserve','最低残したい金額',reserve)}</div><div class="form-section"><div class="inline-value-row"><div><div class="form-label">カードを利用</div><div class="row-sub">対象支出をカード比率に合わせて配分</div></div><button type="button" class="switch ${useCard?'on':''}" id="acfSetupUseCard"></button></div></div><div class="form-section"><div class="acf-credit-head"><span>カードで支払う割合</span><strong id="acfSetupRatioText">${Math.round(ratio)}%</strong></div><input type="range" class="acf-credit-range" id="acfSetupRatio" aria-label="カードで払う割合（%）" min="0" max="100" step="1" value="${ratio}" ${useCard?'':'disabled'}></div></div><div class="group"><div class="row"><div class="row-main"><div class="row-title">現在の全銀行預金</div></div><div class="row-value">${yen(totalDeposits())}</div></div><div class="row"><div class="row-main"><div class="row-title">カード1日上限</div><div class="row-sub">詳細設定で変更できます</div></div><div class="row-value">${yen(acfDefaultSettings().creditDailyLimit)}</div></div></div><button type="button" class="primary" id="acfSetupStart">設定して開始</button></div>`,'full',root=>{
     const reserveBtn=root.querySelector('#acfSetupReserve'),toggle=root.querySelector('#acfSetupUseCard'),range=root.querySelector('#acfSetupRatio'),txt=root.querySelector('#acfSetupRatioText');
     reserveBtn.onclick=()=>openCalculator('最低残したい金額',reserve,v=>{reserve=v;reserveBtn.querySelector('.val').textContent=yen(v)});
     toggle.onclick=e=>{useCard=!useCard;e.currentTarget.classList.toggle('on',useCard);range.disabled=!useCard;txt.textContent=useCard?`${Math.round(ratio)}%`:'OFF'};
@@ -5327,7 +5336,8 @@ function mm3AssetExitManualMode(){
 function mm3FlipRows(list,rows,before){if(mm3MotionReduced())return;requestAnimationFrame(()=>rows.forEach(r=>{const a=before.get(r),b=r.getBoundingClientRect();if(!a)return;const dy=a.top-b.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:300,easing:'cubic-bezier(.2,.85,.2,1)'})}))}
 function mm3AssetInstallManualReorder(){
   const list=document.getElementById('mm3AssetWatchlist');if(!list||mm3AssetSortMode!=='manual')return;mm3AssetExitManualMode();list.classList.add('mm3-assets-manual');
-  const head=list.previousElementSibling;if(head?.classList.contains('mm3-assets-section-head')&&!document.querySelector('#screen-assets .mm3-assets-manual-hint'))head.insertAdjacentHTML('afterend','<div class="mm3-assets-manual-hint">口座を長押しして、そのまま上下に動かすと並べ替えられます。</div>');
+  const head=list.previousElementSibling;if(head?.classList.contains('mm3-assets-section-head')&&!document.querySelector('#screen-assets .mm3-assets-manual-hint'))head.insertAdjacentHTML('afterend','<div class="mm3-assets-manual-hint">口座を長押しして、そのまま上下に動かすと並べ替えられます。<button type="button" class="v11-inline-action" id="mm3AssetOrderEdit">ボタンで並べ替える</button></div>');
+  const orderEdit=document.getElementById('mm3AssetOrderEdit');if(orderEdit)orderEdit.onclick=openAssetOrderSheet;
   [...list.querySelectorAll('.mm3-assets-watchrow')].forEach(row=>row.insertAdjacentHTML('afterbegin','<span class="mm3-assets-reorder-handle" aria-hidden="true">•••</span>'));
   let state=null,timer=null,placeholder=null,dragRect=null;
   const clearTimer=()=>{if(timer){clearTimeout(timer);timer=null}};
@@ -5345,6 +5355,18 @@ function mm3AssetApplySort(mode){
   const rows=[...list.querySelectorAll('.mm3-assets-watchrow')],before=new Map(rows.map(r=>[r,r.getBoundingClientRect()])),order=mm3AssetSortedBanks().map(b=>b.id),map=new Map(rows.map(r=>[r.dataset.bank,r]));order.forEach(id=>{const row=map.get(id);if(row)list.appendChild(row)});const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.documentElement.classList.contains('motion-off');if(!reduce)requestAnimationFrame(()=>{rows.forEach(r=>{const first=before.get(r),last=r.getBoundingClientRect(),dy=first.top-last.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:360,easing:'cubic-bezier(.2,.85,.2,1)'})})});const btn=document.getElementById('mm3AssetSort');if(btn)btn.innerHTML=`${mm3AssetSortLabel()} ${icon('chevronDown')}`;feedback?.selection?.()
 }
 const __mm3P4AssetApplySort=mm3AssetApplySort;
+/* 第11版 ASSETS-103: 長押しドラッグの代替。上下ボタンで下書きを並べ替え、「完了」で保存する。 */
+function openAssetOrderSheet(){
+  let order=mm3AssetSortedBanks().map(b=>b.id);const original=order.join('|');
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="aoCancel">キャンセル</button><div class="sheet-title">口座の並び順</div><button type="button" class="nav-text" id="aoSave">完了</button></div><div class="sheet-body"><div class="group" id="aoList"></div><div class="form-helper">「完了」を押すと並び順を保存します。口座の残高や記録は変わりません。</div></div>`,'half',root=>{
+    const list=root.querySelector('#aoList');
+    const draw=focus=>{list.innerHTML=order.map((id,i)=>{const name=esc(bankById(id)?.name||'口座');return `<div class="row v11-order-row"><div class="row-main"><div class="row-title">${name}</div><div class="row-sub">${i+1}番目</div></div><button type="button" class="v11-order-btn" data-ao-id="${esc(id)}" data-ao-move="-1" aria-label="${name}を上へ" ${i===0?'disabled':''}>${icon('chevronUp')}</button><button type="button" class="v11-order-btn" data-ao-id="${esc(id)}" data-ao-move="1" aria-label="${name}を下へ" ${i===order.length-1?'disabled':''}>${icon('chevronDown')}</button></div>`}).join('');if(focus)(list.querySelector(`[data-ao-id="${CSS.escape(focus.id)}"][data-ao-move="${focus.move}"]:not(:disabled)`)||list.querySelector(`[data-ao-id="${CSS.escape(focus.id)}"]:not(:disabled)`))?.focus();markSheetDirty(order.join('|')!==original)};
+    list.onclick=e=>{const b=e.target.closest('[data-ao-move]');if(!b||b.disabled)return;const i=order.indexOf(b.dataset.aoId),j=i+Number(b.dataset.aoMove);if(i<0||j<0||j>=order.length)return;[order[i],order[j]]=[order[j],order[i]];feedback?.selection?.();draw({id:b.dataset.aoId,move:b.dataset.aoMove})};
+    root.querySelector('#aoCancel').onclick=requestSheetClose;
+    root.querySelector('#aoSave').onclick=()=>{mm3SaveUiPrefs({assetManualOrder:order,assetSortMode:'manual'});closeSheet();renderAssets()};
+    draw();
+  });
+}
 mm3AssetApplySort=function(mode){
   if(mode==='manual'){
     const prefs=mm3LoadUiPrefs(),hasSaved=Array.isArray(prefs.assetManualOrder)&&prefs.assetManualOrder.length;

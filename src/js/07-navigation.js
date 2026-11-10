@@ -145,7 +145,7 @@ async function requestSheetClose(){
   if(document.getElementById('calculator').classList.contains('show')){closeCalc();return}
   const sheet=document.getElementById('sheet');if(!sheet.classList.contains('show')||sheet.dataset.commitPending==='true')return;
   nativeSheetClosePending=true;const revision=sheet.dataset.nativeRevision;
-  try{if(sheetDirtyState&&!await showAlert('変更を破棄しますか？','まだ保存していない変更があります。',{destructive:true,okText:'破棄',cancelText:'戻る'}))return;if(sheet.dataset.nativeRevision===revision)closeSheet()}finally{nativeSheetClosePending=false}
+  try{if(sheetDirtyState&&!await showAlert('変更を破棄しますか？','まだ保存していない変更があります。保存済みの記録は変わりません。',{destructive:true,okText:'変更を破棄',cancelText:'編集を続ける'}))return;if(sheet.dataset.nativeRevision===revision)closeSheet()}finally{nativeSheetClosePending=false}
 }
 function installSheetDrag(sheet){
   const grabber=sheet?.querySelector('.grabber');if(!grabber)return()=>{};

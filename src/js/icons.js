@@ -30,6 +30,7 @@ const MONEY_SYMBOLS=Object.freeze({
   "chevronLeft": "<path d=\"m15 5-7 7 7 7\"/>",
   "chevronRight": "<path d=\"m9 5 7 7-7 7\"/>",
   "chevronDown": "<path d=\"m6 9 6 6 6-6\"/>",
+  "chevronUp": "<path d=\"m6 15 6-6 6 6\"/>",
   "check": "<path d=\"m5 12.5 4.5 4.5L19 7.5\"/>",
   "trash": "<path d=\"M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5\"/>",
   "edit": "<path d=\"M15 5.5 18.5 9M4.5 19.5l1-4.5L16 4.5a1.4 1.4 0 0 1 2 0l1.5 1.5a1.4 1.4 0 0 1 0 2L9 18.5l-4.5 1Z\"/>",

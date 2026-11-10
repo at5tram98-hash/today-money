@@ -1,15 +1,18 @@
-(function installInformationArchitecture(){
+/* 起動時だけでなく、全データ削除やバックアップ復元で作った新しいデータにも同じ補完を行う */
+function ensureInformationArchitecture(target=data){
  let changed=false;
- if(!['today','month'].includes(data.homeViewMode)){data.homeViewMode='today';changed=true}
- if(!Array.isArray(data.sidebarFavorites)){data.sidebarFavorites=[];changed=true}
- if(!Array.isArray(data.sidebarFavoriteOrder)){data.sidebarFavoriteOrder=[...data.sidebarFavorites];changed=true}
- if(!Array.isArray(data.tags)){data.tags=[];changed=true}
- if(!data.favoriteTagMap||typeof data.favoriteTagMap!=='object'||Array.isArray(data.favoriteTagMap)){data.favoriteTagMap={};changed=true}
- if(!['recommended','many','minimal'].includes(data.notificationSettings?.level)){data.notificationSettings={...(data.notificationSettings||{}),level:'recommended'};changed=true}
- for(const list of [data.banks,data.cards,data.debitCards,data.employers,data.fixedPayments,data.largeExpensePlans])for(const x of list){if(!Array.isArray(x.tagIds)){x.tagIds=[];changed=true}}
- tabScrollPositions.payments=Number(tabScrollPositions.payments)||0;
- // Boot persists the final normalized state once, after all startup migrations.
-})();
+ if(!['today','month'].includes(target.homeViewMode)){target.homeViewMode='today';changed=true}
+ if(!Array.isArray(target.sidebarFavorites)){target.sidebarFavorites=[];changed=true}
+ if(!Array.isArray(target.sidebarFavoriteOrder)){target.sidebarFavoriteOrder=[...target.sidebarFavorites];changed=true}
+ if(!Array.isArray(target.tags)){target.tags=[];changed=true}
+ if(!target.favoriteTagMap||typeof target.favoriteTagMap!=='object'||Array.isArray(target.favoriteTagMap)){target.favoriteTagMap={};changed=true}
+ if(!['recommended','many','minimal'].includes(target.notificationSettings?.level)){target.notificationSettings={...(target.notificationSettings||{}),level:'recommended'};changed=true}
+ for(const list of [target.banks,target.cards,target.debitCards,target.employers,target.fixedPayments,target.largeExpensePlans])for(const x of list){if(!Array.isArray(x.tagIds)){x.tagIds=[];changed=true}}
+ return changed;
+}
+ensureInformationArchitecture();
+tabScrollPositions.payments=Number(tabScrollPositions.payments)||0;
+// Boot persists the final normalized state once, after all startup migrations.
 
 
 const starSvg=()=>'<svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.2 6.4 20.2 7.5 14 3 9.6l6.2-.9z"/></svg>';

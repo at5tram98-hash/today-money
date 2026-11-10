@@ -4,10 +4,10 @@
 function openCategoryEdit(index,after){
   const existing=index>=0?data.categories[index]:null,icons=['fork','tram','bus','bag','cart','tshirt','ticket','game','repeat','book','bolt','house','heart','gift','phone','coffee','medical','ellipsis'];
   let selected=normalizeCategoryIcon(existing?.icon,existing?.id);
-  openSheet(`<div class="sheet-nav"><button class="nav-text" id="ceCancel">キャンセル</button><div class="sheet-title">カテゴリ編集</div><button class="nav-text bold" id="ceSave">保存</button></div><div class="sheet-body"><div class="form-group-title">カテゴリ</div><div class="form-card"><div class="form-section"><div class="form-label">名前</div><input class="field" id="ceName" value="${esc(existing?.name||'')}"></div><div class="form-section"><div class="form-label">カラー</div><input class="field" id="ceColor" type="color" value="${esc(existing?.color||'#007AFF')}"></div></div><div class="form-group-title">アイコン</div><div class="icon-picker">${icons.map(x=>`<button class="icon-choice ${x===selected?'on':''}" data-sym="${x}">${icon(x)}</button>`).join('')}</div>${existing&&data.categories.length>1?'<button class="secondary danger" id="ceDelete" style="margin-top:16px">カテゴリを削除</button>':''}</div>`,'full',()=>{
+  openSheet(`<div class="sheet-nav"><button class="nav-text" id="ceCancel">キャンセル</button><div class="sheet-title">カテゴリ編集</div><button class="nav-text bold" id="ceSave">保存</button></div><div class="sheet-body"><div class="form-group-title">カテゴリ</div><div class="form-card"><div class="form-section"><div class="form-label">名前</div><input class="field" id="ceName" value="${esc(existing?.name||'')}"></div><div class="form-section"><div class="form-label">カラー</div><input class="field" id="ceColor" type="color" value="${esc(existing?.color||'#007AFF')}"></div></div><div class="form-group-title">アイコン</div><div class="icon-picker">${icons.map(x=>`<button type="button" class="icon-choice ${x===selected?'on':''}" data-sym="${x}" aria-label="アイコン ${esc(x)}" aria-pressed="${x===selected}">${icon(x)}</button>`).join('')}</div>${existing&&data.categories.length>1?'<button class="secondary danger" id="ceDelete" style="margin-top:16px">カテゴリを削除</button>':''}</div>`,'full',()=>{
     document.querySelectorAll('[data-sym]').forEach(b=>b.onclick=()=>{
       selected=b.dataset.sym;
-      document.querySelectorAll('[data-sym]').forEach(x=>x.classList.toggle('on',x===b))
+      document.querySelectorAll('[data-sym]').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',String(x===b))});markSheetDirty()
     });
     document.getElementById('ceCancel').onclick=requestSheetClose;
     document.getElementById('ceSave').onclick=()=>{
@@ -87,6 +87,7 @@ async function resetAllData({keepSeed=true}={}){
   const fresh=normalizeData({meta:{legacyMigrated:true,seedVersion:keepSeed?0:SEED_VERSION}});
   fresh.meta.legacyMigrated=true;fresh.meta.seedVersion=keepSeed?0:SEED_VERSION;
   if(keepSeed)applyFirstRunSeed(fresh);
+  ensureInformationArchitecture(fresh);
   mm3PendingAsyncCommit=true;
   try{
     await saveAsync({snapshot:fresh});
@@ -236,6 +237,7 @@ async function restoreBackupPayload(obj){
   mm3PendingAsyncCommit=true;
   try{
     const next=prepareLoadedData(obj,{applySeed:false,allowLegacy:false});
+    ensureInformationArchitecture(next);
     await writeRecoverySnapshotAsync('before_import',data);
     await saveAsync({snapshot:next});
     data=mm3StateGuardMode?mm3GuardData(next):next;
