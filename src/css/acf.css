@@ -4,7 +4,7 @@
 .acf-credit-head { display: flex; align-items: center; justify-content: space-between; gap: 10px }
 .acf-credit-range { width: 100%; accent-color: var(--blue); height: 34px }
 .acf-credit-preview { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px }
-.cashflow-table .cf-marker { font-size: 9px; font-weight: 800; margin-left: 2px }
+.cashflow-table .cf-marker { font-size: var(--type-min); font-weight: 800; margin-left: 2px }
 .cashflow-table .cf-marker.salary { color: var(--green) }
 .cashflow-table .cf-marker.card { color: var(--purple) }
 .cashflow-table .cf-marker.large { color: var(--orange) }
@@ -17,7 +17,7 @@
 .acf-plan-compare strong { font-variant-numeric: tabular-nums }
 .acf-home-card { padding: 16px 16px 14px }
 .acf-home-name { font-size: 13px; font-weight: 750; letter-spacing: .1px }
-.acf-home-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px }
+.acf-home-sub { font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .acf-home-caption { font-size: 11px; color: var(--label2); margin-top: 3px }
 .acf-home-split { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: stretch; margin-top: 13px }
 .acf-home-split .ratio { display: flex; flex-direction: column; justify-content: center; text-align: center; min-width: 69px }
@@ -30,8 +30,8 @@
 .acf-budget-cashpart { width: 100%; min-height: 0; background: var(--blue); border-radius: 0 0 3px 3px }
 .acf-budget-col:first-child .acf-budget-cardpart:only-child,
 .acf-budget-cardpart+.acf-budget-cashpart:empty { border-radius: 6px }
-.acf-budget-label { font-size: 8.5px; color: var(--label2); margin-top: 6px; white-space: nowrap }
-.acf-legend-line { display: flex; align-items: center; gap: 13px; font-size: 10px; color: var(--label2); margin-top: 10px }
+.acf-budget-label { font-size: var(--type-min); color: var(--label2); margin-top: 6px; white-space: nowrap }
+.acf-legend-line { display: flex; align-items: center; gap: 13px; font-size: var(--type-min); color: var(--label2); margin-top: 10px }
 .acf-legend-line i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: -1px }
 .acf-legend-card { background: var(--purple) }
 .acf-legend-cash { background: var(--blue) }
@@ -39,7 +39,7 @@
 .acf-trend-grid { stroke: var(--sep); stroke-width: .7 }
 .acf-trend-line { fill: none; stroke: var(--blue); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
 .acf-trend-area { fill: rgba(0,122,255,.08) }
-.acf-trend-axis { fill: var(--label2); font-size: 8px }
+.acf-trend-axis { fill: var(--label2); font-size: var(--type-min) }
 .acf-trend-dot { fill: var(--card); stroke: var(--blue); stroke-width: 2 }
 .acf-ratio-value { font-size: 15px; font-weight: 700; color: var(--blue) }
 .acf-details-panel { margin-top: 10px }
@@ -47,9 +47,9 @@
 .acf-month-nav { margin: 10px 0 12px }
 #acfTableMode { margin-bottom: 12px }
 .acf-table-empty { padding: 22px 14px; border-radius: 12px; background: var(--card); color: var(--label2); text-align: center; font-size: 13px }
-.acf-deficit-marker { display: inline-grid; place-items: center; min-width: 14px; height: 14px; margin-left: 3px; padding: 0 3px; border-radius: 7px; background: rgba(255,59,48,.12); color: var(--red); font-size: 8px; font-weight: 800; vertical-align: 1px }
+.acf-deficit-marker { display: inline-grid; place-items: center; min-width: 14px; height: 14px; margin-left: 3px; padding: 0 3px; border-radius: 7px; background: rgba(255,59,48,.12); color: var(--red); font-size: var(--type-min); font-weight: 800; vertical-align: 1px }
 .acf-negative-sign { display: inline-block; transform-origin: 50% 55% }
-.acf-negative-value.acf-pulse .acf-negative-sign { animation: acfMinusSoftPulse 2.05s ease-in-out infinite }
+.acf-negative-value.acf-pulse .acf-negative-sign { animation: acfMinusSoftPulse var(--motion-push) ease-out 1 }
 .acf-shortage-callout.critical { background: rgba(255,59,48,.085) }
 .acf-shortage-icon { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; flex: 0 0 auto; font-size: 14px; font-weight: 800; background: rgba(255,149,0,.14); color: var(--orange) }
 .acf-shortage-callout.critical .acf-shortage-icon { background: rgba(255,59,48,.13); color: var(--red) }
@@ -67,7 +67,7 @@
 .acf-calendar-unavailable { min-width: 0; min-height: 68px; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px; color: var(--label3); font-size: 12px }
 .acf-calendar-spacer { min-width: 0; min-height: 68px }
 .acf-calendar-number { display: grid; place-items: center; width: 25px; height: 25px; font-size: 13px; font-weight: 600; border-radius: 50% }
-.acf-calendar-amount { font-size: 10px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap }
+.acf-calendar-amount { font-size: var(--type-min); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap }
 .acf-calendar-day.today .acf-calendar-number { color: var(--blue); background: #007aff14 }
 .acf-calendar-day.selected .acf-calendar-number { background: var(--blue); color: #fff }
 .acf-calendar-day.deficit .acf-calendar-amount { color: var(--red) }
@@ -77,7 +77,7 @@
 .acf-calendar-marks i,
 .acf-calendar-legend i { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--orange) }
 .acf-calendar-note { font-size: 11px; color: var(--label2); line-height: 1.7; margin: 12px 6px 8px }
-.acf-calendar-legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: 10px; color: var(--label2); margin: 0 6px }
+.acf-calendar-legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: var(--type-min); color: var(--label2); margin: 0 6px }
 .acf-calendar-legend span { display: flex; align-items: center; gap: 4px }
 .acf-calendar-detail { border-radius: 20px; background: var(--card); border: 1px solid var(--sep); padding: 4px 16px 10px; margin-bottom: 14px }
 .acf-calendar-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--sep); padding: 8px 0 }

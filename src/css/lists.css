@@ -75,7 +75,7 @@
 #app .ring circle { stroke-width: 11 }
 #app .ring-center { width: 83% }
 #app .ring-amount { font-size: 24px; font-weight: 700; letter-spacing: -.5px }
-#app .ring-caption { font-size: 10px; line-height: 1.4; margin-top: 3px }
+#app .ring-caption { font-size: var(--type-min); line-height: 1.4; margin-top: 3px }
 #app .compare-mini { font-size: 11px; line-height: 1.5; margin-top: 6px; padding-top: 6px; grid-column: 1/-1 }
 #app .quick-grid { gap: 8px; margin: 0 0 12px }
 #app .quick-btn { border-radius: var(--native-control); min-height: 44px !important; justify-content: center; background: var(--native-secondary); color: var(--blue); padding: 10px 12px; box-shadow: none; font-size: 15px; font-weight: 600 }
@@ -103,3 +103,11 @@
 @media (max-width:374px) {
   .ring-amount { font-size: 23px }
 }
+/* 分析グラフの指追従（第11版 HOME-010・MONTH-046 ほか） */
+[data-scrub] { touch-action: pan-y; cursor: ew-resize; -webkit-user-select: none; user-select: none }
+[data-scrub]:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px }
+.bar-col.scrub-on .bar { box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--accent) }
+.bar-col.scrub-on .bar-label { color: var(--label); font-weight: 600 }
+.svg-chart circle.scrub-on { r: 6px; fill: var(--accent) }
+.chart-readout { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 12px; padding-top: 10px; border-top: .5px solid var(--sep); font-size: var(--type-note); color: var(--label2) }
+.chart-readout strong { font-size: var(--type-item); color: var(--label); font-variant-numeric: tabular-nums }

@@ -1,0 +1,106 @@
+{
+ "generatedAt": "2026-11-10T19:22:45.582Z",
+ "table": [
+  {
+   "name": "ボタン・操作",
+   "total": 304,
+   "implemented": 304,
+   "verified": 302,
+   "progress": "99.3%"
+  },
+  {
+   "name": "画面（81シナリオ／75画面）",
+   "total": 81,
+   "implemented": 81,
+   "verified": 81,
+   "progress": "100%"
+  },
+  {
+   "name": "追加UI（852候補→重複除去796）",
+   "total": 796,
+   "implemented": 700,
+   "verified": 700,
+   "progress": "87.9%"
+  },
+  {
+   "name": "画面遷移（943記録→重複除去464）",
+   "total": 464,
+   "implemented": 464,
+   "verified": 464,
+   "progress": "100%"
+  },
+  {
+   "name": "アニメーション（645記録→重複除去389）",
+   "total": 389,
+   "implemented": 389,
+   "verified": 389,
+   "progress": "100%"
+  },
+  {
+   "name": "ジェスチャー（実際の対象）",
+   "total": 17,
+   "implemented": 17,
+   "verified": 17,
+   "progress": "100%"
+  }
+ ],
+ "notVerifiedOperations": [
+  "GMAIL-296",
+  "GMAIL-297"
+ ],
+ "notVerifiedScreens": [],
+ "crawl": [
+  {
+   "configs": [
+    {
+     "label": "393-light",
+     "states": 752
+    }
+   ],
+   "summary": {
+    "states": 752,
+    "wroteOnTap": 0,
+    "doubleSave": 0,
+    "operationsReached": 257,
+    "operationsTotal": 304,
+    "notReached": 47,
+    "seedsOpened": 94,
+    "seedsTotal": 96,
+    "small": 0,
+    "smallText": 0,
+    "overlaps": 0,
+    "unnamed": 0,
+    "overflow": 0,
+    "styleDiffs": 0,
+    "structureMismatch": 0,
+    "errors": 0
+   }
+  },
+  {
+   "configs": [
+    {
+     "label": "320-dark",
+     "states": 752
+    }
+   ],
+   "summary": {
+    "states": 752,
+    "wroteOnTap": 0,
+    "doubleSave": 0,
+    "operationsReached": 257,
+    "operationsTotal": 304,
+    "notReached": 47,
+    "seedsOpened": 94,
+    "seedsTotal": 96,
+    "small": 0,
+    "smallText": 0,
+    "overlaps": 0,
+    "unnamed": 0,
+    "overflow": 0,
+    "styleDiffs": 0,
+    "structureMismatch": 0,
+    "errors": 0
+   }
+  }
+ ]
+}

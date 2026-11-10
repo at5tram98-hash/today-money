@@ -63,3 +63,15 @@ test('BACKUP-208/210: restore passes through the preview and no cancel path dele
   const del=javascript.slice(javascript.indexOf('function openDeleteAllConfirmation('));
   assert.ok(del.indexOf("field.value.trim()!=='削除'")<del.indexOf('await resetAllData('));
 });
+
+test('第11版 C章: 動きは仕様の時間内（処理中を示すスピナーだけが繰り返す）',async()=>{
+  const {default:postcss}=await import('postcss'),long=[];
+  for(const file of manifest.styles)postcss.parse(read(file)).walkDecls(/^(transition|animation)(-duration)?$/,d=>{
+    const ms=[...d.value.matchAll(/(\d*\.?\d+)(ms|s)\b/g)].map(x=>parseFloat(x[1])*(x[2]==='s'?1000:1)),durations=d.prop.startsWith('animation')?ms.slice(0,1):ms;
+    const spinner=/infinite/.test(d.value)&&/busy|spin|Spin|Orbit|Sweep|Breathe/.test(d.value);
+    if(!spinner&&durations.some(v=>v>270))long.push(`${file}: ${d.parent.selector} ${d.value}`);
+    if(/infinite/.test(d.value)&&!spinner)long.push(`${file}: ${d.parent.selector} repeats forever`);
+  });
+  assert.deepEqual(long,[]);
+  const tokens=read('src/css/tokens.css');for(const v of ['--motion-push: 220ms','--motion-sheet: 260ms','--motion-menu: 160ms'])assert.ok(tokens.includes(v),v);
+});

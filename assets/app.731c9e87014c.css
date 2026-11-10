@@ -1,5 +1,5 @@
 /* デザイントークン（色・文字・間隔・動き）。値の定義はここだけに置く。 */
-:root { color-scheme: light; --accent: #1673F7; --danger: #D93B46; --success: #16865D; --bg: #F6F7FA; --card: #fff; --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2); --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4); --sep: rgba(60,60,67,.18); --blue: var(--accent); --green: var(--success); --yellow: #ffcc00; --orange: #ff9500; --red: var(--danger); --purple: #af52de; --teal: #30b0c7; --type-title: 28px; --type-amount: 30px; --type-item: 17px; --type-note: 13px; --space-page: 16px; --space-section: 24px; --row-height: 56px; --cta-height: 52px; --tap-min: 44px; --radius-card: 16px; --motion-press: 90ms; --motion-update: 150ms; --motion-menu: 160ms; --motion-push: 220ms; --motion-sheet: 260ms; --accent-soft: rgba(22,115,247,.14); --danger-soft: rgba(217,59,70,.12); --safe-t: env(safe-area-inset-top,0px); --safe-b: env(safe-area-inset-bottom,0px); --r: 12px; --spring: cubic-bezier(.32,.72,0,1); --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif; --tabbar-height: 62px; --tabbar-bottom: max(8px,calc(var(--safe-b) - 10px)); --tab-h: calc(var(--tabbar-height) + var(--tabbar-bottom) + 10px); --glass-bg: rgba(250,250,252,.62); --glass-solid: rgba(249,249,251,.97); --glass-edge: rgba(255,255,255,.75); --glass-highlight: rgba(255,255,255,.9); --glass-shadow: 0 10px 30px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.06),0 0 0 .5px rgba(0,0,0,.08); --capsule-bg: rgba(120,120,128,.16); --tab-inactive: #48484d; --native-glass: rgba(249,249,249,.86); --mm3-motion-tap: 120ms; --mm3-motion-menu: 180ms; --mm3-motion-chart: 250ms; --mm3-motion-month: 290ms; --mm3-motion-flip: 360ms; --mm3-ease: cubic-bezier(.2,.85,.2,1); --mm3-ease-spring: cubic-bezier(.2,.95,.25,1.06); --mm3-action-icon: #5f636b; --mm3-action-icon-bg: rgba(118,118,128,.075); --mm3-action-blue-bg: rgba(0,122,255,.085); --native-gutter: 16px; --native-radius: 20px; --native-control: 14px; --native-ease: cubic-bezier(.2,.8,.2,1); --native-secondary: #e9e9ee; --native-caption: var(--type-note); --native-body: var(--type-item); --native-title: var(--type-title)}
+:root { color-scheme: light; --accent: #1673F7; --danger: #D93B46; --success: #16865D; --bg: #F6F7FA; --card: #fff; --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2); --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4); --sep: rgba(60,60,67,.18); --blue: var(--accent); --green: var(--success); --yellow: #ffcc00; --orange: #ff9500; --red: var(--danger); --purple: #af52de; --teal: #30b0c7; --type-title: 28px; --type-amount: 30px; --type-item: 17px; --type-note: 13px; --type-min: 11px; --space-page: 16px; --space-section: 24px; --row-height: 56px; --cta-height: 52px; --tap-min: 44px; --radius-card: 16px; --motion-press: 90ms; --motion-update: 150ms; --motion-menu: 160ms; --motion-push: 220ms; --motion-sheet: 260ms; --accent-soft: rgba(22,115,247,.14); --danger-soft: rgba(217,59,70,.12); --safe-t: env(safe-area-inset-top,0px); --safe-b: env(safe-area-inset-bottom,0px); --r: 12px; --spring: cubic-bezier(.32,.72,0,1); --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif; --tabbar-height: 62px; --tabbar-bottom: max(8px,calc(var(--safe-b) - 10px)); --tab-h: calc(var(--tabbar-height) + var(--tabbar-bottom) + 10px); --glass-bg: rgba(250,250,252,.62); --glass-solid: rgba(249,249,251,.97); --glass-edge: rgba(255,255,255,.75); --glass-highlight: rgba(255,255,255,.9); --glass-shadow: 0 10px 30px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.06),0 0 0 .5px rgba(0,0,0,.08); --capsule-bg: rgba(120,120,128,.16); --tab-inactive: #48484d; --native-glass: rgba(249,249,249,.86); --mm3-motion-tap: var(--motion-press); --mm3-motion-menu: var(--motion-menu); --mm3-motion-chart: var(--motion-push); --mm3-motion-month: 180ms; --mm3-motion-flip: 180ms; --mm3-ease: cubic-bezier(.2,.85,.2,1); --mm3-ease-spring: cubic-bezier(.2,.95,.25,1.06); --mm3-action-icon: #5f636b; --mm3-action-icon-bg: rgba(118,118,128,.075); --mm3-action-blue-bg: rgba(0,122,255,.085); --native-gutter: 16px; --native-radius: 20px; --native-control: 14px; --native-ease: cubic-bezier(.2,.8,.2,1); --native-secondary: #e9e9ee; --native-caption: var(--type-note); --native-body: var(--type-item); --native-title: var(--type-title)}
 html.dark { color-scheme: dark; --accent: #4C93FF; --danger: #FF6570; --success: #35B886; --accent-soft: rgba(76,147,255,.2); --danger-soft: rgba(255,101,112,.18); --bg: #0A0B0E; --card: #1c1c1e; --fill: rgba(118,118,128,.24); --fill2: rgba(118,118,128,.36); --label: #fff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.4); --sep: rgba(84,84,88,.6); --blue: var(--accent); --green: var(--success); --yellow: #ffd60a; --orange: #ff9f0a; --red: var(--danger); --purple: #bf5af2; --teal: #64d2ff; --glass-bg: rgba(36,36,40,.58); --glass-solid: rgba(28,28,30,.98); --glass-edge: rgba(255,255,255,.16); --glass-highlight: rgba(255,255,255,.14); --glass-shadow: 0 10px 30px rgba(0,0,0,.55),0 0 0 .5px rgba(0,0,0,.6); --capsule-bg: rgba(255,255,255,.14); --tab-inactive: #c7c7cc; --native-glass: rgba(22,22,24,.88); --mm3-action-icon: #b2b2b7; --mm3-action-icon-bg: rgba(118,118,128,.16); --mm3-action-blue-bg: rgba(10,132,255,.15); --native-secondary: #2c2c2e }
 @media (prefers-contrast:more) {
   :root { --label2: #44444b; --label3: #616168 }
@@ -69,10 +69,10 @@ textarea { font: inherit; color: inherit; font-size: 16px !important; min-width:
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue) }
 button:disabled { cursor: default; opacity: .45 }
 button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opacity .11s,background .11s }
-.tab-selection { position: absolute; left: 0; top: 5px; height: calc(100% - 10px); width: 0; z-index: 0; pointer-events: none; border-radius: 999px; background: var(--capsule-bg); box-shadow: inset 0 1px 0 var(--glass-highlight); opacity: 0; transform: translate3d(0,0,0); transition: transform .42s cubic-bezier(.34,1.16,.44,1),width .25s var(--spring),opacity .14s; will-change: transform }
+.tab-selection { position: absolute; left: 0; top: 5px; height: calc(100% - 10px); width: 0; z-index: 0; pointer-events: none; border-radius: 999px; background: var(--capsule-bg); box-shadow: inset 0 1px 0 var(--glass-highlight); opacity: 0; transform: translate3d(0,0,0); transition: transform var(--motion-menu) var(--spring),width var(--motion-menu) var(--spring),opacity .14s; will-change: transform }
 .tabbar { position: absolute; left: 14px; right: 14px; bottom: var(--tabbar-bottom); height: var(--tabbar-height); padding: 5px; display: flex; gap: 0; isolation: isolate; background: var(--glass-bg); border: 0; border-radius: 999px; box-shadow: inset 0 0 0 .5px var(--glass-edge),inset 0 1px 0 var(--glass-highlight),var(--glass-shadow); backdrop-filter: blur(16px) saturate(190%); -webkit-backdrop-filter: blur(16px) saturate(190%); touch-action: pan-y; z-index: 60 }
 .row-value { font-weight: 620; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-.tab { position: relative; z-index: 1; flex: 1; min-width: 0; min-height: 44px !important; border: 0; border-radius: 999px; background: transparent; color: var(--tab-inactive); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; font-weight: 500; transition: color .16s var(--spring) }
+.tab { position: relative; z-index: 1; flex: 1; min-width: 0; min-height: 44px !important; border: 0; border-radius: 999px; background: transparent; color: var(--tab-inactive); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: var(--type-min); font-weight: 500; transition: color .16s var(--spring) }
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
   .tabbar { background: var(--glass-solid) }
 }
@@ -94,8 +94,8 @@ button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opac
 .chart-title { font-size: 14px; font-weight: 650 }
 .chart-sub { font-size: 11px; color: var(--label2); margin-top: 2px }
 .bars { height: 128px; display: flex; align-items: flex-end; gap: 8px; margin-top: 14px }
-.bar-label { font-size: 9px; color: var(--label2); margin-top: 6px; white-space: nowrap }
-.bar-value { font-size: 9px; color: var(--label2); margin-bottom: 3px }
+.bar-label { font-size: var(--type-min); color: var(--label2); margin-top: 6px; white-space: nowrap }
+.bar-value { font-size: var(--type-min); color: var(--label2); margin-bottom: 3px }
 .donut-wrap { display: flex; align-items: center; gap: 14px; margin-top: 10px }
 .legend { flex: 1; font-size: 11px }
 .legend-row { display: flex; align-items: center; gap: 7px; margin: 5px 0 }
@@ -110,7 +110,7 @@ button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opac
 .day-money { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 670; color: var(--label) }
 .day-plan { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 560; color: var(--label2) }
 .summary-value { font-size: 21px; font-weight: 720; margin-top: 3px }
-.calendar-highlight { animation: calendarPlanPulse .8s ease-out }
+.calendar-highlight { animation: calendarPlanPulse var(--motion-push) ease-out }
 .topbar { padding: calc(var(--safe-t) + 13px) 16px 9px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: var(--bg); z-index: 5; min-height: calc(var(--safe-t) + 59px) }
 .topbar-main { min-width: 0; flex: 1 }
 .tab-label { display: block; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; user-select: none; -webkit-user-select: none }
@@ -121,7 +121,7 @@ button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opac
 .toast { min-height: 44px; max-width: 100%; background: rgba(44,44,46,.92); color: #fff; border-radius: 13px; padding: 10px 12px; box-shadow: 0 8px 28px rgba(0,0,0,.24); display: flex; align-items: center; gap: 12px; font-size: 13px; opacity: 0; transform: translateY(8px) scale(.98); animation: toastIn .18s ease forwards; pointer-events: auto; backdrop-filter: blur(16px) }
 .busy-overlay { position: fixed; inset: 0; z-index: 850; background: rgba(242,242,247,.68); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s }
 .storage-boot { position: fixed; inset: 0; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); display: flex; align-items: center; justify-content: center; transition: opacity .2s; z-index: 99999; opacity: 1; pointer-events: auto; background: var(--bg,#f2f2f7); color: var(--label,#111) }
-.budget-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: var(--label); color: var(--bg); border-radius: 8px; padding: 3px 7px; font-size: 10px; font-weight: 650; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .12s }
+.budget-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: var(--label); color: var(--bg); border-radius: 8px; padding: 3px 7px; font-size: var(--type-min); font-weight: 650; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .12s }
 .saving { opacity: .72; pointer-events: none }
 textarea.field { resize: none; min-height: 80px }
 .status-chip { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 8px; border-radius: 999px; background: var(--fill); font-size: 11px; font-weight: 650; color: var(--label2) }
@@ -141,15 +141,15 @@ textarea.field { resize: none; min-height: 80px }
 .day-cell * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none }
 .goal-calendar-preview { margin-top: 14px; margin-bottom: 10px }
 .approval-slider { height: 62px; border-radius: 16px; background: var(--fill); position: relative; overflow: hidden; margin-top: 18px; user-select: none; -webkit-user-select: none }
-.month-progress-fill { height: 100%; background: var(--green); border-radius: 999px; transition: width .3s; max-width: 100% }
-.goal-step-node { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--fill); color: var(--label2); font-size: 10px; font-weight: 700; flex: 0 0 auto }
+.month-progress-fill { height: 100%; background: var(--green); border-radius: 999px; transition: width var(--motion-push); max-width: 100% }
+.goal-step-node { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--fill); color: var(--label2); font-size: var(--type-min); font-weight: 700; flex: 0 0 auto }
 .goal-step-line { height: 2px; flex: 1; background: var(--fill2); border-radius: 2px }
 .financial-event-symbol { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--fill); font-size: 15px; font-weight: 800; flex: 0 0 auto }
-.dim { position: fixed; inset: 0; background: rgba(0,0,0,.44); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .2s }
+.dim { position: fixed; inset: 0; background: rgba(0,0,0,.44); z-index: 200; opacity: 0; pointer-events: none; transition: opacity var(--motion-menu) }
 @media (max-width:390px) {
   .cat-icon { width: 25px; height: 25px }
 }
-.sheet { position: fixed; left: 50%; bottom: 0; width: min(100%,480px); z-index: 210; transform: translate(-50%,110%); transition: transform .3s var(--spring); display: flex; flex-direction: column; overflow: hidden }
+.sheet { position: fixed; left: 50%; bottom: 0; width: min(100%,480px); z-index: 210; transform: translate(-50%,110%); transition: transform var(--motion-sheet) var(--spring); display: flex; flex-direction: column; overflow: hidden }
 .date-nav-btn { width: 38px; height: 38px; border: 0; background: transparent; color: var(--blue); display: grid; place-items: center; border-radius: 10px; min-width: var(--tap-min); min-height: var(--tap-min) }
 .nav-text { border: 0; background: transparent; color: var(--blue); font-size: 16px; padding: 10px 0; text-align: left; transition: transform .1s,opacity .1s; min-height: var(--tap-min); min-width: var(--tap-min) }
 @media (max-width:390px) {
@@ -190,7 +190,7 @@ textarea.field { resize: none; min-height: 80px }
 .hbar-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px }
 .hbar-track { height: 9px; background: var(--fill); border-radius: 999px; overflow: hidden; margin-top: 7px }
 .hbar-fill { height: 100%; border-radius: 999px; min-width: 2px; max-width: 100% }
-.hbar-foot { text-align: right; color: var(--label2); font-size: 9px; margin-top: 3px }
+.hbar-foot { text-align: right; color: var(--label2); font-size: var(--type-min); margin-top: 3px }
 .metric-cell { padding: 12px 10px; min-width: 0 }
 .mini-action { border: 0; background: transparent; color: var(--blue); font-size: 13px; font-weight: 600; padding: 6px 0 }
 @media (max-width:390px) {
@@ -224,7 +224,7 @@ textarea.field { resize: none; min-height: 80px }
 .goal-spinner { width: 42px; height: 42px; border: 3px solid var(--fill2); border-top-color: var(--blue); border-radius: 50%; animation: goalSpin .8s linear infinite }
 .goal-state-title { font-size: 23px; font-weight: 730; margin-top: 18px }
 .goal-state-copy { font-size: 13px; color: var(--label2); line-height: 1.5; margin-top: 6px }
-.goal-success-mark { width: 66px; height: 66px; border-radius: 50%; background: rgba(52,199,89,.14); color: var(--green); display: grid; place-items: center; animation: goalSuccessSpring .42s cubic-bezier(.2,1.4,.4,1) }
+.goal-success-mark { width: 66px; height: 66px; border-radius: 50%; background: rgba(52,199,89,.14); color: var(--green); display: grid; place-items: center; animation: goalSuccessSpring var(--motion-push) cubic-bezier(.2,1.4,.4,1) }
 .today-spend-tap { width: 100%; border: 0; background: transparent; color: inherit; text-align: left }
 .goal-plan-action { width: 100%; border: 0; border-top: .5px solid var(--sep); background: transparent; color: var(--blue); font-weight: 650; text-align: left; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between }
 .goal-step-compact-line { height: 3px; border-radius: 999px; background: var(--fill2); overflow: hidden }
@@ -242,28 +242,28 @@ textarea.field { resize: none; min-height: 80px }
   .goal-step-title { font-size: 24px }
 }
 .day-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue) }
-.day-finmark { font-size: 8px; font-weight: 800; line-height: 1; color: var(--label2) }
+.day-finmark { font-size: var(--type-min); font-weight: 800; line-height: 1; color: var(--label2) }
 .payment-suggest { margin-top: 9px; padding-top: 9px; border-top: .5px solid var(--sep); font-size: 11px; line-height: 1.45 }
 .pay-rule-panel { padding: 10px 12px 12px; background: var(--card); border-top: .5px solid var(--sep) }
 .financial-event-card { width: 100%; min-height: 52px; border: 0; border-radius: 13px; background: var(--card); display: flex; align-items: center; gap: 10px; padding: 10px 13px; text-align: left; margin: 0 0 12px }
 .financial-event-title { font-size: 13px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
-.financial-event-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px }
+.financial-event-sub { font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .financial-event-value { font-size: 13px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums }
 .asset-summary-list { margin-top: 12px; border-top: .5px solid var(--sep); padding-top: 10px; display: grid; gap: 7px }
 .acf-card { background: var(--card); border-radius: 16px; padding: 15px; margin-bottom: 12px; text-align: left }
 .acf-title { font-size: 14px; font-weight: 700 }
-.acf-subtitle { font-size: 10.5px; color: var(--label2); margin-top: 2px }
+.acf-subtitle { font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .acf-value { font-size: 28px; font-weight: 750; letter-spacing: -.7px; margin-top: 8px; font-variant-numeric: tabular-nums }
 .acf-metric { background: var(--fill); border-radius: 10px; padding: 8px; min-width: 0 }
 .acf-link { width: 100%; min-height: 39px; border: 0; border-top: .5px solid var(--sep); background: transparent; color: var(--blue); font-size: 12.5px; font-weight: 650; text-align: left; margin-top: 12px; padding: 10px 0 0 }
 .acf-summary-tile { background: var(--card); border-radius: 13px; padding: 12px }
 .cashflow-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 14px; background: var(--card); margin-bottom: 14px }
-.cashflow-table { border-collapse: separate; border-spacing: 0; min-width: max-content; font-size: 10px }
+.cashflow-table { border-collapse: separate; border-spacing: 0; min-width: max-content; font-size: var(--type-min) }
 .cashflow-timeline { background: var(--card); border-radius: 14px; overflow: hidden }
 .cashflow-event { display: grid; grid-template-columns: 54px 1fr auto; gap: 9px; padding: 11px 13px; border-bottom: .5px solid var(--sep); align-items: start }
 .cashflow-event-date { font-size: 11px; color: var(--label2) }
 .cashflow-event-title { font-size: 13px; font-weight: 600 }
-.cashflow-event-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px; line-height: 1.35 }
+.cashflow-event-sub { font-size: var(--type-min); color: var(--label2); margin-top: 2px; line-height: 1.35 }
 .cashflow-event-value { font-size: 13px; font-weight: 680; white-space: nowrap }
 .risk-row { border-left: 3px solid var(--orange) }
 .acf-plan-compare { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; font-size: 12px }
@@ -274,7 +274,7 @@ textarea.field { resize: none; min-height: 80px }
 .secondary { box-sizing: border-box; width: 100%; border: 0; padding: 12px 16px; font: inherit; font-weight: 600; line-height: 1.4; text-align: center; background: var(--fill); color: var(--label) }
 .danger { color: var(--red) }
 .menu-item { min-height: 46px; width: 100%; border: 0; background: transparent; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 9px 11px; text-align: left; font-size: 15px; color: var(--label) }
-.push-view { position: absolute; inset: 0; display: flex; flex-direction: column; transform: translateX(100%); transition: transform .3s var(--spring); pointer-events: auto; box-shadow: -10px 0 28px rgba(0,0,0,.10); touch-action: pan-y }
+.push-view { position: absolute; inset: 0; display: flex; flex-direction: column; transform: translateX(100%); transition: transform var(--motion-push) var(--spring); pointer-events: auto; box-shadow: -10px 0 28px rgba(0,0,0,.10); touch-action: pan-y }
 .switch { width: 51px; height: 31px; border: 0; border-radius: 16px; background: var(--fill2); position: relative; transition: background .2s }
 .settings-icon { width: 29px; height: 29px; border-radius: 7px; display: grid; place-items: center; color: #fff; background: var(--blue); flex-shrink: 0; overflow: hidden }
 .profile-avatar { object-fit: cover; background: var(--fill); color: var(--blue) }
@@ -287,7 +287,7 @@ button:not(:disabled):active { transform: none; opacity: .65 }
 input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 [contenteditable=true] { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default }
 :focus-visible { outline: 3px solid var(--blue) !important; outline-offset: 3px }
-.schedule-cell { height: 48px; border-radius: 10px; background: var(--fill); padding: 5px; font-size: 10px; position: relative }
+.schedule-cell { height: 48px; border-radius: 10px; background: var(--fill); padding: 5px; font-size: var(--type-min); position: relative }
 .source-check { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--fill2); display: grid; place-items: center; color: transparent; font-size: 14px }
 .pro-period { border: 0; min-width: 45px; height: 34px; padding: 0 11px; border-radius: 17px; background: transparent; color: var(--label); font-size: 13px; font-weight: 650; white-space: nowrap }
 .pro3-chip { height: 36px; flex: 0 0 auto; border: 0; border-radius: 11px; background: var(--fill); padding: 0 12px; color: var(--label2); font-size: 12px; font-weight: 650 }
@@ -312,16 +312,16 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
   .day-cell { margin: 1px; padding-left: 1px; padding-right: 1px }
 }
 .pro4-parse-card { background: var(--card); border-radius: 15px; margin-bottom: 9px; overflow: hidden }
-.pro4-note { font-size: 10.5px; line-height: 1.4; color: var(--label2); padding: 9px 12px; background: var(--fill) }
+.pro4-note { font-size: var(--type-min); line-height: 1.4; color: var(--label2); padding: 9px 12px; background: var(--fill) }
 .stmt-row { min-height: 68px; display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-bottom: .5px solid var(--sep) }
-.goal-step-frame { animation: goalStepForward .24s cubic-bezier(.22,.88,.22,1) }
-.acf-risk-reveal { animation: acfRiskReveal .32s ease-out 1 }
+.goal-step-frame { animation: goalStepForward var(--motion-push) cubic-bezier(.22,.88,.22,1) }
+.acf-risk-reveal { animation: acfRiskReveal var(--motion-push) ease-out 1 }
 .busy-orbit { position: relative; width: 70px; height: 70px; margin: 0 auto 24px; animation: busyOrbit 4.5s linear infinite }
 @media (prefers-reduced-motion:reduce) {
   .busy-orbit,
   .busy-core { animation: none }
 }
-.acf-status-critical { animation: acfStatusSpring .4s cubic-bezier(.2,1.25,.32,1) 1 }
+.acf-status-critical { animation: acfStatusSpring var(--motion-push) cubic-bezier(.2,1.25,.32,1) 1 }
 .mail-item { display: block; width: 100%; min-width: 0; overflow: hidden; border-radius: 16px; background: var(--card); color: var(--label); animation: mailEnter .2s ease-out backwards; animation-delay: var(--mail-delay,0ms) }
 .fav-grip { width: 30px; height: 36px; border: 0; background: transparent; color: var(--label3); font-size: 20px; display: grid; place-items: center; cursor: grab }
 .busy-sub { font-size: 12px; color: var(--label2); margin-top: 8px; line-height: 1.7; min-height: 41px }
@@ -329,8 +329,8 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .alert-message { font-size: 13px; margin-top: 5px; line-height: 1.4 }
 .lock-title { font-size: 24px; font-weight: 720 }
 .lock-key { width: 70px; height: 70px; border-radius: 50%; border: 0; background: var(--card); font-size: 26px }
-.schedule-mark { position: absolute; right: 4px; bottom: 4px; font-size: 8px; font-weight: 700 }
-.spark-empty { font-size: 9.5px; color: var(--label3); white-space: nowrap }
+.schedule-mark { position: absolute; right: 4px; bottom: 4px; font-size: var(--type-min); font-weight: 700 }
+.spark-empty { font-size: var(--type-min); color: var(--label3); white-space: nowrap }
 .goal-recommend-label { font-size: 12px; color: var(--label2); font-weight: 600 }
 .goal-allocation-summary { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 14px 2px 7px; font-size: 12px }
 .goal-review-title { font-size: 12px; color: var(--label2) }
@@ -339,7 +339,7 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .impact-title { font-size: 12px; font-weight: 650 }
 .pay-rule-example { font-size: 11px; color: var(--label2); line-height: 1.45; margin-top: 9px; padding: 8px 9px; border-radius: 9px; background: var(--fill) }
 @media (max-width:350px) {
-  .pay-rule-example { font-size: 10.5px }
+  .pay-rule-example { font-size: var(--type-min) }
 }
 .asset-summary-line { display: flex; justify-content: space-between; gap: 10px; font-size: 12px }
 .pro-finance-eyebrow { font-size: 12px; color: var(--label2); font-weight: 600 }
@@ -347,36 +347,36 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .pro-finance-subtitle { font-size: 13px; color: var(--label2); margin-top: 5px; line-height: 1.35 }
 .pro-finance-value { font-size: 34px; line-height: 1.08; font-weight: 760; letter-spacing: -1px; margin-top: 18px; font-variant-numeric: tabular-nums }
 .pro-finance-change { font-size: 15px; font-weight: 650; margin-top: 3px; font-variant-numeric: tabular-nums }
-.pro-chart-axis { fill: var(--label2); font-size: 9px }
+.pro-chart-axis { fill: var(--label2); font-size: var(--type-min) }
 .pro-chart-readout { min-height: 34px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; border-bottom: .5px solid var(--sep); padding: 2px 0 9px }
 .pro-chart-empty { height: 220px; display: grid; place-items: center; text-align: center; color: var(--label2); font-size: 13px; line-height: 1.5; padding: 24px }
 .pro-action-btn { min-height: 48px; border: 0; border-radius: 12px; background: var(--fill); color: var(--blue); font-size: 12px; font-weight: 680; padding: 8px 6px }
 .pro-section-title { font-size: 13px; color: var(--label2); font-weight: 650; margin: 18px 0 7px }
-.pro-bar-value { font-size: 8.5px; color: var(--label2); height: 15px; white-space: nowrap }
-.pro-bar-label { font-size: 9px; color: var(--label2); margin-top: 6px; white-space: nowrap }
+.pro-bar-value { font-size: var(--type-min); color: var(--label2); height: 15px; white-space: nowrap }
+.pro-bar-label { font-size: var(--type-min); color: var(--label2); margin-top: 6px; white-space: nowrap }
 .pro3-select { height: 36px; min-width: 132px; border: 0; border-radius: 11px; background: var(--fill); padding: 0 10px; font-size: 12px; color: var(--label) }
 .pro3-forecast-value { font-size: 32px; font-weight: 760; letter-spacing: -.8px; font-variant-numeric: tabular-nums }
 .pro3-forecast-note { font-size: 11px; color: var(--label2); line-height: 1.4; margin-top: 4px }
-.pro3-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10px; color: var(--label2); margin: 9px 0 0 }
-.pro3-faxis { fill: var(--label2); font-size: 9px }
-.pro3-event-date { font-size: 10.5px; color: var(--label2) }
+.pro3-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: var(--type-min); color: var(--label2); margin: 9px 0 0 }
+.pro3-faxis { fill: var(--label2); font-size: var(--type-min) }
+.pro3-event-date { font-size: var(--type-min); color: var(--label2) }
 .pro3-event-title { font-size: 13px; font-weight: 620 }
-.pro3-event-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px; line-height: 1.35 }
+.pro3-event-sub { font-size: var(--type-min); color: var(--label2); margin-top: 2px; line-height: 1.35 }
 .pro3-event-amount { font-size: 13px; font-weight: 690; white-space: nowrap; font-variant-numeric: tabular-nums }
 .pro3-scenario-title { font-size: 14px; font-weight: 690 }
-.pro3-scenario-status { font-size: 10px; color: var(--label2) }
+.pro3-scenario-status { font-size: var(--type-min); color: var(--label2) }
 .pro3-mini-btn { min-height: 34px; border: 0; border-radius: 10px; background: var(--fill); padding: 6px 10px; font-size: 11px; color: var(--blue); font-weight: 650 }
 .pro3-allocation-total { font-size: 34px; font-weight: 760; letter-spacing: -1px }
 .pro3-allocation-sum { display: flex; justify-content: space-between; gap: 12px; border-top: .5px solid var(--sep); margin-top: 12px; padding-top: 10px; font-size: 12px }
 .pro3-transfer-route { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 650 }
-.pro3-transfer-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font-size: 10.5px; color: var(--label2) }
+.pro3-transfer-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font-size: var(--type-min); color: var(--label2) }
 .pro3-check-amount { font-size: 13px; font-weight: 670; white-space: nowrap }
 .pro3-preview-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 11px; border-bottom: .5px solid var(--sep); font-size: 11px }
 .pro4-amount-edit { border: 0; background: transparent; text-align: right; font-size: 15px; font-weight: 700; min-height: 36px; color: var(--blue) }
 .pro4-result-type { font-size: 11px; color: var(--label2); margin: 0 3px 6px }
 .pro4-goal-item-amount { text-align: right; font-size: 13px; font-weight: 700; white-space: nowrap }
 .pro4-analysis-row-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 12.5px }
-.pro4-analysis-sub { font-size: 9.5px; color: var(--label2); margin-top: 4px }
+.pro4-analysis-sub { font-size: var(--type-min); color: var(--label2); margin-top: 4px }
 .pro4-review-icon { width: 27px; height: 27px; border-radius: 9px; background: rgba(255,149,0,.13); color: var(--orange); display: grid; place-items: center; font-size: 13px; font-weight: 800 }
 @media (max-width:390px) {
   .pro-finance-title,
@@ -404,7 +404,7 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .day-inspector-actions button { min-height: 56px !important; padding: 9px 7px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.35; overflow-wrap: anywhere }
 .seg button { flex: 1; border: 0; background: transparent; border-radius: 8px; padding: 7px; font-size: 12px; transition: transform .1s,opacity .1s }
 .alert-actions button { flex: 1; border: 0; background: transparent; color: var(--blue); font-size: 16px; min-height: 48px !important }
-.pro4-item-actions button { border: 0; background: var(--fill); border-radius: 9px; min-height: 31px; padding: 5px 9px; color: var(--blue); font-size: 10.5px; font-weight: 650 }
+.pro4-item-actions button { border: 0; background: var(--fill); border-radius: 9px; min-height: 31px; padding: 5px 9px; color: var(--blue); font-size: var(--type-min); font-weight: 650 }
 .stmt-filterbar button { border: 0; background: var(--fill); color: var(--label2); font-size: 11px; font-weight: 650; border-radius: 999px; padding: 7px 10px; white-space: nowrap }
 .mail-status-actions button { border: 0; background: transparent; color: var(--blue); padding: 8px; font-size: 15px }
 .push-right>button { min-width: var(--tap-min); min-height: var(--tap-min) }
@@ -561,12 +561,12 @@ body:has(.day-close-view.show) .toast-layer { bottom: calc(120px + env(safe-area
 .fav-editor-row { touch-action: none }
 .toast .toast-action { border: 0; background: transparent; color: #5AC8FA; font-weight: 700; font-size: 13px }
 .field:focus { box-shadow: inset 0 0 0 1.5px var(--blue) }
-.ring .progress { stroke: var(--green); stroke-linecap: round; transition: stroke-dashoffset .35s,stroke .2s }
+.ring .progress { stroke: var(--green); stroke-linecap: round; transition: stroke-dashoffset var(--motion-push),stroke var(--motion-update) }
 .sheet.dragging { transition: none }
 .cashflow-table .cf-day { cursor: pointer; transition: background .12s,opacity .12s }
 .push-view.interactive { transition: none }
-.sheet.half { height: auto; border-radius: 22px 22px 0 0; transition: transform .28s cubic-bezier(.22,.88,.22,1),height .28s cubic-bezier(.22,.88,.22,1),max-height .28s cubic-bezier(.22,.88,.22,1),border-radius .28s }
-.sheet.full { border-radius: 18px 18px 0 0; transition: transform .28s cubic-bezier(.22,.88,.22,1),height .28s cubic-bezier(.22,.88,.22,1),max-height .28s cubic-bezier(.22,.88,.22,1),border-radius .28s }
+.sheet.half { height: auto; border-radius: 22px 22px 0 0; transition: transform var(--motion-sheet) cubic-bezier(.22,.88,.22,1),height var(--motion-sheet) cubic-bezier(.22,.88,.22,1),max-height var(--motion-sheet) cubic-bezier(.22,.88,.22,1),border-radius var(--motion-sheet) }
+.sheet.full { border-radius: 18px 18px 0 0; transition: transform var(--motion-sheet) cubic-bezier(.22,.88,.22,1),height var(--motion-sheet) cubic-bezier(.22,.88,.22,1),max-height var(--motion-sheet) cubic-bezier(.22,.88,.22,1),border-radius var(--motion-sheet) }
 .form-card .field { background: transparent; border-radius: 0; padding: 4px 0 }
 .form-card .money-field { background: transparent; padding: 2px 0; min-height: 38px }
 .today-spend-tap:active { background: var(--fill) }
@@ -679,15 +679,15 @@ html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,
 #screen-pay .mm3-salary-record-row { width: 100%; min-height: 58px; border: 0; border-bottom: .5px solid var(--sep); background: transparent; display: flex; align-items: center; gap: 10px; text-align: left; padding: 8px 0 }
 #screen-pay .mm3-salary-scrub-guide { position: absolute; top: 8px; bottom: 37px; width: .5px; background: var(--label2); opacity: 0; pointer-events: none; transition: opacity 120ms ease; z-index: 4 }
 #screen-pay .mm3-salary-scrub-dot { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--card); border: 2px solid var(--green); transform: translate(-50%,-50%); opacity: 0; pointer-events: none; transition: opacity 120ms ease; z-index: 5 }
-#screen-pay .mm3-salary-scrub-tip { position: absolute; top: 2px; min-width: 82px; max-width: 140px; padding: 5px 7px; border-radius: 9px; background: rgba(28,28,30,.91); color: #fff; text-align: center; font-size: 8.5px; line-height: 1.25; transform: translateX(-50%); opacity: 0; pointer-events: none; transition: opacity 120ms ease; z-index: 6; box-shadow: 0 5px 16px rgba(0,0,0,.16); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px) }
-#screen-payments .mm3-payment-atf-chip { display: inline-flex; align-items: center; justify-content: center; min-height: 19px; padding: 2px 6px; border-radius: 999px; background: rgba(0,122,255,.10); color: var(--blue); font-size: 8px; font-weight: 760; letter-spacing: .02em }
+#screen-pay .mm3-salary-scrub-tip { position: absolute; top: 2px; min-width: 82px; max-width: 140px; padding: 5px 7px; border-radius: 9px; background: rgba(28,28,30,.91); color: #fff; text-align: center; font-size: var(--type-min); line-height: 1.25; transform: translateX(-50%); opacity: 0; pointer-events: none; transition: opacity 120ms ease; z-index: 6; box-shadow: 0 5px 16px rgba(0,0,0,.16); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px) }
+#screen-payments .mm3-payment-atf-chip { display: inline-flex; align-items: center; justify-content: center; min-height: 19px; padding: 2px 6px; border-radius: 999px; background: rgba(0,122,255,.10); color: var(--blue); font-size: var(--type-min); font-weight: 760; letter-spacing: .02em }
 #screen-payments .mm3-payment-link { border: 0; background: transparent; color: var(--blue); font-weight: 650; padding: 6px 0; white-space: nowrap; font-size: 13px }
 #screen-payments .mm3-atf-tooltip { position: absolute; top: 4px; left: 50%; transform: translateX(-50%) translateY(-2px); opacity: 0; pointer-events: none; background: rgba(28,28,30,.90); color: #fff; border-radius: 10px; padding: 6px 8px; line-height: 1.3; box-shadow: 0 4px 14px rgba(0,0,0,.14); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: opacity .1s,transform .12s; z-index: 4; font-size: 12px; max-width: 250px }
 #screen-payments .mm3-payment-event { width: 100%; border: 0; background: transparent; display: grid; grid-template-columns: 34px minmax(0,1fr) auto; gap: 10px; align-items: center; text-align: left; padding: 9px 0 11px; border-bottom: .5px solid var(--sep); transition: transform .11s,opacity .11s,background .11s }
 #screen-payments .mm3-payment-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; display: grid; gap: 8px; align-items: center; text-align: left; transition: transform .11s,opacity .11s,background .11s }
 #screen-payments .mm3-payment-detail-row { width: 100%; min-height: 51px; border: 0; border-bottom: .5px solid var(--sep); background: transparent; display: flex; align-items: center; gap: 10px; text-align: left; padding: 8px 0; transition: transform .11s,opacity .11s }
 #screen-assets .mm3-assets-divider { height: .5px; background: var(--sep); margin: 11px 0 0 }
-#screen-assets .mm3-assets-tooltip { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); z-index: 3; min-width: 88px; max-width: 150px; padding: 6px 8px; border-radius: 10px; background: rgba(28,28,30,.91); color: #fff; font-size: 9px; line-height: 1.25; text-align: center; opacity: 0; pointer-events: none; transition: opacity .12s,transform .12s; box-shadow: 0 4px 16px rgba(0,0,0,.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px) }
+#screen-assets .mm3-assets-tooltip { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); z-index: 3; min-width: 88px; max-width: 150px; padding: 6px 8px; border-radius: 10px; background: rgba(28,28,30,.91); color: #fff; font-size: var(--type-min); line-height: 1.25; text-align: center; opacity: 0; pointer-events: none; transition: opacity .12s,transform .12s; box-shadow: 0 4px 16px rgba(0,0,0,.18); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px) }
 #screen-assets .mm3-assets-range { display: flex; gap: 2px; background: var(--fill); border-radius: 9px; padding: 2px; margin-top: 0 }
 #screen-assets .mm3-assets-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; color: inherit; display: grid; align-items: center; gap: 8px; text-align: left; position: relative; transition: background .12s,transform .11s,opacity .11s }
 #screen-assets .mm3-assets-reorder-placeholder { border-radius: 12px; background: rgba(0,122,255,.055); box-shadow: inset 0 0 0 1px rgba(0,122,255,.11); margin: 1px 0 }
@@ -813,7 +813,7 @@ html.motion-off .busy-track>span { animation: none }
 .pro3-check.on { background: var(--blue); border-color: var(--blue) }
 .pro3-rebalance-option.on { border-color: rgba(0,122,255,.45); background: rgba(0,122,255,.055) }
 .cashflow-table .cf-deficit-day { background: rgba(255,59,48,.045) }
-.mm3-salary-records-push .mm3-salary-record-state { display: inline-flex; align-items: center; min-height: 21px; border-radius: 999px; padding: 2px 7px; background: var(--fill); color: var(--label2); font-size: 9.5px; font-weight: 650; margin-top: 3px }
+.mm3-salary-records-push .mm3-salary-record-state { display: inline-flex; align-items: center; min-height: 21px; border-radius: 999px; padding: 2px 7px; background: var(--fill); color: var(--label2); font-size: var(--type-min); font-weight: 650; margin-top: 3px }
 .pro4-parse-row .field { min-height: 36px; font-size: 13px; padding: 7px 8px }
 .sheet.half { max-height: min(82dvh,720px); min-height: min(300px,80dvh) }
 .pro4-goal-banner .settings-icon { flex: 0 0 auto }
@@ -868,8 +868,8 @@ html.native-keyboard .sheet.full { height: calc(var(--native-viewport-height,100
 .calendar-card { padding: 8px 0; overflow: visible }
 .day-cell { margin: 0; min-width: 44px; height: 70px; grid-template-rows: 26px 16px 15px 7px }
 .day-num { font-size: 14px; width: 26px; height: 26px }
-.day-money { font-size: 10px; line-height: 16px; height: 16px }
-.day-plan { font-size: 9px; line-height: 15px; height: 15px }
+.day-money { font-size: var(--type-min); line-height: 16px; height: 16px }
+.day-plan { font-size: var(--type-min); line-height: 15px; height: 15px }
 .mm3-action-row { padding: 12px 14px; min-height: 60px }
 @media (max-width:374px) {
   .row { padding-inline: 12px }
@@ -987,7 +987,7 @@ html.native-keyboard .push-view { bottom: var(--native-keyboard-inset,0px) }
   .row-value { font-size: 14px }
 }
 .calc-key { height: clamp(44px,6.7dvh,60px); font-size: 26px; touch-action: manipulation }
-.day-close-mark { font-size: 9px; color: var(--green); margin-left: 2px }
+.day-close-mark { font-size: var(--type-min); color: var(--green); margin-left: 2px }
 @media (max-width:375px) {
   .mm3-atf-day { min-height: 54px }
 }
@@ -1047,7 +1047,7 @@ html.native-keyboard .push-view { bottom: var(--native-keyboard-inset,0px) }
 .pro4-insight strong { display: block; font-size: 13px }
 .pro4-review-state strong { font-size: 14px }
 .pro4-review-issue strong { display: block; font-size: 12.5px }
-.money-ticker-meta strong { display: block; font-size: 9.5px; font-weight: 700; color: var(--ticker-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.money-ticker-meta strong { display: block; font-size: var(--type-min); font-weight: 700; color: var(--ticker-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .acf-home-split strong { display: block; font-family: var(--font-rounded); font-size: 16px; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .acf-graph-head strong { font-size: 14px }
 @media (max-width:390px) {
@@ -1085,35 +1085,35 @@ html.native-keyboard .push-view { bottom: var(--native-keyboard-inset,0px) }
 .month-picker-result { display: block; text-align: center; font-size: 17px; font-weight: 600; margin: 16px 0 }
 .v11-picker-detail { display: grid; gap: 2px }
 .goal-amount-meta span { display: block; font-size: 11px; color: var(--label2) }
-.goal-review-meta span { font-size: 10px; color: var(--label2); display: block }
+.goal-review-meta span { font-size: var(--type-min); color: var(--label2); display: block }
 .planner-compare span,
-.planner-summary-grid span { display: block; font-size: 9.5px; color: var(--label2) }
-.budget-dial-meta span { display: block; color: var(--label2); font-size: 9.5px }
-.acf-split-grid span { display: block; font-size: 9.5px; color: var(--label2) }
+.planner-summary-grid span { display: block; font-size: var(--type-min); color: var(--label2) }
+.budget-dial-meta span { display: block; color: var(--label2); font-size: var(--type-min) }
+.acf-split-grid span { display: block; font-size: var(--type-min); color: var(--label2) }
 .acf-credit-head span { font-size: 13px; color: var(--label2) }
-.acf-credit-preview span { font-size: 9px; color: var(--label2); display: block }
-.metric-cell span { display: block; font-size: 10.5px; color: var(--label2) }
-.month-hero-meta span { display: block; font-size: 10px; color: var(--label2) }
-.acf-metric span { display: block; font-size: 9.5px; color: var(--label2) }
-.acf-summary-tile span { display: block; font-size: 10px; color: var(--label2) }
-.plan-vs-actual span { display: block; font-size: 9.5px; color: var(--label2) }
-.pro-metric span { display: block; color: var(--label2); font-size: 10.5px; line-height: 1.25 }
+.acf-credit-preview span { font-size: var(--type-min); color: var(--label2); display: block }
+.metric-cell span { display: block; font-size: var(--type-min); color: var(--label2) }
+.month-hero-meta span { display: block; font-size: var(--type-min); color: var(--label2) }
+.acf-metric span { display: block; font-size: var(--type-min); color: var(--label2) }
+.acf-summary-tile span { display: block; font-size: var(--type-min); color: var(--label2) }
+.plan-vs-actual span { display: block; font-size: var(--type-min); color: var(--label2) }
+.pro-metric span { display: block; color: var(--label2); font-size: var(--type-min); line-height: 1.25 }
 .pro3-freadout span { font-size: 11px; color: var(--label2) }
-.pro3-scenario-metrics span { display: block; font-size: 9px; color: var(--label2) }
-.pro3-allocation-btn span { display: block; font-size: 10px; color: var(--label2) }
-.pro3-check-main span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 2px }
-.pro3-rebalance-option span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px; line-height: 1.35 }
+.pro3-scenario-metrics span { display: block; font-size: var(--type-min); color: var(--label2) }
+.pro3-allocation-btn span { display: block; font-size: var(--type-min); color: var(--label2) }
+.pro3-check-main span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
+.pro3-rebalance-option span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 3px; line-height: 1.35 }
 .pro3-allocation-ranges span,
-.pro4-parse-head span { font-size: 10px; color: var(--label2) }
-.pro4-goal-banner span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 2px; line-height: 1.35 }
-.pro4-goal-metrics span { display: block; font-size: 9.5px; color: var(--label2) }
-.pro4-goal-item span { display: block; font-size: 10px; color: var(--label2); margin-top: 2px }
+.pro4-parse-head span { font-size: var(--type-min); color: var(--label2) }
+.pro4-goal-banner span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px; line-height: 1.35 }
+.pro4-goal-metrics span { display: block; font-size: var(--type-min); color: var(--label2) }
+.pro4-goal-item span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .pro4-insight span { display: block; font-size: 11px; color: var(--label2); line-height: 1.45; margin-top: 4px }
-.pro4-review-state span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px }
-.pro4-review-issue span { display: block; font-size: 10px; color: var(--label2); margin-top: 2px }
+.pro4-review-state span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 3px }
+.pro4-review-issue span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .money-ticker-meta span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px }
 .acf-home-split span { display: block; font-size: 11px; color: var(--label2) }
-.acf-graph-head span { font-size: 10.5px; color: var(--label2) }
+.acf-graph-head span { font-size: var(--type-min); color: var(--label2) }
 .stmt-import-hero span { display: block; color: var(--label2); font-size: 12px; line-height: 1.5; margin-top: 4px }
 .goal-allocation-summary span { color: var(--label2) }
 .safety-strip span { min-width: 3px; flex: 1 }
@@ -1122,10 +1122,10 @@ html.native-keyboard .push-view { bottom: var(--native-keyboard-inset,0px) }
 .pro-chart-readout span,
 .acf-plan-compare span { color: var(--label2) }
 .stmt-file-picker>span { min-height: 120px; border: 1.5px dashed var(--fill2); border-radius: 16px; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--blue); gap: 5px }
-.stmt-row-main span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px }
+.stmt-row-main span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 3px }
 .mail-metrics span,
 .mail-summary span { display: block; font-size: 12px; color: var(--label2) }
-.pro3-recon-summary span { display: block; font-size: 9.5px; color: var(--label2) }
+.pro3-recon-summary span { display: block; font-size: var(--type-min); color: var(--label2) }
 .mm3-atf-credit span { font-size: 11px; line-height: 1.4; overflow-wrap: anywhere }
 .day-close-totals span,
 .day-close-stage-total span { font-size: 12px; color: var(--label2) }
@@ -1247,7 +1247,7 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 #app .ring circle { stroke-width: 11 }
 #app .ring-center { width: 83% }
 #app .ring-amount { font-size: 24px; font-weight: 700; letter-spacing: -.5px }
-#app .ring-caption { font-size: 10px; line-height: 1.4; margin-top: 3px }
+#app .ring-caption { font-size: var(--type-min); line-height: 1.4; margin-top: 3px }
 #app .compare-mini { font-size: 11px; line-height: 1.5; margin-top: 6px; padding-top: 6px; grid-column: 1/-1 }
 #app .quick-grid { gap: 8px; margin: 0 0 12px }
 #app .quick-btn { border-radius: var(--native-control); min-height: 44px !important; justify-content: center; background: var(--native-secondary); color: var(--blue); padding: 10px 12px; box-shadow: none; font-size: 15px; font-weight: 600 }
@@ -1275,10 +1275,18 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 @media (max-width:374px) {
   .ring-amount { font-size: 23px }
 }
+/* 分析グラフの指追従（第11版 HOME-010・MONTH-046 ほか） */
+[data-scrub] { touch-action: pan-y; cursor: ew-resize; -webkit-user-select: none; user-select: none }
+[data-scrub]:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px }
+.bar-col.scrub-on .bar { box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--accent) }
+.bar-col.scrub-on .bar-label { color: var(--label); font-weight: 600 }
+.svg-chart circle.scrub-on { r: 6px; fill: var(--accent) }
+.chart-readout { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 12px; padding-top: 10px; border-top: .5px solid var(--sep); font-size: var(--type-note); color: var(--label2) }
+.chart-readout strong { font-size: var(--type-item); color: var(--label); font-variant-numeric: tabular-nums }
 /* 電卓、月ホイール、承認スライド。 */
 .approval-slider.returning .approval-handle { transition: transform .17s cubic-bezier(.22,.88,.22,1) }
 .approval-slider.returning .approval-progress { transition: width .17s cubic-bezier(.22,.88,.22,1) }
-#calculator { position: fixed; z-index: 420; bottom: 0; left: 50%; width: min(100%,500px); max-height: calc(100dvh - 12px); padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); box-sizing: border-box; transform: translate(-50%,110%); transition: transform .28s; overflow: auto; overscroll-behavior: contain }
+#calculator { position: fixed; z-index: 420; bottom: 0; left: 50%; width: min(100%,500px); max-height: calc(100dvh - 12px); padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); box-sizing: border-box; transform: translate(-50%,110%); transition: transform var(--motion-sheet); overflow: auto; overscroll-behavior: contain }
 #screen-assets .mm3-assets-reorder-handle { width: 18px; height: 34px; display: grid; place-items: center; color: var(--label3); font-size: 18px; letter-spacing: -4px; transform: rotate(90deg); pointer-events: none }
 #calculator.show { transform: translate(-50%,0) }
 .calc-top { display: flex; align-items: center; justify-content: space-between; height: 44px; gap: 8px }
@@ -1321,7 +1329,7 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 .calc-tools-panel h2 { margin: 0; font-size: 20px }
 .calc-tools-panel p { font-size: 13px; color: var(--label2) }
 .pro3-allocation-ranges label { display: grid; grid-template-columns: 54px 1fr; gap: 9px; align-items: center; min-height: 34px }
-.pro4-parse-row label { font-size: 10.5px; color: var(--label2) }
+.pro4-parse-row label { font-size: var(--type-min); color: var(--label2) }
 .acf-month-nav label { display: block; color: var(--label2); font-size: 13px; font-weight: 650 }
 .mm3-atf-form label { display: grid; gap: 5px; font-size: 13px; font-weight: 700 }
 .calc-tools-panel label { display: block; font-size: 13px }
@@ -1348,35 +1356,35 @@ html.motion-off #calculator { transition: none }
 @media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
   html.dark #calculator { background: #1c1c1e }
 }
-#screen-pay .mm3-salary-primary-change small { font-size: 10px; color: var(--label2); font-weight: 520 }
-#screen-pay .mm3-salary-donut-center span { font-size: 9px; color: var(--label2) }
+#screen-pay .mm3-salary-primary-change small { font-size: var(--type-min); color: var(--label2); font-weight: 520 }
+#screen-pay .mm3-salary-donut-center span { font-size: var(--type-min); color: var(--label2) }
 #screen-pay .mm3-salary-legend-main small { display: block; color: var(--label2); margin-top: 1px; font-variant-numeric: tabular-nums }
 #screen-pay .mm3-salary-metric span { display: block; color: var(--label2); overflow: hidden; text-overflow: ellipsis }
-#screen-pay .mm3-salary-event-main small { display: block; font-size: 9.5px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-event-main small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 #screen-pay .mm3-salary-donut-center strong { font-size: 17px; line-height: 1.1; margin-top: 2px; font-variant-numeric: tabular-nums }
 #screen-pay .mm3-salary-event-value strong { display: block; font-size: 13px; color: var(--green); font-variant-numeric: tabular-nums }
-#screen-pay .mm3-salary-event-value small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-event-value small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 #screen-pay .mm3-salary-watch-main small { display: block; color: var(--label2); margin-top: 3px; overflow: hidden; text-overflow: ellipsis }
 #screen-pay .mm3-salary-watch-value small { display: block; color: var(--green); font-weight: 650; margin-top: 2px; font-variant-numeric: tabular-nums }
-#screen-pay .mm3-salary-detail-row small { display: block; font-size: 9.5px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-detail-row small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 #screen-pay .mm3-salary-detail-row>span { font-size: 18px; color: var(--label3) }
-#screen-payments .mm3-payment-primary-change small { font-size: 9.5px; color: var(--label2); font-weight: 540 }
+#screen-payments .mm3-payment-primary-change small { font-size: var(--type-min); color: var(--label2); font-weight: 540 }
 #screen-payments .mm3-atf-tooltip small { display: block; color: rgba(255,255,255,.70); margin-top: 2px; overflow: hidden; text-overflow: ellipsis }
 #screen-payments .mm3-atf-metric span { display: block; color: var(--label2); overflow: hidden; text-overflow: ellipsis; font-size: 12px; white-space: normal }
-#screen-payments .mm3-payment-event-main small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-payment-event-main small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 #screen-pay .mm3-salary-event-main strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 #screen-pay .mm3-salary-detail-row strong { display: block; font-size: 12.5px }
 @media (max-width:390px) {
   #screen-pay .mm3-salary-watch-value strong { font-size: 11.5px }
 }
 #screen-payments .mm3-payment-event-value strong { display: block; font-size: 12.5px; color: var(--red); font-variant-numeric: tabular-nums }
-#screen-payments .mm3-payment-event-value small { display: block; font-size: 8.5px; color: var(--label2); margin-top: 2px }
+#screen-payments .mm3-payment-event-value small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 #screen-payments .mm3-payment-watch-main small { display: block; color: var(--label2); margin-top: 3px; overflow: hidden; text-overflow: ellipsis }
-#screen-payments .mm3-payment-detail-main small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-payment-detail-main small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 #screen-payments .mm3-payment-watch-value small { display: block; margin-top: 2px; font-weight: 650; font-variant-numeric: tabular-nums }
-#screen-assets .mm3-assets-primary-change small { font-size: 10px; color: var(--label2); font-weight: 560 }
+#screen-assets .mm3-assets-primary-change small { font-size: var(--type-min); color: var(--label2); font-weight: 560 }
 #screen-assets .mm3-assets-history-btn svg { color: var(--blue) }
-#screen-assets .mm3-assets-tooltip small { display: block; font-size: 8px; color: rgba(255,255,255,.7); margin-top: 2px }
+#screen-assets .mm3-assets-tooltip small { display: block; font-size: var(--type-min); color: rgba(255,255,255,.7); margin-top: 2px }
 #screen-assets .mm3-assets-metric span { display: block; color: var(--label2); font-size: 12px; white-space: normal }
 #screen-assets .mm3-assets-watch-main small { display: block; color: var(--label2); margin-top: 4px; overflow: hidden; text-overflow: ellipsis }
 #screen-assets .mm3-assets-watch-value small { display: block; color: var(--label2); margin-top: 3px; font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 12px }
@@ -1385,7 +1393,7 @@ body.dark #calculator { background: var(--bg); color: var(--label); border: 0; b
 .calc-key { border: 0; box-shadow: none; background: var(--card); color: var(--label); border-radius: 16px; font-weight: 400 }
 html.dark .mm3-atf-dayrow { background: var(--fill2) }
 .mm3-atf-form input[type=number] { width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid var(--sep); border-radius: 10px; background: var(--bg); color: var(--label); font-size: 16px }
-.cashflow-table th.cf-first-deficit-day { background: rgba(255,59,48,.065); color: var(--red); animation: acfFirstDeficitReveal .42s cubic-bezier(.2,.85,.25,1) 1 }
+.cashflow-table th.cf-first-deficit-day { background: rgba(255,59,48,.065); color: var(--red); animation: acfFirstDeficitReveal var(--motion-push) cubic-bezier(.2,.85,.25,1) 1 }
 .mail-summary button:last-child { border-right: 0 }
 .mail-detail-lines>div:last-child { border: 0 }
 @media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
@@ -1472,7 +1480,7 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 .planner-compare { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin: 11px 0 }
 .planner-calendar .day-cell { cursor: pointer }
 .planner-calendar.event-lens .day-cell:not(.has-event):not(.out) { opacity: .42 }
-.planner-calendar .day-cell.highlight-day { box-shadow: inset 0 0 0 1.5px var(--blue); animation: plannerDayPulse .7s ease-out }
+.planner-calendar .day-cell.highlight-day { box-shadow: inset 0 0 0 1.5px var(--blue); animation: plannerDayPulse var(--motion-push) ease-out }
 .planner-summary-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; margin: 9px 0 12px }
 .budget-dial-meta { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 12px }
 .budget-control-row { display: grid; grid-template-columns: 48px 1fr 48px; gap: 10px; align-items: center; margin-top: 15px }
@@ -1495,8 +1503,8 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 .money-ticker-spark { grid-column: 2/3; grid-row: 2/4; align-self: center; width: 52px; height: 34px; color: var(--ticker-accent); display: grid; place-items: center }
 .money-ticker-spark-line { fill: none; stroke: var(--ticker-accent); stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
 .money-ticker-spark-fill { fill: var(--ticker-accent); opacity: .08 }
-.money-ticker-spark-empty { font-size: 8.5px; color: var(--label3); line-height: 1.15; text-align: center }
-.money-ticker-meta { grid-column: 1/2; align-self: end; font-size: 9.5px; line-height: 1.25; color: var(--label2); margin-top: 5px; min-width: 0 }
+.money-ticker-spark-empty { font-size: var(--type-min); color: var(--label3); line-height: 1.15; text-align: center }
+.money-ticker-meta { grid-column: 1/2; align-self: end; font-size: var(--type-min); line-height: 1.25; color: var(--label2); margin-top: 5px; min-width: 0 }
 .money-ticker-card.large-value .money-ticker-value { grid-column: 1/-1; font-size: 15px; letter-spacing: -.2px }
 .money-ticker-card.large-value .money-ticker-spark { display: none }
 .money-ticker-card.large-value .money-ticker-meta { grid-column: 1/-1 }
@@ -1528,7 +1536,7 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 #app .money-ticker-card { border-radius: 18px; box-shadow: none; min-height: 90px }
 #app .money-ticker-name { font-size: 11px; font-weight: 600 }
 #app .money-ticker-value { font-size: 21px; font-weight: 700 }
-#app .money-ticker-meta { font-size: 10px; line-height: 1.35 }
+#app .money-ticker-meta { font-size: var(--type-min); line-height: 1.35 }
 #screen-pay .mm3-salary-metric strong,
 #screen-payments .mm3-atf-metric strong { display: block; margin-top: 3px; font-weight: 680; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 #screen-payments .mm3-payment-event-main strong { display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
@@ -1552,8 +1560,8 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 #screen-assets .mm3-assets-watch-main strong { font-size: 15px; white-space: normal; overflow-wrap: anywhere; line-height: 1.4 }
 #app .day-closing-card strong { font-size: 16px; font-weight: 600 }
 #app .mm3-action-main strong { font-size: 16px; font-weight: 500; line-height: 1.4 }
-#app .money-ticker-meta strong { font-size: 10px; line-height: 1.35 }
-#app .money-ticker-spark-empty { font-size: 9px }
+#app .money-ticker-meta strong { font-size: var(--type-min); line-height: 1.35 }
+#app .money-ticker-spark-empty { font-size: var(--type-min) }
 #app .daily-goal>div:last-child { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 2px 8px }
 #app .goal-plan-action>span:last-child { font-size: 15px; line-height: 1 }
 @media (prefers-contrast:more) {
@@ -1575,7 +1583,7 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
   #app .calendar-card { margin-inline: -8px; padding-inline: 0 }
 }
 @media (max-width:340px) {
-  #screen-month .month-name-btn { width: auto; max-width: 100%; overflow: visible; text-overflow: clip; font-size: 32px; line-height: 1.05 }
+  #screen-month .month-name-btn { width: auto; max-width: 100%; overflow: visible; text-overflow: clip; font-size: 22px; line-height: 1.2 }
   .money-ticker-spark { width: 44px }
   .money-ticker-value { font-size: 17px }
 }
@@ -1599,17 +1607,17 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 .day-inspector-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); grid-auto-rows: 1fr; gap: 8px; align-items: stretch }
 .day-closing-card>span:nth-child(2) { flex: 1; min-width: 0 }
 @media (max-width:390px) {
-  .mm3-action-main small { font-size: 10px }
+  .mm3-action-main small { font-size: var(--type-min) }
 }
 .stmt-file-picker small,
 .stmt-processing small { font-size: 11px; color: var(--label2) }
-.stmt-row-main small { display: block; font-size: 9.5px; color: var(--label2); margin-top: 2px }
+.stmt-row-main small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .mail-summary small { font-size: 11px; font-weight: 400; margin-left: 2px }
 .mm3-action-main small { display: block; color: var(--label2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; font-size: 13px; line-height: 1.45; white-space: normal; overflow-wrap: anywhere }
 .mm3-atf-riskbox small { font-size: 13px; line-height: 1.5 }
-.mm3-atf-day small { font-size: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.15px }
+.mm3-atf-day small { font-size: var(--type-min); white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.15px }
 @media (max-width:375px) {
-  .mm3-atf-day small { font-size: 9px }
+  .mm3-atf-day small { font-size: var(--type-min) }
 }
 .mm3-atf-next-event-main small { font-size: 12px; color: var(--label2); line-height: 1.4 }
 .day-closing-card small { display: block; font-size: 12px; color: var(--label2); margin-top: 4px; line-height: 1.5 }
@@ -1671,7 +1679,7 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 .day-close-journal-link svg { width: 20px; height: 20px }
 .day-close-journal-link span { margin-left: auto }
 .day-close-success { text-align: center; padding: 20px 8px 28px }
-.day-close-success>div { display: grid; place-items: center; width: 68px; height: 68px; background: #34c75918; color: var(--green); border: 1px solid #34c75940; border-radius: 50%; margin: 0 auto 20px; animation: dayCloseApproved .35s ease-out }
+.day-close-success>div { display: grid; place-items: center; width: 68px; height: 68px; background: #34c75918; color: var(--green); border: 1px solid #34c75940; border-radius: 50%; margin: 0 auto 20px; animation: dayCloseApproved var(--motion-push) ease-out }
 .day-close-success svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
 .day-close-success h3 { font-size: 24px; letter-spacing: -.03em; margin: 0 0 10px }
 .day-close-success p { font-size: 13px; color: var(--label2) }
@@ -1710,7 +1718,7 @@ html.motion-off .day-close-content { animation: none }
 @media (prefers-reduced-motion:reduce) {
   .day-close-success>div { animation: none }
 }
-.acf-shortage-callout { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0 12px; padding: 11px 12px; border-radius: 13px; background: rgba(255,149,0,.09); animation: acfCalloutIn .28s cubic-bezier(.2,.8,.2,1) 1 }
+.acf-shortage-callout { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0 12px; padding: 11px 12px; border-radius: 13px; background: rgba(255,149,0,.09); animation: acfCalloutIn var(--motion-push) cubic-bezier(.2,.8,.2,1) 1 }
 .mail-surface { color: var(--label); animation: mailEnter .22s ease-out }
 .mail-count-updated { animation: mailFade .18s ease-out }
 @media (prefers-reduced-motion:reduce) {
@@ -1723,7 +1731,7 @@ html.motion-off .day-close-content { animation: none }
 html.dark #screen-pay .mm3-salary-topbar .icon-btn { background: rgba(10,132,255,.14) }
 #screen-pay .mm3-salary-shell { padding-bottom: 8px; transform-origin: 50% 15%; contain: layout style }
 #screen-pay .mm3-salary-monthline { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 1px 1px 0; min-height: 34px }
-#screen-pay .mm3-salary-compare-label { font-size: 10px; color: var(--label2) }
+#screen-pay .mm3-salary-compare-label { font-size: var(--type-min); color: var(--label2) }
 #screen-pay .mm3-salary-primary-label { color: var(--label2); font-size: 13px; font-weight: 500 }
 @media (max-width:390px) {
   #screen-pay .mm3-salary-primary-value { font-size: 37px }
@@ -1735,11 +1743,11 @@ html.dark #screen-pay .mm3-salary-topbar .icon-btn { background: rgba(10,132,255
 #screen-pay .mm3-salary-pull:active { transform: scale(.96); opacity: .72 }
 #screen-pay .mm3-salary-section-caption { color: var(--label2); margin: 0 0 7px; font-size: 12px; line-height: 1.5 }
 #screen-pay .mm3-salary-viz { min-height: 158px; padding: 4px 0 0 }
-#screen-pay .mm3-salary-viz-switch { animation: mm3SalaryVizIn .24s cubic-bezier(.2,.8,.2,1) }
+#screen-pay .mm3-salary-viz-switch { animation: mm3SalaryVizIn var(--motion-push) cubic-bezier(.2,.8,.2,1) }
 #screen-pay .mm3-salary-composition { display: grid; grid-template-columns: minmax(126px,42%) 1fr; gap: 12px; align-items: center; min-height: 150px }
 #screen-pay .mm3-salary-donut { position: relative; width: min(142px,100%); aspect-ratio: 1; margin: 0 auto; display: grid; place-items: center }
 #screen-pay .mm3-salary-donut-track { fill: none; stroke: var(--fill); stroke-width: 18 }
-#screen-pay .mm3-salary-donut-arc { fill: none; stroke-width: 18; stroke-linecap: butt; animation: mm3SalaryDonutIn .55s cubic-bezier(.2,.8,.2,1) both }
+#screen-pay .mm3-salary-donut-arc { fill: none; stroke-width: 18; stroke-linecap: butt; animation: mm3SalaryDonutIn var(--motion-push) cubic-bezier(.2,.8,.2,1) both }
 #screen-pay .mm3-salary-donut-center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none }
 #screen-pay .mm3-salary-legend { min-width: 0; display: grid; gap: 9px }
 #screen-pay .mm3-salary-legend-row { display: grid; grid-template-columns: 9px minmax(0,1fr) auto; gap: 7px; align-items: center; min-width: 0 }
@@ -1750,10 +1758,10 @@ html.dark #screen-pay .mm3-salary-topbar .icon-btn { background: rgba(10,132,255
 #screen-pay .mm3-salary-empty-viz { min-height: 145px; display: grid; place-items: center; text-align: center; color: var(--label2); font-size: 12px; line-height: 1.5; padding: 20px }
 #screen-pay .mm3-salary-trend { padding-top: 4px; position: relative; touch-action: pan-y; -webkit-user-select: none; user-select: none }
 #screen-pay .mm3-salary-grid { stroke: var(--sep); stroke-width: .7 }
-#screen-pay .mm3-salary-trend-line { fill: none; stroke: var(--green); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 800; stroke-dashoffset: 800; animation: mm3SalaryLineIn .58s cubic-bezier(.2,.8,.2,1) forwards }
+#screen-pay .mm3-salary-trend-line { fill: none; stroke: var(--green); stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 800; stroke-dashoffset: 800; animation: mm3SalaryLineIn var(--motion-push) cubic-bezier(.2,.8,.2,1) forwards }
 #screen-pay .mm3-salary-trend-fill { fill: rgba(52,199,89,.065) }
 html.dark #screen-pay .mm3-salary-trend-fill { fill: rgba(48,209,88,.09) }
-#screen-pay .mm3-salary-axis { font-size: 8px; fill: var(--label2); font-family: -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif }
+#screen-pay .mm3-salary-axis { font-size: var(--type-min); fill: var(--label2); font-family: -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif }
 #screen-pay .mm3-salary-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep); margin-top: 8px }
 #screen-pay .mm3-salary-metric { min-width: 0; padding: 10px 8px 10px 0 }
 #screen-pay .mm3-salary-metric+.mm3-salary-metric { padding-left: 8px; border-left: .5px solid var(--sep) }
@@ -1770,7 +1778,7 @@ html.dark #screen-pay .mm3-salary-trend-fill { fill: rgba(48,209,88,.09) }
 }
 #screen-pay .mm3-salary-spark { height: 28px; display: grid; place-items: center; color: var(--green); width: 54px }
 #screen-pay .mm3-salary-spark-line { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
-#screen-pay .mm3-salary-spark-empty { font-size: 8px; color: var(--label3); text-align: center }
+#screen-pay .mm3-salary-spark-empty { font-size: var(--type-min); color: var(--label3); text-align: center }
 #screen-pay .mm3-salary-watch-value { text-align: right; min-width: 0 }
 #screen-pay .mm3-salary-detail-group { border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep) }
 #screen-pay .mm3-salary-detail-row:last-child { border-bottom: 0 }
@@ -1825,7 +1833,7 @@ html.motion-off .mm3-salary-trend-line { stroke-dashoffset: 0 !important }
 #screen-payments .mm3-payment-shell { padding-bottom: 8px; transform-origin: 50% 15%; contain: layout style }
 #screen-payments .mm3-payment-topbar .date-line { display: none }
 #screen-payments .mm3-payment-monthline { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 0 0; min-height: 34px }
-#screen-payments .mm3-payment-monthmeta { font-size: 10px; color: var(--label2); white-space: nowrap }
+#screen-payments .mm3-payment-monthmeta { font-size: var(--type-min); color: var(--label2); white-space: nowrap }
 #screen-payments .mm3-payment-primary-label { color: var(--label2); font-size: 13px; font-weight: 500 }
 @media (max-width:390px) {
   #screen-payments .mm3-payment-primary-value { font-size: 37px }
@@ -1847,7 +1855,7 @@ html.dark #screen-payments .mm3-atf-grid { stroke: rgba(235,235,245,.12) }
 #screen-payments .mm3-atf-selected { fill: var(--card); stroke: var(--blue); stroke-width: 2.3; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .1s }
 #screen-payments .mm3-atf-chart.scrubbing .mm3-atf-guide,
 #screen-payments .mm3-atf-chart.scrubbing .mm3-atf-selected { opacity: 1 }
-#screen-payments .mm3-atf-axis { fill: var(--label2); font-family: -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif; font-size: 10px }
+#screen-payments .mm3-atf-axis { fill: var(--label2); font-family: -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif; font-size: var(--type-min) }
 #screen-payments .mm3-atf-chart.scrubbing .mm3-atf-tooltip { opacity: 1; transform: translateX(-50%) translateY(0) }
 #screen-payments .mm3-atf-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep); margin-top: 2px }
 #screen-payments .mm3-atf-metric { min-width: 0; padding: 10px 8px 10px 0 }
@@ -1866,7 +1874,7 @@ html.dark #screen-payments .mm3-atf-grid { stroke: rgba(235,235,245,.12) }
 }
 #screen-payments .mm3-payment-spark { height: 28px; color: var(--red); display: grid; place-items: center; width: 54px }
 #screen-payments .mm3-payment-spark-line { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
-#screen-payments .mm3-payment-spark-empty { font-size: 8px; color: var(--label3) }
+#screen-payments .mm3-payment-spark-empty { font-size: var(--type-min); color: var(--label3) }
 #screen-payments .mm3-payment-watch-value { text-align: right; min-width: 0 }
 #screen-payments .mm3-payment-detail-list { border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep) }
 #screen-payments .mm3-payment-detail-row:last-child { border-bottom: 0 }
@@ -1878,7 +1886,7 @@ html.dark #screen-payments .mm3-atf-grid { stroke: rgba(235,235,245,.12) }
 .mm3-payment-push-row:active { opacity: .62 }
 .acf-day-state-block .row-value { max-width: 48% }
 .mm3-payment-push-row .row-value { max-width: 38% }
-#screen-payments .mm3-payment-reveal { animation: mm3PaymentReveal .26s cubic-bezier(.2,.8,.2,1) }
+#screen-payments .mm3-payment-reveal { animation: mm3PaymentReveal var(--motion-push) cubic-bezier(.2,.8,.2,1) }
 #screen-payments .mm3-payment-topbar .icon-btn { transition: transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease }
 #paymentsContent { touch-action: pan-y }
 #screen-payments .mm3-atf-event-dot.income { stroke: var(--green) }
@@ -2056,7 +2064,7 @@ html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
 .pro4-review-issue:last-child { border-bottom: 0 }
 .pro4-review-issue .chev { font-size: 20px }
 .pro-chart-point.acf-chart-negative { fill: var(--red); stroke: var(--card) }
-.pro-chart-point.acf-chart-first-negative { animation: acfGraphPointPulse 2.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center }
+.pro-chart-point.acf-chart-first-negative { animation: acfGraphPointPulse var(--motion-push) ease-out 1; transform-box: fill-box; transform-origin: center }
 .pro-chart-axis.acf-zero-axis { fill: var(--red); font-weight: 700 }
 #screen-assets .mm3-assets-shell { padding-bottom: 8px; transform-origin: 50% 15%; contain: layout style }
 #screen-assets .mm3-assets-topbar .date-line { display: none }
@@ -2074,9 +2082,9 @@ html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
 #screen-assets .mm3-assets-grid { stroke: var(--sep); stroke-width: .7; opacity: .62 }
 #screen-assets .mm3-assets-zero { stroke: var(--red); stroke-width: .8; stroke-dasharray: 4 4; opacity: .55 }
 #screen-assets .mm3-assets-area { fill: var(--blue); opacity: .055 }
-#screen-assets .mm3-assets-line { fill: none; stroke: var(--blue); stroke-width: 2.15; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 800; stroke-dashoffset: 800; animation: mm3AssetLineReveal .62s cubic-bezier(.2,.8,.2,1) forwards }
+#screen-assets .mm3-assets-line { fill: none; stroke: var(--blue); stroke-width: 2.15; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 800; stroke-dashoffset: 800; animation: mm3AssetLineReveal var(--motion-push) cubic-bezier(.2,.8,.2,1) forwards }
 #screen-assets .mm3-assets-line.forecast { stroke-dasharray: 5 4; stroke-dashoffset: 0; animation: none; stroke: var(--blue); opacity: .68 }
-#screen-assets .mm3-assets-axis { font-size: 8.3px; fill: var(--label2) }
+#screen-assets .mm3-assets-axis { font-size: var(--type-min); fill: var(--label2) }
 #screen-assets .mm3-assets-guide { stroke: var(--label2); stroke-width: .8; opacity: 0; transition: opacity .12s }
 #screen-assets .mm3-assets-selected { fill: var(--card); stroke: var(--blue); stroke-width: 2.2; opacity: 0; transition: opacity .12s }
 #screen-assets .mm3-assets-chart.scrubbing .mm3-assets-guide,
@@ -2097,13 +2105,13 @@ html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
 #screen-assets .mm3-assets-spark .spark-line { stroke-width: 1.55 }
 #screen-assets .mm3-assets-watch-value { text-align: right; min-width: 0 }
 #screen-assets .mm3-assets-empty-chart { height: 152px; display: grid; place-items: center; text-align: center; color: var(--label2); font-size: 11px; line-height: 1.45; border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep) }
-#screen-assets .mm3-assets-chart-switch { animation: mm3AssetSwitch .24s cubic-bezier(.2,.8,.2,1) }
+#screen-assets .mm3-assets-chart-switch { animation: mm3AssetSwitch var(--motion-push) cubic-bezier(.2,.8,.2,1) }
 #screen-assets .mm3-assets-sort-flip { will-change: transform }
 #screen-assets .mm3-assets-topbar .icon-btn { transition: transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease }
 #screen-assets .mm3-assets-watchlist.mm3-assets-manual { position: relative; touch-action: pan-y }
 #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow { grid-template-columns: 20px minmax(0,1.08fr) 62px minmax(76px,.76fr); cursor: grab; -webkit-user-select: none; user-select: none; touch-action: pan-y }
 #screen-assets .mm3-assets-watchrow.mm3-assets-dragging { cursor: grabbing; background: var(--card); border-radius: 13px; padding-left: 7px; padding-right: 7px; box-shadow: 0 11px 28px rgba(0,0,0,.17); transform: scale(1.018); opacity: .985; transition: box-shadow 150ms ease,transform 150ms var(--mm3-ease); z-index: 90 }
-#screen-assets .mm3-assets-manual-hint { font-size: 9.5px; color: var(--label2); margin: -2px 1px 7px; animation: mm3ManualHintIn 220ms var(--mm3-ease) }
+#screen-assets .mm3-assets-manual-hint { font-size: var(--type-min); color: var(--label2); margin: -2px 1px 7px; animation: mm3ManualHintIn 220ms var(--mm3-ease) }
 #screen-assets .mm3-assets-area.forecast { fill: var(--blue); opacity: .035 }
 #screen-assets .mm3-assets-selected.forecast { stroke: var(--blue) }
 @media (max-width:350px) {
@@ -2162,7 +2170,7 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .acf-credit-head { display: flex; align-items: center; justify-content: space-between; gap: 10px }
 .acf-credit-range { width: 100%; accent-color: var(--blue); height: 34px }
 .acf-credit-preview { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px }
-.cashflow-table .cf-marker { font-size: 9px; font-weight: 800; margin-left: 2px }
+.cashflow-table .cf-marker { font-size: var(--type-min); font-weight: 800; margin-left: 2px }
 .cashflow-table .cf-marker.salary { color: var(--green) }
 .cashflow-table .cf-marker.card { color: var(--purple) }
 .cashflow-table .cf-marker.large { color: var(--orange) }
@@ -2175,7 +2183,7 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .acf-plan-compare strong { font-variant-numeric: tabular-nums }
 .acf-home-card { padding: 16px 16px 14px }
 .acf-home-name { font-size: 13px; font-weight: 750; letter-spacing: .1px }
-.acf-home-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px }
+.acf-home-sub { font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .acf-home-caption { font-size: 11px; color: var(--label2); margin-top: 3px }
 .acf-home-split { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: stretch; margin-top: 13px }
 .acf-home-split .ratio { display: flex; flex-direction: column; justify-content: center; text-align: center; min-width: 69px }
@@ -2188,8 +2196,8 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .acf-budget-cashpart { width: 100%; min-height: 0; background: var(--blue); border-radius: 0 0 3px 3px }
 .acf-budget-col:first-child .acf-budget-cardpart:only-child,
 .acf-budget-cardpart+.acf-budget-cashpart:empty { border-radius: 6px }
-.acf-budget-label { font-size: 8.5px; color: var(--label2); margin-top: 6px; white-space: nowrap }
-.acf-legend-line { display: flex; align-items: center; gap: 13px; font-size: 10px; color: var(--label2); margin-top: 10px }
+.acf-budget-label { font-size: var(--type-min); color: var(--label2); margin-top: 6px; white-space: nowrap }
+.acf-legend-line { display: flex; align-items: center; gap: 13px; font-size: var(--type-min); color: var(--label2); margin-top: 10px }
 .acf-legend-line i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: -1px }
 .acf-legend-card { background: var(--purple) }
 .acf-legend-cash { background: var(--blue) }
@@ -2197,7 +2205,7 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .acf-trend-grid { stroke: var(--sep); stroke-width: .7 }
 .acf-trend-line { fill: none; stroke: var(--blue); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
 .acf-trend-area { fill: rgba(0,122,255,.08) }
-.acf-trend-axis { fill: var(--label2); font-size: 8px }
+.acf-trend-axis { fill: var(--label2); font-size: var(--type-min) }
 .acf-trend-dot { fill: var(--card); stroke: var(--blue); stroke-width: 2 }
 .acf-ratio-value { font-size: 15px; font-weight: 700; color: var(--blue) }
 .acf-details-panel { margin-top: 10px }
@@ -2205,9 +2213,9 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .acf-month-nav { margin: 10px 0 12px }
 #acfTableMode { margin-bottom: 12px }
 .acf-table-empty { padding: 22px 14px; border-radius: 12px; background: var(--card); color: var(--label2); text-align: center; font-size: 13px }
-.acf-deficit-marker { display: inline-grid; place-items: center; min-width: 14px; height: 14px; margin-left: 3px; padding: 0 3px; border-radius: 7px; background: rgba(255,59,48,.12); color: var(--red); font-size: 8px; font-weight: 800; vertical-align: 1px }
+.acf-deficit-marker { display: inline-grid; place-items: center; min-width: 14px; height: 14px; margin-left: 3px; padding: 0 3px; border-radius: 7px; background: rgba(255,59,48,.12); color: var(--red); font-size: var(--type-min); font-weight: 800; vertical-align: 1px }
 .acf-negative-sign { display: inline-block; transform-origin: 50% 55% }
-.acf-negative-value.acf-pulse .acf-negative-sign { animation: acfMinusSoftPulse 2.05s ease-in-out infinite }
+.acf-negative-value.acf-pulse .acf-negative-sign { animation: acfMinusSoftPulse var(--motion-push) ease-out 1 }
 .acf-shortage-callout.critical { background: rgba(255,59,48,.085) }
 .acf-shortage-icon { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; flex: 0 0 auto; font-size: 14px; font-weight: 800; background: rgba(255,149,0,.14); color: var(--orange) }
 .acf-shortage-callout.critical .acf-shortage-icon { background: rgba(255,59,48,.13); color: var(--red) }
@@ -2225,7 +2233,7 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .acf-calendar-unavailable { min-width: 0; min-height: 68px; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px; color: var(--label3); font-size: 12px }
 .acf-calendar-spacer { min-width: 0; min-height: 68px }
 .acf-calendar-number { display: grid; place-items: center; width: 25px; height: 25px; font-size: 13px; font-weight: 600; border-radius: 50% }
-.acf-calendar-amount { font-size: 10px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap }
+.acf-calendar-amount { font-size: var(--type-min); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap }
 .acf-calendar-day.today .acf-calendar-number { color: var(--blue); background: #007aff14 }
 .acf-calendar-day.selected .acf-calendar-number { background: var(--blue); color: #fff }
 .acf-calendar-day.deficit .acf-calendar-amount { color: var(--red) }
@@ -2235,7 +2243,7 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .acf-calendar-marks i,
 .acf-calendar-legend i { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--orange) }
 .acf-calendar-note { font-size: 11px; color: var(--label2); line-height: 1.7; margin: 12px 6px 8px }
-.acf-calendar-legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: 10px; color: var(--label2); margin: 0 6px }
+.acf-calendar-legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: var(--type-min); color: var(--label2); margin: 0 6px }
 .acf-calendar-legend span { display: flex; align-items: center; gap: 4px }
 .acf-calendar-detail { border-radius: 20px; background: var(--card); border: 1px solid var(--sep); padding: 4px 16px 10px; margin-bottom: 14px }
 .acf-calendar-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--sep); padding: 8px 0 }
@@ -2309,7 +2317,7 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .mail-items { display: grid; gap: 8px; margin-bottom: 14px }
 .mail-item-content { display: block; width: 100%; min-width: 0; min-height: 44px !important; border: 0; background: transparent; color: inherit; text-align: left; padding: 12px 12px 0; border-radius: 12px }
 .mail-item-state { min-width: 0; flex: 1 }
-.mail-item-state .mail-caption { font-size: 10px; line-height: 1.4; margin-top: 3px }
+.mail-item-state .mail-caption { font-size: var(--type-min); line-height: 1.4; margin-top: 3px }
 .mail-inline-actions { display: flex; align-items: center; gap: 0; flex: 0 0 88px }
 .mail-action-disc { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--fill); color: var(--label2) }
 .mail-action-match:disabled .mail-action-disc { background: rgba(255,149,0,.12); color: var(--orange) }

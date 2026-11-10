@@ -46,7 +46,7 @@
   .row-value { font-size: 14px }
 }
 .calc-key { height: clamp(44px,6.7dvh,60px); font-size: 26px; touch-action: manipulation }
-.day-close-mark { font-size: 9px; color: var(--green); margin-left: 2px }
+.day-close-mark { font-size: var(--type-min); color: var(--green); margin-left: 2px }
 @media (max-width:375px) {
   .mm3-atf-day { min-height: 54px }
 }
@@ -106,7 +106,7 @@
 .pro4-insight strong { display: block; font-size: 13px }
 .pro4-review-state strong { font-size: 14px }
 .pro4-review-issue strong { display: block; font-size: 12.5px }
-.money-ticker-meta strong { display: block; font-size: 9.5px; font-weight: 700; color: var(--ticker-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.money-ticker-meta strong { display: block; font-size: var(--type-min); font-weight: 700; color: var(--ticker-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .acf-home-split strong { display: block; font-family: var(--font-rounded); font-size: 16px; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .acf-graph-head strong { font-size: 14px }
 @media (max-width:390px) {
@@ -144,35 +144,35 @@
 .month-picker-result { display: block; text-align: center; font-size: 17px; font-weight: 600; margin: 16px 0 }
 .v11-picker-detail { display: grid; gap: 2px }
 .goal-amount-meta span { display: block; font-size: 11px; color: var(--label2) }
-.goal-review-meta span { font-size: 10px; color: var(--label2); display: block }
+.goal-review-meta span { font-size: var(--type-min); color: var(--label2); display: block }
 .planner-compare span,
-.planner-summary-grid span { display: block; font-size: 9.5px; color: var(--label2) }
-.budget-dial-meta span { display: block; color: var(--label2); font-size: 9.5px }
-.acf-split-grid span { display: block; font-size: 9.5px; color: var(--label2) }
+.planner-summary-grid span { display: block; font-size: var(--type-min); color: var(--label2) }
+.budget-dial-meta span { display: block; color: var(--label2); font-size: var(--type-min) }
+.acf-split-grid span { display: block; font-size: var(--type-min); color: var(--label2) }
 .acf-credit-head span { font-size: 13px; color: var(--label2) }
-.acf-credit-preview span { font-size: 9px; color: var(--label2); display: block }
-.metric-cell span { display: block; font-size: 10.5px; color: var(--label2) }
-.month-hero-meta span { display: block; font-size: 10px; color: var(--label2) }
-.acf-metric span { display: block; font-size: 9.5px; color: var(--label2) }
-.acf-summary-tile span { display: block; font-size: 10px; color: var(--label2) }
-.plan-vs-actual span { display: block; font-size: 9.5px; color: var(--label2) }
-.pro-metric span { display: block; color: var(--label2); font-size: 10.5px; line-height: 1.25 }
+.acf-credit-preview span { font-size: var(--type-min); color: var(--label2); display: block }
+.metric-cell span { display: block; font-size: var(--type-min); color: var(--label2) }
+.month-hero-meta span { display: block; font-size: var(--type-min); color: var(--label2) }
+.acf-metric span { display: block; font-size: var(--type-min); color: var(--label2) }
+.acf-summary-tile span { display: block; font-size: var(--type-min); color: var(--label2) }
+.plan-vs-actual span { display: block; font-size: var(--type-min); color: var(--label2) }
+.pro-metric span { display: block; color: var(--label2); font-size: var(--type-min); line-height: 1.25 }
 .pro3-freadout span { font-size: 11px; color: var(--label2) }
-.pro3-scenario-metrics span { display: block; font-size: 9px; color: var(--label2) }
-.pro3-allocation-btn span { display: block; font-size: 10px; color: var(--label2) }
-.pro3-check-main span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 2px }
-.pro3-rebalance-option span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px; line-height: 1.35 }
+.pro3-scenario-metrics span { display: block; font-size: var(--type-min); color: var(--label2) }
+.pro3-allocation-btn span { display: block; font-size: var(--type-min); color: var(--label2) }
+.pro3-check-main span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
+.pro3-rebalance-option span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 3px; line-height: 1.35 }
 .pro3-allocation-ranges span,
-.pro4-parse-head span { font-size: 10px; color: var(--label2) }
-.pro4-goal-banner span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 2px; line-height: 1.35 }
-.pro4-goal-metrics span { display: block; font-size: 9.5px; color: var(--label2) }
-.pro4-goal-item span { display: block; font-size: 10px; color: var(--label2); margin-top: 2px }
+.pro4-parse-head span { font-size: var(--type-min); color: var(--label2) }
+.pro4-goal-banner span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px; line-height: 1.35 }
+.pro4-goal-metrics span { display: block; font-size: var(--type-min); color: var(--label2) }
+.pro4-goal-item span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .pro4-insight span { display: block; font-size: 11px; color: var(--label2); line-height: 1.45; margin-top: 4px }
-.pro4-review-state span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px }
-.pro4-review-issue span { display: block; font-size: 10px; color: var(--label2); margin-top: 2px }
+.pro4-review-state span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 3px }
+.pro4-review-issue span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .money-ticker-meta span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px }
 .acf-home-split span { display: block; font-size: 11px; color: var(--label2) }
-.acf-graph-head span { font-size: 10.5px; color: var(--label2) }
+.acf-graph-head span { font-size: var(--type-min); color: var(--label2) }
 .stmt-import-hero span { display: block; color: var(--label2); font-size: 12px; line-height: 1.5; margin-top: 4px }
 .goal-allocation-summary span { color: var(--label2) }
 .safety-strip span { min-width: 3px; flex: 1 }
@@ -181,10 +181,10 @@
 .pro-chart-readout span,
 .acf-plan-compare span { color: var(--label2) }
 .stmt-file-picker>span { min-height: 120px; border: 1.5px dashed var(--fill2); border-radius: 16px; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--blue); gap: 5px }
-.stmt-row-main span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px }
+.stmt-row-main span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 3px }
 .mail-metrics span,
 .mail-summary span { display: block; font-size: 12px; color: var(--label2) }
-.pro3-recon-summary span { display: block; font-size: 9.5px; color: var(--label2) }
+.pro3-recon-summary span { display: block; font-size: var(--type-min); color: var(--label2) }
 .mm3-atf-credit span { font-size: 11px; line-height: 1.4; overflow-wrap: anywhere }
 .day-close-totals span,
 .day-close-stage-total span { font-size: 12px; color: var(--label2) }

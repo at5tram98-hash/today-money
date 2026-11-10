@@ -1,0 +1,465 @@
+﻿遷移ID（重複をまとめた）,遷移元,入口・手順,期待先,実装済み,検証済み,照合方法
+T8-001 T8-007,home,"[""home"", ""home""]",320-light-home,○,○,画面シナリオ
+T8-002 T8-008,month,"[""month"", ""month""]",320-light-month,○,○,画面シナリオ
+T8-003 T8-009,pay,"[""pay"", ""pay""]",320-light-pay,○,○,画面シナリオ
+T8-004 T8-010,payments,"[""payments"", ""payments""]",320-light-payments,○,○,画面シナリオ
+T8-005 T8-011,assets,"[""assets"", ""assets""]",320-light-assets,○,○,画面シナリオ
+T8-006 T8-012,settings,"[""settings"", ""settings""]",320-light-settings,○,○,画面シナリオ
+T8-013,home,"[""search"", ""home"", ""#todaySearch""]",393-light-search,○,○,画面シナリオ
+T8-014,home,"[""notices"", ""home"", ""#todayNotice""]",393-light-notices,○,○,画面シナリオ
+T8-015,home,"[""home-menu"", ""home"", ""#todayMenu""]",393-light-home-menu,○,○,画面シナリオ
+T8-016,home,"[""expense"", ""home"", ""#quickExpense""]",393-light-expense,○,○,画面シナリオ
+T8-017,home,"[""quick-bank"", ""home"", ""#quickBank""]",393-light-quick-bank,○,○,画面シナリオ
+T8-018,home,"[""quick-income"", ""home"", ""#quickIncome""]",393-light-quick-income,○,○,画面シナリオ
+T8-019,pay,"[""salary-menu"", ""pay"", ""#salaryMenu""]",393-light-salary-menu,○,○,画面シナリオ
+T8-020,pay,"[""salary-add"", ""pay"", ""#salaryAddNav""]",393-light-salary-add,○,○,画面シナリオ
+T8-021,payments,"[""payment-menu"", ""payments"", ""#paymentsMenu""]",393-light-payment-menu,○,○,画面シナリオ
+T8-022,payments,"[""atf"", ""payments"", ""#mm3AtfOpen""]",393-light-atf,○,○,画面シナリオ
+T8-023,assets,"[""assets-menu"", ""assets"", ""#assetMenuSimple""]",393-light-assets-menu,○,○,画面シナリオ
+T8-024,settings,"[""profile"", ""settings"", ""#profileSettings""]",393-light-profile,○,○,画面シナリオ
+T8-025,settings,"[""data"", ""settings"", null, ""openDataSettings""]",393-light-data,○,○,画面シナリオ
+T8-026,settings,"[""delete-guard"", ""settings"", ""#deleteAll"", ""openDataSettings""]",393-light-delete-guard,○,○,画面シナリオ
+T8-027,month,"[""events"", ""month"", ""#monthEventGoals""]",393-light-events,○,○,画面シナリオ
+T8-028,month,"[""new-event"", ""month"", ""#monthEventGoals"", null, ""#eventGoalAdd""]",393-light-new-event,○,○,画面シナリオ
+T8-029,month,"[""new-event-item"", ""month"", ""#monthEventGoals"", null, ""#eventGoalAdd"", ""#eventGoalAddItem""]",393-light-new-event-item,○,○,画面シナリオ
+T8-030,home,"[""daily-budget"", ""home"", null, ""openDailyGoalPlanner""]",393-light-daily-budget,○,○,画面シナリオ
+T8-031,home,"[""acf"", ""home"", null, ""openAcf""]",393-light-acf,○,○,画面シナリオ
+T8-032,assets,"[""financial-update"", ""assets"", null, ""openFinancialUpdates""]",393-light-financial-update,○,○,画面シナリオ
+T8-033,home,"[""today-repeat"", ""home"", ""#todayRepeat""]",393-light-today-repeat,○,○,画面シナリオ
+T8-034,home,"[""today-one-line"", ""home"", ""#todayOneLine""]",393-light-today-one-line,○,○,画面シナリオ
+T8-035,home,"[""today-cross-search"", ""home"", ""#todayCrossSearch""]",393-light-today-cross-search,○,○,画面シナリオ
+T8-036,home,"[""today-analysis"", ""home"", ""#todayAnalysis""]",393-light-today-analysis,○,○,画面シナリオ
+T8-037,home,"[""today-transactions"", ""home"", ""#todayTransactions""]",393-light-today-transactions,○,○,画面シナリオ
+T8-038,home,"[""today-mail"", ""home"", ""#todayMenu"", null, ""#menuLayer button:has-text(\""メール取引\"")""]",393-light-today-mail,○,○,画面シナリオ
+T8-039,month,"[""month-selector"", ""month"", ""#monthName""]",393-light-month-selector,○,○,画面シナリオ
+T8-040,month,"[""month-hero"", ""month"", ""#monthHero""]",393-light-month-hero,○,○,画面シナリオ
+T8-041,month,"[""month-search"", ""month"", ""#monthSearch""]",393-light-month-search,○,○,画面シナリオ
+T8-042,month,"[""month-menu"", ""month"", ""#monthMenu""]",393-light-month-menu,○,○,画面シナリオ
+T8-043,month,"[""month-analysis"", ""month"", ""#monthAnalysis""]",393-light-month-analysis,○,○,画面シナリオ
+T8-044,month,"[""month-reason"", ""month"", ""#monthReasonAnalysis""]",393-light-month-reason,○,○,画面シナリオ
+T8-045,month,"[""month-review"", ""month"", ""#monthCloseReview""]",393-light-month-review,○,○,画面シナリオ
+T8-046,month,"[""month-transactions"", ""month"", ""#monthTransactions""]",393-light-month-transactions,○,○,画面シナリオ
+T8-047,month,"[""month-goal"", ""month"", ""#monthGoal""]",393-light-month-goal,○,○,画面シナリオ
+T8-048,pay,"[""salary-month"", ""pay"", ""#mm3SalaryMonth""]",393-light-salary-month,○,○,画面シナリオ
+T8-049,pay,"[""salary-viz"", ""pay"", ""#mm3SalaryVizMenu""]",393-light-salary-viz,○,○,画面シナリオ
+T8-050,payments,"[""payment-month"", ""payments"", ""#mm3PaymentMonth""]",393-light-payment-month,○,○,画面シナリオ
+T8-051,payments,"[""payment-card-update"", ""payments"", ""#mm3PaymentQuickBilling""]",393-light-payment-card-update,○,○,画面シナリオ
+T8-052,payments,"[""payment-history"", ""payments"", ""#mm3PaymentHistoryTop""]",393-light-payment-history,○,○,画面シナリオ
+T8-053,assets,"[""asset-history"", ""assets"", ""#mm3AssetHistoryTop""]",393-light-asset-history,○,○,画面シナリオ
+T8-054,settings,"[""editor-bank"", ""settings"", null, ""openAddBank""]",393-light-editor-bank,○,○,画面シナリオ
+T8-055,settings,"[""editor-credit-card"", ""settings"", null, ""openAddCard""]",393-light-editor-credit-card,○,○,画面シナリオ
+T8-056,settings,"[""editor-debit-card"", ""settings"", null, ""openAddDebit""]",393-light-editor-debit-card,○,○,画面シナリオ
+T8-057,pay,"[""editor-payroll"", ""pay"", null, ""openSalaryAdd""]",393-light-editor-payroll,○,○,画面シナリオ
+T8-058,payments,"[""editor-fixed-bill"", ""payments"", null, ""openFixedPayment""]",393-light-editor-fixed-bill,○,○,画面シナリオ
+T8-059,home,"[""editor-daily-correction"", ""home"", null, ""openDailyCorrectionDetail""]",393-light-editor-daily-correction,○,○,画面シナリオ
+T8-060,pay,"[""history-temporary-income"", ""pay"", null, ""openTempIncomeHistory""]",393-light-history-temporary-income,○,○,画面シナリオ
+T8-061,payments,"[""editor-billing"", ""payments"", null, ""openQuickCardBilling""]",393-light-editor-billing,○,○,画面シナリオ
+T8-062,settings,"[""initial-financial-settings"", ""settings"", null, ""openInitialValues""]",393-light-initial-financial-settings,○,○,画面シナリオ
+T8-063,home,"[""search-voice-entry"", ""home"", null, ""openSmartInputSearch""]",393-light-search-voice-entry,○,○,画面シナリオ
+T8-064,month,"[""event-goal-list"", ""month"", null, ""openEventGoals""]",393-light-event-goal-list,○,○,画面シナリオ
+T8-065,month,"[""event-goal-editor"", ""month"", null, ""openEventGoalEditor""]",393-light-event-goal-editor,○,○,画面シナリオ
+T8-066,month,"[""reason-analysis"", ""month"", null, ""openReasonAnalysis""]",393-light-reason-analysis,○,○,画面シナリオ
+T8-067,month,"[""month-closing-review"", ""month"", null, ""openMonthCloseReview""]",393-light-month-closing-review,○,○,画面シナリオ
+T8-068,settings,"[""favorites"", ""settings"", null, ""openFavoritesEditor""]",393-light-favorites,○,○,画面シナリオ
+T8-069,settings,"[""tags-manage"", ""settings"", null, ""openTagsManager""]",393-light-tags-manage,○,○,画面シナリオ
+T8-070,settings,"[""tags-editor"", ""settings"", null, ""openTagEdit""]",393-light-tags-editor,○,○,画面シナリオ
+T8-071,assets,"[""timeline"", ""assets"", null, ""openMoneyTimeline""]",393-light-timeline,○,○,画面シナリオ
+T8-072,pay,"[""salary-allocation-picker"", ""pay"", null, ""openSalaryAllocationPicker""]",393-light-salary-allocation-picker,○,○,画面シナリオ
+T8-073,assets,"[""bank-transfer-plans"", ""assets"", null, ""openTransferPlans""]",393-light-bank-transfer-plans,○,○,画面シナリオ
+T8-074,assets,"[""bank-transfer-editor"", ""assets"", null, ""openTransferPlanEditor""]",393-light-bank-transfer-editor,○,○,画面シナリオ
+T8-075,month,"[""budget-rebalance"", ""month"", null, ""openBudgetRebalance""]",393-light-budget-rebalance,○,○,画面シナリオ
+T8-076,home,"[""acf-setup"", ""home"", null, ""openAcfSetup""]",393-light-acf-setup,○,○,画面シナリオ
+T8-077,home,"[""acf-simulator"", ""home"", null, ""openAcfSimulator""]",393-light-acf-simulator,○,○,画面シナリオ
+T8-078,home,"[""acf-settings"", ""home"", null, ""openAcfSettings""]",393-light-acf-settings,○,○,画面シナリオ
+T8-079,home,"[""day-closing-journal"", ""home"", null, ""openDayClosingJournal""]",393-light-day-closing-journal,○,○,画面シナリオ
+T8-080,assets,"[""asset-billing-month"", ""assets"", null, ""openAssetBillingMonthPicker""]",393-light-asset-billing-month,○,○,画面シナリオ
+T8-081,home,"[""quick-repeat-direct"", ""home"", null, ""openQuickRepeat""]",393-light-quick-repeat-direct,○,○,画面シナリオ
+T8-S001,テスト前提状態,"{""name"": ""monthly-goal-step-0"", ""method"": ""openMonthlyGoalPlanner"", ""args"": [], ""plannerStep"": 0}",extra-monthly-goal-step-0,○,○,巡回の直接の入口
+T8-S002,テスト前提状態,"{""name"": ""monthly-goal-step-1"", ""method"": ""openMonthlyGoalPlanner"", ""args"": [], ""plannerStep"": 1}",extra-monthly-goal-step-1,○,○,巡回の直接の入口
+T8-S003,テスト前提状態,"{""name"": ""monthly-goal-step-2"", ""method"": ""openMonthlyGoalPlanner"", ""args"": [], ""plannerStep"": 2}",extra-monthly-goal-step-2,○,○,巡回の直接の入口
+T8-S004,テスト前提状態,"{""name"": ""monthly-goal-step-3"", ""method"": ""openMonthlyGoalPlanner"", ""args"": [], ""plannerStep"": 3}",extra-monthly-goal-step-3,○,○,巡回の直接の入口
+T8-S005,テスト前提状態,"{""name"": ""monthly-goal-step-4"", ""method"": ""openMonthlyGoalPlanner"", ""args"": [], ""plannerStep"": 4}",extra-monthly-goal-step-4,○,○,巡回の直接の入口
+T8-S006,テスト前提状態,"{""name"": ""monthly-goal-step-5"", ""method"": ""openMonthlyGoalPlanner"", ""args"": [], ""plannerStep"": 5}",extra-monthly-goal-step-5,○,○,巡回の直接の入口
+T8-S007,テスト前提状態,"{""name"": ""monthly-goal-step-6"", ""method"": ""openMonthlyGoalPlanner"", ""args"": [], ""plannerStep"": 6}",extra-monthly-goal-step-6,○,○,巡回の直接の入口
+T8-S008,テスト前提状態,"{""name"": ""monthly-goal-step-7"", ""method"": ""openMonthlyGoalPlanner"", ""args"": [], ""plannerStep"": 7}",extra-monthly-goal-step-7,○,○,巡回の直接の入口
+T8-S009,テスト前提状態,"{""name"": ""daily-goal-step-0"", ""method"": ""openDailyGoalPlanner"", ""args"": [], ""plannerStep"": 0}",extra-daily-goal-step-0,○,○,巡回の直接の入口
+T8-S010,テスト前提状態,"{""name"": ""daily-goal-step-1"", ""method"": ""openDailyGoalPlanner"", ""args"": [], ""plannerStep"": 1}",extra-daily-goal-step-1,○,○,巡回の直接の入口
+T8-S011,テスト前提状態,"{""name"": ""daily-goal-step-2"", ""method"": ""openDailyGoalPlanner"", ""args"": [], ""plannerStep"": 2}",extra-daily-goal-step-2,○,○,巡回の直接の入口
+T8-S012,テスト前提状態,"{""name"": ""daily-goal-step-3"", ""method"": ""openDailyGoalPlanner"", ""args"": [], ""plannerStep"": 3}",extra-daily-goal-step-3,○,○,巡回の直接の入口
+T8-S013,テスト前提状態,"{""name"": ""calculator"", ""method"": ""openCalculator"", ""args"": [""監査電卓"", 1000]}",extra-calculator,○,○,巡回の直接の入口
+T8-S014,テスト前提状態,"{""name"": ""calc-discount"", ""method"": ""openCalcAssist"", ""args"": [""discount""]}",extra-calc-discount,○,○,巡回の直接の入口
+T8-S015,テスト前提状態,"{""name"": ""calc-add"", ""method"": ""openCalcAssist"", ""args"": [""add""]}",extra-calc-add,○,○,巡回の直接の入口
+T8-S016,テスト前提状態,"{""name"": ""calc-split"", ""method"": ""openCalcAssist"", ""args"": [""split""]}",extra-calc-split,○,○,巡回の直接の入口
+T8-S017,テスト前提状態,"{""name"": ""transaction-detail"", ""method"": ""openTransactionDetail"", ""args"": [""audit_tx""]}",extra-transaction-detail,○,○,巡回の直接の入口
+T8-S018,テスト前提状態,"{""name"": ""transaction-edit"", ""method"": ""openTransactionEdit"", ""args"": [""audit_tx""]}",extra-transaction-edit,○,○,巡回の直接の入口
+T8-S019,テスト前提状態,"{""name"": ""day-inspector"", ""method"": ""openFinancialDayInspector"", ""args"": [""2026-10-07""]}",extra-day-inspector,○,○,巡回の直接の入口
+T8-S020,テスト前提状態,"{""name"": ""day-plan"", ""method"": ""openDayPlanSheet"", ""args"": [""2026-10-07""]}",extra-day-plan,○,○,巡回の直接の入口
+T8-S021,テスト前提状態,"{""name"": ""day-menu"", ""method"": ""openDayQuickMenu"", ""args"": [""2026-10-07""]}",extra-day-menu,○,○,巡回の直接の入口
+T8-S022,テスト前提状態,"{""name"": ""large-new"", ""method"": ""openLargeExpenseEditor"", ""args"": []}",extra-large-new,○,○,巡回の直接の入口
+T8-S023,テスト前提状態,"{""name"": ""large-edit"", ""method"": ""openLargeExpenseEditor"", ""args"": [""$largeObj""]}",extra-large-edit,○,○,巡回の直接の入口
+T8-S024,テスト前提状態,"{""name"": ""large-detail"", ""method"": ""openLargeExpenseDetail"", ""args"": [""$large""]}",extra-large-detail,○,○,巡回の直接の入口
+T8-S025,テスト前提状態,"{""name"": ""employer-new"", ""method"": ""openEmployerCreate"", ""args"": []}",extra-employer-new,○,○,巡回の直接の入口
+T8-S026,テスト前提状態,"{""name"": ""employer-edit"", ""method"": ""openEmployerEdit"", ""args"": [""$employerObj""]}",extra-employer-edit,○,○,巡回の直接の入口
+T8-S027,テスト前提状態,"{""name"": ""salary-edit"", ""method"": ""openSalaryRecordEdit"", ""args"": [""$salary""]}",extra-salary-edit,○,○,巡回の直接の入口
+T8-S028,テスト前提状態,"{""name"": ""temp-detail"", ""method"": ""openTempIncomeDetail"", ""args"": [""$temp""]}",extra-temp-detail,○,○,巡回の直接の入口
+T8-S029,テスト前提状態,"{""name"": ""temp-edit"", ""method"": ""openTempIncomeEdit"", ""args"": [""$temp""]}",extra-temp-edit,○,○,巡回の直接の入口
+T8-S030,テスト前提状態,"{""name"": ""bank-detail"", ""method"": ""openBankDetail"", ""args"": [""$bank""]}",extra-bank-detail,○,○,巡回の直接の入口
+T8-S031,テスト前提状態,"{""name"": ""bank-edit"", ""method"": ""openAddBank"", ""args"": [""$bank""]}",extra-bank-edit,○,○,巡回の直接の入口
+T8-S032,テスト前提状態,"{""name"": ""card-detail"", ""method"": ""openCardDetail"", ""args"": [""$card""]}",extra-card-detail,○,○,巡回の直接の入口
+T8-S033,テスト前提状態,"{""name"": ""card-edit"", ""method"": ""openAddCard"", ""args"": [""$card""]}",extra-card-edit,○,○,巡回の直接の入口
+T8-S034,テスト前提状態,"{""name"": ""card-month"", ""method"": ""openCardBillingMonthPicker"", ""args"": [""$card"", ""2026-10""]}",extra-card-month,○,○,巡回の直接の入口
+T8-S035,テスト前提状態,"{""name"": ""card-paid"", ""method"": ""openCardPaidConfirmation"", ""args"": [""$card"", ""2026-09"", ""2026-10""]}",extra-card-paid,○,○,巡回の直接の入口
+T8-S036,テスト前提状態,"{""name"": ""fixed-edit"", ""method"": ""openFixedPayment"", ""args"": [""$fixedObj""]}",extra-fixed-edit,○,○,巡回の直接の入口
+T8-S037,テスト前提状態,"{""name"": ""category-edit"", ""method"": ""openCategoryEdit"", ""args"": [0]}",extra-category-edit,○,○,巡回の直接の入口
+T8-S038,テスト前提状態,"{""name"": ""income-new"", ""method"": ""openIncomeEditor"", ""args"": []}",extra-income-new,○,○,巡回の直接の入口
+T8-S039,テスト前提状態,"{""name"": ""gmail-settings"", ""method"": ""openGmailSettings"", ""args"": []}",extra-gmail-settings,○,○,巡回の直接の入口
+T8-S040,テスト前提状態,"{""name"": ""feedback"", ""method"": ""openFeedbackSettings"", ""args"": []}",extra-feedback,○,○,巡回の直接の入口
+T8-S041,テスト前提状態,"{""name"": ""notifications"", ""method"": ""openNotificationSettings"", ""args"": []}",extra-notifications,○,○,巡回の直接の入口
+T8-S042,テスト前提状態,"{""name"": ""security"", ""method"": ""openSecuritySettings"", ""args"": []}",extra-security,○,○,巡回の直接の入口
+T8-S043,テスト前提状態,"{""name"": ""appearance"", ""method"": ""openAppearanceSettings"", ""args"": []}",extra-appearance,○,○,巡回の直接の入口
+T8-S044,テスト前提状態,"{""name"": ""acf-initialized"", ""method"": ""openAcf"", ""args"": []}",extra-acf-initialized,○,○,巡回の直接の入口
+T8-S045,テスト前提状態,"{""name"": ""acf-settings-initialized"", ""method"": ""openAcfSettings"", ""args"": []}",extra-acf-settings-initialized,○,○,巡回の直接の入口
+T8-S046,テスト前提状態,"{""name"": ""rebalance-initialized"", ""method"": ""openBudgetRebalance"", ""args"": [""2026-10""]}",extra-rebalance-initialized,○,○,巡回の直接の入口
+T8-S047,テスト前提状態,"{""name"": ""tag-items"", ""method"": ""openTagItems"", ""args"": [""audit_tag""]}",extra-tag-items,○,○,巡回の直接の入口
+T8-S048,テスト前提状態,"{""name"": ""tag-edit-existing"", ""method"": ""openTagEdit"", ""args"": [""$tagObj""]}",extra-tag-edit-existing,○,○,巡回の直接の入口
+T8-S049,テスト前提状態,"{""name"": ""tag-assignment"", ""method"": ""openTagAssignment"", ""args"": [""audit_tag""]}",extra-tag-assignment,○,○,巡回の直接の入口
+T8-S050,テスト前提状態,"{""name"": ""statement-import"", ""method"": ""openCardStatementImport"", ""args"": [""$card""]}",extra-statement-import,○,○,巡回の直接の入口
+T8-S051,テスト前提状態,"{""name"": ""statement-reconcile"", ""method"": ""openStatementReconciliation"", ""args"": [""$card"", ""2026-10"", ""2026-09""]}",extra-statement-reconcile,○,○,巡回の直接の入口
+T8-S052,テスト前提状態,"{""name"": ""transfer-new"", ""method"": ""openTransferPlanEditor"", ""args"": []}",extra-transfer-new,○,○,巡回の直接の入口
+T8-S053,テスト前提状態,"{""name"": ""day-closing-0"", ""method"": ""openDayClosing"", ""args"": [""2026-10-07""], ""closingStep"": 0}",extra-day-closing-0,○,○,巡回の直接の入口
+T8-S054,テスト前提状態,"{""name"": ""day-closing-1"", ""method"": ""openDayClosing"", ""args"": [""2026-10-07""], ""closingStep"": 1}",extra-day-closing-1,○,○,巡回の直接の入口
+T8-S055,テスト前提状態,"{""name"": ""day-closing-2"", ""method"": ""openDayClosing"", ""args"": [""2026-10-07""], ""closingStep"": 2}",extra-day-closing-2,○,○,巡回の直接の入口
+T8-S056,テスト前提状態,"{""name"": ""day-closing-3"", ""method"": ""openDayClosing"", ""args"": [""2026-10-07""], ""closingStep"": 3}",extra-day-closing-3,○,○,巡回の直接の入口
+T8-S057,テスト前提状態,"{""name"": ""day-closing-4"", ""method"": ""openDayClosing"", ""args"": [""2026-10-07""], ""closingStep"": 4}",extra-day-closing-4,○,○,巡回の直接の入口
+T8-S058,テスト前提状態,"{""name"": ""day-closing-5"", ""method"": ""openDayClosing"", ""args"": [""2026-10-07""], ""closingStep"": 5}",extra-day-closing-5,○,○,巡回の直接の入口
+T8-C139,カード明細取込,stmtStartReview,#stmtReviewSave,○,○,304操作 STATEMENT-214
+T8-C140,カード明細取込,stmtRowClose,#stmtReviewSave,○,○,304操作 STATEMENT-219
+T8-C141,カード明細取込,stmtRowSave,#stmtReviewSave,○,○,304操作 STATEMENT-220
+T8-C142,カード明細取込,stmtReviewSave,#stmtReviewFinal,○,○,304操作 STATEMENT-217
+T8-C143 T8-C145,カード明細取込,stmtReviewFinal,#stmtFinalize,○,○,304操作 STATEMENT-218
+T8-C144,カード明細取込,stmtBackReview,#stmtReviewSave,○,○,304操作 STATEMENT-223
+T8-C146,カード明細取込,stmtFinalize,data assertion follows,○,○,304操作 STATEMENT-222
+T8-C147,カード明細取込,stmtOpenExisting,#stmtConfirmedRows,○,○,304操作 STATEMENT-213
+R8-CI-001 R8-CI-007,シナリオ起点 home,home,320-light-home,○,○,画面シナリオ
+R8-CI-002 R8-CI-008,シナリオ起点 month,month,320-light-month,○,○,画面シナリオ
+R8-CI-003 R8-CI-009,シナリオ起点 pay,pay,320-light-pay,○,○,画面シナリオ
+R8-CI-004 R8-CI-010,シナリオ起点 payments,payments,320-light-payments,○,○,画面シナリオ
+R8-CI-005 R8-CI-011,シナリオ起点 assets,assets,320-light-assets,○,○,画面シナリオ
+R8-CI-006 R8-CI-012,シナリオ起点 settings,settings,320-light-settings,○,○,画面シナリオ
+R8-CI-013,シナリオ起点 home,search,393-light-search,○,○,画面シナリオ
+R8-CI-014,シナリオ起点 home,notices,393-light-notices,○,○,画面シナリオ
+R8-CI-015,シナリオ起点 home,home-menu,393-light-home-menu,○,○,画面シナリオ
+R8-CI-016,シナリオ起点 home,expense,393-light-expense,○,○,画面シナリオ
+R8-CI-017,シナリオ起点 home,quick-bank,393-light-quick-bank,○,○,画面シナリオ
+R8-CI-018,シナリオ起点 home,quick-income,393-light-quick-income,○,○,画面シナリオ
+R8-CI-019,シナリオ起点 pay,salary-menu,393-light-salary-menu,○,○,画面シナリオ
+R8-CI-020,シナリオ起点 pay,salary-add,393-light-salary-add,○,○,画面シナリオ
+R8-CI-021,シナリオ起点 payments,payment-menu,393-light-payment-menu,○,○,画面シナリオ
+R8-CI-022,シナリオ起点 payments,atf,393-light-atf,○,○,画面シナリオ
+R8-CI-023,シナリオ起点 assets,assets-menu,393-light-assets-menu,○,○,画面シナリオ
+R8-CI-024,シナリオ起点 settings,profile,393-light-profile,○,○,画面シナリオ
+R8-CI-025,シナリオ起点 settings,data,393-light-data,○,○,画面シナリオ
+R8-CI-026,シナリオ起点 settings,delete-guard,393-light-delete-guard,○,○,画面シナリオ
+R8-CI-027,シナリオ起点 month,events,393-light-events,○,○,画面シナリオ
+R8-CI-028,シナリオ起点 month,new-event,393-light-new-event,○,○,画面シナリオ
+R8-CI-029,シナリオ起点 month,new-event-item,393-light-new-event-item,○,○,画面シナリオ
+R8-CI-030,シナリオ起点 home,daily-budget,393-light-daily-budget,○,○,画面シナリオ
+R8-CI-031,シナリオ起点 home,acf,393-light-acf,○,○,画面シナリオ
+R8-CI-032,シナリオ起点 assets,financial-update,393-light-financial-update,○,○,画面シナリオ
+R8-CI-033,シナリオ起点 home,today-repeat,393-light-today-repeat,○,○,画面シナリオ
+R8-CI-034,シナリオ起点 home,today-one-line,393-light-today-one-line,○,○,画面シナリオ
+R8-CI-035,シナリオ起点 home,today-cross-search,393-light-today-cross-search,○,○,画面シナリオ
+R8-CI-036,シナリオ起点 home,today-analysis,393-light-today-analysis,○,○,画面シナリオ
+R8-CI-037,シナリオ起点 home,today-transactions,393-light-today-transactions,○,○,画面シナリオ
+R8-CI-038,シナリオ起点 home,today-mail,393-light-today-mail,○,○,画面シナリオ
+R8-CI-039,シナリオ起点 month,month-selector,393-light-month-selector,○,○,画面シナリオ
+R8-CI-040,シナリオ起点 month,month-hero,393-light-month-hero,○,○,画面シナリオ
+R8-CI-041,シナリオ起点 month,month-search,393-light-month-search,○,○,画面シナリオ
+R8-CI-042,シナリオ起点 month,month-menu,393-light-month-menu,○,○,画面シナリオ
+R8-CI-043,シナリオ起点 month,month-analysis,393-light-month-analysis,○,○,画面シナリオ
+R8-CI-044,シナリオ起点 month,month-reason,393-light-month-reason,○,○,画面シナリオ
+R8-CI-045,シナリオ起点 month,month-review,393-light-month-review,○,○,画面シナリオ
+R8-CI-046,シナリオ起点 month,month-transactions,393-light-month-transactions,○,○,画面シナリオ
+R8-CI-047,シナリオ起点 month,month-goal,393-light-month-goal,○,○,画面シナリオ
+R8-CI-048,シナリオ起点 pay,salary-month,393-light-salary-month,○,○,画面シナリオ
+R8-CI-049,シナリオ起点 pay,salary-viz,393-light-salary-viz,○,○,画面シナリオ
+R8-CI-050,シナリオ起点 payments,payment-month,393-light-payment-month,○,○,画面シナリオ
+R8-CI-051,シナリオ起点 payments,payment-card-update,393-light-payment-card-update,○,○,画面シナリオ
+R8-CI-052,シナリオ起点 payments,payment-history,393-light-payment-history,○,○,画面シナリオ
+R8-CI-053,シナリオ起点 assets,asset-history,393-light-asset-history,○,○,画面シナリオ
+R8-CI-054,シナリオ起点 settings,editor-bank,393-light-editor-bank,○,○,画面シナリオ
+R8-CI-055,シナリオ起点 settings,editor-credit-card,393-light-editor-credit-card,○,○,画面シナリオ
+R8-CI-056,シナリオ起点 settings,editor-debit-card,393-light-editor-debit-card,○,○,画面シナリオ
+R8-CI-057,シナリオ起点 pay,editor-payroll,393-light-editor-payroll,○,○,画面シナリオ
+R8-CI-058,シナリオ起点 payments,editor-fixed-bill,393-light-editor-fixed-bill,○,○,画面シナリオ
+R8-CI-059,シナリオ起点 home,editor-daily-correction,393-light-editor-daily-correction,○,○,画面シナリオ
+R8-CI-060,シナリオ起点 pay,history-temporary-income,393-light-history-temporary-income,○,○,画面シナリオ
+R8-CI-061,シナリオ起点 payments,editor-billing,393-light-editor-billing,○,○,画面シナリオ
+R8-CI-062,シナリオ起点 settings,initial-financial-settings,393-light-initial-financial-settings,○,○,画面シナリオ
+R8-CI-063,シナリオ起点 home,search-voice-entry,393-light-search-voice-entry,○,○,画面シナリオ
+R8-CI-064,シナリオ起点 month,event-goal-list,393-light-event-goal-list,○,○,画面シナリオ
+R8-CI-065,シナリオ起点 month,event-goal-editor,393-light-event-goal-editor,○,○,画面シナリオ
+R8-CI-066,シナリオ起点 month,reason-analysis,393-light-reason-analysis,○,○,画面シナリオ
+R8-CI-067,シナリオ起点 month,month-closing-review,393-light-month-closing-review,○,○,画面シナリオ
+R8-CI-068,シナリオ起点 settings,favorites,393-light-favorites,○,○,画面シナリオ
+R8-CI-069,シナリオ起点 settings,tags-manage,393-light-tags-manage,○,○,画面シナリオ
+R8-CI-070,シナリオ起点 settings,tags-editor,393-light-tags-editor,○,○,画面シナリオ
+R8-CI-071,シナリオ起点 assets,timeline,393-light-timeline,○,○,画面シナリオ
+R8-CI-072,シナリオ起点 pay,salary-allocation-picker,393-light-salary-allocation-picker,○,○,画面シナリオ
+R8-CI-073,シナリオ起点 assets,bank-transfer-plans,393-light-bank-transfer-plans,○,○,画面シナリオ
+R8-CI-074,シナリオ起点 assets,bank-transfer-editor,393-light-bank-transfer-editor,○,○,画面シナリオ
+R8-CI-075,シナリオ起点 month,budget-rebalance,393-light-budget-rebalance,○,○,画面シナリオ
+R8-CI-076,シナリオ起点 home,acf-setup,393-light-acf-setup,○,○,画面シナリオ
+R8-CI-077,シナリオ起点 home,acf-simulator,393-light-acf-simulator,○,○,画面シナリオ
+R8-CI-078,シナリオ起点 home,acf-settings,393-light-acf-settings,○,○,画面シナリオ
+R8-CI-079,シナリオ起点 home,day-closing-journal,393-light-day-closing-journal,○,○,画面シナリオ
+R8-CI-080,シナリオ起点 assets,asset-billing-month,393-light-asset-billing-month,○,○,画面シナリオ
+R8-CI-081,シナリオ起点 home,quick-repeat-direct,393-light-quick-repeat-direct,○,○,画面シナリオ
+R8-STEP-001 T711-R-001,closing-approval-cancel（操作前画像）,dayCloseNext,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-140
+R8-STEP-002 T711-R-002,closing-approval-cancel（操作前画像）,dayCloseBack,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-139
+R8-STEP-003 T711-R-003,closing-approval-cancel（操作前画像）,dayCloseAddIncome,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-133
+R8-STEP-004 T711-R-004,closing-approval-cancel（操作前画像）,dayReviewConfirmed,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-141
+R8-STEP-005 T711-R-005,closing-approval-cancel（操作前画像）,dayReviewClose,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-142
+R8-STEP-006 T711-R-006,closing-approval-cancel（操作前画像）,dayCloseJournal,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-129
+R8-STEP-007 T711-R-007,closing-approval-cancel（操作前画像）,journalReview,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-146
+R8-STEP-008 T711-R-008,closing-approval-cancel（操作前画像）,dayCloseModify,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-132
+R8-STEP-009 T711-R-009,closing-approval-cancel（操作前画像）,dayCloseCancel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-131
+R8-STEP-010 T711-R-010,closing-approval-cancel（操作前画像）,dayCancelBack,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-144
+R8-STEP-011 T711-R-011,closing-approval-cancel（操作前画像）,dayCancelNext,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-145
+R8-STEP-012 T711-R-012,closing-approval-cancel（操作前画像）,dayCancelJournal,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-143
+R8-STEP-013 T711-R-013,closing-approval-cancel（操作前画像）,dayCloseDone,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-130
+R8-STEP-014 T711-R-014,closing-child-actions（操作前画像）,dayReviewMail,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-136
+R8-STEP-015 T711-R-015,closing-child-actions（操作前画像）,dayReviewAdd,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-134
+R8-STEP-016 T711-R-016,closing-child-actions（操作前画像）,dayReviewCorrection,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-135
+R8-STEP-017 T711-R-017,closing-child-actions（操作前画像）,dayCloseAddBank,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-137
+R8-STEP-018,acfToday-false（操作前画像）,acfToday,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-268
+R8-STEP-019,acfToday-true（操作前画像）,acfToday,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-268
+R8-STEP-020,acfMonth-false（操作前画像）,acfMonth,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-269
+R8-STEP-021,acfMonth-true（操作前画像）,acfMonth,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-269
+R8-STEP-022 T711-R-018,goal-steps-and-values（操作前画像）,goalStart,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-013
+R8-STEP-023 T711-R-019,goal-steps-and-values（操作前画像）,goalNext,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-015
+R8-STEP-024 T711-R-020,goal-steps-and-values（操作前画像）,goalBack,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-016
+R8-STEP-025 T711-R-021,goal-steps-and-values（操作前画像）,goalAmountEdit,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-017
+R8-STEP-026 T711-R-022,goal-steps-and-values（操作前画像）,goalResetAmount,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-018
+R8-STEP-027 T711-R-023,goal-steps-and-values（操作前画像）,goalResetCategories,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-019
+R8-STEP-028 T711-R-024,transaction-filter-edit-delete（操作前画像）,txSearch,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 TX-035
+R8-STEP-029 T711-R-025,transaction-filter-edit-delete（操作前画像）,txCatFilter,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 TX-036
+R8-STEP-030 T711-R-026,transaction-filter-edit-delete（操作前画像）,txEdit,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 TX-039
+R8-STEP-031 T711-R-027,transaction-filter-edit-delete（操作前画像）,teSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 TX-038
+R8-STEP-032 T711-R-028,transaction-filter-edit-delete（操作前画像）,txDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 TX-040
+R8-STEP-033 T711-R-029,month-wheel-month-candidates（操作前画像）,month-${key}-${v},個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PICKER-127
+R8-STEP-034 T711-R-030,month-wheel-month-candidates（操作前画像）,monthPickerToday,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PICKER-126
+R8-STEP-035 T711-R-031,month-wheel-month-candidates（操作前画像）,monthPickerApply,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PICKER-128
+R8-STEP-036 T711-R-032,calculator-assistance-and-cancel（操作前画像）,[data-k],個別スクリプトの固有assertに従う操作後状態,○,○,304操作 CALC-124
+R8-STEP-037 T711-R-033,calculator-assistance-and-cancel（操作前画像）,[data-calc-tool=discount],個別スクリプトの固有assertに従う操作後状態,○,○,304操作 CALC-121
+R8-STEP-038 T711-R-034,calculator-assistance-and-cancel（操作前画像）,calcToolApply,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 CALC-120
+R8-STEP-039 T711-R-035,calculator-assistance-and-cancel（操作前画像）,[data-calc-tool=add],個別スクリプトの固有assertに従う操作後状態,○,○,304操作 CALC-122
+R8-STEP-040 T711-R-036,calculator-assistance-and-cancel（操作前画像）,[data-calc-tool=split],個別スクリプトの固有assertに従う操作後状態,○,○,304操作 CALC-123
+R8-STEP-041 T711-R-037,calculator-assistance-and-cancel（操作前画像）,calcDone,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 CALC-117
+R8-STEP-042 T711-R-038,calculator-assistance-and-cancel（操作前画像）,calcCancel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 CALC-116
+R8-STEP-043 T711-R-039,acf-settings-draft-persist（操作前画像）,acfReserve,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-259
+R8-STEP-044 T711-R-040,acf-settings-draft-persist（操作前画像）,acfFallback,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-260
+R8-STEP-045 T711-R-041,acf-settings-draft-persist（操作前画像）,acfDetailsToggle,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-261
+R8-STEP-046 T711-R-042,acf-settings-draft-persist（操作前画像）,acfDailyLimit,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-262
+R8-STEP-047 T711-R-043,acf-settings-draft-persist（操作前画像）,acfWeights,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-264
+R8-STEP-048 T711-R-044,acf-settings-draft-persist（操作前画像）,acfRequired,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-265
+R8-STEP-049 T711-R-045,acf-settings-draft-persist（操作前画像）,acfRiskNoti,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-266
+R8-STEP-050 T711-R-046,acf-settings-draft-persist（操作前画像）,acfCreditPlaces,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-263
+R8-STEP-051 T711-R-047,acf-settings-draft-persist（操作前画像）,creditAllCategories,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SIM-273
+R8-STEP-052 T711-R-048,acf-settings-draft-persist（操作前画像）,acfSettingsSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-267
+R8-STEP-053 T711-R-049,acf-initial-setup（操作前画像）,acfSetupUseCard,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-249
+R8-STEP-054 T711-R-050,acf-initial-setup（操作前画像）,acfSetupStart,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-250
+R8-STEP-055,monthly-summary-goal-reset-preserves-fixed（操作前画像）,msGoal,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 LARGE-067
+R8-STEP-056,monthly-summary-goal-reset-preserves-fixed（操作前画像）,msResetPlan,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 LARGE-068
+R8-STEP-057,monthly-safety-return-to-calendar（操作前画像）,goalBackToCalendar,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 LARGE-078
+R8-STEP-058,closing-change-invalidates-review-return（操作前画像）,dayCloseMissing,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 DAYCLOSE-138
+R8-STEP-059 T711-R-051,event-goal-save-pay-reimburse-delete（操作前画像）,eventGoalAdd,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-232
+R8-STEP-060 T711-R-052,event-goal-save-pay-reimburse-delete（操作前画像）,eventGoalAddItem,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-237
+R8-STEP-061 T711-R-053,event-goal-save-pay-reimburse-delete（操作前画像）,goalItemCancel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-233
+R8-STEP-062 T711-R-054,event-goal-save-pay-reimburse-delete（操作前画像）,goalItemSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-234
+R8-STEP-063 T711-R-055,event-goal-save-pay-reimburse-delete（操作前画像）,eventGoalSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-236
+R8-STEP-064 T711-R-056,event-goal-save-pay-reimburse-delete（操作前画像）,eventGoalEdit,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-240
+R8-STEP-065 T711-R-057,event-goal-save-pay-reimburse-delete（操作前画像）,eventGoalCancel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-235
+R8-STEP-066 T711-R-058,event-goal-save-pay-reimburse-delete（操作前画像）,eventGoalReimburse,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-241
+R8-STEP-067 T711-R-059,event-goal-save-pay-reimburse-delete（操作前画像）,reimbCancel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-238
+R8-STEP-068 T711-R-060,event-goal-save-pay-reimburse-delete（操作前画像）,reimbSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-239
+R8-STEP-069 T711-R-061,event-goal-save-pay-reimburse-delete（操作前画像）,eventGoalDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-242
+R8-STEP-070,pdf-export-download（操作前画像）,pdfExport,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BACKUP-206
+R8-STEP-071,atf-next-event-opens-matching-day（操作前画像）,mm3AtfNextEvent,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PAYMENTS-093
+R8-STEP-072,acf-safe-daily-plan-apply-preserves-fixed-day（操作前画像）,acfApplyGoal,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-257
+R8-STEP-073,monthly-goal-approval-see-calendar（操作前画像）,goalSeeCalendar,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-031
+R8-STEP-074,bank-balance-and-daily-correction（操作前画像）,qbSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-148
+R8-STEP-075,bank-balance-and-daily-correction（操作前画像）,dcEdit,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-171
+R8-STEP-076,bank-balance-and-daily-correction（操作前画像）,dcReset,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-172
+R8-STEP-077,temp-income-add-confirm-edit-delete（操作前画像）,tiSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-150
+R8-STEP-078,temp-income-add-confirm-edit-delete（操作前画像）,tempConfirm,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-180
+R8-STEP-079,temp-income-add-confirm-edit-delete（操作前画像）,tempEditNav,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-182
+R8-STEP-080,temp-income-add-confirm-edit-delete（操作前画像）,tempDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-181
+R8-STEP-081,card-create-delete（操作前画像）,acSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-155
+R8-STEP-082,card-create-delete（操作前画像）,acDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-156
+R8-STEP-083,fixed-payment-create-delete（操作前画像）,fpSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-168
+R8-STEP-084,fixed-payment-create-delete（操作前画像）,fpDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-169
+R8-STEP-085 T711-R-062,acf-view-filters-protected-simulator（操作前画像）,[data-view=calendar],個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-252
+R8-STEP-086 T711-R-063,acf-view-filters-protected-simulator（操作前画像）,[data-view=table],個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-251
+R8-STEP-087 T711-R-064,acf-view-filters-protected-simulator（操作前画像）,[data-v=important],個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-254
+R8-STEP-088 T711-R-065,acf-view-filters-protected-simulator（操作前画像）,[data-v=all],個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-253
+R8-STEP-089 T711-R-066,acf-view-filters-protected-simulator（操作前画像）,acfProtected,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ACF-255
+R8-STEP-090 T711-R-067,acf-view-filters-protected-simulator（操作前画像）,simRun,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SIM-272
+R8-STEP-091 T711-R-068,financial-update-month-selection（操作前画像）,financialUpdateMonth,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 UPDATE-304
+R8-STEP-092,goal-day-dial-exact-values（操作前画像）,gdpPlus,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-027
+R8-STEP-093,goal-day-dial-exact-values（操作前画像）,gdpMinus,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-026
+R8-STEP-094,goal-day-dial-exact-values（操作前画像）,gdpCalc,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-028
+R8-STEP-095,goal-day-dial-exact-values（操作前画像）,gdpMode,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-029
+R8-STEP-096,goal-day-dial-exact-values（操作前画像）,gdpLock,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-030
+R8-STEP-097,goal-day-dial-exact-values（操作前画像）,gdpApply,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-025
+R8-STEP-098,goal-day-dial-exact-values（操作前画像）,gdpCancel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GOAL-024
+R8-STEP-099 T711-R-069,mail-apply-link-ignore-history（操作前画像）,mailPreviewLater,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-226
+R8-STEP-100 T711-R-070,mail-apply-link-ignore-history（操作前画像）,mailPreviewReview,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-227
+R8-STEP-101 T711-R-071,mail-apply-link-ignore-history（操作前画像）,mailSyncOverview,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-224
+R8-STEP-102 T711-R-072,mail-apply-link-ignore-history（操作前画像）,mailEditApply,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-229
+R8-STEP-103 T711-R-073,mail-apply-link-ignore-history（操作前画像）,mailEditIgnore,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-230
+R8-STEP-104 T711-R-074,mail-apply-link-ignore-history（操作前画像）,mailEditLink,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-228
+R8-STEP-105 T711-R-075,mail-apply-link-ignore-history（操作前画像）,mailHistoryOverview,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-225
+R8-STEP-106 T711-R-076,mail-apply-link-ignore-history（操作前画像）,mm3MailHistoryTx,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-231
+R8-STEP-107 T711-R-077,card-month-navigation-reconciliation（操作前画像）,cardPrevPay,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-191
+R8-STEP-108 T711-R-078,card-month-navigation-reconciliation（操作前画像）,cardNextPay,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-192
+R8-STEP-109 T711-R-079,card-month-navigation-reconciliation（操作前画像）,cardReconcile,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-196
+R8-STEP-110 T711-R-080,asset-chart-mode-menu-selection（操作前画像）,mm3AssetMode,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 ASSETS-102
+R8-STEP-111 T711-R-081,allocation-picker-close（操作前画像）,allocPickClose,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-282
+R8-STEP-112 T711-R-082,income-editor-save（操作前画像）,ieSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 INCOME-303
+R8-STEP-113 T711-R-083,salary-add-edit-delete（操作前画像）,saSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BANK-165
+R8-STEP-114 T711-R-084,salary-add-edit-delete（操作前画像）,srSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-178
+R8-STEP-115 T711-R-085,salary-add-edit-delete（操作前画像）,srDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-179
+R8-STEP-116 T711-R-086,card-billing-cpApply（操作前画像）,qcbSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-190
+R8-STEP-117 T711-R-087,card-billing-cpApply（操作前画像）,cpApply,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-199
+R8-STEP-118 T711-R-088,card-billing-cpReconciled（操作前画像）,qcbSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-190
+R8-STEP-119 T711-R-089,card-billing-cpReconciled（操作前画像）,cpReconciled,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-200
+R8-STEP-120 T711-R-090,transfer-plan-save（操作前画像）,transferSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-288
+R8-STEP-121 T711-R-091,day-plan-change-fix-reset（操作前画像）,dpChange,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-058
+R8-STEP-122 T711-R-092,day-plan-change-fix-reset（操作前画像）,dpFix,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-060
+R8-STEP-123 T711-R-093,day-plan-change-fix-reset（操作前画像）,dpReset,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-059
+R8-STEP-124 T711-R-094,day-menu-dqmExpense（操作前画像）,dqmExpense,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-062
+R8-STEP-125 T711-R-095,day-menu-dqmIncome（操作前画像）,dqmIncome,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-063
+R8-STEP-126 T711-R-096,day-menu-dqmPlan（操作前画像）,dqmPlan,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-064
+R8-STEP-127 T711-R-097,day-inspector-inspectExpense（操作前画像）,inspectExpense,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-053
+R8-STEP-128 T711-R-098,day-inspector-inspectPlan（操作前画像）,inspectPlan,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-054
+R8-STEP-129 T711-R-099,day-inspector-inspectWhatIf（操作前画像）,inspectWhatIf,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-055
+R8-STEP-130 T711-R-100,day-inspector-inspectLarge（操作前画像）,inspectLarge,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-056
+R8-STEP-131 T711-R-101,day-inspector-dayGoalDetail（操作前画像）,dayGoalDetail,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 MONTH-052
+R8-STEP-132 T711-R-102,large-expense-create-split-complete-delete（操作前画像）,leSplitAdd,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 LARGE-073
+R8-STEP-133 T711-R-103,large-expense-create-split-complete-delete（操作前画像）,leSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 LARGE-071
+R8-STEP-134 T711-R-104,large-expense-create-split-complete-delete（操作前画像）,leEditDetail,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 LARGE-074
+R8-STEP-135 T711-R-105,large-expense-create-split-complete-delete（操作前画像）,leComplete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 LARGE-075
+R8-STEP-136 T711-R-106,large-expense-create-split-complete-delete（操作前画像）,leDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 LARGE-076
+R8-STEP-137,bank-preparation-timeline-history（操作前画像）,prepTransfer,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-183
+R8-STEP-138,bank-preparation-timeline-history（操作前画像）,prepTimeline,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-184
+R8-STEP-139,bank-preparation-timeline-history（操作前画像）,timelineTransfer,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-281
+R8-STEP-140,bank-preparation-timeline-history（操作前画像）,proBankHistory,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SALARYEDIT-187
+R8-STEP-141,budget-rebalance-persist（操作前画像）,rebalanceApply,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-292
+R8-STEP-142,atf-settings-recalculate（操作前画像）,atfApply,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PAYMENTS-094
+R8-STEP-143 T711-R-107,security-passcode-confirm-mismatch-cancel（操作前画像）,passSwitch,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-113
+R8-STEP-144 T711-R-108,security-passcode-confirm-mismatch-cancel（操作前画像）,changePass,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-114
+R8-STEP-145 T711-R-109,security-passcode-confirm-mismatch-cancel（操作前画像）,psCancel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-115
+R8-STEP-146 T711-R-110,gmail-settings-local-draft-save（操作前画像）,gsAuto,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GMAIL-295
+R8-STEP-147 T711-R-111,gmail-settings-local-draft-save（操作前画像）,gsSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 GMAIL-294
+R8-STEP-148 T711-R-112,profile-image-save-clear（操作前画像）,prChooseImage,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-108
+R8-STEP-149 T711-R-113,profile-image-save-clear（操作前画像）,prSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-107
+R8-STEP-150 T711-R-114,profile-image-save-clear（操作前画像）,prClear,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-109
+R8-STEP-151 T711-R-115,settings-volume-notification（操作前画像）,fbVolume,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-111
+R8-STEP-152 T711-R-116,settings-volume-notification（操作前画像）,notiLevel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-112
+R8-STEP-153 T711-R-117,category-add-edit-delete（操作前画像）,catAdd,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 SET-110
+R8-STEP-154 T711-R-118,category-add-edit-delete（操作前画像）,ceSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BACKUP-204
+R8-STEP-155 T711-R-119,category-add-edit-delete（操作前画像）,ceDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 BACKUP-205
+R8-STEP-156 T711-R-120,one-line-parse-save（操作前画像）,pro4Parse,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-244
+R8-STEP-157 T711-R-121,one-line-parse-save（操作前画像）,pro4SaveAll,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-245
+R8-STEP-158 T711-R-122,one-line-normal-form（操作前画像）,pro4NormalForm,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-246
+R8-STEP-159 T711-R-123,save-search-and-month-review（操作前画像）,pro4SaveSearch,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-247
+R8-STEP-160 T711-R-124,save-search-and-month-review（操作前画像）,monthReviewConfirm,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 EVENT-243
+R8-STEP-161 T711-R-125,statement-import-review-confirm-unlock（操作前画像）,stmtImportNew,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-211
+R8-STEP-162 T711-R-126,statement-import-review-confirm-unlock（操作前画像）,stmtStartReview,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-214
+R8-STEP-163 T711-R-127,statement-import-review-confirm-unlock（操作前画像）,stmtRowClose,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-219
+R8-STEP-164 T711-R-128,statement-import-review-confirm-unlock（操作前画像）,stmtRowExclude,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-221
+R8-STEP-165 T711-R-129,statement-import-review-confirm-unlock（操作前画像）,stmtRowSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-220
+R8-STEP-166 T711-R-130,statement-import-review-confirm-unlock（操作前画像）,stmtReviewSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-217
+R8-STEP-167 T711-R-131,statement-import-review-confirm-unlock（操作前画像）,stmtReviewFinal,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-218
+R8-STEP-168 T711-R-132,statement-import-review-confirm-unlock（操作前画像）,stmtBackReview,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-223
+R8-STEP-169 T711-R-133,statement-import-review-confirm-unlock（操作前画像）,stmtFinalize,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-222
+R8-STEP-170 T711-R-134,statement-import-review-confirm-unlock（操作前画像）,stmtOpenExisting,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-213
+R8-STEP-171 T711-R-135,statement-import-review-confirm-unlock（操作前画像）,stmtConfirmedRows,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-215
+R8-STEP-172 T711-R-136,statement-import-review-confirm-unlock（操作前画像）,stmtUnlock,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 STATEMENT-216
+R8-STEP-173 T711-R-137,tag-create-assign-rename-delete（操作前画像）,tagAdd,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-274
+R8-STEP-174 T711-R-138,tag-create-assign-rename-delete（操作前画像）,tagCancel,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-275
+R8-STEP-175 T711-R-139,tag-create-assign-rename-delete（操作前画像）,tagSave,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-276
+R8-STEP-176 T711-R-140,tag-create-assign-rename-delete（操作前画像）,tagAssign,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-278
+R8-STEP-177 T711-R-141,tag-create-assign-rename-delete（操作前画像）,taClose,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-280
+R8-STEP-178 T711-R-142,tag-create-assign-rename-delete（操作前画像）,tagRename,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-279
+R8-STEP-179 T711-R-143,tag-create-assign-rename-delete（操作前画像）,tagDelete,個別スクリプトの固有assertに従う操作後状態,○,○,304操作 PRO-277
+T8R-001 T8R-003 T8R-005 T8R-007,salary,PAY-083 / Enter,給与分析,○,○,304操作 PAY-083
+T8R-002 T8R-004 T8R-006 T8R-008,trend,MONTH-051 / Enter,月次比較・トレンド,○,○,304操作 MONTH-051
+T711-G-001 T711-G-009 T711-G-017 T711-G-025,day-longpress,day-longpress,,○,○,ジェスチャー: 今月カレンダーの日の長押し
+T711-G-002 T711-G-010 T711-G-018 T711-G-026,expense-longpress,expense-longpress,,○,○,ジェスチャー: 支出入力の長押し
+T711-G-003 T711-G-011 T711-G-019 T711-G-027,sheet-detents,sheet-detents,,○,○,ジェスチャー: シートの段階切替
+T711-G-004 T711-G-012 T711-G-020 T711-G-028,sheet-cancel,sheet-cancel,,○,○,ジェスチャー: シートの下スワイプ
+T711-G-005 T711-G-013 T711-G-021 T711-G-029,salary-release,salary-release,,○,○,ジェスチャー: 給与の月スワイプ
+T711-G-006 T711-G-014 T711-G-022 T711-G-030,salary-cancel,salary-cancel,,○,○,ジェスチャー: 給与の縦移動で切り替えない
+T711-G-007 T711-G-015 T711-G-023 T711-G-031,payments-release,payments-release,,○,○,ジェスチャー: 支払いの月スワイプ
+T711-G-008 T711-G-016 T711-G-024 T711-G-032,payments-cancel,payments-cancel,,○,○,ジェスチャー: 支払いの縦移動で切り替えない
+T711-L-001 T711-L-003 T711-L-005 T711-L-007,income-received,label右上端,,○,○,チェック欄のラベル全体で切替
+T711-L-002 T711-L-004 T711-L-006 T711-L-008,closing-confirm,label右上端,,○,○,チェック欄のラベル全体で切替
+T711-F-1-1,メール履歴 / 一文入力解析,"AUD8-017: 320px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back / dark / no-preference",,○,○,44pt（巡回で全画面を検査）
+T711-F-1-2,メール履歴 / 一文入力解析,AUD8-018: 320px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger / dark / no-preference,,○,○,44pt（巡回で全画面を検査）
+T711-F-1-3,メール履歴 / 一文入力解析,"AUD8-017: 393px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back / dark / no-preference",,○,○,44pt（巡回で全画面を検査）
+T711-F-1-4,メール履歴 / 一文入力解析,AUD8-018: 393px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger / dark / no-preference,,○,○,44pt（巡回で全画面を検査）
+T711-F-2-1,メール履歴 / 一文入力解析,"AUD8-017: 320px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back / dark / reduce",,○,○,44pt（巡回で全画面を検査）
+T711-F-2-2,メール履歴 / 一文入力解析,AUD8-018: 320px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger / dark / reduce,,○,○,44pt（巡回で全画面を検査）
+T711-F-2-3,メール履歴 / 一文入力解析,"AUD8-017: 393px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back / dark / reduce",,○,○,44pt（巡回で全画面を検査）
+T711-F-2-4,メール履歴 / 一文入力解析,AUD8-018: 393px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger / dark / reduce,,○,○,44pt（巡回で全画面を検査）
+T711-F-3-1,メール履歴 / 一文入力解析,"AUD8-017: 320px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back / light / no-preference",,○,○,44pt（巡回で全画面を検査）
+T711-F-3-2,メール履歴 / 一文入力解析,AUD8-018: 320px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger / light / no-preference,,○,○,44pt（巡回で全画面を検査）
+T711-F-3-3,メール履歴 / 一文入力解析,"AUD8-017: 393px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back / light / no-preference",,○,○,44pt（巡回で全画面を検査）
+T711-F-3-4,メール履歴 / 一文入力解析,AUD8-018: 393px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger / light / no-preference,,○,○,44pt（巡回で全画面を検査）
+T711-F-4-1,メール履歴 / 一文入力解析,"AUD8-017: 320px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back / light / reduce",,○,○,44pt（巡回で全画面を検査）
+T711-F-4-2,メール履歴 / 一文入力解析,AUD8-018: 320px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger / light / reduce,,○,○,44pt（巡回で全画面を検査）
+T711-F-4-3,メール履歴 / 一文入力解析,"AUD8-017: 393px mail-history search and filter provide 44px targets, filter actual records and preserve data on Back / light / reduce",,○,○,44pt（巡回で全画面を検査）
+T711-F-4-4,メール履歴 / 一文入力解析,AUD8-018: 393px parsed category and payment selectors provide 44px targets; edits remain drafts and Back preserves the ledger / light / reduce,,○,○,44pt（巡回で全画面を検査）
+T8DA59-PRESENT-005-320-no-preference T8DA59-PRESENT-005-320-reduce T8DA59-PRESENT-005-393-no-preference T8DA59-PRESENT-005-393-reduce TK8-PRESENT-005-320-no-preference TK8-PRESENT-005-320-reduce TK8-PRESENT-005-393-no-preference TK8-PRESENT-005-393-reduce,sim,#simAmount,試算金額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-012-320-no-preference T8DA59-PRESENT-012-320-reduce T8DA59-PRESENT-012-393-no-preference T8DA59-PRESENT-012-393-reduce TK8-PRESENT-012-320-no-preference TK8-PRESENT-012-320-reduce TK8-PRESENT-012-393-no-preference TK8-PRESENT-012-393-reduce,income,#ieAmount,収入額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-024-320-no-preference T8DA59-PRESENT-024-320-reduce T8DA59-PRESENT-024-393-no-preference T8DA59-PRESENT-024-393-reduce TK8-PRESENT-024-320-no-preference TK8-PRESENT-024-320-reduce TK8-PRESENT-024-393-no-preference TK8-PRESENT-024-393-reduce,expense,#qeAmount,支出額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-032-320-no-preference T8DA59-PRESENT-032-320-reduce T8DA59-PRESENT-032-393-no-preference T8DA59-PRESENT-032-393-reduce TK8-PRESENT-032-320-no-preference TK8-PRESENT-032-320-reduce TK8-PRESENT-032-393-no-preference TK8-PRESENT-032-393-reduce,quick-bank,#qbAmount,銀行残高,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-036-320-no-preference T8DA59-PRESENT-036-320-reduce T8DA59-PRESENT-036-393-no-preference T8DA59-PRESENT-036-393-reduce TK8-PRESENT-036-320-no-preference TK8-PRESENT-036-320-reduce TK8-PRESENT-036-393-no-preference TK8-PRESENT-036-393-reduce,temporary,#tiAmount,収入額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-041-320-no-preference T8DA59-PRESENT-041-320-reduce T8DA59-PRESENT-041-393-no-preference T8DA59-PRESENT-041-393-reduce TK8-PRESENT-041-320-no-preference TK8-PRESENT-041-320-reduce TK8-PRESENT-041-393-no-preference TK8-PRESENT-041-393-reduce,bank,#abBalance,銀行残高,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-042-320-no-preference T8DA59-PRESENT-042-320-reduce T8DA59-PRESENT-042-393-no-preference T8DA59-PRESENT-042-393-reduce TK8-PRESENT-042-320-no-preference TK8-PRESENT-042-320-reduce TK8-PRESENT-042-393-no-preference TK8-PRESENT-042-393-reduce,bank,#abThreshold,残高アラート,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-047-320-no-preference T8DA59-PRESENT-047-320-reduce T8DA59-PRESENT-047-393-no-preference T8DA59-PRESENT-047-393-reduce TK8-PRESENT-047-320-no-preference TK8-PRESENT-047-320-reduce TK8-PRESENT-047-393-no-preference TK8-PRESENT-047-393-reduce,card,#acLimit,利用限度額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-048-320-no-preference T8DA59-PRESENT-048-320-reduce T8DA59-PRESENT-048-393-no-preference T8DA59-PRESENT-048-393-reduce TK8-PRESENT-048-320-no-preference TK8-PRESENT-048-320-reduce TK8-PRESENT-048-393-no-preference TK8-PRESENT-048-393-reduce,card,#acInitialAmount,現在の請求額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-055-320-no-preference T8DA59-PRESENT-055-320-reduce T8DA59-PRESENT-055-393-no-preference T8DA59-PRESENT-055-393-reduce TK8-PRESENT-055-320-no-preference TK8-PRESENT-055-320-reduce TK8-PRESENT-055-393-no-preference TK8-PRESENT-055-393-reduce,employer-new,#ecHourly,時給,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-056-320-no-preference T8DA59-PRESENT-056-320-reduce T8DA59-PRESENT-056-393-no-preference T8DA59-PRESENT-056-393-reduce TK8-PRESENT-056-320-no-preference TK8-PRESENT-056-320-reduce TK8-PRESENT-056-393-no-preference TK8-PRESENT-056-393-reduce,employer-new,#ecTransport,交通費,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-059-320-no-preference T8DA59-PRESENT-059-320-reduce T8DA59-PRESENT-059-393-no-preference T8DA59-PRESENT-059-393-reduce TK8-PRESENT-059-320-no-preference TK8-PRESENT-059-320-reduce TK8-PRESENT-059-393-no-preference TK8-PRESENT-059-393-reduce,salary-new,#saGross,給与,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-060-320-no-preference T8DA59-PRESENT-060-320-reduce T8DA59-PRESENT-060-393-no-preference T8DA59-PRESENT-060-393-reduce TK8-PRESENT-060-320-no-preference TK8-PRESENT-060-320-reduce TK8-PRESENT-060-393-no-preference TK8-PRESENT-060-393-reduce,salary-new,#saTransport,交通費,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-067-320-no-preference T8DA59-PRESENT-067-320-reduce T8DA59-PRESENT-067-393-no-preference T8DA59-PRESENT-067-393-reduce TK8-PRESENT-067-320-no-preference TK8-PRESENT-067-320-reduce TK8-PRESENT-067-393-no-preference TK8-PRESENT-067-393-reduce,fixed,#fpAmount,支払い金額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-072-320-no-preference T8DA59-PRESENT-072-320-reduce T8DA59-PRESENT-072-393-no-preference T8DA59-PRESENT-072-393-reduce TK8-PRESENT-072-320-no-preference TK8-PRESENT-072-320-reduce TK8-PRESENT-072-393-no-preference TK8-PRESENT-072-393-reduce,correction,#dcEdit,実質使った金額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-076-320-no-preference T8DA59-PRESENT-076-320-reduce T8DA59-PRESENT-076-393-no-preference T8DA59-PRESENT-076-393-reduce TK8-PRESENT-076-320-no-preference TK8-PRESENT-076-320-reduce TK8-PRESENT-076-393-no-preference TK8-PRESENT-076-393-reduce,planner-day,#gdpCalc,日別計画,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-080-320-no-preference T8DA59-PRESENT-080-320-reduce T8DA59-PRESENT-080-393-no-preference T8DA59-PRESENT-080-393-reduce TK8-PRESENT-080-320-no-preference TK8-PRESENT-080-320-reduce TK8-PRESENT-080-393-no-preference TK8-PRESENT-080-393-reduce,planner-total,#goalAmountEdit,月間日常予算,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-081-320-no-preference T8DA59-PRESENT-081-320-reduce T8DA59-PRESENT-081-393-no-preference T8DA59-PRESENT-081-393-reduce TK8-PRESENT-081-320-no-preference TK8-PRESENT-081-320-reduce TK8-PRESENT-081-393-no-preference TK8-PRESENT-081-393-reduce,planner-category,[data-goal-cat],食費,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-085-320-no-preference T8DA59-PRESENT-085-320-reduce T8DA59-PRESENT-085-393-no-preference T8DA59-PRESENT-085-393-reduce TK8-PRESENT-085-320-no-preference TK8-PRESENT-085-320-reduce TK8-PRESENT-085-393-no-preference TK8-PRESENT-085-393-reduce,transaction,#teAmount,取引金額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-095-320-no-preference T8DA59-PRESENT-095-320-reduce T8DA59-PRESENT-095-393-no-preference T8DA59-PRESENT-095-393-reduce TK8-PRESENT-095-320-no-preference TK8-PRESENT-095-320-reduce TK8-PRESENT-095-393-no-preference TK8-PRESENT-095-393-reduce,large-split,[data-le-split-amount],分割 1 の金額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-096-320-no-preference T8DA59-PRESENT-096-320-reduce T8DA59-PRESENT-096-393-no-preference T8DA59-PRESENT-096-393-reduce TK8-PRESENT-096-320-no-preference TK8-PRESENT-096-320-reduce TK8-PRESENT-096-393-no-preference TK8-PRESENT-096-393-reduce,large,#leAmount,大型支出,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-107-320-no-preference T8DA59-PRESENT-107-320-reduce T8DA59-PRESENT-107-393-no-preference T8DA59-PRESENT-107-393-reduce TK8-PRESENT-107-320-no-preference TK8-PRESENT-107-320-reduce TK8-PRESENT-107-393-no-preference TK8-PRESENT-107-393-reduce,day-plan,#dpChange,当日の目標,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-116-320-no-preference T8DA59-PRESENT-116-320-reduce T8DA59-PRESENT-116-393-no-preference T8DA59-PRESENT-116-393-reduce TK8-PRESENT-116-320-no-preference TK8-PRESENT-116-320-reduce TK8-PRESENT-116-393-no-preference TK8-PRESENT-116-393-reduce,employer-edit,#eeHourly,時給,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-117-320-no-preference T8DA59-PRESENT-117-320-reduce T8DA59-PRESENT-117-393-no-preference T8DA59-PRESENT-117-393-reduce TK8-PRESENT-117-320-no-preference TK8-PRESENT-117-320-reduce TK8-PRESENT-117-393-no-preference TK8-PRESENT-117-393-reduce,employer-edit,#eeTransport,交通費,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-121-320-no-preference T8DA59-PRESENT-121-320-reduce T8DA59-PRESENT-121-393-no-preference T8DA59-PRESENT-121-393-reduce TK8-PRESENT-121-320-no-preference TK8-PRESENT-121-320-reduce TK8-PRESENT-121-393-no-preference TK8-PRESENT-121-393-reduce,salary-edit,#srGross,総支給額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-122-320-no-preference T8DA59-PRESENT-122-320-reduce T8DA59-PRESENT-122-393-no-preference T8DA59-PRESENT-122-393-reduce TK8-PRESENT-122-320-no-preference TK8-PRESENT-122-320-reduce TK8-PRESENT-122-393-no-preference TK8-PRESENT-122-393-reduce,salary-edit,#srTransport,交通費,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-123-320-no-preference T8DA59-PRESENT-123-320-reduce T8DA59-PRESENT-123-393-no-preference T8DA59-PRESENT-123-393-reduce TK8-PRESENT-123-320-no-preference TK8-PRESENT-123-320-reduce TK8-PRESENT-123-393-no-preference TK8-PRESENT-123-393-reduce,salary-received,#srReceivedAmount,実際の受取額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-137-320-no-preference T8DA59-PRESENT-137-320-reduce T8DA59-PRESENT-137-393-no-preference T8DA59-PRESENT-137-393-reduce TK8-PRESENT-137-320-no-preference TK8-PRESENT-137-320-reduce TK8-PRESENT-137-393-no-preference TK8-PRESENT-137-393-reduce,temporary-edit,#teAmount,収入額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-143-320-no-preference T8DA59-PRESENT-143-320-reduce T8DA59-PRESENT-143-393-no-preference T8DA59-PRESENT-143-393-reduce TK8-PRESENT-143-320-no-preference TK8-PRESENT-143-320-reduce TK8-PRESENT-143-393-no-preference TK8-PRESENT-143-393-reduce,card-billing,#qcbAmount,請求額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-149-320-no-preference T8DA59-PRESENT-149-320-reduce T8DA59-PRESENT-149-393-no-preference T8DA59-PRESENT-149-393-reduce TK8-PRESENT-149-320-no-preference TK8-PRESENT-149-320-reduce TK8-PRESENT-149-393-no-preference TK8-PRESENT-149-393-reduce,initial,[data-initial-bank],銀行残高,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-186-320-no-preference T8DA59-PRESENT-186-320-reduce T8DA59-PRESENT-186-393-no-preference T8DA59-PRESENT-186-393-reduce TK8-PRESENT-186-320-no-preference TK8-PRESENT-186-320-reduce TK8-PRESENT-186-393-no-preference TK8-PRESENT-186-393-reduce,allocation,[data-alloc],カード・固定支払い,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-191-320-no-preference T8DA59-PRESENT-191-320-reduce T8DA59-PRESENT-191-393-no-preference T8DA59-PRESENT-191-393-reduce TK8-PRESENT-191-320-no-preference TK8-PRESENT-191-320-reduce TK8-PRESENT-191-393-no-preference TK8-PRESENT-191-393-reduce,transfer,#transferAmount,振替金額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-201-320-no-preference T8DA59-PRESENT-201-320-reduce T8DA59-PRESENT-201-393-no-preference T8DA59-PRESENT-201-393-reduce TK8-PRESENT-201-320-no-preference TK8-PRESENT-201-320-reduce TK8-PRESENT-201-393-no-preference TK8-PRESENT-201-393-reduce,reconcile,#reconAmount,確認した請求額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-213-320-no-preference T8DA59-PRESENT-213-320-reduce T8DA59-PRESENT-213-393-no-preference T8DA59-PRESENT-213-393-reduce TK8-PRESENT-213-320-no-preference TK8-PRESENT-213-320-reduce TK8-PRESENT-213-393-no-preference TK8-PRESENT-213-393-reduce,parsed,[data-draft-amount],支出額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-219-320-no-preference T8DA59-PRESENT-219-320-reduce T8DA59-PRESENT-219-393-no-preference T8DA59-PRESENT-219-393-reduce TK8-PRESENT-219-320-no-preference TK8-PRESENT-219-320-reduce TK8-PRESENT-219-393-no-preference TK8-PRESENT-219-393-reduce,goal-item,#goalItemAmount,費目予算,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-222-320-no-preference T8DA59-PRESENT-222-320-reduce T8DA59-PRESENT-222-393-no-preference T8DA59-PRESENT-222-393-reduce TK8-PRESENT-222-320-no-preference TK8-PRESENT-222-320-reduce TK8-PRESENT-222-393-no-preference TK8-PRESENT-222-393-reduce,goal-share,#eventOwnShare,自分の負担額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-227-320-no-preference T8DA59-PRESENT-227-320-reduce T8DA59-PRESENT-227-393-no-preference T8DA59-PRESENT-227-393-reduce TK8-PRESENT-227-320-no-preference TK8-PRESENT-227-320-reduce TK8-PRESENT-227-393-no-preference TK8-PRESENT-227-393-reduce,reimbursement,#reimbAmount,受取額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-234-320-no-preference T8DA59-PRESENT-234-320-reduce T8DA59-PRESENT-234-393-no-preference T8DA59-PRESENT-234-393-reduce TK8-PRESENT-234-320-no-preference TK8-PRESENT-234-320-reduce TK8-PRESENT-234-393-no-preference TK8-PRESENT-234-393-reduce,acf-setup,#acfSetupReserve,最低残したい金額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-237-320-no-preference T8DA59-PRESENT-237-320-reduce T8DA59-PRESENT-237-393-no-preference T8DA59-PRESENT-237-393-reduce TK8-PRESENT-237-320-no-preference TK8-PRESENT-237-320-reduce TK8-PRESENT-237-393-no-preference TK8-PRESENT-237-393-reduce,acf-settings,#acfReserve,最低残したい金額,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-238-320-no-preference T8DA59-PRESENT-238-320-reduce T8DA59-PRESENT-238-393-no-preference T8DA59-PRESENT-238-393-reduce TK8-PRESENT-238-320-no-preference TK8-PRESENT-238-320-reduce TK8-PRESENT-238-393-no-preference TK8-PRESENT-238-393-reduce,acf-limit,#acfDailyLimit,カード1日上限,○,○,金額欄→電卓→取消
+T8DA59-PRESENT-267-320-no-preference T8DA59-PRESENT-267-320-reduce T8DA59-PRESENT-267-393-no-preference T8DA59-PRESENT-267-393-reduce TK8-PRESENT-267-320-no-preference TK8-PRESENT-267-320-reduce TK8-PRESENT-267-393-no-preference TK8-PRESENT-267-393-reduce,statement,#stmtRowAmount,今月支払額,○,○,金額欄→電卓→取消

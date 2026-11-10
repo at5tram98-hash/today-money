@@ -91,7 +91,7 @@ html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
 .pro4-review-issue:last-child { border-bottom: 0 }
 .pro4-review-issue .chev { font-size: 20px }
 .pro-chart-point.acf-chart-negative { fill: var(--red); stroke: var(--card) }
-.pro-chart-point.acf-chart-first-negative { animation: acfGraphPointPulse 2.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center }
+.pro-chart-point.acf-chart-first-negative { animation: acfGraphPointPulse var(--motion-push) ease-out 1; transform-box: fill-box; transform-origin: center }
 .pro-chart-axis.acf-zero-axis { fill: var(--red); font-weight: 700 }
 #screen-assets .mm3-assets-shell { padding-bottom: 8px; transform-origin: 50% 15%; contain: layout style }
 #screen-assets .mm3-assets-topbar .date-line { display: none }
@@ -109,9 +109,9 @@ html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
 #screen-assets .mm3-assets-grid { stroke: var(--sep); stroke-width: .7; opacity: .62 }
 #screen-assets .mm3-assets-zero { stroke: var(--red); stroke-width: .8; stroke-dasharray: 4 4; opacity: .55 }
 #screen-assets .mm3-assets-area { fill: var(--blue); opacity: .055 }
-#screen-assets .mm3-assets-line { fill: none; stroke: var(--blue); stroke-width: 2.15; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 800; stroke-dashoffset: 800; animation: mm3AssetLineReveal .62s cubic-bezier(.2,.8,.2,1) forwards }
+#screen-assets .mm3-assets-line { fill: none; stroke: var(--blue); stroke-width: 2.15; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 800; stroke-dashoffset: 800; animation: mm3AssetLineReveal var(--motion-push) cubic-bezier(.2,.8,.2,1) forwards }
 #screen-assets .mm3-assets-line.forecast { stroke-dasharray: 5 4; stroke-dashoffset: 0; animation: none; stroke: var(--blue); opacity: .68 }
-#screen-assets .mm3-assets-axis { font-size: 8.3px; fill: var(--label2) }
+#screen-assets .mm3-assets-axis { font-size: var(--type-min); fill: var(--label2) }
 #screen-assets .mm3-assets-guide { stroke: var(--label2); stroke-width: .8; opacity: 0; transition: opacity .12s }
 #screen-assets .mm3-assets-selected { fill: var(--card); stroke: var(--blue); stroke-width: 2.2; opacity: 0; transition: opacity .12s }
 #screen-assets .mm3-assets-chart.scrubbing .mm3-assets-guide,
@@ -132,13 +132,13 @@ html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
 #screen-assets .mm3-assets-spark .spark-line { stroke-width: 1.55 }
 #screen-assets .mm3-assets-watch-value { text-align: right; min-width: 0 }
 #screen-assets .mm3-assets-empty-chart { height: 152px; display: grid; place-items: center; text-align: center; color: var(--label2); font-size: 11px; line-height: 1.45; border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep) }
-#screen-assets .mm3-assets-chart-switch { animation: mm3AssetSwitch .24s cubic-bezier(.2,.8,.2,1) }
+#screen-assets .mm3-assets-chart-switch { animation: mm3AssetSwitch var(--motion-push) cubic-bezier(.2,.8,.2,1) }
 #screen-assets .mm3-assets-sort-flip { will-change: transform }
 #screen-assets .mm3-assets-topbar .icon-btn { transition: transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease }
 #screen-assets .mm3-assets-watchlist.mm3-assets-manual { position: relative; touch-action: pan-y }
 #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow { grid-template-columns: 20px minmax(0,1.08fr) 62px minmax(76px,.76fr); cursor: grab; -webkit-user-select: none; user-select: none; touch-action: pan-y }
 #screen-assets .mm3-assets-watchrow.mm3-assets-dragging { cursor: grabbing; background: var(--card); border-radius: 13px; padding-left: 7px; padding-right: 7px; box-shadow: 0 11px 28px rgba(0,0,0,.17); transform: scale(1.018); opacity: .985; transition: box-shadow 150ms ease,transform 150ms var(--mm3-ease); z-index: 90 }
-#screen-assets .mm3-assets-manual-hint { font-size: 9.5px; color: var(--label2); margin: -2px 1px 7px; animation: mm3ManualHintIn 220ms var(--mm3-ease) }
+#screen-assets .mm3-assets-manual-hint { font-size: var(--type-min); color: var(--label2); margin: -2px 1px 7px; animation: mm3ManualHintIn 220ms var(--mm3-ease) }
 #screen-assets .mm3-assets-area.forecast { fill: var(--blue); opacity: .035 }
 #screen-assets .mm3-assets-selected.forecast { stroke: var(--blue) }
 @media (max-width:350px) {

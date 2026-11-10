@@ -9,6 +9,10 @@
     "test:browser": "node tests/browser.mjs",
     "test:crawl": "MM3_CRAWL_STRICT=1 node tests/crawl.mjs",
     "test:live": "node tests/live.mjs",
+    "test:scenarios": "MM3_SCENARIOS_STRICT=1 node tests/scenarios.mjs",
+    "test:amount": "MM3_AMOUNT_STRICT=1 node tests/amount-fields.mjs",
+    "test:p0": "MM3_P0_STRICT=1 node tests/p0-flows.mjs",
+    "test:remaining": "node tests/remaining-ops.mjs",
     "test:worker": "wrangler deploy --config worker/wrangler.jsonc --dry-run --outdir ../test-results/worker-build && node tests/worker-runtime.mjs",
     "push:deploy": "node worker/deploy.mjs",
     "test:push-live": "node tests/push-production.mjs"

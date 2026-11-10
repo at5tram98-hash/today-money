@@ -72,6 +72,9 @@ CSSは版ごとの上書きを重ねた構成をやめ、同じセレクタの�
 ```sh
 npm run test:crawl   # 全画面を巡回し、44pt未満・読み上げ名なし・はみ出し・誤保存・エラーが0件であることを確認
 npm run test:live    # 公開中のサイトをiPhone相当の設定で開いて確認
+npm run test:scenarios  # 仕様書の81画面シナリオ
+npm run test:amount     # 金額欄→電卓→取消で値と保存データが変わらないこと
+npm run test:p0         # 会計データを保存・削除・反映する主な流れ
 ```
 
-304操作の照合台帳、検証結果、実施していない範囲は [docs/v11/README.md](./docs/v11/README.md) を参照してください。物理的なiPhoneのSafariとVoiceOverでの確認は行っていません。
+進捗の最新値・完了/未完了のID・次の作業は [docs/v11/PROGRESS.md](./docs/v11/PROGRESS.md)、各回の作業記録は [docs/v11/README.md](./docs/v11/README.md) を参照してください。物理的なiPhoneのSafariとVoiceOverでの確認は行っていません。

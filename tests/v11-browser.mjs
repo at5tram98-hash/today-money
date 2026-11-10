@@ -56,6 +56,14 @@ async function verifyCardFlows(page,label,root){
   await view.locator('#cardNextPay').click();assert.equal(await shown(),month);
   assert.deepEqual(await getData(page),before,'month arrows do not write data');
 
+  // SALARYEDIT-191/192: swiping the month heading is an auxiliary path; vertical movement and edge starts do nothing.
+  const heading=await view.locator('.card-statement-nav .date-nav-label').boundingBox(),hx=heading.x+heading.width/2,hy=heading.y+heading.height/2;
+  const drag=async(fromX,fromY,toX,toY)=>{await page.mouse.move(fromX,fromY);await page.mouse.down();await page.mouse.move(toX,toY,{steps:6});await page.mouse.up();await page.waitForTimeout(120)};
+  await drag(hx+30,hy,hx-40,hy);assert.notEqual(await shown(),month,'swiping left shows the next month');const next=await shown();
+  await drag(hx-30,hy,hx+40,hy);assert.equal(await shown(),month,'swiping right returns one month');
+  await drag(hx,hy-10,hx+10,hy+60);assert.equal(await shown(),month,'a vertical drag does not change the month');
+  await drag(hx-10,hy,hx+10,hy);assert.equal(await shown(),month,'a short drag does not change the month');
+  assert.ok(next>month);assert.deepEqual(await getData(page),before,'swiping months does not write data');
   // SALARYEDIT-193/197: the wheel is a draft; only the confirmation changes the displayed month.
   await view.locator('#cardBillingMonth').click();const wheel=page.locator('#cbmWheel');await wheel.waitFor();
   await assertTapTarget(page.locator('#cbmClose'),'cbmClose');await assertSheetFits(page,`${label} billing month wheel`);
@@ -117,6 +125,15 @@ async function verifyCalculatorDraft(page){
   const third=await getData(page);await closeEverything(page);
   await page.evaluate(()=>globalThis.__mm3Test.openInitialValues());await page.locator('[data-initial-bank]').first().click();await enter(987654);
   await page.locator('#alertWrap.show').waitFor();assert.deepEqual(await getData(page),third);await alertButton(page,'キャンセル').click();assert.deepEqual(await getData(page),third,'bank balance stays until the separate save');
+  // CALC-124: holding ⌫ deletes continuously and stops on release; a tap deletes one digit.
+  await page.evaluate(()=>globalThis.__mm3Test.openCalculator('検証',0,()=>{}));await page.evaluate(()=>{for(const k of ['clear',...'123456789'])globalThis.__mm3Test.calcKey(k)});
+  await page.waitForTimeout(400);
+  const backKey=await page.locator('#calcGrid [data-k=back]').boundingBox();await assertTapTarget(page.locator('#calcGrid [data-k=back]'),'backspace key');
+  await page.mouse.click(backKey.x+backKey.width/2,backKey.y+backKey.height/2);assert.equal(await page.locator('#calcNumber').innerText(),'12,345,678');
+  await page.mouse.move(backKey.x+backKey.width/2,backKey.y+backKey.height/2);await page.mouse.down();await page.waitForTimeout(820);await page.mouse.up();
+  const afterHold=Number((await page.locator('#calcNumber').innerText()).replace(/,/g,''));assert.ok(afterHold<123456&&afterHold>=0,`holding deletes several digits (${afterHold})`);
+  await page.waitForTimeout(300);assert.equal(Number((await page.locator('#calcNumber').innerText()).replace(/,/g,'')),afterHold,'deleting stops when the finger lifts');
+  await page.locator('#calcCancel').click();assert.deepEqual(await getData(page),third);
   // CALC-120: the helper result returns to the calculator draft only.
   await page.evaluate(()=>{const t=globalThis.__mm3Test;t.openCalculator('検証',1000,()=>{globalThis.__v11CalcUsed=true})});await page.locator('[data-calc-tool=discount]').click();await page.locator('#calcToolApply').click();
   assert.equal(await page.locator('#calcNumber').innerText(),'900');assert.equal(await page.evaluate(()=>globalThis.__v11CalcUsed),undefined);assert.deepEqual(await getData(page),third);
@@ -210,6 +227,131 @@ async function verifyAlternatives(page){
   await closeEverything(page);
 }
 
+/* 既存のジェスチャー（第11版 C章「直接操作」）: いずれも見えるボタンの代替があり、操作だけでは保存しない */
+async function verifyExistingGestures(page){
+  const state=()=>page.evaluate(()=>globalThis.__mm3Test.getState()),sheetShown=()=>page.evaluate(()=>document.getElementById('sheet').classList.contains('show'));
+  // 月の切替後は予測の再計算中表示（最低1.8秒）が出るので、消えるのを待ってから次の操作をする
+  const drag=async(x,y,toX,toY,{hold=0,steps=8}={})=>{await page.mouse.move(x,y);await page.mouse.down();if(hold)await page.waitForTimeout(hold);await page.mouse.move(toX,toY,{steps});await page.mouse.up();await page.waitForTimeout(450);await page.waitForFunction(()=>!document.querySelector('.busy-overlay.show'),null,{timeout:8000})};
+  // 操作部品の上ではない、横スワイプを始められる点を探す
+  const freePoint=sel=>page.evaluate(sel=>{const root=document.querySelector(sel),r=root.getBoundingClientRect();for(let y=Math.max(r.top,0)+20;y<Math.min(r.bottom,innerHeight-120);y+=14)for(let x=r.left+130;x<r.right-130;x+=20){const el=document.elementFromPoint(x,y);if(el&&root.contains(el)&&!el.closest('button,input,select,textarea,a,[role=slider],[data-scrub],svg,.money-ticker-viewport,.mm3-atf-chart,.mm3-salary-trend'))return{x,y}}return null},sel);
+  // 今日の日付の左右スワイプ（矢印ボタンの補助）
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('today'));await page.waitForTimeout(200);const before=await getData(page),day=(await state()).trackingDate;
+  await page.locator('#todayDateNavigator').evaluate(el=>el.scrollIntoView({block:'center'}));const nav=await page.locator('#todayDateNavigator').boundingBox(),ny=nav.y+nav.height/2;
+  await drag(nav.x+nav.width/2-40,ny,nav.x+nav.width/2+60,ny);assert.ok((await state()).trackingDate<day,'swiping right shows the previous day');
+  await drag(nav.x+nav.width/2+40,ny,nav.x+nav.width/2-60,ny);assert.equal((await state()).trackingDate,day,'swiping left returns');
+  // 支出入力ボタンの長押し → 最近の支出（見える「最近の支出を再利用」と同じ画面）
+  await page.locator('#quickExpense').evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(200);const qe=await page.locator('#quickExpense').boundingBox();await page.mouse.move(qe.x+qe.width/2,qe.y+qe.height/2);await page.mouse.down();await page.waitForTimeout(750);await page.mouse.up();
+  await page.locator('#qrClose').waitFor();await page.locator('#qrClose').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
+  assert.equal(await page.locator('#qeSave').count(),0,'a long press does not also open the expense form');
+  // シートのつまみ: 上へ引くと全画面、下へ引くと半分の高さへ戻る
+  await page.locator('#quickExpense').click();await page.locator('#qeSave').waitFor();await page.waitForTimeout(350);
+  const mode=()=>page.locator('#sheet').evaluate(el=>el.classList.contains('full')?'full':'half');
+  if(await mode()==='half'){let g=await page.locator('#sheet .grabber').boundingBox();await drag(g.x+g.width/2,g.y+g.height/2,g.x+g.width/2,g.y-90);assert.equal(await mode(),'full','pulling up expands the sheet');g=await page.locator('#sheet .grabber').boundingBox();await drag(g.x+g.width/2,g.y+g.height/2,g.x+g.width/2,g.y+90);assert.equal(await mode(),'half','pulling down returns to half height');assert.equal(await sheetShown(),true)}
+  await page.locator('#qeCancel').click();if(await page.locator('#alertWrap.show').count())await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
+  // 今月カレンダーの日付: タップは詳細、長押しは日付メニュー
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('month'));await page.waitForTimeout(200);const monthBefore=await getData(page);
+  const cell=page.locator('.day-cell:not(.out)').nth(3);await cell.evaluate(el=>el.scrollIntoView({block:'center'}));const cb=await cell.boundingBox();
+  await page.mouse.move(cb.x+cb.width/2,cb.y+cb.height/2);await page.mouse.down();await page.waitForTimeout(750);await page.mouse.up();
+  await page.locator('#dqmClose').waitFor();assert.equal(await page.locator('#pushLayer .push-view.show').count(),0,'a long press opens only the day menu');
+  await page.locator('#dqmClose').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
+  await cell.click();await page.locator('#pushLayer .push-view.show').waitFor();await page.locator('#pushLayer .push-view.show .back-btn').last().click();await page.waitForFunction(()=>!document.querySelector('#pushLayer .push-view.show'));
+  assert.deepEqual(await getData(page),monthBefore,'calendar gestures never write data');
+  // 月ホイール: 途中で止めても中央の候補へ吸着し、確定するまで親の表示は変わらない
+  await page.locator('#monthName').click();await page.locator('#monthWheel-month').waitFor();await page.waitForTimeout(300);const shownMonth=(await state()).currentMonth;
+  await page.locator('#monthWheel-month').evaluate(el=>{el.scrollTop=el.scrollTop+44*2+17});await page.waitForTimeout(450);
+  const top=await page.locator('#monthWheel-month').evaluate(el=>el.scrollTop);assert.equal(top%44,0,'the wheel settles on a row');
+  assert.equal(await page.locator('#monthWheel-month [aria-selected=true]').count(),1);assert.equal((await state()).currentMonth,shownMonth);
+  await page.locator('#mpClose').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));assert.equal((await state()).currentMonth,shownMonth);
+  // 給与・支払いの月スワイプ: 横に離すと切替、縦の動きでは切り替えない
+  for(const [tab,content,key] of [['pay','#payContent','payViewMonth'],['payments','#paymentsContent','assetBillingMonth']]){
+    await page.evaluate(tab=>globalThis.__mm3Test.switchTab(tab),tab);await page.waitForTimeout(350);const start=(await state())[key],p=await freePoint(content);assert.ok(p,`${tab}: a free point to swipe from`);
+    await drag(p.x,p.y,p.x+12,p.y+90);assert.equal((await state())[key],start,`${tab}: a vertical drag keeps the month`);
+    await drag(p.x,p.y,p.x-120,p.y);await page.waitForFunction(([key,start])=>globalThis.__mm3Test.getState()[key]!==start,[key,start]);
+    const next=(await state())[key];assert.ok(next>start,`${tab}: swiping left shows the next month`);
+    await page.locator(content).evaluate(el=>el.closest('.scroll')?.scrollTo(0,0));await page.waitForTimeout(200);const p2=await freePoint(content)||p;await drag(p2.x,p2.y,p2.x+120,p2.y);await page.waitForFunction(([key,start])=>globalThis.__mm3Test.getState()[key]===start,[key,start]);
+  }
+  // 支払いのATF予測グラフ: なぞると日付と残高を表示する
+  const atf=page.locator('#mm3AtfChart svg');if(await atf.count()){await atf.evaluate(el=>el.scrollIntoView({block:'center'}));const ab=await atf.boundingBox();await drag(ab.x+10,ab.y+ab.height/2,ab.x+ab.width*.6,ab.y+ab.height/2);assert.ok((await page.locator('[data-mm3-atf-tooltip]').innerText()).includes('¥'),'the forecast tooltip follows the finger')}
+  assert.deepEqual(await getData(page),monthBefore,'gestures never write financial data');
+  await closeEverything(page);
+}
+
+/* HOME-010・MONTH-046: 行のタップで分析画面へ移り、そこのグラフだけを指でなぞって値を確認する。なぞっても保存しない */
+async function verifyChartScrub(page){
+  const before=await getData(page);
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('today'));await page.locator('#todayAnalysis').click();
+  const view=page.locator('#pushLayer .push-view.show').last(),chart=view.locator('.bars[data-scrub]').first();await chart.waitFor();await page.waitForTimeout(300);
+  await chart.evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(150);
+  const box=await chart.boundingBox(),cols=await chart.locator('[data-scrub-item]').count(),readout=chart.locator('xpath=following-sibling::output[1]');assert.ok(cols>=2);
+  await page.mouse.move(box.x+6,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width-6,box.y+box.height/2,{steps:10});
+  const lastLabel=await chart.locator('[data-scrub-item]').last().getAttribute('data-label');assert.ok((await readout.innerText()).includes(lastLabel),'the readout follows the finger to the last bar');
+  await page.mouse.move(box.x+6,box.y+box.height/2,{steps:10});await page.mouse.up();
+  const firstLabel=await chart.locator('[data-scrub-item]').first().getAttribute('data-label');assert.ok((await readout.innerText()).includes(firstLabel),'the readout follows back to the first bar');
+  assert.equal(await chart.locator('.scrub-on').count(),1);
+  await chart.focus();await page.keyboard.press('ArrowRight');assert.equal(await chart.locator('[data-scrub-item]').nth(1).evaluate(el=>el.classList.contains('scrub-on')),true,'arrow keys move the selection');
+  assert.equal(await chart.locator('xpath=following-sibling::table[1]').locator('tr').count(),cols,'a table carries the same values for screen readers');
+  assert.equal(await page.locator('#pushLayer .push-view.show').count(),1,'scrubbing never navigates');
+  await view.locator('.back-btn').click();await page.waitForFunction(()=>!document.querySelector('#pushLayer .push-view.show'));
+  // 月間詳細分析の折れ線グラフ
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('month'));await page.waitForTimeout(150);const monthBefore=await getData(page);
+  await page.locator('#monthAnalysis').click();const line=page.locator('#pushLayer .push-view.show svg.svg-chart[data-scrub]').first();await line.waitFor();await page.waitForTimeout(300);
+  await line.evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(150);const lb=await line.boundingBox();
+  await page.mouse.move(lb.x+4,lb.y+lb.height/2);await page.mouse.down();await page.mouse.move(lb.x+lb.width/2,lb.y+lb.height/2,{steps:6});await page.mouse.up();
+  assert.equal(await line.locator('.scrub-on').count(),1,'the line chart highlights the nearest point');
+  assert.deepEqual(await getData(page),monthBefore,'scrubbing never writes data');
+  await closeEverything(page);
+}
+
+/* MONTH-041/065: 今月画面の表示月は下書きのホイールで選び、確定した時だけ切り替わる */
+async function verifyMonthWheel(page){
+  // 「今月」へ切り替えると表示モードの設定が保存される（既存の仕様）ので、比較は切り替えた後から
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('month'));await page.waitForTimeout(150);
+  const before=await getData(page),state=()=>page.evaluate(()=>globalThis.__mm3Test.getState().currentMonth);
+  await page.locator('#monthName').click();await page.locator('#monthWheel-month').waitFor();await page.waitForTimeout(300);
+  await assertTapTarget(page.locator('#mpClose'),'mpClose');await assertTapTarget(page.locator('#monthPickerApply'),'monthPickerApply');await assertSheetFits(page,'month wheel');
+  const start=await state();await page.locator('#monthWheel-month').focus();await page.keyboard.press('ArrowUp');
+  assert.equal(await state(),start,'moving the wheel keeps the displayed month');
+  await page.locator('#mpClose').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));assert.equal(await state(),start,'closing restores the month');
+  await page.locator('#monthName').click();await page.locator('#monthWheel-month').waitFor();await page.waitForTimeout(250);await page.locator('#monthWheel-month').focus();await page.keyboard.press('ArrowUp');await page.locator('#monthPickerApply').click();
+  await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
+  const [y,m]=start.split('-').map(Number),prev=m===1?`${y-1}-12`:`${y}-${String(m-1).padStart(2,'0')}`;assert.equal(await state(),prev,'applying shows the chosen month');
+  assert.ok((await page.locator('#monthName').innerText()).includes(`${Number(prev.slice(5))}月`));
+  assert.deepEqual(await getData(page),before,'choosing a month never writes data');
+  await closeEverything(page);
+}
+
+/* 既存のジェスチャーの確認: シートの下スワイプ、口座の長押しドラッグ、資産グラフのなぞり */
+async function verifyGestures(page){
+  const before=await getData(page);
+  const drag=async(x,y,toX,toY,hold=0)=>{await page.mouse.move(x,y);await page.mouse.down();if(hold)await page.waitForTimeout(hold);await page.mouse.move(toX,toY,{steps:8});await page.mouse.up();await page.waitForTimeout(200)};
+  const sheetShown=()=>page.evaluate(()=>document.getElementById('sheet').classList.contains('show'));
+  // 閲覧だけのシートはつまみを下へ引くと閉じる。短い移動では閉じない
+  await page.evaluate(()=>globalThis.__mm3Test.openDailyCorrectionDetail('2026-10-07'));await page.waitForTimeout(350);
+  let grab=await page.locator('#sheet .grabber').boundingBox();
+  await drag(grab.x+grab.width/2,grab.y+grab.height/2,grab.x+grab.width/2,grab.y+40);assert.equal(await sheetShown(),true,'a short pull keeps the sheet open');
+  grab=await page.locator('#sheet .grabber').boundingBox();
+  await drag(grab.x+grab.width/2,grab.y+grab.height/2,grab.x+grab.width/2,grab.y+160);await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
+  // 編集中のシートは、下へ引いても無断で破棄しない
+  await page.evaluate(()=>globalThis.__mm3Test.openQuickExpense());await page.locator('#qeMerchant').fill('下スワイプの検証');await page.waitForTimeout(350);
+  grab=await page.locator('#sheet .grabber').boundingBox();const mode=await page.locator('#sheet').evaluate(el=>el.classList.contains('full')?'full':'half');
+  await drag(grab.x+grab.width/2,grab.y+grab.height/2,grab.x+grab.width/2,grab.y+170);
+  if(mode==='full'){grab=await page.locator('#sheet .grabber').boundingBox();await drag(grab.x+grab.width/2,grab.y+grab.height/2,grab.x+grab.width/2,grab.y+170)}
+  await page.locator('#alertWrap.show').waitFor();await alertButton(page,'編集を続ける').click();
+  assert.equal(await page.locator('#qeMerchant').inputValue(),'下スワイプの検証','the draft survives the swipe');
+  await page.locator('#qeCancel').click();await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
+  assert.deepEqual(await getData(page),before,'sheet gestures never write data');
+  // ASSETS-103: 手動の並び順で、口座を長押ししてから上下に動かす
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await page.locator('#mm3AssetSort').click();await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();
+  const order=()=>page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').evaluateAll(list=>list.map(r=>r.dataset.bank)),start=await order();
+  await page.locator('#mm3AssetWatchlist').evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(250);
+  const first=await page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').nth(0).boundingBox(),second=await page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').nth(1).boundingBox();
+  await drag(first.x+first.width/2,first.y+first.height/2,first.x+first.width/2,first.y+12);assert.deepEqual(await order(),start,'moving without a long press does not reorder');
+  await drag(first.x+first.width/2,first.y+first.height/2,second.x+second.width/2,second.y+second.height*.9,360);await page.waitForTimeout(400);
+  assert.deepEqual(await order(),[start[1],start[0],...start.slice(2)],'long press and drag moves the account down one place');
+  assert.deepEqual(await getData(page),before,'reordering by drag never changes financial data');
+  await closeEverything(page);
+}
+
 export async function verifyV11({createPage,passed,root,errors}){
   let approvalChecked=0;
   for(const width of [320,393])for(const appearance of ['light','dark']){
@@ -218,6 +360,10 @@ export async function verifyV11({createPage,passed,root,errors}){
     await verifyCardFlows(page,label,root);
     await verifyCalculatorDraft(page);
     if(await verifyApproval(page))approvalChecked++;
+    await verifyExistingGestures(page);
+    await verifyChartScrub(page);
+    await verifyMonthWheel(page);
+    await verifyGestures(page);
     await verifyAlternatives(page);
     await verifyBackupAndDelete(page,label,root,errors);
     passed(`第11版 ${width}px ${appearance}: tokens, month arrows/wheel, button alternatives for reordering and volume, balance switch, calculator drafts, approval slider alternative, restore preview and delete-all confirmation keep data intact until the explicit commit`);
