@@ -210,6 +210,7 @@ html.dark .push-nav{background:rgba(0,0,0,.9)}
 html.dark .ios-menu{background:rgba(44,44,46,.88);border-color:rgba(255,255,255,.09)}
 .ios-menu.show{opacity:1;transform:scale(1);pointer-events:auto}
 .menu-item{min-height:46px;width:100%;border:0;background:transparent;border-radius:10px;display:flex;align-items:center;gap:12px;padding:9px 11px;text-align:left;font-size:15px;color:var(--label)}
+.menu-item .menu-label{min-width:0;white-space:normal;overflow-wrap:anywhere}
 .menu-item+.menu-item{border-top:.5px solid var(--sep);border-radius:0}
 .menu-item:first-child{border-top:0}
 .menu-item:active{background:rgba(118,118,128,.15)}

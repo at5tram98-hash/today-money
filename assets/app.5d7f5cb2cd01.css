@@ -627,6 +627,7 @@ html.dark .push-nav{background:rgba(0,0,0,.9)}
 html.dark .ios-menu{background:rgba(44,44,46,.88);border-color:rgba(255,255,255,.09)}
 .ios-menu.show{opacity:1;transform:scale(1);pointer-events:auto}
 .menu-item{min-height:46px;width:100%;border:0;background:transparent;border-radius:10px;display:flex;align-items:center;gap:12px;padding:9px 11px;text-align:left;font-size:15px;color:var(--label)}
+.menu-item .menu-label{min-width:0;white-space:normal;overflow-wrap:anywhere}
 .menu-item+.menu-item{border-top:.5px solid var(--sep);border-radius:0}
 .menu-item:first-child{border-top:0}
 .menu-item:active{background:rgba(118,118,128,.15)}
@@ -738,6 +739,8 @@ html.dark .ios-menu{background:rgba(44,44,46,.88);border-color:rgba(255,255,255,
 .pro4-dup-toggle i{width:20px;height:20px;border:1.5px solid var(--fill2);border-radius:6px;display:grid;place-items:center;font-style:normal}
 .pro4-dup-toggle.on i{background:var(--blue);border-color:var(--blue);color:white}
 .pro4-dup-toggle.on i:after{content:'✓';font-weight:800}
+.pro4-search-summary{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 8px;margin:0 2px 9px}
+.event-goal-name{margin:0 0 6px;font-size:1.25rem;overflow-wrap:anywhere}
 .pro4-searchbar{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:13px;padding:0 11px;margin-bottom:8px;min-height:44px}.pro4-searchbar svg{width:18px;height:18px;color:var(--label2);fill:none;stroke:currentColor;stroke-width:2}.pro4-searchbar input{flex:1;min-width:0;border:0;background:transparent;outline:none;font-size:15px;color:var(--label)}.pro4-search-filters{display:flex;gap:7px;overflow-x:auto;margin-bottom:11px}.pro4-search-filters::-webkit-scrollbar{display:none}.pro4-search-chip{min-height:44px;border:0;border-radius:10px;background:var(--fill);padding:0 11px;flex:0 0 auto;font-size:13px;color:var(--label2)}.pro4-search-chip.on{background:var(--label);color:var(--bg)}html.dark .pro4-search-chip.on{background:#fff;color:#000}.pro4-result-section{margin-bottom:12px}.pro4-result-type{font-size:11px;color:var(--label2);margin:0 3px 6px}.pro4-result-count{font-variant-numeric:tabular-nums}
 .pro4-goal-banner{width:100%;border:0;background:var(--card);border-radius:15px;padding:12px 13px;margin:0 0 12px;display:flex;align-items:center;gap:11px;text-align:left}
 .pro4-goal-banner .settings-icon{flex:0 0 auto}
@@ -1106,15 +1109,15 @@ html.dark #screen-pay .mm3-salary-trend-fill{fill:rgba(48,209,88,.09)}
 #screen-pay .mm3-salary-watchrow:last-child{border-bottom:0}
 #screen-pay .mm3-salary-watchrow:active{transform:scale(.985);opacity:.64;background:rgba(118,118,128,.04)}
 #screen-pay .mm3-salary-watch-main{min-width:0}
-#screen-pay .mm3-salary-watch-main strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#screen-pay .mm3-salary-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-pay .mm3-salary-watch-main strong{display:block;font-size:12.5px;white-space:normal;overflow-wrap:anywhere}
+#screen-pay .mm3-salary-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:3px;white-space:normal;overflow-wrap:anywhere}
 #screen-pay .mm3-salary-spark{width:72px;height:28px;display:grid;place-items:center;color:var(--green)}
 #screen-pay .mm3-salary-spark svg{width:100%;height:100%;overflow:visible}
 #screen-pay .mm3-salary-spark-line{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 #screen-pay .mm3-salary-spark-empty{font-size:8px;color:var(--label3);text-align:center}
 #screen-pay .mm3-salary-watch-value{text-align:right;min-width:0}
-#screen-pay .mm3-salary-watch-value strong{display:block;font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#screen-pay .mm3-salary-watch-value small{display:block;font-size:9px;color:var(--green);font-weight:650;margin-top:2px;font-variant-numeric:tabular-nums}
+#screen-pay .mm3-salary-watch-value strong{display:block;font-size:12.5px;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+#screen-pay .mm3-salary-watch-value small{display:block;font-size:9px;color:var(--green);font-weight:650;margin-top:2px;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
 #screen-pay .mm3-salary-detail-group{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
 #screen-pay .mm3-salary-detail-row{width:100%;min-height:48px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s}
 #screen-pay .mm3-salary-detail-row:last-child{border-bottom:0}
@@ -1138,7 +1141,7 @@ html.dark #screen-pay .mm3-salary-trend-fill{fill:rgba(48,209,88,.09)}
  #screen-pay .mm3-salary-donut{width:122px}
  #screen-pay .mm3-salary-watchrow{grid-template-columns:minmax(0,1fr) 62px 74px;gap:6px}
  #screen-pay .mm3-salary-spark{width:62px}
- #screen-pay .mm3-salary-watch-value strong{font-size:11.5px}
+ #screen-pay .mm3-salary-watch-value strong{font-size:11.5px;white-space:normal;overflow-wrap:anywhere}
 }
 /* === end My Money 3.0 Phase 1 === */
 
@@ -1203,15 +1206,15 @@ html.dark #screen-payments .mm3-atf-grid{stroke:rgba(235,235,245,.12)}
 #screen-payments .mm3-payment-watchrow:last-child{border-bottom:0}
 #screen-payments .mm3-payment-watchrow:active{transform:scale(.985);opacity:.64;background:rgba(118,118,128,.04)}
 #screen-payments .mm3-payment-watch-main{min-width:0}
-#screen-payments .mm3-payment-watch-main strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#screen-payments .mm3-payment-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-payments .mm3-payment-watch-main strong{display:block;font-size:12.5px;white-space:normal;overflow-wrap:anywhere}
+#screen-payments .mm3-payment-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:3px;white-space:normal;overflow-wrap:anywhere}
 #screen-payments .mm3-payment-spark{width:72px;height:28px;color:var(--red);display:grid;place-items:center}
 #screen-payments .mm3-payment-spark svg{width:100%;height:100%;overflow:visible}
 #screen-payments .mm3-payment-spark-line{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 #screen-payments .mm3-payment-spark-empty{font-size:8px;color:var(--label3)}
 #screen-payments .mm3-payment-watch-value{text-align:right;min-width:0}
-#screen-payments .mm3-payment-watch-value strong{display:block;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#screen-payments .mm3-payment-watch-value small{display:block;font-size:8.5px;margin-top:2px;font-weight:650;font-variant-numeric:tabular-nums}
+#screen-payments .mm3-payment-watch-value strong{display:block;font-size:12px;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+#screen-payments .mm3-payment-watch-value small{display:block;font-size:8.5px;margin-top:2px;font-weight:650;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
 #screen-payments .mm3-payment-detail-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep)}
 #screen-payments .mm3-payment-detail-row{width:100%;min-height:51px;border:0;border-bottom:.5px solid var(--sep);background:transparent;display:flex;align-items:center;gap:10px;text-align:left;padding:8px 0;transition:transform .11s,opacity .11s}
 #screen-payments .mm3-payment-detail-row:last-child{border-bottom:0}
@@ -1238,7 +1241,7 @@ html.dark #screen-payments .mm3-atf-grid{stroke:rgba(235,235,245,.12)}
 @keyframes mm3PaymentReveal{from{opacity:.25;transform:translateY(3px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){#screen-payments .mm3-payment-reveal{animation:none!important}#screen-payments .mm3-atf-tooltip,#screen-payments .mm3-atf-guide,#screen-payments .mm3-atf-selected{transition:none!important}}
 .motion-off #screen-payments .mm3-payment-reveal{animation:none!important}.motion-off #screen-payments .mm3-atf-tooltip,.motion-off #screen-payments .mm3-atf-guide,.motion-off #screen-payments .mm3-atf-selected{transition:none!important}
-@media(max-width:390px){#screen-payments .mm3-payment-primary-value{font-size:37px}#screen-payments .mm3-payment-watchrow{grid-template-columns:minmax(0,1fr) 62px 74px;gap:6px}#screen-payments .mm3-payment-spark{width:62px}#screen-payments .mm3-payment-watch-value strong{font-size:11.5px}}
+@media(max-width:390px){#screen-payments .mm3-payment-primary-value{font-size:37px}#screen-payments .mm3-payment-watchrow{grid-template-columns:minmax(0,1fr) 62px 74px;gap:6px}#screen-payments .mm3-payment-spark{width:62px}#screen-payments .mm3-payment-watch-value strong{font-size:11.5px;white-space:normal;overflow-wrap:anywhere}}
 /* === end My Money 3.0 Phase 2 CSS === */
 
 
@@ -1287,17 +1290,17 @@ html.dark #screen-payments .mm3-atf-grid{stroke:rgba(235,235,245,.12)}
 #screen-assets .mm3-assets-metric strong{display:block;font-size:12.5px;margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #screen-assets .mm3-assets-watchlist{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-bottom:3px}
 #screen-assets .mm3-assets-watchrow{width:100%;min-height:64px;padding:8px 0;border:0;border-bottom:.5px solid var(--sep);background:transparent;color:inherit;display:grid;grid-template-columns:minmax(0,1.15fr) 72px minmax(78px,.78fr);align-items:center;gap:8px;text-align:left;position:relative;transition:background .12s,transform .11s,opacity .11s}
-#screen-assets .mm3-assets-watchrow:last-child{border-bottom:0}
+#screen-assets .record-action-row > .mm3-assets-watchrow{border-bottom:0}
 #screen-assets .mm3-assets-watchrow:active{background:rgba(118,118,128,.07);transform:scale(.985);opacity:.72}
 #screen-assets .mm3-assets-watch-main{min-width:0}
-#screen-assets .mm3-assets-watch-main strong{display:block;font-size:13px;font-weight:690;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#screen-assets .mm3-assets-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#screen-assets .mm3-assets-watch-main strong{display:block;font-size:13px;font-weight:690;line-height:1.2;white-space:normal;overflow-wrap:anywhere}
+#screen-assets .mm3-assets-watch-main small{display:block;font-size:9px;color:var(--label2);margin-top:4px;white-space:normal;overflow-wrap:anywhere}
 #screen-assets .mm3-assets-spark{width:72px;height:29px;display:grid;place-items:center;min-width:0}
 #screen-assets .mm3-assets-spark svg{width:100%;height:27px;overflow:visible}
 #screen-assets .mm3-assets-spark .spark-line{stroke-width:1.55}
 #screen-assets .mm3-assets-watch-value{text-align:right;min-width:0}
-#screen-assets .mm3-assets-watch-value strong{display:block;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-#screen-assets .mm3-assets-watch-value small{display:block;font-size:9px;color:var(--label2);margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap}
+#screen-assets .mm3-assets-watch-value strong{display:block;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+#screen-assets .mm3-assets-watch-value small{display:block;font-size:9px;color:var(--label2);margin-top:3px;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
 #screen-assets .mm3-assets-detail-list{border-top:.5px solid var(--sep);border-bottom:.5px solid var(--sep);margin-bottom:8px}
 #screen-assets .mm3-assets-detail-row{width:100%;min-height:54px;border:0;border-bottom:.5px solid var(--sep);background:transparent;color:inherit;padding:8px 1px;display:grid;grid-template-columns:31px 1fr auto;gap:9px;align-items:center;text-align:left}
 #screen-assets .mm3-assets-detail-row:last-child{border-bottom:0}
@@ -1314,7 +1317,7 @@ html.dark #screen-assets .mm3-assets-tooltip{background:rgba(58,58,60,.94)}
 @keyframes mm3AssetSwitch{from{opacity:.22;transform:scale(.988) translateY(2px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){#screen-assets .mm3-assets-line{animation:none;stroke-dashoffset:0}#screen-assets .mm3-assets-chart-switch{animation:none!important}#screen-assets .mm3-assets-guide,#screen-assets .mm3-assets-selected,#screen-assets .mm3-assets-tooltip{transition:none!important}}
 .motion-off #screen-assets .mm3-assets-line{animation:none;stroke-dashoffset:0}.motion-off #screen-assets .mm3-assets-chart-switch{animation:none!important}
-@media(max-width:390px){#screen-assets .mm3-assets-primary-value{font-size:37px}#screen-assets .mm3-assets-watchrow{grid-template-columns:minmax(0,1fr) 62px 76px;gap:6px}#screen-assets .mm3-assets-spark{width:62px}}
+@media(max-width:390px){#screen-assets .mm3-assets-primary-value{font-size:37px}#screen-assets .mm3-assets-watchrow{grid-template-columns:minmax(0,1fr) minmax(28px,1fr) minmax(67px,1.15fr);gap:6px}#screen-assets .mm3-assets-spark{width:62px}}
 /* === end My Money 3.0 Phase 3 CSS === */
 
 
@@ -1361,7 +1364,7 @@ html.dark #screen-assets .mm3-assets-tooltip{background:rgba(58,58,60,.94)}
 #screen-assets .mm3-assets-watchlist.mm3-assets-manual{position:relative;touch-action:pan-y}
 #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow{grid-template-columns:20px minmax(0,1.08fr) 62px minmax(76px,.76fr);cursor:grab;-webkit-user-select:none;user-select:none;touch-action:pan-y}
 #screen-assets .mm3-assets-reorder-handle{width:18px;height:34px;display:grid;place-items:center;color:var(--label3);font-size:18px;letter-spacing:-4px;transform:rotate(90deg);pointer-events:none}
-#screen-assets .mm3-assets-watchrow.mm3-assets-dragging{cursor:grabbing;background:var(--card);border-radius:13px;padding-left:7px;padding-right:7px;box-shadow:0 11px 28px rgba(0,0,0,.17);transform:scale(1.018);opacity:.985;transition:box-shadow 150ms ease,transform 150ms var(--mm3-ease);z-index:90}
+#screen-assets .record-action-row.mm3-assets-dragging{cursor:grabbing;background:var(--card);border-radius:13px;padding-left:7px;padding-right:7px;box-shadow:0 11px 28px rgba(0,0,0,.17);transform:scale(1.018);opacity:.985;transition:box-shadow 150ms ease,transform 150ms var(--mm3-ease);z-index:90}
 #screen-assets .mm3-assets-reorder-placeholder{border-radius:12px;background:rgba(0,122,255,.055);box-shadow:inset 0 0 0 1px rgba(0,122,255,.11);margin:1px 0}
 #screen-assets .mm3-assets-manual-hint{font-size:9.5px;color:var(--label2);margin:-2px 1px 7px;animation:mm3ManualHintIn 220ms var(--mm3-ease)}
 @keyframes mm3ManualHintIn{from{opacity:0;transform:translateY(-2px)}to{opacity:1;transform:none}}
@@ -2124,7 +2127,8 @@ html.dark{--native-secondary:#2c2c2e}
 .sheet-nav,.push-nav{background:var(--native-glass);border-bottom:.5px solid var(--sep);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .sheet-nav{padding-inline:16px}
 .sheet-title,.push-title{font-size:17px;font-weight:600;letter-spacing:-.3px}
-.sheet-nav .nav-text,.push-right .nav-text{font-size:16px}
+.sheet-nav .nav-text{font-size:clamp(14px,4.6vw,16px)}
+.push-right .nav-text{font-size:16px}
 .sheet-body,.push-body{padding:16px 16px calc(24px + var(--safe-b))}
 .form-card{background:var(--card);border-radius:18px;overflow:hidden}
 .form-section{padding:12px 16px}
@@ -2238,6 +2242,52 @@ button.primary:not(:disabled):active,button.btn-primary:not(:disabled):active{
  opacity:1;
 }
 
+.record-action-row{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:center;min-width:0}
+.record-action-row + .record-action-row{border-top:.5px solid var(--sep)}
+.record-action-row .record-more{width:44px;height:44px}
+.mm3-assets-manual .record-action-row{grid-template-columns:minmax(0,1fr)}
+.mm3-assets-manual .record-more{display:none}
+
+/* Native radios share the surface and focus tokens of segmented controls. */
+.seg.single-choice{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,8em),1fr));
+ gap:4px;
+}
+.single-choice-option{
+ position:relative;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ min-width:0;
+ min-height:44px;
+ padding:6px 8px;
+ border-radius:9px;
+ text-align:center;
+ overflow-wrap:anywhere;
+ cursor:pointer;
+}
+.single-choice-option input{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ margin:0;
+ opacity:0;
+ cursor:inherit;
+}
+.single-choice-option:has(:checked){
+ background:var(--card);
+ color:var(--label);
+ box-shadow:inset 0 0 0 .5px var(--action-toolbar-border),0 1px 3px rgba(0,0,0,.08);
+ font-weight:650;
+}
+.single-choice-option:has(:focus-visible){outline:2px solid var(--blue);outline-offset:-2px}
+.single-choice-option:has(:disabled){opacity:.58;cursor:default}
+.billing-review{margin:8px 0 0;display:grid;gap:8px}
+.billing-review div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px}
+.billing-review dt{color:var(--label2)}
+.billing-review dd{margin:0;min-width:0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 /* Segmented controls have stable bounds and explicit selected state. */
 .seg button,.acf-view-mode button,.native-home-mode button,
 #screen-pay .mm3-salary-range button,#screen-assets .mm3-assets-range button{

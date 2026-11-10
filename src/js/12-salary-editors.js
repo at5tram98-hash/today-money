@@ -76,18 +76,74 @@ function openAssetBillingMonthPicker(onChange=null){openDisplayMonthPicker({titl
 function openQuickCardBilling(paymentMonth=assetBillingMonth,preselectedCardId='',preselectedBillingMonth=''){
   if(!data.cards.length)return showAlert('カードがありません','先にクレジットカードを登録してください。');if(preselectedCardId&&!cardById(preselectedCardId))return showAlert('カードが見つかりません','一覧を開き直してください。');
   let cardId=preselectedCardId||data.cards[0].id,billingMonth=preselectedBillingMonth||'',amount=0,paymentDate=`${paymentMonth}-01`,status='confirmed',balanceMode='none';
-  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="qcbCancel">キャンセル</button><div class="sheet-title">カード請求額を更新</div><button type="button" class="nav-text bold" id="qcbSave">保存</button></div><div class="sheet-body"><div class="form-group-title">請求</div><div class="form-card"><div class="form-section"><div class="form-label">カード</div><select class="field field-select" id="qcbCard">${data.cards.map(c=>`<option value="${c.id}" ${c.id===cardId?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="form-section" id="qcbStatementWrap"><div class="form-label">対象請求</div><select class="field field-select" id="qcbStatement"></select></div><div class="form-section"><div class="form-label">実際の支払日</div><input class="field" id="qcbDate" type="date" value="${esc(paymentDate)}"></div><div class="form-section">${moneyButton('qcbAmount','請求額',amount)}</div></div><div class="form-group-title">状態</div><div class="seg" id="qcbStatus"><button type="button" data-v="estimated">見込み</button><button type="button" data-v="confirmed" class="on">確定</button><button type="button" data-v="paid">支払済み</button></div><div id="qcbBalanceWrap" class="hidden"><div class="form-group-title">引落口座の現在残高</div><div class="seg" id="qcbBalanceMode"><button type="button" data-v="apply">残高にも反映</button><button type="button" data-v="reconciled">すでに反映済み</button></div><div class="form-helper" id="qcbBalanceHelp"></div></div><div class="card card-pad"><div class="row-title">反映内容</div><div class="hero-sub" id="qcbInfo"></div></div></div>`,'full',root=>{
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="qcbCancel">キャンセル</button><div class="sheet-title">カード請求額を更新</div><button type="button" class="nav-text bold" id="qcbSave">保存</button></div><div class="sheet-body"><div class="form-group-title">請求</div><div class="form-card"><div class="form-section"><div class="form-label">カード</div><select class="field field-select" id="qcbCard">${data.cards.map(c=>`<option value="${c.id}" ${c.id===cardId?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="form-section" id="qcbStatementWrap"><div class="form-label">対象請求</div><select class="field field-select" id="qcbStatement"></select></div><div class="form-section"><div class="form-label">実際の支払日</div><input class="field" id="qcbDate" type="date" value="${esc(paymentDate)}"></div><div class="form-section">${moneyButton('qcbAmount','請求額',amount)}</div></div>${singleChoiceHtml('qcbStatus','請求の状態',[['estimated','見込み'],['confirmed','確定'],['paid','支払済み']],status)}<div id="qcbBalanceWrap" class="hidden">${singleChoiceHtml('qcbBalanceMode','銀行残高への反映',[['apply','今回の請求額を残高から引く'],['reconciled','すでに残高へ反映済み']],balanceMode)}<div class="form-helper" id="qcbBalanceHelp"></div></div><div class="card card-pad"><div class="row-title">保存前の確認</div><dl class="billing-review" id="qcbInfo"></dl><p class="form-helper" id="qcbRetry" role="status" hidden>保存できませんでした。入力を保持しています。もう一度お試しください。</p></div></div>`,'full',root=>{
     const amountBtn=root.querySelector('#qcbAmount'),saveBtn=root.querySelector('#qcbSave'),info=root.querySelector('#qcbInfo'),balanceWrap=root.querySelector('#qcbBalanceWrap'),balanceHelp=root.querySelector('#qcbBalanceHelp'),statementSelect=root.querySelector('#qcbStatement');
+    const statusChoices=root.querySelector('#qcbStatus'),balanceChoices=root.querySelector('#qcbBalanceMode'),dateField=root.querySelector('#qcbDate'),retry=root.querySelector('#qcbRetry');
     const choices=()=>{const card=cardById(cardId),items=cardStatementsForPaymentMonth(cardId,paymentMonth);if(items.length)return items;const bm=billingMonth||billingMonthForPaymentMonth(card,paymentMonth);return[cardStatementItem(card,bm,paymentMonth)]};
     const selectedStatement=()=>cardStatementExact(cardId,billingMonth,paymentMonth);
     const drawStatementChoices=()=>{const arr=choices();if(!billingMonth||!arr.some(x=>x.billingMonth===billingMonth))billingMonth=preselectedBillingMonth&&arr.some(x=>x.billingMonth===preselectedBillingMonth)?preselectedBillingMonth:(arr.find(x=>Number(x.amount)>0)?.billingMonth||arr[0]?.billingMonth||billingMonthForPaymentMonth(cardById(cardId),paymentMonth));statementSelect.innerHTML=arr.map(x=>`<option value="${esc(x.billingMonth)}" ${x.billingMonth===billingMonth?'selected':''}>${esc(monthLabel(x.billingMonth))}対象${x.paymentDate?`・${dayLabel(x.paymentDate)}`:''}・${yen(x.amount||0)}</option>`).join('');root.querySelector('#qcbStatementWrap').classList.toggle('hidden',arr.length<=1)};
-    const loadStatement=()=>{const st=selectedStatement();amount=Math.max(0,Number(st?.amount)||0);paymentDate=st?.paymentDate||acfEffectiveCardPaymentDate(cardById(cardId),billingMonth)||`${paymentMonth}-01`;status=st?.status||'confirmed';root.querySelector('#qcbDate').value=paymentDate;amountBtn.querySelector('.val').textContent=yen(amount);root.querySelectorAll('#qcbStatus button').forEach(x=>x.classList.toggle('on',x.dataset.v===status));const h=cardStatementBankHandling(cardId,billingMonth);balanceMode=h.mode==='apply'?'apply':h.mode==='reconciled'?'reconciled':'none';drawInfo();updateBalanceUI()};
-    const updateBalanceUI=()=>{const card=cardById(cardId),h=cardStatementBankHandling(cardId,billingMonth),bank=bankById(card?.bankId),existingPaid=cardAdjustmentInfo(cardId,billingMonth)?.status==='paid';if(existingPaid)balanceMode=h.mode==='apply'?'apply':h.mode==='reconciled'?'reconciled':'none';else if(!bank)balanceMode='none';else if(!['apply','reconciled'].includes(balanceMode))balanceMode='reconciled';balanceWrap.classList.toggle('hidden',status!=='paid');root.querySelectorAll('#qcbBalanceMode button').forEach(x=>{x.disabled=!bank||existingPaid;x.classList.toggle('on',x.dataset.v===balanceMode)});if(status!=='paid')return;if(!bank)balanceHelp.textContent='引落口座が未設定です。支払済み状態は保存できますが、銀行残高は変更しません。';else if(existingPaid)balanceHelp.textContent=`現在の記録：${h.label}。金額を修正しても残高への反映は二重実行しません。`;else if(balanceMode==='apply')balanceHelp.textContent=`${bank.name}の現在残高から請求額を1回だけ差し引きます。`;else balanceHelp.textContent=`${bank.name}の現在残高にはすでにこの支払いが含まれているものとして、残高を変更しません。`};
-    const drawInfo=()=>{paymentDate=root.querySelector('#qcbDate').value||paymentDate;const h=cardStatementBankHandling(cardId,billingMonth);info.textContent=`${monthLabel(String(paymentDate).slice(0,7))}支払い・対象利用 ${monthLabel(billingMonth)}・${cardStatementStatusLabel(status)}${status==='paid'?`・${h.label}`:''}`};
-    amountBtn.onclick=()=>openCalculator('請求額',amount,v=>{amount=v;amountBtn.querySelector('.val').textContent=yen(v);markSheetDirty();drawInfo()});
-    root.querySelector('#qcbCard').onchange=()=>{cardId=root.querySelector('#qcbCard').value;billingMonth='';preselectedBillingMonth='';markSheetDirty();drawStatementChoices();loadStatement()};statementSelect.onchange=()=>{billingMonth=statementSelect.value;markSheetDirty();loadStatement()};root.querySelector('#qcbDate').onchange=()=>{paymentDate=root.querySelector('#qcbDate').value||paymentDate;markSheetDirty();drawInfo();updateBalanceUI()};
-    root.querySelectorAll('#qcbStatus button').forEach(b=>b.onclick=()=>{status=b.dataset.v;root.querySelectorAll('#qcbStatus button').forEach(x=>x.classList.toggle('on',x===b));markSheetDirty();updateBalanceUI();drawInfo()});root.querySelectorAll('#qcbBalanceMode button').forEach(b=>b.onclick=()=>{if(b.disabled)return;balanceMode=b.dataset.v;root.querySelectorAll('#qcbBalanceMode button').forEach(x=>x.classList.toggle('on',x===b));markSheetDirty();updateBalanceUI();drawInfo()});root.querySelector('#qcbCancel').onclick=requestSheetClose;
-    saveBtn.onclick=()=>{paymentDate=root.querySelector('#qcbDate').value||paymentDate;const card=cardById(cardId);if(!card||!billingMonth||!Number.isFinite(amount)||amount<0)return showAlert('入力を確認してください','登録済みカードと0円以上の請求額を指定してください。');runSaveAction(saveBtn,()=>{requireFinancialEntity('card',cardId);return setCardStatement(cardId,billingMonth,amount,{paymentDate,status,memo:'クイック請求額入力',balanceMode:status==='paid'?balanceMode:'keep'})},{render:true,label:'quick card billing',busy:true,busyTitle:'請求額を保存中…',success:'カード請求額を保存しました',afterCommit:refreshFinancialViews,close:closeSheet})};
+    function loadStatement(){
+      const statement=selectedStatement();
+      amount=Math.max(0,Number(statement?.amount)||0);
+      paymentDate=statement?.paymentDate||acfEffectiveCardPaymentDate(cardById(cardId),billingMonth)||`${paymentMonth}-01`;
+      status=statement?.status||'confirmed';
+      dateField.value=paymentDate;
+      amountBtn.querySelector('.val').textContent=yen(amount);
+      balanceMode=cardStatementBankHandling(cardId,billingMonth).mode;
+      renderPreview();
+    }
+    function renderPreview(){
+      const card=cardById(cardId), handling=cardStatementBankHandling(cardId,billingMonth);
+      const existingPaid=cardAdjustmentInfo(cardId,billingMonth)?.status==='paid';
+      const paid=status==='paid', bank=existingPaid?handling.bank:bankById(card?.bankId);
+      if(existingPaid)balanceMode=handling.mode;
+      else if(!bank)balanceMode='none';
+      else if(!['apply','reconciled'].includes(balanceMode))balanceMode='reconciled';
+      balanceWrap.classList.toggle('hidden',!paid);
+      syncSingleChoice(statusChoices,status);
+      syncSingleChoice(balanceChoices,balanceMode,{disabled:!bank||existingPaid});
+      if(paid){
+        if(!bank)balanceHelp.textContent='引落口座が未設定のため、残高は変更されません。';
+        else if(existingPaid)balanceHelp.textContent='反映方法は確定済みです。請求額の修正で残高に反映されるのは差額だけです。';
+        else if(balanceMode==='apply')balanceHelp.textContent='この請求を対象口座から一度だけ差し引きます。残高確認に含まれる支払いは、再度差し引きません。';
+        else balanceHelp.textContent='現在残高に含まれている支払いとして扱い、残高を変更しません。';
+      }
+      const {bank:affected,delta,withinBaseline}=cardStatementBalanceImpact(cardId,billingMonth,amount,{paymentDate,status,balanceMode});
+      const current=Number(affected?.balance)||0;
+      const change=delta?`${yen(current)} → ${yen(current+delta)}`:'残高は変わりません';
+      const lines=[['カード',card?.name||'—'],['対象利用月',monthLabel(billingMonth)],['実際の支払日',dayLabel(paymentDate)],['請求額',yen(amount)],['状態',cardStatementStatusLabel(status)],['引落口座',affected?.name||'未設定'],['今回の残高変動',change]];
+      if(withinBaseline&&paid&&balanceMode==='apply')lines.push(['反映の扱い','残高確認済みの期間に含まれています']);
+      info.innerHTML=lines.map(([label,value])=>`<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('');
+    }
+    amountBtn.onclick=()=>openCalculator('請求額',amount,value=>{
+      amount=value;
+      amountBtn.querySelector('.val').textContent=yen(value);
+      markSheetDirty();
+      renderPreview();
+    });
+    root.querySelector('#qcbCard').onchange=event=>{
+      cardId=event.target.value;
+      billingMonth='';
+      preselectedBillingMonth='';
+      markSheetDirty();
+      drawStatementChoices();
+      loadStatement();
+    };
+    statementSelect.onchange=()=>{billingMonth=statementSelect.value;markSheetDirty();loadStatement()};
+    dateField.onchange=()=>{paymentDate=dateField.value||paymentDate;markSheetDirty();renderPreview()};
+    statusChoices.onchange=event=>{status=event.target.value;markSheetDirty();renderPreview()};
+    balanceChoices.onchange=event=>{balanceMode=event.target.value;markSheetDirty();renderPreview()};
+    root.querySelector('#qcbCancel').onclick=requestSheetClose;
+    saveBtn.onclick=async()=>{
+      paymentDate=dateField.value||paymentDate;
+      if(!cardById(cardId)||!billingMonth||!Number.isFinite(amount)||amount<0)return showAlert('入力を確認してください','登録済みカードと0円以上の請求額を指定してください。');
+      retry.hidden=true;
+      const saved=await runSaveAction(saveBtn,()=>{
+        requireFinancialEntity('card',cardId);
+        return setCardStatement(cardId,billingMonth,amount,{paymentDate,status,memo:'クイック請求額入力',balanceMode:status==='paid'?balanceMode:'keep'});
+      },{render:true,label:'quick card billing',busy:true,busyTitle:'請求額を保存中…',success:'カード請求額を保存しました',afterCommit:refreshFinancialViews,close:closeSheet});
+      if(!saved&&retry.isConnected){retry.hidden=false;saveBtn.focus({preventScroll:true})}
+    };
     drawStatementChoices();loadStatement()
   })
 }

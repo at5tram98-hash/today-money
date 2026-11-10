@@ -10,6 +10,7 @@ import {verifyClosingRefinements} from './closing-refinements-browser.mjs';
 import {verifyNativeUi} from './native-ui-browser.mjs';
 import {verifyPhase8Inventory} from './phase8-control-audit-browser.mjs';
 import {verifyPerControlActions} from './phase8-action-browser.mjs';
+import {verifyIosDesign} from './ios-design-browser.mjs';
 import {build, root, digest} from '../scripts/build.mjs';
 
 build();
@@ -85,7 +86,9 @@ async function finishDayClosing(page){
 }
 
 try {
-  if(process.env.MM3_NATIVE_ONLY==='1'){
+  if(process.env.MM3_IOS_ONLY==='1'){
+    await verifyIosDesign({createPage,passed,errors});
+  }else if(process.env.MM3_NATIVE_ONLY==='1'){
     await verifyNativeUi({createPage,passed});
     await verifyPhase8Inventory({createPage,passed,root});
     await verifyPerControlActions({createPage,passed,root});
@@ -371,6 +374,7 @@ try {
 
   await verifyUiUpdate({createPage,passed,root});
   await verifyNativeUi({createPage,passed});
+  await verifyIosDesign({createPage,passed,errors});
 
   const lifecycle=await createPage();const lp=lifecycle.page;
   const vapid=Buffer.concat([Buffer.from([4]),Buffer.alloc(64,1)]).toString('base64url'),device={apiBase:'https://money.push-test.example',vapidPublicKey:vapid,token:'test-device-token',endpoint:'https://web.push.apple.com/test-old'};

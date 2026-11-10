@@ -266,4 +266,21 @@ function refreshSalaryOpenView(){
   if(root?.dataset?.salaryListMonth){const month=root.dataset.salaryListMonth;if(popView())mm3SalaryRecordsOpen(month)}
 }
 
+function recordActionRowHtml(name,content){
+  return `<div class="record-action-row">${content}<button type="button" class="icon-btn record-more" aria-haspopup="menu" aria-label="${esc(name)}のその他の操作">${icon('menu')}</button></div>`;
+}
+function bindRecordActions(primary,actions,{enabled=()=>true}={}){
+  const more=primary.parentElement.querySelector('.record-more');
+  more.onclick=()=>{if(enabled())openMenu(more,actions)};
+  installLongPress(primary,()=>{if(enabled())openMenu(more,actions)});
+}
+function singleChoiceHtml(id,label,options,selected){
+  return `<div class="form-group-title" id="${id}Label">${esc(label)}</div><div class="seg single-choice" id="${id}" role="radiogroup" aria-labelledby="${id}Label">${options.map(([value,text])=>`<label class="single-choice-option"><input type="radio" name="${id}" value="${value}" data-v="${value}" ${selected===value?'checked':''}><span>${esc(text)}</span></label>`).join('')}</div>`;
+}
+function syncSingleChoice(group,value,{disabled=false}={}){
+  for(const input of group.querySelectorAll('input[type=radio]')){
+    input.checked=input.value===value;
+    input.disabled=disabled;
+  }
+}
 function moneyButton(id,label,value){return `<button class="field money-field press" id="${id}"><span class="hint">${esc(label)}</span><span class="val">${yen(value)}</span></button>`}
