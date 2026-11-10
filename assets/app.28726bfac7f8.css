@@ -1,12 +1,19 @@
 /* Shared iOS design language with My Time. Keep presentation values in one place. */
 :root {
   color-scheme: light;
-  --bg: #f2f2f7; --card: #fff;
+  /* 第11版 C章: セマンティックカラー。既存の --blue/--red/--green はこの3色を参照する。 */
+  --accent: #1673F7; --danger: #D93B46; --success: #16865D;
+  --bg: #F6F7FA; --card: #fff;
   --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2);
   --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4);
   --sep: rgba(60,60,67,.18);
-  --blue: #007aff; --green: #34c759; --yellow: #ffcc00;
-  --orange: #ff9500; --red: #ff3b30; --purple: #af52de; --teal: #30b0c7;
+  --blue: var(--accent); --green: var(--success); --yellow: #ffcc00;
+  --orange: #ff9500; --red: var(--danger); --purple: #af52de; --teal: #30b0c7;
+  /* 第11版 C章: 文字階層・間隔・動きの共通値 */
+  --type-title: 28px; --type-amount: 30px; --type-item: 17px; --type-note: 13px;
+  --space-page: 16px; --space-section: 24px; --row-height: 56px; --cta-height: 52px; --tap-min: 44px; --radius-card: 16px;
+  --motion-press: 90ms; --motion-update: 150ms; --motion-menu: 160ms; --motion-push: 220ms; --motion-sheet: 260ms;
+  --accent-soft: rgba(22,115,247,.14); --danger-soft: rgba(217,59,70,.12);
   --safe-t: env(safe-area-inset-top,0px); --safe-b: env(safe-area-inset-bottom,0px);
   --r: 12px; --spring: cubic-bezier(.32,.72,0,1);
   --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif;
@@ -20,12 +27,15 @@
 }
 html.dark {
   color-scheme: dark;
-  --bg: #000; --card: #1c1c1e;
+  /* 暗い背景でのコントラスト確保のため3色を明るく補正（第11版C章「コントラスト検証で最終補正」） */
+  --accent: #4C93FF; --danger: #FF6570; --success: #35B886;
+  --accent-soft: rgba(76,147,255,.2); --danger-soft: rgba(255,101,112,.18);
+  --bg: #0A0B0E; --card: #1c1c1e;
   --fill: rgba(118,118,128,.24); --fill2: rgba(118,118,128,.36);
   --label: #fff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.4);
   --sep: rgba(84,84,88,.6);
-  --blue: #0a84ff; --green: #30d158; --yellow: #ffd60a;
-  --orange: #ff9f0a; --red: #ff453a; --purple: #bf5af2; --teal: #64d2ff;
+  --blue: var(--accent); --green: var(--success); --yellow: #ffd60a;
+  --orange: #ff9f0a; --red: var(--danger); --purple: #bf5af2; --teal: #64d2ff;
   --glass-bg: rgba(36,36,40,.58); --glass-solid: rgba(28,28,30,.98);
   --glass-edge: rgba(255,255,255,.16); --glass-highlight: rgba(255,255,255,.14);
   --glass-shadow: 0 10px 30px rgba(0,0,0,.55),0 0 0 .5px rgba(0,0,0,.6);
@@ -257,12 +267,12 @@ button:disabled{opacity:.38;cursor:default}button:not(:disabled){transition:tran
 .goal-nav-actions.single{grid-template-columns:1fr}
 .approval-slider.disabled{opacity:.42;pointer-events:none}
 .approval-slider{height:62px;border-radius:16px;background:var(--fill);position:relative;overflow:hidden;margin-top:18px;user-select:none;-webkit-user-select:none}
-.approval-progress{position:absolute;inset:0 auto 0 0;width:0;background:rgba(0,122,255,.14);pointer-events:none}
+.approval-progress{position:absolute;inset:0 auto 0 0;width:0;background:var(--accent-soft);pointer-events:none}
 .approval-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-left:44px;padding-right:12px;color:var(--label2);font-size:13px;font-weight:650;pointer-events:none}
 .approval-handle{position:absolute;left:5px;top:5px;width:52px;height:52px;border:0;border-radius:13px;background:var(--blue);color:#fff;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.16);touch-action:none;transform:translateX(0)}
 .approval-handle svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.approval-slider.returning .approval-handle{transition:transform .28s cubic-bezier(.22,.88,.22,1)}
-.approval-slider.returning .approval-progress{transition:width .28s cubic-bezier(.22,.88,.22,1)}
+.approval-slider.returning .approval-handle{transition:transform .17s cubic-bezier(.22,.88,.22,1)}
+.approval-slider.returning .approval-progress{transition:width .17s cubic-bezier(.22,.88,.22,1)}
 .goal-processing,.goal-success,.goal-error{min-height:58vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 16px}
 .goal-spinner{width:42px;height:42px;border:3px solid var(--fill2);border-top-color:var(--blue);border-radius:50%;animation:goalSpin .8s linear infinite}
 .goal-state-title{font-size:23px;font-weight:730;margin-top:18px}
@@ -2173,3 +2183,43 @@ html.native-keyboard #calculator{bottom:var(--native-keyboard-inset,0px);max-hei
 #app .goal-plan-action>span:last-child{font-size:15px;line-height:1}
 #app #acfToday:not(:has(.acf-head)) .acf-home-amount{display:flex;align-items:center;gap:4px}
 #app #acfToday:not(:has(.acf-head)) .acf-home-amount>.money-symbol{width:12px;height:12px}
+/* 第11版 共通部品。値は tokens.css のトークンだけを参照する。 */
+/* ヒット領域: ツールバー・月送り・シートの文字ボタンは44×44pt以上 */
+.icon-btn,.date-nav-btn{min-width:var(--tap-min);min-height:var(--tap-min)}
+.nav-text{min-height:var(--tap-min);min-width:var(--tap-min)}
+.sheet .row.press,.push-view .row.press{min-height:var(--row-height)}
+.primary,.secondary{min-height:var(--cta-height)}
+/* 画面遷移の時間: push 220ms / sheet 260ms */
+.push-view{transition-duration:var(--motion-push)}
+.sheet{transition-duration:var(--motion-sheet)}
+.sheet.detent-moving{transition-duration:0s}
+/* 危険操作は主CTAと別の赤いグループ */
+.primary.v11-danger-cta{background:var(--danger);color:#fff}
+.primary.v11-danger-cta:disabled{opacity:.4}
+.v11-danger-note{display:grid;gap:4px;margin:0 0 var(--space-page);padding:12px var(--space-page);border-radius:var(--radius-card);background:var(--danger-soft);color:var(--label);font-size:var(--type-note);line-height:1.55}
+.v11-danger-note strong{font-size:15px;color:var(--danger)}
+/* 下書きのスイッチ行・ラジオ行: 色だけでなく形でも状態を示す */
+.v11-switch-row,.v11-radio-row{font:inherit;color:inherit}
+.v11-switch-row:disabled{opacity:.5}
+.v11-switch{flex:none;width:51px;height:31px;border-radius:16px;background:var(--fill2);position:relative;transition:background var(--motion-update)}
+.v11-switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform var(--motion-update)}
+.v11-switch-row[aria-checked=true] .v11-switch{background:var(--success)}
+.v11-switch-row[aria-checked=true] .v11-switch::after{transform:translateX(20px)}
+.v11-radio{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--label3);box-sizing:border-box;display:grid;place-items:center}
+.v11-radio-row[aria-checked=true] .v11-radio{border-color:var(--accent)}
+.v11-radio-row[aria-checked=true] .v11-radio::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--accent)}
+/* ホイール選択の補足（選択中の実値と、確定前の現在値） */
+.v11-picker-detail{display:grid;gap:2px}
+.v11-picker-detail span{font-size:var(--type-note);font-weight:400;color:var(--label2)}
+/* 復元プレビューの比較表 */
+.v11-compare{width:100%;border-collapse:collapse;margin:0 0 var(--space-page);background:var(--card);border-radius:var(--radius-card);overflow:hidden;font-size:15px}
+.v11-compare caption{caption-side:top;text-align:left;padding:0 4px 8px;font-size:var(--type-note);color:var(--label2)}
+.v11-compare th,.v11-compare td{padding:12px var(--space-page);text-align:right;border-bottom:.5px solid var(--sep);font-variant-numeric:tabular-nums}
+.v11-compare th:first-child{text-align:left;font-weight:400}
+.v11-compare thead th{font-size:var(--type-note);color:var(--label2);font-weight:400}
+.v11-compare tbody tr:last-child>*{border-bottom:0}
+/* 最終承認スライドの代替ボタン */
+.v11-approval-alt{margin-top:10px}
+/* キーボード操作時のフォーカス表示 */
+.v11-switch-row:focus-visible,.v11-radio-row:focus-visible,.approval-handle:focus-visible,.month-wheel:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.v11-switch,.v11-switch::after{transition:none}}

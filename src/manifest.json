@@ -54,7 +54,8 @@
     "src/css/day-closing.css",
     "src/css/acf-calendar.css",
     "src/css/financial-updates.css",
-    "src/css/workspace.css"
+    "src/css/workspace.css",
+    "src/css/v11-components.css"
   ],
   "baseline": {
     "blob": "2a33e9e643db3c53347d211fa77b67c3ac580072",

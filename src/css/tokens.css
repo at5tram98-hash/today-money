@@ -1,12 +1,19 @@
 /* Shared iOS design language with My Time. Keep presentation values in one place. */
 :root {
   color-scheme: light;
-  --bg: #f2f2f7; --card: #fff;
+  /* 第11版 C章: セマンティックカラー。既存の --blue/--red/--green はこの3色を参照する。 */
+  --accent: #1673F7; --danger: #D93B46; --success: #16865D;
+  --bg: #F6F7FA; --card: #fff;
   --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2);
   --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4);
   --sep: rgba(60,60,67,.18);
-  --blue: #007aff; --green: #34c759; --yellow: #ffcc00;
-  --orange: #ff9500; --red: #ff3b30; --purple: #af52de; --teal: #30b0c7;
+  --blue: var(--accent); --green: var(--success); --yellow: #ffcc00;
+  --orange: #ff9500; --red: var(--danger); --purple: #af52de; --teal: #30b0c7;
+  /* 第11版 C章: 文字階層・間隔・動きの共通値 */
+  --type-title: 28px; --type-amount: 30px; --type-item: 17px; --type-note: 13px;
+  --space-page: 16px; --space-section: 24px; --row-height: 56px; --cta-height: 52px; --tap-min: 44px; --radius-card: 16px;
+  --motion-press: 90ms; --motion-update: 150ms; --motion-menu: 160ms; --motion-push: 220ms; --motion-sheet: 260ms;
+  --accent-soft: rgba(22,115,247,.14); --danger-soft: rgba(217,59,70,.12);
   --safe-t: env(safe-area-inset-top,0px); --safe-b: env(safe-area-inset-bottom,0px);
   --r: 12px; --spring: cubic-bezier(.32,.72,0,1);
   --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif;
@@ -20,12 +27,15 @@
 }
 html.dark {
   color-scheme: dark;
-  --bg: #000; --card: #1c1c1e;
+  /* 暗い背景でのコントラスト確保のため3色を明るく補正（第11版C章「コントラスト検証で最終補正」） */
+  --accent: #4C93FF; --danger: #FF6570; --success: #35B886;
+  --accent-soft: rgba(76,147,255,.2); --danger-soft: rgba(255,101,112,.18);
+  --bg: #0A0B0E; --card: #1c1c1e;
   --fill: rgba(118,118,128,.24); --fill2: rgba(118,118,128,.36);
   --label: #fff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.4);
   --sep: rgba(84,84,88,.6);
-  --blue: #0a84ff; --green: #30d158; --yellow: #ffd60a;
-  --orange: #ff9f0a; --red: #ff453a; --purple: #bf5af2; --teal: #64d2ff;
+  --blue: var(--accent); --green: var(--success); --yellow: #ffd60a;
+  --orange: #ff9f0a; --red: var(--danger); --purple: #bf5af2; --teal: #64d2ff;
   --glass-bg: rgba(36,36,40,.58); --glass-solid: rgba(28,28,30,.98);
   --glass-edge: rgba(255,255,255,.16); --glass-highlight: rgba(255,255,255,.14);
   --glass-shadow: 0 10px 30px rgba(0,0,0,.55),0 0 0 .5px rgba(0,0,0,.6);
