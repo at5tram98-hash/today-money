@@ -101,7 +101,18 @@ async function resetAllData({keepSeed=true}={}){
     trackingDate=ymd();currentMonth=payViewMonth=assetBillingMonth=ym();monthPlanEditMode=false
   }finally{mm3PendingAsyncCommit=false}
 }
-async function openDataSettings(){const recoveryCount=(await mm3RecoveryList()).length;pushView('データ管理',`<div class="group"><button class="row press" id="pdfExport">${settingsIconHtml('upload','var(--red)')}<div class="row-main"><div class="row-title">PDFで書き出す</div><div class="row-sub">PDFを生成して共有</div></div><span class="chev">›</span></button><button class="row press" id="backupExport">${settingsIconHtml('upload','var(--green)')}<div class="row-main"><div class="row-title">バックアップ作成</div><div class="row-sub">JSONで全データを保存</div></div><span class="chev">›</span></button><button class="row press" id="backupImport">${settingsIconHtml('download','var(--blue)')}<div class="row-main"><div class="row-title">バックアップを復元</div><div class="row-sub">復元前の現在データは自動保護</div></div><span class="chev">›</span></button>${recoveryCount?`<button class="row press" id="recoveryExport">${settingsIconHtml('download','var(--orange)')}<div class="row-main"><div class="row-title">復旧用データを書き出す</div><div class="row-sub">端末内に ${recoveryCount}件の保護コピーがあります</div></div><span class="chev">›</span></button>`:''}</div><div class="group"><button class="row press" id="deleteAll">${settingsIconHtml('trash','var(--red)')}<div class="row-main"><div class="row-title red">全データ削除</div><div class="row-sub">取引・設定・Gmail認証・復旧コピーを削除</div></div></button></div><input type="file" id="importFile" accept="application/json,.json" class="hidden">`,root=>{root.querySelector('#pdfExport').onclick=exportPdf;root.querySelector('#backupExport').onclick=exportBackup;root.querySelector('#backupImport').onclick=()=>root.querySelector('#importFile').click();root.querySelector('#recoveryExport')?.addEventListener('click',exportLatestRecovery);root.querySelector('#importFile').onchange=importBackup;root.querySelector('#deleteAll').onclick=async()=>{if(!await showAlert('すべてのデータを削除しますか？','Gmail認証と復旧用コピーを含む端末内データを削除します。',{destructive:true,okText:'続ける'}))return;const keep=await showAlert('初期登録データを残しますか？','「初期データを残す」ではGU・無印良品・銀行・カード等を再作成します。「完全に空にする」では空の状態にします。',{okText:'初期データを残す',cancelText:'完全に空にする'});try{await resetAllData({keepSeed:keep})}catch(e){console.error(e);showAlert('削除できませんでした','保存処理に失敗したため、元のデータを保持しています。');return}while(pushStack.length){const x=pushStack.pop();document.getElementById(x.id)?.remove()}renderAll()}})}
+async function openDataSettings(){const recoveryCount=(await mm3RecoveryList()).length;pushView('データ管理',`<div class="group"><button class="row press" id="pdfExport">${settingsIconHtml('upload','var(--red)')}<div class="row-main"><div class="row-title">PDFで書き出す</div><div class="row-sub">PDFを生成して共有</div></div><span class="chev">›</span></button><button class="row press" id="backupExport">${settingsIconHtml('upload','var(--green)')}<div class="row-main"><div class="row-title">バックアップ作成</div><div class="row-sub">JSONで全データを保存</div></div><span class="chev">›</span></button><button class="row press" id="backupImport">${settingsIconHtml('download','var(--blue)')}<div class="row-main"><div class="row-title">バックアップを復元</div><div class="row-sub">復元前の現在データは自動保護</div></div><span class="chev">›</span></button>${recoveryCount?`<button class="row press" id="recoveryExport">${settingsIconHtml('download','var(--orange)')}<div class="row-main"><div class="row-title">復旧用データを書き出す</div><div class="row-sub">端末内に ${recoveryCount}件の保護コピーがあります</div></div><span class="chev">›</span></button>`:''}</div><div class="group"><button class="row press" id="deleteAll">${settingsIconHtml('trash','var(--red)')}<div class="row-main"><div class="row-title red">全データ削除</div><div class="row-sub">取引・設定・Gmail認証・復旧コピーを削除</div></div></button></div><input type="file" id="importFile" accept="application/json,.json" class="hidden">`,root=>{root.querySelector('#pdfExport').onclick=exportPdf;root.querySelector('#backupExport').onclick=exportBackup;root.querySelector('#backupImport').onclick=()=>root.querySelector('#importFile').click();root.querySelector('#recoveryExport')?.addEventListener('click',exportLatestRecovery);root.querySelector('#importFile').onchange=importBackup;root.querySelector('#deleteAll').onclick=openDeleteAllConfirmation})}
+/* 第11版 BACKUP-210: 対象と影響を示す確認画面・削除後の状態の明示選択・「削除」の入力・最終確認のすべてを通った時だけ消去する。キャンセルは常に何も消さない。 */
+function openDeleteAllConfirmation(){
+  const counts=`取引 ${data.transactions.length}件・給与 ${data.salaryRecords.length}件・銀行 ${data.banks.length}件・カード ${data.cards.length}件`;
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="daCancel">キャンセル</button><div class="sheet-title">全データ削除</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="v11-danger-note" role="note"><strong>この端末から削除されるもの</strong><span>${counts}、目標・設定、Gmail認証、復旧用コピー。削除後は元に戻せません。</span></div><div class="form-label" id="daModeLabel">削除後の状態</div><div class="group" role="radiogroup" aria-labelledby="daModeLabel"><button type="button" class="row press v11-radio-row" role="radio" aria-checked="true" data-da-mode="seed"><div class="row-main"><div class="row-title">初期データを残す</div><div class="row-sub">GU・無印良品・銀行・カード等の初期登録を再作成します</div></div><span class="v11-radio" aria-hidden="true"></span></button><button type="button" class="row press v11-radio-row" role="radio" aria-checked="false" data-da-mode="empty"><div class="row-main"><div class="row-title">完全に空にする</div><div class="row-sub">何も登録されていない状態にします</div></div><span class="v11-radio" aria-hidden="true"></span></button></div><label class="form-label" for="daConfirmText">確認のため「削除」と入力してください</label><input class="field" id="daConfirmText" type="text" autocomplete="off" autocapitalize="off" enterkeyhint="done" placeholder="削除"><button type="button" class="primary v11-danger-cta" id="daConfirm" disabled>全データを削除</button></div>`,'full',root=>{
+    let mode='seed',running=false;const field=root.querySelector('#daConfirmText'),confirm=root.querySelector('#daConfirm');
+    root.querySelector('#daCancel').onclick=()=>{markSheetDirty(false);closeSheet()};
+    root.querySelectorAll('[data-da-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.daMode;root.querySelectorAll('[data-da-mode]').forEach(x=>x.setAttribute('aria-checked',String(x===b)))});
+    field.oninput=()=>{confirm.disabled=field.value.trim()!=='削除';markSheetDirty(false)};
+    confirm.onclick=async()=>{if(running||field.value.trim()!=='削除')return;running=true;try{if(!await showAlert('本当に全データを削除しますか？',`${counts}を削除し、${mode==='seed'?'初期データを再作成します':'完全に空の状態にします'}。この操作は取り消せません。`,{destructive:true,okText:'全データを削除',cancelText:'キャンセル'}))return;setButtonSaving(confirm,true,'削除中…');try{await resetAllData({keepSeed:mode==='seed'})}catch(e){console.error(e);setButtonSaving(confirm,false);showAlert('削除できませんでした','保存処理に失敗したため、元のデータを保持しています。');return}closeSheet();while(pushStack.length){const x=pushStack.pop();document.getElementById(x.id)?.remove()}renderAll()}finally{running=false}};
+  })
+}
 async function exportPdf(){try{const blob=await buildPdfReport(ym()),file=new File([blob],`MyMoney2-${ym()}.pdf`,{type:'application/pdf'});if(navigator.canShare?.({files:[file]})){await navigator.share({title:`My Money 2.0 ${monthLabel(ym())} 家計レポート`,files:[file]});return}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}catch(e){console.error(e);showAlert('PDFを作成できませんでした','ブラウザの共有機能またはファイル保存を利用できませんでした。')}}
 async function canvasJpegBytes(canvas){const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('JPEG変換失敗')),'image/jpeg',.9));return new Uint8Array(await blob.arrayBuffer())}
 function pdfAscii(str){return new TextEncoder().encode(str)}
@@ -201,24 +212,36 @@ async function exportLatestRecovery(){
     a.href=URL.createObjectURL(blob);a.download=`MyMoney2-recovery-${ymd()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
   }catch(e){showAlert('書き出せませんでした','ブラウザの保存機能を利用できませんでした。')}
 }
+/* 第11版 BACKUP-208: ファイル選択→整合性確認→復元プレビュー→最終確認。最終確認までは現在のデータを一切書き換えない。 */
 async function importBackup(e){
-  const f=e.target.files[0];if(!f)return;
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  if(!f.size)return showAlert('復元できませんでした','空のファイルです。現在のデータは変更していません。');
   let obj;
-  try{obj=JSON.parse(await f.text())}catch(err){console.error(err);e.target.value='';return showAlert('復元できませんでした','JSONとして読み取れないファイルです。現在のデータは変更していません。')}
+  try{obj=JSON.parse(await f.text())}catch(err){console.error(err);return showAlert('復元できませんでした','JSONとして読み取れないファイルです。現在のデータは変更していません。')}
   const check=validateBackupPayload(obj);
-  if(!check.ok){e.target.value='';return showAlert('復元できませんでした',`My Money 2.0バックアップとして形式を確認できません。\n${check.errors.join('\n')}`)}
-  const counts=`取引 ${(obj.transactions||[]).length}件・給与 ${(obj.salaryRecords||[]).length}件・銀行 ${(obj.banks||[]).length}件・カード ${(obj.cards||[]).length}件`;
-  const warn=check.warnings.length?`\n\n確認事項:\n${check.warnings.slice(0,5).map(x=>'・'+x).join('\n')}`:'';
-  if(!await showAlert('バックアップを復元しますか？',`バージョン v${obj.version} / ${counts}\n現在のデータは復旧用コピーを作成してから置き換えます。${warn}`,{okText:'復元'})){e.target.value='';return}
-  if(mm3PendingAsyncCommit){e.target.value='';return showAlert('保存中です','前の保存が完了してから再度お試しください')}
+  if(!check.ok)return showAlert('復元できませんでした',`My Money 2.0バックアップとして形式を確認できません。現在のデータは変更していません。\n${check.errors.join('\n')}`);
+  openBackupRestorePreview(obj,check,f);
+}
+function backupPreviewRows(obj){return [['取引','transactions'],['給与記録','salaryRecords'],['銀行口座','banks'],['カード','cards'],['固定支払い','fixedPayments'],['カテゴリ','categories']].map(([label,key])=>({label,current:Array.isArray(data[key])?data[key].length:0,backup:Array.isArray(obj[key])?obj[key].length:0}))}
+function openBackupRestorePreview(obj,check,file){
+  const rows=backupPreviewRows(obj),exported=obj.backupMeta?.exportedAt?new Date(obj.backupMeta.exportedAt):null,stamp=exported&&!Number.isNaN(exported.getTime())?exported.toLocaleString('ja-JP'):file?.lastModified?new Date(file.lastModified).toLocaleString('ja-JP'):'不明';
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="brCancel">キャンセル</button><div class="sheet-title">復元プレビュー</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="group"><div class="row"><div class="row-main"><div class="row-title">ファイル</div><div class="row-sub">${esc(file?.name||'バックアップ')}</div></div><div class="row-value">v${esc(String(obj.version))}</div></div><div class="row"><div class="row-main"><div class="row-title">${obj.backupMeta?.exportedAt?'バックアップ作成日時':'ファイルの更新日時'}</div></div><div class="row-value">${esc(stamp)}</div></div><div class="row"><div class="row-main"><div class="row-title">整合性確認</div></div><div class="row-value green">形式を確認済み</div></div></div><table class="v11-compare" id="brCompare"><caption>現在のデータは、バックアップの内容にすべて置き換わります</caption><thead><tr><th scope="col">項目</th><th scope="col">現在（消える）</th><th scope="col">復元後</th></tr></thead><tbody>${rows.map(r=>`<tr><th scope="row">${r.label}</th><td>${r.current}件</td><td>${r.backup}件</td></tr>`).join('')}</tbody></table>${check.warnings.length?`<div class="v11-danger-note" role="note"><strong>確認事項</strong>${check.warnings.slice(0,5).map(x=>`<span>・${esc(x)}</span>`).join('')}</div>`:''}<div class="form-helper">復元の直前に、現在のデータを端末内の復旧用コピーへ保護します。保護に失敗した場合は復元しません。</div><button type="button" class="primary" id="brProceed">この内容で復元へ進む</button></div>`,'full',root=>{
+    root.querySelector('#brCancel').onclick=requestSheetClose;
+    const proceed=root.querySelector('#brProceed');
+    proceed.onclick=async()=>{if(proceed.disabled)return;if(!await showAlert('バックアップを復元しますか？',`現在のデータ（取引 ${rows[0].current}件など）を、バックアップ（取引 ${rows[0].backup}件など）に置き換えます。現在のデータは復旧用コピーを作成してから置き換えます。`,{destructive:true,okText:'復元',cancelText:'キャンセル'}))return;setButtonSaving(proceed,true,'復元中…');const ok=await restoreBackupPayload(obj);if(!ok&&proceed.isConnected)setButtonSaving(proceed,false)};
+  });
+}
+async function restoreBackupPayload(obj){
+  if(mm3PendingAsyncCommit){showAlert('保存中です','前の保存が完了してから再度お試しください');return false}
   mm3PendingAsyncCommit=true;
   try{
     const next=prepareLoadedData(obj,{applySeed:false,allowLegacy:false});
     await writeRecoverySnapshotAsync('before_import',data);
     await saveAsync({snapshot:next});
     data=mm3StateGuardMode?mm3GuardData(next):next;
-  }catch(err){console.error(err);showAlert('復元できませんでした','保存に失敗しました。現在のデータは保持しています。');return}
-  finally{mm3PendingAsyncCommit=false;e.target.value=''}
-  try{while(pushStack.length){const x=pushStack.pop();document.getElementById(x.id)?.remove()}renderAll();feedback.success();showToast('バックアップを復元しました')}
+  }catch(err){console.error(err);showAlert('復元できませんでした','保存に失敗しました。現在のデータは保持しています。');return false}
+  finally{mm3PendingAsyncCommit=false}
+  try{closeSheet();while(pushStack.length){const x=pushStack.pop();document.getElementById(x.id)?.remove()}renderAll();feedback.success();showToast('バックアップを復元しました')}
   catch(err){console.error('backup restored; UI refresh failed',err);showToast('復元しました。画面を再読み込みしてください',{tone:'error'})}
+  return true;
 }
