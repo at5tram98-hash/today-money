@@ -1,0 +1,152 @@
+/* 今日・今月の画面、カレンダー、資金ティッカー、通知。 */
+#screen-today .topbar { padding-top: calc(var(--safe-t) + 20px); min-height: calc(var(--safe-t) + 66px) }
+@media (max-width:390px) {
+  .daily-goal { grid-template-columns: 136px 1fr; gap: 13px }
+}
+@media (max-width:370px) {
+  .daily-goal { grid-template-columns: 128px 1fr }
+}
+.daily-goal { display: grid; align-items: center; grid-template-columns: minmax(120px,45%) minmax(0,1fr); gap: 16px }
+.goal-side-title { color: var(--label2); font-size: 13px; line-height: 1.4 }
+.calendar-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); align-items: start }
+.calendar-card.plan-edit .day-cell:not(.out) { box-shadow: inset 0 0 0 1px rgba(0,122,255,.16) }
+.month-swipe { touch-action: pan-y }
+.goal-planner-shell { max-width: 440px; margin: 0 auto }
+.goal-intro-actions { display: grid; gap: 8px; margin-top: 18px }
+.goal-step-indicator { display: flex; align-items: center; gap: 6px; margin: 3px 2px 18px }
+.goal-recommend-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin-top: 16px }
+.goal-recommend.selected .goal-recommend-label { color: var(--blue) }
+.goal-main-amount:active { opacity: .6 }
+.goal-amount-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 13px }
+.goal-range { width: 100%; margin-top: 18px; accent-color: var(--blue); height: 30px }
+.goal-category-row:last-child { border-bottom: 0 }
+.goal-category-row .row-main { min-width: 0 }
+.goal-category-row .row-value { margin-left: auto }
+.goal-review-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 13px }
+.goal-nav-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; margin-top: 16px }
+.goal-nav-actions.single { grid-template-columns: 1fr }
+.goal-step-compact { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 2px 17px }
+.goal-step-compact-main { min-width: 0; flex: 1 }
+.goal-step-compact-line>i { display: block; height: 100%; background: var(--blue); border-radius: 999px; transition: width .22s cubic-bezier(.22,.88,.22,1) }
+.planner-lens { margin: 14px 0 10px }
+.planner-compare { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin: 11px 0 }
+.planner-calendar .day-cell { cursor: pointer }
+.planner-calendar.event-lens .day-cell:not(.has-event):not(.out) { opacity: .42 }
+.planner-calendar .day-cell.highlight-day { box-shadow: inset 0 0 0 1.5px var(--blue); animation: plannerDayPulse .7s ease-out }
+.planner-summary-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; margin: 9px 0 12px }
+.budget-dial-meta { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 12px }
+.budget-control-row { display: grid; grid-template-columns: 48px 1fr 48px; gap: 10px; align-items: center; margin-top: 15px }
+.budget-range-wrap.dragging .budget-bubble { opacity: 1 }
+.budget-range { width: 100%; height: 30px; accent-color: var(--blue) }
+.feedback-volume { display: grid; grid-template-columns: auto minmax(0,1fr) auto auto; gap: 10px; align-items: center }
+.calendar-grid>.day-cell.out { pointer-events: none }
+.month-hero-meta { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.plan-vs-actual { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-top: 10px }
+.money-field { display: flex; align-items: center; justify-content: space-between; text-align: left }
+.money-field .val { font-size: 17px; font-weight: 680 }
+.month-name-btn:active { transform: scale(.97); opacity: .6 }
+.money-ticker-viewport { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; overscroll-behavior-x: contain; touch-action: pan-x pan-y; padding: 2px 16px 4px }
+.money-ticker-viewport::-webkit-scrollbar { display: none }
+.money-ticker-track { display: flex; width: max-content; align-items: stretch }
+.money-ticker-copy { display: flex; gap: 10px; padding-right: 10px }
+.money-ticker-card:active { transform: scale(.985); opacity: .72 }
+.money-ticker-card[data-kind="card"] { --ticker-accent: var(--purple) }
+.money-ticker-card[data-kind="assets"] { --ticker-accent: var(--teal) }
+.money-ticker-spark { grid-column: 2/3; grid-row: 2/4; align-self: center; width: 52px; height: 34px; color: var(--ticker-accent); display: grid; place-items: center }
+.money-ticker-spark-line { fill: none; stroke: var(--ticker-accent); stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
+.money-ticker-spark-fill { fill: var(--ticker-accent); opacity: .08 }
+.money-ticker-spark-empty { font-size: 8.5px; color: var(--label3); line-height: 1.15; text-align: center }
+.money-ticker-meta { grid-column: 1/2; align-self: end; font-size: 9.5px; line-height: 1.25; color: var(--label2); margin-top: 5px; min-width: 0 }
+.money-ticker-card.large-value .money-ticker-value { grid-column: 1/-1; font-size: 15px; letter-spacing: -.2px }
+.money-ticker-card.large-value .money-ticker-spark { display: none }
+.money-ticker-card.large-value .money-ticker-meta { grid-column: 1/-1 }
+.money-ticker-card.very-large-value .money-ticker-value { font-size: 13.5px }
+.money-ticker-card.is-warning { --ticker-accent: var(--orange) }
+.money-ticker-card.is-danger { --ticker-accent: var(--red) }
+.money-ticker-card.is-paid { --ticker-accent: var(--green) }
+.money-ticker-shell::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 14px; pointer-events: none; background: linear-gradient(90deg,transparent,var(--bg)) }
+.money-ticker-paused .money-ticker-card { scroll-snap-align: start }
+.today-spend-tap { padding: 18px }
+.goal-side-value { font-size: 22px; white-space: nowrap }
+.goal-rate { font-size: 17px; margin-top: 6px }
+.goal-plan-action { min-height: 48px; padding-block: 12px; font-size: 14px }
+#quickExpense { grid-column: 1/-1; justify-content: center; background: var(--blue); color: white; font-size: 16px }
+.money-symbol { display: block; flex: none }
+#app .today-goal-hero { border-radius: var(--native-radius); background: var(--card); box-shadow: 0 2px 8px #00000003; margin: 0 0 10px; overflow: hidden }
+#app .today-spend-tap { padding: 12px 16px; width: 100%; background: transparent }
+#app .daily-goal { grid-template-columns: 108px minmax(0,1fr); gap: 18px }
+#app .goal-side-title { font-size: 12px; font-weight: 400; color: var(--label2); grid-column: 1/-1 }
+#app .goal-side-value { font-size: 24px; font-weight: 650; margin-top: 2px; grid-column: 1; line-height: 1.2 }
+#app .goal-rate { font-size: 15px; grid-column: 2; text-align: right; margin: 0; line-height: 1.2 }
+#app .goal-plan-action { min-height: 44px; padding: 10px 16px; font-size: 15px; font-weight: 600; border-top: .5px solid var(--sep); background: transparent }
+#app .goal-plan-action>.money-symbol { width: 13px; height: 13px }
+#app #quickExpense { min-height: 48px !important; background: var(--blue); color: #fff; font-size: 17px }
+#app .day-cell { min-width: 0 }
+#app .money-ticker-shell { margin: 0 calc(-1 * var(--native-gutter)) 8px }
+#app .money-ticker-viewport { padding: 2px var(--native-gutter) 4px }
+#app .settings-icon { border-radius: 9px }
+#app .money-ticker-card { border-radius: 18px; box-shadow: none; min-height: 90px }
+#app .money-ticker-name { font-size: 11px; font-weight: 600 }
+#app .money-ticker-value { font-size: 21px; font-weight: 700 }
+#app .money-ticker-meta { font-size: 10px; line-height: 1.35 }
+#screen-pay .mm3-salary-metric strong,
+#screen-payments .mm3-atf-metric strong { display: block; margin-top: 3px; font-weight: 680; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-payment-event-main strong { display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-payment-detail-main strong { display: block; font-size: 12.5px }
+@media (max-width:390px) {
+  #screen-payments .mm3-payment-watch-value strong { font-size: 11.5px }
+}
+#screen-assets .mm3-assets-tooltip strong { display: block; font-size: 11.5px; margin-top: 1px; font-variant-numeric: tabular-nums }
+#screen-assets .mm3-assets-metric strong { display: block; margin-top: 3px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-pay .mm3-salary-scrub-tip strong { display: block; font-size: 11px; margin-top: 1px; font-variant-numeric: tabular-nums }
+#screen-pay .mm3-salary-watch-value strong,
+#screen-payments .mm3-payment-watch-value strong { display: block; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 15px }
+#screen-assets .mm3-assets-watch-main strong { display: block; font-weight: 690; overflow: hidden; text-overflow: ellipsis }
+#screen-assets .mm3-assets-watch-value strong { display: block; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 15px }
+#screen-payments .mm3-payment-watch-main strong { display: block; overflow: hidden; text-overflow: ellipsis; font-size: 15px; white-space: normal; line-height: 1.4 }
+#screen-pay .mm3-salary-watch-main strong { display: block; overflow: hidden; text-overflow: ellipsis; font-size: 15px; white-space: normal; overflow-wrap: anywhere; line-height: 1.4 }
+#screen-pay .mm3-salary-metric strong { font-size: 15px }
+#screen-payments .mm3-atf-tooltip strong { font-variant-numeric: tabular-nums; font-size: 15px }
+#screen-payments .mm3-atf-metric strong,
+#screen-assets .mm3-assets-metric strong { font-size: 15px }
+#screen-assets .mm3-assets-watch-main strong { font-size: 15px; white-space: normal; overflow-wrap: anywhere; line-height: 1.4 }
+#app .day-closing-card strong { font-size: 16px; font-weight: 600 }
+#app .mm3-action-main strong { font-size: 16px; font-weight: 500; line-height: 1.4 }
+#app .money-ticker-meta strong { font-size: 10px; line-height: 1.35 }
+#app .money-ticker-spark-empty { font-size: 9px }
+#app .daily-goal>div:last-child { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 2px 8px }
+#app .goal-plan-action>span:last-child { font-size: 15px; line-height: 1 }
+@media (prefers-contrast:more) {
+  #app .today-goal-hero { box-shadow: inset 0 0 0 1px var(--sep) }
+}
+@media (prefers-reduced-motion:reduce) {
+  .money-ticker-copy.money-ticker-duplicate { display: none }
+  .money-ticker-card { transition: none !important }
+}
+@media (max-width:390px) {
+  .goal-recommend-grid { gap: 6px }
+  .money-ticker-shell { margin-left: -14px; margin-right: -14px }
+  .money-ticker-viewport { padding-left: 14px; padding-right: 14px }
+  .money-ticker-value { font-size: 18px }
+}
+@media (max-width:350px) {
+  #app .daily-goal { grid-template-columns: 96px minmax(0,1fr); gap: 14px }
+  #app .goal-side-value { font-size: 22px }
+  #app .calendar-card { margin-inline: -8px; padding-inline: 0 }
+}
+@media (max-width:340px) {
+  #screen-month .month-name-btn { width: auto; max-width: 100%; overflow: visible; text-overflow: clip; font-size: 32px; line-height: 1.05 }
+  .money-ticker-spark { width: 44px }
+  .money-ticker-value { font-size: 17px }
+}
+@media (max-width:374px) {
+  .calendar-card { margin-inline: -12px }
+  .day-cell { min-width: 44px }
+  .month-name-btn { font-size: 32px }
+  .daily-goal { gap: 12px; grid-template-columns: minmax(112px,45%) minmax(0,1fr) }
+  .today-spend-tap { padding: 14px }
+  .goal-side-value { font-size: 20px }
+}
+@media (max-height:450px) {
+  .month-name-btn { font-size: 24px }
+}

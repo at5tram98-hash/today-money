@@ -11,8 +11,12 @@ test('第11版 C章: semantic colour, spacing and motion tokens live in tokens.c
   const tokens=read('src/css/tokens.css');
   for(const value of ['--accent: #1673F7','--danger: #D93B46','--success: #16865D','--bg: #F6F7FA','--bg: #0A0B0E','--tap-min: 44px','--row-height: 56px','--cta-height: 52px','--motion-push: 220ms','--motion-sheet: 260ms'])assert.ok(tokens.includes(value),value);
   assert.ok(tokens.includes('--blue: var(--accent)')&&tokens.includes('--red: var(--danger)')&&tokens.includes('--green: var(--success)'));
-  assert.equal(manifest.styles.at(-1),'src/css/v11-components.css');
-  assert.ok(!/#[0-9a-f]{3,8}\b(?!;color:#fff)/i.test(read('src/css/v11-components.css').replace(/#fff/g,'')),'shared components use tokens instead of literal colours');
+  assert.equal(manifest.styles[0],'src/css/tokens.css');
+  // 層をなくした構成: ファイルは部品単位で、版や段階の名前を持たない
+  for(const file of manifest.styles)assert.match(file,/^src\/css\/[a-z-]+\.css$/);
+  assert.ok(!manifest.styles.some(file=>/\d|native-ui|workspace|v11/.test(file)));
+  // トークン（カスタムプロパティ）を :root / html.dark に定義するのは tokens.css だけ
+  for(const file of manifest.styles.slice(1))assert.ok(!/^\s*(:root|html(\.dark)?) \{[^}]*[{;] ?--[a-z-]+:/m.test(read(file)),`${file} does not define tokens`);
 });
 
 test('CALC-117/120: no calculator callback writes the ledger without a separate confirmation',()=>{
@@ -47,7 +51,7 @@ test('SALARYEDIT-191/192/193: arrows step one month and the wheel applies only o
 test('GOAL-034: approval needs an 85% release or the confirmed alternative',()=>{
   assert.ok(javascript.includes('if(ratio>=.85){handle.style.transform'));
   assert.ok(javascript.includes('id="goalApprovalConfirm"')&&javascript.includes("if(alt)alt.onclick=confirmApproval"));
-  assert.ok(styles.includes('.approval-slider.returning .approval-handle{transition:transform .17s'));
+  assert.ok(styles.includes('.approval-slider.returning .approval-handle { transition: transform .17s'));
 });
 
 test('BACKUP-208/210: restore passes through the preview and no cancel path deletes data',()=>{

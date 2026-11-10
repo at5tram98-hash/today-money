@@ -1,0 +1,105 @@
+/* グループ化された行、カード、ヒーロー表示、指標。 */
+@media (max-width:390px) {
+  .ring { width: 136px; height: 136px }
+}
+@media (max-width:370px) {
+  .ring { width: 128px; height: 128px }
+}
+.ring { position: relative; display: grid; place-items: center; width: 100%; height: auto; aspect-ratio: 1 }
+.ring circle { fill: none; stroke-width: 13 }
+.ring .track { stroke: var(--fill) }
+.ring .progress.over { stroke: var(--red) }
+.ring-center { position: absolute; text-align: center; width: 80%; min-width: 0 }
+.ring-caption { color: var(--label2); margin-top: 3px; font-size: 11px; line-height: 1.4 }
+.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0 }
+.week-head { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); align-items: start }
+.week-head div { text-align: center; color: var(--label2); padding: 4px 0 6px }
+.bar-wrap { height: 94px; display: flex; align-items: flex-end; justify-content: center }
+.hbars { margin-top: 13px }
+.hbar-row:last-child { border-bottom: 0 }
+.metric-cell+.metric-cell { border-left: .5px solid var(--sep) }
+.summary-hero-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px }
+.summary-hero-head>div:first-child { min-width: 0 }
+.merchant-rule-row { align-items: flex-start }
+.merchant-rule-actions { display: flex; gap: 5px; flex: 0 0 auto }
+.merchant-rule-actions .pill.block.on { background: rgba(255,59,48,.12); color: var(--red) }
+.card-statement-nav { margin-bottom: 12px }
+.card-statement-nav .date-nav-label { font-size: 14px }
+.schedule-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; margin-top: 10px }
+.schedule-cell.muted { opacity: .34 }
+.schedule-cell.close { box-shadow: inset 0 0 0 1.5px var(--orange) }
+.schedule-cell.due { box-shadow: inset 0 0 0 1.5px var(--blue) }
+.shortcut-symbol { width: 24px; height: 24px; display: grid; place-items: center; color: var(--blue); flex: 0 0 auto }
+.shortcut-check { width: 18px; color: var(--blue); display: grid; place-items: center }
+.simple-hero .hero-value { font-size: 38px }
+.spark-line { fill: none; stroke: var(--blue); stroke-width: 1.7; vector-effect: non-scaling-stroke }
+.spark-fill { fill: var(--blue); opacity: .07 }
+.row:has(.row-sub) .row-title { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.25 }
+.row-sub,
+.hero-sub { font-size: 13px; line-height: 1.45; white-space: normal; overflow-wrap: anywhere }
+.hero-kicker { font-size: 13px; line-height: 1.4 }
+.ring-amount { font-size: 25px; letter-spacing: -.5px; white-space: nowrap; max-width: 100% }
+.compare-mini { font-size: 12px; line-height: 1.5; margin-top: 10px }
+.quick-btn { font-size: 14px; min-height: 48px !important; padding: 12px; border-radius: 24px; white-space: normal }
+@media (max-width:370px) {
+  .quick-btn.small { grid-column: 1/-1; min-height: 42px; width: 100% }
+}
+.quick-btn.small { width: 100%; grid-column: auto; font-size: 14px; min-height: 48px !important }
+.goal-amount-meta>div { border-top: .5px solid var(--sep); padding-top: 10px }
+.goal-review-meta>div { border-top: .5px solid var(--sep); padding-top: 9px }
+.planner-compare>div { background: var(--card); border-radius: 11px; padding: 9px; min-width: 0 }
+.planner-summary-grid>div { background: var(--card); border-radius: 11px; padding: 9px }
+.budget-dial-meta div { background: var(--fill); border-radius: 10px; padding: 8px; text-align: center }
+.acf-split-grid>div { background: var(--fill); border-radius: 10px; padding: 8px; min-width: 0 }
+.acf-credit-preview>div { background: var(--fill); border-radius: 10px; padding: 8px }
+.month-hero-meta>div { padding: 9px 10px; background: var(--fill); border-radius: 10px }
+.plan-vs-actual>div { background: var(--fill); border-radius: 10px; padding: 9px }
+.pro3-scenario-metrics div { background: var(--fill); border-radius: 10px; padding: 8px }
+.pro4-goal-metrics>div { background: var(--fill); border-radius: 11px; padding: 9px }
+.acf-home-split>div { border-left: .5px solid var(--sep); padding: 4px 10px; min-width: 0 }
+.mail-detail-lines>div { padding: 12px 0; border-bottom: .5px solid var(--sep) }
+.pro3-recon-summary>div { background: var(--card); border-radius: 12px; padding: 10px; min-width: 0 }
+.week-head div { font-size: 12px; padding-bottom: 8px }
+#app .ring { width: 108px; height: 108px; aspect-ratio: 1 }
+#screen-pay .mm3-salary-pull svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; color: var(--label2) }
+#screen-pay .mm3-salary-donut svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible }
+#screen-pay .mm3-salary-trend svg { width: 100%; height: 135px; display: block; overflow: visible }
+#screen-pay .mm3-salary-spark svg { width: 100%; height: 100%; overflow: visible }
+#screen-payments .mm3-atf-chart svg { display: block; width: 100%; height: 150px; overflow: visible }
+#screen-payments .mm3-payment-event-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+#screen-payments .mm3-payment-spark svg { width: 100%; height: 100%; overflow: visible }
+#screen-assets .mm3-assets-menu-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; color: var(--label2) }
+#screen-assets .mm3-assets-chart svg { width: 100%; height: 168px; display: block; overflow: visible }
+#screen-assets .mm3-assets-spark svg { width: 100%; height: 27px; overflow: visible }
+#app .ring svg { width: 108px; height: 108px; aspect-ratio: 1 }
+#app .ring circle { stroke-width: 11 }
+#app .ring-center { width: 83% }
+#app .ring-amount { font-size: 24px; font-weight: 700; letter-spacing: -.5px }
+#app .ring-caption { font-size: 10px; line-height: 1.4; margin-top: 3px }
+#app .compare-mini { font-size: 11px; line-height: 1.5; margin-top: 6px; padding-top: 6px; grid-column: 1/-1 }
+#app .quick-grid { gap: 8px; margin: 0 0 12px }
+#app .quick-btn { border-radius: var(--native-control); min-height: 44px !important; justify-content: center; background: var(--native-secondary); color: var(--blue); padding: 10px 12px; box-shadow: none; font-size: 15px; font-weight: 600 }
+#app .quick-btn.small { font-size: 15px }
+#app .quick-btn svg { width: 19px; height: 19px }
+#app .row-title { font-size: var(--type-item); font-weight: 500; line-height: 1.4 }
+#app .row-sub { font-size: var(--type-note); line-height: 1.45; margin-top: 3px }
+#app .chev>.money-symbol { width: 13px; height: 13px }
+.row.press:active { background: var(--fill) }
+@media (prefers-contrast:more) {
+  .hero { border-color: currentColor; box-shadow: inset 0 0 0 1px var(--sep) }
+}
+#app .calendar-card { border-radius: var(--native-radius); padding: 12px 2px; box-shadow: none }
+@media (prefers-contrast:more) {
+  #app .group { box-shadow: inset 0 0 0 1px var(--sep) }
+}
+@media (max-width:370px) {
+  .quick-grid { grid-template-columns: 1fr 1fr }
+}
+@media (max-width:350px) {
+  #app .ring,
+  #app .ring svg { width: 96px; height: 96px }
+  #app .ring-amount { font-size: 22px }
+}
+@media (max-width:374px) {
+  .ring-amount { font-size: 23px }
+}

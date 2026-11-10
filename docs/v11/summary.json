@@ -1,9 +1,16 @@
 {
+  "crawl": {
+    "reached": 216,
+    "configs": [
+      "320-dark",
+      "393-light"
+    ]
+  },
   "operations": {
     "total": 304,
     "source_matched": 304,
     "unmatched": 0,
-    "changed_or_verified_in_v11": 14,
+    "changed_or_verified_in_v11": 18,
     "priority": {
       "P1": 141,
       "P2": 79,

@@ -1,0 +1,2130 @@
+[
+{
+"id": "HOME-001",
+"dom": "todaySearch",
+"kind": "検索",
+"priority": "P1",
+"label": "検索アイコン"
+},
+{
+"id": "HOME-002",
+"dom": "todayNotice",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "通知アイコン"
+},
+{
+"id": "HOME-003",
+"dom": "todayMenu",
+"kind": "メニュー",
+"priority": "P1",
+"label": "その他メニュー"
+},
+{
+"id": "HOME-004",
+"dom": "quickExpense",
+"kind": "主導線",
+"priority": "P2",
+"label": "クイック支出入力"
+},
+{
+"id": "HOME-005",
+"dom": "quickBank",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "クイック銀行口座入力"
+},
+{
+"id": "HOME-006",
+"dom": "quickIncome",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "クイック臨時収入入力"
+},
+{
+"id": "HOME-007",
+"dom": "todayRepeat",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "最近の支出を再利用"
+},
+{
+"id": "HOME-008",
+"dom": "todayOneLine",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "一行入力"
+},
+{
+"id": "HOME-009",
+"dom": "todayCrossSearch",
+"kind": "検索",
+"priority": "P1",
+"label": "横断検索"
+},
+{
+"id": "HOME-010",
+"dom": "todayAnalysis",
+"kind": "分析画面への行入口",
+"priority": "P1",
+"label": "詳細分析"
+},
+{
+"id": "HOME-011",
+"dom": "todayTransactions",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "実績済支払い取引一覧"
+},
+{
+"id": "HOME-012",
+"dom": "todayMail",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "メール取引"
+},
+{
+"id": "GOAL-013",
+"dom": "goalStart",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "目標設定開始"
+},
+{
+"id": "GOAL-014",
+"dom": "goalCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "今はしない"
+},
+{
+"id": "GOAL-015",
+"dom": "goalNext",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "次へ・安全確認へ"
+},
+{
+"id": "GOAL-016",
+"dom": "goalBack",
+"kind": "戻る",
+"priority": "P2",
+"label": "戻る"
+},
+{
+"id": "GOAL-017",
+"dom": "goalAmountEdit",
+"kind": "金額入力",
+"priority": "P0",
+"label": "計画金額"
+},
+{
+"id": "GOAL-018",
+"dom": "goalResetAmount",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "おすすめ額に戻す"
+},
+{
+"id": "GOAL-019",
+"dom": "goalResetCategories",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "おすすめ配分に戻す"
+},
+{
+"id": "GOAL-020",
+"dom": "goalAutoBalance",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "自動調整"
+},
+{
+"id": "GOAL-021",
+"dom": "goalSafeAuto",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "ACFに合わせて最適化"
+},
+{
+"id": "GOAL-022",
+"dom": "safeCancel",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる（安全予算）"
+},
+{
+"id": "GOAL-023",
+"dom": "safeApply",
+"kind": "確定",
+"priority": "P0",
+"label": "この配分を使う"
+},
+{
+"id": "GOAL-024",
+"dom": "gdpCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "閉じる（日別計画）"
+},
+{
+"id": "GOAL-025",
+"dom": "gdpApply",
+"kind": "確定",
+"priority": "P0",
+"label": "適用（日別計画）"
+},
+{
+"id": "GOAL-026",
+"dom": "gdpMinus",
+"kind": "増減",
+"priority": "P2",
+"label": "−"
+},
+{
+"id": "GOAL-027",
+"dom": "gdpPlus",
+"kind": "増減",
+"priority": "P2",
+"label": "＋"
+},
+{
+"id": "GOAL-028",
+"dom": "gdpCalc",
+"kind": "金額入力",
+"priority": "P2",
+"label": "電卓で入力"
+},
+{
+"id": "GOAL-029",
+"dom": "gdpMode",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "月間総額を維持・増減"
+},
+{
+"id": "GOAL-030",
+"dom": "gdpLock",
+"kind": "切替・選択",
+"priority": "P0",
+"label": "日別金額の固定"
+},
+{
+"id": "GOAL-031",
+"dom": "goalSeeCalendar",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "月カレンダーで日別計画を見る"
+},
+{
+"id": "GOAL-032",
+"dom": "goalDone",
+"kind": "閉じる",
+"priority": "P2",
+"label": "完了"
+},
+{
+"id": "GOAL-033",
+"dom": "goalErrorBack",
+"kind": "戻る",
+"priority": "P2",
+"label": "確認画面へ戻る"
+},
+{
+"id": "GOAL-034",
+"dom": "goalApproval",
+"kind": "最終承認スライド",
+"priority": "P0",
+"label": "最終承認スライド"
+},
+{
+"id": "TX-035",
+"dom": "txSearch",
+"kind": "検索",
+"priority": "P1",
+"label": "取引検索"
+},
+{
+"id": "TX-036",
+"dom": "txCatFilter",
+"kind": "検索",
+"priority": "P1",
+"label": "カテゴリ絞り込み"
+},
+{
+"id": "TX-037",
+"dom": "teCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（取引編集）"
+},
+{
+"id": "TX-038",
+"dom": "teSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（取引編集）"
+},
+{
+"id": "TX-039",
+"dom": "txEdit",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "取引を編集"
+},
+{
+"id": "TX-040",
+"dom": "txDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "この取引を削除"
+},
+{
+"id": "MONTH-041",
+"dom": "monthName",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "表示月"
+},
+{
+"id": "MONTH-042",
+"dom": "monthSearch",
+"kind": "検索",
+"priority": "P1",
+"label": "検索アイコン"
+},
+{
+"id": "MONTH-043",
+"dom": "monthMenu",
+"kind": "メニュー",
+"priority": "P1",
+"label": "その他メニュー"
+},
+{
+"id": "MONTH-044",
+"dom": "monthHero",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "今月使った金額"
+},
+{
+"id": "MONTH-045",
+"dom": "monthPlanEdit",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "月間計画を編集"
+},
+{
+"id": "MONTH-046",
+"dom": "monthAnalysis",
+"kind": "分析画面への行入口",
+"priority": "P1",
+"label": "詳細分析"
+},
+{
+"id": "MONTH-047",
+"dom": "monthReasonAnalysis",
+"kind": "分析画面への行入口",
+"priority": "P1",
+"label": "理由が分かる分析"
+},
+{
+"id": "MONTH-048",
+"dom": "monthCloseReview",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "月締めレビュー"
+},
+{
+"id": "MONTH-049",
+"dom": "monthTransactions",
+"kind": "検索",
+"priority": "P1",
+"label": "今月の取引一覧"
+},
+{
+"id": "MONTH-050",
+"dom": "monthMail",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "メール取引"
+},
+{
+"id": "MONTH-051",
+"dom": "monthTrend",
+"kind": "分析へ移動",
+"priority": "P1",
+"label": "月次比較・トレンド分析"
+},
+{
+"id": "MONTH-052",
+"dom": "dayGoalDetail",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "当日の目標"
+},
+{
+"id": "MONTH-053",
+"dom": "inspectExpense",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "支出を追加"
+},
+{
+"id": "MONTH-054",
+"dom": "inspectPlan",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "計画を変更"
+},
+{
+"id": "MONTH-055",
+"dom": "inspectWhatIf",
+"kind": "分析へ移動",
+"priority": "P1",
+"label": "もし使ったら？"
+},
+{
+"id": "MONTH-056",
+"dom": "inspectLarge",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "大型支出を追加"
+},
+{
+"id": "MONTH-057",
+"dom": "dpClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "MONTH-058",
+"dom": "dpChange",
+"kind": "金額入力",
+"priority": "P0",
+"label": "金額を変更"
+},
+{
+"id": "MONTH-059",
+"dom": "dpReset",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "月間おすすめに戻す"
+},
+{
+"id": "MONTH-060",
+"dom": "dpFix",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "当日目標として固定"
+},
+{
+"id": "MONTH-061",
+"dom": "dqmClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "MONTH-062",
+"dom": "dqmExpense",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "支出を追加"
+},
+{
+"id": "MONTH-063",
+"dom": "dqmIncome",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "臨時収入を追加"
+},
+{
+"id": "MONTH-064",
+"dom": "dqmPlan",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "日別計画を調整"
+},
+{
+"id": "MONTH-065",
+"dom": "mpClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "LARGE-066",
+"dom": "msClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる（計画一覧）"
+},
+{
+"id": "LARGE-067",
+"dom": "msGoal",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "月間目標"
+},
+{
+"id": "LARGE-068",
+"dom": "msResetPlan",
+"kind": "危険操作",
+"priority": "P0",
+"label": "月間計画をリセット"
+},
+{
+"id": "LARGE-069",
+"dom": "largePlanAdd",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "計画を追加"
+},
+{
+"id": "LARGE-070",
+"dom": "leCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "LARGE-071",
+"dom": "leSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "LARGE-072",
+"dom": "leSplitToggle",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "分割先"
+},
+{
+"id": "LARGE-073",
+"dom": "leSplitAdd",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "分割先を追加"
+},
+{
+"id": "LARGE-074",
+"dom": "leEditDetail",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "編集"
+},
+{
+"id": "LARGE-075",
+"dom": "leComplete",
+"kind": "確定",
+"priority": "P0",
+"label": "実際の支出として登録して完了"
+},
+{
+"id": "LARGE-076",
+"dom": "leDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "削除"
+},
+{
+"id": "LARGE-077",
+"dom": "goalLargeAdd",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "大型支出を追加（計画）"
+},
+{
+"id": "LARGE-078",
+"dom": "goalBackToCalendar",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "日別計画を調整"
+},
+{
+"id": "PAY-079",
+"dom": "salaryAddNav",
+"kind": "メニュー",
+"priority": "P1",
+"label": "追加アイコン"
+},
+{
+"id": "PAY-080",
+"dom": "salaryMenu",
+"kind": "メニュー",
+"priority": "P1",
+"label": "その他メニュー"
+},
+{
+"id": "PAY-081",
+"dom": "mm3SalaryMonth",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "表示月"
+},
+{
+"id": "PAY-082",
+"dom": "mm3SalaryVizMenu",
+"kind": "グラフ表示メニュー入口",
+"priority": "P1",
+"label": "分析グラフの表示切替"
+},
+{
+"id": "PAY-083",
+"dom": "mm3SalaryEmployerManage",
+"kind": "分析画面への行入口",
+"priority": "P1",
+"label": "分析"
+},
+{
+"id": "PAY-084",
+"dom": "salaryAddClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "PAY-085",
+"dom": "salaryAddRecord",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "給与記録を追加"
+},
+{
+"id": "PAY-086",
+"dom": "salaryAddTemp",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "臨時収入を追加"
+},
+{
+"id": "PAY-087",
+"dom": "salaryAddEmployer",
+"kind": "リスト／設定行",
+"priority": "P2",
+"label": "勤務先を追加"
+},
+{
+"id": "PAYMENTS-088",
+"dom": "paymentsMenu",
+"kind": "メニュー",
+"priority": "P1",
+"label": "その他メニュー"
+},
+{
+"id": "PAYMENTS-089",
+"dom": "mm3PaymentMonth",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "表示月"
+},
+{
+"id": "PAYMENTS-090",
+"dom": "mm3AtfOpen",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "ATFを開く"
+},
+{
+"id": "PAYMENTS-091",
+"dom": "mm3PaymentHistoryTop",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "予定一覧"
+},
+{
+"id": "PAYMENTS-092",
+"dom": "mm3PaymentQuickBilling",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "請求額を更新"
+},
+{
+"id": "PAYMENTS-093",
+"dom": "mm3AtfNextEvent",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "次の重要な資金イベントを見る"
+},
+{
+"id": "PAYMENTS-094",
+"dom": "atfApply",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "この条件で再計算"
+},
+{
+"id": "PAYMENTS-095",
+"dom": "mm3AtfClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "PAYMENTS-096",
+"dom": "paymentsAddClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "PAYMENTS-097",
+"dom": "paymentAddCard",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "クレジットカードを追加"
+},
+{
+"id": "PAYMENTS-098",
+"dom": "paymentAddDebit",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "デビットカードを追加"
+},
+{
+"id": "PAYMENTS-099",
+"dom": "paymentAddFixed",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "固定支払いを追加"
+},
+{
+"id": "PAYMENTS-100",
+"dom": "paymentAddLarge",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "大型支出を追加"
+},
+{
+"id": "ASSETS-101",
+"dom": "assetMenuSimple",
+"kind": "メニュー",
+"priority": "P1",
+"label": "その他メニュー"
+},
+{
+"id": "ASSETS-102",
+"dom": "mm3AssetMode",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "グラフ表示モード"
+},
+{
+"id": "ASSETS-103",
+"dom": "mm3AssetSort",
+"kind": "並び替え",
+"priority": "P1",
+"label": "並び替え"
+},
+{
+"id": "ASSETS-104",
+"dom": "mm3AssetHistoryTop",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "残高履歴"
+},
+{
+"id": "SET-105",
+"dom": "profileSettings",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "名前とプロフィール写真"
+},
+{
+"id": "SET-106",
+"dom": "prCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "SET-107",
+"dom": "prSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "SET-108",
+"dom": "prChooseImage",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "写真を変更"
+},
+{
+"id": "SET-109",
+"dom": "prClear",
+"kind": "危険操作",
+"priority": "P0",
+"label": "写真を削除"
+},
+{
+"id": "SET-110",
+"dom": "catAdd",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "新しいカテゴリを追加"
+},
+{
+"id": "SET-111",
+"dom": "fbVolume",
+"kind": "効果音音量スライダー",
+"priority": "P2",
+"label": "音量"
+},
+{
+"id": "SET-112",
+"dom": "notiLevel",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "通知レベル"
+},
+{
+"id": "SET-113",
+"dom": "passSwitch",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "パスコードの有効化"
+},
+{
+"id": "SET-114",
+"dom": "changePass",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "パスコードを変更"
+},
+{
+"id": "SET-115",
+"dom": "psCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "CALC-116",
+"dom": "calcCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "CALC-117",
+"dom": "calcDone",
+"kind": "電卓の値適用ボタン",
+"priority": "P0",
+"label": "この金額を使う"
+},
+{
+"id": "CALC-118",
+"dom": "calcTools",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "補助計算表示"
+},
+{
+"id": "CALC-119",
+"dom": "calcToolCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "戻る"
+},
+{
+"id": "CALC-120",
+"dom": "calcToolApply",
+"kind": "補助計算結果の適用ボタン",
+"priority": "P0",
+"label": "計算結果を使う"
+},
+{
+"id": "CALC-121",
+"dom": "[data-calc-tool=discount]",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "割引"
+},
+{
+"id": "CALC-122",
+"dom": "[data-calc-tool=add]",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "割合を加算"
+},
+{
+"id": "CALC-123",
+"dom": "[data-calc-tool=split]",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "割り勘"
+},
+{
+"id": "CALC-124",
+"dom": "[data-k]",
+"kind": "計算機キー群",
+"priority": "P0",
+"label": "数字・演算キー"
+},
+{
+"id": "PICKER-125",
+"dom": "monthPickerCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "PICKER-126",
+"dom": "monthPickerToday",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "今月"
+},
+{
+"id": "PICKER-127",
+"dom": "month-${key}-${v}",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "月ホイールの選択肢"
+},
+{
+"id": "PICKER-128",
+"dom": "monthPickerApply",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "この月を表示"
+},
+{
+"id": "DAYCLOSE-129",
+"dom": "dayCloseJournal",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "日締めジャーナル"
+},
+{
+"id": "DAYCLOSE-130",
+"dom": "dayCloseDone",
+"kind": "閉じる",
+"priority": "P2",
+"label": "完了"
+},
+{
+"id": "DAYCLOSE-131",
+"dom": "dayCloseCancel",
+"kind": "承認解除フローへの入口",
+"priority": "P0",
+"label": "日締めの承認を取り消す"
+},
+{
+"id": "DAYCLOSE-132",
+"dom": "dayCloseModify",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "日締め内容の修正"
+},
+{
+"id": "DAYCLOSE-133",
+"dom": "dayCloseAddIncome",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "収入を追加"
+},
+{
+"id": "DAYCLOSE-134",
+"dom": "dayReviewAdd",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "支出を追加"
+},
+{
+"id": "DAYCLOSE-135",
+"dom": "dayReviewCorrection",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "実質金額を確認"
+},
+{
+"id": "DAYCLOSE-136",
+"dom": "dayReviewMail",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "メール取引センター"
+},
+{
+"id": "DAYCLOSE-137",
+"dom": "dayCloseAddBank",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "銀行口座を追加"
+},
+{
+"id": "DAYCLOSE-138",
+"dom": "dayCloseMissing",
+"kind": "戻る",
+"priority": "P2",
+"label": "未確認の項目に戻る"
+},
+{
+"id": "DAYCLOSE-139",
+"dom": "dayCloseBack",
+"kind": "戻る",
+"priority": "P2",
+"label": "戻る"
+},
+{
+"id": "DAYCLOSE-140",
+"dom": "dayCloseNext",
+"kind": "リスト／設定行",
+"priority": "P2",
+"label": "次へ"
+},
+{
+"id": "DAYCLOSE-141",
+"dom": "dayReviewConfirmed",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "照合確認チェック"
+},
+{
+"id": "DAYCLOSE-142",
+"dom": "dayReviewClose",
+"kind": "確定",
+"priority": "P0",
+"label": "日締めを承認"
+},
+{
+"id": "DAYCLOSE-143",
+"dom": "dayCancelJournal",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "日締めジャーナル"
+},
+{
+"id": "DAYCLOSE-144",
+"dom": "dayCancelBack",
+"kind": "戻る",
+"priority": "P2",
+"label": "戻る"
+},
+{
+"id": "DAYCLOSE-145",
+"dom": "dayCancelNext",
+"kind": "リスト／設定行",
+"priority": "P2",
+"label": "次へ"
+},
+{
+"id": "DAYCLOSE-146",
+"dom": "journalReview",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "この日を確認し直す"
+},
+{
+"id": "BANK-147",
+"dom": "qbCancel",
+"kind": "取消",
+"priority": "P0",
+"label": "キャンセル（口座残高）"
+},
+{
+"id": "BANK-148",
+"dom": "qbSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（口座残高）"
+},
+{
+"id": "BANK-149",
+"dom": "tiCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（臨時収入）"
+},
+{
+"id": "BANK-150",
+"dom": "tiSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（臨時収入）"
+},
+{
+"id": "BANK-151",
+"dom": "abCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（銀行口座）"
+},
+{
+"id": "BANK-152",
+"dom": "abSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（銀行口座）"
+},
+{
+"id": "BANK-153",
+"dom": "abDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "この口座を削除"
+},
+{
+"id": "BANK-154",
+"dom": "acCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（カード）"
+},
+{
+"id": "BANK-155",
+"dom": "acSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（カード）"
+},
+{
+"id": "BANK-156",
+"dom": "acDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "このカードを削除"
+},
+{
+"id": "BANK-157",
+"dom": "adCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（デビット）"
+},
+{
+"id": "BANK-158",
+"dom": "adSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（デビット）"
+},
+{
+"id": "BANK-159",
+"dom": "adDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "このデビットカードを削除"
+},
+{
+"id": "BANK-160",
+"dom": "ecCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（勤務先新規）"
+},
+{
+"id": "BANK-161",
+"dom": "ecSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（勤務先新規）"
+},
+{
+"id": "BANK-162",
+"dom": "ecCloseRow",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "締め日"
+},
+{
+"id": "BANK-163",
+"dom": "ecPayRow",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "給料日"
+},
+{
+"id": "BANK-164",
+"dom": "saCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（給与追加）"
+},
+{
+"id": "BANK-165",
+"dom": "saSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（給与追加）"
+},
+{
+"id": "BANK-166",
+"dom": "saNewEmployer",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "新しい勤務先を追加"
+},
+{
+"id": "BANK-167",
+"dom": "fpCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（固定支払）"
+},
+{
+"id": "BANK-168",
+"dom": "fpSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（固定支払）"
+},
+{
+"id": "BANK-169",
+"dom": "fpDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "この固定支払いを削除"
+},
+{
+"id": "BANK-170",
+"dom": "dcClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる（日別補正）"
+},
+{
+"id": "BANK-171",
+"dom": "dcEdit",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "実質金額を修正"
+},
+{
+"id": "BANK-172",
+"dom": "dcReset",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "自動集計に戻す"
+},
+{
+"id": "SALARYEDIT-173",
+"dom": "eeCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（雇用主）"
+},
+{
+"id": "SALARYEDIT-174",
+"dom": "eeSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（雇用主）"
+},
+{
+"id": "SALARYEDIT-175",
+"dom": "eeCloseRow",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "締め日"
+},
+{
+"id": "SALARYEDIT-176",
+"dom": "eePayRow",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "給料日"
+},
+{
+"id": "SALARYEDIT-177",
+"dom": "srCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（給与記録）"
+},
+{
+"id": "SALARYEDIT-178",
+"dom": "srSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（給与記録）"
+},
+{
+"id": "SALARYEDIT-179",
+"dom": "srDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "この給与記録を削除"
+},
+{
+"id": "SALARYEDIT-180",
+"dom": "tempConfirm",
+"kind": "確定",
+"priority": "P0",
+"label": "臨時収入の入金を確定"
+},
+{
+"id": "SALARYEDIT-181",
+"dom": "tempDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "削除（臨時収入）"
+},
+{
+"id": "SALARYEDIT-182",
+"dom": "tempEditNav",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "編集（臨時収入）"
+},
+{
+"id": "SALARYEDIT-183",
+"dom": "prepTransfer",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "振替計画を作成"
+},
+{
+"id": "SALARYEDIT-184",
+"dom": "prepTimeline",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "この口座の60日推移"
+},
+{
+"id": "SALARYEDIT-185",
+"dom": "proBankUpdate",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "残高を更新"
+},
+{
+"id": "SALARYEDIT-186",
+"dom": "proBankPrep",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "引落準備"
+},
+{
+"id": "SALARYEDIT-187",
+"dom": "proBankHistory",
+"kind": "残高履歴への行入口",
+"priority": "P1",
+"label": "履歴"
+},
+{
+"id": "SALARYEDIT-188",
+"dom": "bankEditNav",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "編集（銀行口座）"
+},
+{
+"id": "SALARYEDIT-189",
+"dom": "qcbCancel",
+"kind": "取消",
+"priority": "P0",
+"label": "キャンセル（請求）"
+},
+{
+"id": "SALARYEDIT-190",
+"dom": "qcbSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（請求）"
+},
+{
+"id": "SALARYEDIT-191",
+"dom": "cardPrevPay",
+"kind": "前月送り矢印",
+"priority": "P1",
+"label": "前の支払月"
+},
+{
+"id": "SALARYEDIT-192",
+"dom": "cardNextPay",
+"kind": "次月送り矢印",
+"priority": "P1",
+"label": "次の支払月"
+},
+{
+"id": "SALARYEDIT-193",
+"dom": "cardBillingMonth",
+"kind": "支払月ピッカー",
+"priority": "P1",
+"label": "支払月を選ぶ"
+},
+{
+"id": "SALARYEDIT-194",
+"dom": "cardBillingFix",
+"kind": "補助アクション",
+"priority": "P0",
+"label": "選択請求を更新"
+},
+{
+"id": "SALARYEDIT-195",
+"dom": "cardPaidToggle",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "入金・支払状態を切替"
+},
+{
+"id": "SALARYEDIT-196",
+"dom": "cardReconcile",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "選択請求を照合"
+},
+{
+"id": "SALARYEDIT-197",
+"dom": "cbmClose",
+"kind": "閉じる",
+"priority": "P0",
+"label": "閉じる（請求月）"
+},
+{
+"id": "SALARYEDIT-198",
+"dom": "cpClose",
+"kind": "取消",
+"priority": "P0",
+"label": "キャンセル（残高反映）"
+},
+{
+"id": "SALARYEDIT-199",
+"dom": "cpApply",
+"kind": "残高反映オプション",
+"priority": "P0",
+"label": "口座残高にも反映する"
+},
+{
+"id": "SALARYEDIT-200",
+"dom": "cpReconciled",
+"kind": "残高反映済み状態の確認",
+"priority": "P0",
+"label": "現在残高に反映済み"
+},
+{
+"id": "SALARYEDIT-201",
+"dom": "cardEditNav",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "編集（カード）"
+},
+{
+"id": "SALARYEDIT-202",
+"dom": "debitEditNav",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "編集（デビット）"
+},
+{
+"id": "BACKUP-203",
+"dom": "ceCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（カテゴリ）"
+},
+{
+"id": "BACKUP-204",
+"dom": "ceSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（カテゴリ）"
+},
+{
+"id": "BACKUP-205",
+"dom": "ceDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "カテゴリを削除"
+},
+{
+"id": "BACKUP-206",
+"dom": "pdfExport",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "PDFで書き出す"
+},
+{
+"id": "BACKUP-207",
+"dom": "backupExport",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "バックアップ作成"
+},
+{
+"id": "BACKUP-208",
+"dom": "backupImport",
+"kind": "バックアップ復元フローの入口",
+"priority": "P0",
+"label": "バックアップを復元"
+},
+{
+"id": "BACKUP-209",
+"dom": "recoveryExport",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "復旧用データを書き出す"
+},
+{
+"id": "BACKUP-210",
+"dom": "deleteAll",
+"kind": "危険操作",
+"priority": "P0",
+"label": "全データ削除"
+},
+{
+"id": "STATEMENT-211",
+"dom": "stmtImportNew",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "明細を取り込む"
+},
+{
+"id": "STATEMENT-212",
+"dom": "stmtClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる（明細）"
+},
+{
+"id": "STATEMENT-213",
+"dom": "stmtOpenExisting",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "取り込み済みの明細を見る"
+},
+{
+"id": "STATEMENT-214",
+"dom": "stmtStartReview",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "分類を確認する"
+},
+{
+"id": "STATEMENT-215",
+"dom": "stmtConfirmedRows",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "明細を見る"
+},
+{
+"id": "STATEMENT-216",
+"dom": "stmtUnlock",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "確定を解除して編集"
+},
+{
+"id": "STATEMENT-217",
+"dom": "stmtReviewSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存可能件を取引へ保存"
+},
+{
+"id": "STATEMENT-218",
+"dom": "stmtReviewFinal",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "請求金額を最終確認"
+},
+{
+"id": "STATEMENT-219",
+"dom": "stmtRowClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる（明細行）"
+},
+{
+"id": "STATEMENT-220",
+"dom": "stmtRowSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（明細行）"
+},
+{
+"id": "STATEMENT-221",
+"dom": "stmtRowExclude",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "除外切替"
+},
+{
+"id": "STATEMENT-222",
+"dom": "stmtFinalize",
+"kind": "確定",
+"priority": "P0",
+"label": "請求金額を最終確定"
+},
+{
+"id": "STATEMENT-223",
+"dom": "stmtBackReview",
+"kind": "戻る",
+"priority": "P2",
+"label": "明細へ戻る"
+},
+{
+"id": "STATEMENT-224",
+"dom": "mailSyncOverview",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "メール同期状況"
+},
+{
+"id": "STATEMENT-225",
+"dom": "mailHistoryOverview",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "すべてのメール取引を見る"
+},
+{
+"id": "STATEMENT-226",
+"dom": "mailPreviewLater",
+"kind": "閉じる",
+"priority": "P2",
+"label": "あとで"
+},
+{
+"id": "STATEMENT-227",
+"dom": "mailPreviewReview",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "センターを開く"
+},
+{
+"id": "STATEMENT-228",
+"dom": "mailEditLink",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "既存取引に紐づける"
+},
+{
+"id": "STATEMENT-229",
+"dom": "mailEditApply",
+"kind": "確定",
+"priority": "P0",
+"label": "取引に反映"
+},
+{
+"id": "STATEMENT-230",
+"dom": "mailEditIgnore",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "このメールを対象外にする"
+},
+{
+"id": "STATEMENT-231",
+"dom": "mm3MailHistoryTx",
+"kind": "台帳詳細への行入口",
+"priority": "P0",
+"label": "反映済みの家計取引を見る"
+},
+{
+"id": "EVENT-232",
+"dom": "eventGoalAdd",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "旅行・プレゼント目標を追加"
+},
+{
+"id": "EVENT-233",
+"dom": "goalItemCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（費目）"
+},
+{
+"id": "EVENT-234",
+"dom": "goalItemSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（費目）"
+},
+{
+"id": "EVENT-235",
+"dom": "eventGoalCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（目標）"
+},
+{
+"id": "EVENT-236",
+"dom": "eventGoalSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（目標）"
+},
+{
+"id": "EVENT-237",
+"dom": "eventGoalAddItem",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "費目を追加"
+},
+{
+"id": "EVENT-238",
+"dom": "reimbCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル（回収）"
+},
+{
+"id": "EVENT-239",
+"dom": "reimbSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存（回収）"
+},
+{
+"id": "EVENT-240",
+"dom": "eventGoalEdit",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "編集"
+},
+{
+"id": "EVENT-241",
+"dom": "eventGoalReimburse",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "割り勘の受取を確認"
+},
+{
+"id": "EVENT-242",
+"dom": "eventGoalDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "目標を削除"
+},
+{
+"id": "EVENT-243",
+"dom": "monthReviewConfirm",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "確認完了"
+},
+{
+"id": "EVENT-244",
+"dom": "pro4Parse",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "内容を読み取る"
+},
+{
+"id": "EVENT-245",
+"dom": "pro4SaveAll",
+"kind": "確定",
+"priority": "P0",
+"label": "確認した件を保存"
+},
+{
+"id": "EVENT-246",
+"dom": "pro4NormalForm",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "通常の入力画面で確認する"
+},
+{
+"id": "EVENT-247",
+"dom": "pro4SaveSearch",
+"kind": "確定",
+"priority": "P0",
+"label": "検索条件を保存"
+},
+{
+"id": "ACF-248",
+"dom": "acfSetupCancel",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "ACF-249",
+"dom": "acfSetupUseCard",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "カード利用を有効化"
+},
+{
+"id": "ACF-250",
+"dom": "acfSetupStart",
+"kind": "確定",
+"priority": "P0",
+"label": "設定して開始"
+},
+{
+"id": "ACF-251",
+"dom": "[data-view=table]",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "表"
+},
+{
+"id": "ACF-252",
+"dom": "[data-view=calendar]",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "カレンダー"
+},
+{
+"id": "ACF-253",
+"dom": "[data-v=all]",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "すべての日"
+},
+{
+"id": "ACF-254",
+"dom": "[data-v=important]",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "重要日のみ"
+},
+{
+"id": "ACF-255",
+"dom": "acfProtected",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "確保しておく金額"
+},
+{
+"id": "ACF-256",
+"dom": "acfSimulator",
+"kind": "分析へ移動",
+"priority": "P1",
+"label": "購入前シミュレーション"
+},
+{
+"id": "ACF-257",
+"dom": "acfApplyGoal",
+"kind": "確定",
+"priority": "P0",
+"label": "ACFの安全予算を日別計画へ反映"
+},
+{
+"id": "ACF-258",
+"dom": "acfOpenSettings",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "ACF設定"
+},
+{
+"id": "ACF-259",
+"dom": "acfReserve",
+"kind": "最低確保額入力",
+"priority": "P1",
+"label": "最低確保額"
+},
+{
+"id": "ACF-260",
+"dom": "acfFallback",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "カード併用"
+},
+{
+"id": "ACF-261",
+"dom": "acfDetailsToggle",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "詳細設定"
+},
+{
+"id": "ACF-262",
+"dom": "acfDailyLimit",
+"kind": "カード1日上限入力",
+"priority": "P1",
+"label": "カード1日上限"
+},
+{
+"id": "ACF-263",
+"dom": "acfCreditPlaces",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "カードを使っていい場所"
+},
+{
+"id": "ACF-264",
+"dom": "acfWeights",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "重み付け"
+},
+{
+"id": "ACF-265",
+"dom": "acfRequired",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "必須利用"
+},
+{
+"id": "ACF-266",
+"dom": "acfRiskNoti",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "リスク通知"
+},
+{
+"id": "ACF-267",
+"dom": "acfSettingsSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "ACF-268",
+"dom": "acfToday",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "ACF（今日）"
+},
+{
+"id": "ACF-269",
+"dom": "acfMonth",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "ACF（今月）"
+},
+{
+"id": "SIM-270",
+"dom": "monthIncomeOpen",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "給与・臨時収入の詳細を見る"
+},
+{
+"id": "SIM-271",
+"dom": "simCancel",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "SIM-272",
+"dom": "simRun",
+"kind": "再計算ボタン",
+"priority": "P2",
+"label": "再計算"
+},
+{
+"id": "SIM-273",
+"dom": "creditAllCategories",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "全カテゴリ"
+},
+{
+"id": "PRO-274",
+"dom": "tagAdd",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "新しいタグ"
+},
+{
+"id": "PRO-275",
+"dom": "tagCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "PRO-276",
+"dom": "tagSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "PRO-277",
+"dom": "tagDelete",
+"kind": "危険操作",
+"priority": "P0",
+"label": "このタグを削除"
+},
+{
+"id": "PRO-278",
+"dom": "tagAssign",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "項目を追加・編集"
+},
+{
+"id": "PRO-279",
+"dom": "tagRename",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "タグ名・色を編集"
+},
+{
+"id": "PRO-280",
+"dom": "taClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "完了"
+},
+{
+"id": "PRO-281",
+"dom": "timelineTransfer",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "この口座の引落準備・振替計画"
+},
+{
+"id": "PRO-282",
+"dom": "allocPickClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "PRO-283",
+"dom": "allocCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "PRO-284",
+"dom": "allocSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "PRO-285",
+"dom": "allocLivingRest",
+"kind": "給与振分下書きの補助配分",
+"priority": "P0",
+"label": "残りを生活費へ入れる"
+},
+{
+"id": "PRO-286",
+"dom": "allocRelease",
+"kind": "危険操作",
+"priority": "P0",
+"label": "この振り分けを解除"
+},
+{
+"id": "PRO-287",
+"dom": "transferCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "PRO-288",
+"dom": "transferSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "PRO-289",
+"dom": "transferAdd",
+"kind": "画面へ移動",
+"priority": "P1",
+"label": "新しい振替計画"
+},
+{
+"id": "PRO-290",
+"dom": "reconAmount",
+"kind": "画面へ移動",
+"priority": "P0",
+"label": "請求額を更新"
+},
+{
+"id": "PRO-291",
+"dom": "reconSave",
+"kind": "確定",
+"priority": "P0",
+"label": "照合状態を保存"
+},
+{
+"id": "PRO-292",
+"dom": "rebalanceApply",
+"kind": "確定",
+"priority": "P0",
+"label": "この内容を適用"
+},
+{
+"id": "GMAIL-293",
+"dom": "gsCancel",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "GMAIL-294",
+"dom": "gsSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "GMAIL-295",
+"dom": "gsAuto",
+"kind": "切替・選択",
+"priority": "P1",
+"label": "自動同期"
+},
+{
+"id": "GMAIL-296",
+"dom": "gsSync",
+"kind": "補助アクション",
+"priority": "P2",
+"label": "今すぐ同期"
+},
+{
+"id": "GMAIL-297",
+"dom": "gsDisconnect",
+"kind": "危険操作",
+"priority": "P0",
+"label": "Gmail接続を解除"
+},
+{
+"id": "GMAIL-298",
+"dom": "gsConnect",
+"kind": "補助アクション",
+"priority": "P0",
+"label": "Googleアカウントに接続"
+},
+{
+"id": "REPEAT-299",
+"dom": "qrClose",
+"kind": "閉じる",
+"priority": "P2",
+"label": "閉じる"
+},
+{
+"id": "REPEAT-300",
+"dom": "qeCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "REPEAT-301",
+"dom": "qeSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "INCOME-302",
+"dom": "ieCancel",
+"kind": "取消",
+"priority": "P2",
+"label": "キャンセル"
+},
+{
+"id": "INCOME-303",
+"dom": "ieSave",
+"kind": "確定",
+"priority": "P0",
+"label": "保存"
+},
+{
+"id": "UPDATE-304",
+"dom": "financialUpdateMonth",
+"kind": "ホイール選択",
+"priority": "P1",
+"label": "表示月"
+}
+]

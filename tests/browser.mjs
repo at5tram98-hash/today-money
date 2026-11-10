@@ -60,7 +60,7 @@ async function createPage(version = 'app', {width = 390, height = 844, mobile = 
     }
   }, {appearance, localOnly, stored});
   const page = await context.newPage();
-  page.on('pageerror', error => errors.push({version, message: error.message}));
+  page.on('pageerror', error => errors.push({version, message: process.env.MM3_DEBUG_STACK?error.stack:error.message}));
   page.on('response', response => {if (response.url().startsWith(origin) && response.status() >= 400) errors.push({version, message: `HTTP ${response.status()} ${response.url()}`});});
   page.on('console', message => {if (message.type() === 'error') errors.push({version, message: message.text()});});
   await page.goto(`${origin}/${version}/`);
@@ -263,7 +263,7 @@ try {
   await ui.page.locator('#profileSettings').click();
   await ui.page.locator('#prClear').click();
   await ui.page.locator('#prCancel').click();
-  await ui.page.locator('#alertActions').getByRole('button',{name:'破棄',exact:true}).click();
+  await ui.page.locator('#alertActions').getByRole('button',{name:'変更を破棄',exact:true}).click();
   await ui.page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
   assert.ok(await ui.page.evaluate(()=>globalThis.__mm3Test.getData().profile.icon));
   passed('canceling photo removal preserves the saved profile and releases modal focus');

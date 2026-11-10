@@ -136,7 +136,7 @@ function openAppearanceSettings(){
 }
 function openFeedbackSettings(){
   let draft=feedbackSettings();
-  const draw=()=>settingsDetailView('操作フィードバック',`<div class="settings-detail-intro"><h2>操作フィードバック</h2><p>音・触覚・動きを、自分に合う使い心地に。</p></div><div class="group">${settingsToggleHtml('fbSound','操作音','保存・承認・同期などの重要操作で再生',draft.sound)}${settingsToggleHtml('fbHaptic','触覚','対応する端末で軽い振動を返します',draft.haptic)}${settingsToggleHtml('fbMotion','アニメーション','画面の移動や承認の動きを表示',draft.motion)}</div><div class="section-head">音量</div><div class="card card-pad"><div class="feedback-volume"><input type="range" id="fbVolume" min="0" max="100" step="5" value="${Math.round(draft.volume*100)}" aria-label="操作音の音量"><output id="fbVolumeLabel" for="fbVolume">${Math.round(draft.volume*100)}%</output></div></div><p class="settings-section-footer">変更は自動保存されます。端末の「視差効果を減らす」設定を優先します。</p>`,root=>{
+  const draw=()=>settingsDetailView('操作フィードバック',`<div class="settings-detail-intro"><h2>操作フィードバック</h2><p>音・触覚・動きを、自分に合う使い心地に。</p></div><div class="group">${settingsToggleHtml('fbSound','操作音','保存・承認・同期などの重要操作で再生',draft.sound)}${settingsToggleHtml('fbHaptic','触覚','対応する端末で軽い振動を返します',draft.haptic)}${settingsToggleHtml('fbMotion','アニメーション','画面の移動や承認の動きを表示',draft.motion)}</div><div class="section-head">音量</div><div class="card card-pad"><div class="feedback-volume"><button type="button" class="v11-step-btn" id="fbVolumeDown" aria-label="音量を下げる">−</button><input type="range" id="fbVolume" min="0" max="100" step="5" value="${Math.round(draft.volume*100)}" aria-label="操作音の音量"><button type="button" class="v11-step-btn" id="fbVolumeUp" aria-label="音量を上げる">＋</button><output id="fbVolumeLabel" for="fbVolume">${Math.round(draft.volume*100)}%</output></div></div><p class="settings-section-footer">変更は自動保存されます。端末の「視差効果を減らす」設定を優先します。</p>`,root=>{
     const persist=()=>{
       try{safeCommit(()=>{data.feedbackSettings={...draft}},{label:'feedback settings'})}catch(error){draft=feedbackSettings();draw();return false}
       applyAppearance();renderSettings();return true;
@@ -148,6 +148,9 @@ function openFeedbackSettings(){
     const range=root.querySelector('#fbVolume');
     range.oninput=event=>{draft.volume=clamp(Number(event.target.value)/100,0,1);root.querySelector('#fbVolumeLabel').textContent=`${Math.round(draft.volume*100)}%`};
     range.onchange=()=>{if(persist()&&draft.sound)feedback.selection()};
+    /* 第11版 SET-111: スライダーの代替として5%刻みのボタンを併設 */
+    const stepVolume=delta=>{range.value=String(clamp(Number(range.value)+delta,0,100));range.oninput({target:range});range.onchange()};
+    root.querySelector('#fbVolumeDown').onclick=()=>stepVolume(-5);root.querySelector('#fbVolumeUp').onclick=()=>stepVolume(5);
   });draw();
 }
 function openHelp(){

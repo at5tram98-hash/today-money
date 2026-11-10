@@ -1,0 +1,118 @@
+/* ACF（現金・カード予測）の表、カレンダー、設定。 */
+.acf-split-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 10px }
+.acf-credit-control { display: grid; gap: 10px }
+.acf-credit-head { display: flex; align-items: center; justify-content: space-between; gap: 10px }
+.acf-credit-range { width: 100%; accent-color: var(--blue); height: 34px }
+.acf-credit-preview { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px }
+.cashflow-table .cf-marker { font-size: 9px; font-weight: 800; margin-left: 2px }
+.cashflow-table .cf-marker.salary { color: var(--green) }
+.cashflow-table .cf-marker.card { color: var(--purple) }
+.cashflow-table .cf-marker.large { color: var(--orange) }
+.acf-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px }
+.acf-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 12px }
+.acf-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px }
+.cashflow-day-mark { display: flex; align-items: center; justify-content: flex-end; gap: 3px }
+.cashflow-event:last-child { border-bottom: 0 }
+.risk-row.critical { border-left-color: var(--red) }
+.acf-plan-compare strong { font-variant-numeric: tabular-nums }
+.acf-home-card { padding: 16px 16px 14px }
+.acf-home-name { font-size: 13px; font-weight: 750; letter-spacing: .1px }
+.acf-home-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px }
+.acf-home-caption { font-size: 11px; color: var(--label2); margin-top: 3px }
+.acf-home-split { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: stretch; margin-top: 13px }
+.acf-home-split .ratio { display: flex; flex-direction: column; justify-content: center; text-align: center; min-width: 69px }
+.acf-plain-note { font-size: 11px; color: var(--label2); line-height: 1.45; margin-top: 10px }
+.acf-graph-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 12px }
+.acf-budget-bars { height: 124px; display: flex; align-items: flex-end; gap: 7px; border-bottom: .5px solid var(--sep); padding: 0 1px }
+.acf-budget-col { flex: 1; min-width: 0; text-align: center }
+.acf-budget-stack { height: 94px; display: flex; flex-direction: column; justify-content: flex-end }
+.acf-budget-cardpart { width: 100%; min-height: 0; background: var(--purple); border-radius: 6px 6px 0 0 }
+.acf-budget-cashpart { width: 100%; min-height: 0; background: var(--blue); border-radius: 0 0 3px 3px }
+.acf-budget-col:first-child .acf-budget-cardpart:only-child,
+.acf-budget-cardpart+.acf-budget-cashpart:empty { border-radius: 6px }
+.acf-budget-label { font-size: 8.5px; color: var(--label2); margin-top: 6px; white-space: nowrap }
+.acf-legend-line { display: flex; align-items: center; gap: 13px; font-size: 10px; color: var(--label2); margin-top: 10px }
+.acf-legend-line i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; vertical-align: -1px }
+.acf-legend-card { background: var(--purple) }
+.acf-legend-cash { background: var(--blue) }
+.acf-trend-svg { width: 100%; height: 142px; display: block; touch-action: pan-y }
+.acf-trend-grid { stroke: var(--sep); stroke-width: .7 }
+.acf-trend-line { fill: none; stroke: var(--blue); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
+.acf-trend-area { fill: rgba(0,122,255,.08) }
+.acf-trend-axis { fill: var(--label2); font-size: 8px }
+.acf-trend-dot { fill: var(--card); stroke: var(--blue); stroke-width: 2 }
+.acf-ratio-value { font-size: 15px; font-weight: 700; color: var(--blue) }
+.acf-details-panel { margin-top: 10px }
+.acf-details-panel.hidden { display: none !important }
+.acf-month-nav { margin: 10px 0 12px }
+#acfTableMode { margin-bottom: 12px }
+.acf-table-empty { padding: 22px 14px; border-radius: 12px; background: var(--card); color: var(--label2); text-align: center; font-size: 13px }
+.acf-deficit-marker { display: inline-grid; place-items: center; min-width: 14px; height: 14px; margin-left: 3px; padding: 0 3px; border-radius: 7px; background: rgba(255,59,48,.12); color: var(--red); font-size: 8px; font-weight: 800; vertical-align: 1px }
+.acf-negative-sign { display: inline-block; transform-origin: 50% 55% }
+.acf-negative-value.acf-pulse .acf-negative-sign { animation: acfMinusSoftPulse 2.05s ease-in-out infinite }
+.acf-shortage-callout.critical { background: rgba(255,59,48,.085) }
+.acf-shortage-icon { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; flex: 0 0 auto; font-size: 14px; font-weight: 800; background: rgba(255,149,0,.14); color: var(--orange) }
+.acf-shortage-callout.critical .acf-shortage-icon { background: rgba(255,59,48,.13); color: var(--red) }
+.acf-shortage-main { min-width: 0; flex: 1 }
+.acf-shortage-title { font-size: 12.5px; font-weight: 720 }
+.acf-shortage-callout.critical .acf-shortage-title { color: var(--red) }
+.acf-shortage-copy { font-size: 11px; color: var(--label2); line-height: 1.45; margin-top: 2px }
+.acf-day-state-block { margin-top: 16px }
+.acf-zero-line { stroke: rgba(255,59,48,.5); stroke-width: 1.15; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke }
+.acf-view-mode { margin: 16px 0 12px }
+.acf-view-mode button { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px }
+.acf-calendar { background: var(--card); border: 1px solid var(--sep); border-radius: 22px; padding: 12px 8px; margin-bottom: 16px }
+.acf-calendar-week { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 3px; font-size: 11px; color: var(--label2); text-align: center; padding: 3px 0 12px }
+.acf-calendar-grid { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 3px }
+.acf-calendar-unavailable { min-width: 0; min-height: 68px; display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 12px; color: var(--label3); font-size: 12px }
+.acf-calendar-spacer { min-width: 0; min-height: 68px }
+.acf-calendar-number { display: grid; place-items: center; width: 25px; height: 25px; font-size: 13px; font-weight: 600; border-radius: 50% }
+.acf-calendar-amount { font-size: 10px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap }
+.acf-calendar-day.today .acf-calendar-number { color: var(--blue); background: #007aff14 }
+.acf-calendar-day.selected .acf-calendar-number { background: var(--blue); color: #fff }
+.acf-calendar-day.deficit .acf-calendar-amount { color: var(--red) }
+.acf-calendar-day.warning .acf-calendar-amount { color: var(--orange) }
+.acf-calendar-day:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px }
+.acf-calendar-marks { display: flex; justify-content: center; gap: 3px; min-height: 4px }
+.acf-calendar-marks i,
+.acf-calendar-legend i { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--orange) }
+.acf-calendar-note { font-size: 11px; color: var(--label2); line-height: 1.7; margin: 12px 6px 8px }
+.acf-calendar-legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: 10px; color: var(--label2); margin: 0 6px }
+.acf-calendar-legend span { display: flex; align-items: center; gap: 4px }
+.acf-calendar-detail { border-radius: 20px; background: var(--card); border: 1px solid var(--sep); padding: 4px 16px 10px; margin-bottom: 14px }
+.acf-calendar-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px solid var(--sep); padding: 8px 0 }
+.acf-calendar-detail h3 { font-size: 15px; font-weight: 600; margin: 0 }
+.acf-calendar-inspect { display: flex; align-items: center; gap: 3px; background: transparent; border: 0; color: var(--blue); font: inherit; font-size: 12px; min-height: 44px }
+.acf-calendar-detail dl { margin: 0 }
+.acf-calendar-detail dl>div { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; border-bottom: .5px solid var(--sep) }
+.acf-calendar-detail dl>div:last-child { border-bottom: 0 }
+.acf-calendar-detail dt { font-size: 12px; color: var(--label2) }
+.mail-detail-lines dd { font-size: 15px; line-height: 1.5; margin: 0; overflow-wrap: anywhere }
+.acf-calendar-detail dd { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; margin: 0; overflow-wrap: anywhere }
+#app .acf-home-card { border: 0; padding: 16px; border-radius: var(--native-radius); margin-bottom: 12px }
+#app .acf-home-name { font-size: 12px; font-weight: 600; color: var(--green); letter-spacing: .2px }
+#app .acf-home-sub { font-size: 17px; font-weight: 600; color: var(--label); margin-top: 3px }
+#app .acf-home-amount { font-size: 30px; font-weight: 700; letter-spacing: -.6px; line-height: 1.2; margin-top: 10px }
+#app .acf-home-caption,
+#app .acf-plain-note { font-size: 12px; line-height: 1.5; color: var(--label2) }
+#app .acf-link { display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 500; min-height: 44px; padding: 10px 0 0; margin-top: 10px }
+#app .acf-link>.money-symbol { width: 13px; height: 13px }
+@media (prefers-contrast:more) {
+  #app .acf-card { box-shadow: inset 0 0 0 1px var(--sep) }
+}
+@media (prefers-reduced-motion:reduce) {
+  .acf-negative-value.acf-pulse .acf-negative-sign,
+  .acf-status-critical,
+  .acf-shortage-callout,
+  .cf-first-deficit-day,
+  .acf-chart-first-negative,
+  .acf-risk-reveal { animation: none !important }
+}
+@media (max-width:390px) {
+  .acf-home-split { grid-template-columns: 1fr 1fr }
+  .acf-home-split .ratio { grid-column: 1/-1; min-height: 42px }
+  .acf-budget-bars { gap: 5px }
+}
+@media (max-width:350px) {
+  .acf-calendar-grid { gap: 0; margin-inline: -19px }
+}

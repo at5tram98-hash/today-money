@@ -80,7 +80,8 @@ function mm3AssetExitManualMode(){
 function mm3FlipRows(list,rows,before){if(mm3MotionReduced())return;requestAnimationFrame(()=>rows.forEach(r=>{const a=before.get(r),b=r.getBoundingClientRect();if(!a)return;const dy=a.top-b.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:300,easing:'cubic-bezier(.2,.85,.2,1)'})}))}
 function mm3AssetInstallManualReorder(){
   const list=document.getElementById('mm3AssetWatchlist');if(!list||mm3AssetSortMode!=='manual')return;mm3AssetExitManualMode();list.classList.add('mm3-assets-manual');
-  const head=list.previousElementSibling;if(head?.classList.contains('mm3-assets-section-head')&&!document.querySelector('#screen-assets .mm3-assets-manual-hint'))head.insertAdjacentHTML('afterend','<div class="mm3-assets-manual-hint">口座を長押しして、そのまま上下に動かすと並べ替えられます。</div>');
+  const head=list.previousElementSibling;if(head?.classList.contains('mm3-assets-section-head')&&!document.querySelector('#screen-assets .mm3-assets-manual-hint'))head.insertAdjacentHTML('afterend','<div class="mm3-assets-manual-hint">口座を長押しして、そのまま上下に動かすと並べ替えられます。<button type="button" class="v11-inline-action" id="mm3AssetOrderEdit">ボタンで並べ替える</button></div>');
+  const orderEdit=document.getElementById('mm3AssetOrderEdit');if(orderEdit)orderEdit.onclick=openAssetOrderSheet;
   [...list.querySelectorAll('.mm3-assets-watchrow')].forEach(row=>row.insertAdjacentHTML('afterbegin','<span class="mm3-assets-reorder-handle" aria-hidden="true">•••</span>'));
   let state=null,timer=null,placeholder=null,dragRect=null;
   const clearTimer=()=>{if(timer){clearTimeout(timer);timer=null}};
@@ -98,6 +99,18 @@ function mm3AssetApplySort(mode){
   const rows=[...list.querySelectorAll('.mm3-assets-watchrow')],before=new Map(rows.map(r=>[r,r.getBoundingClientRect()])),order=mm3AssetSortedBanks().map(b=>b.id),map=new Map(rows.map(r=>[r.dataset.bank,r]));order.forEach(id=>{const row=map.get(id);if(row)list.appendChild(row)});const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.documentElement.classList.contains('motion-off');if(!reduce)requestAnimationFrame(()=>{rows.forEach(r=>{const first=before.get(r),last=r.getBoundingClientRect(),dy=first.top-last.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:360,easing:'cubic-bezier(.2,.85,.2,1)'})})});const btn=document.getElementById('mm3AssetSort');if(btn)btn.innerHTML=`${mm3AssetSortLabel()} ${icon('chevronDown')}`;feedback?.selection?.()
 }
 const __mm3P4AssetApplySort=mm3AssetApplySort;
+/* 第11版 ASSETS-103: 長押しドラッグの代替。上下ボタンで下書きを並べ替え、「完了」で保存する。 */
+function openAssetOrderSheet(){
+  let order=mm3AssetSortedBanks().map(b=>b.id);const original=order.join('|');
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="aoCancel">キャンセル</button><div class="sheet-title">口座の並び順</div><button type="button" class="nav-text" id="aoSave">完了</button></div><div class="sheet-body"><div class="group" id="aoList"></div><div class="form-helper">「完了」を押すと並び順を保存します。口座の残高や記録は変わりません。</div></div>`,'half',root=>{
+    const list=root.querySelector('#aoList');
+    const draw=focus=>{list.innerHTML=order.map((id,i)=>{const name=esc(bankById(id)?.name||'口座');return `<div class="row v11-order-row"><div class="row-main"><div class="row-title">${name}</div><div class="row-sub">${i+1}番目</div></div><button type="button" class="v11-order-btn" data-ao-id="${esc(id)}" data-ao-move="-1" aria-label="${name}を上へ" ${i===0?'disabled':''}>${icon('chevronUp')}</button><button type="button" class="v11-order-btn" data-ao-id="${esc(id)}" data-ao-move="1" aria-label="${name}を下へ" ${i===order.length-1?'disabled':''}>${icon('chevronDown')}</button></div>`}).join('');if(focus)(list.querySelector(`[data-ao-id="${CSS.escape(focus.id)}"][data-ao-move="${focus.move}"]:not(:disabled)`)||list.querySelector(`[data-ao-id="${CSS.escape(focus.id)}"]:not(:disabled)`))?.focus();markSheetDirty(order.join('|')!==original)};
+    list.onclick=e=>{const b=e.target.closest('[data-ao-move]');if(!b||b.disabled)return;const i=order.indexOf(b.dataset.aoId),j=i+Number(b.dataset.aoMove);if(i<0||j<0||j>=order.length)return;[order[i],order[j]]=[order[j],order[i]];feedback?.selection?.();draw({id:b.dataset.aoId,move:b.dataset.aoMove})};
+    root.querySelector('#aoCancel').onclick=requestSheetClose;
+    root.querySelector('#aoSave').onclick=()=>{mm3SaveUiPrefs({assetManualOrder:order,assetSortMode:'manual'});closeSheet();renderAssets()};
+    draw();
+  });
+}
 mm3AssetApplySort=function(mode){
   if(mode==='manual'){
     const prefs=mm3LoadUiPrefs(),hasSaved=Array.isArray(prefs.assetManualOrder)&&prefs.assetManualOrder.length;

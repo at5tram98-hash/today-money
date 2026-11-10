@@ -1,44 +1,10 @@
-/* Shared iOS design language with My Time. Keep presentation values in one place. */
-:root {
-  color-scheme: light;
-  /* 第11版 C章: セマンティックカラー。既存の --blue/--red/--green はこの3色を参照する。 */
-  --accent: #1673F7; --danger: #D93B46; --success: #16865D;
-  --bg: #F6F7FA; --card: #fff;
-  --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2);
-  --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4);
-  --sep: rgba(60,60,67,.18);
-  --blue: var(--accent); --green: var(--success); --yellow: #ffcc00;
-  --orange: #ff9500; --red: var(--danger); --purple: #af52de; --teal: #30b0c7;
-  /* 第11版 C章: 文字階層・間隔・動きの共通値 */
-  --type-title: 28px; --type-amount: 30px; --type-item: 17px; --type-note: 13px;
-  --space-page: 16px; --space-section: 24px; --row-height: 56px; --cta-height: 52px; --tap-min: 44px; --radius-card: 16px;
-  --motion-press: 90ms; --motion-update: 150ms; --motion-menu: 160ms; --motion-push: 220ms; --motion-sheet: 260ms;
-  --accent-soft: rgba(22,115,247,.14); --danger-soft: rgba(217,59,70,.12);
-  --safe-t: env(safe-area-inset-top,0px); --safe-b: env(safe-area-inset-bottom,0px);
-  --r: 12px; --spring: cubic-bezier(.32,.72,0,1);
-  --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif;
-  --tabbar-height: 62px; --tabbar-bottom: max(8px,calc(var(--safe-b) - 10px));
-  --tab-h: calc(var(--tabbar-height) + var(--tabbar-bottom) + 10px);
-  --glass-bg: rgba(250,250,252,.62); --glass-solid: rgba(249,249,251,.97);
-  --glass-edge: rgba(255,255,255,.75); --glass-highlight: rgba(255,255,255,.9);
-  --glass-shadow: 0 10px 30px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.06),0 0 0 .5px rgba(0,0,0,.08);
-  --capsule-bg: rgba(120,120,128,.16); --tab-inactive: #48484d;
-  --native-glass: rgba(249,249,249,.86);
+/* デザイントークン（色・文字・間隔・動き）。値の定義はここだけに置く。 */
+:root { color-scheme: light; --accent: #1673F7; --danger: #D93B46; --success: #16865D; --bg: #F6F7FA; --card: #fff; --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2); --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4); --sep: rgba(60,60,67,.18); --blue: var(--accent); --green: var(--success); --yellow: #ffcc00; --orange: #ff9500; --red: var(--danger); --purple: #af52de; --teal: #30b0c7; --type-title: 28px; --type-amount: 30px; --type-item: 17px; --type-note: 13px; --space-page: 16px; --space-section: 24px; --row-height: 56px; --cta-height: 52px; --tap-min: 44px; --radius-card: 16px; --motion-press: 90ms; --motion-update: 150ms; --motion-menu: 160ms; --motion-push: 220ms; --motion-sheet: 260ms; --accent-soft: rgba(22,115,247,.14); --danger-soft: rgba(217,59,70,.12); --safe-t: env(safe-area-inset-top,0px); --safe-b: env(safe-area-inset-bottom,0px); --r: 12px; --spring: cubic-bezier(.32,.72,0,1); --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif; --tabbar-height: 62px; --tabbar-bottom: max(8px,calc(var(--safe-b) - 10px)); --tab-h: calc(var(--tabbar-height) + var(--tabbar-bottom) + 10px); --glass-bg: rgba(250,250,252,.62); --glass-solid: rgba(249,249,251,.97); --glass-edge: rgba(255,255,255,.75); --glass-highlight: rgba(255,255,255,.9); --glass-shadow: 0 10px 30px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.06),0 0 0 .5px rgba(0,0,0,.08); --capsule-bg: rgba(120,120,128,.16); --tab-inactive: #48484d; --native-glass: rgba(249,249,249,.86); --mm3-motion-tap: 120ms; --mm3-motion-menu: 180ms; --mm3-motion-chart: 250ms; --mm3-motion-month: 290ms; --mm3-motion-flip: 360ms; --mm3-ease: cubic-bezier(.2,.85,.2,1); --mm3-ease-spring: cubic-bezier(.2,.95,.25,1.06); --mm3-action-icon: #5f636b; --mm3-action-icon-bg: rgba(118,118,128,.075); --mm3-action-blue-bg: rgba(0,122,255,.085); --native-gutter: 16px; --native-radius: 20px; --native-control: 14px; --native-ease: cubic-bezier(.2,.8,.2,1); --native-secondary: #e9e9ee; --native-caption: var(--type-note); --native-body: var(--type-item); --native-title: var(--type-title)}
+html.dark { color-scheme: dark; --accent: #4C93FF; --danger: #FF6570; --success: #35B886; --accent-soft: rgba(76,147,255,.2); --danger-soft: rgba(255,101,112,.18); --bg: #0A0B0E; --card: #1c1c1e; --fill: rgba(118,118,128,.24); --fill2: rgba(118,118,128,.36); --label: #fff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.4); --sep: rgba(84,84,88,.6); --blue: var(--accent); --green: var(--success); --yellow: #ffd60a; --orange: #ff9f0a; --red: var(--danger); --purple: #bf5af2; --teal: #64d2ff; --glass-bg: rgba(36,36,40,.58); --glass-solid: rgba(28,28,30,.98); --glass-edge: rgba(255,255,255,.16); --glass-highlight: rgba(255,255,255,.14); --glass-shadow: 0 10px 30px rgba(0,0,0,.55),0 0 0 .5px rgba(0,0,0,.6); --capsule-bg: rgba(255,255,255,.14); --tab-inactive: #c7c7cc; --native-glass: rgba(22,22,24,.88); --mm3-action-icon: #b2b2b7; --mm3-action-icon-bg: rgba(118,118,128,.16); --mm3-action-blue-bg: rgba(10,132,255,.15); --native-secondary: #2c2c2e }
+@media (prefers-contrast:more) {
+  :root { --label2: #44444b; --label3: #616168 }
+  html.dark { --label2: #dedee5; --label3: #b6b6bd }
 }
-html.dark {
-  color-scheme: dark;
-  /* 暗い背景でのコントラスト確保のため3色を明るく補正（第11版C章「コントラスト検証で最終補正」） */
-  --accent: #4C93FF; --danger: #FF6570; --success: #35B886;
-  --accent-soft: rgba(76,147,255,.2); --danger-soft: rgba(255,101,112,.18);
-  --bg: #0A0B0E; --card: #1c1c1e;
-  --fill: rgba(118,118,128,.24); --fill2: rgba(118,118,128,.36);
-  --label: #fff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.4);
-  --sep: rgba(84,84,88,.6);
-  --blue: var(--accent); --green: var(--success); --yellow: #ffd60a;
-  --orange: #ff9f0a; --red: var(--danger); --purple: #bf5af2; --teal: #64d2ff;
-  --glass-bg: rgba(36,36,40,.58); --glass-solid: rgba(28,28,30,.98);
-  --glass-edge: rgba(255,255,255,.16); --glass-highlight: rgba(255,255,255,.14);
-  --glass-shadow: 0 10px 30px rgba(0,0,0,.55),0 0 0 .5px rgba(0,0,0,.6);
-  --capsule-bg: rgba(255,255,255,.14); --tab-inactive: #c7c7cc;
-  --native-glass: rgba(22,22,24,.88);
+@media (max-width:350px) {
+  :root { --native-title: 26px; --native-gutter: 12px }
 }

@@ -1,21 +1,163 @@
-/* Glass is reserved for controls; readable amounts use a solid surface. */
-#calculator{position:fixed;z-index:420;bottom:0;left:50%;width:min(100%,500px);max-height:calc(100dvh - 12px);padding:12px 16px calc(14px + env(safe-area-inset-bottom));border-radius:32px 32px 0 0;box-sizing:border-box;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(234,239,251,.94));color:#151722;border:1px solid rgba(255,255,255,.8);box-shadow:0 -12px 60px #0003;transform:translate(-50%,110%);transition:transform .28s;overflow:auto;overscroll-behavior:contain}
-#calculator.show{transform:translate(-50%,0)}
-.calc-top{display:flex;align-items:center;justify-content:space-between;height:44px;gap:8px}.calc-top>div{font-size:15px;font-weight:600;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}.calc-cancel{color:var(--blue);background:none;border:0;font-size:14px;padding:0}.calc-top-spacer{width:70px;flex-shrink:0}
-.calc-expression{height:24px;color:#626575;text-align:right;font-size:14px;overflow:hidden;white-space:nowrap}.calc-display{min-height:74px;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 4px;font-variant-numeric:tabular-nums}.calc-number{font-size:clamp(30px,10vw,52px);font-weight:400;letter-spacing:-1px;max-width:calc(100% - 30px);overflow:hidden}.calc-unit{font-size:16px;color:#626575}
-.calc-assists{display:flex;gap:8px;margin:8px 0 12px}.calc-assists button{flex:1;border:1px solid #ffffffb3;border-radius:16px;background:#ffffff8c;color:#303f63;font-size:13px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.calc-assists button[aria-expanded=true]{background:#dce8ff;color:#145ad8}
-.calc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.calc-grid[hidden]{display:none}.calc-key{height:clamp(44px,6.7dvh,60px);border:1px solid #ffffffb3;border-radius:20px;background:#ffffffa6;color:#151722;box-shadow:inset 0 1px 0 #fff,0 2px 6px #2743750a;font-size:26px;font-weight:400;touch-action:manipulation}.calc-key.util{background:#cfd9ed91;font-size:19px}.calc-key.op{color:#1262e7;background:#dce8ffb3}.calc-key.op.active{background:#176ce9;color:#fff;border-color:#176ce9}.calc-key:active{filter:brightness(.92);transform:scale(.97)}.calc-key[data-k="00"],.calc-key[data-k="000"]{font-size:23px}
-.calc-use{width:100%;margin-top:12px;height:48px;border:1px solid #ffffff70;border-radius:24px;background:#176ce9;color:#fff;font-size:16px;font-weight:650;box-shadow:0 4px 14px #176ce92b}
-.calc-tools-panel{min-height:260px;padding:12px 8px}.calc-tools-panel h2{margin:0;font-size:20px}.calc-tools-panel p{font-size:13px;color:#626575}.calc-tools-panel label{display:block;font-size:13px}.calc-tools-panel input{font-size:24px;border:1px solid #bec9df;border-radius:14px;background:#fff;width:100%;padding:12px;box-sizing:border-box;margin:8px 0}.calc-tools-panel output{display:block;font-size:32px;word-break:break-all}.calc-tool-actions{display:flex;gap:12px}.calc-tool-actions button{flex:1;border:0;border-radius:14px;background:#e0e8f7;color:#176ce9;font-size:14px}.calc-tool-actions button:disabled{opacity:.4}
-html.dark #calculator,body.dark #calculator{background:linear-gradient(145deg,#252936f5,#141821f5);color:#f5f6fb;border-color:#ffffff33}html.dark .calc-key,body.dark .calc-key{background:#ffffff12;color:#f5f6fb;border-color:#ffffff24;box-shadow:inset 0 1px 0 #ffffff14}html.dark .calc-key.op,body.dark .calc-key.op{color:#9dc3ff;background:#336ccb45}html.dark .calc-key.op.active,body.dark .calc-key.op.active{background:#176ce9;color:#fff}html.dark .calc-assists button,body.dark .calc-assists button{background:#ffffff18;color:#d7e4ff;border-color:#ffffff24}
-.display-month-button{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--label);border:0;border-radius:14px;padding:0 8px;font:inherit;font-weight:600}.display-month-button svg{width:15px;height:15px}.month-picker-body{padding-top:8px}.month-picker-caption{text-align:center;color:var(--label2);font-size:13px}.month-wheel-frame{position:relative;display:flex;gap:12px;max-width:320px;margin:auto}.month-wheel{height:220px;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none;padding:88px 0;box-sizing:border-box;flex:1;position:relative;z-index:1;touch-action:pan-y}.month-wheel::-webkit-scrollbar{display:none}.month-wheel button{display:block;width:100%;height:44px;min-height:44px;border:0;padding:0;background:transparent;color:var(--label2);font-size:21px;scroll-snap-align:center;flex-shrink:0}.month-wheel button[aria-selected=true]{color:var(--label);font-weight:600}.month-wheel-selection{pointer-events:none;position:absolute;top:88px;left:0;right:0;height:44px;border-radius:14px;background:var(--fill2);border:1px solid var(--sep)}.month-picker-result{display:block;text-align:center;font-size:17px;font-weight:600;margin:16px 0}
-@media(prefers-reduced-motion:reduce){#calculator,.calc-key{transition:none}.calc-key:active{transform:none}}
-@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){#calculator{background:#f2f4fa}.calc-key,.calc-assists button{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff;border-color:#8996ae}}
-@media(max-height:520px){#calculator{max-height:100dvh;border-radius:20px 20px 0 0}.calc-display{min-height:50px}.calc-expression{height:20px}.calc-assists{margin:4px 0}.calc-key{height:44px}.calc-top{height:44px}}
-
-.native-calc-dim{z-index:410}
-
-html.dark .calc-expression,html.dark .calc-unit,html.dark .calc-tools-panel p{color:#bbc3d5}html.motion-off #calculator{transition:none}
-@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){html.dark #calculator{background:#1c1c1e}html.dark .calc-key,html.dark .calc-assists button{background:#2c2c2e;border-color:#8996ae}}
-
-.calc-use:disabled{opacity:.45}
+/* 電卓、月ホイール、承認スライド。 */
+.approval-slider.returning .approval-handle { transition: transform .17s cubic-bezier(.22,.88,.22,1) }
+.approval-slider.returning .approval-progress { transition: width .17s cubic-bezier(.22,.88,.22,1) }
+#calculator { position: fixed; z-index: 420; bottom: 0; left: 50%; width: min(100%,500px); max-height: calc(100dvh - 12px); padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); box-sizing: border-box; transform: translate(-50%,110%); transition: transform .28s; overflow: auto; overscroll-behavior: contain }
+#screen-assets .mm3-assets-reorder-handle { width: 18px; height: 34px; display: grid; place-items: center; color: var(--label3); font-size: 18px; letter-spacing: -4px; transform: rotate(90deg); pointer-events: none }
+#calculator.show { transform: translate(-50%,0) }
+.calc-top { display: flex; align-items: center; justify-content: space-between; height: 44px; gap: 8px }
+.calc-top>div { font-size: 15px; font-weight: 600; text-overflow: ellipsis; overflow: hidden; white-space: nowrap }
+.calc-cancel { color: var(--blue); background: none; border: 0; font-size: 14px; padding: 0 }
+.calc-top-spacer { width: 70px; flex-shrink: 0 }
+.calc-expression { height: 24px; text-align: right; font-size: 14px; overflow: hidden; white-space: nowrap; color: var(--label2) }
+.calc-display { min-height: 74px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 0 4px; font-variant-numeric: tabular-nums }
+.calc-number { font-size: clamp(30px,10vw,52px); font-weight: 400; letter-spacing: -1px; max-width: calc(100% - 30px); overflow: hidden }
+.calc-unit { font-size: 16px; color: var(--label2) }
+.calc-assists { display: flex; gap: 8px; margin: 8px 0 12px }
+.mail-editor-actions button { margin: 0; white-space: normal; font-size: 15px }
+.mm3-atf-monthtabs button { flex: none; border: 0; border-radius: 11px; padding: 10px 15px; background: var(--fill2); color: var(--label); font-weight: 700; font-size: 14px }
+.calc-assists button { flex: 1; font-size: 13px }
+.calc-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px }
+.calc-grid[hidden] { display: none }
+.day-close-item.checked { background: color-mix(in srgb,var(--green) 4%,var(--card)) }
+.day-close-mark.cancelled { color: var(--orange) }
+.mm3-atf-riskbox.danger { background: rgba(255,59,48,.12) }
+.mm3-atf-day.caution { background: rgba(255,149,0,.12) }
+.mm3-atf-day.danger { background: rgba(255,59,48,.14); border-color: var(--red) }
+.stmt-row-check.on { background: var(--blue); border-color: var(--blue) }
+.day-close-footer .day-close-destructive { background: var(--red); color: #fff }
+.acf-calendar-day.selected { background: #007aff0b; border-color: var(--blue) }
+.acf-calendar-marks .salary,
+.acf-calendar-legend .salary { background: var(--green) }
+.acf-calendar-marks .card,
+.acf-calendar-legend .card { background: var(--purple) }
+.calc-key.util { font-size: 19px; background: var(--native-secondary); color: var(--label) }
+.calc-key.op.active { border-color: #176ce9; background: var(--blue); color: #fff }
+.calc-key:active { filter: brightness(.92); transform: scale(.97) }
+.calc-key[data-k="00"],
+.calc-key[data-k="000"] { font-size: 23px }
+.calc-use { width: 100%; margin-top: 12px; height: 48px; font-size: 16px; font-weight: 650; background: var(--blue); color: #fff; border: 0; box-shadow: none; border-radius: var(--native-control) }
+.calc-tools-panel { min-height: 260px; padding: 12px 8px }
+.mail-preview-heading h2 { font-size: 22px; line-height: 1.25; margin: 0; font-weight: 700; letter-spacing: -.4px }
+.mail-editor-head h2 { font-size: 21px; font-weight: 650; line-height: 1.3; overflow-wrap: anywhere; margin: 0 0 8px }
+.mm3-atf-body h2 { font-size: 23px; margin: 8px 0 12px }
+.settings-detail-intro h2 { font-size: 25px; font-weight: 700; letter-spacing: -.035em; line-height: 1.3; margin: 0 0 8px }
+.calc-tools-panel h2 { margin: 0; font-size: 20px }
+.calc-tools-panel p { font-size: 13px; color: var(--label2) }
+.pro3-allocation-ranges label { display: grid; grid-template-columns: 54px 1fr; gap: 9px; align-items: center; min-height: 34px }
+.pro4-parse-row label { font-size: 10.5px; color: var(--label2) }
+.acf-month-nav label { display: block; color: var(--label2); font-size: 13px; font-weight: 650 }
+.mm3-atf-form label { display: grid; gap: 5px; font-size: 13px; font-weight: 700 }
+.calc-tools-panel label { display: block; font-size: 13px }
+.calc-tools-panel output { display: block; font-size: 32px; word-break: break-all }
+.calc-tool-actions { display: flex; gap: 12px }
+.calc-tool-actions button { flex: 1; border: 0; border-radius: 14px; background: #e0e8f7; color: #176ce9; font-size: 14px }
+.month-picker-caption { text-align: center; color: var(--label2); font-size: 13px }
+.month-wheel-frame { position: relative; display: flex; gap: 12px; max-width: 320px; margin: auto }
+.month-wheel { height: 220px; overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; scrollbar-width: none; padding: 88px 0; box-sizing: border-box; flex: 1; position: relative; z-index: 1; touch-action: pan-y }
+.month-wheel::-webkit-scrollbar { display: none }
+.month-wheel button { display: block; width: 100%; height: 44px; min-height: 44px; border: 0; padding: 0; background: transparent; color: var(--label2); font-size: 21px; scroll-snap-align: center; flex-shrink: 0 }
+.mm3-atf-monthtabs button.on { background: var(--label); color: var(--bg) }
+.month-wheel button[aria-selected=true] { color: var(--label); font-weight: 600 }
+.month-wheel-selection { pointer-events: none; position: absolute; top: 88px; left: 0; right: 0; height: 44px; border-radius: 14px; background: var(--fill2); border: 1px solid var(--sep) }
+html.motion-off #calculator { transition: none }
+.calc-use:disabled { opacity: .45 }
+@media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
+  #calculator { background: #f2f4fa }
+}
+@media (max-height:520px) {
+  #calculator { max-height: 100dvh; border-radius: 20px 20px 0 0 }
+}
+#calculator { background: var(--bg); color: var(--label); border: 0; border-radius: 28px 28px 0 0; box-shadow: 0 -8px 48px #00000026 }
+@media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
+  html.dark #calculator { background: #1c1c1e }
+}
+#screen-pay .mm3-salary-primary-change small { font-size: 10px; color: var(--label2); font-weight: 520 }
+#screen-pay .mm3-salary-donut-center span { font-size: 9px; color: var(--label2) }
+#screen-pay .mm3-salary-legend-main small { display: block; color: var(--label2); margin-top: 1px; font-variant-numeric: tabular-nums }
+#screen-pay .mm3-salary-metric span { display: block; color: var(--label2); overflow: hidden; text-overflow: ellipsis }
+#screen-pay .mm3-salary-event-main small { display: block; font-size: 9.5px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-donut-center strong { font-size: 17px; line-height: 1.1; margin-top: 2px; font-variant-numeric: tabular-nums }
+#screen-pay .mm3-salary-event-value strong { display: block; font-size: 13px; color: var(--green); font-variant-numeric: tabular-nums }
+#screen-pay .mm3-salary-event-value small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-watch-main small { display: block; color: var(--label2); margin-top: 3px; overflow: hidden; text-overflow: ellipsis }
+#screen-pay .mm3-salary-watch-value small { display: block; color: var(--green); font-weight: 650; margin-top: 2px; font-variant-numeric: tabular-nums }
+#screen-pay .mm3-salary-detail-row small { display: block; font-size: 9.5px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-detail-row>span { font-size: 18px; color: var(--label3) }
+#screen-payments .mm3-payment-primary-change small { font-size: 9.5px; color: var(--label2); font-weight: 540 }
+#screen-payments .mm3-atf-tooltip small { display: block; color: rgba(255,255,255,.70); margin-top: 2px; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-atf-metric span { display: block; color: var(--label2); overflow: hidden; text-overflow: ellipsis; font-size: 12px; white-space: normal }
+#screen-payments .mm3-payment-event-main small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-pay .mm3-salary-event-main strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-pay .mm3-salary-detail-row strong { display: block; font-size: 12.5px }
+@media (max-width:390px) {
+  #screen-pay .mm3-salary-watch-value strong { font-size: 11.5px }
+}
+#screen-payments .mm3-payment-event-value strong { display: block; font-size: 12.5px; color: var(--red); font-variant-numeric: tabular-nums }
+#screen-payments .mm3-payment-event-value small { display: block; font-size: 8.5px; color: var(--label2); margin-top: 2px }
+#screen-payments .mm3-payment-watch-main small { display: block; color: var(--label2); margin-top: 3px; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-payment-detail-main small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-payment-watch-value small { display: block; margin-top: 2px; font-weight: 650; font-variant-numeric: tabular-nums }
+#screen-assets .mm3-assets-primary-change small { font-size: 10px; color: var(--label2); font-weight: 560 }
+#screen-assets .mm3-assets-history-btn svg { color: var(--blue) }
+#screen-assets .mm3-assets-tooltip small { display: block; font-size: 8px; color: rgba(255,255,255,.7); margin-top: 2px }
+#screen-assets .mm3-assets-metric span { display: block; color: var(--label2); font-size: 12px; white-space: normal }
+#screen-assets .mm3-assets-watch-main small { display: block; color: var(--label2); margin-top: 4px; overflow: hidden; text-overflow: ellipsis }
+#screen-assets .mm3-assets-watch-value small { display: block; color: var(--label2); margin-top: 3px; font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 12px }
+html.dark #calculator,
+body.dark #calculator { background: var(--bg); color: var(--label); border: 0; border-radius: 28px 28px 0 0; box-shadow: 0 -8px 48px #00000026 }
+.calc-key { border: 0; box-shadow: none; background: var(--card); color: var(--label); border-radius: 16px; font-weight: 400 }
+html.dark .mm3-atf-dayrow { background: var(--fill2) }
+.mm3-atf-form input[type=number] { width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid var(--sep); border-radius: 10px; background: var(--bg); color: var(--label); font-size: 16px }
+.cashflow-table th.cf-first-deficit-day { background: rgba(255,59,48,.065); color: var(--red); animation: acfFirstDeficitReveal .42s cubic-bezier(.2,.85,.25,1) 1 }
+.mail-summary button:last-child { border-right: 0 }
+.mail-detail-lines>div:last-child { border: 0 }
+@media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
+  html.dark .calc-key { background: #2c2c2e; border-color: #8996ae }
+}
+.goal-plan-action span:last-child { color: var(--label3); font-size: 20px }
+.day-close-bank-summary>div:last-child { border-bottom: 0 }
+.day-close-success.cancelled>div { color: var(--orange); background: #ff950014; border-color: #ff950040 }
+.day-close-view .day-close-item-check input,
+.day-close-view .day-review-check input { appearance: none; -webkit-appearance: none; position: relative; border: 1.5px solid var(--label3); border-radius: 50%; background: var(--card); color: var(--green); cursor: pointer }
+.pro3-allocation-sum.over strong { color: var(--red) }
+.acf-home-split .ratio strong { color: var(--blue) }
+.stmt-row-main small.warn { color: var(--orange) }
+.stmt-row-main small.good { color: var(--green) }
+.settings-detail-view .feedback-volume output { min-width: 40px; color: var(--label2); font-size: 15px; font-variant-numeric: tabular-nums; text-align: right }
+html.dark .calc-key,
+body.dark .calc-key { border: 0; box-shadow: none; background: var(--card); color: var(--label); border-radius: 16px; font-weight: 400 }
+.day-close-progress .current>span:first-child { background: var(--blue); color: #fff; box-shadow: 0 0 0 5px var(--bg),0 0 0 6px #007aff30 }
+.day-close-progress .done>span:first-child { background: var(--green); color: #fff }
+.day-close-item.checked .day-close-item-actions>span { color: var(--green) }
+.day-close-view .day-close-item-check input:checked,
+.day-close-view .day-review-check input:checked { background: var(--green); border-color: var(--green) }
+html.dark .calc-key.util { background: var(--native-secondary); color: var(--label) }
+.calc-key.op,
+html.dark .calc-key.op,
+body.dark .calc-key.op { background: color-mix(in srgb,var(--blue) 12%,var(--card)); color: var(--blue) }
+html.dark .calc-key.op.active,
+body.dark .calc-key.op.active { background: var(--blue); color: #fff }
+@media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
+  .calc-assists button { backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; border-color: #8996ae }
+}
+.calc-assists button { background: var(--native-secondary); border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; color: var(--label); border-radius: 12px }
+.calc-assists button[aria-expanded=true],
+html.dark .calc-assists button[aria-expanded=true] { background: var(--blue); color: #fff }
+html.dark .calc-expression,
+html.dark .calc-unit,
+html.dark .calc-tools-panel p { color: var(--label2) }
+.calc-tools-panel input { background: var(--card); color: var(--label); border-color: var(--sep) }
+html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max-height: var(--native-viewport-height,100dvh) }
+.approval-handle:focus-visible,
+.month-wheel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+@media (prefers-reduced-motion:reduce) {
+  #calculator { transition: none }
+  .calc-key:active { transform: none }
+}
+@media (max-height:520px) {
+  .calc-display { min-height: 50px }
+  .calc-expression { height: 20px }
+  .calc-assists { margin: 4px 0 }
+  .calc-key,
+  .calc-top { height: 44px }
+}

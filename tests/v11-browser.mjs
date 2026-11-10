@@ -82,8 +82,8 @@ async function verifyCardFlows(page,label,root){
   assert.ok(await page.locator('#cpCommitApply').isVisible());assert.ok(await page.locator('#cpReconciled').isHidden());
   assert.deepEqual(await getData(page),before,'toggling the switch does not change any saved data');
   await page.locator('#cpApply').click();await page.locator('#cpApply').click();assert.deepEqual(await getData(page),before);
-  await page.locator('#cpClose').click();await alertButton(page,'戻る').click();assert.ok(await page.locator('#cpApply').isVisible(),'"keep editing" keeps the draft open');
-  await page.locator('#cpClose').click();await alertButton(page,'破棄').click();
+  await page.locator('#cpClose').click();await alertButton(page,'編集を続ける').click();assert.ok(await page.locator('#cpApply').isVisible(),'"keep editing" keeps the draft open');
+  await page.locator('#cpClose').click();await alertButton(page,'変更を破棄').click();
   await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));assert.deepEqual(await getData(page),before,'discarding leaves balance and statement unchanged');
 
   // Explicit commit happens once even when the button is pressed twice.
@@ -182,6 +182,34 @@ async function verifyBackupAndDelete(page,label,root,errors){
   await closeEverything(page);
 }
 
+async function verifyAlternatives(page){
+  const before=await getData(page);
+  // ASSETS-103: 長押しドラッグの代替として、上下ボタンで並べ替えられる
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await page.locator('#mm3AssetSort').click();
+  await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();
+  const rows=()=>page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').evaluateAll(list=>list.map(r=>r.dataset.bank)),original=await rows();
+  assert.ok(original.length>=2);await assertTapTarget(page.locator('#mm3AssetOrderEdit'),'mm3AssetOrderEdit');
+  await page.locator('#mm3AssetOrderEdit').click();await page.locator('#aoList .v11-order-btn').first().waitFor();await page.waitForTimeout(350);
+  for(const button of await page.locator('#aoList .v11-order-btn').all())await assertTapTarget(button,'order button');
+  assert.equal(await page.locator('#aoList .v11-order-btn').first().isDisabled(),true,'the first account cannot move up');
+  assert.ok((await page.locator('#aoList .v11-order-btn').nth(1).getAttribute('aria-label')).endsWith('を下へ'));
+  await page.locator('#aoList .v11-order-btn').nth(1).click();
+  assert.deepEqual(await rows(),original,'moving inside the sheet is a draft');
+  await page.locator('#aoCancel').click();await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
+  assert.deepEqual(await rows(),original,'discarding keeps the saved order');
+  await page.locator('#mm3AssetOrderEdit').click();await page.locator('#aoList .v11-order-btn').nth(1).click();await page.locator('#aoSave').click();
+  await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
+  assert.deepEqual(await rows(),[original[1],original[0],...original.slice(2)],'Done saves the new order');
+  assert.deepEqual(await getData(page),before,'reordering accounts never changes financial data');
+  // SET-111: スライダーの代替として音量を5%ずつ変えられる
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('settings'));await page.locator('#feedbackSettingsRow').click();await page.locator('#fbVolumeUp').waitFor();await page.waitForTimeout(350);
+  await assertTapTarget(page.locator('#fbVolumeUp'),'fbVolumeUp');await assertTapTarget(page.locator('#fbVolumeDown'),'fbVolumeDown');
+  const volume=async()=>Number((await page.locator('#fbVolumeLabel').innerText()).replace('%','')),start=await volume();
+  await page.locator(start>=100?'#fbVolumeDown':'#fbVolumeUp').click();assert.equal(await volume(),start>=100?95:start+5);
+  await page.locator(start>=100?'#fbVolumeUp':'#fbVolumeDown').click();assert.equal(await volume(),start);
+  await closeEverything(page);
+}
+
 export async function verifyV11({createPage,passed,root,errors}){
   let approvalChecked=0;
   for(const width of [320,393])for(const appearance of ['light','dark']){
@@ -190,8 +218,9 @@ export async function verifyV11({createPage,passed,root,errors}){
     await verifyCardFlows(page,label,root);
     await verifyCalculatorDraft(page);
     if(await verifyApproval(page))approvalChecked++;
+    await verifyAlternatives(page);
     await verifyBackupAndDelete(page,label,root,errors);
-    passed(`第11版 ${width}px ${appearance}: tokens, month arrows/wheel, balance switch, calculator drafts, approval slider alternative, restore preview and delete-all confirmation keep data intact until the explicit commit`);
+    passed(`第11版 ${width}px ${appearance}: tokens, month arrows/wheel, button alternatives for reordering and volume, balance switch, calculator drafts, approval slider alternative, restore preview and delete-all confirmation keep data intact until the explicit commit`);
     await context.close();
   }
   assert.ok(approvalChecked>0,'the approval alternative was exercised');

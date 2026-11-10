@@ -1,0 +1,231 @@
+/* ボタン、入力欄、スイッチ、セグメント、選択部品。 */
+.section-head { text-transform: none; text-align: left; font-size: 13px; font-weight: 500; line-height: 1.45; margin: 22px 4px 8px; color: var(--label2) }
+.category-grid { display: grid; gap: 9px; grid-template-columns: repeat(2,minmax(0,1fr)) }
+.cat-card:active { transform: scale(.97); opacity: .6 }
+.cat-top { display: flex; align-items: center; justify-content: space-between; gap: 8px }
+.filter-stack { display: grid; grid-template-columns: minmax(0,1fr) 145px; gap: 8px; margin-bottom: 10px }
+.filter-stack .searchbox { margin: 0 }
+.action-list { display: grid; gap: 9px }
+.action-list .secondary { text-align: left; padding: 0 14px }
+.inline-value-row { display: flex; align-items: center; justify-content: space-between; gap: 12px }
+.inline-value-row .form-label { margin: 0 }
+.form-section { margin-bottom: 13px; padding: 12px 16px }
+.form-label { margin: 0 4px 6px; text-align: left; font-size: 13px; line-height: 1.4; color: var(--label2); font-weight: 400 }
+.form-group-title { text-align: left; line-height: 1.45; font-size: 13px; font-weight: 400; letter-spacing: 0; margin: 22px 16px 8px; color: var(--label2) }
+.form-card { margin-bottom: 16px; background: var(--card); border-radius: 18px; overflow: hidden }
+.form-card .form-section { margin: 0; padding: 10px 13px; border-bottom: .5px solid var(--sep) }
+.form-card .form-section:last-child { border-bottom: 0 }
+.form-helper { margin: -8px 4px 14px; font-size: 13px; line-height: 1.6; color: var(--label2); padding-inline: 4px }
+.switch:after { content: ""; position: absolute; left: 2px; top: 2px; width: 27px; height: 27px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s }
+.switch.on:after { transform: translateX(20px) }
+.searchbox { background: var(--fill); border-radius: 11px; display: flex; align-items: center; padding: 8px 10px; gap: 7px; margin-bottom: 10px }
+.secondary:active { transform: scale(.97); opacity: .6 }
+.tag-chip-row { display: flex; align-items: center; gap: 8px }
+.tag-dot { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto }
+.field:focus-visible,
+.searchbox:focus-within { outline: 2px solid var(--blue) !important; outline-offset: 2px }
+.cat-name { font-size: 14px }
+.cat-amount { font-size: 16px }
+.cat-share { font-size: 12px }
+.cat-card { min-width: 0; padding: 14px 12px }
+.form-card .field { min-height: 44px; font-size: 16px }
+.seg button { flex-shrink: 0 }
+#app .section-head { font-size: 17px; font-weight: 600; letter-spacing: -.2px; line-height: 1.35; color: var(--label); margin: 24px 4px 10px }
+#app .category-grid { gap: 8px }
+#app .cat-card { border-radius: 16px; background: var(--card); padding: 14px }
+#app .group { background: var(--card); border: 0; border-radius: var(--native-radius); box-shadow: none; overflow: hidden }
+#screen-pay .mm3-salary-primary-change { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; margin-top: 6px; font-size: 12px; font-weight: 650; font-variant-numeric: tabular-nums }
+#screen-payments .mm3-payment-primary-change { display: flex; align-items: baseline; gap: 7px; margin-top: 5px; font-size: 11px; font-weight: 650; font-variant-numeric: tabular-nums; flex-wrap: wrap }
+#screen-assets .mm3-assets-primary-change { display: flex; align-items: baseline; gap: 6px; margin-top: 5px; font-size: 12px; font-weight: 680; font-variant-numeric: tabular-nums; flex-wrap: wrap }
+#screen-assets .mm3-assets-section-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 16px 1px 7px }
+#app .day-closing-card { border: 0; border-radius: var(--native-radius); background: var(--card); gap: 12px; padding: 12px 14px; margin: 0 0 12px; box-shadow: none }
+#app .cat-icon { border-radius: 9px }
+.field { font-size: 17px; line-height: 1.45; background: transparent }
+.field::placeholder { color: var(--label3); opacity: 1 }
+@media (max-width:374px) {
+  .row-value { font-size: 14px }
+}
+.calc-key { height: clamp(44px,6.7dvh,60px); font-size: 26px; touch-action: manipulation }
+.day-close-mark { font-size: 9px; color: var(--green); margin-left: 2px }
+@media (max-width:375px) {
+  .mm3-atf-day { min-height: 54px }
+}
+.stmt-row-amount { font-size: 13px; font-weight: 700; white-space: nowrap }
+.primary,
+.secondary { border-radius: var(--native-control); font-size: 17px; min-height: var(--cta-height) }
+.mm3-salary-records-push .mm3-salary-record-row { width: 100%; min-height: 62px; border: 0; border-bottom: .5px solid var(--sep); background: var(--card); display: flex; align-items: center; gap: 10px; text-align: left; padding: 9px 12px; color: var(--label); transition: background .11s,transform .11s,opacity .11s }
+.mm3-salary-records-push .chev { font-size: 20px; color: var(--label3) }
+.pro3-transfer-route .arrow { color: var(--label3) }
+.profile-photo-action.danger { color: var(--red); margin-top: 16px }
+.mail-action-approve .mail-action-disc { background: rgba(52,199,89,.14); color: var(--green) }
+.mail-state.pending { color: var(--blue); background: rgba(0,122,255,.08) }
+.mail-state.duplicate { color: var(--label); background: var(--fill) }
+.mail-editor-view .field { color: var(--label); line-height: 1.4 }
+.mail-editor-view .form-section { padding: 11px 15px }
+.settings-detail-view .row { min-height: 56px; padding: 14px 16px; color: var(--label) }
+.income-empty-row .row-sub { margin-top: 0 }
+.settings-detail-view .row-sub { display: block; margin-top: 4px; font-size: 12px; line-height: 1.65; color: var(--label2) }
+.settings-detail-view .section-head,
+.settings-detail-view .form-group-title { font-size: 13px; font-weight: 400; color: var(--label2); margin: 22px 16px 8px }
+.settings-choice-mark.selected { background: var(--blue); color: white; border-color: var(--blue) }
+.day-close-mark.changed { color: var(--orange) }
+.primary.v11-danger-cta { background: var(--danger); color: #fff }
+.primary.v11-danger-cta:disabled { opacity: .4 }
+.v11-danger-note { display: grid; gap: 4px; margin: 0 0 var(--space-page); padding: 12px var(--space-page); border-radius: var(--radius-card); background: var(--danger-soft); color: var(--label); font-size: var(--type-note); line-height: 1.55 }
+.hbar-head strong { font-size: 13px }
+.goal-amount-meta strong { display: block; font-size: 16px; margin-top: 2px; font-variant-numeric: tabular-nums }
+.goal-allocation-summary strong { font-size: 14px }
+.goal-review-meta strong { font-size: 15px; display: block; margin-top: 2px }
+.planner-compare strong { display: block; margin-top: 2px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums }
+.planner-summary-grid strong { display: block; font-size: 14px; margin-top: 2px; font-variant-numeric: tabular-nums }
+.budget-dial-meta strong { display: block; font-size: 12px; margin-top: 2px }
+.acf-split-grid strong { display: block; font-size: 13px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums }
+.acf-credit-head strong { font-size: 14px }
+.acf-credit-preview strong { font-size: 12.5px; display: block; margin-top: 2px }
+.metric-cell strong { display: block; font-size: 16px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.month-hero-meta strong { display: block; font-size: 14px; margin-top: 2px }
+.acf-metric strong { display: block; font-size: 13px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums }
+.acf-summary-tile strong { display: block; font-size: 18px; margin-top: 3px; font-variant-numeric: tabular-nums }
+@media (max-width:390px) {
+  .metric-cell strong { font-size: 14px }
+}
+.rebalance-preview strong { color: var(--label) }
+.plan-vs-actual strong { display: block; font-size: 14px; margin-top: 2px }
+.payment-suggest strong { color: var(--blue) }
+.pro-metric strong { display: block; font-size: 14px; line-height: 1.25; margin-top: 4px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere }
+.pro3-freadout strong { font-size: 14px; font-variant-numeric: tabular-nums }
+.pro3-scenario-metrics strong { display: block; font-size: 12px; margin-top: 2px; font-variant-numeric: tabular-nums }
+.pro3-allocation-btn strong { display: block; font-size: 17px; margin-top: 3px; font-variant-numeric: tabular-nums }
+.pro3-check-main strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.pro3-rebalance-option strong { font-size: 14px }
+.pro4-parse-head strong { font-size: 13px }
+.pro4-goal-banner strong { display: block; font-size: 14px }
+.pro4-goal-title strong { font-size: 16px }
+.pro4-goal-metrics strong { display: block; font-size: 14px; margin-top: 2px; font-variant-numeric: tabular-nums }
+.pro4-goal-item strong { font-size: 13px }
+.pro4-insight strong { display: block; font-size: 13px }
+.pro4-review-state strong { font-size: 14px }
+.pro4-review-issue strong { display: block; font-size: 12.5px }
+.money-ticker-meta strong { display: block; font-size: 9.5px; font-weight: 700; color: var(--ticker-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.acf-home-split strong { display: block; font-family: var(--font-rounded); font-size: 16px; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.acf-graph-head strong { font-size: 14px }
+@media (max-width:390px) {
+  .mm3-action-main strong { font-size: 13.5px }
+}
+.stmt-import-hero strong { display: block; font-size: 17px }
+.stmt-file-picker strong { font-size: 15px }
+.stmt-processing strong { font-size: 14px }
+.stmt-row-main strong { display: block; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.mail-status-head strong { font-size: 20px; font-weight: 650; letter-spacing: -.3px }
+.mail-metrics strong { display: block; font-size: 20px; font-weight: 600; margin-top: 3px; font-variant-numeric: tabular-nums; animation: mailFade .18s ease-out }
+.mail-summary strong { display: block; font-size: 21px; font-weight: 600; margin-top: 5px; font-variant-numeric: tabular-nums; animation: mailFade .18s ease-out }
+.mail-match-panel strong { font-size: 15px; font-weight: 600; display: block }
+.pro3-recon-summary strong { display: block; font-size: 14px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.impact-line strong { font-variant-numeric: tabular-nums; white-space: nowrap }
+.pro4-analysis-row-head strong { white-space: nowrap; font-variant-numeric: tabular-nums }
+.mm3-action-main strong { display: block; text-overflow: ellipsis; font-size: 16px; line-height: 1.35; font-weight: 500; white-space: normal; overflow: visible }
+.day-closing-card strong { display: block; font-size: 15px }
+.mm3-atf-next-event-main strong { font-size: 15px }
+.day-close-totals strong { font-size: 22px; font-weight: 600; letter-spacing: -.035em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere }
+.day-close-stage-total strong { font-size: 32px; letter-spacing: -.04em; font-weight: 600; overflow-wrap: anywhere }
+.day-close-item-check strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.5 }
+.day-close-empty strong { display: block; color: var(--label); font-size: 15px }
+.v11-danger-note strong { font-size: 15px; color: var(--danger) }
+.v11-switch-row,
+.v11-radio-row { font: inherit; color: inherit }
+.v11-switch-row:disabled { opacity: .5 }
+.v11-switch { flex: none; width: 51px; height: 31px; border-radius: 16px; background: var(--fill2); position: relative; transition: background var(--motion-update) }
+.v11-switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform var(--motion-update) }
+.v11-switch-row[aria-checked=true] .v11-switch { background: var(--success) }
+.v11-switch-row[aria-checked=true] .v11-switch::after { transform: translateX(20px) }
+.v11-radio { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--label3); box-sizing: border-box; display: grid; place-items: center }
+.v11-radio-row[aria-checked=true] .v11-radio { border-color: var(--accent) }
+.v11-radio-row[aria-checked=true] .v11-radio::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--accent) }
+.month-picker-result { display: block; text-align: center; font-size: 17px; font-weight: 600; margin: 16px 0 }
+.v11-picker-detail { display: grid; gap: 2px }
+.goal-amount-meta span { display: block; font-size: 11px; color: var(--label2) }
+.goal-review-meta span { font-size: 10px; color: var(--label2); display: block }
+.planner-compare span,
+.planner-summary-grid span { display: block; font-size: 9.5px; color: var(--label2) }
+.budget-dial-meta span { display: block; color: var(--label2); font-size: 9.5px }
+.acf-split-grid span { display: block; font-size: 9.5px; color: var(--label2) }
+.acf-credit-head span { font-size: 13px; color: var(--label2) }
+.acf-credit-preview span { font-size: 9px; color: var(--label2); display: block }
+.metric-cell span { display: block; font-size: 10.5px; color: var(--label2) }
+.month-hero-meta span { display: block; font-size: 10px; color: var(--label2) }
+.acf-metric span { display: block; font-size: 9.5px; color: var(--label2) }
+.acf-summary-tile span { display: block; font-size: 10px; color: var(--label2) }
+.plan-vs-actual span { display: block; font-size: 9.5px; color: var(--label2) }
+.pro-metric span { display: block; color: var(--label2); font-size: 10.5px; line-height: 1.25 }
+.pro3-freadout span { font-size: 11px; color: var(--label2) }
+.pro3-scenario-metrics span { display: block; font-size: 9px; color: var(--label2) }
+.pro3-allocation-btn span { display: block; font-size: 10px; color: var(--label2) }
+.pro3-check-main span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 2px }
+.pro3-rebalance-option span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px; line-height: 1.35 }
+.pro3-allocation-ranges span,
+.pro4-parse-head span { font-size: 10px; color: var(--label2) }
+.pro4-goal-banner span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 2px; line-height: 1.35 }
+.pro4-goal-metrics span { display: block; font-size: 9.5px; color: var(--label2) }
+.pro4-goal-item span { display: block; font-size: 10px; color: var(--label2); margin-top: 2px }
+.pro4-insight span { display: block; font-size: 11px; color: var(--label2); line-height: 1.45; margin-top: 4px }
+.pro4-review-state span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px }
+.pro4-review-issue span { display: block; font-size: 10px; color: var(--label2); margin-top: 2px }
+.money-ticker-meta span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px }
+.acf-home-split span { display: block; font-size: 11px; color: var(--label2) }
+.acf-graph-head span { font-size: 10.5px; color: var(--label2) }
+.stmt-import-hero span { display: block; color: var(--label2); font-size: 12px; line-height: 1.5; margin-top: 4px }
+.goal-allocation-summary span { color: var(--label2) }
+.safety-strip span { min-width: 3px; flex: 1 }
+.impact-line span,
+.asset-summary-line span,
+.pro-chart-readout span,
+.acf-plan-compare span { color: var(--label2) }
+.stmt-file-picker>span { min-height: 120px; border: 1.5px dashed var(--fill2); border-radius: 16px; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--blue); gap: 5px }
+.stmt-row-main span { display: block; font-size: 10.5px; color: var(--label2); margin-top: 3px }
+.mail-metrics span,
+.mail-summary span { display: block; font-size: 12px; color: var(--label2) }
+.pro3-recon-summary span { display: block; font-size: 9.5px; color: var(--label2) }
+.mm3-atf-credit span { font-size: 11px; line-height: 1.4; overflow-wrap: anywhere }
+.day-close-totals span,
+.day-close-stage-total span { font-size: 12px; color: var(--label2) }
+.day-close-item-actions>span { font-size: 11px; color: var(--label2) }
+.v11-picker-detail span { font-size: var(--type-note); font-weight: 400; color: var(--label2) }
+.v11-compare { width: 100%; border-collapse: collapse; margin: 0 0 var(--space-page); background: var(--card); border-radius: var(--radius-card); overflow: hidden; font-size: 15px }
+.v11-compare caption { caption-side: top; text-align: left; padding: 0 4px 8px; font-size: var(--type-note); color: var(--label2) }
+.cashflow-table th { width: 104px; min-width: 104px; height: 38px; padding: 6px 7px; text-align: right; border-bottom: .5px solid var(--sep); font-variant-numeric: tabular-nums; font-weight: 650; color: var(--label2); background: var(--card); position: sticky; top: 0; z-index: 2 }
+.v11-compare th { padding: 12px var(--space-page); text-align: right; border-bottom: .5px solid var(--sep); font-variant-numeric: tabular-nums }
+.cashflow-table td { width: 104px; min-width: 104px; height: 38px; padding: 6px 7px; text-align: right; border-bottom: .5px solid var(--sep); font-variant-numeric: tabular-nums }
+.v11-compare td { padding: 12px var(--space-page); text-align: right; border-bottom: .5px solid var(--sep); font-variant-numeric: tabular-nums }
+.v11-compare th:first-child { text-align: left; font-weight: 400 }
+.v11-compare thead th { font-size: var(--type-note); color: var(--label2); font-weight: 400 }
+@media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
+  html.dark .calc-assists button { background: #2c2c2e; border-color: #8996ae }
+}
+html.dark .calc-assists button,
+body.dark .calc-assists button { background: var(--native-secondary); border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; color: var(--label); border-radius: 12px }
+.v11-compare tbody tr:last-child>* { border-bottom: 0 }
+.v11-approval-alt { margin-top: 10px }
+.v11-switch-row:focus-visible,
+.v11-radio-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+@media (prefers-contrast:more) {
+  .form-card { box-shadow: inset 0 0 0 1px var(--sep) }
+}
+@media (prefers-reduced-motion:reduce) {
+  .v11-switch,
+  .v11-switch::after { transition: none }
+}
+@media (max-width:390px) {
+  .filter-stack { grid-template-columns: 1fr }
+  .compact-metrics { grid-template-columns: 1fr 1fr 1fr }
+  .category-grid { gap: 8px }
+}
+@media (max-width:374px) {
+  .filter-stack { grid-template-columns: 1fr }
+}
+.v11-step-btn { width: var(--tap-min); height: var(--tap-min); border: 0; border-radius: 50%; background: var(--fill); color: var(--label); font-size: 20px; line-height: 1; display: grid; place-items: center }
+.v11-step-btn:active { opacity: .6 }
+.v11-inline-action { display: inline-flex; align-items: center; min-height: var(--tap-min); margin-left: 8px; padding: 0 4px; border: 0; background: transparent; color: var(--accent); font-size: var(--type-note); font-weight: 600 }
+.v11-order-row { gap: 8px }
+.v11-order-btn { flex: none; width: var(--tap-min); height: var(--tap-min); border: 0; border-radius: 12px; background: var(--fill); color: var(--accent); display: grid; place-items: center }
+.v11-order-btn:disabled { opacity: .35 }
+.v11-order-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
