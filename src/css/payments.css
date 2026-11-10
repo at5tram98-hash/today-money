@@ -3,7 +3,7 @@
 #screen-payments .mm3-payment-shell { padding-bottom: 8px; transform-origin: 50% 15%; contain: layout style }
 #screen-payments .mm3-payment-topbar .date-line { display: none }
 #screen-payments .mm3-payment-monthline { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 0 0; min-height: 34px }
-#screen-payments .mm3-payment-monthmeta { font-size: 10px; color: var(--label2); white-space: nowrap }
+#screen-payments .mm3-payment-monthmeta { font-size: var(--type-min); color: var(--label2); white-space: nowrap }
 #screen-payments .mm3-payment-primary-label { color: var(--label2); font-size: 13px; font-weight: 500 }
 @media (max-width:390px) {
   #screen-payments .mm3-payment-primary-value { font-size: 37px }
@@ -25,7 +25,7 @@ html.dark #screen-payments .mm3-atf-grid { stroke: rgba(235,235,245,.12) }
 #screen-payments .mm3-atf-selected { fill: var(--card); stroke: var(--blue); stroke-width: 2.3; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .1s }
 #screen-payments .mm3-atf-chart.scrubbing .mm3-atf-guide,
 #screen-payments .mm3-atf-chart.scrubbing .mm3-atf-selected { opacity: 1 }
-#screen-payments .mm3-atf-axis { fill: var(--label2); font-family: -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif; font-size: 10px }
+#screen-payments .mm3-atf-axis { fill: var(--label2); font-family: -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif; font-size: var(--type-min) }
 #screen-payments .mm3-atf-chart.scrubbing .mm3-atf-tooltip { opacity: 1; transform: translateX(-50%) translateY(0) }
 #screen-payments .mm3-atf-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep); margin-top: 2px }
 #screen-payments .mm3-atf-metric { min-width: 0; padding: 10px 8px 10px 0 }
@@ -44,7 +44,7 @@ html.dark #screen-payments .mm3-atf-grid { stroke: rgba(235,235,245,.12) }
 }
 #screen-payments .mm3-payment-spark { height: 28px; color: var(--red); display: grid; place-items: center; width: 54px }
 #screen-payments .mm3-payment-spark-line { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
-#screen-payments .mm3-payment-spark-empty { font-size: 8px; color: var(--label3) }
+#screen-payments .mm3-payment-spark-empty { font-size: var(--type-min); color: var(--label3) }
 #screen-payments .mm3-payment-watch-value { text-align: right; min-width: 0 }
 #screen-payments .mm3-payment-detail-list { border-top: .5px solid var(--sep); border-bottom: .5px solid var(--sep) }
 #screen-payments .mm3-payment-detail-row:last-child { border-bottom: 0 }
@@ -56,7 +56,7 @@ html.dark #screen-payments .mm3-atf-grid { stroke: rgba(235,235,245,.12) }
 .mm3-payment-push-row:active { opacity: .62 }
 .acf-day-state-block .row-value { max-width: 48% }
 .mm3-payment-push-row .row-value { max-width: 38% }
-#screen-payments .mm3-payment-reveal { animation: mm3PaymentReveal .26s cubic-bezier(.2,.8,.2,1) }
+#screen-payments .mm3-payment-reveal { animation: mm3PaymentReveal var(--motion-push) cubic-bezier(.2,.8,.2,1) }
 #screen-payments .mm3-payment-topbar .icon-btn { transition: transform var(--mm3-motion-tap) var(--mm3-ease),opacity var(--mm3-motion-tap) ease,background var(--mm3-motion-tap) ease }
 #paymentsContent { touch-action: pan-y }
 #screen-payments .mm3-atf-event-dot.income { stroke: var(--green) }

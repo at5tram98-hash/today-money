@@ -32,7 +32,7 @@
 .planner-compare { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin: 11px 0 }
 .planner-calendar .day-cell { cursor: pointer }
 .planner-calendar.event-lens .day-cell:not(.has-event):not(.out) { opacity: .42 }
-.planner-calendar .day-cell.highlight-day { box-shadow: inset 0 0 0 1.5px var(--blue); animation: plannerDayPulse .7s ease-out }
+.planner-calendar .day-cell.highlight-day { box-shadow: inset 0 0 0 1.5px var(--blue); animation: plannerDayPulse var(--motion-push) ease-out }
 .planner-summary-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px; margin: 9px 0 12px }
 .budget-dial-meta { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 12px }
 .budget-control-row { display: grid; grid-template-columns: 48px 1fr 48px; gap: 10px; align-items: center; margin-top: 15px }
@@ -55,8 +55,8 @@
 .money-ticker-spark { grid-column: 2/3; grid-row: 2/4; align-self: center; width: 52px; height: 34px; color: var(--ticker-accent); display: grid; place-items: center }
 .money-ticker-spark-line { fill: none; stroke: var(--ticker-accent); stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
 .money-ticker-spark-fill { fill: var(--ticker-accent); opacity: .08 }
-.money-ticker-spark-empty { font-size: 8.5px; color: var(--label3); line-height: 1.15; text-align: center }
-.money-ticker-meta { grid-column: 1/2; align-self: end; font-size: 9.5px; line-height: 1.25; color: var(--label2); margin-top: 5px; min-width: 0 }
+.money-ticker-spark-empty { font-size: var(--type-min); color: var(--label3); line-height: 1.15; text-align: center }
+.money-ticker-meta { grid-column: 1/2; align-self: end; font-size: var(--type-min); line-height: 1.25; color: var(--label2); margin-top: 5px; min-width: 0 }
 .money-ticker-card.large-value .money-ticker-value { grid-column: 1/-1; font-size: 15px; letter-spacing: -.2px }
 .money-ticker-card.large-value .money-ticker-spark { display: none }
 .money-ticker-card.large-value .money-ticker-meta { grid-column: 1/-1 }
@@ -88,7 +88,7 @@
 #app .money-ticker-card { border-radius: 18px; box-shadow: none; min-height: 90px }
 #app .money-ticker-name { font-size: 11px; font-weight: 600 }
 #app .money-ticker-value { font-size: 21px; font-weight: 700 }
-#app .money-ticker-meta { font-size: 10px; line-height: 1.35 }
+#app .money-ticker-meta { font-size: var(--type-min); line-height: 1.35 }
 #screen-pay .mm3-salary-metric strong,
 #screen-payments .mm3-atf-metric strong { display: block; margin-top: 3px; font-weight: 680; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 #screen-payments .mm3-payment-event-main strong { display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
@@ -112,8 +112,8 @@
 #screen-assets .mm3-assets-watch-main strong { font-size: 15px; white-space: normal; overflow-wrap: anywhere; line-height: 1.4 }
 #app .day-closing-card strong { font-size: 16px; font-weight: 600 }
 #app .mm3-action-main strong { font-size: 16px; font-weight: 500; line-height: 1.4 }
-#app .money-ticker-meta strong { font-size: 10px; line-height: 1.35 }
-#app .money-ticker-spark-empty { font-size: 9px }
+#app .money-ticker-meta strong { font-size: var(--type-min); line-height: 1.35 }
+#app .money-ticker-spark-empty { font-size: var(--type-min) }
 #app .daily-goal>div:last-child { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 2px 8px }
 #app .goal-plan-action>span:last-child { font-size: 15px; line-height: 1 }
 @media (prefers-contrast:more) {
@@ -135,7 +135,7 @@
   #app .calendar-card { margin-inline: -8px; padding-inline: 0 }
 }
 @media (max-width:340px) {
-  #screen-month .month-name-btn { width: auto; max-width: 100%; overflow: visible; text-overflow: clip; font-size: 32px; line-height: 1.05 }
+  #screen-month .month-name-btn { width: auto; max-width: 100%; overflow: visible; text-overflow: clip; font-size: 22px; line-height: 1.2 }
   .money-ticker-spark { width: 44px }
   .money-ticker-value { font-size: 17px }
 }

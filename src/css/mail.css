@@ -33,7 +33,7 @@
 .mail-items { display: grid; gap: 8px; margin-bottom: 14px }
 .mail-item-content { display: block; width: 100%; min-width: 0; min-height: 44px !important; border: 0; background: transparent; color: inherit; text-align: left; padding: 12px 12px 0; border-radius: 12px }
 .mail-item-state { min-width: 0; flex: 1 }
-.mail-item-state .mail-caption { font-size: 10px; line-height: 1.4; margin-top: 3px }
+.mail-item-state .mail-caption { font-size: var(--type-min); line-height: 1.4; margin-top: 3px }
 .mail-inline-actions { display: flex; align-items: center; gap: 0; flex: 0 0 88px }
 .mail-action-disc { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--fill); color: var(--label2) }
 .mail-action-match:disabled .mail-action-disc { background: rgba(255,149,0,.12); color: var(--orange) }

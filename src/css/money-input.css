@@ -1,7 +1,7 @@
 /* 電卓、月ホイール、承認スライド。 */
 .approval-slider.returning .approval-handle { transition: transform .17s cubic-bezier(.22,.88,.22,1) }
 .approval-slider.returning .approval-progress { transition: width .17s cubic-bezier(.22,.88,.22,1) }
-#calculator { position: fixed; z-index: 420; bottom: 0; left: 50%; width: min(100%,500px); max-height: calc(100dvh - 12px); padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); box-sizing: border-box; transform: translate(-50%,110%); transition: transform .28s; overflow: auto; overscroll-behavior: contain }
+#calculator { position: fixed; z-index: 420; bottom: 0; left: 50%; width: min(100%,500px); max-height: calc(100dvh - 12px); padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); box-sizing: border-box; transform: translate(-50%,110%); transition: transform var(--motion-sheet); overflow: auto; overscroll-behavior: contain }
 #screen-assets .mm3-assets-reorder-handle { width: 18px; height: 34px; display: grid; place-items: center; color: var(--label3); font-size: 18px; letter-spacing: -4px; transform: rotate(90deg); pointer-events: none }
 #calculator.show { transform: translate(-50%,0) }
 .calc-top { display: flex; align-items: center; justify-content: space-between; height: 44px; gap: 8px }
@@ -44,7 +44,7 @@
 .calc-tools-panel h2 { margin: 0; font-size: 20px }
 .calc-tools-panel p { font-size: 13px; color: var(--label2) }
 .pro3-allocation-ranges label { display: grid; grid-template-columns: 54px 1fr; gap: 9px; align-items: center; min-height: 34px }
-.pro4-parse-row label { font-size: 10.5px; color: var(--label2) }
+.pro4-parse-row label { font-size: var(--type-min); color: var(--label2) }
 .acf-month-nav label { display: block; color: var(--label2); font-size: 13px; font-weight: 650 }
 .mm3-atf-form label { display: grid; gap: 5px; font-size: 13px; font-weight: 700 }
 .calc-tools-panel label { display: block; font-size: 13px }
@@ -71,35 +71,35 @@ html.motion-off #calculator { transition: none }
 @media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {
   html.dark #calculator { background: #1c1c1e }
 }
-#screen-pay .mm3-salary-primary-change small { font-size: 10px; color: var(--label2); font-weight: 520 }
-#screen-pay .mm3-salary-donut-center span { font-size: 9px; color: var(--label2) }
+#screen-pay .mm3-salary-primary-change small { font-size: var(--type-min); color: var(--label2); font-weight: 520 }
+#screen-pay .mm3-salary-donut-center span { font-size: var(--type-min); color: var(--label2) }
 #screen-pay .mm3-salary-legend-main small { display: block; color: var(--label2); margin-top: 1px; font-variant-numeric: tabular-nums }
 #screen-pay .mm3-salary-metric span { display: block; color: var(--label2); overflow: hidden; text-overflow: ellipsis }
-#screen-pay .mm3-salary-event-main small { display: block; font-size: 9.5px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-event-main small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 #screen-pay .mm3-salary-donut-center strong { font-size: 17px; line-height: 1.1; margin-top: 2px; font-variant-numeric: tabular-nums }
 #screen-pay .mm3-salary-event-value strong { display: block; font-size: 13px; color: var(--green); font-variant-numeric: tabular-nums }
-#screen-pay .mm3-salary-event-value small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-event-value small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 #screen-pay .mm3-salary-watch-main small { display: block; color: var(--label2); margin-top: 3px; overflow: hidden; text-overflow: ellipsis }
 #screen-pay .mm3-salary-watch-value small { display: block; color: var(--green); font-weight: 650; margin-top: 2px; font-variant-numeric: tabular-nums }
-#screen-pay .mm3-salary-detail-row small { display: block; font-size: 9.5px; color: var(--label2); margin-top: 2px }
+#screen-pay .mm3-salary-detail-row small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 #screen-pay .mm3-salary-detail-row>span { font-size: 18px; color: var(--label3) }
-#screen-payments .mm3-payment-primary-change small { font-size: 9.5px; color: var(--label2); font-weight: 540 }
+#screen-payments .mm3-payment-primary-change small { font-size: var(--type-min); color: var(--label2); font-weight: 540 }
 #screen-payments .mm3-atf-tooltip small { display: block; color: rgba(255,255,255,.70); margin-top: 2px; overflow: hidden; text-overflow: ellipsis }
 #screen-payments .mm3-atf-metric span { display: block; color: var(--label2); overflow: hidden; text-overflow: ellipsis; font-size: 12px; white-space: normal }
-#screen-payments .mm3-payment-event-main small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-payment-event-main small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 #screen-pay .mm3-salary-event-main strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 #screen-pay .mm3-salary-detail-row strong { display: block; font-size: 12.5px }
 @media (max-width:390px) {
   #screen-pay .mm3-salary-watch-value strong { font-size: 11.5px }
 }
 #screen-payments .mm3-payment-event-value strong { display: block; font-size: 12.5px; color: var(--red); font-variant-numeric: tabular-nums }
-#screen-payments .mm3-payment-event-value small { display: block; font-size: 8.5px; color: var(--label2); margin-top: 2px }
+#screen-payments .mm3-payment-event-value small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 #screen-payments .mm3-payment-watch-main small { display: block; color: var(--label2); margin-top: 3px; overflow: hidden; text-overflow: ellipsis }
-#screen-payments .mm3-payment-detail-main small { display: block; font-size: 9px; color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+#screen-payments .mm3-payment-detail-main small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 #screen-payments .mm3-payment-watch-value small { display: block; margin-top: 2px; font-weight: 650; font-variant-numeric: tabular-nums }
-#screen-assets .mm3-assets-primary-change small { font-size: 10px; color: var(--label2); font-weight: 560 }
+#screen-assets .mm3-assets-primary-change small { font-size: var(--type-min); color: var(--label2); font-weight: 560 }
 #screen-assets .mm3-assets-history-btn svg { color: var(--blue) }
-#screen-assets .mm3-assets-tooltip small { display: block; font-size: 8px; color: rgba(255,255,255,.7); margin-top: 2px }
+#screen-assets .mm3-assets-tooltip small { display: block; font-size: var(--type-min); color: rgba(255,255,255,.7); margin-top: 2px }
 #screen-assets .mm3-assets-metric span { display: block; color: var(--label2); font-size: 12px; white-space: normal }
 #screen-assets .mm3-assets-watch-main small { display: block; color: var(--label2); margin-top: 4px; overflow: hidden; text-overflow: ellipsis }
 #screen-assets .mm3-assets-watch-value small { display: block; color: var(--label2); margin-top: 3px; font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 12px }
@@ -108,7 +108,7 @@ body.dark #calculator { background: var(--bg); color: var(--label); border: 0; b
 .calc-key { border: 0; box-shadow: none; background: var(--card); color: var(--label); border-radius: 16px; font-weight: 400 }
 html.dark .mm3-atf-dayrow { background: var(--fill2) }
 .mm3-atf-form input[type=number] { width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid var(--sep); border-radius: 10px; background: var(--bg); color: var(--label); font-size: 16px }
-.cashflow-table th.cf-first-deficit-day { background: rgba(255,59,48,.065); color: var(--red); animation: acfFirstDeficitReveal .42s cubic-bezier(.2,.85,.25,1) 1 }
+.cashflow-table th.cf-first-deficit-day { background: rgba(255,59,48,.065); color: var(--red); animation: acfFirstDeficitReveal var(--motion-push) cubic-bezier(.2,.85,.25,1) 1 }
 .mail-summary button:last-child { border-right: 0 }
 .mail-detail-lines>div:last-child { border: 0 }
 @media (prefers-reduced-transparency:reduce),(prefers-contrast:more) {

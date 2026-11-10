@@ -127,7 +127,8 @@ function _openAcfDetailImmediate(){
       tablePanel.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const b=e.target.closest('[data-acf-day]');if(!b||b.tagName==='BUTTON')return;e.preventDefault();openFinancialDayInspector(b.dataset.acfDay)});
       updateTable();
       body.querySelector('#acfSimulator').onclick=()=>openAcfSimulator();
-      body.querySelector('#acfApplyGoal')?.addEventListener('click',()=>applyAcfSafeBudgetToMonthlyPlan());
+      /* 第11版 ACF-257: 反映の結果を必ず伝える（何も変わらない時も黙らない） */
+      body.querySelector('#acfApplyGoal')?.addEventListener('click',()=>{if(!data.monthlyGoals[ym()]?.total)return showAlert('月間計画がありません','先に今月の月間計画を作ってから、安全予算を反映してください。');const applied=applyAcfSafeBudgetToMonthlyPlan();if(applied===false){feedback.error();showToast('日別計画へ反映できませんでした。もう一度お試しください',{tone:'error'})}else if(!applied)showToast('今日以降の安全予算がすべて0円のため、反映する金額はありません');else{feedback.success();showToast(`${applied}日分の日別計画へ反映しました`)}});
       body.querySelector('#acfOpenSettings').onclick=openAcfSettings;
       body.querySelectorAll('[data-confidence]').forEach(b=>b.onclick=()=>openAcfAction(conf.reasons[Number(b.dataset.confidence)]?.action));
       body.querySelectorAll('[data-risk-index]').forEach(b=>b.onclick=()=>openAcfAction(current.risks[Number(b.dataset.riskIndex)]?.action))

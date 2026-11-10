@@ -7,17 +7,17 @@
 .day-inspector-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); grid-auto-rows: 1fr; gap: 8px; align-items: stretch }
 .day-closing-card>span:nth-child(2) { flex: 1; min-width: 0 }
 @media (max-width:390px) {
-  .mm3-action-main small { font-size: 10px }
+  .mm3-action-main small { font-size: var(--type-min) }
 }
 .stmt-file-picker small,
 .stmt-processing small { font-size: 11px; color: var(--label2) }
-.stmt-row-main small { display: block; font-size: 9.5px; color: var(--label2); margin-top: 2px }
+.stmt-row-main small { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .mail-summary small { font-size: 11px; font-weight: 400; margin-left: 2px }
 .mm3-action-main small { display: block; color: var(--label2); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; font-size: 13px; line-height: 1.45; white-space: normal; overflow-wrap: anywhere }
 .mm3-atf-riskbox small { font-size: 13px; line-height: 1.5 }
-.mm3-atf-day small { font-size: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.15px }
+.mm3-atf-day small { font-size: var(--type-min); white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.15px }
 @media (max-width:375px) {
-  .mm3-atf-day small { font-size: 9px }
+  .mm3-atf-day small { font-size: var(--type-min) }
 }
 .mm3-atf-next-event-main small { font-size: 12px; color: var(--label2); line-height: 1.4 }
 .day-closing-card small { display: block; font-size: 12px; color: var(--label2); margin-top: 4px; line-height: 1.5 }
@@ -79,7 +79,7 @@
 .day-close-journal-link svg { width: 20px; height: 20px }
 .day-close-journal-link span { margin-left: auto }
 .day-close-success { text-align: center; padding: 20px 8px 28px }
-.day-close-success>div { display: grid; place-items: center; width: 68px; height: 68px; background: #34c75918; color: var(--green); border: 1px solid #34c75940; border-radius: 50%; margin: 0 auto 20px; animation: dayCloseApproved .35s ease-out }
+.day-close-success>div { display: grid; place-items: center; width: 68px; height: 68px; background: #34c75918; color: var(--green); border: 1px solid #34c75940; border-radius: 50%; margin: 0 auto 20px; animation: dayCloseApproved var(--motion-push) ease-out }
 .day-close-success svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
 .day-close-success h3 { font-size: 24px; letter-spacing: -.03em; margin: 0 0 10px }
 .day-close-success p { font-size: 13px; color: var(--label2) }
@@ -118,7 +118,7 @@ html.motion-off .day-close-content { animation: none }
 @media (prefers-reduced-motion:reduce) {
   .day-close-success>div { animation: none }
 }
-.acf-shortage-callout { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0 12px; padding: 11px 12px; border-radius: 13px; background: rgba(255,149,0,.09); animation: acfCalloutIn .28s cubic-bezier(.2,.8,.2,1) 1 }
+.acf-shortage-callout { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0 12px; padding: 11px 12px; border-radius: 13px; background: rgba(255,149,0,.09); animation: acfCalloutIn var(--motion-push) cubic-bezier(.2,.8,.2,1) 1 }
 .mail-surface { color: var(--label); animation: mailEnter .22s ease-out }
 .mail-count-updated { animation: mailFade .18s ease-out }
 @media (prefers-reduced-motion:reduce) {

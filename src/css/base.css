@@ -59,10 +59,10 @@ textarea { font: inherit; color: inherit; font-size: 16px !important; min-width:
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue) }
 button:disabled { cursor: default; opacity: .45 }
 button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opacity .11s,background .11s }
-.tab-selection { position: absolute; left: 0; top: 5px; height: calc(100% - 10px); width: 0; z-index: 0; pointer-events: none; border-radius: 999px; background: var(--capsule-bg); box-shadow: inset 0 1px 0 var(--glass-highlight); opacity: 0; transform: translate3d(0,0,0); transition: transform .42s cubic-bezier(.34,1.16,.44,1),width .25s var(--spring),opacity .14s; will-change: transform }
+.tab-selection { position: absolute; left: 0; top: 5px; height: calc(100% - 10px); width: 0; z-index: 0; pointer-events: none; border-radius: 999px; background: var(--capsule-bg); box-shadow: inset 0 1px 0 var(--glass-highlight); opacity: 0; transform: translate3d(0,0,0); transition: transform var(--motion-menu) var(--spring),width var(--motion-menu) var(--spring),opacity .14s; will-change: transform }
 .tabbar { position: absolute; left: 14px; right: 14px; bottom: var(--tabbar-bottom); height: var(--tabbar-height); padding: 5px; display: flex; gap: 0; isolation: isolate; background: var(--glass-bg); border: 0; border-radius: 999px; box-shadow: inset 0 0 0 .5px var(--glass-edge),inset 0 1px 0 var(--glass-highlight),var(--glass-shadow); backdrop-filter: blur(16px) saturate(190%); -webkit-backdrop-filter: blur(16px) saturate(190%); touch-action: pan-y; z-index: 60 }
 .row-value { font-weight: 620; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-.tab { position: relative; z-index: 1; flex: 1; min-width: 0; min-height: 44px !important; border: 0; border-radius: 999px; background: transparent; color: var(--tab-inactive); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; font-weight: 500; transition: color .16s var(--spring) }
+.tab { position: relative; z-index: 1; flex: 1; min-width: 0; min-height: 44px !important; border: 0; border-radius: 999px; background: transparent; color: var(--tab-inactive); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: var(--type-min); font-weight: 500; transition: color .16s var(--spring) }
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
   .tabbar { background: var(--glass-solid) }
 }
@@ -84,8 +84,8 @@ button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opac
 .chart-title { font-size: 14px; font-weight: 650 }
 .chart-sub { font-size: 11px; color: var(--label2); margin-top: 2px }
 .bars { height: 128px; display: flex; align-items: flex-end; gap: 8px; margin-top: 14px }
-.bar-label { font-size: 9px; color: var(--label2); margin-top: 6px; white-space: nowrap }
-.bar-value { font-size: 9px; color: var(--label2); margin-bottom: 3px }
+.bar-label { font-size: var(--type-min); color: var(--label2); margin-top: 6px; white-space: nowrap }
+.bar-value { font-size: var(--type-min); color: var(--label2); margin-bottom: 3px }
 .donut-wrap { display: flex; align-items: center; gap: 14px; margin-top: 10px }
 .legend { flex: 1; font-size: 11px }
 .legend-row { display: flex; align-items: center; gap: 7px; margin: 5px 0 }
@@ -100,7 +100,7 @@ button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opac
 .day-money { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 670; color: var(--label) }
 .day-plan { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 560; color: var(--label2) }
 .summary-value { font-size: 21px; font-weight: 720; margin-top: 3px }
-.calendar-highlight { animation: calendarPlanPulse .8s ease-out }
+.calendar-highlight { animation: calendarPlanPulse var(--motion-push) ease-out }
 .topbar { padding: calc(var(--safe-t) + 13px) 16px 9px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: var(--bg); z-index: 5; min-height: calc(var(--safe-t) + 59px) }
 .topbar-main { min-width: 0; flex: 1 }
 .tab-label { display: block; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; user-select: none; -webkit-user-select: none }
@@ -111,7 +111,7 @@ button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opac
 .toast { min-height: 44px; max-width: 100%; background: rgba(44,44,46,.92); color: #fff; border-radius: 13px; padding: 10px 12px; box-shadow: 0 8px 28px rgba(0,0,0,.24); display: flex; align-items: center; gap: 12px; font-size: 13px; opacity: 0; transform: translateY(8px) scale(.98); animation: toastIn .18s ease forwards; pointer-events: auto; backdrop-filter: blur(16px) }
 .busy-overlay { position: fixed; inset: 0; z-index: 850; background: rgba(242,242,247,.68); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s }
 .storage-boot { position: fixed; inset: 0; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); display: flex; align-items: center; justify-content: center; transition: opacity .2s; z-index: 99999; opacity: 1; pointer-events: auto; background: var(--bg,#f2f2f7); color: var(--label,#111) }
-.budget-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: var(--label); color: var(--bg); border-radius: 8px; padding: 3px 7px; font-size: 10px; font-weight: 650; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .12s }
+.budget-bubble { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: var(--label); color: var(--bg); border-radius: 8px; padding: 3px 7px; font-size: var(--type-min); font-weight: 650; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .12s }
 .saving { opacity: .72; pointer-events: none }
 textarea.field { resize: none; min-height: 80px }
 .status-chip { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 8px; border-radius: 999px; background: var(--fill); font-size: 11px; font-weight: 650; color: var(--label2) }
@@ -131,15 +131,15 @@ textarea.field { resize: none; min-height: 80px }
 .day-cell * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none }
 .goal-calendar-preview { margin-top: 14px; margin-bottom: 10px }
 .approval-slider { height: 62px; border-radius: 16px; background: var(--fill); position: relative; overflow: hidden; margin-top: 18px; user-select: none; -webkit-user-select: none }
-.month-progress-fill { height: 100%; background: var(--green); border-radius: 999px; transition: width .3s; max-width: 100% }
-.goal-step-node { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--fill); color: var(--label2); font-size: 10px; font-weight: 700; flex: 0 0 auto }
+.month-progress-fill { height: 100%; background: var(--green); border-radius: 999px; transition: width var(--motion-push); max-width: 100% }
+.goal-step-node { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--fill); color: var(--label2); font-size: var(--type-min); font-weight: 700; flex: 0 0 auto }
 .goal-step-line { height: 2px; flex: 1; background: var(--fill2); border-radius: 2px }
 .financial-event-symbol { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--fill); font-size: 15px; font-weight: 800; flex: 0 0 auto }
-.dim { position: fixed; inset: 0; background: rgba(0,0,0,.44); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .2s }
+.dim { position: fixed; inset: 0; background: rgba(0,0,0,.44); z-index: 200; opacity: 0; pointer-events: none; transition: opacity var(--motion-menu) }
 @media (max-width:390px) {
   .cat-icon { width: 25px; height: 25px }
 }
-.sheet { position: fixed; left: 50%; bottom: 0; width: min(100%,480px); z-index: 210; transform: translate(-50%,110%); transition: transform .3s var(--spring); display: flex; flex-direction: column; overflow: hidden }
+.sheet { position: fixed; left: 50%; bottom: 0; width: min(100%,480px); z-index: 210; transform: translate(-50%,110%); transition: transform var(--motion-sheet) var(--spring); display: flex; flex-direction: column; overflow: hidden }
 .date-nav-btn { width: 38px; height: 38px; border: 0; background: transparent; color: var(--blue); display: grid; place-items: center; border-radius: 10px; min-width: var(--tap-min); min-height: var(--tap-min) }
 .nav-text { border: 0; background: transparent; color: var(--blue); font-size: 16px; padding: 10px 0; text-align: left; transition: transform .1s,opacity .1s; min-height: var(--tap-min); min-width: var(--tap-min) }
 @media (max-width:390px) {
@@ -180,7 +180,7 @@ textarea.field { resize: none; min-height: 80px }
 .hbar-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px }
 .hbar-track { height: 9px; background: var(--fill); border-radius: 999px; overflow: hidden; margin-top: 7px }
 .hbar-fill { height: 100%; border-radius: 999px; min-width: 2px; max-width: 100% }
-.hbar-foot { text-align: right; color: var(--label2); font-size: 9px; margin-top: 3px }
+.hbar-foot { text-align: right; color: var(--label2); font-size: var(--type-min); margin-top: 3px }
 .metric-cell { padding: 12px 10px; min-width: 0 }
 .mini-action { border: 0; background: transparent; color: var(--blue); font-size: 13px; font-weight: 600; padding: 6px 0 }
 @media (max-width:390px) {
@@ -214,7 +214,7 @@ textarea.field { resize: none; min-height: 80px }
 .goal-spinner { width: 42px; height: 42px; border: 3px solid var(--fill2); border-top-color: var(--blue); border-radius: 50%; animation: goalSpin .8s linear infinite }
 .goal-state-title { font-size: 23px; font-weight: 730; margin-top: 18px }
 .goal-state-copy { font-size: 13px; color: var(--label2); line-height: 1.5; margin-top: 6px }
-.goal-success-mark { width: 66px; height: 66px; border-radius: 50%; background: rgba(52,199,89,.14); color: var(--green); display: grid; place-items: center; animation: goalSuccessSpring .42s cubic-bezier(.2,1.4,.4,1) }
+.goal-success-mark { width: 66px; height: 66px; border-radius: 50%; background: rgba(52,199,89,.14); color: var(--green); display: grid; place-items: center; animation: goalSuccessSpring var(--motion-push) cubic-bezier(.2,1.4,.4,1) }
 .today-spend-tap { width: 100%; border: 0; background: transparent; color: inherit; text-align: left }
 .goal-plan-action { width: 100%; border: 0; border-top: .5px solid var(--sep); background: transparent; color: var(--blue); font-weight: 650; text-align: left; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between }
 .goal-step-compact-line { height: 3px; border-radius: 999px; background: var(--fill2); overflow: hidden }
@@ -232,28 +232,28 @@ textarea.field { resize: none; min-height: 80px }
   .goal-step-title { font-size: 24px }
 }
 .day-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue) }
-.day-finmark { font-size: 8px; font-weight: 800; line-height: 1; color: var(--label2) }
+.day-finmark { font-size: var(--type-min); font-weight: 800; line-height: 1; color: var(--label2) }
 .payment-suggest { margin-top: 9px; padding-top: 9px; border-top: .5px solid var(--sep); font-size: 11px; line-height: 1.45 }
 .pay-rule-panel { padding: 10px 12px 12px; background: var(--card); border-top: .5px solid var(--sep) }
 .financial-event-card { width: 100%; min-height: 52px; border: 0; border-radius: 13px; background: var(--card); display: flex; align-items: center; gap: 10px; padding: 10px 13px; text-align: left; margin: 0 0 12px }
 .financial-event-title { font-size: 13px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
-.financial-event-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px }
+.financial-event-sub { font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .financial-event-value { font-size: 13px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums }
 .asset-summary-list { margin-top: 12px; border-top: .5px solid var(--sep); padding-top: 10px; display: grid; gap: 7px }
 .acf-card { background: var(--card); border-radius: 16px; padding: 15px; margin-bottom: 12px; text-align: left }
 .acf-title { font-size: 14px; font-weight: 700 }
-.acf-subtitle { font-size: 10.5px; color: var(--label2); margin-top: 2px }
+.acf-subtitle { font-size: var(--type-min); color: var(--label2); margin-top: 2px }
 .acf-value { font-size: 28px; font-weight: 750; letter-spacing: -.7px; margin-top: 8px; font-variant-numeric: tabular-nums }
 .acf-metric { background: var(--fill); border-radius: 10px; padding: 8px; min-width: 0 }
 .acf-link { width: 100%; min-height: 39px; border: 0; border-top: .5px solid var(--sep); background: transparent; color: var(--blue); font-size: 12.5px; font-weight: 650; text-align: left; margin-top: 12px; padding: 10px 0 0 }
 .acf-summary-tile { background: var(--card); border-radius: 13px; padding: 12px }
 .cashflow-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 14px; background: var(--card); margin-bottom: 14px }
-.cashflow-table { border-collapse: separate; border-spacing: 0; min-width: max-content; font-size: 10px }
+.cashflow-table { border-collapse: separate; border-spacing: 0; min-width: max-content; font-size: var(--type-min) }
 .cashflow-timeline { background: var(--card); border-radius: 14px; overflow: hidden }
 .cashflow-event { display: grid; grid-template-columns: 54px 1fr auto; gap: 9px; padding: 11px 13px; border-bottom: .5px solid var(--sep); align-items: start }
 .cashflow-event-date { font-size: 11px; color: var(--label2) }
 .cashflow-event-title { font-size: 13px; font-weight: 600 }
-.cashflow-event-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px; line-height: 1.35 }
+.cashflow-event-sub { font-size: var(--type-min); color: var(--label2); margin-top: 2px; line-height: 1.35 }
 .cashflow-event-value { font-size: 13px; font-weight: 680; white-space: nowrap }
 .risk-row { border-left: 3px solid var(--orange) }
 .acf-plan-compare { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; font-size: 12px }
@@ -264,7 +264,7 @@ textarea.field { resize: none; min-height: 80px }
 .secondary { box-sizing: border-box; width: 100%; border: 0; padding: 12px 16px; font: inherit; font-weight: 600; line-height: 1.4; text-align: center; background: var(--fill); color: var(--label) }
 .danger { color: var(--red) }
 .menu-item { min-height: 46px; width: 100%; border: 0; background: transparent; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 9px 11px; text-align: left; font-size: 15px; color: var(--label) }
-.push-view { position: absolute; inset: 0; display: flex; flex-direction: column; transform: translateX(100%); transition: transform .3s var(--spring); pointer-events: auto; box-shadow: -10px 0 28px rgba(0,0,0,.10); touch-action: pan-y }
+.push-view { position: absolute; inset: 0; display: flex; flex-direction: column; transform: translateX(100%); transition: transform var(--motion-push) var(--spring); pointer-events: auto; box-shadow: -10px 0 28px rgba(0,0,0,.10); touch-action: pan-y }
 .switch { width: 51px; height: 31px; border: 0; border-radius: 16px; background: var(--fill2); position: relative; transition: background .2s }
 .settings-icon { width: 29px; height: 29px; border-radius: 7px; display: grid; place-items: center; color: #fff; background: var(--blue); flex-shrink: 0; overflow: hidden }
 .profile-avatar { object-fit: cover; background: var(--fill); color: var(--blue) }
@@ -277,7 +277,7 @@ button:not(:disabled):active { transform: none; opacity: .65 }
 input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 [contenteditable=true] { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default }
 :focus-visible { outline: 3px solid var(--blue) !important; outline-offset: 3px }
-.schedule-cell { height: 48px; border-radius: 10px; background: var(--fill); padding: 5px; font-size: 10px; position: relative }
+.schedule-cell { height: 48px; border-radius: 10px; background: var(--fill); padding: 5px; font-size: var(--type-min); position: relative }
 .source-check { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--fill2); display: grid; place-items: center; color: transparent; font-size: 14px }
 .pro-period { border: 0; min-width: 45px; height: 34px; padding: 0 11px; border-radius: 17px; background: transparent; color: var(--label); font-size: 13px; font-weight: 650; white-space: nowrap }
 .pro3-chip { height: 36px; flex: 0 0 auto; border: 0; border-radius: 11px; background: var(--fill); padding: 0 12px; color: var(--label2); font-size: 12px; font-weight: 650 }
@@ -302,16 +302,16 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
   .day-cell { margin: 1px; padding-left: 1px; padding-right: 1px }
 }
 .pro4-parse-card { background: var(--card); border-radius: 15px; margin-bottom: 9px; overflow: hidden }
-.pro4-note { font-size: 10.5px; line-height: 1.4; color: var(--label2); padding: 9px 12px; background: var(--fill) }
+.pro4-note { font-size: var(--type-min); line-height: 1.4; color: var(--label2); padding: 9px 12px; background: var(--fill) }
 .stmt-row { min-height: 68px; display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-bottom: .5px solid var(--sep) }
-.goal-step-frame { animation: goalStepForward .24s cubic-bezier(.22,.88,.22,1) }
-.acf-risk-reveal { animation: acfRiskReveal .32s ease-out 1 }
+.goal-step-frame { animation: goalStepForward var(--motion-push) cubic-bezier(.22,.88,.22,1) }
+.acf-risk-reveal { animation: acfRiskReveal var(--motion-push) ease-out 1 }
 .busy-orbit { position: relative; width: 70px; height: 70px; margin: 0 auto 24px; animation: busyOrbit 4.5s linear infinite }
 @media (prefers-reduced-motion:reduce) {
   .busy-orbit,
   .busy-core { animation: none }
 }
-.acf-status-critical { animation: acfStatusSpring .4s cubic-bezier(.2,1.25,.32,1) 1 }
+.acf-status-critical { animation: acfStatusSpring var(--motion-push) cubic-bezier(.2,1.25,.32,1) 1 }
 .mail-item { display: block; width: 100%; min-width: 0; overflow: hidden; border-radius: 16px; background: var(--card); color: var(--label); animation: mailEnter .2s ease-out backwards; animation-delay: var(--mail-delay,0ms) }
 .fav-grip { width: 30px; height: 36px; border: 0; background: transparent; color: var(--label3); font-size: 20px; display: grid; place-items: center; cursor: grab }
 .busy-sub { font-size: 12px; color: var(--label2); margin-top: 8px; line-height: 1.7; min-height: 41px }
@@ -319,8 +319,8 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .alert-message { font-size: 13px; margin-top: 5px; line-height: 1.4 }
 .lock-title { font-size: 24px; font-weight: 720 }
 .lock-key { width: 70px; height: 70px; border-radius: 50%; border: 0; background: var(--card); font-size: 26px }
-.schedule-mark { position: absolute; right: 4px; bottom: 4px; font-size: 8px; font-weight: 700 }
-.spark-empty { font-size: 9.5px; color: var(--label3); white-space: nowrap }
+.schedule-mark { position: absolute; right: 4px; bottom: 4px; font-size: var(--type-min); font-weight: 700 }
+.spark-empty { font-size: var(--type-min); color: var(--label3); white-space: nowrap }
 .goal-recommend-label { font-size: 12px; color: var(--label2); font-weight: 600 }
 .goal-allocation-summary { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 14px 2px 7px; font-size: 12px }
 .goal-review-title { font-size: 12px; color: var(--label2) }
@@ -329,7 +329,7 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .impact-title { font-size: 12px; font-weight: 650 }
 .pay-rule-example { font-size: 11px; color: var(--label2); line-height: 1.45; margin-top: 9px; padding: 8px 9px; border-radius: 9px; background: var(--fill) }
 @media (max-width:350px) {
-  .pay-rule-example { font-size: 10.5px }
+  .pay-rule-example { font-size: var(--type-min) }
 }
 .asset-summary-line { display: flex; justify-content: space-between; gap: 10px; font-size: 12px }
 .pro-finance-eyebrow { font-size: 12px; color: var(--label2); font-weight: 600 }
@@ -337,36 +337,36 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .pro-finance-subtitle { font-size: 13px; color: var(--label2); margin-top: 5px; line-height: 1.35 }
 .pro-finance-value { font-size: 34px; line-height: 1.08; font-weight: 760; letter-spacing: -1px; margin-top: 18px; font-variant-numeric: tabular-nums }
 .pro-finance-change { font-size: 15px; font-weight: 650; margin-top: 3px; font-variant-numeric: tabular-nums }
-.pro-chart-axis { fill: var(--label2); font-size: 9px }
+.pro-chart-axis { fill: var(--label2); font-size: var(--type-min) }
 .pro-chart-readout { min-height: 34px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; border-bottom: .5px solid var(--sep); padding: 2px 0 9px }
 .pro-chart-empty { height: 220px; display: grid; place-items: center; text-align: center; color: var(--label2); font-size: 13px; line-height: 1.5; padding: 24px }
 .pro-action-btn { min-height: 48px; border: 0; border-radius: 12px; background: var(--fill); color: var(--blue); font-size: 12px; font-weight: 680; padding: 8px 6px }
 .pro-section-title { font-size: 13px; color: var(--label2); font-weight: 650; margin: 18px 0 7px }
-.pro-bar-value { font-size: 8.5px; color: var(--label2); height: 15px; white-space: nowrap }
-.pro-bar-label { font-size: 9px; color: var(--label2); margin-top: 6px; white-space: nowrap }
+.pro-bar-value { font-size: var(--type-min); color: var(--label2); height: 15px; white-space: nowrap }
+.pro-bar-label { font-size: var(--type-min); color: var(--label2); margin-top: 6px; white-space: nowrap }
 .pro3-select { height: 36px; min-width: 132px; border: 0; border-radius: 11px; background: var(--fill); padding: 0 10px; font-size: 12px; color: var(--label) }
 .pro3-forecast-value { font-size: 32px; font-weight: 760; letter-spacing: -.8px; font-variant-numeric: tabular-nums }
 .pro3-forecast-note { font-size: 11px; color: var(--label2); line-height: 1.4; margin-top: 4px }
-.pro3-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10px; color: var(--label2); margin: 9px 0 0 }
-.pro3-faxis { fill: var(--label2); font-size: 9px }
-.pro3-event-date { font-size: 10.5px; color: var(--label2) }
+.pro3-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: var(--type-min); color: var(--label2); margin: 9px 0 0 }
+.pro3-faxis { fill: var(--label2); font-size: var(--type-min) }
+.pro3-event-date { font-size: var(--type-min); color: var(--label2) }
 .pro3-event-title { font-size: 13px; font-weight: 620 }
-.pro3-event-sub { font-size: 10.5px; color: var(--label2); margin-top: 2px; line-height: 1.35 }
+.pro3-event-sub { font-size: var(--type-min); color: var(--label2); margin-top: 2px; line-height: 1.35 }
 .pro3-event-amount { font-size: 13px; font-weight: 690; white-space: nowrap; font-variant-numeric: tabular-nums }
 .pro3-scenario-title { font-size: 14px; font-weight: 690 }
-.pro3-scenario-status { font-size: 10px; color: var(--label2) }
+.pro3-scenario-status { font-size: var(--type-min); color: var(--label2) }
 .pro3-mini-btn { min-height: 34px; border: 0; border-radius: 10px; background: var(--fill); padding: 6px 10px; font-size: 11px; color: var(--blue); font-weight: 650 }
 .pro3-allocation-total { font-size: 34px; font-weight: 760; letter-spacing: -1px }
 .pro3-allocation-sum { display: flex; justify-content: space-between; gap: 12px; border-top: .5px solid var(--sep); margin-top: 12px; padding-top: 10px; font-size: 12px }
 .pro3-transfer-route { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 650 }
-.pro3-transfer-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font-size: 10.5px; color: var(--label2) }
+.pro3-transfer-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; font-size: var(--type-min); color: var(--label2) }
 .pro3-check-amount { font-size: 13px; font-weight: 670; white-space: nowrap }
 .pro3-preview-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 11px; border-bottom: .5px solid var(--sep); font-size: 11px }
 .pro4-amount-edit { border: 0; background: transparent; text-align: right; font-size: 15px; font-weight: 700; min-height: 36px; color: var(--blue) }
 .pro4-result-type { font-size: 11px; color: var(--label2); margin: 0 3px 6px }
 .pro4-goal-item-amount { text-align: right; font-size: 13px; font-weight: 700; white-space: nowrap }
 .pro4-analysis-row-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 12.5px }
-.pro4-analysis-sub { font-size: 9.5px; color: var(--label2); margin-top: 4px }
+.pro4-analysis-sub { font-size: var(--type-min); color: var(--label2); margin-top: 4px }
 .pro4-review-icon { width: 27px; height: 27px; border-radius: 9px; background: rgba(255,149,0,.13); color: var(--orange); display: grid; place-items: center; font-size: 13px; font-weight: 800 }
 @media (max-width:390px) {
   .pro-finance-title,
@@ -394,7 +394,7 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .day-inspector-actions button { min-height: 56px !important; padding: 9px 7px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.35; overflow-wrap: anywhere }
 .seg button { flex: 1; border: 0; background: transparent; border-radius: 8px; padding: 7px; font-size: 12px; transition: transform .1s,opacity .1s }
 .alert-actions button { flex: 1; border: 0; background: transparent; color: var(--blue); font-size: 16px; min-height: 48px !important }
-.pro4-item-actions button { border: 0; background: var(--fill); border-radius: 9px; min-height: 31px; padding: 5px 9px; color: var(--blue); font-size: 10.5px; font-weight: 650 }
+.pro4-item-actions button { border: 0; background: var(--fill); border-radius: 9px; min-height: 31px; padding: 5px 9px; color: var(--blue); font-size: var(--type-min); font-weight: 650 }
 .stmt-filterbar button { border: 0; background: var(--fill); color: var(--label2); font-size: 11px; font-weight: 650; border-radius: 999px; padding: 7px 10px; white-space: nowrap }
 .mail-status-actions button { border: 0; background: transparent; color: var(--blue); padding: 8px; font-size: 15px }
 .push-right>button { min-width: var(--tap-min); min-height: var(--tap-min) }

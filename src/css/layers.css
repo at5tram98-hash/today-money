@@ -78,7 +78,7 @@ html.motion-off .busy-track>span { animation: none }
 .pro3-check.on { background: var(--blue); border-color: var(--blue) }
 .pro3-rebalance-option.on { border-color: rgba(0,122,255,.45); background: rgba(0,122,255,.055) }
 .cashflow-table .cf-deficit-day { background: rgba(255,59,48,.045) }
-.mm3-salary-records-push .mm3-salary-record-state { display: inline-flex; align-items: center; min-height: 21px; border-radius: 999px; padding: 2px 7px; background: var(--fill); color: var(--label2); font-size: 9.5px; font-weight: 650; margin-top: 3px }
+.mm3-salary-records-push .mm3-salary-record-state { display: inline-flex; align-items: center; min-height: 21px; border-radius: 999px; padding: 2px 7px; background: var(--fill); color: var(--label2); font-size: var(--type-min); font-weight: 650; margin-top: 3px }
 .pro4-parse-row .field { min-height: 36px; font-size: 13px; padding: 7px 8px }
 .sheet.half { max-height: min(82dvh,720px); min-height: min(300px,80dvh) }
 .pro4-goal-banner .settings-icon { flex: 0 0 auto }
@@ -133,8 +133,8 @@ html.native-keyboard .sheet.full { height: calc(var(--native-viewport-height,100
 .calendar-card { padding: 8px 0; overflow: visible }
 .day-cell { margin: 0; min-width: 44px; height: 70px; grid-template-rows: 26px 16px 15px 7px }
 .day-num { font-size: 14px; width: 26px; height: 26px }
-.day-money { font-size: 10px; line-height: 16px; height: 16px }
-.day-plan { font-size: 9px; line-height: 15px; height: 15px }
+.day-money { font-size: var(--type-min); line-height: 16px; height: 16px }
+.day-plan { font-size: var(--type-min); line-height: 15px; height: 15px }
 .mm3-action-row { padding: 12px 14px; min-height: 60px }
 @media (max-width:374px) {
   .row { padding-inline: 12px }

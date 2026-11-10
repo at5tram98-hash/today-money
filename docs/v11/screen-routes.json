@@ -1,0 +1,1839 @@
+{
+ "screens": [
+  {
+   "name": "home",
+   "tab": "today",
+   "path": []
+  },
+  {
+   "name": "month",
+   "tab": "month",
+   "path": []
+  },
+  {
+   "name": "pay",
+   "tab": "pay",
+   "path": []
+  },
+  {
+   "name": "payments",
+   "tab": "payments",
+   "path": []
+  },
+  {
+   "name": "assets",
+   "tab": "assets",
+   "path": []
+  },
+  {
+   "name": "settings",
+   "tab": "settings",
+   "path": []
+  },
+  {
+   "name": "search",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todaySearch"
+   ]
+  },
+  {
+   "name": "notices",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todayNotice"
+   ]
+  },
+  {
+   "name": "home-menu",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todayMenu"
+   ]
+  },
+  {
+   "name": "expense",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#quickExpense"
+   ]
+  },
+  {
+   "name": "quick-bank",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#quickBank"
+   ]
+  },
+  {
+   "name": "quick-income",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#quickIncome"
+   ]
+  },
+  {
+   "name": "salary-menu",
+   "tab": "pay",
+   "setup": null,
+   "path": [
+    "#salaryMenu"
+   ]
+  },
+  {
+   "name": "salary-add",
+   "tab": "pay",
+   "setup": null,
+   "path": [
+    "#salaryAddNav"
+   ]
+  },
+  {
+   "name": "payment-menu",
+   "tab": "payments",
+   "setup": null,
+   "path": [
+    "#paymentsMenu"
+   ]
+  },
+  {
+   "name": "atf",
+   "tab": "payments",
+   "setup": null,
+   "path": [
+    "#mm3AtfOpen"
+   ]
+  },
+  {
+   "name": "assets-menu",
+   "tab": "assets",
+   "setup": null,
+   "path": [
+    "#assetMenuSimple"
+   ]
+  },
+  {
+   "name": "profile",
+   "tab": "settings",
+   "setup": null,
+   "path": [
+    "#profileSettings"
+   ]
+  },
+  {
+   "name": "data",
+   "tab": "settings",
+   "setup": {
+    "method": "openDataSettings",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "delete-guard",
+   "tab": "settings",
+   "setup": {
+    "method": "openDataSettings",
+    "args": []
+   },
+   "path": [
+    "#deleteAll"
+   ]
+  },
+  {
+   "name": "events",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthEventGoals"
+   ]
+  },
+  {
+   "name": "new-event",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthEventGoals",
+    "#eventGoalAdd"
+   ]
+  },
+  {
+   "name": "new-event-item",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthEventGoals",
+    "#eventGoalAdd",
+    "#eventGoalAddItem"
+   ]
+  },
+  {
+   "name": "daily-budget",
+   "tab": "today",
+   "setup": {
+    "method": "openDailyGoalPlanner",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "acf",
+   "tab": "today",
+   "setup": {
+    "method": "openAcf",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "financial-update",
+   "tab": "assets",
+   "setup": {
+    "method": "openFinancialUpdates",
+    "args": [
+     "banks",
+     "2026-10"
+    ]
+   },
+   "path": []
+  },
+  {
+   "name": "today-repeat",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todayRepeat"
+   ]
+  },
+  {
+   "name": "today-one-line",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todayOneLine"
+   ]
+  },
+  {
+   "name": "today-cross-search",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todayCrossSearch"
+   ]
+  },
+  {
+   "name": "today-analysis",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todayAnalysis"
+   ]
+  },
+  {
+   "name": "today-transactions",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todayTransactions"
+   ]
+  },
+  {
+   "name": "today-mail",
+   "tab": "today",
+   "setup": null,
+   "path": [
+    "#todayMenu",
+    "#menuLayer button:has-text(\"メール取引\")"
+   ]
+  },
+  {
+   "name": "month-selector",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthName"
+   ]
+  },
+  {
+   "name": "month-hero",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthHero"
+   ]
+  },
+  {
+   "name": "month-search",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthSearch"
+   ]
+  },
+  {
+   "name": "month-menu",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthMenu"
+   ]
+  },
+  {
+   "name": "month-analysis",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthAnalysis"
+   ]
+  },
+  {
+   "name": "month-reason",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthReasonAnalysis"
+   ]
+  },
+  {
+   "name": "month-review",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthCloseReview"
+   ]
+  },
+  {
+   "name": "month-transactions",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthTransactions"
+   ]
+  },
+  {
+   "name": "month-goal",
+   "tab": "month",
+   "setup": null,
+   "path": [
+    "#monthGoal"
+   ]
+  },
+  {
+   "name": "salary-month",
+   "tab": "pay",
+   "setup": null,
+   "path": [
+    "#mm3SalaryMonth"
+   ]
+  },
+  {
+   "name": "salary-viz",
+   "tab": "pay",
+   "setup": null,
+   "path": [
+    "#mm3SalaryVizMenu"
+   ]
+  },
+  {
+   "name": "payment-month",
+   "tab": "payments",
+   "setup": null,
+   "path": [
+    "#mm3PaymentMonth"
+   ]
+  },
+  {
+   "name": "payment-card-update",
+   "tab": "payments",
+   "setup": null,
+   "path": [
+    "#mm3PaymentQuickBilling"
+   ]
+  },
+  {
+   "name": "payment-history",
+   "tab": "payments",
+   "setup": null,
+   "path": [
+    "#mm3PaymentHistoryTop"
+   ]
+  },
+  {
+   "name": "asset-history",
+   "tab": "assets",
+   "setup": null,
+   "path": [
+    "#mm3AssetHistoryTop"
+   ]
+  },
+  {
+   "name": "editor-bank",
+   "tab": "settings",
+   "setup": {
+    "method": "openAddBank",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "editor-credit-card",
+   "tab": "settings",
+   "setup": {
+    "method": "openAddCard",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "editor-debit-card",
+   "tab": "settings",
+   "setup": {
+    "method": "openAddDebit",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "editor-payroll",
+   "tab": "pay",
+   "setup": {
+    "method": "openSalaryAdd",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "editor-fixed-bill",
+   "tab": "payments",
+   "setup": {
+    "method": "openFixedPayment",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "editor-daily-correction",
+   "tab": "today",
+   "setup": {
+    "method": "openDailyCorrectionDetail",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "history-temporary-income",
+   "tab": "pay",
+   "setup": {
+    "method": "openTempIncomeHistory",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "editor-billing",
+   "tab": "payments",
+   "setup": {
+    "method": "openQuickCardBilling",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "initial-financial-settings",
+   "tab": "settings",
+   "setup": {
+    "method": "openInitialValues",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "search-voice-entry",
+   "tab": "today",
+   "setup": {
+    "method": "openSmartInputSearch",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "event-goal-list",
+   "tab": "month",
+   "setup": {
+    "method": "openEventGoals",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "event-goal-editor",
+   "tab": "month",
+   "setup": {
+    "method": "openEventGoalEditor",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "reason-analysis",
+   "tab": "month",
+   "setup": {
+    "method": "openReasonAnalysis",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "month-closing-review",
+   "tab": "month",
+   "setup": {
+    "method": "openMonthCloseReview",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "favorites",
+   "tab": "settings",
+   "setup": {
+    "method": "openFavoritesEditor",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "tags-manage",
+   "tab": "settings",
+   "setup": {
+    "method": "openTagsManager",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "tags-editor",
+   "tab": "settings",
+   "setup": {
+    "method": "openTagEdit",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "timeline",
+   "tab": "assets",
+   "setup": {
+    "method": "openMoneyTimeline",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "salary-allocation-picker",
+   "tab": "pay",
+   "setup": {
+    "method": "openSalaryAllocationPicker",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "bank-transfer-plans",
+   "tab": "assets",
+   "setup": {
+    "method": "openTransferPlans",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "bank-transfer-editor",
+   "tab": "assets",
+   "setup": {
+    "method": "openTransferPlanEditor",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "budget-rebalance",
+   "tab": "month",
+   "setup": {
+    "method": "openBudgetRebalance",
+    "args": []
+   },
+   "path": [],
+   "patch": "s.monthlyGoals['2026-10']={total:60000,categories:{},daily:{}}"
+  },
+  {
+   "name": "acf-setup",
+   "tab": "today",
+   "setup": {
+    "method": "openAcfSetup",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "acf-simulator",
+   "tab": "today",
+   "setup": {
+    "method": "openAcfSimulator",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "acf-settings",
+   "tab": "today",
+   "setup": {
+    "method": "openAcfSettings",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "day-closing-journal",
+   "tab": "today",
+   "setup": {
+    "method": "openDayClosingJournal",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "asset-billing-month",
+   "tab": "assets",
+   "setup": {
+    "method": "openAssetBillingMonthPicker",
+    "args": []
+   },
+   "path": []
+  },
+  {
+   "name": "quick-repeat-direct",
+   "tab": "today",
+   "setup": {
+    "method": "openQuickRepeat",
+    "args": []
+   },
+   "path": []
+  }
+ ],
+ "preconditions": [
+  {
+   "name": "monthly-goal-step-0",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "monthly-goal-step-1",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 1
+   },
+   "path": []
+  },
+  {
+   "name": "monthly-goal-step-2",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 2
+   },
+   "path": []
+  },
+  {
+   "name": "monthly-goal-step-3",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 3
+   },
+   "path": []
+  },
+  {
+   "name": "monthly-goal-step-4",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 4
+   },
+   "path": []
+  },
+  {
+   "name": "monthly-goal-step-5",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 5
+   },
+   "path": []
+  },
+  {
+   "name": "monthly-goal-step-6",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 6
+   },
+   "path": []
+  },
+  {
+   "name": "monthly-goal-step-7",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 7
+   },
+   "path": []
+  },
+  {
+   "name": "daily-goal-step-0",
+   "tab": "today",
+   "setup": {
+    "method": "openDailyGoalPlanner",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "daily-goal-step-1",
+   "tab": "today",
+   "setup": {
+    "method": "openDailyGoalPlanner",
+    "args": [],
+    "step": 1
+   },
+   "path": []
+  },
+  {
+   "name": "daily-goal-step-2",
+   "tab": "today",
+   "setup": {
+    "method": "openDailyGoalPlanner",
+    "args": [],
+    "step": 2
+   },
+   "path": []
+  },
+  {
+   "name": "daily-goal-step-3",
+   "tab": "today",
+   "setup": {
+    "method": "openDailyGoalPlanner",
+    "args": [],
+    "step": 3
+   },
+   "path": []
+  },
+  {
+   "name": "calculator",
+   "tab": "today",
+   "setup": {
+    "method": "openCalculator",
+    "args": [
+     "監査電卓",
+     1000
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "calc-discount",
+   "tab": "today",
+   "setup": {
+    "method": "openCalcAssist",
+    "args": [
+     "discount"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "calc-add",
+   "tab": "today",
+   "setup": {
+    "method": "openCalcAssist",
+    "args": [
+     "add"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "calc-split",
+   "tab": "today",
+   "setup": {
+    "method": "openCalcAssist",
+    "args": [
+     "split"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "transaction-detail",
+   "tab": "today",
+   "setup": {
+    "method": "openTransactionDetail",
+    "args": [
+     "audit_tx"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "transaction-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openTransactionEdit",
+    "args": [
+     "audit_tx"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-inspector",
+   "tab": "today",
+   "setup": {
+    "method": "openFinancialDayInspector",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-plan",
+   "tab": "today",
+   "setup": {
+    "method": "openDayPlanSheet",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-menu",
+   "tab": "today",
+   "setup": {
+    "method": "openDayQuickMenu",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "large-new",
+   "tab": "today",
+   "setup": {
+    "method": "openLargeExpenseEditor",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "large-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openLargeExpenseEditor",
+    "args": [
+     "$largeObj"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "large-detail",
+   "tab": "today",
+   "setup": {
+    "method": "openLargeExpenseDetail",
+    "args": [
+     "$large"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "employer-new",
+   "tab": "today",
+   "setup": {
+    "method": "openEmployerCreate",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "employer-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openEmployerEdit",
+    "args": [
+     "$employerObj"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "salary-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openSalaryRecordEdit",
+    "args": [
+     "$salary"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "temp-detail",
+   "tab": "today",
+   "setup": {
+    "method": "openTempIncomeDetail",
+    "args": [
+     "$temp"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "temp-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openTempIncomeEdit",
+    "args": [
+     "$temp"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "bank-detail",
+   "tab": "today",
+   "setup": {
+    "method": "openBankDetail",
+    "args": [
+     "$bank"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "bank-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openAddBank",
+    "args": [
+     "$bank"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "card-detail",
+   "tab": "today",
+   "setup": {
+    "method": "openCardDetail",
+    "args": [
+     "$card"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "card-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openAddCard",
+    "args": [
+     "$card"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "card-month",
+   "tab": "today",
+   "setup": {
+    "method": "openCardBillingMonthPicker",
+    "args": [
+     "$card",
+     "2026-10"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "card-paid",
+   "tab": "today",
+   "setup": {
+    "method": "openCardPaidConfirmation",
+    "args": [
+     "$card",
+     "2026-09",
+     "2026-10"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "fixed-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openFixedPayment",
+    "args": [
+     "$fixedObj"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "category-edit",
+   "tab": "today",
+   "setup": {
+    "method": "openCategoryEdit",
+    "args": [
+     0
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "income-new",
+   "tab": "today",
+   "setup": {
+    "method": "openIncomeEditor",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "gmail-settings",
+   "tab": "today",
+   "setup": {
+    "method": "openGmailSettings",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "feedback",
+   "tab": "today",
+   "setup": {
+    "method": "openFeedbackSettings",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "notifications",
+   "tab": "today",
+   "setup": {
+    "method": "openNotificationSettings",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "security",
+   "tab": "today",
+   "setup": {
+    "method": "openSecuritySettings",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "appearance",
+   "tab": "today",
+   "setup": {
+    "method": "openAppearanceSettings",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "acf-initialized",
+   "tab": "today",
+   "setup": {
+    "method": "openAcf",
+    "args": [],
+    "step": 0
+   },
+   "path": [],
+   "patch": "s.acfSettings={...(s.acfSettings||{}),initialized:true};s.monthlyGoals['2026-10']={total:60000,categories:{},daily:{}}"
+  },
+  {
+   "name": "acf-settings-initialized",
+   "tab": "today",
+   "setup": {
+    "method": "openAcfSettings",
+    "args": [],
+    "step": 0
+   },
+   "path": [],
+   "patch": "s.acfSettings={...(s.acfSettings||{}),initialized:true};s.monthlyGoals['2026-10']={total:60000,categories:{},daily:{}}"
+  },
+  {
+   "name": "rebalance-initialized",
+   "tab": "today",
+   "setup": {
+    "method": "openBudgetRebalance",
+    "args": [
+     "2026-10"
+    ],
+    "step": 0
+   },
+   "path": [],
+   "patch": "s.monthlyGoals['2026-10']={total:60000,categories:{},daily:{}}"
+  },
+  {
+   "name": "tag-items",
+   "tab": "today",
+   "setup": {
+    "method": "openTagItems",
+    "args": [
+     "audit_tag"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "tag-edit-existing",
+   "tab": "today",
+   "setup": {
+    "method": "openTagEdit",
+    "args": [
+     "$tagObj"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "tag-assignment",
+   "tab": "today",
+   "setup": {
+    "method": "openTagAssignment",
+    "args": [
+     "audit_tag"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "statement-import",
+   "tab": "today",
+   "setup": {
+    "method": "openCardStatementImport",
+    "args": [
+     "$card"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "statement-reconcile",
+   "tab": "today",
+   "setup": {
+    "method": "openStatementReconciliation",
+    "args": [
+     "$card",
+     "2026-10",
+     "2026-09"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "transfer-new",
+   "tab": "today",
+   "setup": {
+    "method": "openTransferPlanEditor",
+    "args": [],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-closing-0",
+   "tab": "today",
+   "setup": {
+    "method": "openDayClosing",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-closing-1",
+   "tab": "today",
+   "setup": {
+    "method": "openDayClosing",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-closing-2",
+   "tab": "today",
+   "setup": {
+    "method": "openDayClosing",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-closing-3",
+   "tab": "today",
+   "setup": {
+    "method": "openDayClosing",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-closing-4",
+   "tab": "today",
+   "setup": {
+    "method": "openDayClosing",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "day-closing-5",
+   "tab": "today",
+   "setup": {
+    "method": "openDayClosing",
+    "args": [
+     "2026-10-07"
+    ],
+    "step": 0
+   },
+   "path": []
+  },
+  {
+   "name": "statement-review",
+   "tab": "payments",
+   "setup": {
+    "method": "openCardStatementImport",
+    "args": [
+     "$card"
+    ],
+    "upload": {
+     "selector": "#stmtFile",
+     "name": "paypay-statement.csv",
+     "text": "利用日/キャンセル日,利用店名・商品名,利用金額,支払区分,当月支払金額,当月お支払日\n2026/09/05,巡回検査ストア,1200,1回,1200,2026/10/27\n2026/09/12,巡回検査カフェ,560,1回,560,2026/10/27\n2026/09/20,巡回検査ブックス,2400,1回,2400,2026/10/27\n"
+    }
+   },
+   "path": []
+  },
+  {
+   "name": "event-goal-detail",
+   "tab": "month",
+   "setup": {
+    "method": "openEventGoalDetail",
+    "args": [
+     "audit_goal"
+    ]
+   },
+   "path": []
+  },
+  {
+   "name": "salary-allocation",
+   "tab": "pay",
+   "setup": {
+    "method": "openSalaryAllocation",
+    "args": [
+     "$salary"
+    ]
+   },
+   "path": []
+  },
+  {
+   "name": "monthly-goal-day-sheet",
+   "tab": "today",
+   "setup": {
+    "method": "openMonthlyGoalPlanner",
+    "args": [],
+    "step": 5
+   },
+   "path": [
+    "[data-goal-day=\"2026-10-15\"]"
+   ]
+  },
+  {
+   "name": "mail-preview",
+   "tab": "payments",
+   "setup": {
+    "method": "mm3MaybeOpenPendingMailReview",
+    "args": [
+     "foreground"
+    ]
+   },
+   "path": []
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "320-light-home",
+   "screen": "home",
+   "width": 320,
+   "theme": "light"
+  },
+  {
+   "id": "320-light-month",
+   "screen": "month",
+   "width": 320,
+   "theme": "light"
+  },
+  {
+   "id": "320-light-pay",
+   "screen": "pay",
+   "width": 320,
+   "theme": "light"
+  },
+  {
+   "id": "320-light-payments",
+   "screen": "payments",
+   "width": 320,
+   "theme": "light"
+  },
+  {
+   "id": "320-light-assets",
+   "screen": "assets",
+   "width": 320,
+   "theme": "light"
+  },
+  {
+   "id": "320-light-settings",
+   "screen": "settings",
+   "width": 320,
+   "theme": "light"
+  },
+  {
+   "id": "393-dark-home",
+   "screen": "home",
+   "width": 393,
+   "theme": "dark"
+  },
+  {
+   "id": "393-dark-month",
+   "screen": "month",
+   "width": 393,
+   "theme": "dark"
+  },
+  {
+   "id": "393-dark-pay",
+   "screen": "pay",
+   "width": 393,
+   "theme": "dark"
+  },
+  {
+   "id": "393-dark-payments",
+   "screen": "payments",
+   "width": 393,
+   "theme": "dark"
+  },
+  {
+   "id": "393-dark-assets",
+   "screen": "assets",
+   "width": 393,
+   "theme": "dark"
+  },
+  {
+   "id": "393-dark-settings",
+   "screen": "settings",
+   "width": 393,
+   "theme": "dark"
+  },
+  {
+   "id": "393-light-search",
+   "screen": "search",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-notices",
+   "screen": "notices",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-home-menu",
+   "screen": "home-menu",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-expense",
+   "screen": "expense",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-quick-bank",
+   "screen": "quick-bank",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-quick-income",
+   "screen": "quick-income",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-salary-menu",
+   "screen": "salary-menu",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-salary-add",
+   "screen": "salary-add",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-payment-menu",
+   "screen": "payment-menu",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-atf",
+   "screen": "atf",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-assets-menu",
+   "screen": "assets-menu",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-profile",
+   "screen": "profile",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-data",
+   "screen": "data",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-delete-guard",
+   "screen": "delete-guard",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-events",
+   "screen": "events",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-new-event",
+   "screen": "new-event",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-new-event-item",
+   "screen": "new-event-item",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-daily-budget",
+   "screen": "daily-budget",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-acf",
+   "screen": "acf",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-financial-update",
+   "screen": "financial-update",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-today-repeat",
+   "screen": "today-repeat",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-today-one-line",
+   "screen": "today-one-line",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-today-cross-search",
+   "screen": "today-cross-search",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-today-analysis",
+   "screen": "today-analysis",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-today-transactions",
+   "screen": "today-transactions",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-today-mail",
+   "screen": "today-mail",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-selector",
+   "screen": "month-selector",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-hero",
+   "screen": "month-hero",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-search",
+   "screen": "month-search",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-menu",
+   "screen": "month-menu",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-analysis",
+   "screen": "month-analysis",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-reason",
+   "screen": "month-reason",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-review",
+   "screen": "month-review",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-transactions",
+   "screen": "month-transactions",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-goal",
+   "screen": "month-goal",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-salary-month",
+   "screen": "salary-month",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-salary-viz",
+   "screen": "salary-viz",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-payment-month",
+   "screen": "payment-month",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-payment-card-update",
+   "screen": "payment-card-update",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-payment-history",
+   "screen": "payment-history",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-asset-history",
+   "screen": "asset-history",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-editor-bank",
+   "screen": "editor-bank",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-editor-credit-card",
+   "screen": "editor-credit-card",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-editor-debit-card",
+   "screen": "editor-debit-card",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-editor-payroll",
+   "screen": "editor-payroll",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-editor-fixed-bill",
+   "screen": "editor-fixed-bill",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-editor-daily-correction",
+   "screen": "editor-daily-correction",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-history-temporary-income",
+   "screen": "history-temporary-income",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-editor-billing",
+   "screen": "editor-billing",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-initial-financial-settings",
+   "screen": "initial-financial-settings",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-search-voice-entry",
+   "screen": "search-voice-entry",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-event-goal-list",
+   "screen": "event-goal-list",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-event-goal-editor",
+   "screen": "event-goal-editor",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-reason-analysis",
+   "screen": "reason-analysis",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-month-closing-review",
+   "screen": "month-closing-review",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-favorites",
+   "screen": "favorites",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-tags-manage",
+   "screen": "tags-manage",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-tags-editor",
+   "screen": "tags-editor",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-timeline",
+   "screen": "timeline",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-salary-allocation-picker",
+   "screen": "salary-allocation-picker",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-bank-transfer-plans",
+   "screen": "bank-transfer-plans",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-bank-transfer-editor",
+   "screen": "bank-transfer-editor",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-budget-rebalance",
+   "screen": "budget-rebalance",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-acf-setup",
+   "screen": "acf-setup",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-acf-simulator",
+   "screen": "acf-simulator",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-acf-settings",
+   "screen": "acf-settings",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-day-closing-journal",
+   "screen": "day-closing-journal",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-asset-billing-month",
+   "screen": "asset-billing-month",
+   "width": 393,
+   "theme": "light"
+  },
+  {
+   "id": "393-light-quick-repeat-direct",
+   "screen": "quick-repeat-direct",
+   "width": 393,
+   "theme": "light"
+  }
+ ]
+}
