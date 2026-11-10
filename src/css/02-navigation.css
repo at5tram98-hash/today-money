@@ -7,7 +7,7 @@
 .favorite-nav-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .favorite-nav-btn.on svg{fill:currentColor}
 .push-right{display:flex;align-items:center;justify-content:flex-end;gap:1px}
-.push-right>button{min-width:34px}
+.push-right>button{min-width:44px}
 .fav-editor-row{touch-action:none}
 .fav-grip{width:30px;height:36px;border:0;background:transparent;color:var(--label3);font-size:20px;display:grid;place-items:center;cursor:grab}
 .fav-editor-row.dragging{opacity:.45;background:var(--fill)}

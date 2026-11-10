@@ -11,15 +11,27 @@ async function checkStage(view){
   await view.locator('#dayCloseNext').click();
 }
 async function seed(page,{pending=false}={}){
-  await page.evaluate(async pending=>{
+  // Keep the durable setup promise owned by the page; Playwright must not
+  // depend on an unreferenced evaluate promise surviving Chromium GC.
+  await page.evaluate(pending=>{
+    window.__phase8Seed={ready:false,error:null};
+    try{
     const api=globalThis.__mm3Test,d=api.getData(),date='2026-10-07';
     d.transactions=[{id:'manual',date,amount:1001,category:'食費',merchant:'手入力の店',paymentMethod:'other',paymentId:'',source:'manual',memo:''},{id:'refund',date,amount:-100,category:'その他',merchant:'返金',paymentMethod:'other',paymentId:'',source:'manual'}, {id:'mail-tx',date,amount:300,category:'食費',merchant:'メール店',paymentMethod:'card',paymentId:'close-card',source:'gmail',mailImportId:'imported'}];
     d.incomes=[{id:'close-income',date,amount:2000,sourceName:'売上',toType:'cash',kind:'temporary',receivedConfirmed:true}];d.tempIncomes=[];d.salaryRecords=[];d.fixedPayments=[];d.largeExpensePlans=[];d.assetSnapshots=[];d.cardAdjustments={};d.dailyCorrections={[date]:900};d.dayClosings={};
     d.banks=[{id:'close-bank',name:'照合テスト銀行',balance:10000,balanceAsOf:'2026-10-06T00:00:00Z'}];d.cards=[{id:'close-card',name:'照合カード',bankId:'close-bank',closingDay:'月末',dueDay:26,limit:100000}];d.debitCards=[];
     d.mailImports=[{id:'imported',date,amount:300,merchant:'メール店',category:'食費',status:'imported',transactionId:'mail-tx',paymentMethod:'card',paymentId:'close-card'}];
     if(pending)d.mailImports.push({id:'waiting',date,amount:250,merchant:'未確認メール',category:'食費',paymentMethod:'other',paymentId:'',status:'pending',direction:'expense',categorySource:'manual'});
-    await api.replaceData(d);api.renderAll();api.enableMM3StateGuard('throw');api.openDayClosing(date);
+    void api.replaceData(d).then(()=>{
+      api.renderAll();api.enableMM3StateGuard('throw');api.openDayClosing(date);
+      window.__phase8Seed.ready=true;
+    }).catch(error=>{window.__phase8Seed.error=String(error)});
+    }catch(error){window.__phase8Seed.error=String(error)}
   },pending);
+  await page.waitForFunction(()=>window.__phase8Seed?.ready||window.__phase8Seed?.error,null,{timeout:15000});
+  const failure=await page.evaluate(()=>window.__phase8Seed.error);
+  if(failure)throw new Error('Financial fixture seed failed: '+failure);
+  assert.ok(await page.evaluate(()=>globalThis.__mm3Test.getData().banks.some(b=>b.id==='close-bank')));
 }
 export async function verifyDayClosingBrowser({createPage,passed,root,errors}){
   const target=await createPage('app',{width:390,appearance:'dark'}),page=target.page;await seed(page);

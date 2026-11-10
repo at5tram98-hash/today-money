@@ -3,6 +3,17 @@ const MM3_UI_PREFS_KEY='mymoney3_ui_prefs_v1';
 function mm3MotionReduced(){return matchMedia('(prefers-reduced-motion: reduce)').matches||data.feedbackSettings?.motion===false||document.documentElement.classList.contains('motion-off')}
 function mm3LoadUiPrefs(){try{return JSON.parse(localStorage.getItem(MM3_UI_PREFS_KEY)||'{}')||{}}catch(e){return{}}}
 function mm3SaveUiPrefs(patch={}){try{const next={...mm3LoadUiPrefs(),...patch};localStorage.setItem(MM3_UI_PREFS_KEY,JSON.stringify(next));return next}catch(e){return mm3LoadUiPrefs()}}
+const MM3_UI_PREF_DEFAULTS=Object.freeze({salaryChartMode:mm3SalaryChartMode,salaryTrendRange:mm3SalaryTrendRange,assetChartMode:mm3AssetChartMode,assetChartRange:mm3AssetChartRange,assetSortMode:mm3AssetSortMode});
+function mm3ResetUiPrefs(){
+  mm3AssetExitManualMode();
+  mm3SalaryChartMode=MM3_UI_PREF_DEFAULTS.salaryChartMode;
+  mm3SalaryTrendRange=MM3_UI_PREF_DEFAULTS.salaryTrendRange;
+  mm3AssetChartMode=MM3_UI_PREF_DEFAULTS.assetChartMode;
+  mm3AssetChartRange=MM3_UI_PREF_DEFAULTS.assetChartRange;
+  mm3AssetSortMode=MM3_UI_PREF_DEFAULTS.assetSortMode;
+  mm3AssetChartState=null;
+  localStorage.removeItem(MM3_UI_PREFS_KEY);
+}
 const mm3UiPrefs=mm3LoadUiPrefs();
 if(['share','trend'].includes(mm3UiPrefs.salaryChartMode))mm3SalaryChartMode=mm3UiPrefs.salaryChartMode;
 if(['1M','3M','6M','1Y','ALL'].includes(mm3UiPrefs.salaryTrendRange))mm3SalaryTrendRange=mm3UiPrefs.salaryTrendRange;
@@ -86,16 +97,17 @@ function mm3AssetInstallManualReorder(){
   const clearTimer=()=>{if(timer){clearTimeout(timer);timer=null}};
   const cleanupRow=row=>{if(!row)return;row.classList.remove('mm3-assets-dragging');for(const k of ['position','left','top','width','height','zIndex','margin','transform'])row.style[k]=''};
   const begin=()=>{if(!state?.row)return;const row=state.row;dragRect=row.getBoundingClientRect();placeholder=document.createElement('div');placeholder.className='mm3-assets-reorder-placeholder';placeholder.style.height=dragRect.height+'px';list.insertBefore(placeholder,row);row.classList.add('mm3-assets-dragging');Object.assign(row.style,{position:'fixed',left:dragRect.left+'px',top:dragRect.top+'px',width:dragRect.width+'px',height:dragRect.height+'px',zIndex:'999',margin:'0'});state.active=true;mm3AssetSuppressClickUntil=Date.now()+800;feedback?.selection?.()};
-  const down=e=>{if(e.button!=null&&e.button!==0)return;const row=e.target.closest('.mm3-assets-watchrow');if(!row||!list.contains(row))return;clearTimer();state={row,pid:e.pointerId,sx:e.clientX,sy:e.clientY,lastY:e.clientY,active:false};timer=setTimeout(begin,280)};
-  const move=e=>{if(!state||e.pointerId!==state.pid)return;state.lastY=e.clientY;const dx=e.clientX-state.sx,dy=e.clientY-state.sy;if(!state.active){if(Math.hypot(dx,dy)>10){clearTimer();state=null}return}e.preventDefault();state.row.style.top=(dragRect.top+dy)+'px';const others=[...list.querySelectorAll('.mm3-assets-watchrow')].filter(r=>r!==state.row),before=new Map(others.map(r=>[r,r.getBoundingClientRect()]));let target=null;for(const r of others){const rr=r.getBoundingClientRect();if(e.clientY<rr.top+rr.height/2){target=r;break}}const oldNext=placeholder?.nextElementSibling;if(target)list.insertBefore(placeholder,target);else list.appendChild(placeholder);if(placeholder?.nextElementSibling!==oldNext)mm3FlipRows(list,others,before)};
+  const down=e=>{if(e.button!=null&&e.button!==0)return;const primary=e.target.closest('.mm3-assets-watchrow'),row=primary?.closest('.record-action-row');if(!row||!list.contains(row))return;clearTimer();state={row,pid:e.pointerId,sx:e.clientX,sy:e.clientY,lastY:e.clientY,active:false};timer=setTimeout(begin,280)};
+  const move=e=>{if(!state||e.pointerId!==state.pid)return;state.lastY=e.clientY;const dx=e.clientX-state.sx,dy=e.clientY-state.sy;if(!state.active){if(Math.hypot(dx,dy)>10){clearTimer();state=null}return}e.preventDefault();state.row.style.top=(dragRect.top+dy)+'px';const others=[...list.querySelectorAll(':scope > .record-action-row')].filter(r=>r!==state.row),before=new Map(others.map(r=>[r,r.getBoundingClientRect()]));let target=null;for(const r of others){const rr=r.getBoundingClientRect();if(e.clientY<rr.top+rr.height/2){target=r;break}}const oldNext=placeholder?.nextElementSibling;if(target)list.insertBefore(placeholder,target);else list.appendChild(placeholder);if(placeholder?.nextElementSibling!==oldNext)mm3FlipRows(list,others,before)};
   const end=e=>{clearTimer();if(!state)return;const row=state.row,wasActive=state.active;state=null;if(!wasActive){placeholder?.remove();placeholder=null;return}if(placeholder?.parentNode)placeholder.parentNode.insertBefore(row,placeholder);placeholder?.remove();placeholder=null;cleanupRow(row);const order=[...list.querySelectorAll('.mm3-assets-watchrow')].map(r=>r.dataset.bank).filter(Boolean);mm3SaveUiPrefs({assetManualOrder:order,assetSortMode:'manual'});mm3AssetSuppressClickUntil=Date.now()+500;feedback?.success?.()};
+  const cancel=()=>{clearTimer();if(state?.row)cleanupRow(state.row);placeholder?.remove();placeholder=null;state=null;dragRect=null};
   const clickCapture=e=>{if(mm3AssetSortMode==='manual'){e.preventDefault();e.stopImmediatePropagation()}};
-  list.addEventListener('pointerdown',down);list.addEventListener('pointermove',move,{passive:false});list.addEventListener('pointerup',end);list.addEventListener('pointercancel',end);list.addEventListener('click',clickCapture,true);
-  list._mm3ManualCleanup=()=>{clearTimer();if(state?.row)cleanupRow(state.row);placeholder?.remove();placeholder=null;state=null;list.removeEventListener('pointerdown',down);list.removeEventListener('pointermove',move);list.removeEventListener('pointerup',end);list.removeEventListener('pointercancel',end);list.removeEventListener('click',clickCapture,true)}
+  list.addEventListener('pointerdown',down);list.addEventListener('pointermove',move,{passive:false});list.addEventListener('pointerup',end);list.addEventListener('pointercancel',cancel);list.addEventListener('click',clickCapture,true);
+  list._mm3ManualCleanup=()=>{clearTimer();if(state?.row)cleanupRow(state.row);placeholder?.remove();placeholder=null;state=null;list.removeEventListener('pointerdown',down);list.removeEventListener('pointermove',move);list.removeEventListener('pointerup',end);list.removeEventListener('pointercancel',cancel);list.removeEventListener('click',clickCapture,true)}
 }
 function mm3AssetApplySort(mode){
   mm3AssetSortMode=mode;const list=document.getElementById('mm3AssetWatchlist');if(!list)return renderAssets();
-  const rows=[...list.querySelectorAll('.mm3-assets-watchrow')],before=new Map(rows.map(r=>[r,r.getBoundingClientRect()])),order=mm3AssetSortedBanks().map(b=>b.id),map=new Map(rows.map(r=>[r.dataset.bank,r]));order.forEach(id=>{const row=map.get(id);if(row)list.appendChild(row)});const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.documentElement.classList.contains('motion-off');if(!reduce)requestAnimationFrame(()=>{rows.forEach(r=>{const first=before.get(r),last=r.getBoundingClientRect(),dy=first.top-last.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:360,easing:'cubic-bezier(.2,.85,.2,1)'})})});const btn=document.getElementById('mm3AssetSort');if(btn)btn.innerHTML=`${mm3AssetSortLabel()} ${icon('chevronDown')}`;feedback?.selection?.()
+  const rows=[...list.querySelectorAll('.mm3-assets-watchrow')],before=new Map(rows.map(r=>[r,r.getBoundingClientRect()])),order=mm3AssetSortedBanks().map(b=>b.id),map=new Map(rows.map(r=>[r.dataset.bank,r]));order.forEach(id=>{const row=map.get(id);if(row)list.appendChild(row.closest('.record-action-row'))});const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.documentElement.classList.contains('motion-off');if(!reduce)requestAnimationFrame(()=>{rows.forEach(r=>{const first=before.get(r),last=r.getBoundingClientRect(),dy=first.top-last.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:360,easing:'cubic-bezier(.2,.85,.2,1)'})})});const btn=document.getElementById('mm3AssetSort');if(btn)btn.innerHTML=`${mm3AssetSortLabel()} ${icon('chevronDown')}`;feedback?.selection?.()
 }
 const __mm3P4AssetApplySort=mm3AssetApplySort;
 mm3AssetApplySort=function(mode){
@@ -122,7 +134,11 @@ mm3BindAssets=function(){
   __mm3P4BindAssets();
   const mode=document.getElementById('mm3AssetMode');if(mode)mode.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3AssetChartMode==='actual'?'✓ ':''}実績`,icon:mm3AssetChartMode==='actual'?'check':'chart',action:()=>{mm3AssetChartMode='actual';mm3SaveUiPrefs({assetChartMode:mm3AssetChartMode});feedback?.selection?.();mode.innerHTML=`実績 ${icon('chevronDown')}`;mm3RefreshAssetChart()}},{label:`${mm3AssetChartMode==='forecast'?'✓ ':''}ATF予測`,icon:mm3AssetChartMode==='forecast'?'check':'chart',action:()=>{mm3AssetChartMode='forecast';if(mm3AssetChartRange==='ALL')mm3AssetChartRange='1Y';mm3SaveUiPrefs({assetChartMode:mm3AssetChartMode,assetChartRange:mm3AssetChartRange});feedback?.selection?.();mode.innerHTML=`ATF予測 ${icon('chevronDown')}`;mm3RefreshAssetChartMaybeBusy()}}]);
   const sort=document.getElementById('mm3AssetSort');if(sort)sort.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3AssetSortMode==='balance-desc'?'✓ ':''}残高が多い順`,icon:mm3AssetSortMode==='balance-desc'?'check':'list',action:()=>mm3AssetApplySort('balance-desc')},{label:`${mm3AssetSortMode==='balance-asc'?'✓ ':''}残高が少ない順`,icon:mm3AssetSortMode==='balance-asc'?'check':'list',action:()=>mm3AssetApplySort('balance-asc')},{label:`${mm3AssetSortMode==='updated'?'✓ ':''}更新が新しい順`,icon:mm3AssetSortMode==='updated'?'check':'calendar',action:()=>mm3AssetApplySort('updated')},{label:`${mm3AssetSortMode==='name'?'✓ ':''}名前順`,icon:mm3AssetSortMode==='name'?'check':'list',action:()=>mm3AssetApplySort('name')},{label:`${mm3AssetSortMode==='manual'?'✓ ':''}手動`,icon:mm3AssetSortMode==='manual'?'check':'menu',action:()=>mm3AssetApplySort('manual')}]);
-  document.querySelectorAll('#screen-assets [data-bank]').forEach(b=>b.onclick=()=>{if(Date.now()<mm3AssetSuppressClickUntil||mm3AssetSortMode==='manual')return;openBankDetail(b.dataset.bank)});
+  document.querySelectorAll('#screen-assets [data-bank]').forEach(button=>{
+    const id=button.dataset.bank, enabled=()=>mm3AssetSortMode!=='manual';
+    button.onclick=()=>{if(Date.now()>=mm3AssetSuppressClickUntil&&enabled())openBankDetail(id)};
+    bindRecordActions(button,[{label:'口座詳細',icon:'list',action:()=>openBankDetail(id)},{label:'残高を更新',icon:'edit',action:()=>openQuickBank(id)}],{enabled});
+  });
   if(mm3AssetSortMode==='manual')requestAnimationFrame(mm3AssetInstallManualReorder)
 };
 

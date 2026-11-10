@@ -39,7 +39,7 @@ export async function verifyUiUpdate({createPage,passed,root}){
   await page.locator('[data-view="calendar"]').click();await page.locator('.acf-calendar-grid').scrollIntoViewIfNeeded();
   assert.ok(await page.locator('.acf-calendar-grid').evaluate(el=>el.scrollWidth<=el.clientWidth+1));
   await page.screenshot({path:resolve(root,'test-results/iphone15pro-acf-light.png'),animations:'disabled'});
-  await page.locator('.acf-calendar-inspect').press('Enter');await page.locator('#inspectExpense').waitFor();
+  await page.locator('.acf-calendar-inspect').press('Enter');await page.locator('.push-view.show #inspectExpense').waitFor();
   assert.equal(await page.locator('.push-view.show').count(),2);
   await page.evaluate(()=>{globalThis.__mm3Test.popView();globalThis.__mm3Test.popView()});
   passed('393×852 touch viewport fits all seven ACF calendar columns and keyboard activation opens one day inspector');

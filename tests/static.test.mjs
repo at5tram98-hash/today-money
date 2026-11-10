@@ -101,3 +101,51 @@ test('sidebar UI, gestures and accessibility scope are fully removed', () => {
   assert.ok(!/sidebarLayer|appSidebar|openSidebar|closeSidebar|renderSidebar|insertSidebarNav|installSidebarGestures/.test(javascript));
   assert.ok(!/sidebarLayer|appSidebar/.test(read('src/index.html')));
 });
+
+test('Phase 8 native action tokens, role states and 44px month control remain defined', () => {
+  const tokens=read('src/css/tokens.css');
+  const native=read('src/css/06-native-ui.css');
+  const layout=read('src/css/workspace.css');
+  for (const name of ['action-soft','action-soft-border','action-pressed','action-hover','action-toolbar','action-danger-soft','action-focus','action-primary-shadow']) {
+    assert.match(tokens,new RegExp('--'+name+':'));
+  }
+  assert.match(native,/\.month-name-btn\{min-height:44px!important/);
+  assert.match(layout,/button\[aria-busy=true\]/);
+  assert.match(layout,/button:focus-visible/);
+  assert.match(layout,/button\[aria-disabled=true\]/);
+  assert.match(layout,/\.alert-actions \.destructive/);
+  assert.match(layout,/\.seg button\[aria-pressed=true\]/);
+  assert.match(layout,/@media\(prefers-contrast:more\)/);
+  assert.match(layout,/@media\(prefers-reduced-transparency:reduce\)/);
+  assert.match(layout,/@media\(prefers-reduced-motion:reduce\)/);
+  assert.doesNotMatch(layout,/button:not\(:disabled\):active\{opacity:\.65\}/);
+});
+
+
+test('304 original memory controls are present with explicit UI roles and priorities', () => {
+  const code=read('src/js/24-accessibility.js').split('\n');
+  const main=code.find(line=>line.trim().startsWith('const phase8Contracts=new Map('));
+  const dyn=code.find(line=>line.trim().startsWith('const phase8DynamicContracts='));
+  assert.ok(main&&dyn,'role metadata must be wired into the accessibility lifecycle');
+  const direct=JSON.parse(main.slice(main.indexOf('new Map(')+8,-2));
+  const dynamic=JSON.parse(dyn.slice(dyn.indexOf('=')+1,-1));
+  assert.equal(direct.length+dynamic.length,304);
+  const tuples=[...direct.map(([selector,spec])=>[selector,...spec]),...dynamic];
+  assert.equal(new Set(tuples.map(t=>t[1])).size,304);
+  assert.equal(tuples.filter(t=>t[2]==='P0').length,173);
+  assert.equal(tuples.filter(t=>t[2]==='P1').length,131);
+  assert.equal(tuples.filter(t=>['danger','primary','secondary','navigation','selection'].includes(t[3])).length,304);
+  const byId=new Map(tuples.map(t=>[t[1],t]));
+  assert.deepEqual(byId.get('HOME-004').slice(2,4),['P0','primary']);
+  assert.deepEqual(byId.get('BACKUP-210').slice(2,4),['P0','danger']);
+  assert.match(read('src/css/workspace.css'),/button\[data-ui-inventory\]/);
+});
+
+
+test('backup validation rejects version-only files while retaining empty and older financial backups', () => {
+  const validate=vm.runInNewContext(read('src/js/00-data-model.js')+'\nvalidateBackupPayload');
+  for(const payload of [{version:18},{version:18,unrelated:[]},{version:18,profile:{name:'not a backup'}},{version:18,transactions:'invalid'}]){
+    const result=validate(payload);assert.equal(result.ok,false,JSON.stringify(payload));
+  }
+  for(const payload of [{version:18,transactions:[]},{version:1,banks:[]},{version:18,banks:[{id:'b',name:'Bank',balance:12345}],transactions:[]}])assert.equal(validate(payload).ok,true);
+});

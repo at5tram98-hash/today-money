@@ -163,5 +163,33 @@ async function runWithBusy(fn,{title='ACFを計算中…',sub='給与・カー�
     return result;
   }finally{await endBusy(token)}
 }
-function installLongPress(el,onLong,{delay=600,moveTolerance=10,feedbackOn=true}={}){if(!el)return()=>{};let timer=null,longPressed=false,sx=0,sy=0;const clear=()=>{if(timer){clearTimeout(timer);timer=null}};const down=e=>{longPressed=false;el.__longPressed=false;sx=e.clientX;sy=e.clientY;clear();timer=setTimeout(()=>{timer=null;longPressed=true;el.__longPressed=true;if(feedbackOn)feedback.selection();onLong?.(e)},delay)};const move=e=>{if(timer&&(Math.abs(e.clientX-sx)>moveTolerance||Math.abs(e.clientY-sy)>moveTolerance))clear()};const suppress=e=>{if(longPressed||el.__longPressed){e.preventDefault();e.stopImmediatePropagation();longPressed=false;el.__longPressed=false}};el.addEventListener('pointerdown',down);el.addEventListener('pointermove',move);el.addEventListener('pointerup',clear);el.addEventListener('pointercancel',clear);el.addEventListener('pointerleave',clear);el.addEventListener('click',suppress,true);el.addEventListener('contextmenu',e=>e.preventDefault());el.addEventListener('selectstart',e=>e.preventDefault());return()=>{clear();el.removeEventListener('pointerdown',down);el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',clear);el.removeEventListener('pointercancel',clear);el.removeEventListener('pointerleave',clear);el.removeEventListener('click',suppress,true)}}
+function installLongPress(el,onLong,{delay=600,moveTolerance=10,feedbackOn=true}={}){
+  if(!el)return()=>{};
+  let timer=null,longPressed=false,sx=0,sy=0;
+  const clear=()=>{if(timer){clearTimeout(timer);timer=null}};
+  const down=e=>{longPressed=false;el.__longPressed=false;sx=e.clientX;sy=e.clientY;clear();timer=setTimeout(()=>{timer=null;longPressed=true;el.__longPressed=true;if(feedbackOn)feedback.selection();onLong?.(e)},delay)};
+  const move=e=>{if(timer&&(Math.abs(e.clientX-sx)>moveTolerance||Math.abs(e.clientY-sy)>moveTolerance))clear()};
+  // A new overlay can receive the tap synthesized when a long touch ends.
+  const suppressTouchEnd=e=>{if(longPressed&&e.cancelable)e.preventDefault()};
+  const suppress=e=>{if(e.detail>0&&(longPressed||el.__longPressed)){e.preventDefault();e.stopImmediatePropagation();longPressed=false;el.__longPressed=false}};
+  el.addEventListener('pointerdown',down);
+  el.addEventListener('pointermove',move);
+  el.addEventListener('pointerup',clear);
+  el.addEventListener('pointercancel',clear);
+  el.addEventListener('pointerleave',clear);
+  el.addEventListener('touchend',suppressTouchEnd,{passive:false});
+  el.addEventListener('click',suppress,true);
+  el.addEventListener('contextmenu',e=>e.preventDefault());
+  el.addEventListener('selectstart',e=>e.preventDefault());
+  return()=>{
+    clear();
+    el.removeEventListener('pointerdown',down);
+    el.removeEventListener('pointermove',move);
+    el.removeEventListener('pointerup',clear);
+    el.removeEventListener('pointercancel',clear);
+    el.removeEventListener('pointerleave',clear);
+    el.removeEventListener('touchend',suppressTouchEnd);
+    el.removeEventListener('click',suppress,true);
+  }
+}
 

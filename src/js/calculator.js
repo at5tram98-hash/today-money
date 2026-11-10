@@ -1,6 +1,6 @@
 /* Amount input: existing arithmetic and commit callback are retained. */
 let calcValue='0',calcCb=null,calcStored=null,calcOp=null,calcWaiting=false,calcLastOperand=null,calcReplaceOnNextDigit=false,calcAllowNegative=false;
-function openCalculator(title='金額',initial=0,cb,options={}){calcValue=String(Math.round(Number(initial)||0));calcStored=null;calcOp=null;calcWaiting=false;calcLastOperand=null;calcReplaceOnNextDigit=true;calcAllowNegative=!!options.allowNegative;calcCb=typeof cb==='function'?value=>{cb(value);if(document.getElementById('sheet').classList.contains('show')&&value!==Math.round(Number(initial)||0))markSheetDirty()}:null;document.activeElement?.blur?.();document.getElementById('dim').classList.add('native-calc-dim');document.getElementById('calcTitle').textContent=title;closeCalcTools();updateCalc();document.getElementById('dim').classList.add('show');document.getElementById('calculator').classList.add('show')}
+function openCalculator(title='金額',initial=0,cb,options={}){calcValue=String(Math.round(Number(initial)||0));calcStored=null;calcOp=null;calcWaiting=false;calcLastOperand=null;calcReplaceOnNextDigit=true;calcAllowNegative=!!options.allowNegative;calcCb=typeof cb==='function'?value=>{cb(value);if(options.affectsSheet!==false&&document.getElementById('sheet').classList.contains('show')&&value!==Math.round(Number(initial)||0))markSheetDirty()}:null;document.activeElement?.blur?.();document.getElementById('dim').classList.add('native-calc-dim');document.getElementById('calcTitle').textContent=title;closeCalcTools();updateCalc();document.getElementById('dim').classList.add('show');document.getElementById('calculator').classList.add('show')}
 function closeCalc(){closeCalcTools();document.getElementById('dim').classList.remove('native-calc-dim');document.getElementById('calculator').classList.remove('show');if(!document.getElementById('sheet').classList.contains('show'))document.getElementById('dim').classList.remove('show');calcCb=null;calcStored=null;calcOp=null;calcWaiting=false;calcLastOperand=null;calcReplaceOnNextDigit=false;calcAllowNegative=false;updateCalc()}
 function calcCompute(a,b,op){a=Number(a)||0;b=Number(b)||0;if(op==='+')return a+b;if(op==='-')return a-b;if(op==='*')return a*b;if(op==='/')return b===0?null:a/b;return b}
 function calcFinalValue(){let v=Number(calcValue)||0;if(calcOp&&calcStored!=null&&!calcWaiting){const result=calcCompute(calcStored,v,calcOp);if(result==null)return null;v=result}v=Math.round(v);if(!calcAllowNegative)v=Math.max(0,v);return Math.max(calcAllowNegative?-999999999:0,Math.min(999999999,v))}
@@ -29,7 +29,14 @@ function calcAssistResult(base,kind,value){
   return {amount:Math.round(base*(kind==='discount'?1-value/100:1+value/100)),copy:kind==='discount'?`${value}%引き`:`${value}%を加算（1円単位で四捨五入）`};
 }
 let calcToolBase=0,calcToolKind='discount';
-function closeCalcTools(){document.getElementById('calcDone').disabled=false;document.getElementById('calcTools').hidden=true;document.getElementById('calcGrid').hidden=false;document.querySelectorAll('[data-calc-tool]').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function closeCalcTools(restoreFocus=false){
+  document.getElementById('calcDone').disabled=false;
+  document.getElementById('calcTools').hidden=true;
+  document.getElementById('calcGrid').hidden=false;
+  const tools=document.querySelectorAll('[data-calc-tool]');
+  tools.forEach(button=>button.setAttribute('aria-expanded','false'));
+  if(restoreFocus)document.querySelector(`[data-calc-tool="${calcToolKind}"]`)?.focus({preventScroll:true});
+}
 function renderCalcAssist(){
   const value=(document.getElementById('calcToolValue').value===''?NaN:Number(document.getElementById('calcToolValue').value)),result=calcAssistResult(calcToolBase,calcToolKind,value);
   document.getElementById('calcToolPreview').textContent=result?`${result.amount.toLocaleString('ja-JP')}円`:'入力を確認してください';
@@ -48,13 +55,13 @@ function openCalcAssist(kind){
 }
 document.querySelectorAll('[data-calc-tool]').forEach(b=>b.onclick=()=>openCalcAssist(b.dataset.calcTool));
 document.getElementById('calcToolValue').oninput=renderCalcAssist;
-document.getElementById('calcToolCancel').onclick=closeCalcTools;
+document.getElementById('calcToolCancel').onclick=()=>closeCalcTools(true);
 document.getElementById('calcToolApply').onclick=()=>{
   const result=calcAssistResult(calcToolBase,calcToolKind,(document.getElementById('calcToolValue').value===''?NaN:Number(document.getElementById('calcToolValue').value)));if(!result||result.amount>999999999)return;
-  calcValue=String(result.amount);calcStored=null;calcOp=null;calcWaiting=false;calcLastOperand=null;calcReplaceOnNextDigit=true;closeCalcTools();updateCalc();
+  calcValue=String(result.amount);calcStored=null;calcOp=null;calcWaiting=false;calcLastOperand=null;calcReplaceOnNextDigit=true;closeCalcTools(true);updateCalc();
 };
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('calculator').classList.contains('show')||/INPUT|TEXTAREA|SELECT/.test(e.target?.tagName||'')||e.ctrlKey||e.metaKey||e.altKey)return;
   const key=/^[0-9]$/.test(e.key)?e.key:({Backspace:'back',Delete:'clear','+':'op:+','-':'op:-','*':'op:*','/':'op:/','%':'percent','=':'done'})[e.key];
-  if(key){e.preventDefault();calcKey(key)}else if(e.key==='Enter'){e.preventDefault();document.getElementById('calcDone').click()}
+  if(key){e.preventDefault();calcKey(key)}else if(e.key==='Enter'&&!e.target?.closest?.('button')){e.preventDefault();document.getElementById('calcDone').click()}
 });

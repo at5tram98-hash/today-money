@@ -91,28 +91,44 @@ function openSmartInputSearch(initialMode='input'){
           }
       })
     };
-    const searchHtml=()=>{
-      const rows=pro4SearchItems(query,searchType),groups={transaction:'支出',salary:'給与',account:'口座',card:'カード',goal:'旅行・プレゼント'};
-      return `<div class="pro4-searchbar">${icon('search')}<input id="pro4SearchQuery" placeholder="取引・給与・口座・請求・目標を検索" value="${esc(query)}"></div><div class="pro4-search-filters">${[['all','すべて'],['transaction','支出'],['salary','給与'],['account','口座'],['card','カード'],['goal','目標']].map(([v,l])=>`<button class="pro4-search-chip ${searchType===v?'on':''}" data-search-type="${v}">${l}</button>`).join('')}</div><div style="display:flex;justify-content:space-between;align-items:center;margin:0 2px 9px"><span class="row-sub pro4-result-count">${rows.length}件</span><button class="nav-text" id="pro4SaveSearch">検索条件を保存</button></div>${rows.length?Object.entries(groups).map(([type,label])=>{
-        const list=rows.filter(r=>r.type===type);
-        return list.length?`<div class="pro4-result-section"><div class="pro4-result-type">${label}</div><div class="group">${list.map(r=>`<button class="row press" data-pro4-result="${type}|${r.id}"><div class="row-main"><div class="row-title">${esc(r.title)}</div><div class="row-sub">${esc(r.sub)}</div></div><div class="row-value">${esc(r.value)}</div><span class="chev">›</span></button>`).join('')}</div></div>`:''
-      }).join(''):'<div class="empty">該当する記録はありません。</div>'}${data.savedSearches.length?`<div class="section-head">保存した検索</div><div class="group">${data.savedSearches.map(x=>`<button class="row press" data-load-search="${x.id}"><div class="row-main"><div class="row-title">${esc(x.name)}</div><div class="row-sub">${esc(x.query||'条件のみ')}・${esc(x.type)}</div></div><span class="chev">›</span></button>`).join('')}</div>`:''}`
-    };
+    const filters=[['all','すべて'],['transaction','支出'],['salary','給与'],['account','口座'],['card','カード'],['goal','目標']];
+    const searchHtml=()=>`<div class="pro4-searchbar">${icon('search')}<input type="search" id="pro4SearchQuery" aria-label="取引・給与・口座・請求・目標を検索" placeholder="取引・給与・口座・請求・目標を検索" value="${esc(query)}"></div><div class="pro4-search-filters" role="group" aria-label="記録の種類">${filters.map(([value,label])=>`<button type="button" class="pro4-search-chip" data-search-type="${value}">${label}</button>`).join('')}</div><div class="pro4-search-summary"><span class="row-sub pro4-result-count" role="status"></span><button class="nav-text" id="pro4SaveSearch">検索条件を保存</button></div><div id="pro4Results"></div><div id="pro4SavedSearches"></div>`;
     const bindSearch=()=>{
-      const inp=body.querySelector('#pro4SearchQuery');
-      inp.oninput=()=>{
-        query=inp.value;
-        clearTimeout(inp.__timer);
-        inp.__timer=setTimeout(draw,180)
+      const input=body.querySelector('#pro4SearchQuery'), results=body.querySelector('#pro4Results'), count=body.querySelector('.pro4-result-count'), saved=body.querySelector('#pro4SavedSearches');
+      const chips=Array.from(body.querySelectorAll('[data-search-type]'));
+      let composing=false, timer;
+      const groups={transaction:'支出',salary:'給与',account:'口座',card:'カード',goal:'旅行・プレゼント'};
+      function renderResults(){
+        clearTimeout(timer);
+        if(!input.isConnected)return;
+        const rows=pro4SearchItems(query,searchType);
+        const resultCount=`${rows.length}件`;
+        if(count.textContent!==resultCount)count.textContent=resultCount;
+        results.innerHTML=rows.length?Object.entries(groups).map(([type,label])=>{
+          const list=rows.filter(r=>r.type===type);
+          return list.length?`<div class="pro4-result-section"><div class="pro4-result-type">${label}</div><div class="group">${list.map(r=>`<button type="button" class="row press" data-pro4-result="${type}|${esc(r.id)}"><div class="row-main"><div class="row-title">${esc(r.title)}</div><div class="row-sub">${esc(r.sub)}</div></div><div class="row-value">${esc(r.value)}</div><span class="chev">›</span></button>`).join('')}</div></div>`:''
+        }).join(''):'<div class="empty">該当する記録はありません。</div>';
+        const buttons=results.querySelectorAll('[data-pro4-result]');
+        const byKey=new Map(rows.map(r=>[`${r.type}|${r.id}`,r]));
+        buttons.forEach(b=>b.onclick=()=>pro4OpenSearchResult(byKey.get(b.dataset.pro4Result)));
+        chips.forEach(b=>{
+          const selected=b.dataset.searchType===searchType;
+          b.classList.toggle('on',selected);
+          b.setAttribute('aria-pressed',String(selected));
+        });
+      }
+      function renderSaved(){
+        saved.innerHTML=data.savedSearches.length?`<div class="section-head">保存した検索</div><div class="group">${data.savedSearches.map(x=>`<button type="button" class="row press" data-load-search="${esc(x.id)}"><div class="row-main"><div class="row-title">${esc(x.name)}</div><div class="row-sub">${esc(x.query||'条件のみ')}・${esc(x.type)}</div></div><span class="chev">›</span></button>`).join('')}</div>`:'';
+      }
+      input.oncompositionstart=()=>{composing=true;clearTimeout(timer)};
+      input.oncompositionend=()=>{composing=false;query=input.value;renderResults()};
+      input.oninput=e=>{
+        if(composing||e.isComposing)return;
+        query=input.value;
+        clearTimeout(timer);
+        timer=setTimeout(renderResults,180);
       };
-      body.querySelectorAll('[data-search-type]').forEach(b=>b.onclick=()=>{
-        searchType=b.dataset.searchType;
-        draw()
-      });
-      body.querySelectorAll('[data-pro4-result]').forEach(b=>b.onclick=()=>{
-        const [type,id]=b.dataset.pro4Result.split('|'),r=pro4SearchItems(query,type).find(x=>x.id===id);
-        if(r)pro4OpenSearchResult(r)
-      });
+      chips.forEach(b=>b.onclick=()=>{searchType=b.dataset.searchType;renderResults()});
       body.querySelector('#pro4SaveSearch').onclick=()=>{
         if(!query&&searchType==='all')return showAlert('検索条件がありません','検索語または種類を指定してください。');
         try{
@@ -122,18 +138,20 @@ function openSmartInputSearch(initialMode='input'){
           },{render:false,label:'save search'});
           feedback.success();
           showToast('検索条件を保存しました');
-          draw()
-        }catch(e){
-          }
+          renderSaved()
+        }catch(e){}
       };
-      body.querySelectorAll('[data-load-search]').forEach(b=>b.onclick=()=>{
-        const x=data.savedSearches.find(v=>v.id===b.dataset.loadSearch);
-        if(x){
-          query=x.query;
-          searchType=x.type||'all';
-          draw()
-        }
-      })
+      saved.onclick=event=>{
+        const button=event.target.closest('[data-load-search]');
+        const value=button&&data.savedSearches.find(x=>x.id===button.dataset.loadSearch);
+        if(!value)return;
+        query=value.query||'';
+        searchType=filters.some(([key])=>key===value.type)?value.type:'all';
+        input.value=query;
+        renderResults();
+      };
+      renderSaved();
+      renderResults();
     };
     draw()
   })
@@ -143,7 +161,29 @@ function eventGoalSummary(g){const total=sum(g.items.filter(i=>i.status!=='cance
 function syncEventGoalPlans(goalId){requireStateCommit('syncEventGoalPlans');const g=data.eventGoals.find(x=>x.id===goalId);if(!g)throw new Error('目標が見つかりません');const keep=new Set();for(const item of g.items){let p=data.largeExpensePlans.find(x=>x.goalId===g.id&&x.goalItemId===item.id);if(item.status==='cancelled'){if(p&&p.status!=='completed')data.largeExpensePlans=data.largeExpensePlans.filter(x=>x.id!==p.id);continue}if(item.status==='paid'){if(p){p.status='completed';p.linkedTransactionId=item.transactionId||p.linkedTransactionId||'';p.updatedAt=new Date().toISOString();item.largePlanId=p.id}continue}const obj={id:p?.id||uid('large'),name:`${g.name}・${item.name}`,date:item.plannedDate||g.deadline,amount:item.budget,category:item.category||'その他',priority:'required',paymentMethod:item.paymentMethod||'other',paymentId:item.paymentId||'',linkedBankId:item.linkedBankId||(item.paymentMethod==='bank'?item.paymentId:'')||(item.paymentMethod==='debit'?paymentBankId('debit',item.paymentId):''),status:'planned',memo:`目標「${g.name}」の費目`,splits:[],goalId:g.id,goalItemId:item.id,createdAt:p?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};if(p)Object.assign(p,obj);else data.largeExpensePlans.push(obj);item.largePlanId=obj.id;keep.add(obj.id)}data.largeExpensePlans=data.largeExpensePlans.filter(p=>p.goalId!==g.id||p.status==='completed'||keep.has(p.id))}
 function eventGoalMonthBannerHtml(month){const goals=data.eventGoals.filter(g=>g.status!=='cancelled'&&(String(g.deadline).slice(0,7)===month||g.items.some(i=>String(i.plannedDate).slice(0,7)===month))),total=sum(goals,g=>eventGoalSummary(g).ownShare);return `<button class="pro4-goal-banner" id="monthEventGoals"><div class="settings-icon" style="background:var(--purple)">${icon('gift')}</div><div class="row-main"><strong>旅行・プレゼントの目標</strong><span>${goals.length?`${goals.length}件・自分の負担予定 ${yen(total)}`:'割り勘・立替・回収までまとめて管理'}</span></div><span class="chev">›</span></button>`}
 function openEventGoals(month=currentMonth){const render=()=>{const list=data.eventGoals.filter(g=>g.status!=='cancelled').sort((a,b)=>a.deadline.localeCompare(b.deadline)),html=`<button class="primary" id="eventGoalAdd" style="margin-bottom:13px">旅行・プレゼント目標を追加</button>${list.length?list.map(g=>{const s=eventGoalSummary(g);return `<button class="pro4-goal-card" data-event-goal="${g.id}" style="width:100%;border:0;text-align:left;color:inherit"><div class="pro4-goal-title"><div><strong>${esc(g.name)}</strong><div class="row-sub">期限 ${dayLabel(g.deadline)}・${g.items.length}費目</div></div><span class="status-chip ${s.unrecovered?'warning':'good'}">${s.unrecovered?'未回収あり':g.status==='completed'?'完了':'計画中'}</span></div><div class="pro4-goal-metrics"><div><span>総費用</span><strong>${yen(s.total)}</strong></div><div><span>自分の最終負担</span><strong>${yen(s.ownShare)}</strong></div><div><span>支払済み</span><strong>${yen(s.paid)}</strong></div><div><span>未回収</span><strong>${yen(s.unrecovered)}</strong></div></div></button>`}).join(''):'<div class="empty">旅行・プレゼントの目標はありません。</div>'}`,bind=root=>{root.querySelector('#eventGoalAdd').onclick=()=>openEventGoalEditor(null,{after:render});root.querySelectorAll('[data-event-goal]').forEach(b=>b.onclick=()=>openEventGoalDetail(b.dataset.eventGoal))};if(pushStack.at(-1)?.title==='旅行・プレゼント')replaceTopPush('旅行・プレゼント',html,bind);else pushView('旅行・プレゼント',html,bind)};render()}
-function openGoalItemEditor(item,deadline,onSave){let draft=clone(item||{id:uid('goalitem'),name:'',budget:0,plannedDate:deadline||ymd(),category:data.categories[0]?.name||'その他',paymentMethod:'other',paymentId:'',status:'planned'}),amount=Number(draft.budget)||0;openSheet(`<div class="sheet-nav"><button class="nav-text" id="goalItemCancel">キャンセル</button><div class="sheet-title">費目</div><button class="nav-text bold" id="goalItemSave">保存</button></div><div class="sheet-body"><div class="form-card"><div class="form-section"><div class="form-label">費目名</div><input class="field" id="goalItemName" value="${esc(draft.name)}" placeholder="例：ホテル"></div><div class="form-section">${moneyButton('goalItemAmount','予算',amount)}</div><div class="form-section"><div class="form-label">支払予定日</div><input class="field" id="goalItemDate" type="date" value="${draft.plannedDate}"></div><div class="form-section"><div class="form-label">カテゴリ</div><select class="field field-select" id="goalItemCat">${data.categories.map(c=>`<option ${c.name===draft.category?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="form-section"><div class="form-label">支払い方法</div><select class="field field-select" id="goalItemPay">${paymentOptions(draft.paymentMethod,draft.paymentId)}</select></div></div></div>`,'full',root=>{const a=root.querySelector('#goalItemAmount');a.onclick=()=>openCalculator('費目予算',amount,v=>{amount=v;a.querySelector('.val').textContent=yen(v)});root.querySelector('#goalItemCancel').onclick=requestSheetClose;root.querySelector('#goalItemSave').onclick=()=>{const name=root.querySelector('#goalItemName').value.trim(),date=root.querySelector('#goalItemDate').value,[pm,pid]=root.querySelector('#goalItemPay').value.split('|');if(!name||amount<=0||!date)return showAlert('入力内容を確認してください','費目名・金額・日付を入力してください。');onSave({...draft,name,budget:amount,plannedDate:date,category:root.querySelector('#goalItemCat').value,paymentMethod:pm,paymentId:pid,linkedBankId:pm==='bank'?pid:(pm==='debit'?paymentBankId(pm,pid):''),status:draft.status||'planned'});closeSheet()}})}
+function openGoalItemEditor(item,deadline,onSave,trigger=null){
+  const draft=clone(item||{id:uid('goalitem'),name:'',budget:0,plannedDate:deadline||ymd(),category:data.categories[0]?.name||'その他',paymentMethod:'other',paymentId:'',status:'planned'});
+  let amount=Number(draft.budget)||0;
+  // Keep the parent travel-goal form, its unsaved fields, scroll position and
+  // event bindings intact while the child occupies the same native sheet.
+  openNestedSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="goalItemCancel">キャンセル</button><div class="sheet-title">費目</div><button type="button" class="nav-text bold" id="goalItemSave">保存</button></div><div class="sheet-body"><div class="form-card"><div class="form-section"><div class="form-label">費目名</div><input class="field" id="goalItemName" value="${esc(draft.name)}" placeholder="例：ホテル"></div><div class="form-section">${moneyButton('goalItemAmount','予算',amount)}</div><div class="form-section"><div class="form-label">支払予定日</div><input class="field" id="goalItemDate" type="date" value="${draft.plannedDate}"></div><div class="form-section"><div class="form-label">カテゴリ</div><select class="field field-select" id="goalItemCat">${data.categories.map(c=>`<option ${c.name===draft.category?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="form-section"><div class="form-label">支払い方法</div><select class="field field-select" id="goalItemPay">${paymentOptions(draft.paymentMethod,draft.paymentId)}</select></div></div></div>`,root=>{
+    const amountBtn=root.querySelector('#goalItemAmount');
+    root.querySelector('#goalItemCancel').onclick=requestNestedSheetClose;
+    amountBtn.onclick=()=>openCalculator('費目予算',amount,value=>{
+      amount=value;
+      amountBtn.querySelector('.val').textContent=yen(value);
+      markNestedSheetDirty()
+    },{affectsSheet:false});
+    root.querySelector('#goalItemSave').onclick=()=>{
+      const name=root.querySelector('#goalItemName').value.trim(),date=root.querySelector('#goalItemDate').value;
+      const [pm,pid]=root.querySelector('#goalItemPay').value.split('|');
+      if(!name||amount<=0||!date)return showAlert('入力内容を確認してください','費目名・金額・日付を入力してください。');
+      const next={...draft,name,budget:amount,plannedDate:date,category:root.querySelector('#goalItemCat').value,paymentMethod:pm,paymentId:pid,linkedBankId:pm==='bank'?pid:(pm==='debit'?paymentBankId(pm,pid):''),status:draft.status||'planned'};
+      closeNestedSheet();
+      onSave(next)
+    }
+  },{discardTitle:'費目の変更を破棄しますか？',discardMessage:'旅行・プレゼント目標の編集中の内容は保持します。',discardOk:'費目の変更を破棄',returnFocus:trigger})
+}
 function openEventGoalEditor(existing,{after=null}={}){
   let draft=clone(existing||{id:uid('goal'),name:'',type:'travel',deadline:addDays(ymd(),30),splitMode:'self',participants:2,ownShareAmount:0,status:'active',items:[],createdAt:new Date().toISOString()}),itemHost=null;
   openSheet(`<div class="sheet-nav"><button class="nav-text" id="eventGoalCancel">キャンセル</button><div class="sheet-title">${existing?'目標を編集':'目標を追加'}</div><button class="nav-text bold" id="eventGoalSave">保存</button></div><div class="sheet-body"><div class="form-group-title">目標</div><div class="form-card"><div class="form-section"><div class="form-label">名前</div><input class="field" id="eventGoalName" value="${esc(draft.name)}" placeholder="例：名古屋旅行・誕生日"></div><div class="form-section"><div class="form-label">期限</div><input class="field" id="eventGoalDeadline" type="date" value="${draft.deadline}"></div><div class="form-section"><div class="form-label">種類</div><select class="field field-select" id="eventGoalType"><option value="travel" ${draft.type==='travel'?'selected':''}>旅行</option><option value="gift" ${draft.type==='gift'?'selected':''}>プレゼント</option><option value="event" ${draft.type==='event'?'selected':''}>イベント</option><option value="other" ${draft.type==='other'?'selected':''}>その他</option></select></div></div><div class="form-group-title">自分の負担</div><div class="seg" id="eventGoalSplit"><button data-v="self" class="${draft.splitMode==='self'?'on':''}">全額</button><button data-v="equal" class="${draft.splitMode==='equal'?'on':''}">等分</button><button data-v="amount" class="${draft.splitMode==='amount'?'on':''}">金額指定</button></div><div class="form-card" style="margin-top:9px"><div class="form-section" id="eventParticipantsWrap"><div class="form-label">人数</div><input class="field" id="eventParticipants" type="number" min="1" max="20" value="${draft.participants||2}"></div><div class="form-section" id="eventOwnShareWrap">${moneyButton('eventOwnShare','自分の負担額',draft.ownShareAmount||0)}</div></div><div class="form-group-title">費目</div><div id="eventGoalItems"></div><button type="button" class="secondary" id="eventGoalAddItem">費目を追加</button><div class="form-helper">費目は大型支出計画と関連IDでつなぎます。割り勘の相手負担分を、受取前の現金・預金へ足すことはありません。</div></div>`,'full',root=>{
@@ -154,7 +194,7 @@ function openEventGoalEditor(existing,{after=null}={}){
         draft.items[Number(b.dataset.itemEdit)]=x;
         markSheetDirty();
         drawItems()
-      }));
+      },b));
       itemHost.querySelectorAll('[data-item-delete]').forEach(b=>b.onclick=()=>{
         draft.items.splice(Number(b.dataset.itemDelete),1);
         markSheetDirty();
@@ -180,7 +220,7 @@ function openEventGoalEditor(existing,{after=null}={}){
       draft.items.push(x);
       markSheetDirty();
       drawItems()
-    });
+    },root.querySelector('#eventGoalAddItem'));
     root.querySelector('#eventGoalCancel').onclick=requestSheetClose;
     root.querySelector('#eventGoalSave').onclick=()=>{
       draft.name=root.querySelector('#eventGoalName').value.trim();
@@ -210,7 +250,7 @@ function openEventGoalEditor(existing,{after=null}={}){
 }
 function completeGoalItem(goalId,itemId,btn=null){return runSaveAction(btn,()=>{const g=data.eventGoals.find(x=>x.id===goalId),i=g?.items.find(x=>x.id===itemId);if(!g||!i||i.status==='paid'||i.status==='cancelled')throw new Error('対象の費目は支払済み、取消済み、または見つかりません');requireFinancialPayment(i.paymentMethod,i.paymentId);const tx=recordExpense({date:i.plannedDate,amount:i.budget,category:i.category,merchant:`${g.name}・${i.name}`,paymentMethod:i.paymentMethod,paymentId:i.paymentId,linkedBankId:i.linkedBankId||'',memo:`目標「${g.name}」`,source:'event_goal',saveNow:false});i.status='paid';i.transactionId=tx?.id||'';const p=data.largeExpensePlans.find(x=>x.id===i.largePlanId||x.goalId===g.id&&x.goalItemId===i.id);if(p){p.status='completed';p.linkedTransactionId=i.transactionId;p.updatedAt=new Date().toISOString()}g.updatedAt=new Date().toISOString()},{label:'goal item paid',afterCommit:refreshFinancialViews,success:'実際の支出として記録しました'})}
 function confirmGoalReimbursement(goalId){const g=data.eventGoals.find(x=>x.id===goalId);if(!g)return;const sm=eventGoalSummary(g);if(sm.unrecovered<=0)return showAlert('未回収はありません','現在、受け取る予定の残額はありません。');let amount=sm.unrecovered,toType='cash',bankId=data.banks[0]?.id||'';openSheet(`<div class="sheet-nav"><button class="nav-text" id="reimbCancel">キャンセル</button><div class="sheet-title">割り勘の受取を確認</div><button class="nav-text bold" id="reimbSave">保存</button></div><div class="sheet-body"><div class="hero"><div class="hero-kicker">未回収</div><div class="hero-value">${yen(sm.unrecovered)}</div><div class="hero-sub">受け取った事実を確認した金額だけ残高へ反映します。</div></div><div class="form-card"><div class="form-section">${moneyButton('reimbAmount','今回受け取った額',amount)}</div><div class="form-section"><div class="seg" id="reimbType"><button data-v="cash" class="on">現金・その他</button><button data-v="bank">銀行口座</button></div></div><div class="form-section hidden" id="reimbBankWrap"><select class="field field-select" id="reimbBank">${data.banks.map(b=>`<option value="${b.id}">${esc(b.name)}</option>`).join('')}</select></div></div></div>`,'half',root=>{const a=root.querySelector('#reimbAmount');a.onclick=()=>openCalculator('受取額',amount,v=>{amount=v;markSheetDirty();a.querySelector('.val').textContent=yen(v)});root.querySelectorAll('#reimbType button').forEach(b=>b.onclick=()=>{toType=b.dataset.v;markSheetDirty();root.querySelectorAll('#reimbType button').forEach(x=>x.classList.toggle('on',x===b));root.querySelector('#reimbBankWrap').classList.toggle('hidden',toType!=='bank')});root.querySelector('#reimbCancel').onclick=requestSheetClose;root.querySelector('#reimbSave').onclick=()=>{bankId=root.querySelector('#reimbBank')?.value||'';runSaveAction(root.querySelector('#reimbSave'),()=>{const current=data.eventGoals.find(x=>x.id===goalId);if(!current)throw new Error('目標が見つかりません');if(!(amount>0)||amount>eventGoalSummary(current).unrecovered)throw new Error('未回収額以下の受取額を入力してください');if(toType==='bank')requireFinancialEntity('bank',bankId);const inc=recordIncome({date:ymd(),amount,sourceName:`${current.name} 割り勘回収`,toType,bankId:toType==='bank'?bankId:'',memo:'旅行・プレゼント目標の回収',kind:'reimbursement',applyNow:toType==='bank',saveNow:false});data.reimbursements.push({id:uid('reimb'),goalId:current.id,amount,date:ymd(),toType,bankId:toType==='bank'?bankId:'',incomeId:inc?.id||'',status:'received',createdAt:new Date().toISOString()});current.updatedAt=new Date().toISOString()},{label:'goal reimbursement',afterCommit:refreshFinancialViews,close:closeSheet,success:'受取を記録しました'})}})}
-function openEventGoalDetail(id,targetRoot=null){const g=data.eventGoals.find(x=>x.id===id);if(!g)return;const sm=eventGoalSummary(g),paidPct=sm.total?Math.round(sm.paid/sm.total*100):0;presentFinancialView(targetRoot,'目標の詳細',`<div class="hero"><div class="hero-kicker">${esc(g.type==='travel'?'旅行':g.type==='gift'?'プレゼント':g.type==='event'?'イベント':'目標')}・期限 ${dayLabel(g.deadline)}</div><div class="hero-value">${yen(sm.ownShare)}</div><div class="hero-sub">自分の最終負担 / 総費用 ${yen(sm.total)}</div><div class="month-progress"><div class="month-progress-fill" style="width:${clamp(paidPct,0,100)}%"></div></div></div><div class="pro4-goal-metrics"><div><span>総費用</span><strong>${yen(sm.total)}</strong></div><div><span>自分の最終負担</span><strong>${yen(sm.ownShare)}</strong></div><div><span>立替済み</span><strong>${yen(sm.advance)}</strong></div><div><span>相手からの未回収</span><strong class="${sm.unrecovered?'orange':''}">${yen(sm.unrecovered)}</strong></div><div><span>支払済み / 残り</span><strong>${yen(sm.paid)} / ${yen(sm.remaining)}</strong></div><div><span>期限まで週あたり目安</span><strong>${yen(sm.weekly)}</strong></div></div>${sm.unrecovered?'<div class="goal-warning">相手の負担分は、実際に受け取るまで現金・預金へ加算していません。</div>':''}<div class="section-head">費目</div><div class="group">${g.items.map(i=>`<div class="pro4-goal-item"><div><strong>${esc(i.name)}</strong><span>${i.plannedDate}・${esc(paymentLabel(i))}・${i.status==='paid'?'支払済み':'予定'}</span>${i.status!=='paid'&&i.status!=='cancelled'?`<div class="pro4-item-actions"><button data-goal-pay="${i.id}">支出として記録</button></div>`:''}</div><div class="pro4-goal-item-amount">${yen(i.budget)}</div></div>`).join('')}</div><button class="secondary" id="eventGoalEdit">編集</button>${sm.unrecovered>0?'<button class="secondary" id="eventGoalReimburse" style="margin-top:9px">割り勘の受取を確認</button>':''}<button class="secondary danger" id="eventGoalDelete" style="margin-top:9px">目標を削除</button>`,root=>{root.dataset.eventGoalId=id;root.querySelector('#eventGoalEdit').onclick=()=>openEventGoalEditor(data.eventGoals.find(x=>x.id===id),{after:refreshFinancialViews});root.querySelector('#eventGoalReimburse')?.addEventListener('click',()=>confirmGoalReimbursement(g.id));root.querySelectorAll('[data-goal-pay]').forEach(b=>b.onclick=async()=>{const i=g.items.find(x=>x.id===b.dataset.goalPay);if(await showAlert('実際の支出として登録しますか？',`${i.name} ${yen(i.budget)} を実績にします。カードの場合は将来の請求へ反映されます。`,{okText:'登録'})){await completeGoalItem(id,i.id,b)}});root.querySelector('#eventGoalDelete').onclick=async()=>{if(!await showAlert('目標を削除しますか？','この目標から作った未完了の大型支出計画も削除します。実績の取引は削除しません。',{destructive:true,okText:'削除'}))return;try{safeCommit(()=>{const current=data.eventGoals.find(x=>x.id===id);if(!current)throw new Error('目標が見つかりません');current.status='cancelled';data.largeExpensePlans=data.largeExpensePlans.filter(p=>p.goalId!==id||p.status==='completed')},{render:true,label:'delete event goal'});feedback.delete();popView();showToast('目標を削除しました')}catch(e){}}})}
+function openEventGoalDetail(id,targetRoot=null){const g=data.eventGoals.find(x=>x.id===id);if(!g)return;const sm=eventGoalSummary(g),paidPct=sm.total?Math.round(sm.paid/sm.total*100):0;presentFinancialView(targetRoot,'目標の詳細',`<div class="hero"><h2 class="event-goal-name">${esc(g.name)}</h2><div class="hero-kicker">${esc(g.type==='travel'?'旅行':g.type==='gift'?'プレゼント':g.type==='event'?'イベント':'目標')}・期限 ${dayLabel(g.deadline)}</div><div class="hero-value">${yen(sm.ownShare)}</div><div class="hero-sub">自分の最終負担 / 総費用 ${yen(sm.total)}</div><div class="month-progress"><div class="month-progress-fill" style="width:${clamp(paidPct,0,100)}%"></div></div></div><div class="pro4-goal-metrics"><div><span>総費用</span><strong>${yen(sm.total)}</strong></div><div><span>自分の最終負担</span><strong>${yen(sm.ownShare)}</strong></div><div><span>立替済み</span><strong>${yen(sm.advance)}</strong></div><div><span>相手からの未回収</span><strong class="${sm.unrecovered?'orange':''}">${yen(sm.unrecovered)}</strong></div><div><span>支払済み / 残り</span><strong>${yen(sm.paid)} / ${yen(sm.remaining)}</strong></div><div><span>期限まで週あたり目安</span><strong>${yen(sm.weekly)}</strong></div></div>${sm.unrecovered?'<div class="goal-warning">相手の負担分は、実際に受け取るまで現金・預金へ加算していません。</div>':''}<div class="section-head">費目</div><div class="group">${g.items.map(i=>`<div class="pro4-goal-item"><div><strong>${esc(i.name)}</strong><span>${i.plannedDate}・${esc(paymentLabel(i))}・${i.status==='paid'?'支払済み':'予定'}</span>${i.status!=='paid'&&i.status!=='cancelled'?`<div class="pro4-item-actions"><button data-goal-pay="${i.id}">支出として記録</button></div>`:''}</div><div class="pro4-goal-item-amount">${yen(i.budget)}</div></div>`).join('')}</div><button class="secondary" id="eventGoalEdit">編集</button>${sm.unrecovered>0?'<button class="secondary" id="eventGoalReimburse" style="margin-top:9px">割り勘の受取を確認</button>':''}<button class="secondary danger" id="eventGoalDelete" style="margin-top:9px">目標を削除</button>`,root=>{root.dataset.eventGoalId=id;root.querySelector('#eventGoalEdit').onclick=()=>openEventGoalEditor(data.eventGoals.find(x=>x.id===id),{after:refreshFinancialViews});root.querySelector('#eventGoalReimburse')?.addEventListener('click',()=>confirmGoalReimbursement(g.id));root.querySelectorAll('[data-goal-pay]').forEach(b=>b.onclick=async()=>{const i=g.items.find(x=>x.id===b.dataset.goalPay);if(await showAlert('実際の支出として登録しますか？',`${i.name} ${yen(i.budget)} を実績にします。カードの場合は将来の請求へ反映されます。`,{okText:'登録'})){await completeGoalItem(id,i.id,b)}});root.querySelector('#eventGoalDelete').onclick=async()=>{if(!await showAlert('目標を削除しますか？','この目標から作った未完了の大型支出計画も削除します。実績の取引は削除しません。',{destructive:true,okText:'削除'}))return;try{safeCommit(()=>{const current=data.eventGoals.find(x=>x.id===id);if(!current)throw new Error('目標が見つかりません');current.status='cancelled';data.largeExpensePlans=data.largeExpensePlans.filter(p=>p.goalId!==id||p.status==='completed')},{render:true,label:'delete event goal'});feedback.delete();popView();showToast('目標を削除しました')}catch(e){}}})}
 
 function pro4ExpenseDimensionRows(month,dimension,compareMode='elapsed'){const curTx=txForMonth(month),prevMonth=addMonths(month,-1),elapsed=month===ym()?Number(ymd().slice(8,10)):daysInMonth(month),prevTx=txForMonth(prevMonth).filter(t=>compareMode==='full'||Number(t.date.slice(8,10))<=Math.min(elapsed,daysInMonth(prevMonth))),key=t=>dimension==='merchant'?(t.merchant||'不明'):dimension==='weekday'?'日月火水木金土'[parseYmd(t.date).getDay()]+'曜日':dimension==='payment'?paymentLabel(t):(t.category||'その他'),map=list=>{const m=new Map;for(const t of list)m.set(key(t),(m.get(key(t))||0)+(Number(t.amount)||0));return m},a=map(curTx),b=map(prevTx),keys=[...new Set([...a.keys(),...b.keys()])];return keys.map(k=>({key:k,value:a.get(k)||0,prev:b.get(k)||0,delta:(a.get(k)||0)-(b.get(k)||0)})).filter(x=>x.value||x.prev).sort((x,y)=>y.value-x.value)}
 function pro4SalaryRows(month){const recs=salaryRecordsPayableInMonth(month),prev=salaryRecordsPayableInMonth(addMonths(month,-1)),make=list=>{const m=new Map;for(const r of list){const e=employerById(r.employerId),k=e?.name||'勤務先';m.set(k,(m.get(k)||0)+salaryRecordExpectedOrReceivedAmount(r))}return m},a=make(recs),b=make(prev);return [...new Set([...a.keys(),...b.keys()])].map(k=>({key:k,value:a.get(k)||0,prev:b.get(k)||0,delta:(a.get(k)||0)-(b.get(k)||0)})).sort((x,y)=>y.value-x.value)}
