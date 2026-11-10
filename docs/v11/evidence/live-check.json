@@ -1,0 +1,61 @@
+{
+ "checkedAt": "2026-11-10T15:55:00.856Z",
+ "device": "Chromium による iPhone 15 Pro / 幅320 の再現（物理端末ではない）",
+ "siteUrl": "https://at5tram98-hash.github.io/today-money/",
+ "urlSource": "GitHubのページ上にリンクが見つからなかったため、リポジトリ内の設定値（worker/wrangler.jsonc の APP_URL）",
+ "iphone15pro-light": {
+  "assets": [
+   "assets/app.0124a6a7a18b.css",
+   "assets/app.61dbe459980f.js"
+  ],
+  "pwa": {
+   "worker": true,
+   "scope": "https://at5tram98-hash.github.io/today-money/",
+   "name": "My Money 3.0",
+   "display": "standalone"
+  }
+ },
+ "iphone15pro-dark": {
+  "assets": [
+   "assets/app.0124a6a7a18b.css",
+   "assets/app.61dbe459980f.js"
+  ],
+  "pwa": {
+   "worker": true,
+   "scope": "https://at5tram98-hash.github.io/today-money/",
+   "name": "My Money 3.0",
+   "display": "standalone"
+  }
+ },
+ "w320-light": {
+  "assets": [
+   "assets/app.0124a6a7a18b.css",
+   "assets/app.61dbe459980f.js"
+  ],
+  "pwa": {
+   "worker": true,
+   "scope": "https://at5tram98-hash.github.io/today-money/",
+   "name": "My Money 3.0",
+   "display": "standalone"
+  }
+ },
+ "w320-dark": {
+  "assets": [
+   "assets/app.0124a6a7a18b.css",
+   "assets/app.61dbe459980f.js"
+  ],
+  "pwa": {
+   "worker": true,
+   "scope": "https://at5tram98-hash.github.io/today-money/",
+   "name": "My Money 3.0",
+   "display": "standalone"
+  }
+ },
+ "results": [
+  "公開URLを取得: https://at5tram98-hash.github.io/today-money/（GitHubのページ上にリンクが見つからなかったため、リポジトリ内の設定値（worker/wrangler.jsonc の APP_URL））",
+  "iphone15pro-light: 最新ビルドの配信、5タブ、はみ出しなし、44pt以上、削除確認の取消、支出入力、今月表示、Service Worker",
+  "iphone15pro-dark: 最新ビルドの配信、5タブ、はみ出しなし、44pt以上、削除確認の取消、支出入力、今月表示、Service Worker",
+  "w320-light: 最新ビルドの配信、5タブ、はみ出しなし、44pt以上、削除確認の取消、支出入力、今月表示、Service Worker",
+  "w320-dark: 最新ビルドの配信、5タブ、はみ出しなし、44pt以上、削除確認の取消、支出入力、今月表示、Service Worker"
+ ]
+}

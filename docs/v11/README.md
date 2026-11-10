@@ -78,6 +78,12 @@ C章のとおり、画面タイトル28（semibold）、主要金額30（等幅�
 - `npm run test:crawl`：全画面巡回。指摘が1件でもあれば失敗
 - `npm run test:live`：公開中のサイトをiPhone相当の設定で開く確認。結果と画面は `evidence/`
 
+## 公開サイトでの確認（2026-11-10）
+
+`npm run test:live` を公開中の https://at5tram98-hash.github.io/today-money/ に対して実行し、iPhone 15 Pro相当（ライト／ダーク）と幅320（ライト／ダーク）の4条件すべてで通過しました。確認した内容は、このリポジトリの最新ビルドが配信されていること、5タブの切替、横はみ出しなし、操作要素が44pt以上、全データ削除の確認画面とキャンセル、支出入力、今月表示、Service Workerとマニフェストです。結果は `evidence/live-check.json`、画面は `evidence/live-*.png` にあります。
+
+GitHubのリポジトリページには公開サイトへのリンクが載っていなかったため、URLはリポジトリ内の設定値（`worker/wrangler.jsonc` の `APP_URL`）から取得しました。
+
 ## 実施していないこと
 
 - **物理的なiPhoneのSafari、VoiceOver、OSの文字拡大での確認。** 自動検証はすべてChromiumによるiPhoneの画面寸法・タッチの再現で、Safari（WebKit）の描画や挙動の差は確認できていません。
