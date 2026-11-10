@@ -61,6 +61,12 @@ export async function verifyIosDesign({createPage,passed,errors}){
 
       await tab('payments');
       await page.locator('#mm3PaymentQuickBillingAction').tap();
+      const cancelLines=await sheet.locator('#qcbCancel').evaluate(button=>{
+        const range=document.createRange();
+        range.selectNodeContents(button);
+        return range.getClientRects().length;
+      });
+      assert.equal(cancelLines,1);
       const states=sheet.getByRole('radiogroup',{name:'請求の状態'});
       const confirmed=states.getByRole('radio',{name:'確定',exact:true});
       await confirmed.press('ArrowRight');
