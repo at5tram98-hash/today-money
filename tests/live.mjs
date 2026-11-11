@@ -16,9 +16,9 @@ const report={checkedAt:new Date().toISOString(),device:'Chromium による iPho
 
 try{
   // 1. GitHubのページから公開URLを取得する
-  let siteUrl='',source='';
+  let siteUrl=process.env.MM3_LIVE_URL||'',source=siteUrl?'環境変数 MM3_LIVE_URL（ローカル確認用）':'';
   const gh=await browser.newContext();const ghPage=await gh.newPage();
-  for(const path of ['','/deployments']){
+  for(const path of siteUrl?[]:['','/deployments']){
     try{
       await ghPage.goto(repository+path,{waitUntil:'domcontentloaded',timeout:45000});
       const found=await ghPage.evaluate(()=>[...document.querySelectorAll('a[href]')].map(a=>a.href).find(h=>/^https:\/\/at5tram98-hash\.github\.io\/today-money\/?/.test(h))||'');
@@ -35,16 +35,16 @@ try{
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
     page.on('response',r=>{if(r.url().startsWith(siteUrl)&&r.status()>=400)errors.push(`HTTP ${r.status()} ${r.url()}`)});
     await page.goto(siteUrl,{waitUntil:'load',timeout:60000});
-    await page.waitForFunction(()=>!document.getElementById('mm3StorageBoot')&&document.querySelectorAll('#tabbar .tab').length===5,null,{timeout:30000});
+    await page.waitForFunction(()=>!document.getElementById('mm3StorageBoot')&&document.querySelectorAll('#tabbar .tab').length===3,null,{timeout:30000});
     await page.waitForTimeout(600);
     // 配信されているのがこのリポジトリの最新ビルドか
     const served=(await page.content()).match(/assets\/app\.[a-f0-9]{12}\.(?:js|css)/g).sort();
     assert.deepEqual([...new Set(served)],localAssets,'公開サイトがこのビルドを配信している');
-    assert.deepEqual(await page.locator('#tabbar .tab-label').allTextContents(),['今日','給与','支払い','資産','設定']);
+    assert.deepEqual(await page.locator('#tabbar .tab-label').allTextContents(),['ホーム','支払い','その他']);
     const fits=async where=>{const d=await page.evaluate(()=>({w:document.documentElement.clientWidth,s:document.documentElement.scrollWidth,inner:[...document.querySelectorAll('.screen.active .scroll,.push-view.show .push-body,#sheet.show .sheet-body')].map(e=>e.scrollWidth-e.clientWidth)}));assert.ok(d.s<=d.w+1&&d.inner.every(x=>x<=1),`${label} ${where}: 横にはみ出さない`)};
     const tapSizes=async where=>{const small=await page.evaluate(()=>{const layer=document.querySelector('#sheet.show')||[...document.querySelectorAll('.push-view.show')].at(-1)||document.querySelector('.screen.active');return[...layer.querySelectorAll('button,[role=button],[role=switch],[role=radio],select,input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file])'),...document.querySelectorAll('#tabbar .tab')].filter(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility!=='hidden'&&!e.disabled&&!e.closest('[aria-hidden=true]')&&(r.width<43.5||r.height<43.5)}).map(e=>`${e.id||e.className} ${Math.round(e.getBoundingClientRect().width)}×${Math.round(e.getBoundingClientRect().height)}`)});assert.deepEqual(small,[],`${label} ${where}: 操作要素は44×44pt以上`)};
     await page.screenshot({path:resolve(evidence,`live-${label}-today.png`)});
-    for(const [index,name] of ['今日','給与','支払い','資産','設定'].entries()){
+    for(const [index,name] of ['ホーム','支払い','その他'].entries()){
       await page.locator('#tabbar .tab').nth(index).tap();await page.waitForTimeout(450);
       assert.equal(await page.locator('#tabbar .tab').nth(index).evaluate(e=>e.classList.contains('active')),true,`${name}タブへ切り替わる`);
       await fits(name);await tapSizes(name);
@@ -58,23 +58,23 @@ try{
     assert.equal(await page.locator('#daConfirm').isDisabled(),true,'「削除」と入力するまで削除ボタンは押せない');await fits('全データ削除の確認');await tapSizes('全データ削除の確認');
     await page.screenshot({path:resolve(evidence,`live-${label}-delete-confirm.png`)});
     await page.locator('#daCancel').tap();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));assert.equal(await stored(),keysBefore);
-    // 今日タブ → 支出入力 → 電卓 → キャンセル
+    // ホーム → ＋入力ハブ → 支出を記録 → 電卓 → キャンセル
     await page.locator('#pushLayer .push-view.show .back-btn').last().tap();await page.waitForFunction(()=>!document.querySelector('#pushLayer .push-view.show'));
     await page.locator('#tabbar .tab').nth(0).tap();await page.waitForTimeout(400);
-    await page.locator('#quickExpense').tap();await page.locator('#qeSave').waitFor();await page.waitForTimeout(400);await fits('支出入力');await tapSizes('支出入力');
+    await page.locator('#addHub').tap();await page.locator('#menuLayer .menu-item').filter({hasText:'支出を記録'}).first().waitFor();await page.waitForTimeout(350);await page.locator('#menuLayer .menu-item').filter({hasText:'支出を記録'}).first().tap();await page.locator('#qeSave').waitFor();await page.waitForTimeout(400);await fits('支出入力');await tapSizes('支出入力');
     await page.screenshot({path:resolve(evidence,`live-${label}-expense.png`)});
     await page.locator('#qeCancel').tap();await page.waitForTimeout(300);
     if(await page.locator('#alertWrap.show').count())await page.locator('#alertActions button').last().tap();
     await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
     // 今日／今月の切替
-    await page.locator('.native-home-mode').getByText('今月',{exact:true}).tap();await page.waitForTimeout(450);await fits('今月');await tapSizes('今月');
+    await page.locator('#homePeriodMonth').tap();await page.waitForTimeout(450);await fits('今月');await tapSizes('今月');
     await page.screenshot({path:resolve(evidence,`live-${label}-month.png`)});
     // Service Worker と Webアプリマニフェスト
     const pwa=await page.evaluate(async()=>{const registration=await Promise.race([navigator.serviceWorker.ready,new Promise(r=>setTimeout(()=>r(null),8000))]),link=document.querySelector('link[rel=manifest]'),manifest=link?await fetch(link.href).then(r=>r.ok?r.json():null).catch(()=>null):null;return{worker:!!registration?.active,scope:registration?.scope||'',name:manifest?.name||manifest?.short_name||'',display:manifest?.display||''}});
     assert.ok(pwa.worker&&pwa.scope.startsWith(siteUrl),'Service Workerが公開URLの範囲で有効');assert.ok(pwa.name,'Webアプリマニフェストを取得できる');
     assert.deepEqual(errors,[],`${label}: JavaScriptエラー・読み込み失敗なし`);
     report[label]={assets:[...new Set(served)],pwa};
-    passed(`${label}: 最新ビルドの配信、5タブ、はみ出しなし、44pt以上、削除確認の取消、支出入力、今月表示、Service Worker`);
+    passed(`${label}: 最新ビルドの配信、3タブ、はみ出しなし、44pt以上、削除確認の取消、支出入力、今月表示、Service Worker`);
     await context.close();
   }
 }finally{await browser.close()}
