@@ -48,14 +48,13 @@ html.dark {
 #app .screen { bottom: 0 }
 #app .screen > .scroll { padding-bottom: calc(var(--tab-h) + 28px); scroll-padding-bottom: calc(var(--tab-h) + 28px) }
 
-/* ---- タブバー: 浮いたカプセル。＋は右に並ぶ丸いガラス ---- */
+/* ---- タブバー: 浮いたカプセル。＋は第14版 Q-001 のとおり右下・タブの上の52ptの丸（色つきのガラス） ---- */
 .tabbar {
   left: max(16px, env(safe-area-inset-left));
-  right: calc(max(16px, env(safe-area-inset-right)) + var(--tabbar-height) + 10px);
+  right: max(16px, env(safe-area-inset-right));
   background: var(--lg-fill);
   box-shadow: inset 0 0 0 .5px var(--lg-stroke), inset 0 1px 0 var(--lg-stroke), 0 0 0 .5px var(--lg-rim), var(--lg-shadow);
 }
-#app:has(> #addHub[hidden]) .tabbar { right: max(16px, env(safe-area-inset-right)) }
 .tab-selection { background: rgba(120,120,128,.14); box-shadow: inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 0 .5px rgba(255,255,255,.4) }
 html.dark .tab-selection { background: rgba(255,255,255,.12); box-shadow: inset 0 1px 0 rgba(255,255,255,.14) }
 .tabbar.tab-dragging .tab-selection { scale: 1.08; background: rgba(255,255,255,.55); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.9), 0 6px 18px rgba(0,0,0,.12) }
@@ -63,9 +62,9 @@ html.dark .tabbar.tab-dragging .tab-selection { background: rgba(255,255,255,.2)
 
 .add-hub {
   right: max(16px, env(safe-area-inset-right));
-  bottom: var(--tabbar-bottom);
-  width: var(--tabbar-height);
-  height: var(--tabbar-height);
+  bottom: calc(var(--tab-h) + 12px);
+  width: 52px;
+  height: 52px;
   background: var(--lg-tint);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 0 0 .5px rgba(255,255,255,.35), 0 8px 22px color-mix(in srgb, var(--accent) 32%, transparent), 0 1px 3px rgba(0,0,0,.12);
   transition: transform 180ms var(--spring), box-shadow 180ms ease-out;
@@ -202,10 +201,10 @@ html.dark .home-card-wrap > .home-card { box-shadow: none }
 .sk-card .sk-ring { grid-row: 2 / span 2; grid-column: 2; width: 52px; height: 52px; border-radius: 50%; border: 9px solid var(--sk-base); border-top-color: color-mix(in srgb, var(--sk-c, var(--accent)) 45%, transparent) }
 .sk { display: block; background: var(--sk-base); background-image: linear-gradient(100deg, transparent 20%, var(--sk-shine) 50%, transparent 80%); background-size: 220% 100%; background-repeat: no-repeat; animation: skeletonShimmer 1.4s ease-in-out infinite }
 @keyframes skeletonShimmer { from { background-position: 160% 0 } to { background-position: -60% 0 } }
-.boot-tabbar { position: fixed; left: 16px; right: calc(16px + var(--tabbar-height) + 10px); bottom: var(--tabbar-bottom); height: var(--tabbar-height); border-radius: 999px; background: var(--lg-fill); box-shadow: inset 0 0 0 .5px var(--lg-stroke), 0 0 0 .5px var(--lg-rim), var(--lg-shadow); display: flex; align-items: center; justify-content: space-around; -webkit-backdrop-filter: var(--lg-blur); backdrop-filter: var(--lg-blur) }
+.boot-tabbar { position: fixed; left: 16px; right: 16px; bottom: var(--tabbar-bottom); height: var(--tabbar-height); border-radius: 999px; background: var(--lg-fill); box-shadow: inset 0 0 0 .5px var(--lg-stroke), 0 0 0 .5px var(--lg-rim), var(--lg-shadow); display: flex; align-items: center; justify-content: space-around; -webkit-backdrop-filter: var(--lg-blur); backdrop-filter: var(--lg-blur) }
 .boot-tabbar i { width: 24px; height: 24px; border-radius: 7px; background: var(--sk-base) }
-.boot-hub { position: fixed; right: 16px; bottom: var(--tabbar-bottom); width: var(--tabbar-height); height: var(--tabbar-height); border-radius: 50%; background: var(--lg-tint); opacity: .55 }
-.boot-status { position: fixed; left: 50%; bottom: calc(var(--tab-h) + 18px); transform: translateX(-50%); display: flex; align-items: center; gap: 12px; max-width: calc(100% - 32px); padding: 10px 18px 10px 14px; border-radius: 999px; background: var(--lg-fill-strong); box-shadow: inset 0 0 0 .5px var(--lg-stroke), 0 0 0 .5px var(--lg-rim), var(--lg-shadow); -webkit-backdrop-filter: var(--lg-blur); backdrop-filter: var(--lg-blur); animation: bootStatusIn .3s var(--spring) both }
+.boot-hub { position: fixed; right: 16px; bottom: calc(var(--tab-h) + 12px); width: 52px; height: 52px; border-radius: 50%; background: var(--lg-tint); opacity: .55 }
+.boot-status { position: fixed; left: 50%; bottom: calc(var(--tab-h) + 80px); transform: translateX(-50%); display: flex; align-items: center; gap: 12px; max-width: calc(100% - 32px); padding: 10px 18px 10px 14px; border-radius: 999px; background: var(--lg-fill-strong); box-shadow: inset 0 0 0 .5px var(--lg-stroke), 0 0 0 .5px var(--lg-rim), var(--lg-shadow); -webkit-backdrop-filter: var(--lg-blur); backdrop-filter: var(--lg-blur); animation: bootStatusIn .3s var(--spring) both }
 .boot-status { width: max-content }
 .boot-status .busy-title { font-size: 14px; font-weight: 600; line-height: 1.35; white-space: nowrap }
 .boot-status .busy-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
