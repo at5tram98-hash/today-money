@@ -70,7 +70,6 @@
 .goal-side-value { font-size: 22px; white-space: nowrap }
 .goal-rate { font-size: 17px; margin-top: 6px }
 .goal-plan-action { min-height: 48px; padding-block: 12px; font-size: 14px }
-#quickExpense { grid-column: 1/-1; justify-content: center; background: var(--blue); color: white; font-size: 16px }
 .money-symbol { display: block; flex: none }
 #app .today-goal-hero { border-radius: var(--native-radius); background: var(--card); box-shadow: 0 2px 8px #00000003; margin: 0 0 10px; overflow: hidden }
 #app .today-spend-tap { padding: 12px 16px; width: 100%; background: transparent }
@@ -80,7 +79,6 @@
 #app .goal-rate { font-size: 15px; grid-column: 2; text-align: right; margin: 0; line-height: 1.2 }
 #app .goal-plan-action { min-height: 44px; padding: 10px 16px; font-size: 15px; font-weight: 600; border-top: .5px solid var(--sep); background: transparent }
 #app .goal-plan-action>.money-symbol { width: 13px; height: 13px }
-#app #quickExpense { min-height: 48px !important; background: var(--blue); color: #fff; font-size: 17px }
 #app .day-cell { min-width: 0 }
 #app .money-ticker-shell { margin: 0 calc(-1 * var(--native-gutter)) 8px }
 #app .money-ticker-viewport { padding: 2px var(--native-gutter) 4px }
@@ -150,3 +148,16 @@
 @media (max-height:450px) {
   .month-name-btn { font-size: 24px }
 }
+/* 今日画面のクイック操作（第11版 HOME-004〜011）: 唯一の青い主ボタンと、線画アイコン付き56ptの行 */
+.quick-grid { display: grid; gap: var(--space-section); margin: 0 0 var(--space-section) }
+.today-primary-cta { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--cta-height); border-radius: 14px; font-size: var(--type-item); font-weight: 600 }
+.today-primary-cta svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.today-quick-list { margin: 0 }
+.row-icon { flex: none; width: 24px; height: 24px; display: grid; place-items: center; color: var(--accent) }
+.row-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+#app .group > .today-quick-row { min-height: var(--row-height); gap: 12px; padding: 8px var(--space-page); border-bottom: 0; position: relative }
+#app .today-quick-row .row-title { line-height: 22px }
+#app .today-quick-row .row-sub { line-height: 18px; margin-top: 0 }
+/* 区切り線は同一グループ内のみ・アイコンの右から */
+.today-quick-row + .today-quick-row::before { content: ""; position: absolute; top: 0; right: 0; left: calc(var(--space-page) + 36px); border-top: .5px solid var(--sep) }
+.today-quick-row .chev svg, #todayAnalysis .chev svg, #todayTransactions .chev svg { width: 14px; height: 14px }

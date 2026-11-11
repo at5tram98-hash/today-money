@@ -1,6 +1,6 @@
 /* デザイントークン（色・文字・間隔・動き）。値の定義はここだけに置く。 */
-:root { color-scheme: light; --accent: #1673F7; --danger: #D93B46; --success: #16865D; --bg: #F6F7FA; --card: #fff; --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2); --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4); --sep: rgba(60,60,67,.18); --blue: var(--accent); --green: var(--success); --yellow: #ffcc00; --orange: #ff9500; --red: var(--danger); --purple: #af52de; --teal: #30b0c7; --type-title: 28px; --type-amount: 30px; --type-item: 17px; --type-note: 13px; --type-min: 11px; --space-page: 16px; --space-section: 24px; --row-height: 56px; --cta-height: 52px; --tap-min: 44px; --radius-card: 16px; --motion-press: 90ms; --motion-update: 150ms; --motion-menu: 160ms; --motion-push: 220ms; --motion-sheet: 260ms; --accent-soft: rgba(22,115,247,.14); --danger-soft: rgba(217,59,70,.12); --safe-t: env(safe-area-inset-top,0px); --safe-b: env(safe-area-inset-bottom,0px); --r: 12px; --spring: cubic-bezier(.32,.72,0,1); --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif; --tabbar-height: 62px; --tabbar-bottom: max(8px,calc(var(--safe-b) - 10px)); --tab-h: calc(var(--tabbar-height) + var(--tabbar-bottom) + 10px); --glass-bg: rgba(250,250,252,.62); --glass-solid: rgba(249,249,251,.97); --glass-edge: rgba(255,255,255,.75); --glass-highlight: rgba(255,255,255,.9); --glass-shadow: 0 10px 30px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.06),0 0 0 .5px rgba(0,0,0,.08); --capsule-bg: rgba(120,120,128,.16); --tab-inactive: #48484d; --native-glass: rgba(249,249,249,.86); --mm3-motion-tap: var(--motion-press); --mm3-motion-menu: var(--motion-menu); --mm3-motion-chart: var(--motion-push); --mm3-motion-month: 180ms; --mm3-motion-flip: 180ms; --mm3-ease: cubic-bezier(.2,.85,.2,1); --mm3-ease-spring: cubic-bezier(.2,.95,.25,1.06); --mm3-action-icon: #5f636b; --mm3-action-icon-bg: rgba(118,118,128,.075); --mm3-action-blue-bg: rgba(0,122,255,.085); --native-gutter: 16px; --native-radius: 20px; --native-control: 14px; --native-ease: cubic-bezier(.2,.8,.2,1); --native-secondary: #e9e9ee; --native-caption: var(--type-note); --native-body: var(--type-item); --native-title: var(--type-title)}
-html.dark { color-scheme: dark; --accent: #4C93FF; --danger: #FF6570; --success: #35B886; --accent-soft: rgba(76,147,255,.2); --danger-soft: rgba(255,101,112,.18); --bg: #0A0B0E; --card: #1c1c1e; --fill: rgba(118,118,128,.24); --fill2: rgba(118,118,128,.36); --label: #fff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.4); --sep: rgba(84,84,88,.6); --blue: var(--accent); --green: var(--success); --yellow: #ffd60a; --orange: #ff9f0a; --red: var(--danger); --purple: #bf5af2; --teal: #64d2ff; --glass-bg: rgba(36,36,40,.58); --glass-solid: rgba(28,28,30,.98); --glass-edge: rgba(255,255,255,.16); --glass-highlight: rgba(255,255,255,.14); --glass-shadow: 0 10px 30px rgba(0,0,0,.55),0 0 0 .5px rgba(0,0,0,.6); --capsule-bg: rgba(255,255,255,.14); --tab-inactive: #c7c7cc; --native-glass: rgba(22,22,24,.88); --mm3-action-icon: #b2b2b7; --mm3-action-icon-bg: rgba(118,118,128,.16); --mm3-action-blue-bg: rgba(10,132,255,.15); --native-secondary: #2c2c2e }
+:root { color-scheme: light; --accent: #1673F7; --danger: #D93B46; --success: #16865D; --bg: #F6F7FA; --card: #fff; --fill: rgba(120,120,128,.12); --fill2: rgba(120,120,128,.2); --label: #000; --label2: rgba(60,60,67,.6); --label3: rgba(60,60,67,.4); --sep: rgba(60,60,67,.18); --blue: var(--accent); --green: var(--success); --yellow: #ffcc00; --orange: #ff9500; --red: var(--danger); --purple: #af52de; --teal: #30b0c7; --type-title: 28px; --type-amount: 30px; --type-item: 17px; --type-note: 13px; --type-min: 11px; --space-page: 16px; --space-section: 24px; --row-height: 56px; --cta-height: 52px; --tap-min: 44px; --radius-card: 16px; --motion-press: 90ms; --motion-update: 150ms; --motion-menu: 160ms; --motion-push: 220ms; --motion-sheet: 260ms; --accent-soft: rgba(22,115,247,.14); --danger-soft: rgba(217,59,70,.12); --safe-t: env(safe-area-inset-top,0px); --safe-b: env(safe-area-inset-bottom,0px); --r: 12px; --spring: cubic-bezier(.32,.72,0,1); --font-rounded: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif; --tabbar-height: 62px; --tabbar-bottom: max(8px,calc(var(--safe-b) - 10px)); --tab-h: calc(var(--tabbar-height) + var(--tabbar-bottom) + 10px); --glass-bg: rgba(250,250,252,.62); --glass-solid: rgba(249,249,251,.97); --glass-edge: rgba(255,255,255,.75); --glass-highlight: rgba(255,255,255,.9); --glass-shadow: 0 10px 30px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.06),0 0 0 .5px rgba(0,0,0,.08); --capsule-bg: rgba(120,120,128,.16); --tab-inactive: #48484d; --tab-knock: #F9F9FB; --native-glass: rgba(249,249,249,.86); --mm3-motion-tap: var(--motion-press); --mm3-motion-menu: var(--motion-menu); --mm3-motion-chart: var(--motion-push); --mm3-motion-month: 180ms; --mm3-motion-flip: 180ms; --mm3-ease: cubic-bezier(.2,.85,.2,1); --mm3-ease-spring: cubic-bezier(.2,.95,.25,1.06); --mm3-action-icon: #5f636b; --mm3-action-icon-bg: rgba(118,118,128,.075); --mm3-action-blue-bg: rgba(0,122,255,.085); --native-gutter: 16px; --native-radius: 20px; --native-control: 14px; --native-ease: cubic-bezier(.2,.8,.2,1); --native-secondary: #e9e9ee; --native-caption: var(--type-note); --native-body: var(--type-item); --native-title: var(--type-title)}
+html.dark { color-scheme: dark; --accent: #4C93FF; --danger: #FF6570; --success: #35B886; --accent-soft: rgba(76,147,255,.2); --danger-soft: rgba(255,101,112,.18); --bg: #0A0B0E; --card: #1c1c1e; --fill: rgba(118,118,128,.24); --fill2: rgba(118,118,128,.36); --label: #fff; --label2: rgba(235,235,245,.6); --label3: rgba(235,235,245,.4); --sep: rgba(84,84,88,.6); --blue: var(--accent); --green: var(--success); --yellow: #ffd60a; --orange: #ff9f0a; --red: var(--danger); --purple: #bf5af2; --teal: #64d2ff; --glass-bg: rgba(36,36,40,.58); --glass-solid: rgba(28,28,30,.98); --glass-edge: rgba(255,255,255,.16); --glass-highlight: rgba(255,255,255,.14); --glass-shadow: 0 10px 30px rgba(0,0,0,.55),0 0 0 .5px rgba(0,0,0,.6); --capsule-bg: rgba(255,255,255,.14); --tab-inactive: #c7c7cc; --tab-knock: #2a2a2e; --native-glass: rgba(22,22,24,.88); --mm3-action-icon: #b2b2b7; --mm3-action-icon-bg: rgba(118,118,128,.16); --mm3-action-blue-bg: rgba(10,132,255,.15); --native-secondary: #2c2c2e }
 @media (prefers-contrast:more) {
   :root { --label2: #44444b; --label3: #616168 }
   html.dark { --label2: #dedee5; --label3: #b6b6bd }
@@ -89,7 +89,6 @@ button:not(:disabled) { transition: transform .11s cubic-bezier(.2,.8,.2,1),opac
 .hero-value { font-family: var(--font-rounded); margin-top: 4px }
 .money { font-variant-numeric: tabular-nums }
 .ring-amount { font-weight: 750; font-variant-numeric: tabular-nums lining-nums }
-.quick-btn { border: 0; background: var(--card); color: var(--blue); font-weight: 650; transition: transform .12s,opacity .12s; display: flex; align-items: center; justify-content: flex-start; gap: 8px; text-align: left }
 .mini-bar { height: 6px; background: var(--fill); border-radius: 999px; overflow: hidden; margin-top: 9px }
 .chart-title { font-size: 14px; font-weight: 650 }
 .chart-sub { font-size: 11px; color: var(--label2); margin-top: 2px }
@@ -194,7 +193,6 @@ textarea.field { resize: none; min-height: 80px }
 .metric-cell { padding: 12px 10px; min-width: 0 }
 .mini-action { border: 0; background: transparent; color: var(--blue); font-size: 13px; font-weight: 600; padding: 6px 0 }
 @media (max-width:390px) {
-  .quick-btn { font-size: 11.5px; padding-left: 8px; padding-right: 8px }
   .metric-cell { padding-left: 7px; padding-right: 7px }
 }
 .approval-progress { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--accent-soft); pointer-events: none }
@@ -273,7 +271,7 @@ textarea.field { resize: none; min-height: 80px }
 .primary { box-sizing: border-box; width: 100%; border: 0; padding: 12px 16px; font: inherit; font-weight: 600; line-height: 1.4; text-align: center; background: var(--blue); color: #fff }
 .secondary { box-sizing: border-box; width: 100%; border: 0; padding: 12px 16px; font: inherit; font-weight: 600; line-height: 1.4; text-align: center; background: var(--fill); color: var(--label) }
 .danger { color: var(--red) }
-.menu-item { min-height: 46px; width: 100%; border: 0; background: transparent; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 9px 11px; text-align: left; font-size: 15px; color: var(--label) }
+.menu-item { min-height: var(--tap-min); width: 100%; border: 0; background: transparent; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 9px 12px; text-align: left; font-size: var(--type-item); color: var(--label) }
 .push-view { position: absolute; inset: 0; display: flex; flex-direction: column; transform: translateX(100%); transition: transform var(--motion-push) var(--spring); pointer-events: auto; box-shadow: -10px 0 28px rgba(0,0,0,.10); touch-action: pan-y }
 .switch { width: 51px; height: 31px; border: 0; border-radius: 16px; background: var(--fill2); position: relative; transition: background .2s }
 .settings-icon { width: 29px; height: 29px; border-radius: 7px; display: grid; place-items: center; color: #fff; background: var(--blue); flex-shrink: 0; overflow: hidden }
@@ -498,7 +496,6 @@ body:has(.day-close-view.show) .toast-layer { bottom: calc(120px + env(safe-area
 .motion-off .goal-success-mark { animation: none }
 .date-navigator { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; margin: 1px 0 10px; min-height: 48px; margin-bottom: 12px }
 .date-nav-btn:disabled { opacity: .25 }
-.quick-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto }
 .cat-icon svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
 .goal-intro-icon svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
 .goal-step-node svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
@@ -594,8 +591,7 @@ body:has(.day-close-view.show) .toast-layer { bottom: calc(120px + env(safe-area
 .sheet.show { transform: translate(-50%,0) }
 .push-view.show { transform: translateX(0) }
 .hero-button:active { transform: scale(.985); opacity: .72 }
-.quick-btn:active { transform: scale(.97); opacity: .62 }
-.ios-menu.show { opacity: 1; transform: scale(1); pointer-events: auto }
+.ios-menu.show { opacity: 1; transform: scale(1); pointer-events: auto; transition: opacity var(--motion-menu) ease-out,transform var(--motion-menu) ease-out }
 .choice:active { transform: scale(.97); opacity: .6 }
 .fav-editor-row.dragging { opacity: .45; background: var(--fill) }
 .motion-off .acf-negative-value.acf-pulse .acf-negative-sign,
@@ -621,7 +617,6 @@ body:has(.day-close-view.show) .toast-layer { bottom: calc(120px + env(safe-area
 .topbar.native-scrolled { border-bottom-color: var(--sep) }
 .topbar .icon-btn { width: 44px; height: 44px; min-width: 44px; background: var(--glass-bg) !important; box-shadow: inset 0 0 0 .5px var(--glass-edge),0 2px 8px #00000008; border-radius: 50%; color: var(--label) }
 .pro3-fchart svg { width: 100%; height: 210px; display: block; overflow: visible; touch-action: pan-y }
-.pro4-command svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.9 }
 .pro4-searchbar svg { width: 18px; height: 18px; color: var(--label2); fill: none; stroke: currentColor; stroke-width: 2 }
 .money-ticker-spark svg { display: block; width: 52px; height: 31px; overflow: visible }
 @media (max-width:340px) {
@@ -667,8 +662,6 @@ html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,
 #assetsTop .large-title { font-size: 34px; white-space: nowrap; letter-spacing: -1px }
 #app .large-title { font-size: var(--native-title); font-weight: 600; letter-spacing: -.9px; line-height: 1.2; transform-origin: left center; transition: transform .18s var(--native-ease) }
 #app .nav-actions { gap: 4px }
-#app .nav-actions .icon-btn { width: 44px; height: 44px; min-width: 44px; background: transparent !important; box-shadow: none; color: var(--label) }
-#app .nav-actions .icon-btn svg { width: 22px; height: 22px }
 #screen-pay .mm3-salary-topbar { padding-bottom: 4px }
 #screen-pay .mm3-salary-range { display: flex; gap: 2px; background: var(--fill); border-radius: 9px; padding: 2px; margin-top: 2px }
 #screen-pay .mm3-salary-link { border: 0; background: transparent; color: var(--blue); font-weight: 650; padding: 5px 0; font-size: 13px }
@@ -733,6 +726,20 @@ html.native-keyboard .tabbar { visibility: hidden; pointer-events: none }
   .topbar .topbar-main { flex: 1 }
   .large-title { font-size: 24px }
 }
+
+/* 第11版 C タブ：5項目とも線画＋短いラベル。選択中は形（塗り）・明度・ラベルで区別する */
+.tab .tab-symbol .tf, .tab .tab-symbol .tk { transition: fill var(--motion-update) ease-out, stroke var(--motion-update) ease-out }
+.tab.active .tab-symbol .tf { fill: currentColor }
+.tab.active .tab-symbol .tk { stroke: var(--tab-knock) }
+.tab.active .tab-symbol .tkf { fill: var(--tab-knock) }
+.tab.active .tab-symbol .tb { stroke-width: 2.8 }
+/* 第11版 HOME-001/002/003：右上は線画20px・見た目40px・ヒット領域44px。背景は通常透明、押下中とメニュー表示中だけ中間色の丸 */
+#app .nav-actions .icon-btn { width: var(--tap-min); height: var(--tap-min); min-width: var(--tap-min); border-radius: 50%; background: transparent !important; box-shadow: none; color: var(--label); transition: opacity var(--motion-press) ease-out }
+#app .nav-actions .icon-btn::before { content: ""; position: absolute; inset: 2px; border-radius: 50%; background: var(--fill); opacity: 0; transition: opacity var(--motion-press) ease-out; pointer-events: none }
+#app .nav-actions .icon-btn:active::before, #app .nav-actions .icon-btn.menu-anchor-active::before { opacity: 1 }
+#app .nav-actions .icon-btn:active { transform: none; opacity: 1 }
+#app .nav-actions .icon-btn svg { position: relative; width: 20px; height: 20px; stroke-width: 1.8 }
+#app .nav-actions .nav-badge { top: 4px; right: 4px; transform: translate(35%,-35%); min-width: 18px; height: 18px; padding: 0 5px; font-size: var(--type-min); border-radius: 9px; box-shadow: 0 0 0 2px var(--bg) }
 /* 下層画面（push）、シート、ダイアログ、メニュー、トースト、処理中表示。 */
 .toast-layer { position: fixed; left: 50%; bottom: calc(var(--tab-h) + 10px); transform: translateX(-50%); z-index: 900; width: min(calc(100% - 24px),430px); pointer-events: none; display: flex; justify-content: center }
 .toast .toast-message { flex: 1 }
@@ -938,6 +945,14 @@ html.native-keyboard .push-view { bottom: var(--native-keyboard-inset,0px) }
 }
 @media (max-height:450px) {
   .sheet .grabber { height: 16px; flex-basis: 16px }
+}
+/* メニュー（第11版 HOME-003・MONTH-043・PAY-080 ほか）: 背景の遮蔽、開く160ms／閉じる130ms、各項目44pt */
+.menu-scrim { position: fixed; inset: 0; z-index: 299; background: rgba(0,0,0,.12); opacity: 0; pointer-events: none; transition: opacity 130ms ease-in }
+.menu-scrim.show { opacity: 1; pointer-events: auto; transition: opacity var(--motion-menu) ease-out }
+html.dark .menu-scrim { background: rgba(0,0,0,.36) }
+.ios-menu.measuring { visibility: hidden; transition: none }
+@media (prefers-reduced-motion:reduce) {
+  .menu-scrim, .ios-menu { transition: opacity 120ms linear !important; transform: none !important }
 }
 /* ボタン、入力欄、スイッチ、セグメント、選択部品。 */
 .section-head { text-transform: none; text-align: left; font-size: 13px; font-weight: 500; line-height: 1.45; margin: 22px 4px 8px; color: var(--label2) }
@@ -1183,7 +1198,6 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 .ring .progress.over { stroke: var(--red) }
 .ring-center { position: absolute; text-align: center; width: 80%; min-width: 0 }
 .ring-caption { color: var(--label2); margin-top: 3px; font-size: 11px; line-height: 1.4 }
-.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0 }
 .week-head { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); align-items: start }
 .week-head div { text-align: center; color: var(--label2); padding: 4px 0 6px }
 .bar-wrap { height: 94px; display: flex; align-items: flex-end; justify-content: center }
@@ -1212,11 +1226,6 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 .hero-kicker { font-size: 13px; line-height: 1.4 }
 .ring-amount { font-size: 25px; letter-spacing: -.5px; white-space: nowrap; max-width: 100% }
 .compare-mini { font-size: 12px; line-height: 1.5; margin-top: 10px }
-.quick-btn { font-size: 14px; min-height: 48px !important; padding: 12px; border-radius: 24px; white-space: normal }
-@media (max-width:370px) {
-  .quick-btn.small { grid-column: 1/-1; min-height: 42px; width: 100% }
-}
-.quick-btn.small { width: 100%; grid-column: auto; font-size: 14px; min-height: 48px !important }
 .goal-amount-meta>div { border-top: .5px solid var(--sep); padding-top: 10px }
 .goal-review-meta>div { border-top: .5px solid var(--sep); padding-top: 9px }
 .planner-compare>div { background: var(--card); border-radius: 11px; padding: 9px; min-width: 0 }
@@ -1249,10 +1258,6 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 #app .ring-amount { font-size: 24px; font-weight: 700; letter-spacing: -.5px }
 #app .ring-caption { font-size: var(--type-min); line-height: 1.4; margin-top: 3px }
 #app .compare-mini { font-size: 11px; line-height: 1.5; margin-top: 6px; padding-top: 6px; grid-column: 1/-1 }
-#app .quick-grid { gap: 8px; margin: 0 0 12px }
-#app .quick-btn { border-radius: var(--native-control); min-height: 44px !important; justify-content: center; background: var(--native-secondary); color: var(--blue); padding: 10px 12px; box-shadow: none; font-size: 15px; font-weight: 600 }
-#app .quick-btn.small { font-size: 15px }
-#app .quick-btn svg { width: 19px; height: 19px }
 #app .row-title { font-size: var(--type-item); font-weight: 500; line-height: 1.4 }
 #app .row-sub { font-size: var(--type-note); line-height: 1.45; margin-top: 3px }
 #app .chev>.money-symbol { width: 13px; height: 13px }
@@ -1263,9 +1268,6 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 #app .calendar-card { border-radius: var(--native-radius); padding: 12px 2px; box-shadow: none }
 @media (prefers-contrast:more) {
   #app .group { box-shadow: inset 0 0 0 1px var(--sep) }
-}
-@media (max-width:370px) {
-  .quick-grid { grid-template-columns: 1fr 1fr }
 }
 @media (max-width:350px) {
   #app .ring,
@@ -1518,7 +1520,6 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 .goal-side-value { font-size: 22px; white-space: nowrap }
 .goal-rate { font-size: 17px; margin-top: 6px }
 .goal-plan-action { min-height: 48px; padding-block: 12px; font-size: 14px }
-#quickExpense { grid-column: 1/-1; justify-content: center; background: var(--blue); color: white; font-size: 16px }
 .money-symbol { display: block; flex: none }
 #app .today-goal-hero { border-radius: var(--native-radius); background: var(--card); box-shadow: 0 2px 8px #00000003; margin: 0 0 10px; overflow: hidden }
 #app .today-spend-tap { padding: 12px 16px; width: 100%; background: transparent }
@@ -1528,7 +1529,6 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 #app .goal-rate { font-size: 15px; grid-column: 2; text-align: right; margin: 0; line-height: 1.2 }
 #app .goal-plan-action { min-height: 44px; padding: 10px 16px; font-size: 15px; font-weight: 600; border-top: .5px solid var(--sep); background: transparent }
 #app .goal-plan-action>.money-symbol { width: 13px; height: 13px }
-#app #quickExpense { min-height: 48px !important; background: var(--blue); color: #fff; font-size: 17px }
 #app .day-cell { min-width: 0 }
 #app .money-ticker-shell { margin: 0 calc(-1 * var(--native-gutter)) 8px }
 #app .money-ticker-viewport { padding: 2px var(--native-gutter) 4px }
@@ -1598,6 +1598,19 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 @media (max-height:450px) {
   .month-name-btn { font-size: 24px }
 }
+/* 今日画面のクイック操作（第11版 HOME-004〜011）: 唯一の青い主ボタンと、線画アイコン付き56ptの行 */
+.quick-grid { display: grid; gap: var(--space-section); margin: 0 0 var(--space-section) }
+.today-primary-cta { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--cta-height); border-radius: 14px; font-size: var(--type-item); font-weight: 600 }
+.today-primary-cta svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.today-quick-list { margin: 0 }
+.row-icon { flex: none; width: 24px; height: 24px; display: grid; place-items: center; color: var(--accent) }
+.row-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+#app .group > .today-quick-row { min-height: var(--row-height); gap: 12px; padding: 8px var(--space-page); border-bottom: 0; position: relative }
+#app .today-quick-row .row-title { line-height: 22px }
+#app .today-quick-row .row-sub { line-height: 18px; margin-top: 0 }
+/* 区切り線は同一グループ内のみ・アイコンの右から */
+.today-quick-row + .today-quick-row::before { content: ""; position: absolute; top: 0; right: 0; left: calc(var(--space-page) + 36px); border-top: .5px solid var(--sep) }
+.today-quick-row .chev svg, #todayAnalysis .chev svg, #todayTransactions .chev svg { width: 14px; height: 14px }
 /* 日締めの照合と承認、ジャーナル。 */
 .day-date-slot { display: grid; place-items: center; width: 26px; height: 26px }
 .day-money.no-value { visibility: hidden }
@@ -1670,7 +1683,7 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
 .day-close-bank-summary span { min-width: 0; overflow-wrap: anywhere }
 .day-close-bank-summary strong { white-space: nowrap; font-variant-numeric: tabular-nums }
 .stmt-sticky-actions { position: sticky; bottom: calc(-24px - var(--safe-b)); background: linear-gradient(to bottom,rgba(242,242,247,0),var(--bg) 20%); padding: 28px 0 calc(12px + var(--safe-b)); z-index: 5 }
-.ios-menu { position: fixed; z-index: 300; width: min(260px,calc(100vw - 16px)); background: rgba(248,248,250,.86); border: 0.5px solid rgba(60,60,67,.14); border-radius: 14px; padding: 5px; box-shadow: 0 12px 34px rgba(0,0,0,.22); backdrop-filter: blur(26px) saturate(160%); -webkit-backdrop-filter: blur(26px) saturate(160%); opacity: 0; transform: scale(.96); transform-origin: top right; pointer-events: none; transition: opacity var(--mm3-motion-menu) ease,transform var(--mm3-motion-menu) var(--mm3-ease-spring) }
+.ios-menu { position: fixed; z-index: 300; width: min(320px,calc(100vw - 16px)); background: rgba(248,248,250,.86); border: 0.5px solid rgba(60,60,67,.14); border-radius: 14px; padding: 5px; box-shadow: 0 12px 34px rgba(0,0,0,.22); backdrop-filter: blur(26px) saturate(160%); -webkit-backdrop-filter: blur(26px) saturate(160%); opacity: 0; transform: scale(.98); transform-origin: top right; pointer-events: none; transition: opacity 130ms ease-in,transform 130ms ease-in }
 .native-calc-dim { z-index: 410 }
 .day-close-footer { position: sticky; bottom: -24px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; z-index: 2; background: color-mix(in srgb,var(--bg) 86%,transparent); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); border-top: 1px solid var(--sep); padding: 16px 0 max(18px,env(safe-area-inset-bottom)); margin-top: 20px }
 .day-close-footer>button { min-width: 0; margin: 0; min-height: 48px }
@@ -2030,8 +2043,6 @@ html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
 .pro3-preview-row:last-child { border-bottom: 0 }
 .pro3-preview-row strong { font-variant-numeric: tabular-nums }
 .pro3-allocation-ranges { margin-top: 12px; border-top: .5px solid var(--sep); padding-top: 8px }
-.pro4-command-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: -2px 0 12px }
-.pro4-command { border: 0; border-radius: 13px; background: var(--card); color: var(--blue); font-weight: 680; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 13px; min-height: 46px !important }
 .pro4-mode { margin: 2px 0 12px }
 .pro4-editor { background: var(--card); border-radius: 16px; padding: 12px; margin-bottom: 12px }
 .pro4-editor textarea { width: 100%; min-height: 92px; resize: vertical; border: 0; background: transparent; outline: none; font-size: 15px; line-height: 1.5; color: var(--label) }
@@ -2129,8 +2140,6 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .profile-photo-action { display: block; min-height: 44px; padding: 10px 16px; border: 0; background: transparent; color: var(--blue); font-size: 15px; margin: 0 auto }
 .profile-photo-action[hidden] { display: none }
 .profile-name-field { padding: 0; border: 0; background: transparent; width: 100% }
-#app .pro4-command-strip { gap: 8px; margin: 0 0 16px }
-#app .pro4-command { background: var(--card); border-radius: var(--native-control); font-size: 14px }
 #app .mm3-assets-shell { background: transparent }
 @media (prefers-reduced-motion:reduce) {
   #screen-assets .mm3-assets-line { animation: none; stroke-dashoffset: 0 }
@@ -2154,7 +2163,6 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
   .pro3-allocation-grid,
   .pro3-scenario-metrics { grid-template-columns: 1fr }
   .pro3-day-picks { grid-template-columns: repeat(3,minmax(0,1fr)) }
-  .pro4-command-strip { grid-template-columns: 1fr }
   .pro4-parse-row { grid-template-columns: 74px minmax(0,1fr) }
   .pro4-goal-metrics { grid-template-columns: 1fr }
   .pro4-review-issue { grid-template-columns: 28px minmax(0,1fr) auto }
@@ -2448,8 +2456,6 @@ html.motion-off *::after { animation-duration: .001ms !important; animation-iter
 #app .mm3-action-main small { font-size: 12px; line-height: 1.45; margin-top: 3px }
 .mm3-action-chev>.money-symbol { width: 13px; height: 13px }
 #app .native-quick-action { border-radius: var(--native-control); font-size: 16px; min-height: 48px !important }
-#app #todayRepeat { justify-content: flex-start; background: var(--card); color: var(--blue); padding: 12px 16px; margin: 12px 0 8px; font-size: 15px; font-weight: 500 }
-#app #todayRepeat>.money-symbol { width: 20px; height: 20px }
 #app .mm3-action-row { background: var(--card) }
 #app #acfToday:not(:has(.acf-head)) .acf-home-amount>.money-symbol { width: 12px; height: 12px }
 @media (prefers-contrast:more) {
