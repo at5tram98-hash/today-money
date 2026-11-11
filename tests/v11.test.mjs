@@ -68,7 +68,8 @@ test('第11版 C章・第14版 共通ルール: 動きは仕様の時間内（�
   const {default:postcss}=await import('postcss'),long=[];
   for(const file of manifest.styles)postcss.parse(read(file)).walkDecls(/^(transition|animation)(-duration)?$/,d=>{
     const ms=[...d.value.matchAll(/(\d*\.?\d+)(ms|s)\b/g)].map(x=>parseFloat(x[1])*(x[2]==='s'?1000:1)),durations=d.prop.startsWith('animation')?ms.slice(0,1):ms;
-    const spinner=/infinite/.test(d.value)&&/busy|spin|Spin|Orbit|Sweep|Breathe/.test(d.value);
+    // 読み込み中のスケルトンの光沢（Shimmer）も処理中を示す表示として繰り返してよい
+    const spinner=/infinite/.test(d.value)&&/busy|spin|Spin|Orbit|Sweep|Breathe|Shimmer/.test(d.value);
     // 第14版 共通ルール「通常220〜320ms」（＋から開く入力シートは280〜340msの範囲で280ms）
     if(!spinner&&durations.some(v=>v>320))long.push(`${file}: ${d.parent.selector} ${d.value}`);
     if(/infinite/.test(d.value)&&!spinner)long.push(`${file}: ${d.parent.selector} repeats forever`);

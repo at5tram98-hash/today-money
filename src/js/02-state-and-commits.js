@@ -124,7 +124,7 @@ async function runSaveAction(btn,mutator,{render=true,label='save',success='‰øùÂ
    if(busyToken)await endBusy(busyToken);
  }
 }
-function busyAnimationHtml(){return '<div class="busy-orbit" aria-hidden="true"><span></span><span></span><span></span><div class="busy-core"></div></div>'}
+function busyAnimationHtml(size='large'){return `<span class="lg-spinner ${size}" aria-hidden="true">${'<i></i>'.repeat(12)}</span>`}
 function ensureBusyOverlay(){
   let el=document.getElementById('busyOverlay');if(el)return el;
   el=document.createElement('div');el.id='busyOverlay';el.className='busy-overlay';

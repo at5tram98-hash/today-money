@@ -336,7 +336,7 @@ async function loadDataAsync(){updateBootMessage('データを読み込んでい
 const mm3BootStarted=performance.now();
 const mm3BootLayer=document.createElement('div');
 mm3BootLayer.id='mm3StorageBoot';mm3BootLayer.className='storage-boot';mm3BootLayer.setAttribute('role','status');mm3BootLayer.setAttribute('aria-live','polite');
-mm3BootLayer.innerHTML='<div class="busy-card"><div class="busy-orbit" aria-hidden="true"><span></span><span></span><span></span><div class="busy-core"></div></div><div class="busy-title" id="bootTitle">データを読み込んでいます…</div><div class="busy-sub" id="bootSub">端末に保存した記録を確認しています</div><div class="busy-track" aria-hidden="true"><span></span></div></div>';
+mm3BootLayer.innerHTML='<div class="boot-skel" aria-hidden="true"><div class="boot-top"><span class="sk sk-title"></span><span class="sk sk-circle"></span><span class="sk sk-circle"></span></div><div class="sk-card" style="--sk-c:var(--orange)"><span class="sk-label"></span><span class="sk sk-amount"></span><span class="sk sk-line"></span><span class="sk-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div><div class="sk-card" style="--sk-c:var(--accent)"><span class="sk-label"></span><span class="sk sk-amount"></span><span class="sk sk-line"></span><span class="sk-ring"></span></div><div class="sk-card" style="--sk-c:var(--green)"><span class="sk-label"></span><span class="sk sk-amount"></span><span class="sk sk-line"></span><span class="sk-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div><div class="sk-card" style="--sk-c:var(--teal)"><span class="sk-label"></span><span class="sk sk-amount"></span><span class="sk sk-line"></span><span class="sk-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div></div><div class="boot-tabbar" aria-hidden="true"><i></i><i></i><i></i></div><span class="boot-hub" aria-hidden="true"></span><div class="boot-status"><span class="lg-spinner" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="boot-text"><div class="busy-title" id="bootTitle">データを読み込んでいます…</div><div class="busy-sub" id="bootSub">端末に保存した記録を確認しています</div></span></div>';
 document.body.appendChild(mm3BootLayer);
 function updateBootMessage(title,sub){mm3BootLayer.querySelector('#bootTitle').textContent=title;mm3BootLayer.querySelector('#bootSub').textContent=sub}
 (async function startMyMoney(){
@@ -465,7 +465,7 @@ async function runSaveAction(btn,mutator,{render=true,label='save',success='保�
    if(busyToken)await endBusy(busyToken);
  }
 }
-function busyAnimationHtml(){return '<div class="busy-orbit" aria-hidden="true"><span></span><span></span><span></span><div class="busy-core"></div></div>'}
+function busyAnimationHtml(size='large'){return `<span class="lg-spinner ${size}" aria-hidden="true">${'<i></i>'.repeat(12)}</span>`}
 function ensureBusyOverlay(){
   let el=document.getElementById('busyOverlay');if(el)return el;
   el=document.createElement('div');el.id='busyOverlay';el.className='busy-overlay';
@@ -6172,8 +6172,11 @@ function openFixedPaymentList(){pushView('固定支払い',`<div class="group ho
     const top=root.querySelector('.topbar'),content=root.querySelector('.scroll');
     // Keep nodes and their existing handlers; moving them cannot register twice.
     // 第14版: 入力の入口は＋ハブだけ（各画面に同じ入力ボタンを足さない）。今日／今月の切替はホームの支出カード内にある
-    if(!content.dataset.nativeScrollBound){content.dataset.nativeScrollBound='true';content.addEventListener('scroll',()=>top.classList.toggle('native-scrolled',content.scrollTop>4),{passive:true})}
-    top.classList.toggle('native-scrolled',content.scrollTop>4);
+    // Liquid Glass: 少しスクロールしたら上端をガラスに、見出しの高さ分スクロールしたら中央の小見出しへ切り替える
+    const syncScrolled=()=>{const y=content.scrollTop;top.classList.toggle('native-scrolled',y>4);top.classList.toggle('lg-collapsed',y>28)};
+    if(!content.dataset.nativeScrollBound){content.dataset.nativeScrollBound='true';content.addEventListener('scroll',syncScrolled,{passive:true})}
+    const compact=top.querySelector('.large-title')?.textContent.trim()||'';if(compact)top.dataset.compactTitle=compact;else delete top.dataset.compactTitle;
+    syncScrolled();
     enhance(root);syncTabState();
   }
   const renders={today:renderToday,day:renderDay,month:renderMonth,pay:renderPay,payments:renderPayments,payroot:renderPayRoot,assets:renderAssets,settings:renderSettings};
@@ -6256,7 +6259,7 @@ function openFixedPaymentList(){pushView('固定支払い',`<div class="group ho
 try{await saveAsync({snapshot:data})}catch(e){console.warn('initial persistence unavailable',e);data.meta={...(data.meta||{}),storageWriteError:true}}
 updateBootMessage('画面を準備しています…','集計結果を画面に反映しています');
 renderAll();void initializeWebPush();renderLock();initializeTabIndicator();
-await waitForUiPaint();const bootRemaining=700-(performance.now()-mm3BootStarted);if(bootRemaining>0)await new Promise(resolve=>setTimeout(resolve,bootRemaining));await waitForUiPaint();mm3BootLayer.remove();
+await waitForUiPaint();const bootRemaining=700-(performance.now()-mm3BootStarted);if(bootRemaining>0)await new Promise(resolve=>setTimeout(resolve,bootRemaining));await waitForUiPaint();mm3BootLayer.classList.add('done');mm3BootLayer.setAttribute('aria-hidden','true');setTimeout(()=>mm3BootLayer.remove(),matchMedia('(prefers-reduced-motion:reduce)').matches?0:300);
 function appMaintenance(){
   try{const noticesChanged=pruneExpiredSystemNotices(),journalChanged=pruneDayClosingJournal();if(noticesChanged||journalChanged)renderAll()}catch(e){console.error('app maintenance failed',e)}
   queuePushSummary();maybeAutoSyncGmail(false);
