@@ -39,7 +39,7 @@ function installTabSlide(bar){
     if(moved){
       suppressUntil=performance.now()+400;
       const rect=bar.getBoundingClientRect();
-      if(commit&&event.clientY>=rect.top-24&&event.clientY<=rect.bottom+24)switchTab(buttonAt(event.clientX).dataset.tab);
+      if(commit&&event.clientY>=rect.top-24&&event.clientY<=rect.bottom+24)switchRoot(buttonAt(event.clientX).dataset.tab);
       syncTabIndicator();
     }
   };
@@ -64,13 +64,38 @@ function installTabSlide(bar){
   bar.addEventListener('lostpointercapture',event=>{if(event.target===bar)finish(event,false)});
   bar.addEventListener('click',event=>{if(performance.now()<suppressUntil){event.preventDefault();event.stopImmediatePropagation()}},true);
 }
+/* 第14版 N-001〜003: 下部タブは「ホーム／支払い／その他」の3つ。
+   給与・資産・支出（今日／今月）・請求一覧は、どのrootから開いても同じ専用画面（detail）として開き、
+   戻るボタンで開いた起点のrootへ表示位置ごと戻る。旧5タブの画面と機能はそのまま残す。 */
+const ROOT_SCREENS={home:'today',payments:'payroot',settings:'settings'};
+const DETAIL_SCREENS={day:'今日の支出',month:'今月の支出',pay:'給与',assets:'資産',payments:'請求一覧'};
+const ROOT_LABELS={today:'ホーム',payroot:'支払い',settings:'その他'};
+let detailOrigin='today';
+function isDetailScreen(screen=activeTab){return Object.prototype.hasOwnProperty.call(DETAIL_SCREENS,screen)}
+function rootScreenOf(screen=activeTab){return isDetailScreen(screen)?detailOrigin:screen}
+function rootTabOf(screen=activeTab){const root=rootScreenOf(screen);return Object.keys(ROOT_SCREENS).find(k=>ROOT_SCREENS[k]===root)||'home'}
+/* indicator=false: 状態の同期だけ（クラスを変えない限り変更を起こさない。読み上げ層の監視から呼ぶため） */
+function syncTabButtons(indicator=true){
+  const tab=rootTabOf();
+  document.querySelectorAll('#tabbar .tab').forEach(button=>{
+    const selected=button.dataset.tab===tab;
+    button.classList.toggle('active',selected);
+    if(selected){if(button.getAttribute('aria-current')!=='page')button.setAttribute('aria-current','page')}else if(button.hasAttribute('aria-current'))button.removeAttribute('aria-current');
+  });
+  if(indicator)syncTabIndicator();
+}
+/* 下部タブから: rootへ。表示中のrootをもう一度押すと先頭へ（T-001〜003） */
+function switchRoot(tab){
+  const root=ROOT_SCREENS[tab];if(!root)return;
+  if(root===activeTab){const current=document.querySelector(`#screen-${activeTab} .scroll`);current?.scrollTo({top:0,behavior:mm3MotionReduced()?'auto':'smooth'});return}
+  switchTab(root);
+}
+/* 専用画面の戻る: 開いた起点のrootへ（表示位置・期間はtabScrollPositionsと各状態変数に残っている） */
+function closeDetailScreen(){if(isDetailScreen())switchTab(detailOrigin)}
 function switchTab(tab){
   if(goalPlannerState?.locked)return;
-  const target=tab==='home'?(data.homeViewMode||'today'):tab;
-  if(!['today','month','pay','payments','assets','settings'].includes(target))return;
-  if((target==='today'||target==='month')&&(data.homeViewMode||'today')!==target){
-    try{safeCommit(()=>{data.homeViewMode=target},{label:'tab selection',invalidateAcf:false})}catch(e){return}
-  }
+  const target=tab==='home'?'today':tab;
+  if(!['today','day','month','pay','payments','payroot','assets','settings'].includes(target))return;
   if(target===activeTab){
     const current=document.querySelector(`#screen-${activeTab} .scroll`);
     current?.scrollTo({top:0,behavior:mm3MotionReduced()?'auto':'smooth'});
@@ -79,15 +104,12 @@ function switchTab(tab){
   const perform=()=>{
     const previous=activeTab,current=document.querySelector(`#screen-${previous} .scroll`);
     if(current)tabScrollPositions[previous]=current.scrollTop;
-    if(previous==='today'||previous==='month')stopMoneyTicker(previous);
+    if(previous==='day'||previous==='month')stopMoneyTicker(previous==='day'?'today':previous);
+    if(isDetailScreen(target)){if(!isDetailScreen(previous))detailOrigin=previous}
+    else detailOrigin=target;
     activeTab=target;
     document.querySelectorAll('.screen').forEach(el=>el.classList.toggle('active',el.id===`screen-${target}`));
-    document.querySelectorAll('.tab').forEach(button=>{
-      const selected=button.dataset.tab===target||(button.dataset.tab==='home'&&['today','month'].includes(target));
-      button.classList.toggle('active',selected);
-      if(selected)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
-    });
-    syncTabIndicator();
+    syncTabButtons();
     feedback?.selection?.();
     renderAll();
     requestAnimationFrame(()=>{
@@ -105,7 +127,17 @@ function switchTab(tab){
   });
   return perform();
 }
-document.getElementById('tabbar').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)switchTab(b.dataset.tab)});
+/* 専用画面の上部に「‹ 起点」の戻るボタンを置く（各画面の描画後に呼ぶ） */
+function placeDetailBack(screen){
+  const top=document.querySelector(`#screen-${screen} .topbar`);if(!top)return;
+  top.querySelector('.detail-back')?.remove();
+  if(!isDetailScreen(screen))return;
+  const b=document.createElement('button');b.type='button';b.className='back-btn detail-back';b.id=`detailBack-${screen}`;
+  b.setAttribute('aria-label',`${ROOT_LABELS[detailOrigin]||'ホーム'}に戻る`);
+  b.innerHTML=`${icon('chevronLeft')}<span>${esc(ROOT_LABELS[detailOrigin]||'ホーム')}</span>`;
+  b.onclick=closeDetailScreen;top.prepend(b);top.classList.add('has-detail-back');
+}
+document.getElementById('tabbar').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)switchRoot(b.dataset.tab)});
 function installHorizontalSwipe(el,onNext,onPrev,threshold=56){
   if(!el)return;el.__horizontalSwipeCleanup?.();let gesture=null,suppressUntil=0;
   const down=e=>{if(e.isPrimary===false||e.button>0)return;gesture=null;if(e.target.closest?.('input,select,textarea,a,[role=slider],.money-ticker-viewport')||e.clientX-el.getBoundingClientRect().left<28)return;gesture={id:e.pointerId,x:e.clientX,y:e.clientY}};
@@ -138,7 +170,9 @@ function addNotice(title,message,type='info',notify=true,options={}){
 function unreadNotices(){return data.notices.filter(n=>!n.read).length}
 function showAlert(title,message,opts={}){return new Promise(resolve=>{const w=document.getElementById('alertWrap');document.getElementById('alertTitle').textContent=title;document.getElementById('alertMessage').textContent=message;const a=document.getElementById('alertActions');a.innerHTML='';const cancel=document.createElement('button');cancel.textContent=opts.cancelText||'キャンセル';cancel.onclick=()=>{w.classList.remove('show');resolve(false)};const ok=document.createElement('button');ok.textContent=opts.okText||'OK';if(opts.destructive)ok.className='destructive';ok.onclick=()=>{w.classList.remove('show');resolve(true)};a.append(cancel,ok);w.classList.add('show')})}
 /* 第11版 HOME-003ほか: メニューは背景を少し暗くし、押したボタンの位置から0.98→1倍で開く（160ms）。閉じる時は130ms */
-function closeMenu(){const m=document.getElementById('menuLayer');m?.classList.remove('show');document.getElementById('menuScrim')?.classList.remove('show');for(const x of document.querySelectorAll('.icon-btn.menu-anchor-active'))x.classList.remove('menu-anchor-active')}function openMenu(anchor,items){const menu=document.getElementById('menuLayer');if(!menu||!anchor)return;closeMenu();const visible=items.filter(x=>!x.disabled),r=anchor.getBoundingClientRect(),width=Math.min(320,innerWidth-16,Math.max(220,...visible.map(x=>String(x.label||'').length*17+76)));menu.style.width=width+'px';menu.innerHTML=visible.map((x,i)=>`<button type="button" class="menu-item ${x.danger?'danger':''}" data-menu-index="${i}" role="menuitem"><span class="menu-label">${esc(x.label)}</span><span class="menu-icon">${menuSymbol(x.icon)}</span></button>`).join('');menu.classList.add('measuring');const h=menu.offsetHeight,left=clamp(r.right-width,8,innerWidth-width-8),spaceBelow=innerHeight-r.bottom-8,top=spaceBelow>=h?Math.min(innerHeight-h-8,r.bottom+5):Math.max(8,r.top-h-5);menu.style.left=left+'px';menu.style.right='auto';menu.style.top=top+'px';menu.style.transformOrigin=`${clamp(r.left+r.width/2-left,18,width-18)}px ${spaceBelow>=h?'0':'100%'}`;menu.classList.remove('measuring');void menu.offsetWidth;menu.classList.add('show');if(anchor.classList.contains('icon-btn'))anchor.classList.add('menu-anchor-active');document.getElementById('menuScrim')?.classList.add('show');menu.onclick=e=>{const b=e.target.closest('[data-menu-index]');if(!b)return;const item=visible[Number(b.dataset.menuIndex)];closeMenu();item?.action?.()}}document.addEventListener('pointerdown',e=>{const m=document.getElementById('menuLayer');if(m?.classList.contains('show')&&!m.contains(e.target)&&!e.target.closest('.icon-btn'))closeMenu()},{capture:true});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()})
+function closeMenu(){const m=document.getElementById('menuLayer');m?.classList.remove('show');document.getElementById('menuScrim')?.classList.remove('show');for(const x of document.querySelectorAll('.icon-btn.menu-anchor-active'))x.classList.remove('menu-anchor-active')}/* items: {label, sub?, icon, action, danger?, preview?}。preview は押しても何もしない読み取り専用の行（長押しのプレビュー用）。
+   opts.html を渡すと、項目の代わりにその内容をパネルとして同じ位置・同じ動きで開く（opts.bind で結び付け） */
+function openMenu(anchor,items,opts={}){const menu=document.getElementById('menuLayer');if(!menu||!anchor)return;closeMenu();const visible=(items||[]).filter(x=>!x.disabled),r=anchor.getBoundingClientRect(),width=opts.width||Math.min(320,innerWidth-16,Math.max(220,...visible.map(x=>Math.max(String(x.label||'').length,String(x.sub||'').length*.8)*17+76)));menu.style.width=width+'px';menu.classList.toggle('menu-panel',!!opts.html);menu.setAttribute('aria-label',opts.label||'メニュー');menu.innerHTML=opts.html||visible.map((x,i)=>x.preview?`<div class="menu-item menu-preview" role="none"><span class="menu-label">${esc(x.label)}${x.sub?`<small>${esc(x.sub)}</small>`:''}</span>${x.value?`<span class="menu-value">${esc(x.value)}</span>`:''}</div>`:`<button type="button" class="menu-item ${x.danger?'danger':''}" data-menu-index="${i}" role="menuitem"><span class="menu-label">${esc(x.label)}${x.sub?`<small>${esc(x.sub)}</small>`:''}</span><span class="menu-icon">${menuSymbol(x.icon)}</span></button>`).join('');opts.bind?.(menu);menu.classList.add('measuring');const h=menu.offsetHeight,left=clamp(r.right-width,8,innerWidth-width-8),spaceBelow=innerHeight-r.bottom-8,top=spaceBelow>=h?Math.min(innerHeight-h-8,r.bottom+5):Math.max(8,r.top-h-5);menu.style.left=left+'px';menu.style.right='auto';menu.style.top=top+'px';menu.style.transformOrigin=`${clamp(r.left+r.width/2-left,18,width-18)}px ${spaceBelow>=h?'0':'100%'}`;menu.classList.remove('measuring');void menu.offsetWidth;menu.classList.add('show');if(anchor.classList.contains('icon-btn'))anchor.classList.add('menu-anchor-active');document.getElementById('menuScrim')?.classList.add('show');menu.onclick=e=>{const b=e.target.closest('[data-menu-index]');if(!b)return;const item=visible[Number(b.dataset.menuIndex)];closeMenu();item?.action?.()}}document.addEventListener('pointerdown',e=>{const m=document.getElementById('menuLayer');if(m?.classList.contains('show')&&!m.contains(e.target)&&!e.target.closest('.icon-btn,#addHub'))closeMenu()},{capture:true});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()})
 function markSheetDirty(value=true){sheetDirtyState=!!value}
 let nativeSheetClosePending=false;
 async function requestSheetClose(){

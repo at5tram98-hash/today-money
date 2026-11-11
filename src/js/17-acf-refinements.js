@@ -197,7 +197,7 @@ async function syncGmail({silent=false}={}){
     refreshUnknownMailView();
     if(!silent){if(busyToken){updateBusy(busyToken,'読み取り結果を準備しています…',reviewIds.length?`${reviewIds.length}件を確認してください`:'新しい取引はありません');await endBusy(busyToken)}if(reviewIds.length)openGmailReview(reviewIds);else await showAlert('メールを確認しました','新しい支払いメールはありませんでした。',{okText:'OK',cancelText:'閉じる'})}
     else if(reviewIds.length)addNotice('Gmailに確認待ちの取引があります',`${reviewIds.length}件の読み取り結果を確認してください。`,'warning',false);
-    if(activeTab==='today')renderToday();else if(activeTab==='month')renderMonth();else if(activeTab==='settings')renderSettings()
+    renderAll()
   }catch(e){console.error(e);if(busyToken)await endBusy(busyToken);if(!silent)showAlert('Gmail同期に失敗しました',e.message)}finally{gmailSyncing=false;for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();if(busyToken)await endBusy(busyToken)}
 };
 

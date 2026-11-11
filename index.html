@@ -12,31 +12,32 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/app-192.png?v=wallet-20261110">
 <link rel="icon" type="image/png" href="./icons/app-192.png?v=wallet-20261110">
-<link rel="stylesheet" href="./assets/app.ab986bc16817.css">
+<link rel="stylesheet" href="./assets/app.d95df8c0b220.css">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <div id="app">
   <section class="screen active" id="screen-today"><header class="topbar" id="todayTop"></header><div class="scroll" id="todayContent"></div></section>
+  <section class="screen" id="screen-day"><header class="topbar" id="dayTop"></header><div class="scroll" id="dayContent"></div></section>
   <section class="screen" id="screen-month"><header class="topbar" id="monthTop"></header><div class="scroll month-swipe" id="monthContent"></div></section>
   <section class="screen" id="screen-pay"><header class="topbar" id="payTop"></header><div class="scroll" id="payContent"></div></section>
+  <section class="screen" id="screen-payroot"><header class="topbar" id="payrootTop"></header><div class="scroll" id="payrootContent"></div></section>
   <section class="screen" id="screen-payments"><header class="topbar" id="paymentsTop"></header><div class="scroll" id="paymentsContent"></div></section>
   <section class="screen" id="screen-assets"><header class="topbar" id="assetsTop"></header><div class="scroll" id="assetsContent"></div></section>
   <section class="screen" id="screen-settings"><header class="topbar" id="settingsTop"></header><div class="scroll" id="settingsContent"></div></section>
   <nav class="tabbar" id="tabbar" aria-label="メインナビゲーション">
     <span class="tab-selection" aria-hidden="true"></span>
-    <button class="tab active" data-tab="home" id="homeTab"><svg class="money-symbol tab-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path class="tf" d="M5 6.5h14a1 1 0 0 1 1 1V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7.5a1 1 0 0 1 1-1Z"/><path class="tk" d="M4 10.5h16"/><path d="M8.5 4v4M15.5 4v4"/></svg><span class="tab-label">今日</span></button>
-    <button class="tab" data-tab="pay"><svg class="money-symbol tab-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path class="tf" d="M4.5 8h15a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><path d="M9 8V5.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1V8"/><path class="tk" d="M3.5 13h17"/></svg><span class="tab-label">給与</span></button>
-    <button class="tab" data-tab="payments"><svg class="money-symbol tab-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect class="tf" x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path class="tk" d="M3.5 10h17M7 15h3"/></svg><span class="tab-label">支払い</span></button>
-    <button class="tab" data-tab="assets"><svg class="money-symbol tab-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path class="tb" d="M5 20V12M10 20V5M15 20v-9M20 20v-5"/></svg><span class="tab-label">資産</span></button>
-    <button class="tab" data-tab="settings"><svg class="money-symbol tab-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path class="tf" d="M19.4 15a1.7 1.7 0 0 0 .4 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.4 1.7 1.7 0 0 0-1 1.6V21h-4v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.4l-.1.1L4.3 17l.1-.1a1.7 1.7 0 0 0 .4-1.9 1.7 1.7 0 0 0-1.6-1H3v-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.4-1.9L4.3 7l2.8-2.8.1.1a1.7 1.7 0 0 0 1.9.4 1.7 1.7 0 0 0 1-1.6V3h4v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.4l.1-.1L19.9 7l-.1.1a1.7 1.7 0 0 0-.4 1.9 1.7 1.7 0 0 0 1.6 1h.1v4H21a1.7 1.7 0 0 0-1.6 1z"/><circle class="tk tkf" cx="12" cy="12" r="3"/></svg><span class="tab-label">設定</span></button>
+    <button class="tab active" data-tab="home" id="homeTab"><svg class="money-symbol tab-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path class="tf" d="M4 10.4 12 4l8 6.4V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1Z"/></svg><span class="tab-label">ホーム</span></button>
+    <button class="tab" data-tab="payments" id="paymentsTab"><svg class="money-symbol tab-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect class="tf" x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path class="tk" d="M3.5 10h17M7 15h3"/></svg><span class="tab-label">支払い</span></button>
+    <button class="tab" data-tab="settings" id="settingsTab"><svg class="money-symbol tab-symbol" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect class="tf" x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect class="tf" x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect class="tf" x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect class="tf" x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/></svg><span class="tab-label">その他</span></button>
   </nav>
+  <button type="button" class="add-hub" id="addHub" aria-label="入力する" aria-haspopup="menu"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg></button>
 </div>
 <div class="dim" id="dim"></div><div class="sheet" id="sheet"></div><div id="pushLayer"></div><div class="menu-scrim" id="menuScrim"></div><div class="ios-menu" id="menuLayer" role="menu"></div>
 <div id="toastLayer" class="toast-layer" aria-live="polite" aria-atomic="true"></div>
 <div class="alert-wrap" id="alertWrap"><div class="alert-box"><div class="alert-content"><div class="alert-title" id="alertTitle"></div><div class="alert-message" id="alertMessage"></div></div><div class="alert-actions" id="alertActions"></div></div></div>
 <div id="calculator"><div class="calc-top"><button type="button" class="calc-cancel" id="calcCancel">キャンセル</button><div id="calcTitle">金額</div><span class="calc-top-spacer"></span></div><div class="calc-expression" id="calcExpression">金額を入力</div><div class="calc-display" id="calcDisplay"><span class="calc-number" id="calcNumber">0</span><span class="calc-unit">円</span></div><div class="calc-assists" aria-label="家計の入力補助"><button type="button" data-calc-tool="discount" aria-expanded="false">割引</button><button type="button" data-calc-tool="add" aria-expanded="false">割合を加算</button><button type="button" data-calc-tool="split" aria-expanded="false">割り勘</button></div><div id="calcTools" class="calc-tools-panel" hidden><h2 id="calcToolHeading"></h2><p id="calcToolBase"></p><label for="calcToolValue" id="calcToolLabel">割合（%）</label><input type="number" inputmode="numeric" id="calcToolValue" min="0" max="100" step="1"><output id="calcToolPreview" aria-live="polite"></output><p id="calcToolNote"></p><div class="calc-tool-actions"><button type="button" id="calcToolCancel">戻る</button><button type="button" id="calcToolApply">計算結果を使う</button></div></div><div class="calc-grid" id="calcGrid"></div><button type="button" class="calc-use" id="calcDone">この金額を使う</button></div>
 <div id="lockScreen"><div class="lock-title">My Money 3.0</div><div class="row-sub" style="margin-top:8px">パスコードを入力</div><div class="lock-dots" id="lockDots"></div><div class="lock-pad" id="lockPad"></div></div>
-<script src="./assets/app.32a7dd9db7e0.js"></script>
+<script src="./assets/app.871873c30f0d.js"></script>
 </body>
 </html>

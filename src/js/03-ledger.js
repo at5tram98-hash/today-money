@@ -130,7 +130,8 @@ function buildMonthFinancialMarkers(month,{largeExpensePlans=data.largeExpensePl
     x.largePlans.push(p)
   }return map
 }
-function nextFinancialEvent(from=ymd(),days=90){
+/* 期間内の入出金予定（給与・カード引落・固定支払い・必須の大型支出）を日付順に返す */
+function financialEventsFrom(from=ymd(),days=90){
   const end=addDays(from,days),events=[];
   for(const e of getSalaryPaymentEvents(from,end))events.push({date:e.date,type:'income',title:`${e.employerName}給与`,amount:e.amount,detail:`${Number((e.workMonth||'').slice(5,7))||''}月勤務分`});
   const startMonth=from.slice(0,7),endMonth=end.slice(0,7),[sy,sm]=startMonth.split('-').map(Number),[ey,em]=endMonth.split('-').map(Number),span=Math.max(0,(ey-sy)*12+(em-sm));
@@ -139,21 +140,22 @@ function nextFinancialEvent(from=ymd(),days=90){
     for(const st of mm3PaymentCardItems(pm)){
       const amount=Number(st.outstandingAmount??st.amount)||0;
       if(amount<=0||!st.paymentDate||st.paymentDate<from||st.paymentDate>end)continue;
-      events.push({date:st.paymentDate,type:'card',title:`${st.cardName}支払`,amount:-amount,detail:`${monthLabel(st.billingMonth)}対象${st.plannedAmount?`・予定含む`:''}`})
+      events.push({date:st.paymentDate,type:'card',cardId:st.cardId,title:`${st.cardName}支払`,amount:-amount,detail:`${monthLabel(st.billingMonth)}対象${st.plannedAmount?`・予定含む`:''}`})
     }
   }for(const f of data.fixedPayments){
     if(f.paymentMethod==='card')continue;
     for(const d of dateRange(from,end,days+2)){
-      if(fixedDueOn(f,d)&&!(f.skippedDates||[]).includes(d)&&!data.transactions.some(t=>t.source==='fixed'&&t.fixedId===f.id&&t.date===d))events.push({date:d,type:'fixed',title:f.name||'固定支払い',amount:-Number(f.amount||0),detail:'固定支払い'})
+      if(fixedDueOn(f,d)&&!(f.skippedDates||[]).includes(d)&&!data.transactions.some(t=>t.source==='fixed'&&t.fixedId===f.id&&t.date===d))events.push({date:d,type:'fixed',fixedId:f.id,title:f.name||'固定支払い',amount:-Number(f.amount||0),detail:'固定支払い'})
     }
   }for(const p of data.largeExpensePlans){
     if(p.status!=='planned'||p.priority!=='required'||p.date<from||p.date>end)continue;
     for(const part of largeExpensePendingParts(p)){
       if(part.paymentMethod==='card')continue;
-      events.push({date:p.date,type:'large',title:p.name||'大型支出',amount:-Number(part.amount||0),detail:`必須・${largeExpensePaymentLabel({...p,splits:[part],paymentMethod:part.paymentMethod,paymentId:part.paymentId})}`})
+      events.push({date:p.date,type:'large',largeId:p.id,title:p.name||'大型支出',amount:-Number(part.amount||0),detail:`必須・${largeExpensePaymentLabel({...p,splits:[part],paymentMethod:part.paymentMethod,paymentId:part.paymentId})}`})
     }
   }events.sort((a,b)=>a.date.localeCompare(b.date)||({income:0,card:1,fixed:2,large:3}[a.type]-({income:0,card:1,fixed:2,large:3}[b.type])));
-  return events[0]||null
+  return events
 }
+function nextFinancialEvent(from=ymd(),days=90){return financialEventsFrom(from,days)[0]||null}
 function nextFinancialEventHtml(){const e=nextFinancialEvent();if(!e)return'';const diff=Math.max(0,Math.round((parseYmd(e.date)-parseYmd(ymd()))/86400000)),symbol=e.type==='income'?'¥':e.type==='card'?'$':e.type==='large'?'●':'•';return `<button type="button" class="financial-event-card" id="nextMoneyEvent" data-date="${e.date}"><span class="financial-event-symbol ${e.type}">${symbol}</span><span class="financial-event-main"><span class="financial-event-title">次の動き　${esc(e.title)}</span><span class="financial-event-sub">${diff===0?'今日':`あと${diff}日`}・${Number(e.date.slice(5,7))}/${Number(e.date.slice(8,10))}${e.detail?`・${esc(e.detail)}`:''}</span></span><span class="financial-event-value ${e.amount<0?'red':e.amount>0?'green':''}">${e.amount?`${e.amount>0?'+':''}${yen(e.amount)}`:'予定'}</span></button>`}
 /* ACF: daily spending capacity. The ATF scenario calculator is separate below. */
