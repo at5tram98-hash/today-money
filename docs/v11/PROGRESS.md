@@ -1,6 +1,6 @@
 # 第11版 進捗と再開用の記録
 
-最終更新: 2026-11-11 04:15 UTC ／ ブランチ `claude/approve-all-permissions-3i1w3q` ／ HEAD `04f59be`
+最終更新: 2026-11-11 04:43 UTC ／ ブランチ `claude/approve-all-permissions-3i1w3q` ／ HEAD `2712178`
 
 集計は `node scripts/v11/progress.mjs <仕様書パッケージのフォルダ>` で再生成できます。監査記録は同じ部品・同じ遷移の重複を含むため、件数は重複をまとめた後の数です。
 
@@ -77,6 +77,7 @@
 
 ## 最近のコミット
 
+- 2712178 2026-11-11 追加UIを796/796まで個別に検証し、視差を減らす設定でトーストが透明のまま出ない不具合を修正
 - 04f59be 2026-11-11 公開サイトでの確認結果（最新の配信）を記録
 - 8f7b535 2026-11-11 今日の「支出を記録」を仕様どおり高さ52pxに（HOME-004）
 - 46c341c 2026-11-11 巡回結果を反映して進捗を更新
@@ -88,7 +89,6 @@
 - 42da12c 2026-11-10 Record the live-site check of the published build
 - 53520e7 2026-11-10 Merge main (wallet icon update) and keep the icon links in the page template
 - 49949d2 2026-11-10 Rebuild stylesheets by component, verify every screen by crawling, and finish edition 11 alternatives
-- bdbaa2f 2026-11-10 Apply edition 11 confirmed interactions for billing, balance, approval, calculator, restore and deletion
 
 ## 次に着手する作業
 
