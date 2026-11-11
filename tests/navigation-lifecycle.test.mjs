@@ -32,11 +32,14 @@ test('new navigation removes only retired animation views and preserves the live
   assert.equal(run('pushStack[1].title'),'新しい画面');
 });
 
-test('original five tabs and today/month mode stay in their familiar locations',()=>{
+test('第14版: 下部タブは ホーム／支払い／その他 の3つ。給与・資産・今日／今月の支出・請求一覧は専用画面として残る',()=>{
   const html=readFileSync(new URL('../src/index.html',import.meta.url),'utf8');
-  assert.deepEqual([...html.matchAll(/data-tab="([^"]+)"/g)].map(m=>m[1]),['home','pay','payments','assets','settings']);
-  const accessibility=readFileSync(new URL('../src/js/24-accessibility.js',import.meta.url),'utf8');
-  assert.ok(accessibility.includes("[['today','今日'],['month','今月']]"));
+  assert.deepEqual([...html.matchAll(/data-tab="([^"]+)"/g)].map(m=>m[1]),['home','payments','settings']);
+  assert.deepEqual([...html.matchAll(/<span class="tab-label">([^<]+)</g)].map(m=>m[1]),['ホーム','支払い','その他']);
+  for(const screen of ['today','day','month','pay','payroot','payments','assets','settings'])assert.ok(html.includes(`id="screen-${screen}"`),screen);
+  assert.ok(html.includes('id="addHub"'),'＋入力ハブ');
+  const nav=readFileSync(new URL('../src/js/07-navigation.js',import.meta.url),'utf8');
+  assert.ok(nav.includes("const DETAIL_SCREENS={day:'今日の支出',month:'今月の支出',pay:'給与',assets:'資産',payments:'請求一覧'}"));
   const settings=readFileSync(new URL('../src/js/settings.js',import.meta.url),'utf8');
   assert.ok(!settings.includes('finance-pay'));
   assert.ok(!settings.includes('allFeatures'));

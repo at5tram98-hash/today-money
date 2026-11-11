@@ -182,10 +182,26 @@ export async function reset(page,tab){
 }
 export const closeHarness=async()=>{for(const p of [...pages])await collectFlow(p);if(flowInventory.size){mkdirSync(resolve(root,'test-results'),{recursive:true});writeFileSync(resolve(root,`test-results/flow-inventory-${basename(process.argv[1]||'test','.mjs')}.json`),JSON.stringify([...flowInventory].sort(),null,1))}await browser.close();await new Promise(r=>server.close(r))};
 /* 画面を開く: reset → 前提の関数呼び出し → 目標計画の段階指定 → セレクタの順押し */
+/* 第14版: 旧5タブの画面・入口を、3タブのrootから新しい入口をタップしてたどる（docs/v14/relocation.json） */
+export const relocation=JSON.parse(readFileSync(resolve(root,'docs/v14/relocation.json'),'utf8'));
+export function relocate(tab,path=[]){
+  const first=path[0],sel=first&&relocation.selectors[first];
+  if(sel&&['today','month'].includes(tab))return{root:sel.root,via:sel.via,rest:path.slice(1),steps:[...sel.via,...path.slice(1)],label:sel.label};
+  const screen=relocation.screens[tab];
+  if(!screen)return{root:tab,via:[],rest:path,steps:path,label:''};
+  return{root:screen.root,via:screen.via,rest:path,steps:[...screen.via,...path],label:screen.label};
+}
+export async function tap(page,selector){
+  if(selector.includes(':has-text(')){const target=page.locator(selector).first();if(!await target.count())return false;await target.click();await settle(page);return true}
+  if(!await page.evaluate(sel=>globalThis.__crawl.click(sel),selector))return false;await settle(page);return true;
+}
 export async function openScreen(page,{tab,setup=null,path=[],patch=null,keepData=false}){
+  // 旧画面の入口をたどってから（via）、前提の関数呼び出し（setup）、元の操作（path）の順に行う
+  const route=relocate(tab,path);path=route.rest;tab=route.root;
   // keepData: 直前の操作で保存した内容を保ったまま開き直す（画面だけを閉じる）
   if(keepData)await page.evaluate(()=>{const t=globalThis.__mm3Test;document.getElementById('alertWrap')?.classList.remove('show');try{t.closeCalc()}catch(e){}try{t.closeSheet()}catch(e){}while(document.querySelector('#pushLayer .push-view.show')&&t.popView()!==false);});
   else await reset(page,tab);
+  if(!keepData)for(const selector of route.via){if(!await tap(page,selector))return false}
   // patch: 保存データの一部を変えた状態から始める（関数の本文。s が保存データの複製）
   if(patch){await page.evaluate(async body=>{const t=globalThis.__mm3Test,s=t.getData();new Function('s',body)(s);await t.replaceData(s);t.renderAll()},patch);await settle(page)}
   if(setup){
@@ -195,6 +211,6 @@ export async function openScreen(page,{tab,setup=null,path=[],patch=null,keepDat
     if(setup.upload){await page.locator(setup.upload.selector).setInputFiles({name:setup.upload.name,mimeType:setup.upload.type||'text/csv',buffer:Buffer.from(setup.upload.text)});await page.waitForTimeout(600);await settle(page)}
     if(setup.step){await page.evaluate(()=>document.querySelector('#goalStart')?.click());await settle(page);if(setup.step>1){await page.evaluate(n=>globalThis.__mm3Test.plannerStep(n),setup.step);await settle(page)}}
   }
-  for(const selector of path){if(!await page.evaluate(sel=>globalThis.__crawl.click(sel),selector))return false;await settle(page)}
+  for(const selector of path){if(!await tap(page,selector))return false}
   return true;
 }

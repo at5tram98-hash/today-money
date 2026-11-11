@@ -19,7 +19,7 @@ export async function verifyUiUpdate({createPage,passed,root}){
   console.log(`ACF preview ${versions.liteMs.toFixed(1)}ms; full ${versions.fullMs.toFixed(1)}ms`);
   passed('lightweight previews preserve every balance and cash/card budget without contaminating full forecast results');
 
-  await page.locator('#acfToday').click();
+  await page.locator('#homeAcfCard').click(); // 第14版 H-050: ホームの生活費の見通しカードからACF詳細へ
   await page.locator('#acfSetupStart').waitFor();
   await page.locator('#acfSetupReserve').click();await page.locator('[data-k="clear"]').click();await page.locator('#calcDone').click();
   await page.locator('#acfSetupStart').click();await page.locator('#acfViewMode').waitFor();await page.locator('.busy-overlay.show').waitFor({state:'hidden'});
@@ -45,17 +45,17 @@ export async function verifyUiUpdate({createPage,passed,root}){
   passed('393×852 touch viewport fits all seven ACF calendar columns and keyboard activation opens one day inspector');
 
   const bankBefore=await page.evaluate(()=>globalThis.__mm3Test.getData().banks);
-  for(const tab of ['pay','payments','assets','settings','home']){
+  for(const tab of ['payments','settings','home']){
     await page.locator(`[data-tab="${tab}"]`).click();
     await page.waitForFunction(()=>document.querySelectorAll('.screen.active').length===1);
     assert.equal(await page.locator('.screen.active').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
     assert.equal(await page.locator('.tab.active').getAttribute('data-tab'),tab);
   }
-  const home=await page.locator('[data-tab="home"]').boundingBox(),assets=await page.locator('[data-tab="assets"]').boundingBox();
+  const home=await page.locator('[data-tab="home"]').boundingBox(),assets=await page.locator('[data-tab="settings"]').boundingBox();
   const y=home.y+home.height/2;
   await page.mouse.move(home.x+home.width/2,y);await page.mouse.down();await page.mouse.move(assets.x+assets.width/2,y,{steps:10});
   assert.equal(await page.locator('.tab.active').getAttribute('data-tab'),'home');
-  await page.mouse.up();assert.equal(await page.locator('.tab.active').getAttribute('data-tab'),'assets');
+  await page.mouse.up();assert.equal(await page.locator('.tab.active').getAttribute('data-tab'),'settings');
   await page.waitForTimeout(420);
   await page.locator('[data-tab="home"]').click();
   assert.equal(await page.locator('.tab.active').getAttribute('data-tab'),'home');
