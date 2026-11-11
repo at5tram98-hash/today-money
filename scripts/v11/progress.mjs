@@ -74,8 +74,12 @@ for(const r of extra){const key=[r.DOM.replace(/^#/,''),r['ラベル'],r['観測
 const renamed={deleteConfirmPhrase:'daConfirmText',deleteConfirmProceed:'daConfirm',deleteModeEmpty:'daConfirm',deleteModeKeep:'daConfirm'};
 const testedIds=new Set([...testText.matchAll(/#([A-Za-z][\w-]+)/g)].map(m=>m[1])),amountFields=new Set(amount.filter(r=>r['結果']==='合格').map(r=>r['金額欄'].replace(/^#/,'')));
 const invNames=[...invByName.keys()];
+// tests/extra-ui.mjs が仕様のIDごとに画面を開いて見つけた要素（見えて・名前があり・44pt以上）
+const extraEvidence=new Map(repoCsv('docs/v11/extra-ui-evidence.csv').map(r=>[r['追加UI ID'],r]));
 const extraRows=[...uniqueExtra.values()].map(r=>{const dom0=r.DOM.replace(/^#/,''),dom=renamed[dom0]||dom0,byTest=!!dom&&(testedIds.has(dom)||amountFields.has(dom)),byDom=dom&&(invById.has(dom)||byTest),byName=!byDom&&invByName.has(norm(r['ラベル'])),byShape=!byDom&&!byName&&(invByShape.has(shape(r['ラベル']))||(norm(r['ラベル']).length>=2&&invNames.some(n=>n.startsWith(norm(r['ラベル']))))),alias=dom2id.get(dom)||'';
   const testData=/テスト|検証|監査|巡回/.test(r['ラベル']);
+  const ev=r.ids.map(id=>extraEvidence.get(id)).find(Boolean);
+  if(ev&&!(byDom||byName||byShape))return{ids:r.ids.join(' '),label:r['ラベル'],dom:r.DOM,kind:r['観測種別'],alias,status:'照合済み',verified:true,basis:`観測画面を開いて個別に確認: 「${ev['実際の要素の読み上げ名']}」${ev['押せる範囲(pt)']}${ev['備考']?'・'+ev['備考']:''}`};
   return{ids:r.ids.join(' '),label:r['ラベル'],dom:r.DOM,kind:r['観測種別'],alias,status:byDom||byName||byShape?'照合済み':'未照合',verified:byDom||byName||byShape,basis:byDom?(byTest&&!invById.has(dom)?'識別子をブラウザテスト（金額欄・ホイール等）で操作':renamed[dom0]?`以前の識別子 ${dom0} → 現在の ${dom}（同じ部品）`:'識別子が巡回で操作した画面に存在'):byName?'同じ名前の操作要素が巡回で操作した画面に存在':byShape?'日付・金額だけが違う同じ部品（カレンダーの日・一覧の行）が巡回した画面に存在':testData?'観測時のテスト用データを含む表示（実データで内容が変わる行）':'巡回で同じ要素を確認できない'}});
 writeCsv('extra-ui-852.csv',['追加UI ID（重複をまとめた）','ラベル','DOM','観測種別','304操作の別名','照合','巡回で検査済み','根拠'],extraRows.map(r=>[r.ids,r.label,r.dom,r.kind,r.alias,r.status,r.verified?'○':'×',r.basis]));
 

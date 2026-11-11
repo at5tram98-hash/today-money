@@ -84,7 +84,8 @@
 .favorite-nav-btn svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
 .favorite-nav-btn.on svg { fill: currentColor }
 .fav-editor-row { touch-action: none }
-.toast .toast-action { border: 0; background: transparent; color: #5AC8FA; font-weight: 700; font-size: 13px }
+/* 第11版: 操作は44pt以上 */
+.toast .toast-action { flex: none; min-width: var(--tap-min); height: var(--tap-min); margin: -10px -4px; padding: 0 8px; border: 0; background: transparent; color: #5AC8FA; font-weight: 700; font-size: 13px }
 .field:focus { box-shadow: inset 0 0 0 1.5px var(--blue) }
 .ring .progress { stroke: var(--green); stroke-linecap: round; transition: stroke-dashoffset var(--motion-push),stroke var(--motion-update) }
 .sheet.dragging { transition: none }
@@ -268,3 +269,5 @@ html.native-keyboard .tabbar { visibility: hidden; pointer-events: none }
 #app .nav-actions .icon-btn:active { transform: none; opacity: 1 }
 #app .nav-actions .icon-btn svg { position: relative; width: 20px; height: 20px; stroke-width: 1.8 }
 #app .nav-actions .nav-badge { top: 4px; right: 4px; transform: translate(35%,-35%); min-width: 18px; height: 18px; padding: 0 5px; font-size: var(--type-min); border-radius: 9px; box-shadow: 0 0 0 2px var(--bg) }
+/* 視差を減らす設定では登場アニメーションが止まるため、最初から表示した状態にする（止めると透明のまま残っていた） */
+@media (prefers-reduced-motion:reduce) { .toast { opacity: 1; transform: none } }

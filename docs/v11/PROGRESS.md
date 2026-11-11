@@ -1,6 +1,6 @@
 # 第11版 進捗と再開用の記録
 
-最終更新: 2026-11-11 01:40 UTC ／ ブランチ `claude/approve-all-permissions-3i1w3q` ／ HEAD `c7e19bf`
+最終更新: 2026-11-11 04:43 UTC ／ ブランチ `claude/approve-all-permissions-3i1w3q` ／ HEAD `2712178`
 
 集計は `node scripts/v11/progress.mjs <仕様書パッケージのフォルダ>` で再生成できます。監査記録は同じ部品・同じ遷移の重複を含むため、件数は重複をまとめた後の数です。
 
@@ -10,7 +10,7 @@
 |---|---|---|---|---|
 | ボタン・操作 | 304 | 304 | 302 | 99.3% |
 | 画面（81シナリオ／75画面） | 81 | 81 | 81 | 100% |
-| 追加UI（852候補→重複除去796） | 796 | 744 | 744 | 93.5% |
+| 追加UI（852候補→重複除去796） | 796 | 796 | 796 | 100% |
 | 画面遷移（943記録→重複除去464） | 464 | 464 | 464 | 100% |
 | アニメーション（645記録→重複除去389） | 389 | 389 | 389 | 100% |
 | ジェスチャー（実際の対象） | 17 | 17 | 17 | 100% |
@@ -65,7 +65,7 @@
 - GMAIL: Googleアカウントへの接続が前提（外部認証のため自動検証できない）
 
 
-## 未検証の遷移（0）とアニメーション（0）、未照合の追加UI（52）
+## 未検証の遷移（0）とアニメーション（0）、未照合の追加UI（0）
 
 - 遷移: `checklists/transitions-943.csv` の「検証済み=×」。上の未完了IDの操作を入口とするもの。
 - アニメーション: `checklists/motions-645.csv`。push 220ms・sheet 260ms・menu 160ms・状態変化150〜220ms は `src/css/tokens.css` の値に統一済み。「×」は計測した画面の中に指示外の時間が残っているもの。
@@ -77,6 +77,10 @@
 
 ## 最近のコミット
 
+- 2712178 2026-11-11 追加UIを796/796まで個別に検証し、視差を減らす設定でトーストが透明のまま出ない不具合を修正
+- 04f59be 2026-11-11 公開サイトでの確認結果（最新の配信）を記録
+- 8f7b535 2026-11-11 今日の「支出を記録」を仕様どおり高さ52pxに（HOME-004）
+- 46c341c 2026-11-11 巡回結果を反映して進捗を更新
 - c7e19bf 2026-11-11 追加UIの照合を観測画面まで広げ、進捗を更新
 - 18739a0 2026-11-11 今日画面・ナビゲーションのアイコン・その他メニューを第11版の仕様どおりに修正
 - 040b60d 2026-11-10 Record the live-site check of the edition 11 completion build
@@ -85,14 +89,10 @@
 - 42da12c 2026-11-10 Record the live-site check of the published build
 - 53520e7 2026-11-10 Merge main (wallet icon update) and keep the icon links in the page template
 - 49949d2 2026-11-10 Rebuild stylesheets by component, verify every screen by crawling, and finish edition 11 alternatives
-- bdbaa2f 2026-11-10 Apply edition 11 confirmed interactions for billing, balance, approval, calculator, restore and deletion
-- fd2b274 2026-11-04 Unify native iPhone presentation and keyboard-safe forms without changing existing navigation
-- df8873c 2026-11-04 Restore familiar five tabs and feature locations; refresh presentation and expose expense reuse
-- 498f9f1 2026-11-04 Rebuild My Money workspaces around My Time design and retain existing features
 
 ## 次に着手する作業
 
 1. 未完了ID（GMAIL-296 GMAIL-297）を確認する。Googleアカウントを接続した端末で、手動で「今すぐ同期」と「接続を解除」を確かめる（自動検証では外部認証を通せない）。
-2. 追加UIの未照合52件（巡回で同じ要素を確認できない25件、観測時のテスト用データの行27件）を画面ごとに照合し、304操作の別名か新しいIDかを決める。
+2. 追加UIの未照合0件（巡回で同じ要素を確認できない0件、観測時のテスト用データの行0件）を画面ごとに照合し、304操作の別名か新しいIDかを決める。
 3. 物理的なiPhone（Safari・ホーム画面に追加したPWA）で、VoiceOver・文字拡大・Reduce Motionを人の手で確認する。
 4. 仕様で任意とされたジェスチャー（一覧行の長押しメニュー等）を採用するかを決める。採用する場合も、見えるボタンの代替を必ず残す。
