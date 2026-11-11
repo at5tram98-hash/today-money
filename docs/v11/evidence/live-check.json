@@ -1,12 +1,12 @@
 {
- "checkedAt": "2026-11-11T14:41:43.455Z",
+ "checkedAt": "2026-11-11T16:51:56.413Z",
  "device": "Chromium による iPhone 15 Pro / 幅320 の再現（物理端末ではない）",
  "siteUrl": "https://at5tram98-hash.github.io/today-money/",
  "urlSource": "GitHubのページ上にリンクが見つからなかったため、リポジトリ内の設定値（worker/wrangler.jsonc の APP_URL）",
  "iphone15pro-light": {
   "assets": [
-   "assets/app.3807d9b2fa1a.js",
-   "assets/app.faa8d2e83419.css"
+   "assets/app.6b42254a8743.js",
+   "assets/app.80ddb2bad120.css"
   ],
   "pwa": {
    "worker": true,
@@ -17,8 +17,8 @@
  },
  "iphone15pro-dark": {
   "assets": [
-   "assets/app.3807d9b2fa1a.js",
-   "assets/app.faa8d2e83419.css"
+   "assets/app.6b42254a8743.js",
+   "assets/app.80ddb2bad120.css"
   ],
   "pwa": {
    "worker": true,
@@ -29,8 +29,8 @@
  },
  "w320-light": {
   "assets": [
-   "assets/app.3807d9b2fa1a.js",
-   "assets/app.faa8d2e83419.css"
+   "assets/app.6b42254a8743.js",
+   "assets/app.80ddb2bad120.css"
   ],
   "pwa": {
    "worker": true,
@@ -41,8 +41,8 @@
  },
  "w320-dark": {
   "assets": [
-   "assets/app.3807d9b2fa1a.js",
-   "assets/app.faa8d2e83419.css"
+   "assets/app.6b42254a8743.js",
+   "assets/app.80ddb2bad120.css"
   ],
   "pwa": {
    "worker": true,
