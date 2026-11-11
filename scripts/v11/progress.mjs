@@ -25,6 +25,8 @@ const pct=(a,b)=>b?`${Math.round(a/b*1000)/10}%`:'—';
 const ops=specFile('304操作'),dom2id=new Map(ops.map(o=>[o['DOM／識別子'],o['ID']]));
 const crawls=['393-light','320-dark'].map(c=>json(`test-results/crawl-final-${c}.json`)).filter(Boolean);
 const reached=new Map(),behaviour={},inventory=new Set(),seedsOpened=new Set();
+// 流れのテスト（P0・残りの操作・81画面・金額欄）が実際に表示した操作要素（見えて・名前があり・44pt以上）も照合に使う
+const flowInv=readdirSync(resolve(root,'test-results')).filter(n=>/^flow-inventory-.*\.json$/.test(n)).flatMap(n=>json(`test-results/${n}`)||[]);
 for(const c of crawls){for(const [id,labels] of Object.entries(c.reached))reached.set(id,[...new Set([...(reached.get(id)||[]),...labels])]);Object.assign(behaviour,c.behaviour);for(const k of Object.keys(c.inventory||{}))inventory.add(k);for(const k of Object.keys(c.seedsOpened||{}))seedsOpened.add(k)}
 const p0Flows=repoCsv('docs/v11/p0-flows.csv'),p0Verified=new Set(p0Flows.filter(r=>r['結果']==='合格').flatMap(r=>r['操作ID'].split(' ').filter(Boolean)));
 // remaining-ops.csv の「STATEMENT-219・221」は STATEMENT-219 と STATEMENT-221 を表す
@@ -64,6 +66,7 @@ const norm=s=>String(s||'').replace(/\s+/g,'').replace(/[¥,，]/g,'');
 const entityTokens=[[/テスト口座\d(?=\d+月|\D|$)|SBI新生銀行|ゆうちょ銀行|PayPay銀行|三井住友銀行\s?Olive|三井住友銀行/g,'〔口座〕'],[/テストカード\d(?=\d+月|\D|$)|三井住友カード|メルペイカード|PayPayカード/g,'〔カード〕'],[/テスト勤務先\d(?=\d+月|\D|$)|無印良品|\bGU\b|GU(?=\d|・| )/g,'〔勤務先〕'],[/テスト店舗|巡回検査の支出|監査用カード店舗|架空メール店舗|別店舗/g,'〔店舗〕'],[/監査新規カード/g,'〔カード〕'],[/監査用旅行|巡回検査の旅行/g,'〔目標〕'],[/監査カテゴリ/g,'〔カテゴリ〕'],[/監査用タグ|巡回検査/g,'〔タグ〕'],[/テスト臨時収入|巡回検査の臨時収入/g,'〔臨時収入〕'],[/テスト大型支出|巡回検査の大型支出/g,'〔大型支出〕'],[/架空データ|クレジットカード|デビットカード/g,'〔種別〕']];
 const entity=s=>entityTokens.reduce((v,[re,token])=>v.replace(re,token),String(s||''));
 const shape=s=>norm(entity(s)).replace(/[0-9０-９]+/g,'9').replace(/(9[,.]?)+/g,'9').replace(/[月火水木金土日](?=[）)])/g,'曜');
+for(const k of flowInv)inventory.add(k);
 const invByName=new Map(),invById=new Set(),invByShape=new Set();for(const k of inventory){const [,id,name]=k.split('|');if(id)invById.add(id);invByName.set(norm(name),k);invByShape.add(shape(name))}
 const extra=specFile('追加UI852'),uniqueExtra=new Map();
 for(const r of extra){const key=[r.DOM.replace(/^#/,''),r['ラベル'],r['観測種別']].join('|');if(!uniqueExtra.has(key))uniqueExtra.set(key,{...r,ids:[]});uniqueExtra.get(key).ids.push(r.ID)}
