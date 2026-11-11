@@ -203,7 +203,7 @@ async function verifyAlternatives(page){
   const before=await getData(page);
   // ASSETS-103: 長押しドラッグの代替として、上下ボタンで並べ替えられる
   await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await page.locator('#mm3AssetSort').click();
-  await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();
+  await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();await page.waitForTimeout(400);
   const rows=()=>page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').evaluateAll(list=>list.map(r=>r.dataset.bank)),original=await rows();
   assert.ok(original.length>=2);await assertTapTarget(page.locator('#mm3AssetOrderEdit'),'mm3AssetOrderEdit');
   await page.locator('#mm3AssetOrderEdit').click();await page.locator('#aoList .v11-order-btn').first().waitFor();await page.waitForTimeout(350);
@@ -342,7 +342,7 @@ async function verifyGestures(page){
   await page.locator('#qeCancel').click();await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
   assert.deepEqual(await getData(page),before,'sheet gestures never write data');
   // ASSETS-103: 手動の並び順で、口座を長押ししてから上下に動かす
-  await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await page.locator('#mm3AssetSort').click();await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await page.locator('#mm3AssetSort').click();await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();await page.waitForTimeout(400);
   const order=()=>page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').evaluateAll(list=>list.map(r=>r.dataset.bank)),start=await order();
   await page.locator('#mm3AssetWatchlist').evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(250);
   const first=await page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').nth(0).boundingBox(),second=await page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').nth(1).boundingBox();

@@ -1,15 +1,15 @@
 ﻿シナリオID,画面,第14版の入口,幅,テーマ,画面が開く,3タブ,44pt未満・重なり,読み上げ名なし,横はみ出し(px),開いただけでは保存しない,戻り方,戻っても保存しない,結果
 320-light-home,home,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,320,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
 320-light-month,month,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,320,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
-320-light-pay,pay,その他→給与タイル（ホームの給与カードからも同じ画面）,320,light,○,○,0,0,0,○,「その他に戻る」,○,合格
+320-light-pay,pay,ホーム→今月の給与カード→給与（入口はホームだけ）,320,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
 320-light-payments,payments,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,320,light,○,○,0,0,0,○,「支払いに戻る」,○,合格
-320-light-assets,assets,その他→資産タイル（ホームの総資産カードからも同じ画面）,320,light,○,○,0,0,0,○,「その他に戻る」,○,合格
+320-light-assets,assets,ホーム→総資産カード→資産（入口はホームだけ）,320,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
 320-light-settings,settings,その他（旧「設定」）,320,light,○,○,0,0,0,○,（最上位の画面）,○,合格
 393-dark-home,home,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,dark,○,○,0,0,0,○,「ホームに戻る」,○,合格
 393-dark-month,month,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,393,dark,○,○,0,0,0,○,「ホームに戻る」,○,合格
-393-dark-pay,pay,その他→給与タイル（ホームの給与カードからも同じ画面）,393,dark,○,○,0,0,0,○,「その他に戻る」,○,合格
+393-dark-pay,pay,ホーム→今月の給与カード→給与（入口はホームだけ）,393,dark,○,○,0,0,0,○,「ホームに戻る」,○,合格
 393-dark-payments,payments,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,dark,○,○,0,0,0,○,「支払いに戻る」,○,合格
-393-dark-assets,assets,その他→資産タイル（ホームの総資産カードからも同じ画面）,393,dark,○,○,0,0,0,○,「その他に戻る」,○,合格
+393-dark-assets,assets,ホーム→総資産カード→資産（入口はホームだけ）,393,dark,○,○,0,0,0,○,「ホームに戻る」,○,合格
 393-dark-settings,settings,その他（旧「設定」）,393,dark,○,○,0,0,0,○,（最上位の画面）,○,合格
 393-light-search,search,ホーム右上の検索（H-002）,393,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
 393-light-notices,notices,プロフィールパネル→お知らせ（H-007）,393,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
@@ -17,11 +17,11 @@
 393-light-expense,expense,＋入力ハブ→支出を記録（Q-002）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
 393-light-quick-bank,quick-bank,＋入力ハブ→残高を更新（Q-004）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
 393-light-quick-income,quick-income,＋入力ハブ→臨時収入（Q-003）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
-393-light-salary-menu,salary-menu,その他→給与タイル（ホームの給与カードからも同じ画面）,393,light,○,○,0,0,0,○,メニューを閉じる → 「その他に戻る」,○,合格
-393-light-salary-add,salary-add,その他→給与タイル（ホームの給与カードからも同じ画面）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「その他に戻る」,○,合格
+393-light-salary-menu,salary-menu,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,メニューを閉じる → 「ホームに戻る」,○,合格
+393-light-salary-add,salary-add,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
 393-light-payment-menu,payment-menu,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,light,○,○,0,0,0,○,メニューを閉じる → 「支払いに戻る」,○,合格
 393-light-atf,atf,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「支払いに戻る」,○,合格
-393-light-assets-menu,assets-menu,その他→資産タイル（ホームの総資産カードからも同じ画面）,393,light,○,○,0,0,0,○,メニューを閉じる → 「その他に戻る」,○,合格
+393-light-assets-menu,assets-menu,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,メニューを閉じる → 「ホームに戻る」,○,合格
 393-light-profile,profile,その他（旧「設定」）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
 393-light-data,data,その他（旧「設定」）,393,light,○,○,0,0,0,○,「その他に戻る」,○,合格
 393-light-delete-guard,delete-guard,その他（旧「設定」）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「その他に戻る」,○,合格
@@ -30,7 +30,7 @@
 393-light-new-event-item,new-event-item,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「今月の支出に戻る」 → 「ホームに戻る」,○,合格
 393-light-daily-budget,daily-budget,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格
 393-light-acf,acf,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
-393-light-financial-update,financial-update,その他→資産タイル（ホームの総資産カードからも同じ画面）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「その他に戻る」,○,合格
+393-light-financial-update,financial-update,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「ホームに戻る」,○,合格
 393-light-today-repeat,today-repeat,＋入力ハブ→その他の入力→最近の支出を再利用（Q-006）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
 393-light-today-one-line,today-one-line,＋入力ハブ→その他の入力→一行入力（Q-006）,393,light,○,○,0,0,0,○,「その他の入力に戻る」 → 「ホームに戻る」,○,合格
 393-light-today-cross-search,today-cross-search,ホーム右上の検索（H-002・横断検索）,393,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
@@ -46,19 +46,19 @@
 393-light-month-review,month-review,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,393,light,○,○,0,0,0,○,「今月の支出に戻る」 → 「ホームに戻る」,○,合格
 393-light-month-transactions,month-transactions,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,393,light,○,○,0,0,0,○,「今月の支出に戻る」 → 「ホームに戻る」,○,合格
 393-light-month-goal,month-goal,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,393,light,○,○,0,0,0,○,「今月の支出に戻る」 → 「ホームに戻る」,○,合格
-393-light-salary-month,salary-month,その他→給与タイル（ホームの給与カードからも同じ画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「その他に戻る」,○,合格
-393-light-salary-viz,salary-viz,その他→給与タイル（ホームの給与カードからも同じ画面）,393,light,○,○,0,0,0,○,メニューを閉じる → 「その他に戻る」,○,合格
+393-light-salary-month,salary-month,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「ホームに戻る」,○,合格
+393-light-salary-viz,salary-viz,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,メニューを閉じる → 「ホームに戻る」,○,合格
 393-light-payment-month,payment-month,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「支払いに戻る」,○,合格
 393-light-payment-card-update,payment-card-update,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「支払いに戻る」,○,合格
 393-light-payment-history,payment-history,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,light,○,○,0,0,0,○,「請求一覧に戻る」 → 「支払いに戻る」,○,合格
-393-light-asset-history,asset-history,その他→資産タイル（ホームの総資産カードからも同じ画面）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「その他に戻る」,○,合格
+393-light-asset-history,asset-history,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「ホームに戻る」,○,合格
 393-light-editor-bank,editor-bank,その他（旧「設定」）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
 393-light-editor-credit-card,editor-credit-card,その他（旧「設定」）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
 393-light-editor-debit-card,editor-debit-card,その他（旧「設定」）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
-393-light-editor-payroll,editor-payroll,その他→給与タイル（ホームの給与カードからも同じ画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「その他に戻る」,○,合格
+393-light-editor-payroll,editor-payroll,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「ホームに戻る」,○,合格
 393-light-editor-fixed-bill,editor-fixed-bill,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「支払いに戻る」,○,合格
 393-light-editor-daily-correction,editor-daily-correction,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
-393-light-history-temporary-income,history-temporary-income,その他→給与タイル（ホームの給与カードからも同じ画面）,393,light,○,○,0,0,0,○,「給与に戻る」 → 「その他に戻る」,○,合格
+393-light-history-temporary-income,history-temporary-income,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,「給与に戻る」 → 「ホームに戻る」,○,合格
 393-light-editor-billing,editor-billing,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「支払いに戻る」,○,合格
 393-light-initial-financial-settings,initial-financial-settings,その他（旧「設定」）,393,light,○,○,0,0,0,○,「その他に戻る」,○,合格
 393-light-search-voice-entry,search-voice-entry,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格
@@ -69,14 +69,14 @@
 393-light-favorites,favorites,その他（旧「設定」）,393,light,○,○,0,0,0,○,「その他に戻る」,○,合格
 393-light-tags-manage,tags-manage,その他（旧「設定」）,393,light,○,○,0,0,0,○,「その他に戻る」,○,合格
 393-light-tags-editor,tags-editor,その他（旧「設定」）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
-393-light-timeline,timeline,その他→資産タイル（ホームの総資産カードからも同じ画面）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「その他に戻る」,○,合格
-393-light-salary-allocation-picker,salary-allocation-picker,その他→給与タイル（ホームの給与カードからも同じ画面）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「その他に戻る」,○,合格
-393-light-bank-transfer-plans,bank-transfer-plans,その他→資産タイル（ホームの総資産カードからも同じ画面）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「その他に戻る」,○,合格
-393-light-bank-transfer-editor,bank-transfer-editor,その他→資産タイル（ホームの総資産カードからも同じ画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「その他に戻る」,○,合格
+393-light-timeline,timeline,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「ホームに戻る」,○,合格
+393-light-salary-allocation-picker,salary-allocation-picker,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
+393-light-bank-transfer-plans,bank-transfer-plans,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「ホームに戻る」,○,合格
+393-light-bank-transfer-editor,bank-transfer-editor,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「ホームに戻る」,○,合格
 393-light-budget-rebalance,budget-rebalance,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,393,light,○,○,0,0,0,○,ダイアログの取消 → 「ホームに戻る」,○,合格
 393-light-acf-setup,acf-setup,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
 393-light-acf-simulator,acf-simulator,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
 393-light-acf-settings,acf-settings,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格
 393-light-day-closing-journal,day-closing-journal,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格
-393-light-asset-billing-month,asset-billing-month,その他→資産タイル（ホームの総資産カードからも同じ画面）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「その他に戻る」,○,合格
+393-light-asset-billing-month,asset-billing-month,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「ホームに戻る」,○,合格
 393-light-quick-repeat-direct,quick-repeat-direct,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格

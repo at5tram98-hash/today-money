@@ -123,7 +123,7 @@ try {
     await page.waitForFunction(() => document.querySelectorAll('.screen.active').length === 1);
   }
   passed('tab buttons respond and keep exactly one active screen');
-  await page.locator('[data-tab="settings"]').click();await page.locator('#tileSalary').click();
+  await page.locator('[data-tab="home"]').click();await page.locator('#homeSalaryCard').click();
   await page.locator('#mm3SalaryMonth').click();await page.locator('#monthWheel-month').focus();await page.keyboard.press('ArrowDown');await page.locator('#monthPickerApply').click();
   await page.waitForFunction(() => globalThis.__mm3Test.getState().payViewMonth === '2026-11');
   assert.ok((await page.locator('#screen-pay').innerText()).includes('¥48,810'));

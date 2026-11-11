@@ -52,7 +52,7 @@ const map={
  'P-012':['カード請求詳細の照合チェック','src/js/15-pro-features.js openStatementReconciliation','別検査で確認','既存（第11版 SALARYEDIT-195/196、検証済み）。支払いrootのカード行の長押し「照合する」から'],
  'P-013':['カード請求詳細「口座残高にも反映する」','src/js/12-salary-editors.js openCardPaidConfirmation','別検査で確認','既存（第11版 SALARYEDIT-199/200、検証済み）'],
  'P-014':['支払いの管理メニュー「カードを追加」「デビットカードを追加」',`${H} bindPayRoot`],'P-015':['#payrootMail',`${H} renderPayRoot`],
- 'O-001':['#settingsTop・.other-tiles',`${S} renderSettings`],'O-002':['#tileSalary',`${S} bindSettings`],'O-003':['#tileAssets',`${S} bindSettings`],'O-004':['#tileAcf',`${S} bindSettings`],'O-005':['#dataSettings（タイル）',`${S} renderSettings`],
+ 'O-001':['#settingsTop・設定の一覧',`${S} renderSettings`],'O-002':['（置かない）','','指示により置かない','利用者の指示で、給与への入口はホームの給与カード（H-040）だけにした（ホームとその他の2つの動線をつくらない）'],'O-003':['（置かない）','','指示により置かない','資産への入口はホームの総資産カード（H-030）だけ'],'O-004':['（置かない）','','指示により置かない','生活費の見通しへの入口はホームのカード（H-050）だけ。計算条件の設定は「その他」の設定行に残す'],'O-005':['#dataSettings（設定の行）',`${S} renderSettings`],
  'O-006':['#profileSettings',S],'O-007':['#categorySettings',S],'O-008':['#tagSettings',S],'O-009':['#favoriteSettings',S],'O-010':['#notificationSettings',S],'O-011':['#appearanceSettings',S],'O-012':['#feedbackSettingsRow',S],'O-013':['#securitySettings',S],'O-014':['#gmailSettings',S],'O-015':['#initialValuesSettings',S],'O-016':['#helpSettings',S],
  'O-017':['#pdfExport','src/js/13-settings-and-backup.js'],'O-018':['#backupExport','src/js/13-settings-and-backup.js'],'O-019':['#backupImport','src/js/13-settings-and-backup.js'],'O-020':['#deleteAll','src/js/13-settings-and-backup.js'],'O-021':['#systemNoticesRow',S],
  'D-001':['#screen-day（今日の支出）・#screen-month（今月の支出）','src/js/11-home-and-month.js renderDay/renderMonth'],
@@ -80,7 +80,7 @@ const trRows=tr.map(t=>{const id=t['遷移ID'],users=byTransition.get(id)||[],te
 write('transitions-85.csv',['遷移ID','起点','遷移先','使っている設計ID（状態）','検証状態','補足'],trRows);
 
 /* 旧304: 旧画面（IDの接頭辞）→ 3タブからの新しい入口。旧台帳の識別子をそのまま新DOMと見なさず、入口の検査（v14-ui）と旧操作の検査（第11版の巡回・81画面・P0・残りの操作。第14版の入口で再実行）を合わせて証拠にする */
-const entry={HOME:['ホーム→支出カード→今日の支出／ホーム右上・プロフィール・＋入力ハブ','H-020・H-002・H-007・Q-001'],MONTH:['ホーム→支出カード（今月）→今月の支出','H-010・H-020'],GOAL:['ホームの支出カード「目標」→目標計画','H-023'],PAY:['その他→給与（ホームの給与カードからも）','O-002・H-040'],PAYMENTS:['支払いroot→請求一覧','P-003・P-006'],ASSETS:['その他→資産（ホームの総資産カードからも）','O-003・H-030'],BANK:['資産→口座詳細／＋残高を更新','O-003・D-013・Q-004'],SALARYEDIT:['給与／請求一覧の編集シート','O-002・P-005'],ACF:['ホームの生活費の見通しカード→ACF詳細','H-050'],SIM:['ACF詳細→買う前に試す','H-050'],STATEMENT:['ホームの未確認の明細／支払いの明細照合センター','H-078・P-015'],PRO:['今月の支出・給与・資産の各メニュー','H-020・O-002・O-003'],DAYCLOSE:['ホームの日締め行→日締めジャーナル／今日の支出','H-075・H-020'],EVENT:['ホームの旅行・プレゼント行／＋その他の入力','H-080・Q-006'],LARGE:['ホームの大型支出行／支払いroot／＋その他の入力','H-079・P-008・Q-006'],SET:['その他（設定の一覧）','O-006〜O-016'],CALC:['＋入力の金額欄→電卓','Q-002・Q-008'],BACKUP:['その他→データとバックアップ','O-005・O-017〜O-020'],TX:['ホームの最近の取引／すべての取引','H-073・H-074'],GMAIL:['その他→Gmail連携','O-014'],PICKER:['各画面の月ホイール','H-011・P-011'],REPEAT:['＋→その他の入力→最近の支出を再利用','Q-006'],INCOME:['＋→臨時収入／給与','Q-003・O-002'],UPDATE:['ホームの今日／今月の切替','H-010']};
+const entry={HOME:['ホーム→支出カード→今日の支出／ホーム右上・プロフィール・＋入力ハブ','H-020・H-002・H-007・Q-001'],MONTH:['ホーム→支出カード（今月）→今月の支出','H-010・H-020'],GOAL:['ホームの支出カード「目標」→目標計画','H-023'],PAY:['ホームの今月の給与カード→給与','H-040'],PAYMENTS:['支払いroot→請求一覧','P-003・P-006'],ASSETS:['ホームの総資産カード→資産','H-030'],BANK:['ホームの総資産カード→資産→口座詳細／＋残高を更新','H-030・D-013・Q-004'],SALARYEDIT:['給与（ホームの給与カード）／請求一覧の編集シート','H-040・P-005'],ACF:['ホームの生活費の見通しカード→ACF詳細','H-050'],SIM:['ACF詳細→買う前に試す','H-050'],STATEMENT:['ホームの未確認の明細／支払いの明細照合センター','H-078・P-015'],PRO:['今月の支出・給与・資産の各メニュー','H-020・H-040・H-030'],DAYCLOSE:['ホームの日締め行→日締めジャーナル／今日の支出','H-075・H-020'],EVENT:['ホームの旅行・プレゼント行／＋その他の入力','H-080・Q-006'],LARGE:['ホームの大型支出行／支払いroot／＋その他の入力','H-079・P-008・Q-006'],SET:['その他（設定の一覧）','O-006〜O-016'],CALC:['＋入力の金額欄→電卓','Q-002・Q-008'],BACKUP:['その他→データとバックアップ','O-005・O-017〜O-020'],TX:['ホームの最近の取引／すべての取引','H-073・H-074'],GMAIL:['その他→Gmail連携','O-014'],PICKER:['各画面の月ホイール','H-011・P-011'],REPEAT:['＋→その他の入力→最近の支出を再利用','Q-006'],INCOME:['＋→臨時収入／給与','Q-003・H-040'],UPDATE:['ホームの今日／今月の切替','H-010']};
 const relocation=JSON.parse(readFileSync(resolve(v14,'relocation.json'),'utf8'));
 const legacyRows=legacy.map(r=>{const id=r['旧304操作ID'],pre=id.replace(/-\d+$/,''),[path,ids]=entry[pre]||['（未割当）',''],v11=v11ops.get(id)||{},dom=v11['DOM／識別子']||r['旧台帳DOM識別子'],moved=relocation.selectors['#'+dom];
   const entryOk=ids.split('・').every(x=>{const k=x.replace(/〜.*/,'');const u=uiRows.find(u=>u.id===k);return !u||u.status==='完了'||u.status==='別検査で確認'||results[k]?.result==='合格'});
@@ -96,13 +96,15 @@ const lines=[
 `生成時のコミット: ${commit}`,'',
 '| 対象 | 全件数 | 完了（この版で実装・個別検査） | 別検査で確認（既存機能） | 一部 | 未対応 | 不合格・未確認 |','|---|---|---|---|---|---|---|',
 `| ボタン／カード／UI | ${uiRows.length} | ${st('完了')} | ${st('別検査で確認')} | ${st('一部')} | ${st('未対応')} | ${st('不合格')+st('未確認')} |`,
+`| （うち、利用者の指示で置かない） | ${st('指示により置かない')} | | | | | |`,
 `| 画面遷移 | ${trRows.length} | ${count(trRows,r=>r[4]==='検証済み')} | ${count(trRows,r=>r[4]==='別検査で確認')} | ${count(trRows,r=>r[4]==='一部検証')} | — | ${count(trRows,r=>['未確認','該当なし'].includes(r[4]))} |`,
 `| 旧304操作の移設 | ${legacyRows.length} | ${count(legacyRows,r=>r[8]==='新しい入口から到達・動作を確認')} | — | — | — | ${count(legacyRows,r=>r[8]!=='新しい入口から到達・動作を確認')} |`,'',
 '- 「完了」= `tests/v14-ui.mjs` で実際の要素を押し・長押し・なぞり、行き先・戻り・会計データ不変・44ptを確認した。結果は `ui-results.json`、画面は `test-results/v14/<ID>.png`。',
 '- 「別検査で確認」= 第11版から続く既存の画面・機能。第14版の入口（`relocation.json`）からたどって81画面シナリオ・P0・残りの操作・金額欄・巡回で確認。',
+'- 「指示により置かない」= O-002〜004（その他の給与・資産・生活費の見通しタイル）。入口をホームのカードに一本化するよう利用者から指示があったため。',
 '- 「一部」「未対応」は下の一覧。全面実装完了とは報告しない。','',
 '## 一部・未対応・未確認','',
-...uiRows.filter(r=>!['完了','別検査で確認'].includes(r.status)).map(r=>`- **${r.id} ${r.name}**（${r.status}）: ${r.note||r.test}`),
+...uiRows.filter(r=>!['完了','別検査で確認','指示により置かない'].includes(r.status)).map(r=>`- **${r.id} ${r.name}**（${r.status}）: ${r.note||r.test}`),
 ...legacyRows.filter(r=>r[8]!=='新しい入口から到達・動作を確認').map(r=>`- **${r[0]} ${r[1]}**（旧304）: ${r[8]}`),
 ''];
 writeFileSync(resolve(v14,'PROGRESS.md'),lines.join('\n'));

@@ -308,11 +308,4 @@ html.native-keyboard .tabbar { visibility: hidden; pointer-events: none }
 .add-hub svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round }
 .add-hub[hidden] { display: none }
 #app .screen > .scroll { padding-bottom: calc(28px + 64px) }
-/* その他: 2列のタイル（O-002〜005） */
-.other-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 4px 0 20px }
-.other-tile { display: grid; align-content: start; gap: 6px; min-height: 120px; padding: 14px; border: 0; border-radius: 18px; background: var(--card); color: var(--label); text-align: left; transition: transform var(--motion-press) ease-out }
-.other-tile:active { transform: scale(.98) }
-.other-tile-icon svg { width: 26px; height: 26px; fill: none; stroke: var(--label); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round }
-.other-tile-title { font-size: var(--type-item); font-weight: 600 }
-.other-tile-note { font-size: var(--type-note); line-height: 1.4; color: var(--label2) }
-@media (prefers-reduced-motion:reduce) { .home-period-indicator, .home-period button, .home-card-body, .add-hub, .other-tile { transition: none !important } .home-period button[aria-pressed=true] { transform: none } }
+@media (prefers-reduced-motion:reduce) { .home-period-indicator, .home-period button, .home-card-body, .add-hub { transition: none !important } .home-period button[aria-pressed=true] { transform: none } }

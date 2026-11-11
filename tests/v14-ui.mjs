@@ -109,11 +109,9 @@ try{
   await check(page,'P-014',{from:'payroot',run:async p=>{await tap(p,'#payrootMenu');await menuPick(p,'カードを追加');await expectSheet(p,/カード/);return '支払いの管理メニューに格納'}});
   await check(page,'P-015',{from:'payroot',run:async p=>{assert.ok(await p.locator('#payrootMail').count());await tap(p,'#payrootMail');await expectPush(p,/メール/);return '明細照合センター'}});
   /* ---- その他・トップ ---- */
-  await check(page,'O-001',{from:'settings',run:async p=>{assert.equal(await p.locator('.other-tile').count(),4);return '「その他」・2列タイル4枚'}});
-  await check(page,'O-002',{from:'settings',run:async p=>{await longPress(p,'#tileSalary');await expectMenu(p,[]);await closeAll(p);await tap(p,'#tileSalary');await expectScreen(p,'pay');assert.equal(await p.locator('#tabbar .tab.active').getAttribute('data-tab'),'settings','起点のタブが選択のまま');await backTo(p,'settings');return '給与詳細（ホームの給与カードと同じ画面）'}});
-  await check(page,'O-003',{from:'settings',run:async p=>{await longPress(p,'#tileAssets');await expectMenu(p,[]);await closeAll(p);await tap(p,'#tileAssets');await expectScreen(p,'assets');await backTo(p,'settings');return '資産詳細'}});
-  await check(page,'O-004',{from:'settings',run:async p=>{await tap(p,'#tileAcf');const v=await view(p);assert.ok(v.push.length||v.sheet);return 'ACF'}});
-  await check(page,'O-005',{from:'settings',run:async p=>{await tap(p,'#dataSettings');await expectPush(p,/データ/);return 'データ管理'}});
+  /* その他は設定の一覧だけ（給与・資産・生活費の見通しへの入口はホームのカードに一本化。利用者の指示） */
+  await check(page,'O-001',{from:'settings',run:async p=>{assert.equal(await p.locator('#screen-settings .large-title').innerText(),'その他');for(const id of ['tileSalary','tileAssets','tileAcf'])assert.equal(await p.locator('#'+id).count(),0,`${id} は置かない`);const text=await p.locator('#settingsContent').innerText();assert.ok(!/今月の受取|総残高/.test(text));return '設定の一覧だけ（給与・資産の入口はホームのみ）'}});
+  await check(page,'O-005',{from:'settings',run:async p=>{await tap(p,'#dataSettings');await expectPush(p,/データ/);return 'データとバックアップ（設定の行）'}});
   await check(page,'O-006',{from:'settings',run:async p=>{await tap(p,'#profileSettings');await expectSheet(p,/プロフィール/);return 'プロフィール編集（ホームの写真と同じ）'}});
   for(const [id,sel,re] of [['O-007','#categorySettings',/カテゴリ/],['O-008','#tagSettings',/タグ/],['O-009','#favoriteSettings',/お気に入り/],['O-010','#notificationSettings',/通知/],['O-011','#appearanceSettings',/外観/],['O-012','#feedbackSettingsRow',/フィードバック/],['O-013','#securitySettings',/セキュリティ/],['O-014','#gmailSettings',/Gmail/],['O-015','#initialValuesSettings',/初期/],['O-016','#helpSettings',/ヘルプ/],['O-021','#systemNoticesRow',/お知らせ/]])
     await check(page,id,{from:'settings',run:async p=>{await tap(p,sel);const v=await view(p);assert.ok(v.push.some(t=>re.test(t))||re.test(v.sheet),`${JSON.stringify(v.push)} ${v.sheet}`);return v.push.at(-1)||v.sheet}});

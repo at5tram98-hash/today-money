@@ -3992,14 +3992,12 @@ function renderSettings(){
       {id:'feedbackSettingsRow',symbol:'wave',color:'var(--blue)',title:'操作フィードバック',detail:'操作音・触覚・アニメーション'},
       {id:'securitySettings',symbol:'lock',color:'#8E8E93',title:'セキュリティ',value:data.security.enabled?'パスコード ON':'パスコード OFF'},
       {id:'helpSettings',symbol:'help',color:'var(--teal)',title:'ヘルプ・お問い合わせ'}
-    ]]
+    ]],
+    ['データ',[{id:'dataSettings',symbol:'upload',color:'var(--green)',title:'データとバックアップ',detail:'PDF・バックアップ・復元・削除'}]]
   ];
-  /* 第14版 O-001〜005: 「その他」。上段は給与・資産・生活費の見通し・データとバックアップの2列タイル（どこから開いても同じ専用画面） */
-  const salary=mm3SalaryMonthSummary(ym()),acfNote=data.acfSettings.initialized?(()=>{try{return `今日使える ${formatAcfAvailable(buildCashFlowForecast().safeTotalBudget)}`}catch(e){return '計算できません'}})():'未設定',st=typeof profileState==='function'?profileState():{label:''};
-  const tiles=[['tileSalary','briefcase','給与',data.employers.length||data.salaryRecords.length?`今月 ${yen(salary.total)}`:'未登録'],['tileAssets','chart','資産',data.banks.length?`総残高 ${yen(totalDeposits())}`:'口座未登録'],['tileAcf','wave','生活費の見通し',acfNote],['dataSettings','upload','データとバックアップ',st.label||'PDF・バックアップ・削除']];
+  /* 第14版 O-001: 「その他」は設定の一覧だけ。給与・資産・生活費の見通しはホームのカードから開く（入口を1つにする） */
   document.getElementById('settingsTop').innerHTML=topbar('その他','');
   document.getElementById('settingsContent').innerHTML=`
-    <div class="other-tiles">${tiles.map(([id,sym,title,note])=>`<button type="button" class="other-tile" id="${id}"><span class="other-tile-icon">${icon(sym)}</span><span class="other-tile-title">${title}</span><span class="other-tile-note">${esc(note)}</span></button>`).join('')}</div>
     <button type="button" class="settings-profile-card" id="profileSettings">
       ${profileAvatarHtml('settings-profile-avatar')}
       <span class="settings-profile-copy"><span class="settings-profile-name">${esc(data.profile.name||'プロフィール')}</span><span class="settings-profile-caption">名前とプロフィール写真</span></span>
@@ -4015,14 +4013,9 @@ function bindSettings(){
     notificationSettings:openNotificationSettings,appearanceSettings:openAppearanceSettings,
     feedbackSettingsRow:openFeedbackSettings,securitySettings:openSecuritySettings,
     helpSettings:openHelp,dataSettings:openDataSettings,systemNoticesRow:openNotices,
-    tileSalary:()=>{payViewMonth=ym();switchTab('pay')},tileAssets:()=>switchTab('assets'),tileAcf:openAcf
   };
   const root=document.getElementById('settingsContent');
   for(const [id,action] of Object.entries(actions))root.querySelector('#'+id).onclick=action;
-  if(typeof homeLongPress==='function'){
-    homeLongPress(root.querySelector('#tileSalary'),()=>{const s=mm3SalaryMonthSummary(ym());return[{label:'今月の受取見込み',value:yen(s.total),preview:true},{label:'入金済み',value:yen(s.received||0),preview:true}]});
-    homeLongPress(root.querySelector('#tileAssets'),()=>data.banks.length?data.banks.map(b=>({label:b.name,value:yen(b.balance),preview:true})):[{label:'口座はまだありません',preview:true}]);
-  }
 }
 function openProfileEdit(){
   const draft={...data.profile};
