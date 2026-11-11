@@ -87,7 +87,7 @@ try{
     await expect(p,'A8R-0118',{re:/^テスト勤務先111月10日（火）・入金予定時給 ¥1,300 ・ 交通費支給 ¥840／勤務¥/});
     await expect(p,'A8R-0119',{re:/^テスト勤務先211月25日（水）・入金予定時給 ¥1,200 ・ 交通費支給 ¥980／勤務¥/});
   }});
-  await screen(page,'横断検索',{open:async p=>{await click(p,'#todayCrossSearch');const q=p.locator('#pushLayer .push-view.show input[type=search],#pushLayer .push-view.show input').first();if(await q.count()){await q.fill('テスト店舗');await settle(p)}},checks:async p=>{
+  await screen(page,'横断検索',{open:async p=>{await click(p,'#todaySearch');const q=p.locator('#pushLayer .push-view.show input[type=search],#pushLayer .push-view.show input').first();if(await q.count()){await q.fill('テスト店舗');await settle(p)}},checks:async p=>{
     await expect(p,'A8-0223 A8-0277 A8R-0091',{re:/^テスト店舗2026-10-07・食費・現金・その他¥1,234$/});
   }});
   await screen(page,'最近の支出を再利用',{open:p=>call(p,'openQuickRepeat'),checks:async p=>{
@@ -144,7 +144,7 @@ try{
     for(let s=0;s<8&&!evidence.some(e=>e[0]==='A8R-0068');s++){await p.evaluate(n=>globalThis.__mm3Test.plannerStep(n),s);await settle(p);if(await p.evaluate(()=>[...document.querySelectorAll('button')].some(b=>globalThis.__crawl.visible(b)&&/^テスト大型支出2026-10-06・必須/.test(globalThis.__crawl.name(b)))))break}
     await expect(p,'A8R-0068',{re:/^テスト大型支出2026-10-06・必須¥2,000$/});
   }});
-  await screen(page,'取引一覧',{open:p=>click(p,'#todayTransactions'),checks:async p=>{
+  await screen(page,'取引一覧',{open:p=>click(p,'#homeAllTransactions'),checks:async p=>{
     await expect(p,'A8R-0092',{re:/^別店舗2026-10-07・交通費・現金・その他¥500$/});
   }});
   await screen(page,'旅行・プレゼント',{open:p=>call(p,'openEventGoals'),checks:async p=>{
@@ -152,7 +152,7 @@ try{
     await call(p,'openEventGoalDetail',['audit_goal']);
     await expect(p,'A8R-0173',{re:/^支出として記録$/});
   }});
-  await screen(page,'今日（月間計画の承認後：カテゴリ目標あり）',{tab:'home',readOnly:false,open:async p=>{await p.evaluate(()=>{const t=globalThis.__mm3Test,d=t.getData();d.dailyGoals['2026-10-07']={total:2777,categories:{食費:1000},origin:'monthly'};return t.replaceData(d)});await settle(p);await p.evaluate(()=>globalThis.__mm3Test.renderAll());await settle(p)},checks:async p=>{
+  await screen(page,'今日（月間計画の承認後：カテゴリ目標あり）',{tab:'home',readOnly:false,open:async p=>{await p.evaluate(()=>{const t=globalThis.__mm3Test,d=t.getData();d.dailyGoals['2026-10-07']={total:2777,categories:{食費:1000},origin:'monthly'};return t.replaceData(d)});await settle(p);await p.evaluate(()=>globalThis.__mm3Test.renderAll());await settle(p);await click(p,'#homeSpendCard')},checks:async p=>{
     await expect(p,'A8R-0194',{re:/^食費¥[\d,]+目標 ¥1,000・\d+%$/});
   }});
   await screen(page,'ACFカレンダー',{open:p=>call(p,'openAcf'),checks:async p=>{
@@ -185,7 +185,7 @@ try{
   await screen(page,'カテゴリ管理',{tab:'settings',open:p=>click(p,'#categorySettings'),checks:async p=>{
     await expect(p,'A8R-0339',{re:/^監査カテゴリ$/});await expect(p,'A8R-0340',{re:/^監査カテゴリを上へ$/});await expect(p,'A8R-0341',{re:/^監査カテゴリを下へ$/});
   }});
-  await screen(page,'保存した検索',{open:async p=>{await click(p,'#todayCrossSearch')},checks:async p=>{
+  await screen(page,'保存した検索',{open:async p=>{await click(p,'#todaySearch')},checks:async p=>{
     await expect(p,'A8R-0355',{re:/^テスト店舗テスト店舗・all$/});
   }});
   await screen(page,'タグの項目',{open:p=>call(p,'openTagItems',['audit_tag']),checks:async p=>{

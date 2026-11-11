@@ -229,3 +229,8 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 .v11-order-btn { flex: none; width: var(--tap-min); height: var(--tap-min); border: 0; border-radius: 12px; background: var(--fill); color: var(--accent); display: grid; place-items: center }
 .v11-order-btn:disabled { opacity: .35 }
 .v11-order-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+/* 第14版 Q-012: メモなどは「詳細を表示」で開閉（閉じても入力値は残る） */
+.form-more { margin: 0 }
+.form-more > summary { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 4px; color: var(--accent); font-size: var(--type-item); list-style: none; cursor: pointer }
+.form-more > summary::-webkit-details-marker { display: none }
+.form-more[open] > summary { color: var(--label2) }

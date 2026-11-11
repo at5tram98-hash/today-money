@@ -23,7 +23,7 @@ const diffStyles=(a,b)=>{
 };
 
 const elementSet=process.env.MM3_CRAWL_ELEMENTS?new Set():null,motionMode=!!process.env.MM3_CRAWL_MOTION;
-const tabs=['today','month','pay','payments','assets','settings'];
+const tabs=['today','day','month','pay','payroot','payments','assets','settings'];
 const routes=JSON.parse(readFileSync(resolve(root,'docs/v11/screen-routes.json'),'utf8'));
 // 画面を直接開く入口（元の監査の75画面と前提状態）。タブからの巡回だけでは届かない段階や編集画面へ到達する
 const seeds=[...routes.screens.filter(s=>s.setup),...routes.preconditions].map(s=>({tab:s.tab,setup:s.setup,patch:s.patch||null,name:s.name,path:s.path.map(selector=>({id:'*'+selector,selector}))}));

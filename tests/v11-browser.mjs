@@ -26,7 +26,7 @@ async function verifyTokens(page,appearance){
     assert.equal(tokens.accent,'rgb(22, 115, 247)');assert.equal(tokens.danger,'rgb(217, 59, 70)');assert.equal(tokens.success,'rgb(22, 134, 93)');assert.equal(tokens.bg,'rgb(246, 247, 250)');
   }else assert.equal(tokens.bg,'rgb(10, 11, 14)');
   assert.equal(tokens.tap,'44px');assert.equal(tokens.push,'220ms');assert.equal(tokens.sheet,'260ms');
-  assert.deepEqual(await page.locator('#tabbar .tab-label').allTextContents(),['今日','給与','支払い','資産','設定']);
+  assert.deepEqual(await page.locator('#tabbar .tab-label').allTextContents(),['ホーム','支払い','その他']);
 }
 
 async function findCardMonth(page){
@@ -203,7 +203,7 @@ async function verifyAlternatives(page){
   const before=await getData(page);
   // ASSETS-103: 長押しドラッグの代替として、上下ボタンで並べ替えられる
   await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await page.locator('#mm3AssetSort').click();
-  await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();
+  await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();await page.waitForTimeout(400);
   const rows=()=>page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').evaluateAll(list=>list.map(r=>r.dataset.bank)),original=await rows();
   assert.ok(original.length>=2);await assertTapTarget(page.locator('#mm3AssetOrderEdit'),'mm3AssetOrderEdit');
   await page.locator('#mm3AssetOrderEdit').click();await page.locator('#aoList .v11-order-btn').first().waitFor();await page.waitForTimeout(350);
@@ -235,16 +235,17 @@ async function verifyExistingGestures(page){
   // 操作部品の上ではない、横スワイプを始められる点を探す
   const freePoint=sel=>page.evaluate(sel=>{const root=document.querySelector(sel),r=root.getBoundingClientRect();for(let y=Math.max(r.top,0)+20;y<Math.min(r.bottom,innerHeight-120);y+=14)for(let x=r.left+130;x<r.right-130;x+=20){const el=document.elementFromPoint(x,y);if(el&&root.contains(el)&&!el.closest('button,input,select,textarea,a,[role=slider],[data-scrub],svg,.money-ticker-viewport,.mm3-atf-chart,.mm3-salary-trend'))return{x,y}}return null},sel);
   // 今日の日付の左右スワイプ（矢印ボタンの補助）
-  await page.evaluate(()=>globalThis.__mm3Test.switchTab('today'));await page.waitForTimeout(200);const before=await getData(page),day=(await state()).trackingDate;
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('day'));await page.waitForTimeout(200);const before=await getData(page),day=(await state()).trackingDate;
   await page.locator('#todayDateNavigator').evaluate(el=>el.scrollIntoView({block:'center'}));const nav=await page.locator('#todayDateNavigator').boundingBox(),ny=nav.y+nav.height/2;
   await drag(nav.x+nav.width/2-40,ny,nav.x+nav.width/2+60,ny);assert.ok((await state()).trackingDate<day,'swiping right shows the previous day');
   await drag(nav.x+nav.width/2+40,ny,nav.x+nav.width/2-60,ny);assert.equal((await state()).trackingDate,day,'swiping left returns');
-  // 支出入力ボタンの長押し → 最近の支出（見える「最近の支出を再利用」と同じ画面）
-  await page.locator('#quickExpense').evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(200);const qe=await page.locator('#quickExpense').boundingBox();await page.mouse.move(qe.x+qe.width/2,qe.y+qe.height/2);await page.mouse.down();await page.waitForTimeout(750);await page.mouse.up();
+  // 第14版: 最近の支出の再利用は＋入力ハブの「その他の入力」から（旧: 支出入力ボタンの長押し）
+  await page.locator('#addHub').click();await page.locator('#menuLayer .menu-item').filter({hasText:'その他の入力'}).click();await page.locator('#ihRepeat').click();
   await page.locator('#qrClose').waitFor();await page.locator('#qrClose').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
-  assert.equal(await page.locator('#qeSave').count(),0,'a long press does not also open the expense form');
-  // シートのつまみ: 上へ引くと全画面、下へ引くと半分の高さへ戻る
-  await page.locator('#quickExpense').click();await page.locator('#qeSave').waitFor();await page.waitForTimeout(350);
+  assert.equal(await page.locator('#qeSave').count(),0,'opening recent expenses does not also open the expense form');
+  await page.evaluate(()=>globalThis.__mm3Test.popView());
+  // シートのつまみ: 上へ引くと全画面、下へ引くと半分の高さへ戻る（支出の記録は＋入力ハブから）
+  await page.locator('#addHub').click();await page.locator('#menuLayer .menu-item').filter({hasText:'支出を記録'}).click();await page.locator('#qeSave').waitFor();await page.waitForTimeout(350);
   const mode=()=>page.locator('#sheet').evaluate(el=>el.classList.contains('full')?'full':'half');
   if(await mode()==='half'){let g=await page.locator('#sheet .grabber').boundingBox();await drag(g.x+g.width/2,g.y+g.height/2,g.x+g.width/2,g.y-90);assert.equal(await mode(),'full','pulling up expands the sheet');g=await page.locator('#sheet .grabber').boundingBox();await drag(g.x+g.width/2,g.y+g.height/2,g.x+g.width/2,g.y+90);assert.equal(await mode(),'half','pulling down returns to half height');assert.equal(await sheetShown(),true)}
   await page.locator('#qeCancel').click();if(await page.locator('#alertWrap.show').count())await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
@@ -279,7 +280,7 @@ async function verifyExistingGestures(page){
 /* HOME-010・MONTH-046: 行のタップで分析画面へ移り、そこのグラフだけを指でなぞって値を確認する。なぞっても保存しない */
 async function verifyChartScrub(page){
   const before=await getData(page);
-  await page.evaluate(()=>globalThis.__mm3Test.switchTab('today'));await page.locator('#todayAnalysis').click();
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('day'));await page.locator('#todayAnalysis').click();
   const view=page.locator('#pushLayer .push-view.show').last(),chart=view.locator('.bars[data-scrub]').first();await chart.waitFor();await page.waitForTimeout(300);
   await chart.evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(150);
   const box=await chart.boundingBox(),cols=await chart.locator('[data-scrub-item]').count(),readout=chart.locator('xpath=following-sibling::output[1]');assert.ok(cols>=2);
@@ -341,7 +342,7 @@ async function verifyGestures(page){
   await page.locator('#qeCancel').click();await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
   assert.deepEqual(await getData(page),before,'sheet gestures never write data');
   // ASSETS-103: 手動の並び順で、口座を長押ししてから上下に動かす
-  await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await page.locator('#mm3AssetSort').click();await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();
+  await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await page.locator('#mm3AssetSort').click();await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();await page.waitForTimeout(400);
   const order=()=>page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').evaluateAll(list=>list.map(r=>r.dataset.bank)),start=await order();
   await page.locator('#mm3AssetWatchlist').evaluate(el=>el.scrollIntoView({block:'center'}));await page.waitForTimeout(250);
   const first=await page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').nth(0).boundingBox(),second=await page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').nth(1).boundingBox();

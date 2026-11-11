@@ -408,7 +408,6 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .push-right>button { min-width: var(--tap-min); min-height: var(--tap-min) }
 .mail-summary button { border: 0; background: transparent; color: var(--label); min-width: 0; padding: 0 4px; border-right: .5px solid var(--sep) }
 .mail-preview-actions button { margin: 0; font-size: 15px; border-radius: 12px }
-.native-home-mode button { flex: 1; border: 0; border-radius: 8px; background: transparent; color: var(--label2); font-size: 15px; font-weight: 600 }
 button.switch { height: 44px; min-height: 44px !important; background: transparent !important; border-radius: 0; flex-shrink: 0 }
 button.switch:before { content: ''; position: absolute; left: 0; top: 6.5px; width: 51px; height: 31px; border-radius: 16px; background: var(--fill2); transition: background .18s }
 button.switch.on:before { background: var(--green) }
@@ -630,7 +629,6 @@ body:has(.day-close-view.show) .toast-layer { bottom: calc(120px + env(safe-area
 .mail-preview-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.7 }
 .month-name-btn svg { stroke-linecap: round; stroke-linejoin: round; width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 2 }
 .icon-btn svg { width: 23px; height: 23px; flex: 0 0 auto }
-.native-home-mode { display: flex; gap: 2px; background: var(--fill); border-radius: 10px; padding: 3px; margin: 2px 0 14px }
 html.dark .busy-overlay { background: rgba(0,0,0,.68) }
 html.dark .busy-card { border-color: rgba(255,255,255,.12); box-shadow: 0 18px 60px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08) }
 html.dark .storage-boot { background: rgba(0,0,0,.68) }
@@ -645,13 +643,11 @@ html.dark .stock-detail-view { background: #000 }
 html.dark .money-ticker-card { background: #1C1C1E; box-shadow: inset 0 0 0 .5px #2C2C2E }
 .stmt-filterbar button.on { background: var(--label); color: var(--bg) }
 html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,0,0),var(--bg) 20%) }
-.native-home-mode button[aria-pressed=true] { background: var(--card); color: var(--label); box-shadow: 0 1px 3px #00000014 }
 .back-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .favorite-open { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; padding: 0; border: 0; background: transparent; text-align: left; color: var(--label) }
 .account-balance { font-variant-numeric: tabular-nums lining-nums }
 .display-month-button { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--label); border: 0; border-radius: 14px; padding: 0 8px; font: inherit; font-weight: 600 }
 .ring svg { transform: rotate(-90deg); width: 100%; height: auto; aspect-ratio: 1 }
-.native-quick-action svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
 .mm3-atf-daytoggle svg { width: 16px; height: 16px; flex: none; color: var(--label2); transition: transform .18s; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
 .mm3-atf-next-event-icon svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: 21px; height: 21px }
 .settings-profile-avatar svg { width: 38px; height: 38px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round }
@@ -686,16 +682,13 @@ html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,
 #screen-assets .mm3-assets-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; color: inherit; display: grid; align-items: center; gap: 8px; text-align: left; position: relative; transition: background .12s,transform .11s,opacity .11s }
 #screen-assets .mm3-assets-reorder-placeholder { border-radius: 12px; background: rgba(0,122,255,.055); box-shadow: inset 0 0 0 1px rgba(0,122,255,.11); margin: 1px 0 }
 #sheet.mm3-salary-edit-sheet { background: var(--bg) }
-#app .native-home-mode { margin: 0 0 12px; padding: 3px; border-radius: 24px; background: var(--fill) }
 #screen-pay .mm3-salary-range button { flex: 1; border: 0; background: transparent; border-radius: 7px; padding: 5px 1px; color: var(--label2); min-width: 0; font-size: 11px }
 #screen-assets .mm3-assets-range button { flex: 1; min-width: 0; border: 0; background: transparent; border-radius: 7px; min-height: 28px; padding: 4px 1px; color: var(--label2); transition: transform .1s,background .14s,color .14s; font-size: 11px }
-#app .native-home-mode button { border-radius: 21px; font-size: 15px; font-weight: 600; color: var(--label2) }
 #screen-pay .mm3-salary-range button.on { background: var(--card); color: var(--label); font-weight: 650; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
 #screen-assets .mm3-assets-range button.on { background: var(--card); color: var(--label); font-weight: 700; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
 html.dark #screen-pay .mm3-salary-pull { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
 html.dark #screen-assets .mm3-assets-tooltip { background: rgba(58,58,60,.94) }
 html.dark #screen-assets .mm3-assets-menu-btn { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
-#app .native-home-mode button[aria-pressed=true] { background: var(--blue); color: #fff; box-shadow: 0 2px 5px #0000000d }
 #app .date-navigator { margin: 4px 0 8px; min-height: 44px; grid-template-columns: 44px minmax(0,1fr) 44px }
 #app .date-nav-btn { width: 44px; height: 44px; border-radius: 50%; background: transparent }
 #app .date-nav-label { font-size: 15px; font-weight: 650 }
@@ -743,6 +736,50 @@ html.native-keyboard .tabbar { visibility: hidden; pointer-events: none }
 #app .nav-actions .nav-badge { top: 4px; right: 4px; transform: translate(35%,-35%); min-width: 18px; height: 18px; padding: 0 5px; font-size: var(--type-min); border-radius: 9px; box-shadow: 0 0 0 2px var(--bg) }
 /* 視差を減らす設定では登場アニメーションが止まるため、最初から表示した状態にする（止めると透明のまま残っていた） */
 @media (prefers-reduced-motion:reduce) { .toast { opacity: 1; transform: none } }
+/* ===== 第14版 共通ナビゲーション ===== */
+/* 専用画面（給与・資産・支出・請求一覧）の戻る: 上段に「‹ 起点」、その下に大見出し */
+#app .screen > .topbar.has-detail-back { grid-template-columns: minmax(0,1fr) auto }
+#app .screen > .topbar.has-detail-back > :not(.detail-back) { grid-row: 2 }
+.detail-back { grid-row: 1; grid-column: 1 / -1; justify-self: start; display: inline-flex; align-items: center; gap: 2px; min-height: var(--tap-min); margin: -6px 0 0 -8px; font-size: var(--type-item) }
+.detail-back svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
+/* 検索: ガラスの丸型44pt。プロフィール: 写真＋状態リング（色だけでなく、パネル内の文言で状態を伝える） */
+#app .nav-actions .glass-btn { background: var(--glass-bg) !important; box-shadow: inset 0 0 0 .5px var(--glass-edge); color: var(--accent); backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6) }
+.profile-btn { position: relative; width: var(--tap-min); height: var(--tap-min); padding: 0; border: 0; border-radius: 50%; background: transparent; display: grid; place-items: center }
+.profile-btn::before { content: ""; position: absolute; inset: 2px; border-radius: 50%; border: 2px solid var(--label3) }
+.profile-btn.ring-ok::before, .profile-btn.ring-local::before { border-color: var(--success) }
+.profile-btn.ring-syncing::before { border-color: var(--accent); border-style: dashed }
+.profile-btn.ring-warning::before { border-color: var(--danger) }
+.profile-btn-avatar { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: var(--fill); color: var(--label2) }
+.profile-btn-avatar img { width: 100%; height: 100%; object-fit: cover }
+.profile-btn-avatar svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8 }
+.profile-dot { position: absolute; top: 0; right: -2px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--danger); color: #fff; font-size: var(--type-min); font-weight: 700; line-height: 18px; box-shadow: 0 0 0 2px var(--bg) }
+/* プロフィールパネル（写真の位置から膨らむ。動きはメニューと同じ） */
+.ios-menu.menu-panel { padding: 12px }
+.profile-panel-head { display: flex; align-items: center; gap: 12px; padding: 4px 4px 12px }
+.profile-panel-avatar { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: var(--fill); color: var(--label2) }
+.profile-panel-avatar img { width: 100%; height: 100%; object-fit: cover }
+.profile-panel-avatar svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8 }
+.profile-panel-name { font-size: var(--type-item); font-weight: 600 }
+.profile-panel-sub { display: flex; align-items: center; gap: 6px; font-size: var(--type-note); color: var(--label2) }
+.profile-state-mark { width: 8px; height: 8px; border-radius: 50%; background: var(--label3) }
+.profile-state-mark.ring-ok, .profile-state-mark.ring-local { background: var(--success) }
+.profile-state-mark.ring-syncing { background: var(--accent) }
+.profile-state-mark.ring-warning { background: var(--danger) }
+.profile-panel-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px }
+.profile-tile { position: relative; display: grid; align-content: start; gap: 4px; min-height: 104px; padding: 12px; border: 0; border-radius: 14px; background: var(--fill); color: var(--label); text-align: left; font-size: 15px; font-weight: 600 }
+.profile-tile svg { width: 22px; height: 22px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.profile-tile small { font-size: var(--type-min); line-height: 1.4; font-weight: 500; color: var(--label2) }
+.profile-tile-dot { position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: var(--danger) }
+.menu-item .menu-label small { display: block; font-size: var(--type-note); color: var(--label2) }
+.menu-item.menu-preview { cursor: default; justify-content: space-between }
+.menu-preview .menu-value { font-variant-numeric: tabular-nums; color: var(--label2) }
+/* ＋入力ハブ（Q-001）: 右下・タブの上。唯一の主要な入力起点 */
+.add-hub { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: calc(var(--tab-h) + 12px); z-index: 40; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; box-shadow: 0 6px 18px rgba(22,115,247,.32), 0 1px 3px rgba(0,0,0,.12); transition: transform var(--motion-press) ease-out, background var(--motion-press) ease-out }
+.add-hub:active { transform: scale(.94); background: color-mix(in srgb, var(--accent) 82%, #000) }
+.add-hub svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round }
+.add-hub[hidden] { display: none }
+#app .screen > .scroll { padding-bottom: calc(28px + 64px) }
+@media (prefers-reduced-motion:reduce) { .home-period-indicator, .home-period button, .home-card-body, .add-hub { transition: none !important } .home-period button[aria-pressed=true] { transform: none } }
 /* 下層画面（push）、シート、ダイアログ、メニュー、トースト、処理中表示。 */
 .toast-layer { position: fixed; left: 50%; bottom: calc(var(--tab-h) + 10px); transform: translateX(-50%); z-index: 900; width: min(calc(100% - 24px),430px); pointer-events: none; display: flex; justify-content: center }
 .toast .toast-message { flex: 1 }
@@ -957,6 +994,10 @@ html.dark .menu-scrim { background: rgba(0,0,0,.36) }
 @media (prefers-reduced-motion:reduce) {
   .menu-scrim, .ios-menu { transition: opacity 120ms linear !important; transform: none !important }
 }
+/* 第14版 Q-002: ＋から開く入力は右下を起点に広がる（280ms）。視差を減らす設定では短いフェードだけ */
+@keyframes hubSheetIn { from { opacity: 0; transform: translate(28%,22%) scale(.35); border-radius: 32px } to { opacity: 1; transform: none } }
+#sheet.from-hub.show { transform-origin: 100% 100%; animation: hubSheetIn 280ms var(--spring) both }
+@media (prefers-reduced-motion:reduce) { #sheet.from-hub.show { animation: none } }
 /* ボタン、入力欄、スイッチ、セグメント、選択部品。 */
 .section-head { text-transform: none; text-align: left; font-size: 13px; font-weight: 500; line-height: 1.45; margin: 22px 4px 8px; color: var(--label2) }
 .category-grid { display: grid; gap: 9px; grid-template-columns: repeat(2,minmax(0,1fr)) }
@@ -1188,6 +1229,11 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 .v11-order-btn { flex: none; width: var(--tap-min); height: var(--tap-min); border: 0; border-radius: 12px; background: var(--fill); color: var(--accent); display: grid; place-items: center }
 .v11-order-btn:disabled { opacity: .35 }
 .v11-order-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+/* 第14版 Q-012: メモなどは「詳細を表示」で開閉（閉じても入力値は残る） */
+.form-more { margin: 0 }
+.form-more > summary { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 4px; color: var(--accent); font-size: var(--type-item); list-style: none; cursor: pointer }
+.form-more > summary::-webkit-details-marker { display: none }
+.form-more[open] > summary { color: var(--label2) }
 /* グループ化された行、カード、ヒーロー表示、指標。 */
 @media (max-width:390px) {
   .ring { width: 136px; height: 136px }
@@ -1602,18 +1648,85 @@ html.native-keyboard #calculator { bottom: var(--native-keyboard-inset,0px); max
   .month-name-btn { font-size: 24px }
 }
 /* 今日画面のクイック操作（第11版 HOME-004〜011）: 唯一の青い主ボタンと、線画アイコン付き56ptの行 */
-.quick-grid { display: grid; gap: var(--space-section); margin: 0 0 var(--space-section) }
-#app .today-primary-cta { display: flex; align-items: center; justify-content: center; gap: 8px; height: var(--cta-height); padding: 0 16px; border-radius: 14px; font-size: var(--type-item); font-weight: 600 }
-.today-primary-cta svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
-.today-quick-list { margin: 0 }
 .row-icon { flex: none; width: 24px; height: 24px; display: grid; place-items: center; color: var(--accent) }
 .row-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
-#app .group > .today-quick-row { min-height: var(--row-height); gap: 12px; padding: 8px var(--space-page); border-bottom: 0; position: relative }
-#app .today-quick-row .row-title { line-height: 22px }
-#app .today-quick-row .row-sub { line-height: 18px; margin-top: 0 }
-/* 区切り線は同一グループ内のみ・アイコンの右から */
-.today-quick-row + .today-quick-row::before { content: ""; position: absolute; top: 0; right: 0; left: calc(var(--space-page) + 36px); border-top: .5px solid var(--sep) }
-.today-quick-row .chev svg, #todayAnalysis .chev svg, #todayTransactions .chev svg { width: 14px; height: 14px }
+
+/* ===== 第14版 ホーム（H-001〜081） ===== */
+.home-cards { display: grid; gap: 20px; margin: 4px 0 8px }
+.home-card-wrap { min-width: 0 }
+.home-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 8px }
+.home-card-title { margin: 0 0 8px 4px; font-size: 20px; line-height: 1.25; font-weight: 700; color: var(--label) }
+.home-card-head .home-card-title { margin-bottom: 0 }
+.home-card { position: relative; background: var(--card); border-radius: 22px; padding: 6px 0; box-shadow: 0 1px 2px rgba(0,0,0,.04) }
+.home-card-body { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 12px; width: 100%; min-height: 96px; padding: 10px var(--space-page); border: 0; background: transparent; color: inherit; text-align: left; border-radius: 22px; transition: transform var(--motion-press) ease-out, background var(--motion-press) ease-out }
+.home-card-body:active { transform: scale(.98); background: var(--fill) }
+.home-card-left { display: grid; gap: 4px; min-width: 0 }
+.home-card-value { font-family: var(--font-rounded); font-size: var(--type-amount); line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--label); overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.home-card-value.small { font-size: var(--type-item); line-height: 1.35; white-space: normal }
+.home-card-caption { font-size: var(--type-note); line-height: 1.4; color: var(--label2) }
+.home-card-caption.sub { color: var(--label3) }
+.home-card-right { display: grid; justify-items: end; min-width: 0 }
+.home-card-empty { max-width: 9em; font-size: var(--type-note); line-height: 1.4; color: var(--label2); text-align: right }
+.home-card-readout { margin: -4px var(--space-page) 6px; font-size: var(--type-note); color: var(--accent); font-variant-numeric: tabular-nums }
+.home-card-note { margin: 0 var(--space-page) 8px; font-size: var(--type-note); line-height: 1.45; color: var(--danger) }
+.home-card-status { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: calc(100% - 2 * var(--space-page)); min-height: var(--tap-min); margin: 0 var(--space-page); padding: 0; border: 0; border-top: .5px solid var(--sep); background: transparent; color: var(--label); font-size: 15px; text-align: left }
+.home-card-status svg { width: 14px; height: 14px; fill: none; stroke: var(--label3); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.home-card-status.ok { color: var(--success) }
+.home-card-status.over { color: var(--danger) }
+.home-card-status.link { color: var(--accent) }
+.home-date { display: inline-flex; align-items: center; gap: 4px; min-height: var(--tap-min); margin: 0 var(--space-page); padding: 0; border: 0; background: transparent; color: var(--label2); font-size: 15px; font-weight: 600 }
+.home-date svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+/* 今日／今月: 小さなガラスの2択。選択中は文字がやや大きく、背景が指に付いてくる */
+.home-period { position: relative; display: grid; grid-template-columns: 1fr 1fr; width: 132px; padding: 2px; border-radius: 999px; background: var(--glass-bg); box-shadow: inset 0 0 0 .5px var(--glass-edge); backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6); touch-action: pan-y }
+.home-period-indicator { position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc(50% - 2px); border-radius: 999px; background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.12); transition: transform 220ms var(--spring) }
+.home-period:has(#homePeriodMonth[aria-pressed=true]) .home-period-indicator { transform: translateX(100%) }
+.home-period.dragging .home-period-indicator { transition: none; transform: translateX(calc(var(--drag,0) * 100% - 50%)) }
+.home-period button { position: relative; z-index: 1; min-height: var(--tap-min); border: 0; background: transparent; color: var(--label2); font-size: 15px; font-weight: 600; transition: transform 160ms ease-out, color 160ms ease-out }
+.home-period button[aria-pressed=true] { color: var(--label); transform: scale(1.06) }
+/* ミニグラフ */
+.mini-chart { display: block; width: 128px; height: 56px; overflow: visible; touch-action: none }
+.mini-bars rect { fill: var(--accent) }
+.mini-bars rect.empty { fill: var(--fill2) }
+.mini-donut { width: 56px; height: 56px }
+.mini-donut circle { fill: none; stroke-width: 9 }
+.mini-spark path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.mini-spark .spark-threshold { stroke: var(--danger); stroke-width: 1; stroke-dasharray: 3 3 }
+/* 重要なお知らせ・支払いの不足警告（発生時だけ最上段） */
+.home-alert { display: flex; align-items: stretch; gap: 4px; margin: 0 0 16px; background: var(--card); border-radius: 16px; box-shadow: inset 0 0 0 1px var(--orange) }
+.home-alert.danger { box-shadow: inset 0 0 0 1px var(--danger) }
+.home-alert-body { flex: 1; display: flex; gap: 10px; align-items: flex-start; min-height: 56px; padding: 12px 0 12px 14px; border: 0; background: transparent; color: inherit; text-align: left }
+.home-alert-icon { flex: none; width: 22px; height: 22px; color: var(--orange) }
+.home-alert.danger .home-alert-icon { color: var(--danger) }
+.home-alert-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.home-alert-text { display: grid; gap: 2px; font-size: var(--type-note); line-height: 1.45; color: var(--label2) }
+.home-alert-text strong { font-size: 15px; color: var(--label); font-weight: 600 }
+.home-alert-close { flex: none; align-self: center; width: var(--tap-min); height: var(--tap-min); margin-right: 4px; border: 0; border-radius: 50%; background: transparent; display: grid; place-items: center; color: var(--label2) }
+.home-alert-close::before { content: ""; position: absolute; width: 28px; height: 28px; border-radius: 50%; background: var(--fill) }
+.home-alert-close { position: relative }
+.home-alert-close svg { position: relative; width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round }
+/* 最近の動き: 3行までのグループ表 */
+.home-section-head { margin-top: 28px }
+#app .home-table { margin: 0 0 16px }
+#app .group > .home-row { min-height: var(--row-height); gap: 12px; padding: 8px var(--space-page); border-bottom: 0; position: relative }
+.home-row + .home-row::before, .home-table > .row + .home-row::before { content: ""; position: absolute; top: 0; right: 0; left: calc(var(--space-page) + 36px); border-top: .5px solid var(--sep) }
+.home-row .row-value { display: grid; justify-items: end; font-variant-numeric: tabular-nums }
+.home-row .row-value small { font-size: var(--type-min); color: var(--label2); font-weight: 500 }
+.home-row .chev svg { width: 14px; height: 14px }
+.home-row.link-row .row-title { color: var(--accent) }
+.home-ratio { height: 4px; margin-top: 6px; border-radius: 2px; background: var(--fill); overflow: hidden }
+.home-ratio i { display: block; height: 100%; border-radius: 2px; background: var(--accent) }
+.cat-line { color: var(--label2) }
+.home-layout-row { gap: 4px }
+/* 日付カレンダー（確定するまで表示中の日付は変えない） */
+.day-calendar { margin: 4px 0 20px }
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: var(--type-item) }
+.cal-week, .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; text-align: center }
+.cal-week span { font-size: var(--type-min); color: var(--label2); padding: 4px 0 }
+.cal-cell { min-height: var(--tap-min); border: 0; border-radius: 50%; background: transparent; color: var(--label); font-size: 17px; font-variant-numeric: tabular-nums }
+.cal-cell.today { color: var(--accent); font-weight: 700 }
+.cal-cell.on { background: var(--accent); color: #fff; font-weight: 700 }
+.cal-cell:disabled { color: var(--label3) }
+.payroot-month { display: flex; align-items: center; justify-content: center; gap: 4px; margin: 0 0 12px }
 /* 日締めの照合と承認、ジャーナル。 */
 .day-date-slot { display: grid; place-items: center; width: 26px; height: 26px }
 .day-money.no-value { visibility: hidden }
@@ -2175,6 +2288,12 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
   #screen-assets .mm3-assets-spark { display: none }
   #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow { grid-template-columns: 20px minmax(0,1fr) minmax(90px,auto) }
 }
+/* 第14版 D-004: 総資産の口座配分（押すと口座一覧へ） */
+.assets-share { display: flex; align-items: center; gap: 12px; width: 100%; min-height: var(--tap-min); margin-top: 12px; padding: 8px 0 0; border: 0; border-top: .5px solid var(--sep); background: transparent; color: var(--label2); text-align: left }
+.assets-share span { display: grid; gap: 2px; font-size: var(--type-note) }
+.assets-share i { font-style: normal }
+.assets-share i::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--c) }
+.assets-share-empty { margin: 12px 0 0; font-size: var(--type-note); color: var(--label2) }
 /* ACF（現金・カード予測）の表、カレンダー、設定。 */
 .acf-split-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 10px }
 .acf-credit-control { display: grid; gap: 10px }
@@ -2440,7 +2559,6 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .mm3-action-main { min-width: 0; flex: 1 }
 .mm3-action-chev { font-size: 21px; line-height: 1; font-weight: 400; flex-shrink: 0; color: var(--label3) }
 .date-line { font-size: 13px; line-height: 1.4; margin-top: 3px }
-.native-quick-action { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border: 0; border-radius: 26px; background: var(--blue); color: #fff; font-size: 16px; font-weight: 600; padding: 12px 16px; margin: 14px 0 18px; min-height: 48px !important }
 html.motion-off *,
 html.motion-off *::before,
 html.motion-off *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important }
@@ -2458,7 +2576,6 @@ html.motion-off *::after { animation-duration: .001ms !important; animation-iter
 #app .mm3-action-group { background: var(--card); border: 0; border-radius: var(--native-radius); box-shadow: none; overflow: hidden }
 #app .mm3-action-main small { font-size: 12px; line-height: 1.45; margin-top: 3px }
 .mm3-action-chev>.money-symbol { width: 13px; height: 13px }
-#app .native-quick-action { border-radius: var(--native-control); font-size: 16px; min-height: 48px !important }
 #app .mm3-action-row { background: var(--card) }
 #app #acfToday:not(:has(.acf-head)) .acf-home-amount>.money-symbol { width: 12px; height: 12px }
 @media (prefers-contrast:more) {

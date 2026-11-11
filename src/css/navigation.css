@@ -158,7 +158,6 @@
 .mail-preview-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.7 }
 .month-name-btn svg { stroke-linecap: round; stroke-linejoin: round; width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 2 }
 .icon-btn svg { width: 23px; height: 23px; flex: 0 0 auto }
-.native-home-mode { display: flex; gap: 2px; background: var(--fill); border-radius: 10px; padding: 3px; margin: 2px 0 14px }
 html.dark .busy-overlay { background: rgba(0,0,0,.68) }
 html.dark .busy-card { border-color: rgba(255,255,255,.12); box-shadow: 0 18px 60px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08) }
 html.dark .storage-boot { background: rgba(0,0,0,.68) }
@@ -173,13 +172,11 @@ html.dark .stock-detail-view { background: #000 }
 html.dark .money-ticker-card { background: #1C1C1E; box-shadow: inset 0 0 0 .5px #2C2C2E }
 .stmt-filterbar button.on { background: var(--label); color: var(--bg) }
 html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,0,0),var(--bg) 20%) }
-.native-home-mode button[aria-pressed=true] { background: var(--card); color: var(--label); box-shadow: 0 1px 3px #00000014 }
 .back-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .favorite-open { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; padding: 0; border: 0; background: transparent; text-align: left; color: var(--label) }
 .account-balance { font-variant-numeric: tabular-nums lining-nums }
 .display-month-button { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--label); border: 0; border-radius: 14px; padding: 0 8px; font: inherit; font-weight: 600 }
 .ring svg { transform: rotate(-90deg); width: 100%; height: auto; aspect-ratio: 1 }
-.native-quick-action svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
 .mm3-atf-daytoggle svg { width: 16px; height: 16px; flex: none; color: var(--label2); transition: transform .18s; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
 .mm3-atf-next-event-icon svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: 21px; height: 21px }
 .settings-profile-avatar svg { width: 38px; height: 38px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round }
@@ -214,16 +211,13 @@ html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,
 #screen-assets .mm3-assets-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; color: inherit; display: grid; align-items: center; gap: 8px; text-align: left; position: relative; transition: background .12s,transform .11s,opacity .11s }
 #screen-assets .mm3-assets-reorder-placeholder { border-radius: 12px; background: rgba(0,122,255,.055); box-shadow: inset 0 0 0 1px rgba(0,122,255,.11); margin: 1px 0 }
 #sheet.mm3-salary-edit-sheet { background: var(--bg) }
-#app .native-home-mode { margin: 0 0 12px; padding: 3px; border-radius: 24px; background: var(--fill) }
 #screen-pay .mm3-salary-range button { flex: 1; border: 0; background: transparent; border-radius: 7px; padding: 5px 1px; color: var(--label2); min-width: 0; font-size: 11px }
 #screen-assets .mm3-assets-range button { flex: 1; min-width: 0; border: 0; background: transparent; border-radius: 7px; min-height: 28px; padding: 4px 1px; color: var(--label2); transition: transform .1s,background .14s,color .14s; font-size: 11px }
-#app .native-home-mode button { border-radius: 21px; font-size: 15px; font-weight: 600; color: var(--label2) }
 #screen-pay .mm3-salary-range button.on { background: var(--card); color: var(--label); font-weight: 650; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
 #screen-assets .mm3-assets-range button.on { background: var(--card); color: var(--label); font-weight: 700; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
 html.dark #screen-pay .mm3-salary-pull { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
 html.dark #screen-assets .mm3-assets-tooltip { background: rgba(58,58,60,.94) }
 html.dark #screen-assets .mm3-assets-menu-btn { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
-#app .native-home-mode button[aria-pressed=true] { background: var(--blue); color: #fff; box-shadow: 0 2px 5px #0000000d }
 #app .date-navigator { margin: 4px 0 8px; min-height: 44px; grid-template-columns: 44px minmax(0,1fr) 44px }
 #app .date-nav-btn { width: 44px; height: 44px; border-radius: 50%; background: transparent }
 #app .date-nav-label { font-size: 15px; font-weight: 650 }
@@ -271,3 +265,47 @@ html.native-keyboard .tabbar { visibility: hidden; pointer-events: none }
 #app .nav-actions .nav-badge { top: 4px; right: 4px; transform: translate(35%,-35%); min-width: 18px; height: 18px; padding: 0 5px; font-size: var(--type-min); border-radius: 9px; box-shadow: 0 0 0 2px var(--bg) }
 /* 視差を減らす設定では登場アニメーションが止まるため、最初から表示した状態にする（止めると透明のまま残っていた） */
 @media (prefers-reduced-motion:reduce) { .toast { opacity: 1; transform: none } }
+/* ===== 第14版 共通ナビゲーション ===== */
+/* 専用画面（給与・資産・支出・請求一覧）の戻る: 上段に「‹ 起点」、その下に大見出し */
+#app .screen > .topbar.has-detail-back { grid-template-columns: minmax(0,1fr) auto }
+#app .screen > .topbar.has-detail-back > :not(.detail-back) { grid-row: 2 }
+.detail-back { grid-row: 1; grid-column: 1 / -1; justify-self: start; display: inline-flex; align-items: center; gap: 2px; min-height: var(--tap-min); margin: -6px 0 0 -8px; font-size: var(--type-item) }
+.detail-back svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round }
+/* 検索: ガラスの丸型44pt。プロフィール: 写真＋状態リング（色だけでなく、パネル内の文言で状態を伝える） */
+#app .nav-actions .glass-btn { background: var(--glass-bg) !important; box-shadow: inset 0 0 0 .5px var(--glass-edge); color: var(--accent); backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6) }
+.profile-btn { position: relative; width: var(--tap-min); height: var(--tap-min); padding: 0; border: 0; border-radius: 50%; background: transparent; display: grid; place-items: center }
+.profile-btn::before { content: ""; position: absolute; inset: 2px; border-radius: 50%; border: 2px solid var(--label3) }
+.profile-btn.ring-ok::before, .profile-btn.ring-local::before { border-color: var(--success) }
+.profile-btn.ring-syncing::before { border-color: var(--accent); border-style: dashed }
+.profile-btn.ring-warning::before { border-color: var(--danger) }
+.profile-btn-avatar { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: var(--fill); color: var(--label2) }
+.profile-btn-avatar img { width: 100%; height: 100%; object-fit: cover }
+.profile-btn-avatar svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8 }
+.profile-dot { position: absolute; top: 0; right: -2px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--danger); color: #fff; font-size: var(--type-min); font-weight: 700; line-height: 18px; box-shadow: 0 0 0 2px var(--bg) }
+/* プロフィールパネル（写真の位置から膨らむ。動きはメニューと同じ） */
+.ios-menu.menu-panel { padding: 12px }
+.profile-panel-head { display: flex; align-items: center; gap: 12px; padding: 4px 4px 12px }
+.profile-panel-avatar { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: var(--fill); color: var(--label2) }
+.profile-panel-avatar img { width: 100%; height: 100%; object-fit: cover }
+.profile-panel-avatar svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8 }
+.profile-panel-name { font-size: var(--type-item); font-weight: 600 }
+.profile-panel-sub { display: flex; align-items: center; gap: 6px; font-size: var(--type-note); color: var(--label2) }
+.profile-state-mark { width: 8px; height: 8px; border-radius: 50%; background: var(--label3) }
+.profile-state-mark.ring-ok, .profile-state-mark.ring-local { background: var(--success) }
+.profile-state-mark.ring-syncing { background: var(--accent) }
+.profile-state-mark.ring-warning { background: var(--danger) }
+.profile-panel-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px }
+.profile-tile { position: relative; display: grid; align-content: start; gap: 4px; min-height: 104px; padding: 12px; border: 0; border-radius: 14px; background: var(--fill); color: var(--label); text-align: left; font-size: 15px; font-weight: 600 }
+.profile-tile svg { width: 22px; height: 22px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.profile-tile small { font-size: var(--type-min); line-height: 1.4; font-weight: 500; color: var(--label2) }
+.profile-tile-dot { position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: var(--danger) }
+.menu-item .menu-label small { display: block; font-size: var(--type-note); color: var(--label2) }
+.menu-item.menu-preview { cursor: default; justify-content: space-between }
+.menu-preview .menu-value { font-variant-numeric: tabular-nums; color: var(--label2) }
+/* ＋入力ハブ（Q-001）: 右下・タブの上。唯一の主要な入力起点 */
+.add-hub { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: calc(var(--tab-h) + 12px); z-index: 40; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; box-shadow: 0 6px 18px rgba(22,115,247,.32), 0 1px 3px rgba(0,0,0,.12); transition: transform var(--motion-press) ease-out, background var(--motion-press) ease-out }
+.add-hub:active { transform: scale(.94); background: color-mix(in srgb, var(--accent) 82%, #000) }
+.add-hub svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round }
+.add-hub[hidden] { display: none }
+#app .screen > .scroll { padding-bottom: calc(28px + 64px) }
+@media (prefers-reduced-motion:reduce) { .home-period-indicator, .home-period button, .home-card-body, .add-hub { transition: none !important } .home-period button[aria-pressed=true] { transform: none } }

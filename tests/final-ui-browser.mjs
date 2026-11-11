@@ -78,7 +78,7 @@ export async function verifyFinalUiBrowser({createPage,passed,root,financialBase
   assert.ok(await page.locator('.acf-calendar-grid').isVisible());passed('ACF calendar supports keyboard selection, existing day details and saved display preference');
   await target.context.close();
 
-  const goal=await createPage(),gp=goal.page;await gp.locator('#todayGoalAction').click();assert.ok(await gp.locator('#goalStart').isVisible());await gp.locator('#goalStart').click();
+  const goal=await createPage(),gp=goal.page;await gp.evaluate(()=>globalThis.__mm3Test.switchTab('day'));await gp.locator('#todayGoalAction').click();assert.ok(await gp.locator('#goalStart').isVisible());await gp.locator('#goalStart').click();
   assert.ok(await gp.locator('#goalAmountRange').isVisible());assert.equal(await gp.locator('[data-goal-plan]').count(),0);
   await assertEqualActions(gp.locator('.goal-nav-actions button'));
   const goalBefore=await gp.evaluate(()=>globalThis.__mm3Test.getData());await gp.locator('#goalAmountRange').focus();await gp.keyboard.press('ArrowRight');
@@ -94,10 +94,10 @@ export async function verifyFinalUiBrowser({createPage,passed,root,financialBase
 
   const warning=await createPage(),wg=warning.page;
   await wg.evaluate(async()=>{const t=globalThis.__mm3Test;await t.safeCommitAsync(()=>t.recordExpense({date:'2026-10-07',amount:500,category:'食費',merchant:'予算警告の検証',paymentMethod:'other',saveNow:false}));t.renderAll()});
-  await wg.locator('#todayGoalAction').click();await wg.locator('#goalStart').click();await wg.locator('#goalAmountRange').focus();await wg.keyboard.press('Home');assert.ok(await wg.locator('#goalAmountWarning').isVisible());await wg.keyboard.press('End');assert.equal(await wg.locator('#goalAmountWarning').isVisible(),false);
+  await wg.evaluate(()=>globalThis.__mm3Test.switchTab('day'));await wg.locator('#todayGoalAction').click();await wg.locator('#goalStart').click();await wg.locator('#goalAmountRange').focus();await wg.keyboard.press('Home');assert.ok(await wg.locator('#goalAmountWarning').isVisible());await wg.keyboard.press('End');assert.equal(await wg.locator('#goalAmountWarning').isVisible(),false);
   passed('budget warnings update immediately when the slider crosses recorded spending');await warning.context.close();
 
-  const closing=await createPage(),cp=closing.page;await cp.locator('#todayDayClose').click();const cv=cp.locator('.day-close-view').last();
+  const closing=await createPage(),cp=closing.page;await cp.evaluate(()=>globalThis.__mm3Test.switchTab('day'));await cp.locator('#todayDayClose').click();const cv=cp.locator('.day-close-view').last();
   await horizontalGesture(cp,cv.locator('.day-close-heading'));assert.equal(await cv.locator('.day-close-heading').innerText(),'収入の照合');
   await horizontalGesture(cp,cv.locator('.day-close-heading'));assert.equal(await cv.locator('.day-close-heading').innerText(),'収入の照合');
   await cv.locator('.day-close-heading').focus();await cp.keyboard.press('ArrowLeft');assert.equal(await cv.locator('.day-close-heading').innerText(),'日締め');
@@ -111,17 +111,17 @@ export async function verifyFinalUiBrowser({createPage,passed,root,financialBase
   passed('approved day closing stays read-only, explicit revision can be canceled, and re-approval preserves the previous journal snapshot');await closing.context.close();
 
   const update=await createPage(),up=update.page;
-  await up.locator('[data-tab="pay"]').click();await up.locator('#screen-pay [data-financial-update]').click();let uv=up.locator('.financial-update-view').last();
+  await up.evaluate(()=>globalThis.__mm3Test.switchTab('pay'));await up.locator('#screen-pay [data-financial-update]').click();let uv=up.locator('.financial-update-view').last();
   const originalBanks=await up.evaluate(()=>globalThis.__mm3Test.getData().banks);
   for(const amount of [41000,41500]){
     await uv.locator('[data-update-row]').first().click();assert.equal(await up.locator('#calcTitle').innerText(),'受取予定額（控除後）');await enterAmount(up,amount);await up.locator('#srSave').click();await settleSave(up);
     assert.equal(await uv.locator('.financial-update-row b').first().innerText(),`¥${amount.toLocaleString('ja-JP')}`);
   }
   assert.deepEqual(await up.evaluate(()=>globalThis.__mm3Test.getData().banks),originalBanks);assert.equal(await up.evaluate(()=>globalThis.__mm3Test.getData().incomes.length),0);
-  await up.evaluate(()=>globalThis.__mm3Test.popView());await up.locator('[data-tab="payments"]').click();await up.locator('#screen-payments [data-financial-update]').click();uv=up.locator('.financial-update-view').last();
+  await up.evaluate(()=>globalThis.__mm3Test.popView());await up.evaluate(()=>globalThis.__mm3Test.switchTab('payments'));await up.locator('#screen-payments [data-financial-update]').click();uv=up.locator('.financial-update-view').last();
   for(const amount of [32000,33000]){await uv.locator('[data-update-row]').first().click();await enterAmount(up,amount);await up.locator('#qcbSave').click();await settleSave(up);assert.equal(await uv.locator('.financial-update-row b').first().innerText(),`¥${amount.toLocaleString('ja-JP')}`);}
   assert.deepEqual(await up.evaluate(()=>globalThis.__mm3Test.getData().banks),originalBanks);
-  await up.evaluate(()=>globalThis.__mm3Test.popView());await up.locator('[data-tab="assets"]').click();await up.locator('#screen-assets [data-financial-update]').click();uv=up.locator('.financial-update-view').last();
+  await up.evaluate(()=>globalThis.__mm3Test.popView());await up.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await up.locator('#screen-assets [data-financial-update]').click();uv=up.locator('.financial-update-view').last();
   for(const amount of [150000,151000]){await uv.locator('[data-update-row]').first().click();await enterAmount(up,amount);await up.locator('#qbSave').click();await settleSave(up);assert.equal(await uv.locator('.financial-update-row b').first().innerText(),`¥${amount.toLocaleString('ja-JP')}`);assert.equal(await up.evaluate(()=>globalThis.__mm3Test.getData().banks[0].balance),amount);}
   const afterUpdates=await up.evaluate(()=>globalThis.__mm3Test.getData());await uv.locator('[data-update-row]').first().click();await up.locator('#calcCancel').click();await up.locator('#qbCancel').click();assert.deepEqual(await up.evaluate(()=>globalThis.__mm3Test.getData()),afterUpdates);
   await up.reload();await up.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));const persisted=await up.evaluate(()=>globalThis.__mm3Test.getData());assert.equal(persisted.banks[0].balance,151000);assert.equal(persisted.salaryRecords.find(record=>record.id==='salary_seed_gu_202610').gross,41500);
@@ -130,10 +130,10 @@ export async function verifyFinalUiBrowser({createPage,passed,root,financialBase
 
   const paid=await createPage(),pp=paid.page;
   await pp.evaluate(async()=>{const t=globalThis.__mm3Test,d=t.getData();d.banks[0].balance=100000;d.banks[0].balanceAsOf='2026-10-06T12:00:00Z';for(const e of d.employers)e.bankId=d.banks[0].id;for(const c of d.cards)c.bankId=d.banks[0].id;await t.replaceData(d);t.renderAll()});
-  await pp.locator('[data-tab="pay"]').click();await pp.locator('#screen-pay [data-financial-update]').click();let pv=pp.locator('.financial-update-view').last();
+  await pp.evaluate(()=>globalThis.__mm3Test.switchTab('pay'));await pp.locator('#screen-pay [data-financial-update]').click();let pv=pp.locator('.financial-update-view').last();
   await pv.locator('[data-update-row]').first().click();await pp.locator('#calcCancel').click();await pp.locator('#srStatus [data-v="入金済"]').click();await pp.locator('#srActualDate').fill('2026-10-07');await pp.locator('#srReceipt').selectOption('bank');await pp.locator('#srReceivedAmount').click();await enterAmount(pp,40000);await pp.locator('#srSave').click();await settleSave(pp);assert.equal(await pp.evaluate(()=>globalThis.__mm3Test.getData().banks[0].balance),140000);
   for(const amount of [41000,42000]){await pv.locator('[data-update-row]').first().click();assert.equal(await pp.locator('#calcTitle').innerText(),'実際の受取額');await enterAmount(pp,amount);await pp.locator('#srSave').click();await settleSave(pp);const actual=await pp.evaluate(()=>globalThis.__mm3Test.getData());assert.equal(actual.banks[0].balance,100000+amount);assert.equal(actual.incomes.length,1);assert.equal(actual.incomes[0].amount,amount);}
-  await pp.evaluate(()=>globalThis.__mm3Test.popView());await pp.locator('[data-tab="payments"]').click();await pp.locator('#screen-payments [data-financial-update]').click();pv=pp.locator('.financial-update-view').last();
+  await pp.evaluate(()=>globalThis.__mm3Test.popView());await pp.evaluate(()=>globalThis.__mm3Test.switchTab('payments'));await pp.locator('#screen-payments [data-financial-update]').click();pv=pp.locator('.financial-update-view').last();
   await pv.locator('[data-update-row]').first().click();await enterAmount(pp,33000);await pp.locator('#qcbDate').fill('2026-10-07');await pp.locator('#qcbStatus [data-v="paid"]').click();await pp.locator('#qcbBalanceMode [data-v="apply"]').click();await pp.locator('#qcbSave').click();await settleSave(pp);assert.equal(await pp.evaluate(()=>globalThis.__mm3Test.getData().banks[0].balance),109000);
   for(const amount of [34000,34000]){await pv.locator('[data-update-row]').first().click();await enterAmount(pp,amount);await pp.locator('#qcbSave').click();await settleSave(pp);assert.equal(await pp.evaluate(()=>globalThis.__mm3Test.getData().banks[0].balance),108000);}
   passed('received salary updates replace one linked receipt and paid-card updates apply only the difference, including repeated identical saves');await paid.context.close();
@@ -146,11 +146,11 @@ export async function verifyFinalUiBrowser({createPage,passed,root,financialBase
     const mobile=await createPage('app',{width,appearance}),mp=mobile.page;
     await mp.evaluate(async()=>{const api=globalThis.__mm3Test;await api.configureAcf({...api.acfDefaultSettings(),initialized:true});void api.openAcfDetail()});await mp.locator('#acfViewMode').waitFor();await mp.locator('.busy-overlay.show').waitFor({state:'hidden'});await mp.locator('#acfViewMode [data-view="calendar"]').click();
     assert.equal(await mp.locator('.push-view').last().locator('.push-body').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);await assertEqualActions(mp.locator('#acfViewMode button'));await mp.locator('.acf-calendar-grid').scrollIntoViewIfNeeded();await mp.screenshot({path:resolve(root,`test-results/acf-calendar-${width}-${appearance}.png`),animations:'disabled'});
-    await mp.evaluate(()=>globalThis.__mm3Test.popView());await mp.locator('#todayDayClose').click();const mv=mp.locator('.day-close-view').last();await mv.locator('#dayCloseNext').click();await assertEqualActions(mv.locator('.day-close-footer button'));assert.equal(await mv.locator('.push-body').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+    await mp.evaluate(()=>{globalThis.__mm3Test.popView();globalThis.__mm3Test.switchTab('day')});await mp.locator('#todayDayClose').click();const mv=mp.locator('.day-close-view').last();await mv.locator('#dayCloseNext').click();await assertEqualActions(mv.locator('.day-close-footer button'));assert.equal(await mv.locator('.push-body').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
     await mp.screenshot({path:resolve(root,`test-results/day-closing-${width}-${appearance}.png`),animations:'disabled'});
     await mp.evaluate(()=>globalThis.__mm3Test.popView());await mp.locator('#todayGoalAction').click();await mp.locator('#goalStart').click();await assertEqualActions(mp.locator('.goal-nav-actions button'));assert.equal(await mp.locator('.push-view').last().locator('.push-body').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
     await mp.screenshot({path:resolve(root,`test-results/daily-budget-${width}-${appearance}.png`),animations:'disabled'});
-    await mp.locator('#goalBack').click();await mp.locator('#goalCancel').click();await mp.locator('[data-tab="assets"]').click();await mp.locator('#screen-assets [data-financial-update]').click();assert.equal(await mp.locator('.financial-update-view').last().locator('.push-body').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+    await mp.locator('#goalBack').click();await mp.locator('#goalCancel').click();await mp.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));await mp.locator('#screen-assets [data-financial-update]').click();assert.equal(await mp.locator('.financial-update-view').last().locator('.push-body').evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
     passed(`${width}px ${appearance} calendar, day closing, goal and update views fit; paired buttons have equal width and height`);await mobile.context.close();
   }
 }

@@ -398,7 +398,6 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .push-right>button { min-width: var(--tap-min); min-height: var(--tap-min) }
 .mail-summary button { border: 0; background: transparent; color: var(--label); min-width: 0; padding: 0 4px; border-right: .5px solid var(--sep) }
 .mail-preview-actions button { margin: 0; font-size: 15px; border-radius: 12px }
-.native-home-mode button { flex: 1; border: 0; border-radius: 8px; background: transparent; color: var(--label2); font-size: 15px; font-weight: 600 }
 button.switch { height: 44px; min-height: 44px !important; background: transparent !important; border-radius: 0; flex-shrink: 0 }
 button.switch:before { content: ''; position: absolute; left: 0; top: 6.5px; width: 51px; height: 31px; border-radius: 16px; background: var(--fill2); transition: background .18s }
 button.switch.on:before { background: var(--green) }

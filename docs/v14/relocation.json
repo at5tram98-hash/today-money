@@ -1,0 +1,113 @@
+{
+  "note": "第14版の3タブ化で、旧5タブ（今日・給与・支払い・資産・設定）の画面と入口がどこへ移ったか。テストはこの表に従い、3タブのrootから実際にタップして旧画面・旧操作へ到達する（旧台帳の識別子をそのまま新DOMと見なさない）。",
+  "screens": {
+    "today": {
+      "root": "home",
+      "via": [
+        "#homePeriodToday",
+        "#homeSpendCard"
+      ],
+      "label": "ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）"
+    },
+    "month": {
+      "root": "home",
+      "via": [
+        "#homePeriodMonth",
+        "#homeSpendCard"
+      ],
+      "label": "ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）"
+    },
+    "pay": {
+      "root": "home",
+      "via": [
+        "#homeSalaryCard"
+      ],
+      "label": "ホーム→今月の給与カード→給与（入口はホームだけ）"
+    },
+    "assets": {
+      "root": "home",
+      "via": [
+        "#homeAssetsCard"
+      ],
+      "label": "ホーム→総資産カード→資産（入口はホームだけ）"
+    },
+    "payments": {
+      "root": "payroot",
+      "via": [
+        "#payrootAllCards"
+      ],
+      "label": "支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）"
+    },
+    "settings": {
+      "root": "settings",
+      "via": [],
+      "label": "その他（旧「設定」）"
+    }
+  },
+  "selectors": {
+    "#todaySearch": {
+      "root": "home",
+      "via": [
+        "#todaySearch"
+      ],
+      "label": "ホーム右上の検索（H-002）"
+    },
+    "#todayCrossSearch": {
+      "root": "home",
+      "via": [
+        "#todaySearch"
+      ],
+      "label": "ホーム右上の検索（H-002・横断検索）"
+    },
+    "#todayNotice": {
+      "root": "home",
+      "via": [
+        "#homeProfile",
+        "#ppNotices"
+      ],
+      "label": "プロフィールパネル→お知らせ（H-007）"
+    },
+    "#quickExpense": {
+      "root": "home",
+      "via": [
+        "#addHub",
+        "#menuLayer .menu-item:has-text(\"支出を記録\")"
+      ],
+      "label": "＋入力ハブ→支出を記録（Q-002）"
+    },
+    "#quickIncome": {
+      "root": "home",
+      "via": [
+        "#addHub",
+        "#menuLayer .menu-item:has-text(\"臨時収入\")"
+      ],
+      "label": "＋入力ハブ→臨時収入（Q-003）"
+    },
+    "#quickBank": {
+      "root": "home",
+      "via": [
+        "#addHub",
+        "#menuLayer .menu-item:has-text(\"残高を更新\")"
+      ],
+      "label": "＋入力ハブ→残高を更新（Q-004）"
+    },
+    "#todayRepeat": {
+      "root": "home",
+      "via": [
+        "#addHub",
+        "#menuLayer .menu-item:has-text(\"その他の入力\")",
+        "#ihRepeat"
+      ],
+      "label": "＋入力ハブ→その他の入力→最近の支出を再利用（Q-006）"
+    },
+    "#todayOneLine": {
+      "root": "home",
+      "via": [
+        "#addHub",
+        "#menuLayer .menu-item:has-text(\"その他の入力\")",
+        "#ihOneLine"
+      ],
+      "label": "＋入力ハブ→その他の入力→一行入力（Q-006）"
+    }
+  }
+}

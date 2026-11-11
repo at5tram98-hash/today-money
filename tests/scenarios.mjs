@@ -4,20 +4,17 @@
 import assert from 'node:assert/strict';
 import {mkdirSync, writeFileSync, readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
-import {root, createPage, settle, reset, closeHarness} from './v11-harness.mjs';
+import {root, createPage, settle, reset, closeHarness, relocate, tap} from './v11-harness.mjs';
 
 const routes=JSON.parse(readFileSync(resolve(root,'docs/v11/screen-routes.json'),'utf8')),screens=new Map(routes.screens.map(s=>[s.name,s]));
 const shots=resolve(root,'test-results/scenarios');mkdirSync(shots,{recursive:true});
 const rows=[],failures=[];
 // 表示の状態（通知の既読、今日／今月の表示モード）は会計データではないので比較から外す
 const financial=text=>{const d=JSON.parse(text);delete d.homeViewMode;d.notices=(d.notices||[]).map(({read,...rest})=>rest);return JSON.stringify(d)};
-const press=async(page,selector)=>{
-  if(selector.includes(':has-text(')){const target=page.locator(selector).first();if(!await target.count())return false;await target.click()}
-  else if(!await page.evaluate(sel=>globalThis.__crawl.click(sel),selector))return false;
-  await settle(page);return true;
-};
+const press=tap;
 const layers=page=>page.evaluate(()=>({sheet:document.getElementById('sheet').classList.contains('show'),push:document.querySelectorAll('#pushLayer .push-view.show').length,menu:document.getElementById('menuLayer').classList.contains('show'),calc:document.getElementById('calculator').classList.contains('show'),alert:document.getElementById('alertWrap').classList.contains('show'),tab:document.querySelector('.screen.active')?.id||''}));
-const depth=l=>l.push+(l.sheet?1:0)+(l.menu?1:0)+(l.calc?1:0)+(l.alert?1:0);
+const detailScreens=['screen-day','screen-month','screen-pay','screen-assets','screen-payments'];
+const depth=l=>l.push+(l.sheet?1:0)+(l.menu?1:0)+(l.calc?1:0)+(l.alert?1:0)+(detailScreens.includes(l.tab)?1:0);
 /* 最前面の層を、その画面自身の戻る・キャンセル・閉じるで1枚ずつ閉じる */
 async function closeTop(page){
   const l=await layers(page);
@@ -30,6 +27,9 @@ async function closeTop(page){
     return label?`シートの「${label}」`:'';
   }
   if(l.push){const label=await page.evaluate(()=>{const b=[...document.querySelectorAll('#pushLayer .push-view.show')].at(-1).querySelector('.back-btn');if(!b)return'';const t=b.getAttribute('aria-label')||b.textContent.trim();b.click();return t});await settle(page);return label?`「${label}」`:''}
+  // 第14版: 専用画面（今日の支出・今月の支出・給与・資産・請求一覧）は、上部の「‹ 起点」で開いた起点のrootへ戻る
+  const back=await page.evaluate(()=>{const b=document.querySelector('.screen.active .detail-back');if(!b)return'';const t=b.getAttribute('aria-label');b.click();return t});
+  if(back){await settle(page);return `「${back}」`}
   return '';
 }
 
@@ -38,16 +38,17 @@ try{
   for(const [key,list] of groups){
     const [width,appearance]=key.split('-'),{page,context,errors}=await createPage('app',{width:Number(width),appearance});
     for(const scenario of list){
-      const route=screens.get(scenario.screen),row={id:scenario.id,screen:scenario.screen,width,theme:appearance,opened:false,tabs:false,small:0,unnamed:0,overflow:0,openedWithoutWrite:false,returned:'',returnedWithoutWrite:false,result:''};
+      const legacy=screens.get(scenario.screen),moved=relocate(legacy.tab,legacy.path),route={...legacy,tab:moved.root,via:moved.via,path:moved.rest},row={id:scenario.id,screen:scenario.screen,width,theme:appearance,opened:false,tabs:false,small:0,unnamed:0,overflow:0,openedWithoutWrite:false,returned:'',returnedWithoutWrite:false,result:''};
       try{
         await reset(page,route.tab);
         const before=await page.evaluate(()=>JSON.stringify(globalThis.__mm3Test.getData())),base=await layers(page);
         let ok=true;
-        if(route.setup){ok=await page.evaluate(([name,args])=>globalThis.__mm3Test.call(name,args),[route.setup.method,route.setup.args||[]]);await settle(page)}
+        for(const selector of route.via){if(!ok)break;ok=await press(page,selector)}
+        if(ok&&route.setup){ok=await page.evaluate(([name,args])=>globalThis.__mm3Test.call(name,args),[route.setup.method,route.setup.args||[]]);await settle(page)}
         for(const selector of route.path){if(!ok)break;ok=await press(page,selector)}
         const now=await layers(page);
-        row.opened=ok&&(route.path.length||route.setup?depth(now)>depth(base):now.tab===`screen-${route.tab}`);
-        row.tabs=(await page.locator('#tabbar .tab-label').allTextContents()).join('／')==='今日／給与／支払い／資産／設定';
+        row.opened=ok&&(route.path.length||route.via.length||route.setup?depth(now)>depth(base):now.tab===`screen-${route.tab==='home'?'today':route.tab}`);row.via=moved.label;
+        row.tabs=(await page.locator('#tabbar .tab-label').allTextContents()).join('／')==='ホーム／支払い／その他';
         const audit=await page.evaluate(()=>globalThis.__crawl.audit());row.small=audit.small.length+audit.overlaps.length;row.unnamed=audit.unnamed.length;row.overflow=audit.overflow;
         row.openedWithoutWrite=financial(await page.evaluate(()=>JSON.stringify(globalThis.__mm3Test.getData())))===financial(before);
         await page.screenshot({path:resolve(shots,`${scenario.id}.png`)});
@@ -65,9 +66,9 @@ try{
     await context.close();console.log(`${key}: ${list.length} scenarios`);
   }
 }finally{await closeHarness()}
-const header=['シナリオID','画面','幅','テーマ','画面が開く','5タブ','44pt未満・重なり','読み上げ名なし','横はみ出し(px)','開いただけでは保存しない','戻り方','戻っても保存しない','結果'];
+const header=['シナリオID','画面','第14版の入口','幅','テーマ','画面が開く','3タブ','44pt未満・重なり','読み上げ名なし','横はみ出し(px)','開いただけでは保存しない','戻り方','戻っても保存しない','結果'];
 const cell=v=>{const s=v===true?'○':v===false?'×':String(v);return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s};
-writeFileSync(resolve(root,'docs/v11/scenarios-81.csv'),'﻿'+[header,...rows.map(r=>[r.id,r.screen,r.width,r.theme,r.opened,r.tabs,r.small,r.unnamed,r.overflow,r.openedWithoutWrite,r.returned,r.returnedWithoutWrite,r.result])].map(r=>r.map(cell).join(',')).join('\n')+'\n');
+writeFileSync(resolve(root,'docs/v11/scenarios-81.csv'),'﻿'+[header,...rows.map(r=>[r.id,r.screen,r.via||'',r.width,r.theme,r.opened,r.tabs,r.small,r.unnamed,r.overflow,r.openedWithoutWrite,r.returned,r.returnedWithoutWrite,r.result])].map(r=>r.map(cell).join(',')).join('\n')+'\n');
 const passed=rows.filter(r=>r.result==='合格').length;
 console.log(`${passed}/${rows.length} scenarios passed`);for(const f of failures.slice(0,40))console.log('FAIL',f.slice(0,420));
 if(process.env.MM3_SCENARIOS_STRICT)assert.equal(failures.length,0);

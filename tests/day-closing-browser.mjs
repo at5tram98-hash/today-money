@@ -67,7 +67,7 @@ export async function verifyDayClosingBrowser({createPage,passed,root,errors}){
   const imported=await mp.evaluate(()=>globalThis.__mm3Test.getData());assert.equal(imported.transactions.filter(t=>t.mailImportId==='waiting').length,1);assert.equal(imported.mailImports.find(m=>m.id==='waiting').status,'imported');await mv.locator('[data-close-key="mail:waiting"]').check();await mv.locator('[data-close-key="mail:imported"]').check();assert.equal(await mv.locator('#dayCloseNext').isEnabled(),true);
   passed('pending mail blocks closing until existing Gmail approval records exactly one transaction');await mail.context.close();
 
-  const busy=await createPage(),bp=busy.page;
+  const busy=await createPage(),bp=busy.page;await bp.evaluate(()=>globalThis.__mm3Test.switchTab('day'));
   await bp.evaluate(()=>{globalThis.__busyWork=globalThis.__mm3Test.runWithBusy(async()=>{await new Promise(resolve=>globalThis.__finishBusy=resolve);document.getElementById('todayDayClose').dataset.afterPaint='ready';return 42},{title:'ATFを計算中…'})});
   await bp.waitForFunction(()=>typeof globalThis.__finishBusy==='function');await bp.waitForTimeout(1250);assert.equal(await bp.locator('.busy-overlay.show').count(),1);await bp.evaluate(()=>globalThis.__finishBusy());assert.equal(await bp.evaluate(()=>globalThis.__busyWork),42);assert.equal(await bp.locator('.busy-overlay.show').count(),0);assert.equal(await bp.locator('#todayDayClose').getAttribute('data-after-paint'),'ready');
   passed('ATF waiting remains visible until asynchronous work, the 1.8-second minimum and redraw complete');

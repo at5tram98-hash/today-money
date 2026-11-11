@@ -24,16 +24,17 @@ function renderSettings(){
       {id:'favoriteSettings',symbol:'star',color:'var(--orange)',title:'お気に入り',value:`${favoriteOrder().length}件`},
       {id:'tagSettings',symbol:'tag',color:'var(--blue)',title:'タグ',value:`${data.tags.length}件`}
     ]],
-    ['通知',[{id:'notificationSettings',symbol:'bell',color:'var(--red)',title:'通知設定',value:level}],'今日のお知らせを残し、昨日以前のお知らせは日本時間で自動削除します。'],
+    ['通知',[{id:'notificationSettings',symbol:'bell',color:'var(--red)',title:'通知設定',value:level},{id:'systemNoticesRow',symbol:'tray',color:'var(--red)',title:'システムのお知らせ',value:unreadNotices()?`未読 ${unreadNotices()}件`:''}],'今日のお知らせを残し、昨日以前のお知らせは日本時間で自動削除します。ホームで閉じた警告もここで確認できます。'],
     ['アプリ',[
       {id:'appearanceSettings',symbol:'appearance',color:'#5856D6',title:'外観',value:appearance},
       {id:'feedbackSettingsRow',symbol:'wave',color:'var(--blue)',title:'操作フィードバック',detail:'操作音・触覚・アニメーション'},
       {id:'securitySettings',symbol:'lock',color:'#8E8E93',title:'セキュリティ',value:data.security.enabled?'パスコード ON':'パスコード OFF'},
       {id:'helpSettings',symbol:'help',color:'var(--teal)',title:'ヘルプ・お問い合わせ'}
     ]],
-    ['データ',[{id:'dataSettings',symbol:'upload',color:'var(--green)',title:'データ管理',detail:'PDF・バックアップ・削除'}]]
+    ['データ',[{id:'dataSettings',symbol:'upload',color:'var(--green)',title:'データとバックアップ',detail:'PDF・バックアップ・復元・削除'}]]
   ];
-  document.getElementById('settingsTop').innerHTML=topbar('設定','');
+  /* 第14版 O-001: 「その他」は設定の一覧だけ。給与・資産・生活費の見通しはホームのカードから開く（入口を1つにする） */
+  document.getElementById('settingsTop').innerHTML=topbar('その他','');
   document.getElementById('settingsContent').innerHTML=`
     <button type="button" class="settings-profile-card" id="profileSettings">
       ${profileAvatarHtml('settings-profile-avatar')}
@@ -49,7 +50,7 @@ function bindSettings(){
     acfSettingsRow:openAcfSettings,favoriteSettings:openFavoritesEditor,tagSettings:openTagsManager,
     notificationSettings:openNotificationSettings,appearanceSettings:openAppearanceSettings,
     feedbackSettingsRow:openFeedbackSettings,securitySettings:openSecuritySettings,
-    helpSettings:openHelp,dataSettings:openDataSettings
+    helpSettings:openHelp,dataSettings:openDataSettings,systemNoticesRow:openNotices,
   };
   const root=document.getElementById('settingsContent');
   for(const [id,action] of Object.entries(actions))root.querySelector('#'+id).onclick=action;
