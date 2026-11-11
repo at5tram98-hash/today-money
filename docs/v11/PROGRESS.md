@@ -1,6 +1,6 @@
 # 第11版 進捗と再開用の記録
 
-最終更新: 2026-11-11 01:11 UTC ／ ブランチ `claude/approve-all-permissions-3i1w3q` ／ HEAD `18739a0`
+最終更新: 2026-11-11 01:40 UTC ／ ブランチ `claude/approve-all-permissions-3i1w3q` ／ HEAD `c7e19bf`
 
 集計は `node scripts/v11/progress.mjs <仕様書パッケージのフォルダ>` で再生成できます。監査記録は同じ部品・同じ遷移の重複を含むため、件数は重複をまとめた後の数です。
 
@@ -77,6 +77,7 @@
 
 ## 最近のコミット
 
+- c7e19bf 2026-11-11 追加UIの照合を観測画面まで広げ、進捗を更新
 - 18739a0 2026-11-11 今日画面・ナビゲーションのアイコン・その他メニューを第11版の仕様どおりに修正
 - 040b60d 2026-11-10 Record the live-site check of the edition 11 completion build
 - e67b491 2026-11-10 Record the final verification results and resume notes for edition 11
@@ -88,7 +89,6 @@
 - fd2b274 2026-11-04 Unify native iPhone presentation and keyboard-safe forms without changing existing navigation
 - df8873c 2026-11-04 Restore familiar five tabs and feature locations; refresh presentation and expose expense reuse
 - 498f9f1 2026-11-04 Rebuild My Money workspaces around My Time design and retain existing features
-- 731fafb 2026-11-03 Unify My Money with My Time UI and correct ACF forecasting
 
 ## 次に着手する作業
 
