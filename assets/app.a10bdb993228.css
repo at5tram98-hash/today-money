@@ -408,7 +408,6 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
 .push-right>button { min-width: var(--tap-min); min-height: var(--tap-min) }
 .mail-summary button { border: 0; background: transparent; color: var(--label); min-width: 0; padding: 0 4px; border-right: .5px solid var(--sep) }
 .mail-preview-actions button { margin: 0; font-size: 15px; border-radius: 12px }
-.native-home-mode button { flex: 1; border: 0; border-radius: 8px; background: transparent; color: var(--label2); font-size: 15px; font-weight: 600 }
 button.switch { height: 44px; min-height: 44px !important; background: transparent !important; border-radius: 0; flex-shrink: 0 }
 button.switch:before { content: ''; position: absolute; left: 0; top: 6.5px; width: 51px; height: 31px; border-radius: 16px; background: var(--fill2); transition: background .18s }
 button.switch.on:before { background: var(--green) }
@@ -630,7 +629,6 @@ body:has(.day-close-view.show) .toast-layer { bottom: calc(120px + env(safe-area
 .mail-preview-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.7 }
 .month-name-btn svg { stroke-linecap: round; stroke-linejoin: round; width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 2 }
 .icon-btn svg { width: 23px; height: 23px; flex: 0 0 auto }
-.native-home-mode { display: flex; gap: 2px; background: var(--fill); border-radius: 10px; padding: 3px; margin: 2px 0 14px }
 html.dark .busy-overlay { background: rgba(0,0,0,.68) }
 html.dark .busy-card { border-color: rgba(255,255,255,.12); box-shadow: 0 18px 60px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08) }
 html.dark .storage-boot { background: rgba(0,0,0,.68) }
@@ -645,13 +643,11 @@ html.dark .stock-detail-view { background: #000 }
 html.dark .money-ticker-card { background: #1C1C1E; box-shadow: inset 0 0 0 .5px #2C2C2E }
 .stmt-filterbar button.on { background: var(--label); color: var(--bg) }
 html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,0,0),var(--bg) 20%) }
-.native-home-mode button[aria-pressed=true] { background: var(--card); color: var(--label); box-shadow: 0 1px 3px #00000014 }
 .back-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .favorite-open { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; padding: 0; border: 0; background: transparent; text-align: left; color: var(--label) }
 .account-balance { font-variant-numeric: tabular-nums lining-nums }
 .display-month-button { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--label); border: 0; border-radius: 14px; padding: 0 8px; font: inherit; font-weight: 600 }
 .ring svg { transform: rotate(-90deg); width: 100%; height: auto; aspect-ratio: 1 }
-.native-quick-action svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
 .mm3-atf-daytoggle svg { width: 16px; height: 16px; flex: none; color: var(--label2); transition: transform .18s; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
 .mm3-atf-next-event-icon svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: 21px; height: 21px }
 .settings-profile-avatar svg { width: 38px; height: 38px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round }
@@ -686,16 +682,13 @@ html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,
 #screen-assets .mm3-assets-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; color: inherit; display: grid; align-items: center; gap: 8px; text-align: left; position: relative; transition: background .12s,transform .11s,opacity .11s }
 #screen-assets .mm3-assets-reorder-placeholder { border-radius: 12px; background: rgba(0,122,255,.055); box-shadow: inset 0 0 0 1px rgba(0,122,255,.11); margin: 1px 0 }
 #sheet.mm3-salary-edit-sheet { background: var(--bg) }
-#app .native-home-mode { margin: 0 0 12px; padding: 3px; border-radius: 24px; background: var(--fill) }
 #screen-pay .mm3-salary-range button { flex: 1; border: 0; background: transparent; border-radius: 7px; padding: 5px 1px; color: var(--label2); min-width: 0; font-size: 11px }
 #screen-assets .mm3-assets-range button { flex: 1; min-width: 0; border: 0; background: transparent; border-radius: 7px; min-height: 28px; padding: 4px 1px; color: var(--label2); transition: transform .1s,background .14s,color .14s; font-size: 11px }
-#app .native-home-mode button { border-radius: 21px; font-size: 15px; font-weight: 600; color: var(--label2) }
 #screen-pay .mm3-salary-range button.on { background: var(--card); color: var(--label); font-weight: 650; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
 #screen-assets .mm3-assets-range button.on { background: var(--card); color: var(--label); font-weight: 700; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
 html.dark #screen-pay .mm3-salary-pull { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
 html.dark #screen-assets .mm3-assets-tooltip { background: rgba(58,58,60,.94) }
 html.dark #screen-assets .mm3-assets-menu-btn { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
-#app .native-home-mode button[aria-pressed=true] { background: var(--blue); color: #fff; box-shadow: 0 2px 5px #0000000d }
 #app .date-navigator { margin: 4px 0 8px; min-height: 44px; grid-template-columns: 44px minmax(0,1fr) 44px }
 #app .date-nav-btn { width: 44px; height: 44px; border-radius: 50%; background: transparent }
 #app .date-nav-label { font-size: 15px; font-weight: 650 }
@@ -1008,6 +1001,10 @@ html.dark .menu-scrim { background: rgba(0,0,0,.36) }
 @media (prefers-reduced-motion:reduce) {
   .menu-scrim, .ios-menu { transition: opacity 120ms linear !important; transform: none !important }
 }
+/* 第14版 Q-002: ＋から開く入力は右下を起点に広がる（280ms）。視差を減らす設定では短いフェードだけ */
+@keyframes hubSheetIn { from { opacity: 0; transform: translate(28%,22%) scale(.35); border-radius: 32px } to { opacity: 1; transform: none } }
+#sheet.from-hub.show { transform-origin: 100% 100%; animation: hubSheetIn 280ms var(--spring) both }
+@media (prefers-reduced-motion:reduce) { #sheet.from-hub.show { animation: none } }
 /* ボタン、入力欄、スイッチ、セグメント、選択部品。 */
 .section-head { text-transform: none; text-align: left; font-size: 13px; font-weight: 500; line-height: 1.45; margin: 22px 4px 8px; color: var(--label2) }
 .category-grid { display: grid; gap: 9px; grid-template-columns: repeat(2,minmax(0,1fr)) }
@@ -1239,6 +1236,11 @@ body.dark .calc-assists button { background: var(--native-secondary); border: 0;
 .v11-order-btn { flex: none; width: var(--tap-min); height: var(--tap-min); border: 0; border-radius: 12px; background: var(--fill); color: var(--accent); display: grid; place-items: center }
 .v11-order-btn:disabled { opacity: .35 }
 .v11-order-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+/* 第14版 Q-012: メモなどは「詳細を表示」で開閉（閉じても入力値は残る） */
+.form-more { margin: 0 }
+.form-more > summary { display: flex; align-items: center; min-height: var(--tap-min); padding: 0 4px; color: var(--accent); font-size: var(--type-item); list-style: none; cursor: pointer }
+.form-more > summary::-webkit-details-marker { display: none }
+.form-more[open] > summary { color: var(--label2) }
 /* グループ化された行、カード、ヒーロー表示、指標。 */
 @media (max-width:390px) {
   .ring { width: 136px; height: 136px }
@@ -2293,6 +2295,12 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
   #screen-assets .mm3-assets-spark { display: none }
   #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow { grid-template-columns: 20px minmax(0,1fr) minmax(90px,auto) }
 }
+/* 第14版 D-004: 総資産の口座配分（押すと口座一覧へ） */
+.assets-share { display: flex; align-items: center; gap: 12px; width: 100%; min-height: var(--tap-min); margin-top: 12px; padding: 8px 0 0; border: 0; border-top: .5px solid var(--sep); background: transparent; color: var(--label2); text-align: left }
+.assets-share span { display: grid; gap: 2px; font-size: var(--type-note) }
+.assets-share i { font-style: normal }
+.assets-share i::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--c) }
+.assets-share-empty { margin: 12px 0 0; font-size: var(--type-note); color: var(--label2) }
 /* ACF（現金・カード予測）の表、カレンダー、設定。 */
 .acf-split-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; margin-top: 10px }
 .acf-credit-control { display: grid; gap: 10px }
@@ -2558,7 +2566,6 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .mm3-action-main { min-width: 0; flex: 1 }
 .mm3-action-chev { font-size: 21px; line-height: 1; font-weight: 400; flex-shrink: 0; color: var(--label3) }
 .date-line { font-size: 13px; line-height: 1.4; margin-top: 3px }
-.native-quick-action { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border: 0; border-radius: 26px; background: var(--blue); color: #fff; font-size: 16px; font-weight: 600; padding: 12px 16px; margin: 14px 0 18px; min-height: 48px !important }
 html.motion-off *,
 html.motion-off *::before,
 html.motion-off *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important }
@@ -2576,7 +2583,6 @@ html.motion-off *::after { animation-duration: .001ms !important; animation-iter
 #app .mm3-action-group { background: var(--card); border: 0; border-radius: var(--native-radius); box-shadow: none; overflow: hidden }
 #app .mm3-action-main small { font-size: 12px; line-height: 1.45; margin-top: 3px }
 .mm3-action-chev>.money-symbol { width: 13px; height: 13px }
-#app .native-quick-action { border-radius: var(--native-control); font-size: 16px; min-height: 48px !important }
 #app .mm3-action-row { background: var(--card) }
 #app #acfToday:not(:has(.acf-head)) .acf-home-amount>.money-symbol { width: 12px; height: 12px }
 @media (prefers-contrast:more) {

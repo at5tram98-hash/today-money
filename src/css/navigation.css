@@ -158,7 +158,6 @@
 .mail-preview-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.7 }
 .month-name-btn svg { stroke-linecap: round; stroke-linejoin: round; width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 2 }
 .icon-btn svg { width: 23px; height: 23px; flex: 0 0 auto }
-.native-home-mode { display: flex; gap: 2px; background: var(--fill); border-radius: 10px; padding: 3px; margin: 2px 0 14px }
 html.dark .busy-overlay { background: rgba(0,0,0,.68) }
 html.dark .busy-card { border-color: rgba(255,255,255,.12); box-shadow: 0 18px 60px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08) }
 html.dark .storage-boot { background: rgba(0,0,0,.68) }
@@ -173,13 +172,11 @@ html.dark .stock-detail-view { background: #000 }
 html.dark .money-ticker-card { background: #1C1C1E; box-shadow: inset 0 0 0 .5px #2C2C2E }
 .stmt-filterbar button.on { background: var(--label); color: var(--bg) }
 html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,0,0),var(--bg) 20%) }
-.native-home-mode button[aria-pressed=true] { background: var(--card); color: var(--label); box-shadow: 0 1px 3px #00000014 }
 .back-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .favorite-open { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; padding: 0; border: 0; background: transparent; text-align: left; color: var(--label) }
 .account-balance { font-variant-numeric: tabular-nums lining-nums }
 .display-month-button { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--label); border: 0; border-radius: 14px; padding: 0 8px; font: inherit; font-weight: 600 }
 .ring svg { transform: rotate(-90deg); width: 100%; height: auto; aspect-ratio: 1 }
-.native-quick-action svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round }
 .mm3-atf-daytoggle svg { width: 16px; height: 16px; flex: none; color: var(--label2); transition: transform .18s; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
 .mm3-atf-next-event-icon svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: 21px; height: 21px }
 .settings-profile-avatar svg { width: 38px; height: 38px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round }
@@ -214,16 +211,13 @@ html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,
 #screen-assets .mm3-assets-watchrow { width: 100%; border: 0; border-bottom: .5px solid var(--sep); background: transparent; color: inherit; display: grid; align-items: center; gap: 8px; text-align: left; position: relative; transition: background .12s,transform .11s,opacity .11s }
 #screen-assets .mm3-assets-reorder-placeholder { border-radius: 12px; background: rgba(0,122,255,.055); box-shadow: inset 0 0 0 1px rgba(0,122,255,.11); margin: 1px 0 }
 #sheet.mm3-salary-edit-sheet { background: var(--bg) }
-#app .native-home-mode { margin: 0 0 12px; padding: 3px; border-radius: 24px; background: var(--fill) }
 #screen-pay .mm3-salary-range button { flex: 1; border: 0; background: transparent; border-radius: 7px; padding: 5px 1px; color: var(--label2); min-width: 0; font-size: 11px }
 #screen-assets .mm3-assets-range button { flex: 1; min-width: 0; border: 0; background: transparent; border-radius: 7px; min-height: 28px; padding: 4px 1px; color: var(--label2); transition: transform .1s,background .14s,color .14s; font-size: 11px }
-#app .native-home-mode button { border-radius: 21px; font-size: 15px; font-weight: 600; color: var(--label2) }
 #screen-pay .mm3-salary-range button.on { background: var(--card); color: var(--label); font-weight: 650; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
 #screen-assets .mm3-assets-range button.on { background: var(--card); color: var(--label); font-weight: 700; box-shadow: 0 1px 4px rgba(0,0,0,.10) }
 html.dark #screen-pay .mm3-salary-pull { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
 html.dark #screen-assets .mm3-assets-tooltip { background: rgba(58,58,60,.94) }
 html.dark #screen-assets .mm3-assets-menu-btn { background: rgba(118,118,128,.18); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
-#app .native-home-mode button[aria-pressed=true] { background: var(--blue); color: #fff; box-shadow: 0 2px 5px #0000000d }
 #app .date-navigator { margin: 4px 0 8px; min-height: 44px; grid-template-columns: 44px minmax(0,1fr) 44px }
 #app .date-nav-btn { width: 44px; height: 44px; border-radius: 50%; background: transparent }
 #app .date-nav-label { font-size: 15px; font-weight: 650 }

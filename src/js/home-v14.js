@@ -272,7 +272,9 @@ function openOtherInputs(){
   ];
   pushView('その他の入力',`<div class="group">${items.map(([id,sym,title,sub])=>`<button type="button" class="row press home-row" id="${id}"><span class="row-icon">${icon(sym)}</span><div class="row-main"><div class="row-title">${title}</div>${sub?`<div class="row-sub">${sub}</div>`:''}</div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`,root=>{for(const [id,,,,fn] of items)root.querySelector('#'+id).onclick=fn});
 }
-document.getElementById('addHub')?.addEventListener('click',e=>{const b=e.currentTarget;if(document.getElementById('menuLayer')?.classList.contains('show')){closeMenu();return}feedback?.selection?.();openMenu(b,addHubItems(),{label:'入力の種類'})});
+/* ＋から開く入力シートは右下（＋の位置）を起点に広がる（Q-002「右下を起点に全画面入力へ」。ページめくりはWebで不安定なため、仕様の代替である連続拡大にする） */
+function fromHub(fn){return()=>{const s=document.getElementById('sheet');s?.classList.add('from-hub');s?.addEventListener('animationend',()=>s.classList.remove('from-hub'),{once:true});setTimeout(()=>s?.classList.remove('from-hub'),600);fn()}}
+document.getElementById('addHub')?.addEventListener('click',e=>{const b=e.currentTarget;if(document.getElementById('menuLayer')?.classList.contains('show')){closeMenu();return}feedback?.selection?.();openMenu(b,addHubItems().map(x=>x.label==='その他の入力'?x:{...x,action:fromHub(x.action)}),{label:'入力の種類'})});
 
 /* ---------- 支払いroot（P-001〜015） ---------- */
 let payrootDismissedRisk='';

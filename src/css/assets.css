@@ -186,3 +186,9 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
   #screen-assets .mm3-assets-spark { display: none }
   #screen-assets .mm3-assets-watchlist.mm3-assets-manual .mm3-assets-watchrow { grid-template-columns: 20px minmax(0,1fr) minmax(90px,auto) }
 }
+/* 第14版 D-004: 総資産の口座配分（押すと口座一覧へ） */
+.assets-share { display: flex; align-items: center; gap: 12px; width: 100%; min-height: var(--tap-min); margin-top: 12px; padding: 8px 0 0; border: 0; border-top: .5px solid var(--sep); background: transparent; color: var(--label2); text-align: left }
+.assets-share span { display: grid; gap: 2px; font-size: var(--type-note) }
+.assets-share i { font-style: normal }
+.assets-share i::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--c) }
+.assets-share-empty { margin: 12px 0 0; font-size: var(--type-note); color: var(--label2) }

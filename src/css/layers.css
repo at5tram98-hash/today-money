@@ -212,3 +212,7 @@ html.dark .menu-scrim { background: rgba(0,0,0,.36) }
 @media (prefers-reduced-motion:reduce) {
   .menu-scrim, .ios-menu { transition: opacity 120ms linear !important; transform: none !important }
 }
+/* 第14版 Q-002: ＋から開く入力は右下を起点に広がる（280ms）。視差を減らす設定では短いフェードだけ */
+@keyframes hubSheetIn { from { opacity: 0; transform: translate(28%,22%) scale(.35); border-radius: 32px } to { opacity: 1; transform: none } }
+#sheet.from-hub.show { transform-origin: 100% 100%; animation: hubSheetIn 280ms var(--spring) both }
+@media (prefers-reduced-motion:reduce) { #sheet.from-hub.show { animation: none } }
