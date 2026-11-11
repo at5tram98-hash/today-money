@@ -15,7 +15,8 @@
     "test:remaining": "node tests/remaining-ops.mjs",
     "test:worker": "wrangler deploy --config worker/wrangler.jsonc --dry-run --outdir ../test-results/worker-build && node tests/worker-runtime.mjs",
     "push:deploy": "node worker/deploy.mjs",
-    "test:push-live": "node tests/push-production.mjs"
+    "test:push-live": "node tests/push-production.mjs",
+    "test:extra": "MM3_EXTRA_STRICT=1 node tests/extra-ui.mjs"
   },
   "devDependencies": {
     "acorn": "8.19.0",

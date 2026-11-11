@@ -57,8 +57,6 @@ html.dark .stock-detail-view .pro-chart-point { fill: #1C1C1E }
 .pro3-preview-row:last-child { border-bottom: 0 }
 .pro3-preview-row strong { font-variant-numeric: tabular-nums }
 .pro3-allocation-ranges { margin-top: 12px; border-top: .5px solid var(--sep); padding-top: 8px }
-.pro4-command-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: -2px 0 12px }
-.pro4-command { border: 0; border-radius: 13px; background: var(--card); color: var(--blue); font-weight: 680; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 13px; min-height: 46px !important }
 .pro4-mode { margin: 2px 0 12px }
 .pro4-editor { background: var(--card); border-radius: 16px; padding: 12px; margin-bottom: 12px }
 .pro4-editor textarea { width: 100%; min-height: 92px; resize: vertical; border: 0; background: transparent; outline: none; font-size: 15px; line-height: 1.5; color: var(--label) }
@@ -156,8 +154,6 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
 .profile-photo-action { display: block; min-height: 44px; padding: 10px 16px; border: 0; background: transparent; color: var(--blue); font-size: 15px; margin: 0 auto }
 .profile-photo-action[hidden] { display: none }
 .profile-name-field { padding: 0; border: 0; background: transparent; width: 100% }
-#app .pro4-command-strip { gap: 8px; margin: 0 0 16px }
-#app .pro4-command { background: var(--card); border-radius: var(--native-control); font-size: 14px }
 #app .mm3-assets-shell { background: transparent }
 @media (prefers-reduced-motion:reduce) {
   #screen-assets .mm3-assets-line { animation: none; stroke-dashoffset: 0 }
@@ -181,7 +177,6 @@ html.motion-off .mm3-assets-line { stroke-dashoffset: 0 !important }
   .pro3-allocation-grid,
   .pro3-scenario-metrics { grid-template-columns: 1fr }
   .pro3-day-picks { grid-template-columns: repeat(3,minmax(0,1fr)) }
-  .pro4-command-strip { grid-template-columns: 1fr }
   .pro4-parse-row { grid-template-columns: 74px minmax(0,1fr) }
   .pro4-goal-metrics { grid-template-columns: 1fr }
   .pro4-review-issue { grid-template-columns: 28px minmax(0,1fr) auto }

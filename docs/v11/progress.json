@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-10T19:22:45.582Z",
+ "generatedAt": "2026-11-11T01:40:27.074Z",
  "table": [
   {
    "name": "ボタン・操作",
@@ -18,9 +18,9 @@
   {
    "name": "追加UI（852候補→重複除去796）",
    "total": 796,
-   "implemented": 700,
-   "verified": 700,
-   "progress": "87.9%"
+   "implemented": 744,
+   "verified": 744,
+   "progress": "93.5%"
   },
   {
    "name": "画面遷移（943記録→重複除去464）",

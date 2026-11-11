@@ -204,3 +204,11 @@ html.native-keyboard .push-view { bottom: var(--native-keyboard-inset,0px) }
 @media (max-height:450px) {
   .sheet .grabber { height: 16px; flex-basis: 16px }
 }
+/* メニュー（第11版 HOME-003・MONTH-043・PAY-080 ほか）: 背景の遮蔽、開く160ms／閉じる130ms、各項目44pt */
+.menu-scrim { position: fixed; inset: 0; z-index: 299; background: rgba(0,0,0,.12); opacity: 0; pointer-events: none; transition: opacity 130ms ease-in }
+.menu-scrim.show { opacity: 1; pointer-events: auto; transition: opacity var(--motion-menu) ease-out }
+html.dark .menu-scrim { background: rgba(0,0,0,.36) }
+.ios-menu.measuring { visibility: hidden; transition: none }
+@media (prefers-reduced-motion:reduce) {
+  .menu-scrim, .ios-menu { transition: opacity 120ms linear !important; transform: none !important }
+}

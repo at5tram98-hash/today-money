@@ -1,8 +1,8 @@
 /* 巡回検査と画面シナリオ検査が共有する実行基盤。
    ビルド済みのアプリを配信し、検査用の入口（画面を開く関数、初期データの投入）を差し込む。 */
 import {createServer} from 'node:http';
-import {readFileSync, statSync} from 'node:fs';
-import {resolve, extname} from 'node:path';
+import {readFileSync, statSync, writeFileSync, mkdirSync} from 'node:fs';
+import {resolve, extname, basename} from 'node:path';
 import {chromium} from 'playwright';
 import {build, root} from '../scripts/build.mjs';
 
@@ -66,8 +66,15 @@ export async function createPage(version,{width,appearance}){
   // 取引・タグが1件ずつある状態から始め、編集や削除の画面にも到達できるようにする
   await page.evaluate(async()=>{await globalThis.__mm3Test.seed();globalThis.__mm3Test.renderAll();globalThis.__original=JSON.stringify(globalThis.__mm3Test.getData())});
   await page.evaluate(inPage);
+  await page.evaluate(()=>globalThis.__crawl.recordFlow());
+  const close=context.close.bind(context);context.close=async(...args)=>{await collectFlow(page);return close(...args)};
+  pages.add(page);
   return{page,context,errors};
 }
+/* 流れのテスト（P0・残りの操作・81画面・金額欄）で実際に表示された操作要素を記録し、追加UIの照合に使う。
+   記録するのは、見えていて・読み上げ名があり・44pt以上の要素だけ。 */
+const flowInventory=new Set(),pages=new Set();
+async function collectFlow(page){if(!pages.has(page))return;pages.delete(page);try{for(const x of await page.evaluate(()=>[...(globalThis.__flowInv||[])]))flowInventory.add(x)}catch(e){}}
 
 /* ---- ページ内の補助関数 ---- */
 export const inPage=`
@@ -101,6 +108,8 @@ globalThis.__crawl={
     if(text(el.textContent))return text(el.textContent);
     return text(el.getAttribute('title'))||text(el.getAttribute('placeholder'))||text(el.getAttribute('alt'))||(el.querySelector('img[alt],svg[aria-label]')?'icon':'');
   },
+  /* DOMが変わるたびに（200ms待ってから）合格した操作要素を記録する */
+  recordFlow(){const inv=globalThis.__flowInv=new Set();let timer=0;const snap=()=>{timer=0;try{const sel='button,a[href],input:not([type=hidden]),select,textarea,[role=button],[role=switch],[role=radio],[role=option],[role=menuitem],[role=listbox]';for(const el of document.querySelectorAll(sel)){if(!this.visible(el)||el.closest('[aria-hidden=true]'))continue;const n=this.name(el),r=el.getBoundingClientRect();if(!n||r.width<43.5||r.height<43.5)continue;inv.add(el.tagName+'|'+(el.id||'')+'|'+n.slice(0,60))}for(const el of document.querySelectorAll('.push-title,.sheet-title,.large-title,[role=dialog] h2,#alertTitle'))if(this.visible(el)&&this.name(el))inv.add('DIV|'+(el.id||'')+'|'+this.name(el).slice(0,60))}catch(e){}};new MutationObserver(()=>{if(!timer)timer=setTimeout(snap,200)}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class','hidden']});snap()},
   audit(){
     const layer=this.layer(),small=[],unnamed=[];
     for(const el of layer.querySelectorAll('button,a[href],input:not([type=hidden]),select,textarea,[role=button],[role=switch],[role=radio],[role=option],[role=tab],[role=menuitem],[role=slider]')){
@@ -121,7 +130,7 @@ globalThis.__crawl={
     for(const el of layer.querySelectorAll('*')){if(el.children.length||!el.textContent.trim()||!this.visible(el)||el.closest('[aria-hidden=true],svg'))continue;const size=parseFloat(getComputedStyle(el).fontSize);if(size<11)smallText.push((el.id?'#'+el.id:'.'+String(el.className).split(' ')[0])+' '+size+'px')}
     for(const el of layer.querySelectorAll('button,a[href],input:not([type=hidden]),select,textarea,[role=button],[role=switch],[role=radio],[role=option],[role=menuitem],[role=listbox]')){if(this.visible(el))inventory.push(el.tagName+'|'+(el.id||'')+'|'+this.name(el).slice(0,60))}
     // 画面の見出しと最下段のタブも、追加UIの照合対象にする
-    for(const el of [...layer.querySelectorAll('.push-title,.sheet-title,.large-title,[role=dialog] h2'),...document.querySelectorAll('#tabbar .tab')]){if(this.visible(el))inventory.push((el.matches('button')?'BUTTON':'DIV')+'|'+(el.id||'')+'|'+this.name(el).slice(0,60))}
+    for(const el of [...layer.querySelectorAll('.push-title,.sheet-title,.large-title,[role=dialog] h2,#alertTitle'),...document.querySelectorAll('#tabbar .tab')]){if(this.visible(el))inventory.push((el.matches('button')?'BUTTON':'DIV')+'|'+(el.id||'')+'|'+this.name(el).slice(0,60))}
     return{small,unnamed,overlaps:[...new Set(overlaps)].slice(0,8),smallText:[...new Set(smallText)],inventory:[...new Set(inventory)],overflow:scroller.scrollWidth>scroller.clientWidth+1?scroller.scrollWidth-scroller.clientWidth:0};
   },
   motion(){
@@ -171,7 +180,7 @@ export async function reset(page,tab){
   },tab);
   await page.waitForTimeout(60);
 }
-export const closeHarness=async()=>{await browser.close();await new Promise(r=>server.close(r))};
+export const closeHarness=async()=>{for(const p of [...pages])await collectFlow(p);if(flowInventory.size){mkdirSync(resolve(root,'test-results'),{recursive:true});writeFileSync(resolve(root,`test-results/flow-inventory-${basename(process.argv[1]||'test','.mjs')}.json`),JSON.stringify([...flowInventory].sort(),null,1))}await browser.close();await new Promise(r=>server.close(r))};
 /* 画面を開く: reset → 前提の関数呼び出し → 目標計画の段階指定 → セレクタの順押し */
 export async function openScreen(page,{tab,setup=null,path=[],patch=null,keepData=false}){
   // keepData: 直前の操作で保存した内容を保ったまま開き直す（画面だけを閉じる）
