@@ -25,7 +25,7 @@ const map={
  'N-001':['#homeTab（data-tab=home）',`${N} switchRoot/switchTab`],'N-002':['#paymentsTab（data-tab=payments）',`${N} switchRoot`],'N-003':['#settingsTab（data-tab=settings）',`${N} switchRoot`],
  'N-004':['nav#tabbar',`${N} installTabSlide・src/css/navigation.css`],'N-005':['.topbar.native-scrolled','src/js/24-accessibility.js decorate'],
  'N-006':['.busy-overlay（全面）','src/js/02-state-and-commits.js runWithBusy','未対応','重い計算（ATF・資産予測）では今も全面の待機表示を使う。データ領域だけのスケルトンと領域別の再試行は未実装'],
- 'H-001':['#todayTop .large-title',`${H} homeHeaderHtml`],'H-002':['#todaySearch',`${H} bindHome→openSmartInputSearch`,'','検索画面は既存のpush遷移。虫眼鏡から検索欄への連続変形アニメーションは未実装'],
+ 'H-001':['#todayTop .large-title',`${H} homeHeaderHtml`],'H-002':['#todaySearch',`${H} bindHome→openSmartInputSearch`,'一部','検索画面は既存のpush遷移。虫眼鏡から検索欄への連続変形アニメーションは未実装'],
  'H-003':['#homeProfile',`${H} openProfilePanel`],'H-004':['.profile-panel-sub・.profile-btn.ring-*',`${H} profileState`,'','状態は「端末に保存済み／保存できません／Gmail同期中・連携中」。バックアップ作成日時は記録が無いため表示しない'],
  'H-005':['#ppEdit',`${H} openProfilePanel→openProfileEdit`],'H-006':['#ppBackup',`${H} openProfilePanel→openDataSettings`],'H-007':['#ppNotices・.profile-dot',`${H} openProfilePanel→openNotices`],
  'H-008':['#homeAlert',`${H} homeAlertHtml`],'H-009':['#homeAlertClose',`${H} bindHome`],'H-010':['#homePeriodToday・#homePeriodMonth',`${H} setHomePeriod・installPeriodDrag`],
@@ -36,7 +36,7 @@ const map={
  'H-050':['#homeAcfCard',`${H} homeAcfCardHtml`],'H-051':['#homeAcfCard .mini-spark',`${H} miniSparkSvg`],'H-060':['#homePaymentCard',`${H} homePaymentCardHtml・openPaymentEvent`],'H-061':['#homeAllPayments',`${H} bindHome→switchRoot`],
  'H-070':['.home-section-head',`${H} homeRowsHtml`],'H-071':['[data-home-cat]',`${H} categoryTableRowHtml`],'H-072':['#homeAllCategories',`${H} openHomeCategoryList`],'H-073':['[data-home-tx]',`${H} homeRowsHtml`],'H-074':['#homeAllTransactions','src/js/11-home-and-month.js openTransactionList'],
  'H-075':['#homeDayClose',`${H} homeRowsHtml→openDayClosingJournal`],'H-076':['#homeCompare',`${H} homeRowsHtml→openMonthAnalysis`],'H-077':['（ホームでは非表示）・ACF詳細 #acfViewMode','src/js/17-acf-refinements.js'],
- 'H-078':['#homeMail',`${H} homeRowsHtml`],'H-079':['#homeLarge',`${H} openLargeExpenseList`],'H-080':['#homeGoals',`${H} homeRowsHtml→openEventGoals`],'H-081':['#homeLayoutEdit',`${H} openHomeLayoutEditor`,'','並び替えは上下ボタン（長押しドラッグは未実装）'],
+ 'H-078':['#homeMail',`${H} homeRowsHtml`],'H-079':['#homeLarge',`${H} openLargeExpenseList`],'H-080':['#homeGoals',`${H} homeRowsHtml→openEventGoals`],'H-081':['#homeLayoutEdit',`${H} openHomeLayoutEditor`,'一部','並び替えは上下ボタン（長押しドラッグは未実装）'],
  'Q-001':['#addHub',`${H} addHubItems・src/index.html`],'Q-002':['＋→「支出を記録」','src/js/08-transactions.js openQuickExpense',''],'Q-003':['＋→「臨時収入」','src/js/09-accounts-and-payroll.js openTempIncome'],'Q-004':['＋→「残高を更新」','src/js/09-accounts-and-payroll.js openQuickBank'],
  'Q-005':['＋→「給与を登録」','src/js/09-accounts-and-payroll.js openSalaryAdd'],'Q-006':['＋→「その他の入力」#ih*',`${H} openOtherInputs`],'Q-007':['#sheet .sheet-title・#qeCancel・#qeSave','src/js/08-transactions.js'],
  'Q-008':['#qeAmount→#calculator','src/js/calculator.js','別検査で確認','金額欄46種の電卓（npm run test:amount 164/164）。初期フォーカスは電卓を開く前の金額欄'],
@@ -68,7 +68,7 @@ const map={
 };
 const commit=sha();
 const uiRows=ui.map(r=>{const id=r['設計ID'],[dom,src,st,note]=map[id]||['','','未対応','対応表に未登録'],res=results[id];
-  const status=st&&st!==''?st:res?(res.result==='合格'?'完了':'不合格'):'未確認';
+  const status=st&&st!==''?(st==='一部'&&res&&res.result!=='合格'?'不合格':st):res?(res.result==='合格'?'完了':'不合格'):'未確認';
   const done=status==='完了'||(status==='別検査で確認');
   return{id,name:r['ボタン・カード名'],dom,src,before:`旧: ${r['既存参照ID（実在保証なし）']}`,after:res?`test-results/v14/${id}.png`:'',test:res?`${res.result}：${res.note}`:'',side:res?(res.result==='合格'?(/保存|二重/.test(res.note)?'保存は1回だけ':'会計データ不変（操作前後で一致）'):''):'',commit:done?commit:'',status,note:note||'',transition:r['遷移ID'],priority:r['優先度']}});
 write('ui-111.csv',['設計ID','ボタン・カード名','優先度','現行HTML ID・セレクタ','ソースファイルと関数','変更前画面','変更後画面','操作・遷移テスト','副作用テスト','コミットSHA','完了状態','補足'],uiRows.map(r=>[r.id,r.name,r.priority,r.dom,r.src,r.before,r.after,r.test,r.side,r.commit,r.status,r.note]));
@@ -83,7 +83,7 @@ write('transitions-85.csv',['遷移ID','起点','遷移先','使っている設�
 const entry={HOME:['ホーム→支出カード→今日の支出／ホーム右上・プロフィール・＋入力ハブ','H-020・H-002・H-007・Q-001'],MONTH:['ホーム→支出カード（今月）→今月の支出','H-010・H-020'],GOAL:['ホームの支出カード「目標」→目標計画','H-023'],PAY:['その他→給与（ホームの給与カードからも）','O-002・H-040'],PAYMENTS:['支払いroot→請求一覧','P-003・P-006'],ASSETS:['その他→資産（ホームの総資産カードからも）','O-003・H-030'],BANK:['資産→口座詳細／＋残高を更新','O-003・D-013・Q-004'],SALARYEDIT:['給与／請求一覧の編集シート','O-002・P-005'],ACF:['ホームの生活費の見通しカード→ACF詳細','H-050'],SIM:['ACF詳細→買う前に試す','H-050'],STATEMENT:['ホームの未確認の明細／支払いの明細照合センター','H-078・P-015'],PRO:['今月の支出・給与・資産の各メニュー','H-020・O-002・O-003'],DAYCLOSE:['ホームの日締め行→日締めジャーナル／今日の支出','H-075・H-020'],EVENT:['ホームの旅行・プレゼント行／＋その他の入力','H-080・Q-006'],LARGE:['ホームの大型支出行／支払いroot／＋その他の入力','H-079・P-008・Q-006'],SET:['その他（設定の一覧）','O-006〜O-016'],CALC:['＋入力の金額欄→電卓','Q-002・Q-008'],BACKUP:['その他→データとバックアップ','O-005・O-017〜O-020'],TX:['ホームの最近の取引／すべての取引','H-073・H-074'],GMAIL:['その他→Gmail連携','O-014'],PICKER:['各画面の月ホイール','H-011・P-011'],REPEAT:['＋→その他の入力→最近の支出を再利用','Q-006'],INCOME:['＋→臨時収入／給与','Q-003・O-002'],UPDATE:['ホームの今日／今月の切替','H-010']};
 const relocation=JSON.parse(readFileSync(resolve(v14,'relocation.json'),'utf8'));
 const legacyRows=legacy.map(r=>{const id=r['旧304操作ID'],pre=id.replace(/-\d+$/,''),[path,ids]=entry[pre]||['（未割当）',''],v11=v11ops.get(id)||{},dom=v11['DOM／識別子']||r['旧台帳DOM識別子'],moved=relocation.selectors['#'+dom];
-  const entryOk=ids.split('・').every(x=>{const k=x.replace(/〜.*/,'');const u=uiRows.find(u=>u.id===k);return !u||u.status==='完了'||u.status==='別検査で確認'});
+  const entryOk=ids.split('・').every(x=>{const k=x.replace(/〜.*/,'');const u=uiRows.find(u=>u.id===k);return !u||u.status==='完了'||u.status==='別検査で確認'||results[k]?.result==='合格'});
   const opOk=v11['検証済み']==='○';
   const status=opOk&&entryOk?'新しい入口から到達・動作を確認':!opOk?'未確認（外部認証が必要）':'入口が未確認';
   return[id,r['旧ボタン名'],dom,r['新しい移設先'],moved?moved.label:path,ids,v11['実装ファイル']||'',`${v11['検証の証拠']||''}${opOk?'・第14版の入口で81画面/P0/残りの操作/巡回を再実行':''}`,status]});
