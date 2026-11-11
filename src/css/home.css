@@ -150,7 +150,7 @@
 }
 /* 今日画面のクイック操作（第11版 HOME-004〜011）: 唯一の青い主ボタンと、線画アイコン付き56ptの行 */
 .quick-grid { display: grid; gap: var(--space-section); margin: 0 0 var(--space-section) }
-.today-primary-cta { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--cta-height); border-radius: 14px; font-size: var(--type-item); font-weight: 600 }
+#app .today-primary-cta { display: flex; align-items: center; justify-content: center; gap: 8px; height: var(--cta-height); padding: 0 16px; border-radius: 14px; font-size: var(--type-item); font-weight: 600 }
 .today-primary-cta svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
 .today-quick-list { margin: 0 }
 .row-icon { flex: none; width: 24px; height: 24px; display: grid; place-items: center; color: var(--accent) }
