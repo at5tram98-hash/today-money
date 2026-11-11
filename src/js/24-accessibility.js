@@ -55,8 +55,11 @@
     const top=root.querySelector('.topbar'),content=root.querySelector('.scroll');
     // Keep nodes and their existing handlers; moving them cannot register twice.
     // 第14版: 入力の入口は＋ハブだけ（各画面に同じ入力ボタンを足さない）。今日／今月の切替はホームの支出カード内にある
-    if(!content.dataset.nativeScrollBound){content.dataset.nativeScrollBound='true';content.addEventListener('scroll',()=>top.classList.toggle('native-scrolled',content.scrollTop>4),{passive:true})}
-    top.classList.toggle('native-scrolled',content.scrollTop>4);
+    // Liquid Glass: 少しスクロールしたら上端をガラスに、見出しの高さ分スクロールしたら中央の小見出しへ切り替える
+    const syncScrolled=()=>{const y=content.scrollTop;top.classList.toggle('native-scrolled',y>4);top.classList.toggle('lg-collapsed',y>28)};
+    if(!content.dataset.nativeScrollBound){content.dataset.nativeScrollBound='true';content.addEventListener('scroll',syncScrolled,{passive:true})}
+    const compact=top.querySelector('.large-title')?.textContent.trim()||'';if(compact)top.dataset.compactTitle=compact;else delete top.dataset.compactTitle;
+    syncScrolled();
     enhance(root);syncTabState();
   }
   const renders={today:renderToday,day:renderDay,month:renderMonth,pay:renderPay,payments:renderPayments,payroot:renderPayRoot,assets:renderAssets,settings:renderSettings};

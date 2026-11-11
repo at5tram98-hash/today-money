@@ -56,7 +56,8 @@
     "src/css/acf.css",
     "src/css/mail.css",
     "src/css/settings.css",
-    "src/css/components.css"
+    "src/css/components.css",
+    "src/css/liquid-glass.css"
   ],
   "baseline": {
     "blob": "2a33e9e643db3c53347d211fa77b67c3ac580072",
