@@ -3267,7 +3267,7 @@ html.dark {
 .sheet-nav:has(.nav-icon) { min-height: calc(var(--ln-size) + 16px); align-items: center }
 
 /* ---------- タブバー（コンパクト・レンズ） ---------- */
-#app .tabbar { left: 0; right: 0; margin-inline: auto; width: min(330px, calc(100% - 40px)); height: 64px; padding: 4px }
+#app .tabbar { left: 0; right: 0; margin-inline: auto; width: min(330px, calc(100% - 40px)) }
 #app .tabbar .tab-selection { transition: transform .32s var(--ln-spring), width .32s var(--ln-spring), scale .26s var(--ln-spring), background .2s, box-shadow .2s }
 #app .tabbar.lens-press .tab-selection, #app .tabbar.tab-dragging .tab-selection { scale: 1.18 1.32; background: radial-gradient(130% 150% at 50% 0%, rgba(255,255,255,.75), rgba(255,255,255,.28) 55%, rgba(255,255,255,.18)); -webkit-backdrop-filter: brightness(1.12) saturate(1.6) blur(2px); backdrop-filter: brightness(1.12) saturate(1.6) blur(2px); box-shadow: inset 0 1.5px 0 #fff, inset 0 -1px 2px rgba(0,0,0,.06), inset 0 0 0 1px rgba(255,255,255,.85), 0 10px 26px rgba(0,0,0,.16) }
 html.dark #app .tabbar.lens-press .tab-selection, html.dark #app .tabbar.tab-dragging .tab-selection { background: radial-gradient(130% 150% at 50% 0%, rgba(255,255,255,.3), rgba(255,255,255,.1) 55%, rgba(255,255,255,.08)); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px rgba(255,255,255,.2), 0 10px 26px rgba(0,0,0,.5) }
@@ -3390,3 +3390,29 @@ html.dark .hs-hero-center .hs-avatar-img { background: linear-gradient(160deg, #
 :is(.sheet-body, .push-body) > .form-section .field { background: transparent; padding-left: 0; padding-right: 0 }
 .form-card { border-radius: 20px }
 .form-label { font-size: 13px; font-weight: 600; color: var(--label2) }
+/* 電卓: 小さな画面でもキーが隠れない配置 */
+.entry-amount-line { display: flex; align-items: baseline; justify-content: space-between; gap: 10px }
+.entry-amount-line .entry-mode-label { flex: none }
+.entry-date { position: relative; flex: none; min-height: 44px; padding: 0 12px; border-radius: 14px; font-size: 15px; font-weight: 600 }
+.entry-date input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; max-width: none; min-height: 0; cursor: pointer }
+.entry-chip-sep { flex: none; width: .5px; align-self: stretch; margin: 8px 2px; background: var(--sep) }
+@media (max-height: 700px) { .entry-hint { display: none } .entry-expr { min-height: 0; font-size: 13px } #sheet.entry-sheet .sheet-body.entry-calc { gap: 8px } .entry-keys { grid-template-rows: repeat(5, 44px); gap: 6px } .entry-key { min-height: 44px; font-size: 22px; border-radius: 18px } }
+@media (max-height: 600px) { .entry-amount { font-size: 34px } .entry-expr:empty { display: none } }
+#sheet.entry-sheet .entry-calc > :not(.entry-keys) { flex-shrink: 0 }
+.entry-keys { flex: 1 1 auto; min-height: 0; max-height: 430px; grid-template-rows: repeat(5, minmax(44px, 1fr)) }
+@media (max-height: 700px) { .entry-keys { flex: 0 0 auto; grid-template-rows: repeat(5, 44px) } }
+@media (max-height: 600px) { .entry-modes.glass-lensbar > button { min-height: 44px; font-size: 13px } .entry-modes.glass-lensbar > button svg { display: none } .entry-expr { display: none } #sheet.entry-sheet .sheet-body.entry-calc { gap: 6px; padding-top: 0 } #sheet.entry-sheet .sheet-nav { min-height: 56px } }
+.dg-card { padding: 0 !important; overflow: hidden }
+.dg-card .today-spend-tap { display: block; width: 100%; text-align: left; padding: 16px 16px 12px; border: 0; background: transparent; color: inherit }
+.dg-metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)) }
+.dg-metric { display: flex; flex-direction: column; min-width: 0; padding: 0 10px; border-left: .5px solid var(--sep) }
+.dg-metric:first-child { padding-left: 0; border-left: 0 }
+.dg-metric > span { font-size: 13px; font-weight: 700; color: var(--c) }
+.dg-metric > b { font-family: var(--font-rounded, inherit); font-size: 22px; font-weight: 700; letter-spacing: -.4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums }
+.dg-bar { height: 8px; margin: 14px 0 8px; border-radius: 4px; background: var(--fill) }
+.dg-bar > i { display: block; height: 100%; border-radius: 4px; background: var(--green); transition: width .3s ease-out }
+.dg-bar.over > i { background: var(--red) }
+.dg-note { font-size: 13px; color: var(--label2) }
+.dg-card .goal-plan-action { margin: 0 !important; padding: 0 16px; min-height: 50px; border-top: .5px solid var(--sep) }
+@media (max-width: 360px) { .dg-metric > b { font-size: 18px } }
+html.native-keyboard #sheet { transition-property: transform !important }

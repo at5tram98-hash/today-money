@@ -46,31 +46,31 @@ function openEntryCalc(initialMode='expense'){
     const placeLens=(animate=true)=>{const b=modes.querySelector(`[data-entry-mode="${st.mode}"]`);if(!b)return;lens.style.transition=animate&&!mm3MotionReduced()?'':'none';lens.style.width=b.offsetWidth+'px';lens.style.transform=`translateX(${b.offsetLeft}px)`;lens.style.setProperty('--m',modeOf(st.mode).color)};
     const drawDisplay=()=>{const m=modeOf(st.mode),a=amount(),bank=st.mode==='bank'?bankById(st.bankId):null;
       display.style.setProperty('--m',m.color);
-      display.innerHTML=`<div class="entry-display-top"><span class="entry-mode-label">${esc(m.label)}</span>${st.mode==='expense'||st.mode==='income'?`<label class="entry-date">${icon('calendar')}<input type="date" id="entryDate" value="${esc(st.date)}" aria-label="日付"></label>`:''}</div><div class="entry-expr">${esc(/[+\-×÷]/.test(st.expr)?st.expr:'')}</div><div class="entry-amount">${yen(a)}</div><div class="entry-hint">${st.mode==='bank'&&bank?`現在の残高 ${yen(bank.balance)}・入力した金額に置き換えます`:st.mode==='salary'?'保存すると給与の記録を開きます（総支給額）':st.mode==='card'?'保存すると請求の記録を開きます':st.mode==='income'?'給与以外の入金':'使った金額'}</div>`;
-      const d=display.querySelector('#entryDate');if(d)d.onchange=()=>{st.date=d.value||st.date};
+      display.innerHTML=`<div class="entry-expr">${esc(/[+\-×÷]/.test(st.expr)?st.expr:'')}</div><div class="entry-amount-line"><span class="entry-mode-label">${esc(m.label)}</span><span class="entry-amount">${yen(a)}</span></div><div class="entry-hint">${st.mode==='bank'&&bank?`現在の残高 ${yen(bank.balance)}・入力した金額に置き換えます`:st.mode==='salary'?'保存すると給与の記録を開きます（総支給額）':st.mode==='card'?'保存すると請求の記録を開きます':st.mode==='income'?'給与以外の入金':'使った金額'}</div>`;
       markSheetDirty(a>0&&st.typed)};
+    const dateChip=()=>{const d=parseYmd(st.date);return `<label class="entry-date" title="日付">${icon('calendar')}<span>${st.date===ymd()?'今日':`${d.getMonth()+1}/${d.getDate()}`}</span><input type="date" id="entryDate" value="${esc(st.date)}" aria-label="日付（${esc(dayLabel(st.date))}）"></label>`};
+    const bindDate=()=>{const d=context.querySelector('#entryDate');if(d)d.onchange=()=>{if(d.value){st.date=d.value;drawContext()}}};
     const chip=(attr,val,label,on,extra='')=>`<button type="button" class="entry-chip${on?' on':''}" ${attr}="${esc(val)}" aria-pressed="${on}" ${extra}>${label}</button>`;
     const drawContext=()=>{let h='';
       if(st.mode==='expense'){
         const pays=entryPaymentChoices(),pay=pays.find(p=>p.method===st.pay.method&&p.id===st.pay.id)||pays[0],recent=recentExpenseTemplates(4);
-        h=`<div class="entry-chips" role="group" aria-label="カテゴリ">${data.categories.map(c=>chip('data-entry-cat',c.name,`<i style="background:${c.color}"></i>${esc(c.name)}`,c.name===st.cat)).join('')}</div>
-        <div class="entry-row2"><button type="button" class="entry-field-btn" id="entryPay" aria-haspopup="dialog">${icon('card')}<span>${esc(pay.label)}</span>${icon('chevronDown')}</button><label class="entry-field"><input type="text" id="entryMerchant" placeholder="店名・メモ" value="${esc(st.merchant)}" aria-label="店名・メモ"></label></div>
-        <div class="entry-chips entry-quick" role="group" aria-label="すばやく入力"><button type="button" class="entry-chip ghost" id="entryDetail">${icon('list')}詳細入力</button><button type="button" class="entry-chip ghost" id="entryOneLine">${icon('edit')}一行入力</button>${recent.length?`<button type="button" class="entry-chip ghost" id="entryRecent">${icon('repeat')}最近</button>`:''}${recent.map((r,i)=>`<button type="button" class="entry-chip tpl" data-entry-tpl="${i}">${esc(r.merchant)} ${yen(r.amount)}</button>`).join('')}</div>`;
-        context.innerHTML=h;
+        h=`<div class="entry-chips" role="group" aria-label="カテゴリとすばやく入力">${data.categories.map(c=>chip('data-entry-cat',c.name,`<i style="background:${c.color}"></i>${esc(c.name)}`,c.name===st.cat)).join('')}<span class="entry-chip-sep" aria-hidden="true"></span><button type="button" class="entry-chip ghost" id="entryDetail">${icon('list')}詳細入力</button><button type="button" class="entry-chip ghost" id="entryOneLine">${icon('edit')}一行入力</button><button type="button" class="entry-chip ghost" id="entryRecent">${icon('repeat')}最近</button>${recent.map((r,i)=>`<button type="button" class="entry-chip tpl" data-entry-tpl="${i}">${esc(r.merchant)} ${yen(r.amount)}</button>`).join('')}</div>
+        <div class="entry-row2">${dateChip()}<button type="button" class="entry-field-btn" id="entryPay" aria-haspopup="menu">${icon('card')}<span>${esc(pay.label)}</span>${icon('chevronDown')}</button><label class="entry-field"><input type="text" id="entryMerchant" placeholder="店名・メモ" value="${esc(st.merchant)}" aria-label="店名・メモ"></label></div>`;
+        context.innerHTML=h;bindDate();
         context.querySelectorAll('[data-entry-cat]').forEach(b=>b.onclick=()=>{st.cat=b.dataset.entryCat;feedback?.selection?.();drawContext()});
         $('#entryPay').onclick=()=>openEntryOptions('支払い方法',pays.map(p=>[`${p.method}|${p.id}`,p.label]),`${st.pay.method}|${st.pay.id}`,v=>{const [m,id]=v.split('|');st.pay={method:m,id:id||''};drawContext()});
         $('#entryMerchant').oninput=e=>{st.merchant=e.target.value};
         $('#entryOneLine').onclick=()=>{closeSheet();openSmartInputSearch('input')};
-        $('#entryDetail').onclick=()=>{const a=amount(),pre={amount:a,category:st.cat,paymentMethod:st.pay.method,paymentId:st.pay.id,merchant:(st.merchant||'').trim()};closeSheet();setTimeout(()=>openQuickExpense(st.date,pre),40)};
+        $('#entryDetail').onclick=()=>{const a=amount(),pre={amount:a,category:st.cat,paymentMethod:st.pay.method,paymentId:st.pay.id,merchant:(st.merchant||'').trim()};closeSheet();openQuickExpense(st.date,pre)};
         $('#entryRecent')?.addEventListener('click',()=>{closeSheet();openQuickRepeat(st.date)});
         context.querySelectorAll('[data-entry-tpl]').forEach(b=>b.onclick=()=>{const r=recent[Number(b.dataset.entryTpl)];st.expr=String(r.amount);st.cat=r.category;st.pay={method:r.paymentMethod,id:r.paymentId};st.merchant=r.merchant;st.typed=true;feedback?.selection?.();drawDisplay();drawContext()});
         return;
       }
-      if(st.mode==='income')h=`<div class="entry-chips" role="group" aria-label="入金先">${chip('data-entry-to','cash|','手持ち・未入金',st.toType==='cash')}${data.banks.map(b=>chip('data-entry-to',`bank|${b.id}`,`${icon('bank')}${esc(b.name)}`,st.toType==='bank'&&st.bankId===b.id)).join('')}</div><div class="entry-row2"><label class="entry-field wide"><input type="text" id="entrySource" placeholder="収入源（例：単発バイト・返金）" value="${esc(st.merchant)}" aria-label="収入源"></label></div>`;
+      if(st.mode==='income')h=`<div class="entry-chips" role="group" aria-label="入金先">${chip('data-entry-to','cash|','手持ち・未入金',st.toType==='cash')}${data.banks.map(b=>chip('data-entry-to',`bank|${b.id}`,`${icon('bank')}${esc(b.name)}`,st.toType==='bank'&&st.bankId===b.id)).join('')}</div><div class="entry-row2">${dateChip()}<label class="entry-field wide"><input type="text" id="entrySource" placeholder="収入源（例：単発バイト・返金）" value="${esc(st.merchant)}" aria-label="収入源"></label></div>`;
       if(st.mode==='bank')h=data.banks.length?`<div class="entry-chips" role="group" aria-label="口座">${data.banks.map(b=>chip('data-entry-bank',b.id,`${icon('bank')}${esc(b.name)}`,st.bankId===b.id)).join('')}</div>`:`<div class="entry-empty">銀行口座がありません。「その他」→「口座とカード」で追加できます。</div>`;
       if(st.mode==='salary')h=data.employers.length?`<div class="entry-chips" role="group" aria-label="勤務先">${data.employers.map(e=>chip('data-entry-emp',e.id,`${icon('briefcase')}${esc(e.name)}`,st.empId===e.id)).join('')}</div>`:`<div class="entry-empty">勤務先がありません。「その他」→「給与と勤務先」で追加できます。</div>`;
       if(st.mode==='card')h=data.cards.length?`<div class="entry-chips" role="group" aria-label="カード">${data.cards.map(c=>chip('data-entry-card',c.id,`${icon('card')}${esc(c.name)}`,st.cardId===c.id)).join('')}</div>`:`<div class="entry-empty">クレジットカードがありません。「その他」→「口座とカード」で追加できます。</div>`;
-      context.innerHTML=h;
+      context.innerHTML=h;bindDate();
       context.querySelectorAll('[data-entry-to]').forEach(b=>b.onclick=()=>{const [t,id]=b.dataset.entryTo.split('|');st.toType=t;if(id)st.bankId=id;drawContext()});
       $('#entrySource')?.addEventListener('input',e=>{st.merchant=e.target.value});
       context.querySelectorAll('[data-entry-bank]').forEach(b=>b.onclick=()=>{st.bankId=b.dataset.entryBank;if(!st.typed)st.expr=String(Math.round(Number(bankById(st.bankId)?.balance)||0));drawContext();drawDisplay()});
@@ -126,11 +126,11 @@ function entrySave(st,a){
   }
   if(st.mode==='salary'){
     if(!data.employers.length)return showAlert('勤務先がありません','「その他」→「給与と勤務先」で勤務先を追加してください。');
-    closeSheet();setTimeout(()=>openSalaryAdd(null,st.empId,{gross:a,selectedId:st.empId}),60);return;
+    closeSheet();openSalaryAdd(null,st.empId,{gross:a,selectedId:st.empId});return;
   }
   if(st.mode==='card'){
     if(!data.cards.length)return showAlert('カードがありません','「その他」→「口座とカード」でカードを追加してください。');
-    closeSheet();setTimeout(()=>openQuickCardBilling(paymentHomeMonth(),st.cardId,'',a),60);return;
+    closeSheet();openQuickCardBilling(paymentHomeMonth(),st.cardId,'',a);return;
   }
 }
 /* 紙がめくれるように開く（右下の＋から、折り目が斜めに上がる） */
@@ -209,3 +209,13 @@ function decorateSheetNav(nav){
   /* タブバー: 押している間はレンズがふくらむ */
   const bar=document.getElementById('tabbar');if(bar){let t=0;bar.addEventListener('pointerdown',()=>{clearTimeout(t);bar.classList.add('lens-press')});const off=()=>{clearTimeout(t);t=setTimeout(()=>bar.classList.remove('lens-press'),140)};['pointerup','pointercancel','pointerleave'].forEach(ev=>bar.addEventListener(ev,off))}
 })();
+
+/* ---------- 今日の目標: 輪をやめ、アクティビティのような3つの数値と細い棒 ---------- */
+function ringHtml(date,prefix='today'){
+  const s=spentDate(date),g=dailyGoal(date).total||spendDayGoal(date),rate=goalRate(s,g),y=addDays(date,-1),ys=spentDate(y),has=g>0,over=has&&s>g;
+  return `<div class="hero today-goal-hero dg-card"><button class="today-spend-tap" id="${prefix}Hero" type="button" aria-label="${date===ymd()?'今日':'この日'}使った金額 ${yen(s)}・目標 ${has?yen(g):'未設定'}">
+    <div class="dg-metrics"><div class="dg-metric" style="--c:var(--orange)"><span>使った金額</span><b>${yen(s)}</b></div><div class="dg-metric" style="--c:var(--green)"><span>目標</span><b>${has?yen(g):'—'}</b></div><div class="dg-metric" style="--c:var(--accent)"><span>昨日</span><b>${yen(ys)}</b></div></div>
+    <div class="dg-bar${over?' over':''}" aria-hidden="true"><i style="width:${has?clamp(rate,0,100):0}%"></i></div>
+    <div class="dg-note">${has?(over?`目標を ${yen(s-g)} 超えています`:`目標の ${rate}%・あと ${yen(g-s)} 使えます`):'目標を決めると、使える残りがわかります'}</div>
+  </button><button type="button" class="goal-plan-action" id="${prefix}GoalAction"><span>${has?'目標を見直す':'目標をつくる'}</span><span>›</span></button></div>`;
+}
