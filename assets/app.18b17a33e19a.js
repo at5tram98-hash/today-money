@@ -3126,7 +3126,7 @@ function openFinancialDayInspector(date){
   })
 }
 
-function bindMonth(){bindMoneyTicker('month');document.getElementById('monthSearch')?.addEventListener('click',()=>openSmartInputSearch('search'));document.getElementById('monthEventGoals')?.addEventListener('click',()=>openEventGoals(currentMonth));document.getElementById('monthReasonAnalysis')?.addEventListener('click',()=>openReasonAnalysis({kind:'expense',month:currentMonth}));document.getElementById('monthCloseReview')?.addEventListener('click',()=>openMonthCloseReview(currentMonth));document.getElementById('monthName').onclick=openMonthPicker;document.getElementById('monthGoal').onclick=()=>openMonthlyGoalPlanner(currentMonth);document.getElementById('monthHero').onclick=e=>{if(e.target.closest('.goal-plan-action'))openMonthlyGoalPlanner(currentMonth);else openMonthSummaryDetail()};document.getElementById('acfMonth')?.addEventListener('click',openAcf);document.getElementById('monthIncomeOpen')?.addEventListener('click',()=>{payViewMonth=currentMonth;switchTab('pay')});document.getElementById('largePlanAdd')?.addEventListener('click',()=>openLargeExpenseEditor(null,{after:()=>renderMonth()}));document.querySelectorAll('[data-large-plan]').forEach(b=>b.onclick=()=>openLargeExpenseDetail(b.dataset.largePlan));document.getElementById('monthAnalysis').onclick=()=>openMonthAnalysis(currentMonth);document.getElementById('monthTransactions').onclick=()=>openTransactionList({month:currentMonth,title:`${monthLabel(currentMonth)}の支払い`});document.getElementById('monthMail').onclick=openMailOverview;document.querySelectorAll('[data-month-cat]').forEach(b=>b.onclick=()=>{const selectedCategory=b.dataset.monthCat;openTransactionList({month:currentMonth,category:selectedCategory,title:`${selectedCategory}・${monthLabel(currentMonth)}`})});document.getElementById('monthPlanEdit')?.addEventListener('click',()=>{monthPlanEditMode=!monthPlanEditMode;renderMonth()});document.getElementById('monthMenu').onclick=e=>openMenu(e.currentTarget,[{label:'お金のタイムライン',icon:'chart',action:()=>openMoneyTimeline()},{label:'予算を立て直す',icon:'target',action:()=>openBudgetRebalance(currentMonth)},{label:'旅行・プレゼント目標',icon:'gift',action:()=>openEventGoals(currentMonth)},{label:'理由が分かる分析',icon:'chart',action:()=>openReasonAnalysis({kind:'expense',month:currentMonth})},{label:'月締めレビュー',icon:'check',action:()=>openMonthCloseReview(currentMonth)},{label:'横断検索',icon:'search',action:()=>openSmartInputSearch('search')},{label:'生活費の見通し',icon:'chart',action:openAcf},{label:'月間目標を見直す',icon:'target',action:()=>openMonthlyGoalPlanner(currentMonth)},{label:'前月',icon:'chevronLeft',action:()=>monthShift(-1)},{label:'次月',icon:'chevronRight',action:()=>monthShift(1)}]);installHorizontalSwipe(document.getElementById('monthContent'),()=>monthShift(1),()=>monthShift(-1),78);document.querySelectorAll('.day-cell:not(.out)').forEach(cell=>{cell.onclick=()=>{if(monthPlanEditMode)openDayPlanSheet(cell.dataset.date);else openFinancialDayInspector(cell.dataset.date)};installLongPress(cell,()=>openDayQuickMenu(cell.dataset.date),{delay:600,moveTolerance:10})})}
+function bindMonth(){bindMoneyTicker('month');document.getElementById('monthSearch')?.addEventListener('click',()=>openGlobalSearch('transaction'));document.getElementById('monthEventGoals')?.addEventListener('click',()=>openEventGoals(currentMonth));document.getElementById('monthReasonAnalysis')?.addEventListener('click',()=>openReasonAnalysis({kind:'expense',month:currentMonth}));document.getElementById('monthCloseReview')?.addEventListener('click',()=>openMonthCloseReview(currentMonth));document.getElementById('monthName').onclick=openMonthPicker;document.getElementById('monthGoal').onclick=()=>openMonthlyGoalPlanner(currentMonth);document.getElementById('monthHero').onclick=e=>{if(e.target.closest('.goal-plan-action'))openMonthlyGoalPlanner(currentMonth);else openMonthSummaryDetail()};document.getElementById('acfMonth')?.addEventListener('click',openAcf);document.getElementById('monthIncomeOpen')?.addEventListener('click',()=>{payViewMonth=currentMonth;switchTab('pay')});document.getElementById('largePlanAdd')?.addEventListener('click',()=>openLargeExpenseEditor(null,{after:()=>renderMonth()}));document.querySelectorAll('[data-large-plan]').forEach(b=>b.onclick=()=>openLargeExpenseDetail(b.dataset.largePlan));document.getElementById('monthAnalysis').onclick=()=>openMonthAnalysis(currentMonth);document.getElementById('monthTransactions').onclick=()=>openTransactionList({month:currentMonth,title:`${monthLabel(currentMonth)}の支払い`});document.getElementById('monthMail').onclick=openMailOverview;document.querySelectorAll('[data-month-cat]').forEach(b=>b.onclick=()=>{const selectedCategory=b.dataset.monthCat;openTransactionList({month:currentMonth,category:selectedCategory,title:`${selectedCategory}・${monthLabel(currentMonth)}`})});document.getElementById('monthPlanEdit')?.addEventListener('click',()=>{monthPlanEditMode=!monthPlanEditMode;renderMonth()});document.getElementById('monthMenu').onclick=e=>openMenu(e.currentTarget,[{label:'お金のタイムライン',icon:'chart',action:()=>openMoneyTimeline()},{label:'予算を立て直す',icon:'target',action:()=>openBudgetRebalance(currentMonth)},{label:'旅行・プレゼント目標',icon:'gift',action:()=>openEventGoals(currentMonth)},{label:'理由が分かる分析',icon:'chart',action:()=>openReasonAnalysis({kind:'expense',month:currentMonth})},{label:'月締めレビュー',icon:'check',action:()=>openMonthCloseReview(currentMonth)},{label:'横断検索',icon:'search',action:()=>openSmartInputSearch('search')},{label:'生活費の見通し',icon:'chart',action:openAcf},{label:'月間目標を見直す',icon:'target',action:()=>openMonthlyGoalPlanner(currentMonth)},{label:'前月',icon:'chevronLeft',action:()=>monthShift(-1)},{label:'次月',icon:'chevronRight',action:()=>monthShift(1)}]);installHorizontalSwipe(document.getElementById('monthContent'),()=>monthShift(1),()=>monthShift(-1),78);document.querySelectorAll('.day-cell:not(.out)').forEach(cell=>{cell.onclick=()=>{if(monthPlanEditMode)openDayPlanSheet(cell.dataset.date);else openFinancialDayInspector(cell.dataset.date)};installLongPress(cell,()=>openDayQuickMenu(cell.dataset.date),{delay:600,moveTolerance:10})})}
 function openDayPlanSheet(date){const month=date.slice(0,7),day=Number(date.slice(8,10)),mg=monthlyGoal(month),raw=data.dailyGoals[date],current=Number(raw?.total)||Number(mg.daily?.[day])||0;openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="dpClose">閉じる</button><div class="sheet-title">${parseYmd(date).getMonth()+1}月${day}日の計画</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="hero"><div class="hero-kicker">現在の計画</div><div class="hero-value">${current?yen(current):'未設定'}</div><div class="hero-sub">${raw?.origin==='daily'?'当日目標として固定':raw?.origin==='monthly'?'月間計画から設定':'月間計画の配分対象'}</div></div><div class="action-list"><button type="button" class="secondary" id="dpChange">金額を変更</button><button type="button" class="secondary" id="dpReset">月間おすすめに戻す</button><button type="button" class="secondary" id="dpFix">当日目標として固定</button></div></div>`,'half',root=>{root.querySelector('#dpClose').onclick=requestSheetClose;root.querySelector('#dpChange').onclick=()=>openCalculator('当日の目標',current,async v=>{if(!await confirmAmountDraft('当日の目標',current,v))return;try{safeCommit(()=>{data.dailyGoals[date]={total:v,categories:data.dailyGoals[date]?.categories||{},origin:'daily'};data.monthlyGoals[month]={...(data.monthlyGoals[month]||{}),daily:{...((data.monthlyGoals[month]||{}).daily||{}),[day]:v}}},{label:'daily plan change'})}catch(e){return}closeSheet();renderAll()});root.querySelector('#dpReset').onclick=()=>{try{safeCommit(()=>{if(data.dailyGoals[date]?.origin==='daily')delete data.dailyGoals[date];const plan=monthlyGoal(month),built=buildMonthlyDailyPlan(month,Number(plan.total)||0,plan.daily||{}),v=Number(built.plan?.[day])||0;if(v>0){data.dailyGoals[date]={total:v,categories:{},origin:'monthly'};data.monthlyGoals[month]={...(data.monthlyGoals[month]||{}),daily:{...((data.monthlyGoals[month]||{}).daily||{}),[day]:v}}}},{label:'daily plan reset'})}catch(e){return}closeSheet();renderAll()};root.querySelector('#dpFix').onclick=()=>{if(!current)return showAlert('計画額がありません','先に金額を設定してください。');try{safeCommit(()=>{data.dailyGoals[date]={total:current,categories:data.dailyGoals[date]?.categories||{},origin:'daily'};data.monthlyGoals[month]={...(data.monthlyGoals[month]||{}),daily:{...((data.monthlyGoals[month]||{}).daily||{}),[day]:current}}},{label:'daily plan fix'})}catch(e){return}closeSheet();renderAll()}})}function resetMonthlyPlan(month){const mg=data.monthlyGoals[month];if(!mg)return;try{safeCommit(()=>{for(let d=1;d<=daysInMonth(month);d++){const ds=`${month}-${pad(d)}`;if(data.dailyGoals[ds]?.origin==='monthly')delete data.dailyGoals[ds]}delete data.monthlyGoals[month]},{label:'monthly plan reset'})}catch(e){return}renderAll()}function openDayQuickMenu(date){openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="dqmClose">閉じる</button><div class="sheet-title">${dayLabel(date)}</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="action-list"><button type="button" class="secondary" id="dqmExpense">支出を追加</button><button type="button" class="secondary" id="dqmIncome">臨時収入を追加</button><button type="button" class="secondary" id="dqmPlan">日別計画を調整</button></div></div>`,'half',root=>{root.querySelector('#dqmClose').onclick=requestSheetClose;root.querySelector('#dqmExpense').onclick=()=>{closeSheet();openQuickExpense(date)};root.querySelector('#dqmIncome').onclick=()=>{closeSheet();openTempIncome(date)};root.querySelector('#dqmPlan').onclick=()=>{closeSheet();openDayPlanSheet(date)}})}
 /* 第11版 MONTH-041/065: 表示月は給与・支払いと同じ月ホイール。動かしている間は下書きで、「この月を表示」だけが今月画面を切り替える */
 function openMonthPicker(){openDisplayMonthPicker({title:'表示月を変更',value:currentMonth,cancelId:'mpClose',cancelLabel:'閉じる',onApply:month=>{currentMonth=month;renderAll()}})}
@@ -3993,6 +3993,7 @@ function renderSettings(){
       {id:'securitySettings',symbol:'lock',color:'#8E8E93',title:'セキュリティ',value:data.security.enabled?'パスコード ON':'パスコード OFF'},
       {id:'helpSettings',symbol:'help',color:'var(--teal)',title:'ヘルプ・お問い合わせ'}
     ]],
+    ...appPrefsGroups(),
     ['データ',[{id:'dataSettings',symbol:'upload',color:'var(--green)',title:'データとバックアップ',detail:'PDF・バックアップ・復元・削除'}]]
   ];
   /* 第14版 O-001: 「その他」は設定の一覧だけ。給与・資産・生活費の見通しはホームのカードから開く（入口を1つにする） */
@@ -4016,6 +4017,7 @@ function bindSettings(){
   };
   const root=document.getElementById('settingsContent');
   for(const [id,action] of Object.entries(actions))root.querySelector('#'+id).onclick=action;
+  bindAppPrefRows(root);
 }
 function openProfileEdit(){
   const draft={...data.profile};
@@ -4079,10 +4081,9 @@ function settingsToggleHtml(id,title,detail,on){
   return `<div class="row"><div class="row-main"><div class="row-title">${esc(title)}</div>${detail?`<div class="row-sub">${esc(detail)}</div>`:''}</div><button type="button" class="switch ${on?'on':''}" id="${id}" role="switch" aria-checked="${!!on}" aria-label="${esc(title)}"></button></div>`;
 }
 function openCategorySettings(){
-  const draw=()=>settingsDetailView('カテゴリ管理',`<div class="settings-detail-intro"><h2>カテゴリ</h2><p>名前やアイコンを編集し、表示順を揃えます。</p></div><div class="group">${data.categories.map((category,index)=>`<div class="row"><button type="button" class="settings-category-open" data-ci="${index}">${categoryIconHtml(category,'settings-icon')}<span class="row-main"><span class="row-title">${esc(category.name)}</span></span><span class="chev" aria-hidden="true">›</span></button><div class="settings-category-order"><button type="button" class="pill" data-up="${index}" aria-label="${esc(category.name)}を上へ" ${index===0?'disabled':''}>↑</button><button type="button" class="pill" data-down="${index}" aria-label="${esc(category.name)}を下へ" ${index===data.categories.length-1?'disabled':''}>↓</button></div></div>`).join('')}</div><button type="button" class="primary" id="catAdd">新しいカテゴリを追加</button>`,root=>{
-    for(const [attribute,offset] of [['up',-1],['down',1]])root.querySelectorAll(`[data-${attribute}]`).forEach(button=>button.onclick=()=>{
-      const index=Number(button.dataset[attribute]),next=index+offset;if(!data.categories[next])return;
-      try{safeCommit(()=>{[data.categories[index],data.categories[next]]=[data.categories[next],data.categories[index]]},{label:'category reorder'})}catch(error){return}draw();
+  const draw=()=>settingsDetailView('カテゴリ管理',`<div class="settings-detail-intro"><h2>カテゴリ</h2><p>名前やアイコンを編集し、表示順を揃えます。</p></div><div class="group" id="categoryOrderList">${data.categories.map((category,index)=>`<div class="row" data-reorder-key="${esc(category.id)}"><button type="button" class="settings-category-open" data-ci="${index}">${categoryIconHtml(category,'settings-icon')}<span class="row-main"><span class="row-title">${esc(category.name)}</span></span><span class="chev" aria-hidden="true">›</span></button>${dragHandleHtml(category.name)}</div>`).join('')}</div><p class="settings-section-footer">右の ≡ を上下になぞると並び順が変わります。</p><button type="button" class="primary" id="catAdd">新しいカテゴリを追加</button>`,root=>{
+    installDragReorder(root.querySelector('#categoryOrderList'),order=>{
+      try{safeCommit(()=>{const by=new Map(data.categories.map(c=>[c.id,c]));data.categories=order.map(id=>by.get(id)).filter(Boolean)},{label:'category reorder'})}catch(error){return}draw();
     });
     root.querySelectorAll('[data-ci]').forEach(button=>button.onclick=()=>openCategoryEdit(Number(button.dataset.ci),draw));
     root.querySelector('#catAdd').onclick=()=>openCategoryEdit(-1,draw);
@@ -4141,11 +4142,13 @@ function pro4DraftValid(d){return d.amount>0&&d.merchant.trim()&&!!d.date&&!!d.p
 function pro4SearchItems(query,type='all'){const q=String(query||'').trim().toLowerCase(),hit=s=>!q||String(s||'').toLowerCase().includes(q),rows=[];if(type==='all'||type==='transaction')for(const t of data.transactions)if(hit(`${t.merchant} ${t.category} ${t.memo} ${paymentLabel(t)} ${t.date}`))rows.push({type:'transaction',id:t.id,title:t.merchant,sub:`${t.date}・${t.category}・${paymentLabel(t)}`,value:yen(t.amount),date:t.date});if(type==='all'||type==='salary')for(const r of data.salaryRecords){const e=employerById(r.employerId),txt=`${e?.name||''} ${r.month} ${r.date} ${salaryRecordDisplayStatus(r)}`;if(hit(txt))rows.push({type:'salary',id:r.id,title:e?.name||'給与',sub:`${monthLabel(r.month)}勤務分・${salaryRecordDisplayStatus(r)}`,value:yen(salaryRecordExpectedOrReceivedAmount(r)),date:r.date})}if(type==='all'||type==='account')for(const b of data.banks)if(hit(`${b.name} ${b.label||''}`))rows.push({type:'account',id:b.id,title:b.name,sub:b.label||'銀行口座',value:yen(b.balance),date:''});if(type==='all'||type==='card')for(const c of data.cards)if(hit(`${c.name} ${c.company||''}`))rows.push({type:'card',id:c.id,title:c.name,sub:'クレジットカード',value:typeof cardUsageLabel==='function'?cardUsageLabel(c):'',date:''});if(type==='all'||type==='goal')for(const g of data.eventGoals)if(hit(`${g.name} ${g.type} ${g.items.map(i=>i.name).join(' ')}`)){const sm=eventGoalSummary(g);rows.push({type:'goal',id:g.id,title:g.name,sub:`期限 ${g.deadline}・自分の負担 ${yen(sm.ownShare)}`,value:yen(sm.total),date:g.deadline})}return rows.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,100)}
 function pro4OpenSearchResult(r){if(r.type==='transaction')openTransactionDetail(r.id);else if(r.type==='salary')openSalaryRecordEdit(r.id);else if(r.type==='account')openBankDetail(r.id);else if(r.type==='card')openCardDetail(r.id,assetBillingMonth);else if(r.type==='goal')openEventGoalDetail(r.id)}
 function openSmartInputSearch(initialMode='input'){
-  let mode=initialMode==='search'?'search':'input',drafts=[],query='',searchType='all';
-  pushView('入力と検索','',root=>{
+  /* 検索は新しい横断検索（openGlobalSearch）へ。ここは「一行入力」だけ */
+  if(initialMode==='search')return openGlobalSearch();
+  let mode='input',drafts=[],query='',searchType='all';
+  pushView('一行入力','',root=>{
     const body=root.querySelector('.push-body');
     const draw=()=>{
-      body.innerHTML=`<div class="seg pro4-mode" id="pro4Mode"><button data-v="input" class="${mode==='input'?'on':''}">入力</button><button data-v="search" class="${mode==='search'?'on':''}">検索</button></div>${mode==='input'?inputHtml():searchHtml()}`;
+      body.innerHTML=`${mode==='input'?inputHtml():searchHtml()}`;
       body.querySelectorAll('#pro4Mode button').forEach(b=>b.onclick=()=>{
         mode=b.dataset.v;
         feedback.selection();
@@ -4360,7 +4363,7 @@ function openMonthCloseReview(month=currentMonth){pushView('月締めレビュ�
 
 
 
-function renderAll(){try{processScheduled()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('scheduled processing failed',e)}try{pruneDayClosingJournal();pruneExpiredSystemNotices();generateSystemNotices();for(const view of pushStack)document.getElementById(view.id)?.__refreshNotices?.()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('notice generation failed',e)}for(const view of pushStack){const root=document.getElementById(view.id);root?.__refreshDayClosing?.();root?.__refreshFinancialUpdates?.();root?.__refreshAcf?.()}applyAppearance();if(activeTab==='today')renderToday();else if(activeTab==='day')renderDay();else if(activeTab==='month')renderMonth();else if(activeTab==='pay')renderPay();else if(activeTab==='payments')renderPayments();else if(activeTab==='payroot')renderPayRoot();else if(activeTab==='assets')renderAssets();else renderSettings();placeDetailBack(activeTab);syncAddHub();updateHomeTabButton();if(data.meta?.storageWriteError&&!storageErrorToastShown){storageErrorToastShown=true;setTimeout(()=>showToast('端末へ保存できません。空き容量やSafariのストレージ設定を確認してください。',{tone:'error',duration:7000}),0)}}
+function renderAll(){try{processScheduled()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('scheduled processing failed',e)}try{pruneDayClosingJournal();pruneExpiredSystemNotices();generateSystemNotices();for(const view of pushStack)document.getElementById(view.id)?.__refreshNotices?.()}catch(e){mm3AllowInternalStateWrite(()=>{data.meta={...(data.meta||{}),storageWriteError:true}});console.error('notice generation failed',e)}for(const view of pushStack){const root=document.getElementById(view.id);root?.__refreshDayClosing?.();root?.__refreshFinancialUpdates?.();root?.__refreshAcf?.()}applyAppearance();if(activeTab==='today')renderToday();else if(activeTab==='day')renderDay();else if(activeTab==='month')renderMonth();else if(activeTab==='pay')renderPay();else if(activeTab==='payments')renderPayments();else if(activeTab==='payroot')renderPayRoot();else if(activeTab==='assets')renderAssets();else renderSettings();placeDetailBack(activeTab);syncAddHub();if(typeof applyAppPrefs==='function')applyAppPrefs();updateHomeTabButton();if(data.meta?.storageWriteError&&!storageErrorToastShown){storageErrorToastShown=true;setTimeout(()=>showToast('端末へ保存できません。空き容量やSafariのストレージ設定を確認してください。',{tone:'error',duration:7000}),0)}}
 updateHomeTabButton();
 /* === end IA patch === */
 
@@ -5421,13 +5424,13 @@ function mm3AssetApplySort(mode){
   const rows=[...list.querySelectorAll('.mm3-assets-watchrow')],before=new Map(rows.map(r=>[r,r.getBoundingClientRect()])),order=mm3AssetSortedBanks().map(b=>b.id),map=new Map(rows.map(r=>[r.dataset.bank,r]));order.forEach(id=>{const row=map.get(id);if(row)list.appendChild(row)});const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches||document.documentElement.classList.contains('motion-off');if(!reduce)requestAnimationFrame(()=>{rows.forEach(r=>{const first=before.get(r),last=r.getBoundingClientRect(),dy=first.top-last.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:160,easing:'cubic-bezier(.2,.85,.2,1)'})})});const btn=document.getElementById('mm3AssetSort');if(btn)btn.innerHTML=`${mm3AssetSortLabel()} ${icon('chevronDown')}`;feedback?.selection?.()
 }
 const __mm3P4AssetApplySort=mm3AssetApplySort;
-/* 第11版 ASSETS-103: 長押しドラッグの代替。上下ボタンで下書きを並べ替え、「完了」で保存する。 */
+/* 第11版 ASSETS-103: 口座の並び順。右の ≡ を上下になぞって下書きを並べ替え、「完了」で保存する（上下ボタンは置かない）。 */
 function openAssetOrderSheet(){
   let order=mm3AssetSortedBanks().map(b=>b.id);const original=order.join('|');
-  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="aoCancel">キャンセル</button><div class="sheet-title">口座の並び順</div><button type="button" class="nav-text" id="aoSave">完了</button></div><div class="sheet-body"><div class="group" id="aoList"></div><div class="form-helper">「完了」を押すと並び順を保存します。口座の残高や記録は変わりません。</div></div>`,'half',root=>{
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="aoCancel">キャンセル</button><div class="sheet-title">口座の並び順</div><button type="button" class="nav-text bold" id="aoSave">完了</button></div><div class="sheet-body"><div class="group" id="aoList"></div><div class="form-helper">右の ≡ を上下になぞって並べ替え、「完了」で保存します。口座の残高や記録は変わりません。</div></div>`,'half',root=>{
     const list=root.querySelector('#aoList');
-    const draw=focus=>{list.innerHTML=order.map((id,i)=>{const name=esc(bankById(id)?.name||'口座');return `<div class="row v11-order-row"><div class="row-main"><div class="row-title">${name}</div><div class="row-sub">${i+1}番目</div></div><button type="button" class="v11-order-btn" data-ao-id="${esc(id)}" data-ao-move="-1" aria-label="${name}を上へ" ${i===0?'disabled':''}>${icon('chevronUp')}</button><button type="button" class="v11-order-btn" data-ao-id="${esc(id)}" data-ao-move="1" aria-label="${name}を下へ" ${i===order.length-1?'disabled':''}>${icon('chevronDown')}</button></div>`}).join('');if(focus)(list.querySelector(`[data-ao-id="${CSS.escape(focus.id)}"][data-ao-move="${focus.move}"]:not(:disabled)`)||list.querySelector(`[data-ao-id="${CSS.escape(focus.id)}"]:not(:disabled)`))?.focus();markSheetDirty(order.join('|')!==original)};
-    list.onclick=e=>{const b=e.target.closest('[data-ao-move]');if(!b||b.disabled)return;const i=order.indexOf(b.dataset.aoId),j=i+Number(b.dataset.aoMove);if(i<0||j<0||j>=order.length)return;[order[i],order[j]]=[order[j],order[i]];feedback?.selection?.();draw({id:b.dataset.aoId,move:b.dataset.aoMove})};
+    const draw=()=>{list.innerHTML=order.map((id,i)=>{const name=esc(bankById(id)?.name||'口座');return `<div class="row v11-order-row" data-reorder-key="${esc(id)}"><div class="row-main"><div class="row-title">${name}</div><div class="row-sub">${i+1}番目</div></div>${dragHandleHtml(bankById(id)?.name||'口座')}</div>`}).join('')};
+    installDragReorder(list,next=>{order=next;markSheetDirty(order.join('|')!==original);feedback?.selection?.();draw()});
     root.querySelector('#aoCancel').onclick=requestSheetClose;
     root.querySelector('#aoSave').onclick=()=>{mm3SaveUiPrefs({assetManualOrder:order,assetSortMode:'manual'});closeSheet();renderAssets()};
     draw();
@@ -5803,18 +5806,13 @@ function mm3SalaryRecordsOpen(month){
 
 /* ---------- 共通の小部品 ---------- */
 const HOME_CARD_KEYS=['spend','assets','salary','acf','payment'];
-const HOME_ROW_KEYS=['categories','transactions','dayclose','compare','mail','large','goals'];
-const HOME_SECTION_LABELS={spend:'支出',assets:'総資産',salary:'今月の給与',acf:'生活費の見通し',payment:'次の支払い',categories:'カテゴリ別支出',transactions:'最近の取引',dayclose:'日締め',compare:'今月の比較',mail:'未確認の明細',large:'大型支出の計画',goals:'旅行・プレゼント'};
+const HOME_ROW_KEYS=['highlights','categories','transactions','dayclose','compare','mail','large','goals'];
+const HOME_SECTION_LABELS={spend:'支出',assets:'総資産',salary:'今月の給与',acf:'生活費の見通し',payment:'次の支払い',highlights:'ハイライト',categories:'カテゴリ別支出',transactions:'最近の取引',dayclose:'日締め',compare:'今月の比較',mail:'未確認の明細',large:'大型支出の計画',goals:'旅行・プレゼント'};
 function homeLayout(){
   const raw=data.homeLayout||{},norm=(list,keys)=>{const seen=(Array.isArray(list)?list:[]).filter(k=>keys.includes(k));return [...new Set([...seen,...keys])]};
   return{cards:norm(raw.cards,HOME_CARD_KEYS),rows:norm(raw.rows,HOME_ROW_KEYS),hidden:new Set((raw.hidden||[]).filter(k=>HOME_CARD_KEYS.includes(k)||HOME_ROW_KEYS.includes(k)))};
 }
-function homePeriod(){return data.homeViewMode==='month'?'month':'today'}
-function setHomePeriod(mode){
-  if(homePeriod()===mode)return;
-  try{safeCommit(()=>{data.homeViewMode=mode},{label:'home period',invalidateAcf:false})}catch(e){return}
-  feedback?.selection?.();renderToday();
-}
+/* homePeriod・setHomePeriod は glass-v15.js（開いた時の期間の設定に従う） */
 function homeTimeLabel(iso){if(!iso)return '';const d=new Date(iso);if(Number.isNaN(d.getTime()))return '';return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
 function homeShortDate(date){const d=parseYmd(date);return `${d.getMonth()+1}/${d.getDate()}`}
 const HOME_CHART_COLORS=['var(--accent)','var(--teal)','var(--orange)','var(--purple)','var(--green)','var(--yellow)'];
@@ -5860,22 +5858,10 @@ function profileState(){
   return{key:'local',label:'端末に保存済み',note:'Gmailは未接続。バックアップはデータ管理から作成できます'};
 }
 function homeHeaderHtml(){
-  const st=profileState(),n=unreadNotices();
-  return topbar('ホーム','',`<button class="icon-btn glass-btn" id="todaySearch" aria-label="検索">${icon('search')}</button><button type="button" class="profile-btn ring-${st.key}" id="homeProfile" aria-label="プロフィール・${esc(st.label)}${n?`・未読のお知らせ${n}件`:''}" aria-haspopup="dialog">${profileAvatarHtml('profile-btn-avatar')}${n?`<span class="profile-dot" aria-hidden="true">${n>99?'99+':n}</span>`:''}</button>`);
+  const st=profileState();
+  return topbar('ホーム','',`<button class="icon-btn glass-btn" id="todaySearch" aria-label="検索">${icon('search')}</button><button type="button" class="profile-btn ring-${st.key}" id="homeProfile" aria-label="プロフィール・ホームの設定・${esc(st.label)}" aria-haspopup="dialog">${profileAvatarHtml('profile-btn-avatar')}</button>`);
 }
-function openProfilePanel(anchor){
-  const st=profileState(),n=unreadNotices();
-  const html=`<div class="profile-panel"><div class="profile-panel-head">${profileAvatarHtml('profile-panel-avatar')}<div><div class="profile-panel-name">${esc(data.profile?.name||'プロフィール')}</div><div class="profile-panel-sub"><span class="profile-state-mark ring-${st.key}" aria-hidden="true"></span>${esc(st.label)}</div></div></div>
-  <div class="profile-panel-tiles"><button type="button" class="profile-tile" id="ppBackup">${icon('upload')}<span>バックアップ</span><small>${esc(st.note)}</small></button><button type="button" class="profile-tile" id="ppNotices">${icon('bell')}<span>お知らせ</span><small>${n?`未読 ${n}件`:'未読はありません'}</small>${n?`<i class="profile-tile-dot" aria-hidden="true"></i>`:''}</button></div>
-  <button type="button" class="menu-item" id="ppEdit"><span class="menu-label">プロフィール編集</span><span class="menu-icon">${icon('person')}</span></button><button type="button" class="menu-item" id="ppSettings"><span class="menu-label">その他・設定</span><span class="menu-icon">${icon('grid')}</span></button></div>`;
-  openMenu(anchor,[],{html,width:Math.min(320,innerWidth-16),label:'プロフィール',bind:menu=>{
-    const go=fn=>()=>{closeMenu();fn()};
-    menu.querySelector('#ppBackup').onclick=go(openDataSettings);
-    menu.querySelector('#ppNotices').onclick=go(openNotices);
-    menu.querySelector('#ppEdit').onclick=go(openProfileEdit);
-    menu.querySelector('#ppSettings').onclick=go(()=>switchRoot('settings'));
-  }});
-}
+/* プロフィールボタンはホーム専用の設定（openHomeSettings、glass-v15.js）。他のタブへ移るボタンは置かない */
 /* 重要なお知らせ（H-008・H-009）: 警告がある時だけ支出カードの上。×はこのカードだけ閉じる（お知らせ一覧には残る） */
 let homeDismissedNotices=new Set();
 function homeAlertHtml(){
@@ -5918,9 +5904,29 @@ function homeAcfCardHtml(){
 }
 function homePaymentEvents(limit=3){return financialEventsFrom(ymd(),60).filter(e=>e.type!=='income').slice(0,limit)}
 function homePaymentCardHtml(){
-  const ev=homePaymentEvents(1)[0];
-  const body=ev?`<span class="home-card-left"><span class="home-card-value">${yen(Math.abs(ev.amount))}</span><span class="home-card-caption">${esc(ev.title)}・${homeShortDate(ev.date)}${ev.date===ymd()?'（今日）':''}</span><span class="home-card-caption sub">${esc(ev.detail||'')}</span></span>`:`<span class="home-card-left"><span class="home-card-value small">60日以内の支払い予定はありません</span><span class="home-card-caption">カード・固定支払い・大型支出を登録すると表示します</span></span>`;
-  return `<section class="home-card-wrap" data-home-section="payment"><h2 class="home-card-title">次の支払い</h2><div class="home-card"><button type="button" class="home-card-body" id="homePaymentCard" aria-label="${esc(ev?`次の支払い ${ev.title} ${homeShortDate(ev.date)} ${yen(Math.abs(ev.amount))}・詳細を開く`:'次の支払い・予定なし')}">${body}</button><button type="button" class="home-card-status link" id="homeAllPayments">すべての支払いを見る${icon('chevronRight')}</button></div></section>`;
+  const list=homePaymentEvents(4),within=financialEventsFrom(ymd(),30).filter(e=>e.type!=='income'),total=sum(within,e=>Math.abs(Number(e.amount)||0)),ev=list[0];
+  const kind=e=>({card:'カード',fixed:'固定',large:'大型'}[e.type]||'支払い');
+  const rows=list.map(e=>{const d=parseYmd(e.date),days=Math.round((d-parseYmd(ymd()))/864e5);return `<span class="np-row"><span class="np-date" aria-hidden="true"><b>${d.getDate()}</b><i>${d.getMonth()+1}月</i></span><span class="np-main"><span class="np-title">${esc(e.title)}</span><span class="np-sub">${days===0?'今日':days===1?'明日':`${days}日後`}・${kind(e)}${e.detail?`・${esc(e.detail)}`:''}</span></span><span class="np-amount">${yen(Math.abs(e.amount))}</span></span>`}).join('');
+  const body=ev?`<span class="np-summary"><span class="np-summary-label">30日以内</span><span class="np-summary-value"><span class="home-card-value np-total">${yen(total)}</span><span class="np-count">${within.length}件</span></span></span><span class="np-list">${rows}</span>`:`<span class="home-card-left"><span class="home-card-value small">60日以内の支払い予定はありません</span><span class="home-card-caption">カード・固定支払い・大型支出を登録すると表示します</span></span>`;
+  return `<section class="home-card-wrap" data-home-section="payment"><h2 class="home-card-title">次の支払い</h2><div class="home-card"><button type="button" class="home-card-body np-body" id="homePaymentCard" aria-label="${esc(ev?`次の支払い ${ev.title} ${homeShortDate(ev.date)} ${yen(Math.abs(ev.amount))}・30日以内 ${within.length}件 ${yen(total)}・詳細を開く`:'次の支払い・予定なし')}">${body}</button><button type="button" class="home-card-status link" id="homeAllPayments">すべての支払いを見る${icon('chevronRight')}</button></div></section>`;
+}
+/* ハイライト（ヘルスケアの「ハイライト」のように、比べて分かる短い文と2本の棒） */
+function homeHighlights(){
+  const m=ym(),pm=addMonths(m,-1),today=parseYmd(ymd()).getDate(),pdays=daysInMonth(pm),upto=Math.min(today,pdays);
+  const spentUntil=(mk,n)=>{let t=0;for(let i=1;i<=n;i++)t+=spentDate(`${mk}-${pad(i)}`);return t};
+  const cur=spentUntil(m,today),prev=spentUntil(pm,upto),out=[];
+  if(cur||prev)out.push({key:'pace',sym:'cart',color:'var(--orange)',label:'支出のペース',text:cur<=prev?`今月は先月の同じ時期より ${yen(prev-cur)} 少ないペースです。`:`今月は先月の同じ時期より ${yen(cur-prev)} 多いペースです。`,bars:[{label:monthLabel(m),value:cur},{label:monthLabel(pm),value:prev}],open:()=>openMonthAnalysis(m)});
+  const avgCur=today?Math.round(cur/today):0,avgPrev=pdays?Math.round(spentMonth(pm)/pdays):0;
+  if(avgCur||avgPrev)out.push({key:'average',sym:'chart',color:'var(--accent)',label:'1日の平均',text:avgCur<=avgPrev?'今月の1日あたりの支出は先月より少なめです。':'今月の1日あたりの支出は先月より多めです。',bars:[{label:monthLabel(m),value:avgCur,unit:'/日'},{label:monthLabel(pm),value:avgPrev,unit:'/日'}],open:()=>openMonthAnalysis(m)});
+  const cats=data.categories.map(c=>({c,v:monthCategorySpent(m,c.name)})).filter(x=>x.v>0).sort((a,b)=>b.v-a.v),monthTotal=spentMonth(m);
+  if(cats.length)out.push({key:'category',sym:normalizeCategoryIcon(cats[0].c.icon,cats[0].c.id),color:'var(--purple)',label:'いちばん多いカテゴリ',text:`今月は「${cats[0].c.name}」が支出の ${Math.round(cats[0].v/Math.max(1,monthTotal)*100)}% です。`,bars:cats.slice(0,2).map(x=>({label:x.c.name,value:x.v})),open:()=>openTransactionList({month:m,category:cats[0].c.name,title:`${cats[0].c.name}・${monthLabel(m)}`})});
+  const salary=mm3SalaryMonthSummary(m).total;
+  if(salary)out.push({key:'balance',sym:'wallet',color:'var(--green)',label:'収入と支出',text:salary>=monthTotal?`今月の給与見込みから支出を引くと ${yen(salary-monthTotal)} 残ります。`:`今月の支出が給与見込みを ${yen(monthTotal-salary)} 上回っています。`,bars:[{label:'給与見込み',value:salary},{label:'支出',value:monthTotal}],open:()=>{payViewMonth=m;switchTab('pay')}});
+  return out;
+}
+function homeHighlightsHtml(){
+  const list=homeHighlights();if(!list.length)return '';
+  return `<div class="home-highlights" data-home-section="highlights">${list.map(h=>{const max=Math.max(1,...h.bars.map(b=>b.value));return `<button type="button" class="hl-card" data-home-highlight="${h.key}" style="--hl:${h.color}" aria-label="${esc(`${h.label}・${h.text}`)}"><span class="hl-head"><span class="hl-icon" aria-hidden="true">${icon(h.sym)}</span>${esc(h.label)}<span class="chev" aria-hidden="true">${icon('chevronRight')}</span></span><span class="hl-text">${esc(h.text)}</span><span class="hl-bars" aria-hidden="true">${h.bars.map((b,i)=>`<span class="hl-bar-row"><span class="hl-bar-value">${yen(b.value)}${b.unit?`<small>${b.unit}</small>`:''}</span><span class="hl-bar ${i?'muted':''}" style="width:${Math.max(18,b.value/max*100).toFixed(1)}%"><span>${esc(b.label)}</span></span></span>`).join('')}</span></button>`}).join('')}</div>`;
 }
 function openPaymentEvent(ev){
   if(!ev)return switchRoot('payments');
@@ -5937,8 +5943,8 @@ function homeRecentTransactions(limit=3){return [...data.transactions].sort((a,b
 function homeRowsHtml(){
   const L=homeLayout(),month=homePeriod()==='month',parts={};
   const cats=homeCategoryRows(),total=sum(cats,x=>x.v);
-  parts.categories=`<div class="group home-table" data-home-section="categories" aria-label="カテゴリ別支出">${cats.length?cats.slice(0,3).map(x=>categoryTableRowHtml(x,total)).join(''):`<div class="row"><div class="row-main"><div class="row-title">カテゴリ別支出</div><div class="row-sub">${month?'今月':'この日'}の支出はまだありません</div></div></div>`}${cats.length?`<button type="button" class="row press home-row link-row" id="homeAllCategories"><div class="row-main"><div class="row-title">カテゴリをすべて見る</div></div><span class="chev">${icon('chevronRight')}</span></button>`:''}</div>`;
-  const txs=homeRecentTransactions(3);
+  parts.categories=`<div class="group home-table" data-home-section="categories" aria-label="カテゴリ別支出">${cats.length?cats.slice(0,homePrefs().recentCount).map(x=>categoryTableRowHtml(x,total)).join(''):`<div class="row"><div class="row-main"><div class="row-title">カテゴリ別支出</div><div class="row-sub">${month?'今月':'この日'}の支出はまだありません</div></div></div>`}${cats.length?`<button type="button" class="row press home-row link-row" id="homeAllCategories"><div class="row-main"><div class="row-title">カテゴリをすべて見る</div></div><span class="chev">${icon('chevronRight')}</span></button>`:''}</div>`;
+  const txs=homeRecentTransactions(homePrefs().recentCount);
   parts.transactions=`<div class="group home-table" data-home-section="transactions" aria-label="最近の取引">${txs.length?txs.map(t=>`<button type="button" class="row press home-row" data-home-tx="${esc(t.id)}"><span class="row-icon cat-line">${icon(normalizeCategoryIcon(catByName(t.category)?.icon,catByName(t.category)?.id))}</span><div class="row-main"><div class="row-title">${esc(t.merchant||t.category||'支出')}</div><div class="row-sub">${homeShortDate(t.date)}・${esc(t.category||'')}</div></div><div class="row-value">${yen(t.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">最近の取引</div><div class="row-sub">まだ記録がありません。＋から支出を記録できます</div></div></div>'}<button type="button" class="row press home-row link-row" id="homeAllTransactions"><div class="row-main"><div class="row-title">すべての取引</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`;
   const dcLabel=typeof dayClosingLabel==='function'?dayClosingLabel(trackingDate):'',pendingMail=data.mailImports.filter(x=>x.status==='pending').length;
   parts.dayclose=`<button type="button" class="row press home-row" id="homeDayClose"><span class="row-icon">${icon('dayClose')}</span><div class="row-main"><div class="row-title">日締め</div><div class="row-sub">${dcLabel?esc(dcLabel):'まだ締めていません'}${pendingMail?`・未確認 ${pendingMail}件`:''}</div></div><span class="chev">${icon('chevronRight')}</span></button>`;
@@ -5949,9 +5955,14 @@ function homeRowsHtml(){
   parts.large=large.length?`<button type="button" class="row press home-row" id="homeLarge"><span class="row-icon">${icon('cart')}</span><div class="row-main"><div class="row-title">大型支出の計画 ${large.length}件</div><div class="row-sub">次は ${homeShortDate([...large].sort((a,b)=>a.date.localeCompare(b.date))[0].date)}</div></div><span class="chev">${icon('chevronRight')}</span></button>`:'';
   const goals=(data.eventGoals||[]).filter(g=>g.status==='active'||g.status==='planning');
   parts.goals=goals.length?`<button type="button" class="row press home-row" id="homeGoals"><span class="row-icon">${icon('gift')}</span><div class="row-main"><div class="row-title">旅行・プレゼント ${goals.length}件</div><div class="row-sub">${esc(goals[0].name)}・期限 ${homeShortDate(goals[0].deadline)}</div></div><span class="chev">${icon('chevronRight')}</span></button>`:'';
-  const tables=L.rows.filter(k=>!L.hidden.has(k)&&(k==='categories'||k==='transactions')).map(k=>parts[k]);
-  const lines=L.rows.filter(k=>!L.hidden.has(k)&&!['categories','transactions'].includes(k)).map(k=>parts[k]).filter(Boolean);
-  return `<h2 class="section-head home-section-head">最近の動き</h2>${tables.join('')}${lines.length?`<div class="group home-table">${lines.join('')}</div>`:''}<div class="group home-table"><button type="button" class="row press home-row link-row" id="homeLayoutEdit"><span class="row-icon">${icon('reorder')}</span><div class="row-main"><div class="row-title">表示する項目を編集</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`;
+  parts.highlights=homeHighlightsHtml();
+  /* 並び順どおりに出す。日締め・比較などの1行の項目は、続いている間は1つの表にまとめる */
+  const visible=L.rows.filter(k=>!L.hidden.has(k)&&parts[k]),out=[];let lineBuf=[];
+  const flush=()=>{if(lineBuf.length)out.push(`<div class="group home-table">${lineBuf.join('')}</div>`);lineBuf=[]};
+  let recentHead=false;const head=()=>{if(!recentHead){recentHead=true;out.push('<h2 class="section-head home-section-head">最近の動き</h2>')}};
+  for(const k of visible){if(k==='highlights'){flush();out.push(`<h2 class="section-head home-section-head">ハイライト</h2>${parts[k]}`)}else if(['categories','transactions'].includes(k)){flush();head();out.push(parts[k])}else{if(!lineBuf.length)head();lineBuf.push(parts[k])}}
+  flush();
+  return out.join('');
 }
 
 /* ---------- ホームの描画 ---------- */
@@ -5959,12 +5970,12 @@ function renderToday(){
   document.getElementById('todayTop').innerHTML=homeHeaderHtml();
   const L=homeLayout(),cards={spend:homeSpendCardHtml,assets:homeAssetsCardHtml,salary:homeSalaryCardHtml,acf:homeAcfCardHtml,payment:homePaymentCardHtml};
   document.getElementById('todayContent').innerHTML=`${homeAlertHtml()}<div class="home-cards">${L.cards.filter(k=>!L.hidden.has(k)).map(k=>cards[k]()).join('')}</div>${homeRowsHtml()}`;
-  bindHome();
+  bindHome();applyHomePrefs();
 }
 function bindHome(){
   const $=id=>document.getElementById(id),on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn};
-  on('todaySearch',()=>openSmartInputSearch('search'));
-  on('homeProfile',e=>openProfilePanel(e.currentTarget));
+  on('todaySearch',()=>openGlobalSearch());
+  on('homeProfile',openHomeSettings);
   on('homeAlert',openNotices);
   on('homeAlertClose',e=>{homeDismissedNotices.add($('homeAlert')?.dataset.notice);renderToday()});
   on('homePeriodToday',()=>setHomePeriod('today'));on('homePeriodMonth',()=>setHomePeriod('month'));
@@ -5994,7 +6005,7 @@ function bindHome(){
   on('homeMail',openMailOverview);
   const lg=$('homeLarge');if(lg){lg.onclick=openLargeExpenseList;homeLongPress(lg,[{label:'大型支出を計画',icon:'plus',action:()=>openLargeExpenseEditor(null,{after:renderAll})}])}
   const gl=$('homeGoals');if(gl){gl.onclick=()=>openEventGoals(ym());homeLongPress(gl,[{label:'新しい目標',icon:'plus',action:()=>openEventGoalEditor()}])}
-  on('homeLayoutEdit',openHomeLayoutEditor);
+  document.querySelectorAll('#todayContent [data-home-highlight]').forEach(b=>{const h=homeHighlights().find(x=>x.key===b.dataset.homeHighlight);if(h)b.onclick=h.open});
 }
 /* 今日／今月の切替: 指でなぞると選択が指に付いてきて、離した位置で決まる（H-010） */
 function installPeriodDrag(group){
@@ -6013,22 +6024,15 @@ function openLargeExpenseList(){
   const draw=()=>{const list=data.largeExpensePlans.filter(p=>p.status==='planned').sort((a,b)=>a.date.localeCompare(b.date));return `<div class="group home-table">${list.length?list.map(p=>`<button type="button" class="row press" data-large-plan="${esc(p.id)}"><div class="row-main"><div class="row-title">${esc(p.name)}</div><div class="row-sub">${esc(p.date)}・${p.priority==='required'?'必須':'任意'}</div></div><div class="row-value">${yen(p.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">計画中の大型支出はありません</div></div></div>'}</div><button type="button" class="secondary" id="largeListAdd">大型支出を計画</button>`};
   pushView('大型支出の計画',draw(),root=>{const bind=()=>{root.querySelectorAll('[data-large-plan]').forEach(b=>b.onclick=()=>openLargeExpenseDetail(b.dataset.largePlan));root.querySelector('#largeListAdd').onclick=()=>openLargeExpenseEditor(null,{after:()=>{root.querySelector('.push-body').innerHTML=draw();bind();renderAll()}})};bind()});
 }
-/* 表示する項目の編集（H-081）: 表示・非表示と並び順だけを保存する（会計データには触れない） */
-function openHomeLayoutEditor(){
-  const draw=()=>{const L=homeLayout(),row=(k,list,i)=>`<div class="row home-layout-row"><div class="row-main"><div class="row-title">${esc(HOME_SECTION_LABELS[k])}</div></div><button type="button" class="v11-order-btn" data-layout-move="${k}" data-dir="-1" aria-label="${esc(HOME_SECTION_LABELS[k])}を上へ" ${i===0?'disabled':''}>${icon('chevronUp')}</button><button type="button" class="v11-order-btn" data-layout-move="${k}" data-dir="1" aria-label="${esc(HOME_SECTION_LABELS[k])}を下へ" ${i===list.length-1?'disabled':''}>${icon('chevronDown')}</button><button type="button" class="switch ${L.hidden.has(k)?'':'on'}" data-layout-toggle="${k}" role="switch" aria-checked="${!L.hidden.has(k)}" aria-label="${esc(HOME_SECTION_LABELS[k])}を表示"></button></div>`;
-    return `<p class="form-helper">ホームに表示するカードと一覧の順番を変えられます。表示を消しても、データや機能は消えません。</p><h2 class="section-head">カード</h2><div class="group">${L.cards.map((k,i,a)=>row(k,a,i)).join('')}</div><h2 class="section-head">最近の動き</h2><div class="group">${L.rows.map((k,i,a)=>row(k,a,i)).join('')}</div>`};
-  pushView('表示する項目',draw(),root=>{const bind=()=>{
-    const save=fn=>{const L=homeLayout(),next={cards:[...L.cards],rows:[...L.rows],hidden:[...L.hidden]};fn(next);try{safeCommit(()=>{data.homeLayout=next},{label:'home layout',invalidateAcf:false})}catch(e){return}root.querySelector('.push-body').innerHTML=draw();bind();renderAll()};
-    root.querySelectorAll('[data-layout-toggle]').forEach(b=>b.onclick=()=>save(n=>{const k=b.dataset.layoutToggle;n.hidden=n.hidden.includes(k)?n.hidden.filter(x=>x!==k):[...n.hidden,k]}));
-    root.querySelectorAll('[data-layout-move]').forEach(b=>b.onclick=()=>save(n=>{const k=b.dataset.layoutMove,list=n.cards.includes(k)?n.cards:n.rows,i=list.indexOf(k),j=i+Number(b.dataset.dir);if(j<0||j>=list.length)return;[list[i],list[j]]=[list[j],list[i]]}));
-  };bind()});
-}
+/* 表示する項目の編集（H-081）は「ホームの設定」（プロフィールボタン）の中。並べ替えは ≡ を上下になぞる */
+function openHomeLayoutEditor(){openHomeSettings()}
 
 /* ---------- 日付の選択（H-011・Q-011）: 確定するまで表示中の日付は変わらない ---------- */
 function openDayCalendar(initial,onApply,{title='日付を選ぶ',apply='この日を表示'}={}){
   const {min,max}=trackingDateBounds();let month=initial.slice(0,7),picked=initial;
-  const draw=()=>{const [y,m]=month.split('-').map(Number),first=new Date(y,m-1,1).getDay(),days=daysInMonth(month),cells=[];for(let i=0;i<first;i++)cells.push('<span class="cal-cell out" aria-hidden="true"></span>');for(let d=1;d<=days;d++){const ds=`${month}-${pad(d)}`,off=ds<min||ds>max;cells.push(`<button type="button" class="cal-cell ${ds===picked?'on':''} ${ds===ymd()?'today':''}" data-cal="${ds}" ${off?'disabled':''} aria-pressed="${ds===picked}" aria-label="${esc(dayLabel(ds))}">${d}</button>`)}
-    return `<div class="cal-head"><button type="button" class="date-nav-btn" id="calPrev" aria-label="前の月" ${`${month}-01`<=min?'disabled':''}>${icon('chevronLeft')}</button><strong>${monthLabel(month)}</strong><button type="button" class="date-nav-btn" id="calNext" aria-label="次の月" ${`${month}-${pad(days)}`>=max?'disabled':''}>${icon('chevronRight')}</button></div><div class="cal-week" aria-hidden="true">${['日','月','火','水','木','金','土'].map(w=>`<span>${w}</span>`).join('')}</div><div class="cal-grid">${cells.join('')}</div>`};
+  const ws=typeof appPrefs==='function'?appPrefs().weekStart:0,wnames=['日','月','火','水','木','金','土'];
+  const draw=()=>{const [y,m]=month.split('-').map(Number),first=(new Date(y,m-1,1).getDay()-ws+7)%7,days=daysInMonth(month),cells=[];for(let i=0;i<first;i++)cells.push('<span class="cal-cell out" aria-hidden="true"></span>');for(let d=1;d<=days;d++){const ds=`${month}-${pad(d)}`,off=ds<min||ds>max;cells.push(`<button type="button" class="cal-cell ${ds===picked?'on':''} ${ds===ymd()?'today':''}" data-cal="${ds}" ${off?'disabled':''} aria-pressed="${ds===picked}" aria-label="${esc(dayLabel(ds))}">${d}</button>`)}
+    return `<div class="cal-head"><button type="button" class="date-nav-btn" id="calPrev" aria-label="前の月" ${`${month}-01`<=min?'disabled':''}>${icon('chevronLeft')}</button><strong>${monthLabel(month)}</strong><button type="button" class="date-nav-btn" id="calNext" aria-label="次の月" ${`${month}-${pad(days)}`>=max?'disabled':''}>${icon('chevronRight')}</button></div><div class="cal-week" aria-hidden="true">${[...wnames.slice(ws),...wnames.slice(0,ws)].map(w=>`<span>${w}</span>`).join('')}</div><div class="cal-grid">${cells.join('')}</div>`};
   openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="calCancel">キャンセル</button><div class="sheet-title">${esc(title)}</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="day-calendar" id="dayCalendar">${draw()}</div><button type="button" class="primary" id="calApply">${esc(apply)}</button></div>`,'half',root=>{
     const box=root.querySelector('#dayCalendar'),bind=()=>{box.querySelector('#calPrev').onclick=()=>{month=addMonths(month,-1);box.innerHTML=draw();bind()};box.querySelector('#calNext').onclick=()=>{month=addMonths(month,1);box.innerHTML=draw();bind()};box.querySelectorAll('[data-cal]').forEach(b=>b.onclick=()=>{picked=b.dataset.cal;feedback?.selection?.();box.innerHTML=draw();bind()})};bind();
     root.querySelector('#calCancel').onclick=closeSheet;root.querySelector('#calApply').onclick=()=>{closeSheet();onApply(picked)};
@@ -6042,34 +6046,9 @@ function openDayWheel(initial,onApply){
 
 /* ---------- ＋入力ハブ（Q-001〜006） ---------- */
 function syncAddHub(){const b=document.getElementById('addHub');if(b)b.hidden=false}
-function addHubItems(){
-  const date=['today','day'].includes(activeTab)?trackingDate:ymd();
-  return[
-    {label:'支出を記録',icon:'plus',action:()=>openQuickExpense(date)},
-    {label:'臨時収入',icon:'wallet',action:()=>openTempIncome(date)},
-    {label:'残高を更新',icon:'bank',action:openQuickBank},
-    {label:'給与を登録',icon:'briefcase',action:openSalaryAdd},
-    {label:'その他の入力',icon:'ellipsis',action:openOtherInputs}
-  ];
-}
-function openOtherInputs(){
-  const items=[
-    ['ihCard','card','カードの請求額を更新','カードを選んで今月の請求額を入力',()=>openQuickCardBilling(paymentHomeMonth())],
-    ['ihRepeat','repeat','最近の支出を再利用','前に記録した支出から選ぶ',()=>openQuickRepeat(trackingDate)],
-    ['ihOneLine','edit','一行入力','「コンビニ 580円」のように書いて記録',()=>openSmartInputSearch('input')],
-    ['ihBank','bank','銀行口座を追加','',openAddBank],
-    ['ihEmployer','briefcase','勤務先を追加','',()=>openEmployerCreate(()=>renderAll())],
-    ['ihCredit','card','クレジットカードを追加','',()=>openAddCard()],
-    ['ihDebit','card','デビットカードを追加','',()=>openAddDebit()],
-    ['ihFixed','repeat','固定支払いを追加','',()=>openFixedPayment()],
-    ['ihLarge','cart','大型支出を計画','',()=>openLargeExpenseEditor(null,{after:renderAll})],
-    ['ihGoal','gift','旅行・プレゼント目標','',()=>openEventGoalEditor()]
-  ];
-  pushView('その他の入力',`<div class="group">${items.map(([id,sym,title,sub])=>`<button type="button" class="row press home-row" id="${id}"><span class="row-icon">${icon(sym)}</span><div class="row-main"><div class="row-title">${title}</div>${sub?`<div class="row-sub">${sub}</div>`:''}</div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`,root=>{for(const [id,,,,fn] of items)root.querySelector('#'+id).onclick=fn});
-}
+/* ＋は全画面の「新規入力」（openEntryHub、glass-v15.js） */
 /* ＋から開く入力シートは右下（＋の位置）を起点に広がる（Q-002「右下を起点に全画面入力へ」。ページめくりはWebで不安定なため、仕様の代替である連続拡大にする） */
 function fromHub(fn){return()=>{const s=document.getElementById('sheet');s?.classList.add('from-hub');s?.addEventListener('animationend',()=>s.classList.remove('from-hub'),{once:true});setTimeout(()=>s?.classList.remove('from-hub'),600);fn()}}
-document.getElementById('addHub')?.addEventListener('click',e=>{const b=e.currentTarget;if(document.getElementById('menuLayer')?.classList.contains('show')){closeMenu();return}feedback?.selection?.();openMenu(b,addHubItems().map(x=>x.label==='その他の入力'?x:{...x,action:fromHub(x.action)}),{label:'入力の種類'})});
 
 /* ---------- 支払いroot（P-001〜015） ---------- */
 let payrootDismissedRisk='';
@@ -6097,7 +6076,7 @@ function renderPayRoot(){
 }
 function bindPayRoot(month,next,atf,riskKey){
   const $=id=>document.getElementById(id),on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn};
-  on('payrootSearch',()=>openSmartInputSearch('search'));
+  on('payrootSearch',()=>openGlobalSearch('payment'));
   on('payrootMenu',e=>openMenu(e.currentTarget,[{label:'請求一覧を開く',icon:'list',action:()=>switchTab('payments')},{label:'カードの請求額を更新',icon:'card',action:()=>openQuickCardBilling(month)},{label:'明細照合センター',icon:'mail',action:openMailOverview},{label:'カードを追加',icon:'card',action:()=>openAddCard()},{label:'デビットカードを追加',icon:'card',action:()=>openAddDebit()}]));
   on('payrootRisk',()=>mm3OpenAtfSheet(atf));
   on('payrootRiskClose',()=>{payrootDismissedRisk=riskKey;renderPayRoot()});
@@ -6115,6 +6094,329 @@ function bindPayRoot(month,next,atf,riskKey){
   on('payrootAtf',()=>mm3OpenAtfSheet(atf));
 }
 function openFixedPaymentList(){pushView('固定支払い',`<div class="group home-table">${data.fixedPayments.map(f=>`<button type="button" class="row press" data-fixed-open="${esc(f.id)}"><div class="row-main"><div class="row-title">${esc(f.name||'固定支払い')}</div><div class="row-sub">${f.day?`毎月${f.day}日`:''}</div></div><div class="row-value">${yen(f.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`,root=>root.querySelectorAll('[data-fixed-open]').forEach(b=>b.onclick=()=>openFixedPayment(data.fixedPayments.find(x=>x.id===b.dataset.fixedOpen))))}
+/* ======================================================================
+   Liquid Glass 第2段
+   - 並べ替えは右の「≡」を上下になぞる（上下ボタンは置かない）。キーボードでは ≡ に合わせて上下の矢印キー
+   - プロフィールボタン = ホーム専用の設定（他のタブへ移るボタンは置かない）
+   - ＋ = すぐに全画面の「新規入力」。何を入力するかをその場で選ぶ
+   - 専用画面（今日の支出・今月の支出・給与・資産・請求一覧）も左端からのスワイプで戻る
+   - 検索 = ガラスの検索欄・種類の切替・最近の検索・グループごとの結果・強調表示。かな/カナ・全角/半角・金額・日付で探せる
+   - その他 = アプリ全体の設定（起動時の画面・週の始まり・ガラスの質感・数字の書体・文字の太さ・ボタンの形・コントラスト・プライバシー）
+   会計データ（取引・残高・請求・給与）はここでは書き換えない。保存するのは表示の設定だけ。
+   ====================================================================== */
+
+/* ---------- 並べ替え（≡ を上下になぞる） ---------- */
+const GRIP_SVG='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8h14M5 12h14M5 16h14"/></svg>';
+function dragHandleHtml(label){return `<button type="button" class="drag-handle" aria-label="${esc(label)}の並べ替え。上下にドラッグ、または上下の矢印キーで移動">${GRIP_SVG}</button>`}
+/* list の直下の [data-reorder-key] を並べ替える。onReorder(新しい順のキー配列, 動かしたキー) */
+function installDragReorder(list,onReorder){
+  if(!list||list.dataset.reorderBound)return;list.dataset.reorderBound='1';
+  const rows=()=>[...list.querySelectorAll(':scope > [data-reorder-key]')];
+  const commit=(order,key)=>{onReorder(order,key);requestAnimationFrame(()=>list.querySelector(`[data-reorder-key="${CSS.escape(key)}"] .drag-handle`)?.focus({preventScroll:true}))};
+  list.addEventListener('keydown',e=>{
+    const h=e.target.closest?.('.drag-handle');if(!h||!['ArrowUp','ArrowDown'].includes(e.key))return;
+    const row=h.closest('[data-reorder-key]'),all=rows(),i=all.indexOf(row),j=i+(e.key==='ArrowUp'?-1:1);if(i<0||j<0||j>=all.length)return;
+    e.preventDefault();const order=all.map(r=>r.dataset.reorderKey);order.splice(j,0,order.splice(i,1)[0]);feedback?.selection?.();commit(order,row.dataset.reorderKey);
+  });
+  list.addEventListener('pointerdown',e=>{
+    const h=e.target.closest?.('.drag-handle');if(!h||!list.contains(h)||e.button>0)return;
+    const row=h.closest('[data-reorder-key]'),all=rows(),from=all.indexOf(row);if(from<0)return;
+    e.preventDefault();const rects=all.map(r=>r.getBoundingClientRect()),startY=e.clientY,height=rects[from].height;let to=from;
+    try{h.setPointerCapture(e.pointerId)}catch(err){}
+    row.classList.add('reorder-lifted');list.classList.add('reordering');feedback?.selection?.();
+    const move=ev=>{
+      const dy=ev.clientY-startY;row.style.transform=`translateY(${dy}px) scale(1.02)`;
+      const center=rects[from].top+height/2+dy;let t=from;
+      for(let k=0;k<rects.length;k++){const mid=rects[k].top+rects[k].height/2;if(k<from&&center<=mid){t=k;break}if(k>from&&center>=mid)t=k}
+      if(t!==to){to=t;feedback?.selection?.()}
+      all.forEach((r,k)=>{if(r===row)return;const s=from<to&&k>from&&k<=to?-height:from>to&&k>=to&&k<from?height:0;r.style.transform=s?`translateY(${s}px)`:''});
+    };
+    const up=()=>{
+      h.removeEventListener('pointermove',move);h.removeEventListener('pointerup',up);h.removeEventListener('pointercancel',up);
+      all.forEach(r=>{r.style.transform=''});row.classList.remove('reorder-lifted');list.classList.remove('reordering');
+      if(to!==from){const order=all.map(r=>r.dataset.reorderKey);order.splice(to,0,order.splice(from,1)[0]);commit(order,row.dataset.reorderKey)}
+    };
+    h.addEventListener('pointermove',move);h.addEventListener('pointerup',up);h.addEventListener('pointercancel',up);
+  });
+}
+
+/* ---------- ホームの設定（プロフィールボタン） ---------- */
+const HOME_PREF_DEFAULTS={startPeriod:'last',hideAmounts:false,showCharts:true,showCaptions:true,showAlert:true,recentCount:3,wash:true,compact:false};
+function homePrefs(){return{...HOME_PREF_DEFAULTS,...(data.homePrefs&&typeof data.homePrefs==='object'?data.homePrefs:{})}}
+let homeSessionPeriod=null,homeSessionData=null;
+function homePeriod(){if(homeSessionData!==data)homeSessionPeriod=null;if(homeSessionPeriod)return homeSessionPeriod;const p=homePrefs().startPeriod;if(p==='today'||p==='month')return p;return data.homeViewMode==='month'?'month':'today'}
+function setHomePeriod(mode){
+  if(homePeriod()===mode&&data.homeViewMode===mode)return;homeSessionPeriod=mode;homeSessionData=data;
+  try{safeCommit(()=>{data.homeViewMode=mode},{label:'home period',invalidateAcf:false})}catch(e){}
+  feedback?.selection?.();renderToday();
+}
+function saveHomeSettings(fn){
+  const L=homeLayout(),next={layout:{cards:[...L.cards],rows:[...L.rows],hidden:[...L.hidden]},prefs:homePrefs()};fn(next);
+  try{safeCommit(()=>{data.homeLayout=next.layout;data.homePrefs=next.prefs},{label:'home settings',invalidateAcf:false})}catch(e){return false}
+  renderToday();return true;
+}
+function homeSettingsHtml(){
+  const L=homeLayout(),P=homePrefs(),st=profileState();
+  const item=(k)=>`<div class="row hs-row" data-reorder-key="${k}"><button type="button" class="switch ${L.hidden.has(k)?'':'on'}" data-layout-toggle="${k}" role="switch" aria-checked="${!L.hidden.has(k)}" aria-label="${esc(HOME_SECTION_LABELS[k])}を表示"></button><div class="row-main"><div class="row-title">${esc(HOME_SECTION_LABELS[k])}</div></div>${dragHandleHtml(HOME_SECTION_LABELS[k])}</div>`;
+  const sw=(k,title,sub='')=>`<div class="row hs-row"><div class="row-main"><div class="row-title">${esc(title)}</div>${sub?`<div class="row-sub">${esc(sub)}</div>`:''}</div><button type="button" class="switch ${P[k]?'on':''}" data-home-pref="${k}" role="switch" aria-checked="${!!P[k]}" aria-label="${esc(title)}"></button></div>`;
+  const seg=(k,label,opts)=>`<div class="hs-seg-block"><div class="hs-seg-label">${esc(label)}</div><div class="glass-seg" role="radiogroup" aria-label="${esc(label)}">${opts.map(([v,l])=>`<button type="button" role="radio" aria-checked="${String(P[k])===String(v)}" data-home-pref-set="${k}" data-value="${v}">${esc(l)}</button>`).join('')}</div></div>`;
+  return `<div class="hs-hero"><div class="hs-avatar">${profileAvatarHtml('hs-avatar-img')}</div><div class="hs-hero-copy"><div class="hs-name">${esc(data.profile?.name||'ホーム')}</div><div class="hs-state"><span class="profile-state-mark ring-${st.key}" aria-hidden="true"></span>${esc(st.label)}</div></div></div>
+  <h2 class="section-head">カード</h2><p class="hs-help">右の ≡ を上下になぞると並び順が変わります。スイッチで表示・非表示。</p><div class="group hs-list" id="hsCards">${L.cards.map(item).join('')}</div>
+  <h2 class="section-head">最近の動き</h2><div class="group hs-list" id="hsRows">${L.rows.map(item).join('')}</div>
+  <h2 class="section-head">支出カード</h2><div class="group hs-block">${seg('startPeriod','開いた時の期間',[['last','前回のまま'],['today','今日'],['month','今月']])}</div>
+  <h2 class="section-head">表示</h2><div class="group">${sw('hideAmounts','金額を隠す','ホームの金額を「••••」で表示')}${sw('showCharts','カードのグラフ')}${sw('showCaptions','カードの補足','更新時刻や説明の行')}${sw('showAlert','警告カード','確認が必要なお知らせをホームの上に表示')}${sw('wash','上部の色のにじみ')}${sw('compact','カードを詰めて表示','余白を減らして多く表示')}</div>
+  <h2 class="section-head">一覧の件数</h2><div class="group hs-block">${seg('recentCount','カテゴリと取引の表示件数',[[3,'3件'],[5,'5件'],[10,'10件']])}</div>
+  <button type="button" class="secondary hs-reset" id="hsReset">ホームの表示を初期の状態に戻す</button><p class="form-helper">ここで変えるのはホームの見た目だけです。記録や残高は変わりません。</p>`;
+}
+function openHomeSettings(){
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="hsClose">閉じる</button><div class="sheet-title">ホームの設定</div><span></span></div><div class="sheet-body home-settings" id="homeSettingsBody">${homeSettingsHtml()}</div>`,'full',root=>{
+    root.closest('#sheet')?.classList.add('glass-sheet');
+    const body=root.querySelector('#homeSettingsBody');
+    const redraw=()=>{const y=body.scrollTop;body.innerHTML=homeSettingsHtml();body.scrollTop=y;bind()};
+    const bind=()=>{
+      body.querySelectorAll('[data-layout-toggle]').forEach(b=>b.onclick=()=>{const k=b.dataset.layoutToggle;if(saveHomeSettings(n=>{const h=n.layout.hidden;n.layout.hidden=h.includes(k)?h.filter(x=>x!==k):[...h,k]})){feedback?.selection?.();redraw()}});
+      body.querySelectorAll('[data-home-pref]').forEach(b=>b.onclick=()=>{const k=b.dataset.homePref;if(saveHomeSettings(n=>{n.prefs[k]=!n.prefs[k]})){feedback?.selection?.();redraw()}});
+      body.querySelectorAll('[data-home-pref-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.homePrefSet,v=k==='recentCount'?Number(b.dataset.value):b.dataset.value;if(k==='startPeriod'){homeSessionPeriod=v==='last'?null:v;homeSessionData=data}if(saveHomeSettings(n=>{n.prefs[k]=v})){feedback?.selection?.();redraw()}});
+      installDragReorder(body.querySelector('#hsCards'),order=>{if(saveHomeSettings(n=>{n.layout.cards=order}))redraw()});
+      installDragReorder(body.querySelector('#hsRows'),order=>{if(saveHomeSettings(n=>{n.layout.rows=order}))redraw()});
+      body.querySelector('#hsReset').onclick=async()=>{if(!await showAlert('ホームの表示を戻しますか？','カードの並び・表示と、このページの設定を初期の状態に戻します。記録は変わりません。',{okText:'戻す',destructive:true}))return;homeSessionPeriod=null;try{safeCommit(()=>{data.homeLayout={};data.homePrefs={}},{label:'home settings reset',invalidateAcf:false})}catch(e){return}renderToday();redraw();showToast('ホームの表示を初期の状態に戻しました')};
+    };
+    root.querySelector('#hsClose').onclick=closeSheet;bind();
+  });
+}
+/* ホームの描画後に表示の設定を反映する（金額を隠す・グラフ・補足・警告・にじみ・詰めて表示） */
+function applyHomePrefs(){
+  const P=homePrefs(),screen=document.getElementById('screen-today'),content=document.getElementById('todayContent');if(!screen||!content)return;
+  screen.classList.toggle('no-wash',!P.wash);content.classList.toggle('home-compact',!!P.compact);content.classList.toggle('home-no-charts',!P.showCharts);content.classList.toggle('home-no-captions',!P.showCaptions);
+  if(!P.showAlert)content.querySelector('.home-alert')?.remove();
+  if(P.hideAmounts){content.classList.add('home-hidden-amounts');content.querySelectorAll('.home-card-value,.row-value,.hl-value,.np-amount,.hl-bar-value').forEach(el=>{if(/[¥￥\d]/.test(el.textContent)&&!el.dataset.masked){el.dataset.masked='1';el.setAttribute('aria-label','金額は非表示');el.textContent='••••'}});content.querySelectorAll('.home-card-body[aria-label]').forEach(b=>b.setAttribute('aria-label',b.getAttribute('aria-label').replace(/[−-]?[¥￥][\d,]+/g,'金額非表示')))}
+  else content.classList.remove('home-hidden-amounts');
+}
+
+/* ---------- ＋ = 全画面の「新規入力」 ---------- */
+function entryHubGroups(){
+  const date=['today','day'].includes(activeTab)?trackingDate:ymd();
+  return[
+    {title:'よく使う入力',big:true,items:[
+      {id:'entryExpense',sym:'cart',color:'var(--orange)',title:'支出を記録',sub:'使った金額を記録',run:()=>openQuickExpense(date)},
+      {id:'entryIncome',sym:'wallet',color:'var(--green)',title:'臨時収入',sub:'給与以外の入金',run:()=>openTempIncome(date)},
+      {id:'entryBank',sym:'bank',color:'var(--accent)',title:'残高を更新',sub:'口座の今の残高',run:openQuickBank},
+      {id:'entrySalary',sym:'briefcase',color:'var(--teal)',title:'給与を登録',sub:'今月の給与・予定',run:openSalaryAdd}]},
+    {title:'すばやく入力',items:[
+      {id:'ihCard',sym:'card',color:'var(--purple)',title:'カードの請求額を更新',sub:'カードを選んで今月の請求額を入力',run:()=>openQuickCardBilling(paymentHomeMonth())},
+      {id:'ihRepeat',sym:'repeat',color:'var(--orange)',title:'最近の支出を再利用',sub:'前に記録した支出から選ぶ',run:()=>openQuickRepeat(trackingDate)},
+      {id:'ihOneLine',sym:'edit',color:'var(--accent)',title:'一行入力',sub:'「コンビニ 580円」のように書いて記録',run:()=>openSmartInputSearch('input')}]},
+    {title:'新しく登録',items:[
+      {id:'ihBank',sym:'bank',color:'var(--accent)',title:'銀行口座を追加',sub:'',run:openAddBank},
+      {id:'ihEmployer',sym:'briefcase',color:'var(--teal)',title:'勤務先を追加',sub:'',run:()=>openEmployerCreate(()=>renderAll())},
+      {id:'ihCredit',sym:'card',color:'var(--purple)',title:'クレジットカードを追加',sub:'',run:()=>openAddCard()},
+      {id:'ihDebit',sym:'card',color:'var(--green)',title:'デビットカードを追加',sub:'',run:()=>openAddDebit()},
+      {id:'ihFixed',sym:'repeat',color:'var(--red)',title:'固定支払いを追加',sub:'家賃・サブスクなど',run:()=>openFixedPayment()},
+      {id:'ihLarge',sym:'cart',color:'var(--orange)',title:'大型支出を計画',sub:'',run:()=>openLargeExpenseEditor(null,{after:renderAll})},
+      {id:'ihGoal',sym:'gift',color:'var(--purple)',title:'旅行・プレゼント目標',sub:'',run:()=>openEventGoalEditor()}]}
+  ];
+}
+function openEntryHub(){
+  const groups=entryHubGroups(),all=groups.flatMap(g=>g.items);
+  const tile=x=>`<button type="button" class="entry-tile" id="${x.id}" style="--tile:${x.color}"><span class="entry-tile-icon" aria-hidden="true">${icon(x.sym)}</span><span class="entry-tile-title">${esc(x.title)}</span><span class="entry-tile-sub">${esc(x.sub)}</span></button>`;
+  const row=x=>`<button type="button" class="row press entry-row" id="${x.id}" style="--tile:${x.color}"><span class="entry-row-icon" aria-hidden="true">${icon(x.sym)}</span><div class="row-main"><div class="row-title">${esc(x.title)}</div>${x.sub?`<div class="row-sub">${esc(x.sub)}</div>`:''}</div><span class="chev">${icon('chevronRight')}</span></button>`;
+  const html=`<div class="sheet-nav"><button type="button" class="nav-text" id="entryClose">閉じる</button><div class="sheet-title">新規入力</div><span></span></div><div class="sheet-body entry-hub" id="entryHub"><p class="entry-lead">何を入力しますか？</p>${groups.map(g=>`<h2 class="section-head">${esc(g.title)}</h2>${g.big?`<div class="entry-grid">${g.items.map(tile).join('')}</div>`:`<div class="group">${g.items.map(row).join('')}</div>`}`).join('')}</div>`;
+  openSheet(html,'full',root=>{
+    const sheet=root.closest('#sheet');sheet?.classList.add('glass-sheet','from-hub');setTimeout(()=>sheet?.classList.remove('from-hub'),600);
+    root.querySelector('#entryClose').onclick=closeSheet;
+    for(const x of all)root.querySelector('#'+x.id).onclick=()=>{feedback?.selection?.();closeSheet();x.run()};
+  });
+}
+document.getElementById('addHub')?.addEventListener('click',()=>{feedback?.selection?.();openEntryHub()});
+/* 旧「その他の入力」（push画面）も同じ「新規入力」へ */
+function openOtherInputs(){openEntryHub()}
+function addHubItems(){return entryHubGroups().flatMap(g=>g.items).map(x=>({label:x.title,icon:x.sym,action:x.run}))}
+
+/* ---------- 専用画面の左端スワイプで戻る ---------- */
+(function installDetailEdgeBack(){
+  const app=document.getElementById('app');if(!app)return;let g=null;
+  const blocked=()=>document.getElementById('sheet')?.classList.contains('show')||document.querySelector('#pushLayer .push-view.show')||document.getElementById('menuLayer')?.classList.contains('show')||document.getElementById('calculator')?.classList.contains('show')||(typeof goalPlannerState!=='undefined'&&goalPlannerState?.locked);
+  const reset=()=>{if(!g)return;for(const el of [g.screen,g.under]){el.style.transition='';el.style.transform='';el.style.opacity=''}g.under.classList.remove('swipe-under');g.screen.classList.remove('swipe-top');g=null};
+  app.addEventListener('touchstart',e=>{
+    if(!isDetailScreen()||blocked()||e.touches.length>1)return;const t=e.touches[0];if(t.clientX>24)return;
+    const screen=document.getElementById(`screen-${activeTab}`),under=document.getElementById(`screen-${ROOT_SCREENS[detailOrigin]||'today'}`);if(!screen||!under)return;
+    g={screen,under,sx:t.clientX,sy:t.clientY,lastX:t.clientX,lastAt:performance.now(),horizontal:false};
+  },{passive:true,capture:true});
+  app.addEventListener('touchmove',e=>{
+    if(!g)return;const t=e.touches[0],dx=Math.max(0,t.clientX-g.sx),dy=Math.abs(t.clientY-g.sy);
+    if(!g.horizontal){if(dy>11&&dy>dx*1.15){g=null;return}if(dx<7)return;g.horizontal=true;g.under.classList.add('swipe-under');g.screen.classList.add('swipe-top')}
+    e.preventDefault();e.stopPropagation();g.lastX=t.clientX;g.lastAt=performance.now();
+    const w=g.screen.clientWidth,x=Math.min(w,dx),r=x/Math.max(1,w);g.screen.style.transform=`translateX(${x}px)`;g.under.style.transform=`translateX(${(-30+30*r).toFixed(2)}%)`;g.under.style.opacity=String(.85+.15*r);
+  },{passive:false,capture:true});
+  const end=e=>{
+    if(!g)return;if(!g.horizontal){g=null;return}e.stopPropagation();
+    const t=e.changedTouches?.[0],x=t?.clientX??g.lastX,dx=Math.max(0,x-g.sx),v=Math.max(0,(x-g.lastX)/Math.max(1,performance.now()-g.lastAt)),w=g.screen.clientWidth,done=dx>w*.31||(dx>24&&v>.5);
+    const cur=g;const ease='transform .26s cubic-bezier(.22,.88,.22,1),opacity .26s';cur.screen.style.transition=ease;cur.under.style.transition=ease;
+    if(done){cur.screen.style.transform='translateX(100%)';cur.under.style.transform='translateX(0)';cur.under.style.opacity='1';setTimeout(()=>{g=cur;reset();closeDetailScreen()},265)}
+    else{cur.screen.style.transform='translateX(0)';cur.under.style.transform='translateX(-30%)';setTimeout(()=>{g=cur;reset()},270)}
+    g=null;
+  };
+  app.addEventListener('touchend',end,{capture:true});app.addEventListener('touchcancel',()=>{reset()},{capture:true});
+})();
+
+/* ---------- 検索（ガラスの検索欄・横断検索） ---------- */
+function searchFold(s){return String(s??'').normalize('NFKC').toLowerCase().replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60)).replace(/[\s,，、・]/g,'')}
+function searchParseQuery(q){
+  const tokens=String(q||'').normalize('NFKC').trim().split(/[\s　]+/).filter(Boolean),out={words:[],min:null,max:null,amounts:[],dates:[],months:[]};
+  for(const raw of tokens){
+    const t=raw.replace(/[¥￥,円]/g,'');let m;
+    if((m=t.match(/^>=?(\d+)$/)))out.min=Number(m[1]);
+    else if((m=t.match(/^<=?(\d+)$/)))out.max=Number(m[1]);
+    else if((m=t.match(/^(\d+)[-〜~](\d+)$/))&&!/^\d{4}[-/]\d{1,2}$/.test(t)){out.min=Number(m[1]);out.max=Number(m[2])}
+    else if((m=t.match(/^(\d{1,2})\/(\d{1,2})$/)))out.dates.push(`-${pad(Number(m[1]))}-${pad(Number(m[2]))}`);
+    else if((m=t.match(/^(\d{1,2})月(\d{1,2})日?$/)))out.dates.push(`-${pad(Number(m[1]))}-${pad(Number(m[2]))}`);
+    else if((m=t.match(/^(\d{1,2})月$/)))out.months.push(`-${pad(Number(m[1]))}-`);
+    else if((m=t.match(/^(\d{4})[-/](\d{1,2})$/)))out.months.push(`${m[1]}-${pad(Number(m[2]))}`);
+    else if(/^\d{3,}$/.test(t)){out.amounts.push(Number(t));out.words.push(searchFold(raw))}
+    else out.words.push(searchFold(raw));
+  }
+  return out;
+}
+const SEARCH_SCOPES=[['all','すべて'],['transaction','支出'],['salary','給与'],['account','口座'],['card','カード'],['payment','支払い'],['goal','目標'],['setting','設定']];
+const SEARCH_GROUP_META={transaction:['支出','cart','var(--orange)'],income:['臨時収入','wallet','var(--green)'],salary:['給与','briefcase','var(--teal)'],account:['口座','bank','var(--accent)'],card:['カード','card','var(--purple)'],payment:['支払い','repeat','var(--red)'],goal:['目標','gift','var(--purple)'],category:['カテゴリ','grid','var(--orange)'],setting:['設定','settings','#8E8E93']};
+function searchSettingEntries(){
+  if(!document.querySelector('#settingsContent .settings-list-row'))try{renderSettings()}catch(e){}
+  return [...document.querySelectorAll('#settingsContent .settings-list-row[id]')].map(b=>({type:'setting',id:b.id,title:b.querySelector('.settings-row-title')?.textContent||'',sub:b.querySelector('.settings-row-detail')?.textContent||'その他',hay:b.textContent,open:()=>document.getElementById(b.id)?.click()}));
+}
+function searchIndex(){
+  const out=[],cat=n=>catByName(n);
+  for(const t of data.transactions)out.push({type:'transaction',id:t.id,title:t.merchant||t.category||'支出',sub:`${dayLabel(t.date)}・${t.category||''}・${paymentLabel(t)}`,amount:Number(t.amount)||0,date:t.date,hay:`${t.merchant} ${t.category} ${t.memo||''} ${paymentLabel(t)} ${(t.tags||[]).join(' ')}`,sym:normalizeCategoryIcon(cat(t.category)?.icon,cat(t.category)?.id),open:()=>openTransactionDetail(t.id)});
+  for(const x of data.tempIncomes||[])out.push({type:'income',id:x.id,title:x.name||x.source||'臨時収入',sub:dayLabel(x.date),amount:Number(x.amount)||0,date:x.date,hay:`${x.name||''} ${x.source||''} ${x.memo||''} 臨時収入`,open:()=>openTempIncomeHistory()});
+  for(const r of data.salaryRecords){const e=data.employers.find(x=>x.id===r.employerId);out.push({type:'salary',id:r.id,title:e?.name||'給与',sub:`${r.date?dayLabel(r.date):''}・${r.status||''}`,amount:salaryRecordExpectedOrReceivedAmount(r),date:r.date,hay:`${e?.name||''} 給与 ${r.status||''} ${r.memo||''}`,open:()=>openSalaryRecordEdit(r.id)})}
+  for(const e of data.employers)out.push({type:'salary',id:'emp-'+e.id,title:e.name,sub:'勤務先',hay:`${e.name} 勤務先`,open:()=>openEmployerDetail(e.id)});
+  for(const b of data.banks)out.push({type:'account',id:b.id,title:b.name||'口座',sub:'銀行口座',amount:Number(b.balance)||0,hay:`${b.name} 銀行 口座 残高`,open:()=>openBankDetail(b.id)});
+  for(const c of data.cards)out.push({type:'card',id:c.id,title:c.name,sub:'クレジットカード',hay:`${c.name} カード クレジット`,open:()=>openCardDetail(c.id,assetBillingMonth)});
+  for(const d of data.debitCards||[])out.push({type:'card',id:'debit-'+d.id,title:d.name,sub:'デビットカード',hay:`${d.name} デビット カード`,open:()=>openDebitDetail(d.id)});
+  for(const f of data.fixedPayments)out.push({type:'payment',id:f.id,title:f.name||'固定支払い',sub:`固定支払い${f.day?`・毎月${f.day}日`:''}`,amount:Number(f.amount)||0,hay:`${f.name} 固定 支払い サブスク`,open:()=>openFixedPayment(f)});
+  for(const p of data.largeExpensePlans)out.push({type:'payment',id:p.id,title:p.name,sub:`大型支出・${p.date?dayLabel(p.date):''}`,amount:Number(p.amount)||0,date:p.date,hay:`${p.name} 大型 支出 計画`,open:()=>openLargeExpenseDetail(p.id)});
+  for(const g of data.eventGoals||[])out.push({type:'goal',id:g.id,title:g.name,sub:`目標${g.deadline?`・期限 ${dayLabel(g.deadline)}`:''}`,amount:Number(g.targetAmount||g.amount)||0,hay:`${g.name} 目標 旅行 プレゼント`,open:()=>openEventGoalDetail(g.id)});
+  for(const c of data.categories)out.push({type:'category',id:'cat-'+c.id,title:c.name,sub:'カテゴリの取引を表示',hay:`${c.name} カテゴリ`,sym:normalizeCategoryIcon(c.icon,c.id),open:()=>openTransactionList({category:c.name,title:c.name})});
+  return out.concat(searchSettingEntries());
+}
+const SEARCH_SCOPE_TYPES={all:null,transaction:['transaction','income','category'],salary:['salary'],account:['account'],card:['card'],payment:['payment'],goal:['goal'],setting:['setting']};
+function runGlobalSearch(query,scope='all'){
+  const q=searchParseQuery(query),types=SEARCH_SCOPE_TYPES[scope]||null,empty=!q.words.length&&q.min==null&&q.max==null&&!q.dates.length&&!q.months.length;if(empty)return[];
+  const res=[];
+  for(const it of searchIndex()){
+    if(types&&!types.includes(it.type))continue;
+    const hay=searchFold(`${it.title} ${it.hay||''} ${it.sub||''}`),title=searchFold(it.title);let score=0,ok=true;
+    for(const w of q.words){const amountHit=q.amounts.length&&it.amount!=null&&q.amounts.includes(Math.round(Math.abs(it.amount)))&&/^\d+$/.test(w);if(hay.includes(w)){score+=title.startsWith(w)?30:title.includes(w)?20:8}else if(amountHit)score+=25;else{ok=false;break}}
+    if(!ok)continue;
+    if(q.min!=null||q.max!=null){if(it.amount==null)continue;const a=Math.abs(it.amount);if(q.min!=null&&a<q.min||q.max!=null&&a>q.max)continue;score+=5}
+    if(q.dates.length){if(!it.date||!q.dates.some(d=>it.date.endsWith(d.slice(1))||it.date.includes(d)))continue;score+=10}
+    if(q.months.length){if(!it.date||!q.months.some(m=>it.date.includes(m)))continue;score+=6}
+    if(it.date)score+=Math.max(0,3-Math.floor((Date.now()-parseYmd(it.date).getTime())/864e5/60));
+    res.push({...it,score});
+  }
+  return res.sort((a,b)=>b.score-a.score||String(b.date||'').localeCompare(String(a.date||'')));
+}
+function searchHighlight(text,query){
+  let html=esc(text);const words=String(query||'').normalize('NFKC').trim().split(/[\s　]+/).filter(w=>w&&!/^[<>]/.test(w)).map(w=>w.replace(/[¥￥,円]/g,'')).filter(Boolean);
+  for(const w of words){const re=new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');html=html.replace(re,m=>`<mark>${m}</mark>`)}
+  return html;
+}
+function recentSearches(){return Array.isArray(data.recentSearches)?data.recentSearches.slice(0,8):[]}
+function rememberSearch(q){q=String(q||'').trim();if(!q)return;try{safeCommit(()=>{data.recentSearches=[q,...recentSearches().filter(x=>x!==q)].slice(0,8)},{render:false,label:'recent search',invalidateAcf:false})}catch(e){}}
+function openGlobalSearch(initialScope='all'){
+  let query='',scope=initialScope,expanded=new Set();
+  pushView('検索',`<div class="gsearch"><div class="gsearch-bar"><label class="gsearch-field">${icon('search')}<input type="search" id="globalSearchInput" enterkeyhint="search" autocomplete="off" placeholder="取引・給与・口座・カード・設定を検索" aria-label="検索"><button type="button" class="gsearch-clear" id="globalSearchClear" aria-label="検索語を消す" hidden>${icon('close')}</button></label></div><div class="gsearch-scopes glass-seg wide" role="radiogroup" aria-label="検索する種類" id="globalSearchScopes"></div><div class="gsearch-results" id="globalSearchResults" aria-live="polite"></div></div>`,root=>{
+    root.classList.add('gsearch-view');
+    const input=root.querySelector('#globalSearchInput'),clear=root.querySelector('#globalSearchClear'),scopes=root.querySelector('#globalSearchScopes'),out=root.querySelector('#globalSearchResults');
+    const drawScopes=()=>{scopes.innerHTML=SEARCH_SCOPES.map(([v,l])=>`<button type="button" role="radio" aria-checked="${scope===v}" data-search-scope="${v}">${esc(l)}</button>`).join('');scopes.querySelectorAll('[data-search-scope]').forEach(b=>b.onclick=()=>{scope=b.dataset.searchScope;expanded.clear();feedback?.selection?.();drawScopes();draw()})};
+    const suggestions=()=>{const freq=new Map();for(const t of data.transactions.slice(-200)){if(t.merchant)freq.set(t.merchant,(freq.get(t.merchant)||0)+1)}return [...freq].sort((a,b)=>b[1]-a[1]).slice(0,6).map(x=>x[0]).concat(data.categories.slice(0,4).map(c=>c.name))};
+    const draw=()=>{
+      clear.hidden=!query;
+      if(!query.trim()){
+        const rec=recentSearches(),saved=data.savedSearches||[];
+        out.innerHTML=`${rec.length?`<div class="gsearch-section-head"><h2>最近の検索</h2><button type="button" class="gsearch-link" id="gsClearRecent">消去</button></div><div class="group">${rec.map(r=>`<button type="button" class="row press" data-gs-recent="${esc(r)}"><span class="gsearch-row-icon" aria-hidden="true">${icon('clock')}</span><div class="row-main"><div class="row-title">${esc(r)}</div></div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`:''}
+        ${saved.length?`<div class="gsearch-section-head"><h2>保存した検索</h2></div><div class="group">${saved.map(x=>`<button type="button" class="row press" data-load-search="${esc(x.id)}"><span class="gsearch-row-icon" aria-hidden="true">${icon('star')}</span><div class="row-main"><div class="row-title">${esc(x.name)}</div><div class="row-sub">${esc(x.query||'条件のみ')}</div></div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`:''}
+        <div class="gsearch-section-head"><h2>候補</h2></div><div class="gsearch-chips">${suggestions().map(s=>`<button type="button" class="gsearch-chip" data-gs-suggest="${esc(s)}">${esc(s)}</button>`).join('')}</div>
+        <div class="gsearch-tips"><strong>検索のこつ</strong><span>「&gt;5000」で5,000円以上、「1000-3000」で範囲、「10/7」「10月」で日付、「カフェ 500」のように並べると両方を含む結果。ひらがな・カタカナ、全角・半角は区別しません。</span></div>`;
+      }else{
+        const res=runGlobalSearch(query,scope),by=new Map();for(const r of res){if(!by.has(r.type))by.set(r.type,[]);by.get(r.type).push(r)}
+        out.innerHTML=res.length?`<div class="gsearch-count">${res.length}件</div>${[...by].map(([type,list])=>{const [label,sym,color]=SEARCH_GROUP_META[type]||[type,'search','var(--accent)'],open=expanded.has(type),shown=open?list:list.slice(0,5);return `<section class="gsearch-group" style="--g:${color}"><div class="gsearch-section-head"><h2>${esc(label)}<small>${list.length}</small></h2>${list.length>5?`<button type="button" class="gsearch-link" data-gs-more="${type}">${open?'閉じる':'すべて表示'}</button>`:''}</div><div class="group">${shown.map(r=>`<button type="button" class="row press gsearch-result" data-gs-type="${type}" data-gs-id="${esc(r.id)}"><span class="gsearch-row-icon tinted" aria-hidden="true">${icon(r.sym||sym)}</span><div class="row-main"><div class="row-title">${searchHighlight(r.title,query)}</div><div class="row-sub">${searchHighlight(r.sub||'',query)}</div></div>${r.amount!=null&&r.type!=='setting'&&r.type!=='category'?`<div class="row-value">${yen(Math.abs(r.amount))}</div>`:''}<span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div></section>`}).join('')}<button type="button" class="secondary gsearch-save" id="pro4SaveSearch">この検索を保存</button>`:`<div class="gsearch-empty"><span aria-hidden="true">${icon('search')}</span><strong>「${esc(query)}」の結果はありません</strong><small>別の言葉や、金額・日付（例: 10/7, &gt;1000）で試してください。</small></div>`;
+        out._results=res;
+      }
+      bind();
+    };
+    const bind=()=>{
+      out.querySelectorAll('[data-gs-recent]').forEach(b=>b.onclick=()=>{query=b.dataset.gsRecent;input.value=query;draw()});
+      out.querySelectorAll('[data-gs-suggest]').forEach(b=>b.onclick=()=>{query=b.dataset.gsSuggest;input.value=query;draw()});
+      out.querySelector('#gsClearRecent')?.addEventListener('click',()=>{try{safeCommit(()=>{data.recentSearches=[]},{render:false,label:'recent search clear',invalidateAcf:false})}catch(e){}draw()});
+      out.querySelectorAll('[data-load-search]').forEach(b=>b.onclick=()=>{const x=(data.savedSearches||[]).find(v=>v.id===b.dataset.loadSearch);if(!x)return;query=x.query||'';scope=SEARCH_SCOPE_TYPES[x.type]!==undefined?x.type:'all';input.value=query;drawScopes();draw()});
+      out.querySelectorAll('[data-gs-more]').forEach(b=>b.onclick=()=>{const t=b.dataset.gsMore;expanded.has(t)?expanded.delete(t):expanded.add(t);draw()});
+      out.querySelectorAll('[data-gs-id]').forEach(b=>b.onclick=()=>{const r=(out._results||[]).find(x=>x.type===b.dataset.gsType&&x.id===b.dataset.gsId);if(!r)return;rememberSearch(query);r.open()});
+      const save=out.querySelector('#pro4SaveSearch');if(save)save.onclick=()=>{if((data.savedSearches||[]).some(v=>v.query===query&&(v.type||'all')===scope)){showToast('この検索は保存済みです');return}try{safeCommit(()=>{data.savedSearches=[...(data.savedSearches||[]),{id:uid('search'),name:query,query,type:scope,createdAt:new Date().toISOString()}].slice(-10)},{render:false,label:'save search'})}catch(e){return}showToast('検索を保存しました')};
+    };
+    let timer=0;input.oninput=()=>{query=input.value;clearTimeout(timer);timer=setTimeout(draw,90)};
+    input.onkeydown=e=>{if(e.key==='Enter'){rememberSearch(query);input.blur()}};
+    clear.onclick=()=>{query='';input.value='';draw();input.focus()};
+    drawScopes();draw();setTimeout(()=>input.focus({preventScroll:true}),320);
+  });
+}
+
+/* ---------- その他: アプリ全体の設定 ---------- */
+const APP_PREF_DEFAULTS={startTab:'home',weekStart:0,payMonth:'current',glass:'standard',numberFont:'rounded',boldText:false,buttonShapes:false,contrast:false,privacyBlur:false,tabBadge:true};
+function appPrefs(){return{...APP_PREF_DEFAULTS,...(data.appPrefs&&typeof data.appPrefs==='object'?data.appPrefs:{})}}
+function setAppPref(k,v){try{safeCommit(()=>{data.appPrefs={...appPrefs(),[k]:v}},{label:'app prefs',invalidateAcf:false})}catch(e){return false}applyAppPrefs();renderAll();return true}
+const APP_PREF_OPTIONS={
+  startTab:{title:'起動時に開く画面',options:[['home','ホーム'],['payments','支払い']],footer:'アプリを開いた時に最初に表示するタブです。'},
+  weekStart:{title:'週の始まり',options:[[0,'日曜日'],[1,'月曜日']],footer:'カレンダーの並びに使います。'},
+  payMonth:{title:'支払いタブの表示月',options:[['current','今月'],['nextDebit','次の引落がある月']],footer:'アプリを開いた時に支払いタブで表示する月です。'},
+  glass:{title:'ガラスの質感',options:[['standard','標準（透ける）'],['subtle','控えめ'],['solid','不透明']],footer:'タブバー・ボタン・検索欄などのガラス素材の透け具合です。端末の「透明度を下げる」がオンの時は常に不透明になります。'},
+  numberFont:{title:'数字の書体',options:[['rounded','丸みのある数字'],['standard','標準の数字']],footer:'金額などの数字の書体です。'}
+};
+function appPrefLabel(k){const o=APP_PREF_OPTIONS[k];if(!o)return'';const v=appPrefs()[k];return o.options.find(([x])=>String(x)===String(v))?.[1]||''}
+function appPrefsGroups(){
+  return[
+    ['一般',[{id:'prefStartTab',symbol:'house',color:'var(--accent)',title:'起動時に開く画面',value:appPrefLabel('startTab')},{id:'prefWeekStart',symbol:'calendar',color:'var(--red)',title:'週の始まり',value:appPrefLabel('weekStart')},{id:'prefPayMonth',symbol:'card',color:'var(--purple)',title:'支払いタブの表示月',value:appPrefLabel('payMonth')}]],
+    ['表示とアクセシビリティ',[{id:'prefGlass',symbol:'sparkles',color:'var(--teal)',title:'ガラスの質感',value:appPrefLabel('glass')},{id:'prefNumberFont',symbol:'textsize',color:'var(--orange)',title:'数字の書体',value:appPrefLabel('numberFont')},{id:'prefReadability',symbol:'appearance',color:'#5856D6',title:'読みやすさ',detail:'文字を太く・ボタンの形・コントラスト'}]],
+    ['プライバシー',[{id:'prefPrivacy',symbol:'lock',color:'#8E8E93',title:'画面のぼかしとバッジ',detail:'アプリを離れた時のぼかし・その他タブの数字'}]]
+  ];
+}
+function openAppPrefOptions(k){
+  const o=APP_PREF_OPTIONS[k];
+  const draw=()=>settingsDetailView(o.title,`<div class="group" role="radiogroup" aria-label="${esc(o.title)}">${o.options.map(([v,l])=>`<button type="button" class="row press option-row" role="radio" aria-checked="${String(appPrefs()[k])===String(v)}" data-pref-value="${v}"><div class="row-main"><div class="row-title">${esc(l)}</div></div><span class="option-check" aria-hidden="true">${String(appPrefs()[k])===String(v)?icon('check'):''}</span></button>`).join('')}</div><p class="settings-section-footer">${esc(o.footer)}</p>`,root=>root.querySelectorAll('[data-pref-value]').forEach(b=>b.onclick=()=>{const raw=b.dataset.prefValue,v=k==='weekStart'?Number(raw):raw;if(setAppPref(k,v)){feedback?.selection?.();draw()}}));
+  draw();
+}
+function openSwitchPrefs(title,items,footer){
+  const draw=()=>settingsDetailView(title,`<div class="group">${items.map(([k,t,s])=>`<div class="row"><div class="row-main"><div class="row-title">${esc(t)}</div><div class="row-sub">${esc(s)}</div></div><button type="button" class="switch ${appPrefs()[k]?'on':''}" role="switch" aria-checked="${!!appPrefs()[k]}" aria-label="${esc(t)}" data-pref-switch="${k}"></button></div>`).join('')}</div><p class="settings-section-footer">${esc(footer)}</p>`,root=>root.querySelectorAll('[data-pref-switch]').forEach(b=>b.onclick=()=>{const k=b.dataset.prefSwitch;if(setAppPref(k,!appPrefs()[k])){feedback?.selection?.();draw()}}));
+  draw();
+}
+function bindAppPrefRows(root){
+  const on=(id,fn)=>{const el=root.querySelector('#'+id);if(el)el.onclick=fn};
+  on('prefStartTab',()=>openAppPrefOptions('startTab'));on('prefWeekStart',()=>openAppPrefOptions('weekStart'));on('prefPayMonth',()=>openAppPrefOptions('payMonth'));
+  on('prefGlass',()=>openAppPrefOptions('glass'));on('prefNumberFont',()=>openAppPrefOptions('numberFont'));
+  on('prefReadability',()=>openSwitchPrefs('読みやすさ',[['boldText','文字を太くする','画面の文字を少し太く表示'],['buttonShapes','ボタンの形を表示','文字だけのボタンに背景を付ける'],['contrast','コントラストを上げる','薄い文字と境界を濃くする']],'端末の設定とは別に、このアプリだけに使います。'));
+  on('prefPrivacy',()=>openSwitchPrefs('画面のぼかしとバッジ',[['privacyBlur','アプリを離れたらぼかす','アプリの切り替え画面で金額が見えないようにする'],['tabBadge','その他タブに未読数を表示','システムのお知らせの未読数']],'記録の内容は変わりません。'));
+}
+function applyAppPrefs(){
+  const P=appPrefs(),h=document.documentElement;
+  h.classList.toggle('glass-subtle',P.glass==='subtle');h.classList.toggle('glass-solid-pref',P.glass==='solid');
+  h.classList.toggle('num-standard',P.numberFont==='standard');h.classList.toggle('bold-text',!!P.boldText);h.classList.toggle('button-shapes',!!P.buttonShapes);h.classList.toggle('more-contrast',!!P.contrast);
+  const tab=document.getElementById('settingsTab'),n=P.tabBadge&&typeof unreadNotices==='function'?unreadNotices():0;
+  if(tab){let b=tab.querySelector('.tab-badge');if(n){if(!b){b=document.createElement('span');b.className='tab-badge';b.setAttribute('aria-hidden','true');tab.appendChild(b)}b.textContent=n>99?'99+':String(n);tab.setAttribute('aria-label',`その他・未読のお知らせ${n}件`)}else{b?.remove();tab.removeAttribute('aria-label')}}
+}
+let appStartupApplied=false;
+function applyStartupPrefs(){
+  if(appStartupApplied)return;appStartupApplied=true;applyAppPrefs();
+  const P=appPrefs();
+  if(P.payMonth==='nextDebit'){const ev=financialEventsFrom(ymd(),62).find(e=>e.type!=='income');if(ev)assetBillingMonth=ev.date.slice(0,7)}
+  if(P.startTab==='payments'&&activeTab==='today')switchRoot('payments');
+}
+/* アプリを離れたらぼかす */
+(function(){
+  const shield=()=>{let el=document.getElementById('privacyShield');if(!el){el=document.createElement('div');el.id='privacyShield';el.setAttribute('aria-hidden','true');el.innerHTML='<span>My Money</span>';document.body.appendChild(el)}return el};
+  const set=on=>{if(!appPrefs().privacyBlur&&on)return;shield().classList.toggle('show',on)};
+  document.addEventListener('visibilitychange',()=>set(document.visibilityState==='hidden'));
+  window.addEventListener('pagehide',()=>set(true));window.addEventListener('pageshow',()=>set(false));
+  window.addEventListener('focus',()=>set(false));
+})();
 /* ======================================================================
    UI-20260917 · Presentation/accessibility lifecycle
    No data migration, storage keys, amount formulas or import rules change.
@@ -6259,7 +6561,7 @@ function openFixedPaymentList(){pushView('固定支払い',`<div class="group ho
 try{await saveAsync({snapshot:data})}catch(e){console.warn('initial persistence unavailable',e);data.meta={...(data.meta||{}),storageWriteError:true}}
 updateBootMessage('画面を準備しています…','集計結果を画面に反映しています');
 renderAll();void initializeWebPush();renderLock();initializeTabIndicator();
-await waitForUiPaint();const bootRemaining=700-(performance.now()-mm3BootStarted);if(bootRemaining>0)await new Promise(resolve=>setTimeout(resolve,bootRemaining));await waitForUiPaint();mm3BootLayer.classList.add('done');mm3BootLayer.setAttribute('aria-hidden','true');setTimeout(()=>mm3BootLayer.remove(),matchMedia('(prefers-reduced-motion:reduce)').matches?0:300);
+await waitForUiPaint();const bootRemaining=700-(performance.now()-mm3BootStarted);if(bootRemaining>0)await new Promise(resolve=>setTimeout(resolve,bootRemaining));await waitForUiPaint();try{applyStartupPrefs()}catch(e){console.warn('startup prefs',e)}mm3BootLayer.classList.add('done');mm3BootLayer.setAttribute('aria-hidden','true');setTimeout(()=>mm3BootLayer.remove(),matchMedia('(prefers-reduced-motion:reduce)').matches?0:300);
 function appMaintenance(){
   try{const noticesChanged=pruneExpiredSystemNotices(),journalChanged=pruneDayClosingJournal();if(noticesChanged||journalChanged)renderAll()}catch(e){console.error('app maintenance failed',e)}
   queuePushSummary();maybeAutoSyncGmail(false);

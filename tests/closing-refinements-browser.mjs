@@ -109,9 +109,9 @@ export async function verifyClosingRefinements({createPage,passed,root,errors}){
   for(const width of [320,390])for(const appearance of ['light','dark']){
     const target=await createPage('app',{width,appearance}),page=target.page;
     await page.evaluate(()=>globalThis.__mm3Test.switchTab('assets'));
-    const history=page.locator('#mm3AssetHistoryTop');const box=await history.boundingBox();assert.ok(box.height>=44);
-    assert.equal(await history.locator('svg').count(),1);assert.equal(await history.evaluate(el=>getComputedStyle(el).borderTopWidth),'0px');
-    for(const id of ['mm3AssetHistoryTop','mm3AssetHistoryRow']){await page.locator('#'+id).click();assert.equal(await page.locator('.push-view').last().locator('.push-title').innerText(),'残高履歴');await page.locator('.push-view').last().locator('.back-btn').click();}
+    /* 「詳細」見出し横の残高履歴ボタンは、下の「残高履歴」の行と重複するため表示しない（二重ボタン禁止） */assert.equal(await page.locator('#mm3AssetHistoryTop').isVisible(),false);const history=page.locator('#mm3AssetHistoryRow');const box=await history.boundingBox();assert.ok(box.height>=44);
+    assert.ok(await history.locator('svg').count()>=1);assert.equal(await history.evaluate(el=>getComputedStyle(el).borderTopWidth),'0px');
+    for(const id of ['mm3AssetHistoryRow']){await page.locator('#'+id).click();assert.equal(await page.locator('.push-view').last().locator('.push-title').innerText(),'残高履歴');await page.locator('.push-view').last().locator('.back-btn').click();}
     await page.evaluate(()=>globalThis.__mm3Test.switchTab('settings'));
     for(const id of ['profileSettings','gmailSettings','categorySettings','initialValuesSettings','acfSettingsRow','favoriteSettings','tagSettings','notificationSettings','appearanceSettings','feedbackSettingsRow','securitySettings','helpSettings','dataSettings']){
       await page.locator('#'+id).click();
@@ -125,7 +125,7 @@ export async function verifyClosingRefinements({createPage,passed,root,errors}){
       assert.ok(await detail.evaluate(el=>el.querySelector('.push-body').scrollWidth<=el.querySelector('.push-body').clientWidth+1),`${id} overflow ${width}`);
       if(id==='categorySettings'){
         const categories=await page.evaluate(()=>globalThis.__mm3Test.getData().categories);
-        await page.locator('[data-down="0"]').click();await page.locator('[data-up="1"]').click();
+        /* 並べ替えは ≡ だけ（上下ボタンなし）。矢印キーで下へ→上へ戻すと元の順 */const first=await page.evaluate(()=>globalThis.__mm3Test.getData().categories[0].id);await page.locator(`[data-reorder-key="${first}"] .drag-handle`).focus();await page.keyboard.press('ArrowDown');await page.waitForTimeout(150);await page.locator(`[data-reorder-key="${first}"] .drag-handle`).focus();await page.keyboard.press('ArrowUp');await page.waitForTimeout(150);
         assert.deepEqual(await page.evaluate(()=>globalThis.__mm3Test.getData().categories),categories);
         await page.locator('[data-ci="0"]').click();await page.locator('#ceCancel').click();await page.locator('#sheet.show').waitFor({state:'hidden'});
       }

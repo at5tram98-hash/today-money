@@ -61,7 +61,7 @@ try{
     // ホーム → ＋入力ハブ → 支出を記録 → 電卓 → キャンセル
     await page.locator('#pushLayer .push-view.show .back-btn').last().tap();await page.waitForFunction(()=>!document.querySelector('#pushLayer .push-view.show'));
     await page.locator('#tabbar .tab').nth(0).tap();await page.waitForTimeout(400);
-    await page.locator('#addHub').tap();await page.locator('#menuLayer .menu-item').filter({hasText:'支出を記録'}).first().waitFor();await page.waitForTimeout(350);await page.locator('#menuLayer .menu-item').filter({hasText:'支出を記録'}).first().tap();await page.locator('#qeSave').waitFor();await page.waitForTimeout(400);await fits('支出入力');await tapSizes('支出入力');
+    await page.locator('#addHub').tap();await page.locator('#entryExpense').waitFor();await page.waitForTimeout(350);await page.locator('#entryExpense').tap();await page.locator('#qeSave').waitFor();await page.waitForTimeout(400);await fits('支出入力');await tapSizes('支出入力');
     await page.screenshot({path:resolve(evidence,`live-${label}-expense.png`)});
     await page.locator('#qeCancel').tap();await page.waitForTimeout(300);
     if(await page.locator('#alertWrap.show').count())await page.locator('#alertActions button').last().tap();

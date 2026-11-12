@@ -186,7 +186,7 @@ export const closeHarness=async()=>{for(const p of [...pages])await collectFlow(
 export const relocation=JSON.parse(readFileSync(resolve(root,'docs/v14/relocation.json'),'utf8'));
 export function relocate(tab,path=[]){
   const first=path[0],sel=first&&relocation.selectors[first];
-  if(sel&&['today','month'].includes(tab))return{root:sel.root,via:sel.via,rest:path.slice(1),steps:[...sel.via,...path.slice(1)],label:sel.label};
+  if(sel&&(sel.tabs||['today','month']).includes(tab))return{root:sel.root,via:sel.via,rest:path.slice(1),steps:[...sel.via,...path.slice(1)],label:sel.label};
   const screen=relocation.screens[tab];
   if(!screen)return{root:tab,via:[],rest:path,steps:path,label:''};
   return{root:screen.root,via:screen.via,rest:path,steps:[...screen.via,...path],label:screen.label};

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 // 第14版: 「最近の支出を再利用」は＋入力ハブの「その他の入力」から
-const openRepeat=async page=>{await page.evaluate(()=>{while(document.querySelector('#pushLayer .push-view.show'))globalThis.__mm3Test.popView()});await page.locator('#addHub').click();await page.locator('#menuLayer .menu-item').filter({hasText:'その他の入力'}).click();await page.locator('#ihRepeat').click()};
+const openRepeat=async page=>{await page.evaluate(()=>{while(document.querySelector('#pushLayer .push-view.show'))globalThis.__mm3Test.popView()});await page.locator('#addHub').click();await page.locator('#entryHub').waitFor();await page.locator('#ihRepeat').click()};
 export async function verifyRepeatShortcut(page){
   const before=await page.evaluate(()=>globalThis.__mm3Test.getData());
   await openRepeat(page);await page.locator('#qrClose').waitFor();

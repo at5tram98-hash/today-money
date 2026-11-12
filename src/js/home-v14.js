@@ -8,18 +8,13 @@
 
 /* ---------- 共通の小部品 ---------- */
 const HOME_CARD_KEYS=['spend','assets','salary','acf','payment'];
-const HOME_ROW_KEYS=['categories','transactions','dayclose','compare','mail','large','goals'];
-const HOME_SECTION_LABELS={spend:'支出',assets:'総資産',salary:'今月の給与',acf:'生活費の見通し',payment:'次の支払い',categories:'カテゴリ別支出',transactions:'最近の取引',dayclose:'日締め',compare:'今月の比較',mail:'未確認の明細',large:'大型支出の計画',goals:'旅行・プレゼント'};
+const HOME_ROW_KEYS=['highlights','categories','transactions','dayclose','compare','mail','large','goals'];
+const HOME_SECTION_LABELS={spend:'支出',assets:'総資産',salary:'今月の給与',acf:'生活費の見通し',payment:'次の支払い',highlights:'ハイライト',categories:'カテゴリ別支出',transactions:'最近の取引',dayclose:'日締め',compare:'今月の比較',mail:'未確認の明細',large:'大型支出の計画',goals:'旅行・プレゼント'};
 function homeLayout(){
   const raw=data.homeLayout||{},norm=(list,keys)=>{const seen=(Array.isArray(list)?list:[]).filter(k=>keys.includes(k));return [...new Set([...seen,...keys])]};
   return{cards:norm(raw.cards,HOME_CARD_KEYS),rows:norm(raw.rows,HOME_ROW_KEYS),hidden:new Set((raw.hidden||[]).filter(k=>HOME_CARD_KEYS.includes(k)||HOME_ROW_KEYS.includes(k)))};
 }
-function homePeriod(){return data.homeViewMode==='month'?'month':'today'}
-function setHomePeriod(mode){
-  if(homePeriod()===mode)return;
-  try{safeCommit(()=>{data.homeViewMode=mode},{label:'home period',invalidateAcf:false})}catch(e){return}
-  feedback?.selection?.();renderToday();
-}
+/* homePeriod・setHomePeriod は glass-v15.js（開いた時の期間の設定に従う） */
 function homeTimeLabel(iso){if(!iso)return '';const d=new Date(iso);if(Number.isNaN(d.getTime()))return '';return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
 function homeShortDate(date){const d=parseYmd(date);return `${d.getMonth()+1}/${d.getDate()}`}
 const HOME_CHART_COLORS=['var(--accent)','var(--teal)','var(--orange)','var(--purple)','var(--green)','var(--yellow)'];
@@ -65,22 +60,10 @@ function profileState(){
   return{key:'local',label:'端末に保存済み',note:'Gmailは未接続。バックアップはデータ管理から作成できます'};
 }
 function homeHeaderHtml(){
-  const st=profileState(),n=unreadNotices();
-  return topbar('ホーム','',`<button class="icon-btn glass-btn" id="todaySearch" aria-label="検索">${icon('search')}</button><button type="button" class="profile-btn ring-${st.key}" id="homeProfile" aria-label="プロフィール・${esc(st.label)}${n?`・未読のお知らせ${n}件`:''}" aria-haspopup="dialog">${profileAvatarHtml('profile-btn-avatar')}${n?`<span class="profile-dot" aria-hidden="true">${n>99?'99+':n}</span>`:''}</button>`);
+  const st=profileState();
+  return topbar('ホーム','',`<button class="icon-btn glass-btn" id="todaySearch" aria-label="検索">${icon('search')}</button><button type="button" class="profile-btn ring-${st.key}" id="homeProfile" aria-label="プロフィール・ホームの設定・${esc(st.label)}" aria-haspopup="dialog">${profileAvatarHtml('profile-btn-avatar')}</button>`);
 }
-function openProfilePanel(anchor){
-  const st=profileState(),n=unreadNotices();
-  const html=`<div class="profile-panel"><div class="profile-panel-head">${profileAvatarHtml('profile-panel-avatar')}<div><div class="profile-panel-name">${esc(data.profile?.name||'プロフィール')}</div><div class="profile-panel-sub"><span class="profile-state-mark ring-${st.key}" aria-hidden="true"></span>${esc(st.label)}</div></div></div>
-  <div class="profile-panel-tiles"><button type="button" class="profile-tile" id="ppBackup">${icon('upload')}<span>バックアップ</span><small>${esc(st.note)}</small></button><button type="button" class="profile-tile" id="ppNotices">${icon('bell')}<span>お知らせ</span><small>${n?`未読 ${n}件`:'未読はありません'}</small>${n?`<i class="profile-tile-dot" aria-hidden="true"></i>`:''}</button></div>
-  <button type="button" class="menu-item" id="ppEdit"><span class="menu-label">プロフィール編集</span><span class="menu-icon">${icon('person')}</span></button><button type="button" class="menu-item" id="ppSettings"><span class="menu-label">その他・設定</span><span class="menu-icon">${icon('grid')}</span></button></div>`;
-  openMenu(anchor,[],{html,width:Math.min(320,innerWidth-16),label:'プロフィール',bind:menu=>{
-    const go=fn=>()=>{closeMenu();fn()};
-    menu.querySelector('#ppBackup').onclick=go(openDataSettings);
-    menu.querySelector('#ppNotices').onclick=go(openNotices);
-    menu.querySelector('#ppEdit').onclick=go(openProfileEdit);
-    menu.querySelector('#ppSettings').onclick=go(()=>switchRoot('settings'));
-  }});
-}
+/* プロフィールボタンはホーム専用の設定（openHomeSettings、glass-v15.js）。他のタブへ移るボタンは置かない */
 /* 重要なお知らせ（H-008・H-009）: 警告がある時だけ支出カードの上。×はこのカードだけ閉じる（お知らせ一覧には残る） */
 let homeDismissedNotices=new Set();
 function homeAlertHtml(){
@@ -123,9 +106,29 @@ function homeAcfCardHtml(){
 }
 function homePaymentEvents(limit=3){return financialEventsFrom(ymd(),60).filter(e=>e.type!=='income').slice(0,limit)}
 function homePaymentCardHtml(){
-  const ev=homePaymentEvents(1)[0];
-  const body=ev?`<span class="home-card-left"><span class="home-card-value">${yen(Math.abs(ev.amount))}</span><span class="home-card-caption">${esc(ev.title)}・${homeShortDate(ev.date)}${ev.date===ymd()?'（今日）':''}</span><span class="home-card-caption sub">${esc(ev.detail||'')}</span></span>`:`<span class="home-card-left"><span class="home-card-value small">60日以内の支払い予定はありません</span><span class="home-card-caption">カード・固定支払い・大型支出を登録すると表示します</span></span>`;
-  return `<section class="home-card-wrap" data-home-section="payment"><h2 class="home-card-title">次の支払い</h2><div class="home-card"><button type="button" class="home-card-body" id="homePaymentCard" aria-label="${esc(ev?`次の支払い ${ev.title} ${homeShortDate(ev.date)} ${yen(Math.abs(ev.amount))}・詳細を開く`:'次の支払い・予定なし')}">${body}</button><button type="button" class="home-card-status link" id="homeAllPayments">すべての支払いを見る${icon('chevronRight')}</button></div></section>`;
+  const list=homePaymentEvents(4),within=financialEventsFrom(ymd(),30).filter(e=>e.type!=='income'),total=sum(within,e=>Math.abs(Number(e.amount)||0)),ev=list[0];
+  const kind=e=>({card:'カード',fixed:'固定',large:'大型'}[e.type]||'支払い');
+  const rows=list.map(e=>{const d=parseYmd(e.date),days=Math.round((d-parseYmd(ymd()))/864e5);return `<span class="np-row"><span class="np-date" aria-hidden="true"><b>${d.getDate()}</b><i>${d.getMonth()+1}月</i></span><span class="np-main"><span class="np-title">${esc(e.title)}</span><span class="np-sub">${days===0?'今日':days===1?'明日':`${days}日後`}・${kind(e)}${e.detail?`・${esc(e.detail)}`:''}</span></span><span class="np-amount">${yen(Math.abs(e.amount))}</span></span>`}).join('');
+  const body=ev?`<span class="np-summary"><span class="np-summary-label">30日以内</span><span class="np-summary-value"><span class="home-card-value np-total">${yen(total)}</span><span class="np-count">${within.length}件</span></span></span><span class="np-list">${rows}</span>`:`<span class="home-card-left"><span class="home-card-value small">60日以内の支払い予定はありません</span><span class="home-card-caption">カード・固定支払い・大型支出を登録すると表示します</span></span>`;
+  return `<section class="home-card-wrap" data-home-section="payment"><h2 class="home-card-title">次の支払い</h2><div class="home-card"><button type="button" class="home-card-body np-body" id="homePaymentCard" aria-label="${esc(ev?`次の支払い ${ev.title} ${homeShortDate(ev.date)} ${yen(Math.abs(ev.amount))}・30日以内 ${within.length}件 ${yen(total)}・詳細を開く`:'次の支払い・予定なし')}">${body}</button><button type="button" class="home-card-status link" id="homeAllPayments">すべての支払いを見る${icon('chevronRight')}</button></div></section>`;
+}
+/* ハイライト（ヘルスケアの「ハイライト」のように、比べて分かる短い文と2本の棒） */
+function homeHighlights(){
+  const m=ym(),pm=addMonths(m,-1),today=parseYmd(ymd()).getDate(),pdays=daysInMonth(pm),upto=Math.min(today,pdays);
+  const spentUntil=(mk,n)=>{let t=0;for(let i=1;i<=n;i++)t+=spentDate(`${mk}-${pad(i)}`);return t};
+  const cur=spentUntil(m,today),prev=spentUntil(pm,upto),out=[];
+  if(cur||prev)out.push({key:'pace',sym:'cart',color:'var(--orange)',label:'支出のペース',text:cur<=prev?`今月は先月の同じ時期より ${yen(prev-cur)} 少ないペースです。`:`今月は先月の同じ時期より ${yen(cur-prev)} 多いペースです。`,bars:[{label:monthLabel(m),value:cur},{label:monthLabel(pm),value:prev}],open:()=>openMonthAnalysis(m)});
+  const avgCur=today?Math.round(cur/today):0,avgPrev=pdays?Math.round(spentMonth(pm)/pdays):0;
+  if(avgCur||avgPrev)out.push({key:'average',sym:'chart',color:'var(--accent)',label:'1日の平均',text:avgCur<=avgPrev?'今月の1日あたりの支出は先月より少なめです。':'今月の1日あたりの支出は先月より多めです。',bars:[{label:monthLabel(m),value:avgCur,unit:'/日'},{label:monthLabel(pm),value:avgPrev,unit:'/日'}],open:()=>openMonthAnalysis(m)});
+  const cats=data.categories.map(c=>({c,v:monthCategorySpent(m,c.name)})).filter(x=>x.v>0).sort((a,b)=>b.v-a.v),monthTotal=spentMonth(m);
+  if(cats.length)out.push({key:'category',sym:normalizeCategoryIcon(cats[0].c.icon,cats[0].c.id),color:'var(--purple)',label:'いちばん多いカテゴリ',text:`今月は「${cats[0].c.name}」が支出の ${Math.round(cats[0].v/Math.max(1,monthTotal)*100)}% です。`,bars:cats.slice(0,2).map(x=>({label:x.c.name,value:x.v})),open:()=>openTransactionList({month:m,category:cats[0].c.name,title:`${cats[0].c.name}・${monthLabel(m)}`})});
+  const salary=mm3SalaryMonthSummary(m).total;
+  if(salary)out.push({key:'balance',sym:'wallet',color:'var(--green)',label:'収入と支出',text:salary>=monthTotal?`今月の給与見込みから支出を引くと ${yen(salary-monthTotal)} 残ります。`:`今月の支出が給与見込みを ${yen(monthTotal-salary)} 上回っています。`,bars:[{label:'給与見込み',value:salary},{label:'支出',value:monthTotal}],open:()=>{payViewMonth=m;switchTab('pay')}});
+  return out;
+}
+function homeHighlightsHtml(){
+  const list=homeHighlights();if(!list.length)return '';
+  return `<div class="home-highlights" data-home-section="highlights">${list.map(h=>{const max=Math.max(1,...h.bars.map(b=>b.value));return `<button type="button" class="hl-card" data-home-highlight="${h.key}" style="--hl:${h.color}" aria-label="${esc(`${h.label}・${h.text}`)}"><span class="hl-head"><span class="hl-icon" aria-hidden="true">${icon(h.sym)}</span>${esc(h.label)}<span class="chev" aria-hidden="true">${icon('chevronRight')}</span></span><span class="hl-text">${esc(h.text)}</span><span class="hl-bars" aria-hidden="true">${h.bars.map((b,i)=>`<span class="hl-bar-row"><span class="hl-bar-value">${yen(b.value)}${b.unit?`<small>${b.unit}</small>`:''}</span><span class="hl-bar ${i?'muted':''}" style="width:${Math.max(18,b.value/max*100).toFixed(1)}%"><span>${esc(b.label)}</span></span></span>`).join('')}</span></button>`}).join('')}</div>`;
 }
 function openPaymentEvent(ev){
   if(!ev)return switchRoot('payments');
@@ -142,8 +145,8 @@ function homeRecentTransactions(limit=3){return [...data.transactions].sort((a,b
 function homeRowsHtml(){
   const L=homeLayout(),month=homePeriod()==='month',parts={};
   const cats=homeCategoryRows(),total=sum(cats,x=>x.v);
-  parts.categories=`<div class="group home-table" data-home-section="categories" aria-label="カテゴリ別支出">${cats.length?cats.slice(0,3).map(x=>categoryTableRowHtml(x,total)).join(''):`<div class="row"><div class="row-main"><div class="row-title">カテゴリ別支出</div><div class="row-sub">${month?'今月':'この日'}の支出はまだありません</div></div></div>`}${cats.length?`<button type="button" class="row press home-row link-row" id="homeAllCategories"><div class="row-main"><div class="row-title">カテゴリをすべて見る</div></div><span class="chev">${icon('chevronRight')}</span></button>`:''}</div>`;
-  const txs=homeRecentTransactions(3);
+  parts.categories=`<div class="group home-table" data-home-section="categories" aria-label="カテゴリ別支出">${cats.length?cats.slice(0,homePrefs().recentCount).map(x=>categoryTableRowHtml(x,total)).join(''):`<div class="row"><div class="row-main"><div class="row-title">カテゴリ別支出</div><div class="row-sub">${month?'今月':'この日'}の支出はまだありません</div></div></div>`}${cats.length?`<button type="button" class="row press home-row link-row" id="homeAllCategories"><div class="row-main"><div class="row-title">カテゴリをすべて見る</div></div><span class="chev">${icon('chevronRight')}</span></button>`:''}</div>`;
+  const txs=homeRecentTransactions(homePrefs().recentCount);
   parts.transactions=`<div class="group home-table" data-home-section="transactions" aria-label="最近の取引">${txs.length?txs.map(t=>`<button type="button" class="row press home-row" data-home-tx="${esc(t.id)}"><span class="row-icon cat-line">${icon(normalizeCategoryIcon(catByName(t.category)?.icon,catByName(t.category)?.id))}</span><div class="row-main"><div class="row-title">${esc(t.merchant||t.category||'支出')}</div><div class="row-sub">${homeShortDate(t.date)}・${esc(t.category||'')}</div></div><div class="row-value">${yen(t.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">最近の取引</div><div class="row-sub">まだ記録がありません。＋から支出を記録できます</div></div></div>'}<button type="button" class="row press home-row link-row" id="homeAllTransactions"><div class="row-main"><div class="row-title">すべての取引</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`;
   const dcLabel=typeof dayClosingLabel==='function'?dayClosingLabel(trackingDate):'',pendingMail=data.mailImports.filter(x=>x.status==='pending').length;
   parts.dayclose=`<button type="button" class="row press home-row" id="homeDayClose"><span class="row-icon">${icon('dayClose')}</span><div class="row-main"><div class="row-title">日締め</div><div class="row-sub">${dcLabel?esc(dcLabel):'まだ締めていません'}${pendingMail?`・未確認 ${pendingMail}件`:''}</div></div><span class="chev">${icon('chevronRight')}</span></button>`;
@@ -154,9 +157,14 @@ function homeRowsHtml(){
   parts.large=large.length?`<button type="button" class="row press home-row" id="homeLarge"><span class="row-icon">${icon('cart')}</span><div class="row-main"><div class="row-title">大型支出の計画 ${large.length}件</div><div class="row-sub">次は ${homeShortDate([...large].sort((a,b)=>a.date.localeCompare(b.date))[0].date)}</div></div><span class="chev">${icon('chevronRight')}</span></button>`:'';
   const goals=(data.eventGoals||[]).filter(g=>g.status==='active'||g.status==='planning');
   parts.goals=goals.length?`<button type="button" class="row press home-row" id="homeGoals"><span class="row-icon">${icon('gift')}</span><div class="row-main"><div class="row-title">旅行・プレゼント ${goals.length}件</div><div class="row-sub">${esc(goals[0].name)}・期限 ${homeShortDate(goals[0].deadline)}</div></div><span class="chev">${icon('chevronRight')}</span></button>`:'';
-  const tables=L.rows.filter(k=>!L.hidden.has(k)&&(k==='categories'||k==='transactions')).map(k=>parts[k]);
-  const lines=L.rows.filter(k=>!L.hidden.has(k)&&!['categories','transactions'].includes(k)).map(k=>parts[k]).filter(Boolean);
-  return `<h2 class="section-head home-section-head">最近の動き</h2>${tables.join('')}${lines.length?`<div class="group home-table">${lines.join('')}</div>`:''}<div class="group home-table"><button type="button" class="row press home-row link-row" id="homeLayoutEdit"><span class="row-icon">${icon('reorder')}</span><div class="row-main"><div class="row-title">表示する項目を編集</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`;
+  parts.highlights=homeHighlightsHtml();
+  /* 並び順どおりに出す。日締め・比較などの1行の項目は、続いている間は1つの表にまとめる */
+  const visible=L.rows.filter(k=>!L.hidden.has(k)&&parts[k]),out=[];let lineBuf=[];
+  const flush=()=>{if(lineBuf.length)out.push(`<div class="group home-table">${lineBuf.join('')}</div>`);lineBuf=[]};
+  let recentHead=false;const head=()=>{if(!recentHead){recentHead=true;out.push('<h2 class="section-head home-section-head">最近の動き</h2>')}};
+  for(const k of visible){if(k==='highlights'){flush();out.push(`<h2 class="section-head home-section-head">ハイライト</h2>${parts[k]}`)}else if(['categories','transactions'].includes(k)){flush();head();out.push(parts[k])}else{if(!lineBuf.length)head();lineBuf.push(parts[k])}}
+  flush();
+  return out.join('');
 }
 
 /* ---------- ホームの描画 ---------- */
@@ -164,12 +172,12 @@ function renderToday(){
   document.getElementById('todayTop').innerHTML=homeHeaderHtml();
   const L=homeLayout(),cards={spend:homeSpendCardHtml,assets:homeAssetsCardHtml,salary:homeSalaryCardHtml,acf:homeAcfCardHtml,payment:homePaymentCardHtml};
   document.getElementById('todayContent').innerHTML=`${homeAlertHtml()}<div class="home-cards">${L.cards.filter(k=>!L.hidden.has(k)).map(k=>cards[k]()).join('')}</div>${homeRowsHtml()}`;
-  bindHome();
+  bindHome();applyHomePrefs();
 }
 function bindHome(){
   const $=id=>document.getElementById(id),on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn};
-  on('todaySearch',()=>openSmartInputSearch('search'));
-  on('homeProfile',e=>openProfilePanel(e.currentTarget));
+  on('todaySearch',()=>openGlobalSearch());
+  on('homeProfile',openHomeSettings);
   on('homeAlert',openNotices);
   on('homeAlertClose',e=>{homeDismissedNotices.add($('homeAlert')?.dataset.notice);renderToday()});
   on('homePeriodToday',()=>setHomePeriod('today'));on('homePeriodMonth',()=>setHomePeriod('month'));
@@ -199,7 +207,7 @@ function bindHome(){
   on('homeMail',openMailOverview);
   const lg=$('homeLarge');if(lg){lg.onclick=openLargeExpenseList;homeLongPress(lg,[{label:'大型支出を計画',icon:'plus',action:()=>openLargeExpenseEditor(null,{after:renderAll})}])}
   const gl=$('homeGoals');if(gl){gl.onclick=()=>openEventGoals(ym());homeLongPress(gl,[{label:'新しい目標',icon:'plus',action:()=>openEventGoalEditor()}])}
-  on('homeLayoutEdit',openHomeLayoutEditor);
+  document.querySelectorAll('#todayContent [data-home-highlight]').forEach(b=>{const h=homeHighlights().find(x=>x.key===b.dataset.homeHighlight);if(h)b.onclick=h.open});
 }
 /* 今日／今月の切替: 指でなぞると選択が指に付いてきて、離した位置で決まる（H-010） */
 function installPeriodDrag(group){
@@ -218,22 +226,15 @@ function openLargeExpenseList(){
   const draw=()=>{const list=data.largeExpensePlans.filter(p=>p.status==='planned').sort((a,b)=>a.date.localeCompare(b.date));return `<div class="group home-table">${list.length?list.map(p=>`<button type="button" class="row press" data-large-plan="${esc(p.id)}"><div class="row-main"><div class="row-title">${esc(p.name)}</div><div class="row-sub">${esc(p.date)}・${p.priority==='required'?'必須':'任意'}</div></div><div class="row-value">${yen(p.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">計画中の大型支出はありません</div></div></div>'}</div><button type="button" class="secondary" id="largeListAdd">大型支出を計画</button>`};
   pushView('大型支出の計画',draw(),root=>{const bind=()=>{root.querySelectorAll('[data-large-plan]').forEach(b=>b.onclick=()=>openLargeExpenseDetail(b.dataset.largePlan));root.querySelector('#largeListAdd').onclick=()=>openLargeExpenseEditor(null,{after:()=>{root.querySelector('.push-body').innerHTML=draw();bind();renderAll()}})};bind()});
 }
-/* 表示する項目の編集（H-081）: 表示・非表示と並び順だけを保存する（会計データには触れない） */
-function openHomeLayoutEditor(){
-  const draw=()=>{const L=homeLayout(),row=(k,list,i)=>`<div class="row home-layout-row"><div class="row-main"><div class="row-title">${esc(HOME_SECTION_LABELS[k])}</div></div><button type="button" class="v11-order-btn" data-layout-move="${k}" data-dir="-1" aria-label="${esc(HOME_SECTION_LABELS[k])}を上へ" ${i===0?'disabled':''}>${icon('chevronUp')}</button><button type="button" class="v11-order-btn" data-layout-move="${k}" data-dir="1" aria-label="${esc(HOME_SECTION_LABELS[k])}を下へ" ${i===list.length-1?'disabled':''}>${icon('chevronDown')}</button><button type="button" class="switch ${L.hidden.has(k)?'':'on'}" data-layout-toggle="${k}" role="switch" aria-checked="${!L.hidden.has(k)}" aria-label="${esc(HOME_SECTION_LABELS[k])}を表示"></button></div>`;
-    return `<p class="form-helper">ホームに表示するカードと一覧の順番を変えられます。表示を消しても、データや機能は消えません。</p><h2 class="section-head">カード</h2><div class="group">${L.cards.map((k,i,a)=>row(k,a,i)).join('')}</div><h2 class="section-head">最近の動き</h2><div class="group">${L.rows.map((k,i,a)=>row(k,a,i)).join('')}</div>`};
-  pushView('表示する項目',draw(),root=>{const bind=()=>{
-    const save=fn=>{const L=homeLayout(),next={cards:[...L.cards],rows:[...L.rows],hidden:[...L.hidden]};fn(next);try{safeCommit(()=>{data.homeLayout=next},{label:'home layout',invalidateAcf:false})}catch(e){return}root.querySelector('.push-body').innerHTML=draw();bind();renderAll()};
-    root.querySelectorAll('[data-layout-toggle]').forEach(b=>b.onclick=()=>save(n=>{const k=b.dataset.layoutToggle;n.hidden=n.hidden.includes(k)?n.hidden.filter(x=>x!==k):[...n.hidden,k]}));
-    root.querySelectorAll('[data-layout-move]').forEach(b=>b.onclick=()=>save(n=>{const k=b.dataset.layoutMove,list=n.cards.includes(k)?n.cards:n.rows,i=list.indexOf(k),j=i+Number(b.dataset.dir);if(j<0||j>=list.length)return;[list[i],list[j]]=[list[j],list[i]]}));
-  };bind()});
-}
+/* 表示する項目の編集（H-081）は「ホームの設定」（プロフィールボタン）の中。並べ替えは ≡ を上下になぞる */
+function openHomeLayoutEditor(){openHomeSettings()}
 
 /* ---------- 日付の選択（H-011・Q-011）: 確定するまで表示中の日付は変わらない ---------- */
 function openDayCalendar(initial,onApply,{title='日付を選ぶ',apply='この日を表示'}={}){
   const {min,max}=trackingDateBounds();let month=initial.slice(0,7),picked=initial;
-  const draw=()=>{const [y,m]=month.split('-').map(Number),first=new Date(y,m-1,1).getDay(),days=daysInMonth(month),cells=[];for(let i=0;i<first;i++)cells.push('<span class="cal-cell out" aria-hidden="true"></span>');for(let d=1;d<=days;d++){const ds=`${month}-${pad(d)}`,off=ds<min||ds>max;cells.push(`<button type="button" class="cal-cell ${ds===picked?'on':''} ${ds===ymd()?'today':''}" data-cal="${ds}" ${off?'disabled':''} aria-pressed="${ds===picked}" aria-label="${esc(dayLabel(ds))}">${d}</button>`)}
-    return `<div class="cal-head"><button type="button" class="date-nav-btn" id="calPrev" aria-label="前の月" ${`${month}-01`<=min?'disabled':''}>${icon('chevronLeft')}</button><strong>${monthLabel(month)}</strong><button type="button" class="date-nav-btn" id="calNext" aria-label="次の月" ${`${month}-${pad(days)}`>=max?'disabled':''}>${icon('chevronRight')}</button></div><div class="cal-week" aria-hidden="true">${['日','月','火','水','木','金','土'].map(w=>`<span>${w}</span>`).join('')}</div><div class="cal-grid">${cells.join('')}</div>`};
+  const ws=typeof appPrefs==='function'?appPrefs().weekStart:0,wnames=['日','月','火','水','木','金','土'];
+  const draw=()=>{const [y,m]=month.split('-').map(Number),first=(new Date(y,m-1,1).getDay()-ws+7)%7,days=daysInMonth(month),cells=[];for(let i=0;i<first;i++)cells.push('<span class="cal-cell out" aria-hidden="true"></span>');for(let d=1;d<=days;d++){const ds=`${month}-${pad(d)}`,off=ds<min||ds>max;cells.push(`<button type="button" class="cal-cell ${ds===picked?'on':''} ${ds===ymd()?'today':''}" data-cal="${ds}" ${off?'disabled':''} aria-pressed="${ds===picked}" aria-label="${esc(dayLabel(ds))}">${d}</button>`)}
+    return `<div class="cal-head"><button type="button" class="date-nav-btn" id="calPrev" aria-label="前の月" ${`${month}-01`<=min?'disabled':''}>${icon('chevronLeft')}</button><strong>${monthLabel(month)}</strong><button type="button" class="date-nav-btn" id="calNext" aria-label="次の月" ${`${month}-${pad(days)}`>=max?'disabled':''}>${icon('chevronRight')}</button></div><div class="cal-week" aria-hidden="true">${[...wnames.slice(ws),...wnames.slice(0,ws)].map(w=>`<span>${w}</span>`).join('')}</div><div class="cal-grid">${cells.join('')}</div>`};
   openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="calCancel">キャンセル</button><div class="sheet-title">${esc(title)}</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="day-calendar" id="dayCalendar">${draw()}</div><button type="button" class="primary" id="calApply">${esc(apply)}</button></div>`,'half',root=>{
     const box=root.querySelector('#dayCalendar'),bind=()=>{box.querySelector('#calPrev').onclick=()=>{month=addMonths(month,-1);box.innerHTML=draw();bind()};box.querySelector('#calNext').onclick=()=>{month=addMonths(month,1);box.innerHTML=draw();bind()};box.querySelectorAll('[data-cal]').forEach(b=>b.onclick=()=>{picked=b.dataset.cal;feedback?.selection?.();box.innerHTML=draw();bind()})};bind();
     root.querySelector('#calCancel').onclick=closeSheet;root.querySelector('#calApply').onclick=()=>{closeSheet();onApply(picked)};
@@ -247,34 +248,9 @@ function openDayWheel(initial,onApply){
 
 /* ---------- ＋入力ハブ（Q-001〜006） ---------- */
 function syncAddHub(){const b=document.getElementById('addHub');if(b)b.hidden=false}
-function addHubItems(){
-  const date=['today','day'].includes(activeTab)?trackingDate:ymd();
-  return[
-    {label:'支出を記録',icon:'plus',action:()=>openQuickExpense(date)},
-    {label:'臨時収入',icon:'wallet',action:()=>openTempIncome(date)},
-    {label:'残高を更新',icon:'bank',action:openQuickBank},
-    {label:'給与を登録',icon:'briefcase',action:openSalaryAdd},
-    {label:'その他の入力',icon:'ellipsis',action:openOtherInputs}
-  ];
-}
-function openOtherInputs(){
-  const items=[
-    ['ihCard','card','カードの請求額を更新','カードを選んで今月の請求額を入力',()=>openQuickCardBilling(paymentHomeMonth())],
-    ['ihRepeat','repeat','最近の支出を再利用','前に記録した支出から選ぶ',()=>openQuickRepeat(trackingDate)],
-    ['ihOneLine','edit','一行入力','「コンビニ 580円」のように書いて記録',()=>openSmartInputSearch('input')],
-    ['ihBank','bank','銀行口座を追加','',openAddBank],
-    ['ihEmployer','briefcase','勤務先を追加','',()=>openEmployerCreate(()=>renderAll())],
-    ['ihCredit','card','クレジットカードを追加','',()=>openAddCard()],
-    ['ihDebit','card','デビットカードを追加','',()=>openAddDebit()],
-    ['ihFixed','repeat','固定支払いを追加','',()=>openFixedPayment()],
-    ['ihLarge','cart','大型支出を計画','',()=>openLargeExpenseEditor(null,{after:renderAll})],
-    ['ihGoal','gift','旅行・プレゼント目標','',()=>openEventGoalEditor()]
-  ];
-  pushView('その他の入力',`<div class="group">${items.map(([id,sym,title,sub])=>`<button type="button" class="row press home-row" id="${id}"><span class="row-icon">${icon(sym)}</span><div class="row-main"><div class="row-title">${title}</div>${sub?`<div class="row-sub">${sub}</div>`:''}</div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`,root=>{for(const [id,,,,fn] of items)root.querySelector('#'+id).onclick=fn});
-}
+/* ＋は全画面の「新規入力」（openEntryHub、glass-v15.js） */
 /* ＋から開く入力シートは右下（＋の位置）を起点に広がる（Q-002「右下を起点に全画面入力へ」。ページめくりはWebで不安定なため、仕様の代替である連続拡大にする） */
 function fromHub(fn){return()=>{const s=document.getElementById('sheet');s?.classList.add('from-hub');s?.addEventListener('animationend',()=>s.classList.remove('from-hub'),{once:true});setTimeout(()=>s?.classList.remove('from-hub'),600);fn()}}
-document.getElementById('addHub')?.addEventListener('click',e=>{const b=e.currentTarget;if(document.getElementById('menuLayer')?.classList.contains('show')){closeMenu();return}feedback?.selection?.();openMenu(b,addHubItems().map(x=>x.label==='その他の入力'?x:{...x,action:fromHub(x.action)}),{label:'入力の種類'})});
 
 /* ---------- 支払いroot（P-001〜015） ---------- */
 let payrootDismissedRisk='';
@@ -302,7 +278,7 @@ function renderPayRoot(){
 }
 function bindPayRoot(month,next,atf,riskKey){
   const $=id=>document.getElementById(id),on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn};
-  on('payrootSearch',()=>openSmartInputSearch('search'));
+  on('payrootSearch',()=>openGlobalSearch('payment'));
   on('payrootMenu',e=>openMenu(e.currentTarget,[{label:'請求一覧を開く',icon:'list',action:()=>switchTab('payments')},{label:'カードの請求額を更新',icon:'card',action:()=>openQuickCardBilling(month)},{label:'明細照合センター',icon:'mail',action:openMailOverview},{label:'カードを追加',icon:'card',action:()=>openAddCard()},{label:'デビットカードを追加',icon:'card',action:()=>openAddDebit()}]));
   on('payrootRisk',()=>mm3OpenAtfSheet(atf));
   on('payrootRiskClose',()=>{payrootDismissedRisk=riskKey;renderPayRoot()});

@@ -31,6 +31,7 @@ function renderSettings(){
       {id:'securitySettings',symbol:'lock',color:'#8E8E93',title:'セキュリティ',value:data.security.enabled?'パスコード ON':'パスコード OFF'},
       {id:'helpSettings',symbol:'help',color:'var(--teal)',title:'ヘルプ・お問い合わせ'}
     ]],
+    ...appPrefsGroups(),
     ['データ',[{id:'dataSettings',symbol:'upload',color:'var(--green)',title:'データとバックアップ',detail:'PDF・バックアップ・復元・削除'}]]
   ];
   /* 第14版 O-001: 「その他」は設定の一覧だけ。給与・資産・生活費の見通しはホームのカードから開く（入口を1つにする） */
@@ -54,6 +55,7 @@ function bindSettings(){
   };
   const root=document.getElementById('settingsContent');
   for(const [id,action] of Object.entries(actions))root.querySelector('#'+id).onclick=action;
+  bindAppPrefRows(root);
 }
 function openProfileEdit(){
   const draft={...data.profile};
@@ -117,10 +119,9 @@ function settingsToggleHtml(id,title,detail,on){
   return `<div class="row"><div class="row-main"><div class="row-title">${esc(title)}</div>${detail?`<div class="row-sub">${esc(detail)}</div>`:''}</div><button type="button" class="switch ${on?'on':''}" id="${id}" role="switch" aria-checked="${!!on}" aria-label="${esc(title)}"></button></div>`;
 }
 function openCategorySettings(){
-  const draw=()=>settingsDetailView('カテゴリ管理',`<div class="settings-detail-intro"><h2>カテゴリ</h2><p>名前やアイコンを編集し、表示順を揃えます。</p></div><div class="group">${data.categories.map((category,index)=>`<div class="row"><button type="button" class="settings-category-open" data-ci="${index}">${categoryIconHtml(category,'settings-icon')}<span class="row-main"><span class="row-title">${esc(category.name)}</span></span><span class="chev" aria-hidden="true">›</span></button><div class="settings-category-order"><button type="button" class="pill" data-up="${index}" aria-label="${esc(category.name)}を上へ" ${index===0?'disabled':''}>↑</button><button type="button" class="pill" data-down="${index}" aria-label="${esc(category.name)}を下へ" ${index===data.categories.length-1?'disabled':''}>↓</button></div></div>`).join('')}</div><button type="button" class="primary" id="catAdd">新しいカテゴリを追加</button>`,root=>{
-    for(const [attribute,offset] of [['up',-1],['down',1]])root.querySelectorAll(`[data-${attribute}]`).forEach(button=>button.onclick=()=>{
-      const index=Number(button.dataset[attribute]),next=index+offset;if(!data.categories[next])return;
-      try{safeCommit(()=>{[data.categories[index],data.categories[next]]=[data.categories[next],data.categories[index]]},{label:'category reorder'})}catch(error){return}draw();
+  const draw=()=>settingsDetailView('カテゴリ管理',`<div class="settings-detail-intro"><h2>カテゴリ</h2><p>名前やアイコンを編集し、表示順を揃えます。</p></div><div class="group" id="categoryOrderList">${data.categories.map((category,index)=>`<div class="row" data-reorder-key="${esc(category.id)}"><button type="button" class="settings-category-open" data-ci="${index}">${categoryIconHtml(category,'settings-icon')}<span class="row-main"><span class="row-title">${esc(category.name)}</span></span><span class="chev" aria-hidden="true">›</span></button>${dragHandleHtml(category.name)}</div>`).join('')}</div><p class="settings-section-footer">右の ≡ を上下になぞると並び順が変わります。</p><button type="button" class="primary" id="catAdd">新しいカテゴリを追加</button>`,root=>{
+    installDragReorder(root.querySelector('#categoryOrderList'),order=>{
+      try{safeCommit(()=>{const by=new Map(data.categories.map(c=>[c.id,c]));data.categories=order.map(id=>by.get(id)).filter(Boolean)},{label:'category reorder'})}catch(error){return}draw();
     });
     root.querySelectorAll('[data-ci]').forEach(button=>button.onclick=()=>openCategoryEdit(Number(button.dataset.ci),draw));
     root.querySelector('#catAdd').onclick=()=>openCategoryEdit(-1,draw);

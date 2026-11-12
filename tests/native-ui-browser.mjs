@@ -8,7 +8,7 @@ export async function verifyNativeUi({createPage,passed}){
   for(const button of await page.locator('#todayTop button').all()){
     const rect=await button.boundingBox();assert.ok(rect.width>=44&&rect.height>=44);
   }
-  await page.locator('#addHub').click();await page.locator('#menuLayer .menu-item').filter({hasText:'支出を記録'}).click();await page.locator('#qeMerchant').waitFor();
+  await page.locator('#addHub').click();await page.locator('#entryExpense').click();await page.locator('#qeMerchant').waitFor();
   await page.locator('#qeMerchant').fill('長い店名でも入力と保存が使えるかを確認');
   const merchant=page.locator('#qeMerchant');assert.equal(await merchant.getAttribute('enterkeyhint'),'done');
   await merchant.focus();
