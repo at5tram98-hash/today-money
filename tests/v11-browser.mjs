@@ -206,15 +206,17 @@ async function verifyAlternatives(page){
   await page.locator('#menuLayer .menu-item').filter({hasText:'手動'}).click();await page.locator('#mm3AssetOrderEdit').waitFor();await page.waitForTimeout(400);
   const rows=()=>page.locator('#mm3AssetWatchlist .mm3-assets-watchrow').evaluateAll(list=>list.map(r=>r.dataset.bank)),original=await rows();
   assert.ok(original.length>=2);await assertTapTarget(page.locator('#mm3AssetOrderEdit'),'mm3AssetOrderEdit');
-  await page.locator('#mm3AssetOrderEdit').click();await page.locator('#aoList .v11-order-btn').first().waitFor();await page.waitForTimeout(350);
-  for(const button of await page.locator('#aoList .v11-order-btn').all())await assertTapTarget(button,'order button');
-  assert.equal(await page.locator('#aoList .v11-order-btn').first().isDisabled(),true,'the first account cannot move up');
-  assert.ok((await page.locator('#aoList .v11-order-btn').nth(1).getAttribute('aria-label')).endsWith('を下へ'));
-  await page.locator('#aoList .v11-order-btn').nth(1).click();
+  /* 並べ替えは右の ≡ だけ（上下ボタンなし）。2行目の ≡ を上へ1行なぞる */
+  const dragUp=async()=>{const h=page.locator('#aoList [data-reorder-key] .drag-handle').nth(1),b=await h.boundingBox(),row=await page.locator('#aoList [data-reorder-key]').nth(1).boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();for(let i=1;i<=6;i++)await page.mouse.move(b.x+b.width/2,b.y+b.height/2-row.height*i/6);await page.mouse.up();await page.waitForTimeout(200)};
+  await page.locator('#mm3AssetOrderEdit').click();await page.locator('#aoList .drag-handle').first().waitFor();await page.waitForTimeout(350);
+  assert.equal(await page.locator('#aoList .v11-order-btn').count(),0,'no up/down buttons');
+  for(const handle of await page.locator('#aoList .drag-handle').all())await assertTapTarget(handle,'drag handle');
+  assert.ok((await page.locator('#aoList .drag-handle').nth(1).getAttribute('aria-label')).includes('並べ替え'));
+  await dragUp();
   assert.deepEqual(await rows(),original,'moving inside the sheet is a draft');
   await page.locator('#aoCancel').click();await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
   assert.deepEqual(await rows(),original,'discarding keeps the saved order');
-  await page.locator('#mm3AssetOrderEdit').click();await page.locator('#aoList .v11-order-btn').nth(1).click();await page.locator('#aoSave').click();
+  await page.locator('#mm3AssetOrderEdit').click();await page.locator('#aoList .drag-handle').first().waitFor();await page.waitForTimeout(350);await dragUp();await page.locator('#aoSave').click();
   await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
   assert.deepEqual(await rows(),[original[1],original[0],...original.slice(2)],'Done saves the new order');
   assert.deepEqual(await getData(page),before,'reordering accounts never changes financial data');
@@ -240,12 +242,12 @@ async function verifyExistingGestures(page){
   await drag(nav.x+nav.width/2-40,ny,nav.x+nav.width/2+60,ny);assert.ok((await state()).trackingDate<day,'swiping right shows the previous day');
   await drag(nav.x+nav.width/2+40,ny,nav.x+nav.width/2-60,ny);assert.equal((await state()).trackingDate,day,'swiping left returns');
   // 第14版: 最近の支出の再利用は＋入力ハブの「その他の入力」から（旧: 支出入力ボタンの長押し）
-  await page.locator('#addHub').click();await page.locator('#menuLayer .menu-item').filter({hasText:'その他の入力'}).click();await page.locator('#ihRepeat').click();
+  await page.locator('#addHub').click();await page.locator('#entryHub').waitFor();await page.locator('#ihRepeat').click();
   await page.locator('#qrClose').waitFor();await page.locator('#qrClose').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
   assert.equal(await page.locator('#qeSave').count(),0,'opening recent expenses does not also open the expense form');
   await page.evaluate(()=>globalThis.__mm3Test.popView());
   // シートのつまみ: 上へ引くと全画面、下へ引くと半分の高さへ戻る（支出の記録は＋入力ハブから）
-  await page.locator('#addHub').click();await page.locator('#menuLayer .menu-item').filter({hasText:'支出を記録'}).click();await page.locator('#qeSave').waitFor();await page.waitForTimeout(350);
+  await page.locator('#addHub').click();await page.locator('#entryExpense').click();await page.locator('#qeSave').waitFor();await page.waitForTimeout(350);
   const mode=()=>page.locator('#sheet').evaluate(el=>el.classList.contains('full')?'full':'half');
   if(await mode()==='half'){let g=await page.locator('#sheet .grabber').boundingBox();await drag(g.x+g.width/2,g.y+g.height/2,g.x+g.width/2,g.y-90);assert.equal(await mode(),'full','pulling up expands the sheet');g=await page.locator('#sheet .grabber').boundingBox();await drag(g.x+g.width/2,g.y+g.height/2,g.x+g.width/2,g.y+90);assert.equal(await mode(),'half','pulling down returns to half height');assert.equal(await sheetShown(),true)}
   await page.locator('#qeCancel').click();if(await page.locator('#alertWrap.show').count())await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));

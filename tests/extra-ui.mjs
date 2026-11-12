@@ -88,7 +88,7 @@ try{
     await expect(p,'A8R-0119',{re:/^テスト勤務先211月25日（水）・入金予定時給 ¥1,200 ・ 交通費支給 ¥980／勤務¥/});
   }});
   await screen(page,'横断検索',{open:async p=>{await click(p,'#todaySearch');const q=p.locator('#pushLayer .push-view.show input[type=search],#pushLayer .push-view.show input').first();if(await q.count()){await q.fill('テスト店舗');await settle(p)}},checks:async p=>{
-    await expect(p,'A8-0223 A8-0277 A8R-0091',{re:/^テスト店舗2026-10-07・食費・現金・その他¥1,234$/});
+    await expect(p,'A8-0223 A8-0277 A8R-0091',{re:/^テスト店舗10月7日（水）・食費・現金・その他¥1,234$/});
   }});
   await screen(page,'最近の支出を再利用',{open:p=>call(p,'openQuickRepeat'),checks:async p=>{
     await expect(p,'A8-0227',{re:/^テスト店舗食費・現金・その他¥1,234$/});
@@ -183,10 +183,10 @@ try{
     await expect(p,'A8R-0279',{re:/^すぐ/});await expect(p,'A8R-0280',{re:/^1分後/});await expect(p,'A8R-0281',{re:/^しない/});
   }});
   await screen(page,'カテゴリ管理',{tab:'settings',open:p=>click(p,'#categorySettings'),checks:async p=>{
-    await expect(p,'A8R-0339',{re:/^監査カテゴリ$/});await expect(p,'A8R-0340',{re:/^監査カテゴリを上へ$/});await expect(p,'A8R-0341',{re:/^監査カテゴリを下へ$/});
+    await expect(p,'A8R-0339',{re:/^監査カテゴリ$/});/* 上下ボタンは利用者の指示で廃止。並べ替えは右の ≡（ドラッグ・矢印キー）1つ */await expect(p,'A8R-0340 A8R-0341',{re:/^監査カテゴリの並べ替え。上下にドラッグ、または上下の矢印キーで移動$/});
   }});
   await screen(page,'保存した検索',{open:async p=>{await click(p,'#todaySearch')},checks:async p=>{
-    await expect(p,'A8R-0355',{re:/^テスト店舗テスト店舗・all$/});
+    await expect(p,'A8R-0355',{re:/^テスト店舗テスト店舗$/});
   }});
   await screen(page,'タグの項目',{open:p=>call(p,'openTagItems',['audit_tag']),checks:async p=>{
     await expect(p,'A8R-0377',{re:/^テスト定期支払固定支払い$/});await expect(p,'A8R-0378',{re:/^テスト大型支出大型支出$/});

@@ -60,54 +60,62 @@
       "label": "ホーム右上の検索（H-002・横断検索）"
     },
     "#todayNotice": {
-      "root": "home",
+      "root": "settings",
       "via": [
-        "#homeProfile",
-        "#ppNotices"
+        "#systemNoticesRow"
       ],
-      "label": "プロフィールパネル→お知らせ（H-007）"
+      "label": "その他→システムのお知らせ（プロフィールはホーム専用の設定にしたため、お知らせの入口は「その他」の1か所）"
     },
     "#quickExpense": {
       "root": "home",
       "via": [
         "#addHub",
-        "#menuLayer .menu-item:has-text(\"支出を記録\")"
+        "#entryExpense"
       ],
-      "label": "＋入力ハブ→支出を記録（Q-002）"
+      "label": "＋（全画面の新規入力）→支出を記録（Q-002）"
     },
     "#quickIncome": {
       "root": "home",
       "via": [
         "#addHub",
-        "#menuLayer .menu-item:has-text(\"臨時収入\")"
+        "#entryIncome"
       ],
-      "label": "＋入力ハブ→臨時収入（Q-003）"
+      "label": "＋（全画面の新規入力）→臨時収入（Q-003）"
     },
     "#quickBank": {
       "root": "home",
       "via": [
         "#addHub",
-        "#menuLayer .menu-item:has-text(\"残高を更新\")"
+        "#entryBank"
       ],
-      "label": "＋入力ハブ→残高を更新（Q-004）"
+      "label": "＋（全画面の新規入力）→残高を更新（Q-004）"
     },
     "#todayRepeat": {
       "root": "home",
       "via": [
         "#addHub",
-        "#menuLayer .menu-item:has-text(\"その他の入力\")",
         "#ihRepeat"
       ],
-      "label": "＋入力ハブ→その他の入力→最近の支出を再利用（Q-006）"
+      "label": "＋（全画面の新規入力）→最近の支出を再利用（Q-006）"
     },
     "#todayOneLine": {
       "root": "home",
       "via": [
         "#addHub",
-        "#menuLayer .menu-item:has-text(\"その他の入力\")",
         "#ihOneLine"
       ],
-      "label": "＋入力ハブ→その他の入力→一行入力（Q-006）"
+      "label": "＋（全画面の新規入力）→一行入力（Q-006）"
+    },
+    "#mm3AssetHistoryTop": {
+      "tabs": [
+        "assets"
+      ],
+      "root": "home",
+      "via": [
+        "#homeAssetsCard",
+        "#mm3AssetHistoryRow"
+      ],
+      "label": "ホーム→総資産→「残高履歴」の行（見出し横の同じボタンは二重のため表示しない）"
     }
   }
 }

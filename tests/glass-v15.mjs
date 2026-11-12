@@ -1,0 +1,84 @@
+/* Liquid Glass 第2段の検査（ID: G-xx）。結果は docs/design/glass-v15-results.json に記録する。
+   - 専用画面・push画面の左端スワイプで戻る
+   - ＋ → 全画面の新規入力。全14項目がそれぞれの入力を開き、開くだけでは会計データが変わらない
+   - 検索: かな/カナ・金額の条件・日付・種類・最近の検索・強調
+   - その他の設定が実際に反映される（起動時の画面・週の始まり・ガラス・数字・読みやすさ・ぼかし・バッジ）
+   - 並べ替えは ≡ のドラッグだけ（上下ボタンが残っていない）
+   - ホームの設定（件数・グラフ・詰めて表示） */
+import assert from 'node:assert/strict';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {createPage,closeHarness,root,settle,tap,reset,inPage} from './v11-harness.mjs';
+const shots=resolve(root,'test-results/glass-v15');mkdirSync(shots,{recursive:true});
+const results={};let failed=0;
+const data=page=>page.evaluate(()=>JSON.stringify(globalThis.__mm3Test.getData()));
+const financial=text=>{const d=JSON.parse(text);for(const k of ['homeViewMode','notices','homeLayout','homePrefs','appPrefs','recentSearches','savedSearches','categories'])delete d[k];return JSON.stringify(d)};
+const closeAll=async page=>{await page.evaluate(()=>{const t=globalThis.__mm3Test;t.closeSheet();t.closeMenu?.();while(document.querySelector('#pushLayer .push-view.show'))t.popView();document.getElementById('alertWrap')?.classList.remove('show')});await settle(page)};
+async function check(page,id,title,run,{writes=false}={}){
+  try{await closeAll(page);await reset(page,'today');await settle(page);const before=await data(page);const note=await run(page);if(!writes)assert.equal(financial(await data(page)),financial(before),'会計データが変わった');await page.screenshot({path:resolve(shots,`${id}.png`)});results[id]={title,result:'合格',note:note||''};console.log('PASS',id,title,note||'')}
+  catch(e){failed++;results[id]={title,result:'不合格',note:e.message.split('\n')[0]};console.log('FAIL',id,title,e.message.split('\n')[0])}
+}
+/* 左端から右へなぞる（タッチ） */
+async function edgeSwipe(page,{dx=260,steps=10}={}){
+  const cdp=await page.context().newCDPSession(page),y=420;
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:6,y}]});
+  for(let i=1;i<=steps;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:6+dx*i/steps,y:y+i}]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(450);await settle(page);await cdp.detach();
+}
+const active=page=>page.evaluate(()=>document.querySelector('.screen.active')?.id);
+
+const {page,context,errors}=await createPage('app',{width:393,appearance:'light'});
+
+/* ---- 左端スワイプで戻る ---- */
+for(const [id,label,open,screen,origin] of [
+  ['G-01','今日の支出',p=>tap(p,'#homeSpendCard'),'screen-day','screen-today'],
+  ['G-02','給与',p=>tap(p,'#homeSalaryCard'),'screen-pay','screen-today'],
+  ['G-03','資産',p=>tap(p,'#homeAssetsCard'),'screen-assets','screen-today'],
+  ['G-04','今月の支出',async p=>{await tap(p,'#homePeriodMonth');await tap(p,'#homeSpendCard')},'screen-month','screen-today'],
+  ['G-05','請求一覧',async p=>{await tap(p,'#paymentsTab');await tap(p,'#payrootAllCards')},'screen-payments','screen-payroot']
+])await check(page,id,`${label}を左端スワイプで閉じる`,async p=>{await open(p);assert.equal(await active(p),screen);await edgeSwipe(p,{dx:40,steps:4});assert.equal(await active(p),screen,'短い移動では戻らない');await edgeSwipe(p);assert.equal(await active(p),origin,'起点の画面へ戻る');return `${screen} → ${origin}`});
+await check(page,'G-06','push画面（すべての取引）を左端スワイプで閉じる',async p=>{await tap(p,'#homeAllTransactions');assert.equal(await p.locator('#pushLayer .push-view.show').count(),1);await edgeSwipe(p);assert.equal(await p.locator('#pushLayer .push-view.show').count(),0,'push画面が閉じる');return 'すべての取引 → ホーム'});
+await check(page,'G-07','ホーム→検索→結果の取引→スワイプで2段戻る',async p=>{await tap(p,'#todaySearch');await p.locator('#globalSearchInput').fill('巡回');await p.waitForTimeout(250);await p.locator('.gsearch-result').first().click();await settle(p);const n=await p.locator('#pushLayer .push-view.show').count();assert.ok(n>=2);await edgeSwipe(p);assert.equal(await p.locator('#pushLayer .push-view.show').count(),n-1);await edgeSwipe(p);assert.equal(await p.locator('#pushLayer .push-view.show').count(),n-2);return `push ${n}段 → ${n-2}段`});
+
+/* ---- ＋ → 全画面の新規入力 ---- */
+await check(page,'G-10','＋を押すとすぐ全画面の新規入力（メニューを挟まない）',async p=>{await tap(p,'#addHub');assert.equal(await p.locator('#menuLayer.show').count(),0,'メニューは開かない');assert.ok(await p.locator('#sheet.show.full #entryHub').count(),'全画面のシート');const tiles=await p.locator('#entryHub .entry-tile').count(),rows=await p.locator('#entryHub .entry-row').count();assert.equal(tiles,4);assert.equal(rows,10);return `大きなタイル ${tiles}・一覧 ${rows}`});
+const entries=[['entryExpense',/支出/],['entryIncome',/収入/],['entryBank',/残高|口座/],['entrySalary',/給与|勤務先|種類/],['ihCard',/カード|請求/],['ihRepeat',/最近|支出/],['ihOneLine',/一行入力/],['ihBank',/口座|銀行/],['ihEmployer',/勤務先/],['ihCredit',/カード/],['ihDebit',/デビット/],['ihFixed',/固定/],['ihLarge',/大型/],['ihGoal',/目標|旅行|プレゼント/]];
+await check(page,'G-11','新規入力の全14項目がそれぞれの入力を開く（開くだけでは保存しない）',async p=>{const seen=[];for(const [id,re] of entries){await closeAll(p);await tap(p,'#addHub');await p.locator('#'+id).click();await settle(p);const t=await p.evaluate(()=>document.querySelector('#sheet.show .sheet-title')?.textContent||[...document.querySelectorAll('#pushLayer .push-view.show .push-title')].at(-1)?.textContent||document.querySelector('#menuLayer.show')?.getAttribute('aria-label')||'');assert.match(t,re,`${id} → 「${t}」`);seen.push(`${id}:${t}`)}return seen.join('／')});
+await check(page,'G-12','新規入力は閉じるで閉じ、＋の見た目は元のまま',async p=>{await tap(p,'#addHub');await tap(p,'#entryClose');assert.equal(await p.locator('#sheet.show').count(),0);const r=await p.locator('#addHub svg').evaluate(e=>getComputedStyle(e).transform);assert.ok(r==='none'||r==='matrix(1, 0, 0, 1, 0, 0)',`＋が回転したまま ${r}`);return '閉じる・＋は「＋」のまま'});
+
+/* ---- 検索 ---- */
+const search=async(p,q,scope)=>{if(scope)await p.locator(`[data-search-scope="${scope}"]`).click();await p.locator('#globalSearchInput').fill(q);await p.waitForTimeout(250);return p.locator('.gsearch-result').evaluateAll(r=>r.map(x=>x.dataset.gsType+':'+x.querySelector('.row-title').textContent))};
+await check(page,'G-20','検索: 空の時は候補と検索のこつ',async p=>{await tap(p,'#todaySearch');assert.ok(await p.locator('.gsearch-chip').count()>=1,'候補');assert.ok(await p.locator('.gsearch-tips').count());return `候補 ${await p.locator('.gsearch-chip').count()}件`});
+await check(page,'G-21','検索: ひらがな・カタカナ・全角半角を区別しない',async p=>{await p.evaluate(()=>{const t=globalThis.__mm3Test;return t.safeCommitAsync(()=>t.recordExpense({merchant:'スターバックス',amount:500,category:'食費'}))});await settle(p);await tap(p,'#todaySearch');const a=await search(p,'すたーばっくす'),b=await search(p,'ｽﾀｰﾊﾞｯｸｽ');assert.ok(a.some(x=>x.includes('スターバックス')),`ひらがな ${a}`);assert.ok(b.some(x=>x.includes('スターバックス')),`半角カナ ${b}`);return `${a.length}件・${b.length}件`},{writes:true});
+await check(page,'G-22','検索: 金額の条件（>・範囲）と日付',async p=>{await tap(p,'#todaySearch');const over=await search(p,'>20000'),range=await search(p,'1000-1500'),date=await search(p,'10/7');assert.ok(over.length>=1&&!over.some(x=>x.includes('巡回検査の支出')),`>20000 ${over}`);assert.ok(range.some(x=>x.includes('巡回検査の支出')),`範囲 ${range}`);assert.ok(date.some(x=>x.startsWith('transaction')),`日付 ${date}`);return `>20000: ${over.length}件・1000-1500: ${range.length}件・10/7: ${date.length}件`});
+await check(page,'G-23','検索: 種類の切替と設定の検索',async p=>{await tap(p,'#todaySearch');const all=await search(p,'カード'),cards=await search(p,'カード','card');assert.ok(cards.length&&cards.every(x=>x.startsWith('card:')),`カードだけ ${cards}`);assert.ok(all.length>=cards.length);const set=await search(p,'通知','setting');assert.ok(set.some(x=>x.includes('通知')),`設定 ${set}`);await p.locator('.gsearch-result').first().click();await settle(p);assert.ok(await p.locator('#pushLayer .push-view.show').count()>=2,'設定の画面が開く');return `すべて${all.length}件・カード${cards.length}件・設定「${set[0]}」`});
+await check(page,'G-24','検索: 開いた検索語は「最近の検索」に残り、消去できる',async p=>{await tap(p,'#todaySearch');await search(p,'巡回');await p.locator('.gsearch-result').first().click();await settle(p);await closeAll(p);await tap(p,'#todaySearch');assert.ok(await p.locator('[data-gs-recent="巡回"]').count(),'最近の検索');await p.locator('#gsClearRecent').click();await settle(p);assert.equal(await p.locator('[data-gs-recent]').count(),0);return '保存→消去'});
+await check(page,'G-25','検索: 結果なしの表示と×で消す',async p=>{await tap(p,'#todaySearch');await search(p,'該当しない語xyz');assert.ok(await p.locator('.gsearch-empty').count());await p.locator('#globalSearchClear').click();await settle(p);assert.equal(await p.locator('#globalSearchInput').inputValue(),'');return '結果なし→消去'});
+
+/* ---- 並べ替えは ≡ だけ ---- */
+await check(page,'G-30','カテゴリ・口座・ホームの並べ替えに上下ボタンがない',async p=>{const counts=[];await tap(p,'#settingsTab');await tap(p,'#categorySettings');counts.push(await p.locator('[data-up],[data-down],.v11-order-btn').count());assert.ok(await p.locator('#categoryOrderList .drag-handle').count()>=2);await closeAll(p);await tap(p,'#homeTab');await tap(p,'#homeProfile');counts.push(await p.locator('.v11-order-btn,[data-layout-move]').count());await closeAll(p);await tap(p,'#homeAssetsCard');const sort=p.locator('#mm3AssetOrderEdit');if(await sort.count()){await sort.click();await settle(p);counts.push(await p.locator('#aoList .v11-order-btn').count());assert.ok(await p.locator('#aoList .drag-handle').count()>=1)}assert.deepEqual(counts.filter(Boolean),[]);const labels=await p.evaluate(()=>[...document.querySelectorAll('[aria-label]')].map(e=>e.getAttribute('aria-label')).filter(l=>/を上へ$|を下へ$/.test(l)));assert.deepEqual(labels,[]);return `上下ボタン 0（${counts.length}画面）`});
+await check(page,'G-31','カテゴリを ≡ のドラッグで並べ替えて保存',async p=>{await tap(p,'#settingsTab');await tap(p,'#categorySettings');const before=await p.evaluate(()=>globalThis.__mm3Test.getData().categories.map(c=>c.name));const h=p.locator('#categoryOrderList [data-reorder-key] .drag-handle').nth(2),b=await h.boundingBox(),row=await p.locator('#categoryOrderList [data-reorder-key]').nth(2).boundingBox();await p.mouse.move(b.x+b.width/2,b.y+b.height/2);await p.mouse.down();for(let i=1;i<=8;i++)await p.mouse.move(b.x+b.width/2,b.y+b.height/2-row.height*2*i/8);await p.mouse.up();await settle(p);const after=await p.evaluate(()=>globalThis.__mm3Test.getData().categories.map(c=>c.name));assert.equal(after[0],before[2],`先頭へ ${after}`);return `${before.slice(0,3).join('・')} → ${after.slice(0,3).join('・')}`},{writes:true});
+
+/* ---- ホームの設定 ---- */
+await check(page,'G-40','ホームの設定: 一覧の件数・グラフ・詰めて表示',async p=>{await tap(p,'#homeProfile');await p.locator('[data-home-pref-set="recentCount"][data-value="5"]').click();await settle(p);await p.locator('[data-home-pref="showCharts"]').click();await settle(p);await p.locator('[data-home-pref="compact"]').click();await settle(p);await tap(p,'#hsClose');assert.ok(await p.locator('#todayContent.home-no-charts.home-compact').count());assert.equal(await p.locator('#todayContent .home-card-right').first().evaluate(e=>getComputedStyle(e).display),'none');await tap(p,'#homeProfile');await p.locator('#hsReset').click();await p.locator('#alertActions button',{hasText:'戻す'}).click();await settle(p);await tap(p,'#hsClose');assert.equal(await p.locator('#todayContent.home-no-charts').count(),0,'初期に戻す');return '件数5・グラフなし・詰めて表示 → 初期に戻す'});
+
+/* ---- その他の設定 ---- */
+const pref=async(p,row,label)=>{await tap(p,'#settingsTab');await tap(p,'#'+row);await p.locator('.push-view.show [data-pref-value]').filter({hasText:label}).first().click();await settle(p);await closeAll(p)};
+await check(page,'G-50','その他: アプリ全体の設定が並ぶ',async p=>{await tap(p,'#settingsTab');const ids=['prefStartTab','prefWeekStart','prefPayMonth','prefGlass','prefNumberFont','prefReadability','prefPrivacy'];for(const id of ids)assert.ok(await p.locator('#'+id).count(),id);const n=await p.locator('#settingsContent .settings-list-row').count();return `設定の行 ${n}件（追加 ${ids.length}件）`});
+await check(page,'G-51','その他: ガラスの質感・数字の書体',async p=>{await pref(p,'prefGlass','控えめ');assert.ok(await p.evaluate(()=>document.documentElement.classList.contains('glass-subtle')));await pref(p,'prefGlass','不透明');assert.ok(await p.evaluate(()=>document.documentElement.classList.contains('glass-solid-pref')));const bg=await p.locator('#tabbar').evaluate(e=>getComputedStyle(e).backdropFilter);assert.equal(bg,'none','不透明ではぼかさない');await pref(p,'prefGlass','標準');await pref(p,'prefNumberFont','標準の数字');assert.ok(await p.evaluate(()=>document.documentElement.classList.contains('num-standard')));await pref(p,'prefNumberFont','丸み');return 'クラスとぼかしが切り替わる'});
+await check(page,'G-52','その他: 週の始まり（月曜）がカレンダーに反映',async p=>{await pref(p,'prefWeekStart','月曜日');await tap(p,'#homeTab');await tap(p,'#homeDate');const first=await p.locator('.cal-week span').first().innerText();assert.equal(first,'月');await closeAll(p);await pref(p,'prefWeekStart','日曜日');return 'カレンダーの先頭が「月」'});
+await check(page,'G-53','その他: 読みやすさ（太字・ボタンの形・コントラスト）',async p=>{await tap(p,'#settingsTab');await tap(p,'#prefReadability');for(const k of ['boldText','buttonShapes','contrast'])await p.locator(`[data-pref-switch="${k}"]`).click();await settle(p);const c=await p.evaluate(()=>['bold-text','button-shapes','more-contrast'].filter(x=>document.documentElement.classList.contains(x)));assert.equal(c.length,3);for(const k of ['boldText','buttonShapes','contrast'])await p.locator(`[data-pref-switch="${k}"]`).click();await settle(p);return c.join('・')});
+await check(page,'G-54','その他: アプリを離れたらぼかす・その他タブの未読数',async p=>{await tap(p,'#settingsTab');await tap(p,'#prefPrivacy');await p.locator('[data-pref-switch="privacyBlur"]').click();await settle(p);await p.evaluate(()=>{Object.defineProperty(document,'visibilityState',{value:'hidden',configurable:true});document.dispatchEvent(new Event('visibilitychange'))});assert.ok(await p.locator('#privacyShield.show').count(),'ぼかしが出る');await p.evaluate(()=>{Object.defineProperty(document,'visibilityState',{value:'visible',configurable:true});document.dispatchEvent(new Event('visibilitychange'))});assert.equal(await p.locator('#privacyShield.show').count(),0);await p.locator('[data-pref-switch="privacyBlur"]').click();await settle(p);const badge=await p.locator('#settingsTab .tab-badge').count();await p.locator('[data-pref-switch="tabBadge"]').click();await settle(p);assert.equal(await p.locator('#settingsTab .tab-badge').count(),0,'バッジを消せる');await p.locator('[data-pref-switch="tabBadge"]').click();await settle(p);return `ぼかし・バッジ（表示中 ${badge}）`});
+
+/* ---- ナビゲーションバーの統一 ---- */
+await check(page,'G-60','ナビゲーションバー: 専用画面・push画面の戻るは丸いガラス、見出しは中央',async p=>{const out=[];for(const open of [p=>tap(p,'#homeSalaryCard'),p=>tap(p,'#homeAllTransactions')]){await closeAll(p);await reset(p,'today');await open(p);const r=await p.evaluate(()=>{const b=[...document.querySelectorAll('#pushLayer .push-view.show .back-btn')].at(-1)||document.querySelector('.screen.active .detail-back'),t=[...document.querySelectorAll('#pushLayer .push-view.show .push-title')].at(-1)||document.querySelector('.screen.active .large-title'),br=b.getBoundingClientRect(),tr=t.getBoundingClientRect(),s=getComputedStyle(b);return{w:Math.round(br.width),h:Math.round(br.height),radius:s.borderRadius,center:Math.round(tr.left+tr.width/2),mid:Math.round(innerWidth/2)}});assert.ok(r.w>=44&&r.h>=44&&r.radius==='50%',JSON.stringify(r));assert.ok(Math.abs(r.center-r.mid)<=30,`中央 ${JSON.stringify(r)}`);out.push(`${r.w}×${r.h} 中央差${Math.abs(r.center-r.mid)}`)}return out.join('／')});
+
+/* 再読み込みを伴うので最後に行う */
+await check(page,'G-55','その他: 起動時に開く画面＝支払い（再読み込みで反映）',async p=>{await pref(p,'prefStartTab','支払い');await p.reload();await p.waitForFunction(()=>!!globalThis.__mm3Test&&!document.getElementById('mm3StorageBoot'));await p.evaluate(inPage);await p.evaluate(()=>{globalThis.__original=JSON.stringify(globalThis.__mm3Test.getData())});await settle(p);assert.equal(await active(p),'screen-payroot');await closeAll(p);await p.locator('#settingsTab').click();await settle(p);await p.locator('#prefStartTab').click();await settle(p);await p.locator('.push-view.show [data-pref-value]').filter({hasText:'ホーム'}).first().click();await settle(p);assert.equal(await p.evaluate(()=>globalThis.__mm3Test.getData().appPrefs.startTab),'home');return '再読み込みで支払いタブ'},{writes:true/* 再読み込みで起動時のデータ整理（お知らせの期限など）が走るため */});
+
+console.log(errors.length?`errors: ${errors.join(' | ')}`:'no JS errors');
+if(errors.length)failed++;
+writeFileSync(resolve(root,'docs/design/glass-v15-results.json'),JSON.stringify(results,null,1));
+await context.close();await closeHarness();
+console.log(`${Object.keys(results).length-failed}/${Object.keys(results).length} glass checks passed`);
+if(failed)process.exitCode=1;
