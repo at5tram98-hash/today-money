@@ -189,7 +189,7 @@ function searchSettingEntries(){
 }
 function searchIndex(){
   const out=[],cat=n=>catByName(n);
-  for(const t of data.transactions)out.push({type:'transaction',id:t.id,title:t.merchant||t.category||'支出',sub:`${dayLabel(t.date)}・${t.category||''}・${paymentLabel(t)}`,amount:Number(t.amount)||0,date:t.date,hay:`${t.merchant} ${t.category} ${t.memo||''} ${paymentLabel(t)} ${(t.tags||[]).join(' ')}`,sym:normalizeCategoryIcon(cat(t.category)?.icon,cat(t.category)?.id),open:()=>openTransactionDetail(t.id)});
+  for(const t of data.transactions)out.push({type:'transaction',cat:t.category,id:t.id,title:t.merchant||t.category||'支出',sub:`${dayLabel(t.date)}・${t.category||''}・${paymentLabel(t)}`,amount:Number(t.amount)||0,date:t.date,hay:`${t.merchant} ${t.category} ${t.memo||''} ${paymentLabel(t)} ${(t.tags||[]).join(' ')}`,sym:normalizeCategoryIcon(cat(t.category)?.icon,cat(t.category)?.id),open:()=>openTransactionDetail(t.id)});
   for(const x of data.tempIncomes||[])out.push({type:'income',id:x.id,title:x.name||x.source||'臨時収入',sub:dayLabel(x.date),amount:Number(x.amount)||0,date:x.date,hay:`${x.name||''} ${x.source||''} ${x.memo||''} 臨時収入`,open:()=>openTempIncomeHistory()});
   for(const r of data.salaryRecords){const e=data.employers.find(x=>x.id===r.employerId);out.push({type:'salary',id:r.id,title:e?.name||'給与',sub:`${r.date?dayLabel(r.date):''}・${r.status||''}`,amount:salaryRecordExpectedOrReceivedAmount(r),date:r.date,hay:`${e?.name||''} 給与 ${r.status||''} ${r.memo||''}`,open:()=>openSalaryRecordEdit(r.id)})}
   for(const e of data.employers)out.push({type:'salary',id:'emp-'+e.id,title:e.name,sub:'勤務先',hay:`${e.name} 勤務先`,open:()=>openEmployerDetail(e.id)});
@@ -203,11 +203,17 @@ function searchIndex(){
   return out.concat(searchSettingEntries());
 }
 const SEARCH_SCOPE_TYPES={all:null,transaction:['transaction','income','category'],salary:['salary'],account:['account'],card:['card'],payment:['payment'],goal:['goal'],setting:['setting']};
-function runGlobalSearch(query,scope='all'){
-  const q=searchParseQuery(query),types=SEARCH_SCOPE_TYPES[scope]||null,empty=!q.words.length&&q.min==null&&q.max==null&&!q.dates.length&&!q.months.length;if(empty)return[];
+const SEARCH_PERIODS=[['all','すべての期間'],['today','今日'],['week','今週'],['month','今月'],['lastMonth','先月'],['3m','過去3か月'],['year','今年']];
+function searchPeriodRange(p){const t=ymd(),m=t.slice(0,7),end=x=>`${x}-${pad(new Date(Number(x.slice(0,4)),Number(x.slice(5,7)),0).getDate())}`;
+  if(p==='today')return [t,t];if(p==='week'){const s=spendWeekStart(t);return [s,spendAddDays(s,6)]}if(p==='month')return [`${m}-01`,end(m)];
+  if(p==='lastMonth'){const l=addMonths(m,-1);return [`${l}-01`,end(l)]}if(p==='3m')return [`${addMonths(m,-2)}-01`,t];if(p==='year')return [`${t.slice(0,4)}-01-01`,`${t.slice(0,4)}-12-31`];return null}
+function runGlobalSearch(query,scope='all',filters={}){
+  const q=searchParseQuery(query),types=SEARCH_SCOPE_TYPES[scope]||null,range=filters.period&&filters.period!=='all'?searchPeriodRange(filters.period):null,cat=filters.category||'',empty=!q.words.length&&q.min==null&&q.max==null&&!q.dates.length&&!q.months.length;if(empty&&!range&&!cat)return[];
   const res=[];
   for(const it of searchIndex()){
     if(types&&!types.includes(it.type))continue;
+    if(range&&(!it.date||it.date<range[0]||it.date>range[1]))continue;
+    if(cat&&it.cat!==cat)continue;
     const hay=searchFold(`${it.title} ${it.hay||''} ${it.sub||''}`),title=searchFold(it.title);let score=0,ok=true;
     for(const w of q.words){const amountHit=q.amounts.length&&it.amount!=null&&q.amounts.includes(Math.round(Math.abs(it.amount)))&&/^\d+$/.test(w);if(hay.includes(w)){score+=title.startsWith(w)?30:title.includes(w)?20:8}else if(amountHit)score+=25;else{ok=false;break}}
     if(!ok)continue;
@@ -226,24 +232,31 @@ function searchHighlight(text,query){
 }
 function recentSearches(){return Array.isArray(data.recentSearches)?data.recentSearches.slice(0,8):[]}
 function rememberSearch(q){q=String(q||'').trim();if(!q)return;try{safeCommit(()=>{data.recentSearches=[q,...recentSearches().filter(x=>x!==q)].slice(0,8)},{render:false,label:'recent search',invalidateAcf:false})}catch(e){}}
-function openGlobalSearch(initialScope='all'){
-  let query='',scope=initialScope,expanded=new Set();
-  pushView('検索',`<div class="gsearch"><div class="gsearch-bar"><label class="gsearch-field">${icon('search')}<input type="search" id="globalSearchInput" enterkeyhint="search" autocomplete="off" placeholder="取引・給与・口座・カード・設定を検索" aria-label="検索"><button type="button" class="gsearch-clear" id="globalSearchClear" aria-label="検索語を消す" hidden>${icon('close')}</button></label></div><div class="gsearch-scopes glass-seg wide" role="radiogroup" aria-label="検索する種類" id="globalSearchScopes"></div><div class="gsearch-results" id="globalSearchResults" aria-live="polite"></div></div>`,root=>{
+function openGlobalSearchView(initialScope='all'){
+  let query='',scope=initialScope,expanded=new Set(),period='all',category='';
+  pushView('検索',`<div class="gsearch"><div class="gsearch-bar"><label class="gsearch-field">${icon('search')}<input type="search" id="globalSearchInput" enterkeyhint="search" autocomplete="off" placeholder="取引・給与・口座・カード・設定を検索" aria-label="検索"><button type="button" class="gsearch-clear" id="globalSearchClear" aria-label="検索語を消す" hidden>${icon('close')}</button></label></div><div class="gsearch-scopes glass-seg wide" role="radiogroup" aria-label="検索する種類" id="globalSearchScopes"></div><div class="gsearch-filters" id="globalSearchFilters"></div><div class="gsearch-results" id="globalSearchResults" aria-live="polite"></div></div>`,root=>{
     root.classList.add('gsearch-view');
-    const input=root.querySelector('#globalSearchInput'),clear=root.querySelector('#globalSearchClear'),scopes=root.querySelector('#globalSearchScopes'),out=root.querySelector('#globalSearchResults');
+    const input=root.querySelector('#globalSearchInput'),clear=root.querySelector('#globalSearchClear'),scopes=root.querySelector('#globalSearchScopes'),out=root.querySelector('#globalSearchResults'),filters=root.querySelector('#globalSearchFilters');
+    const filtered=()=>period!=='all'||!!category;
+    const drawFilters=()=>{const pl=SEARCH_PERIODS.find(x=>x[0]===period)?.[1]||'すべての期間';filters.innerHTML=`<button type="button" class="gsearch-filter${period!=='all'?' on':''}" id="gsPeriodChip" aria-haspopup="dialog" aria-label="期間で絞り込む（現在: ${esc(pl)}）">${icon('calendar')}<span>${esc(period==='all'?'期間':pl)}</span>${icon('chevronDown')}</button><button type="button" class="gsearch-filter${category?' on':''}" id="gsCategoryChip" aria-haspopup="dialog" aria-label="カテゴリで絞り込む（現在: ${esc(category||'すべて')}）">${icon('grid')}<span>${esc(category||'カテゴリ')}</span>${icon('chevronDown')}</button>`;
+      filters.querySelector('#gsPeriodChip').onclick=()=>pickFilter('期間',SEARCH_PERIODS,period,v=>{period=v});
+      filters.querySelector('#gsCategoryChip').onclick=()=>pickFilter('カテゴリ',[['','すべてのカテゴリ'],...data.categories.map(c=>[c.name,c.name])],category,v=>{category=v})};
+    const pickFilter=(title,options,current,apply)=>openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="gsfCancel">キャンセル</button><div class="sheet-title">${esc(title)}</div><span style="min-width:64px"></span></div><div class="sheet-body gsearch-filter-sheet"><div class="group" role="radiogroup" aria-label="${esc(title)}">${options.map(([v,l])=>`<button type="button" class="row press option-row" role="radio" aria-checked="${current===v}" data-gsf="${esc(v)}"><div class="row-main"><div class="row-title">${esc(l)}</div>${title==='期間'&&v!=='all'?`<div class="row-sub">${(r=>r?`${spendJpDay(r[0])}〜${spendJpDay(r[1])}`:'')(searchPeriodRange(v))}</div>`:''}</div><span class="option-check" aria-hidden="true">${current===v?icon('check'):''}</span></button>`).join('')}</div></div>`,'half',sh=>{
+      sh.querySelector('#gsfCancel').onclick=closeSheet;
+      sh.querySelectorAll('[data-gsf]').forEach(b=>b.onclick=()=>{apply(b.dataset.gsf);feedback?.selection?.();closeSheet();expanded.clear();drawFilters();draw()})});
     const drawScopes=()=>{scopes.innerHTML=SEARCH_SCOPES.map(([v,l])=>`<button type="button" role="radio" aria-checked="${scope===v}" data-search-scope="${v}">${esc(l)}</button>`).join('');scopes.querySelectorAll('[data-search-scope]').forEach(b=>b.onclick=()=>{scope=b.dataset.searchScope;expanded.clear();feedback?.selection?.();drawScopes();draw()})};
     const suggestions=()=>{const freq=new Map();for(const t of data.transactions.slice(-200)){if(t.merchant)freq.set(t.merchant,(freq.get(t.merchant)||0)+1)}return [...freq].sort((a,b)=>b[1]-a[1]).slice(0,6).map(x=>x[0]).concat(data.categories.slice(0,4).map(c=>c.name))};
     const draw=()=>{
       clear.hidden=!query;
-      if(!query.trim()){
+      if(!query.trim()&&!filtered()){
         const rec=recentSearches(),saved=data.savedSearches||[];
         out.innerHTML=`${rec.length?`<div class="gsearch-section-head"><h2>最近の検索</h2><button type="button" class="gsearch-link" id="gsClearRecent">消去</button></div><div class="group">${rec.map(r=>`<button type="button" class="row press" data-gs-recent="${esc(r)}"><span class="gsearch-row-icon" aria-hidden="true">${icon('clock')}</span><div class="row-main"><div class="row-title">${esc(r)}</div></div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`:''}
-        ${saved.length?`<div class="gsearch-section-head"><h2>保存した検索</h2></div><div class="group">${saved.map(x=>`<button type="button" class="row press" data-load-search="${esc(x.id)}"><span class="gsearch-row-icon" aria-hidden="true">${icon('star')}</span><div class="row-main"><div class="row-title">${esc(x.name)}</div><div class="row-sub">${esc(x.query||'条件のみ')}</div></div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`:''}
+        ${saved.length?`<div class="gsearch-section-head"><h2>保存した検索</h2></div><div class="group">${saved.map(x=>`<button type="button" class="row press" data-load-search="${esc(x.id)}"><span class="gsearch-row-icon" aria-hidden="true">${icon('star')}</span><div class="row-main"><div class="row-title">${esc(x.name)}</div><div class="row-sub">${esc([x.query,x.period&&x.period!=='all'?SEARCH_PERIODS.find(p=>p[0]===x.period)?.[1]:'',x.category].filter(Boolean).join('・')||'条件のみ')}</div></div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`:''}
         <div class="gsearch-section-head"><h2>候補</h2></div><div class="gsearch-chips">${suggestions().map(s=>`<button type="button" class="gsearch-chip" data-gs-suggest="${esc(s)}">${esc(s)}</button>`).join('')}</div>
         <div class="gsearch-tips"><strong>検索のこつ</strong><span>「&gt;5000」で5,000円以上、「1000-3000」で範囲、「10/7」「10月」で日付、「カフェ 500」のように並べると両方を含む結果。ひらがな・カタカナ、全角・半角は区別しません。</span></div>`;
       }else{
-        const res=runGlobalSearch(query,scope),by=new Map();for(const r of res){if(!by.has(r.type))by.set(r.type,[]);by.get(r.type).push(r)}
-        out.innerHTML=res.length?`<div class="gsearch-count">${res.length}件</div>${[...by].map(([type,list])=>{const [label,sym,color]=SEARCH_GROUP_META[type]||[type,'search','var(--accent)'],open=expanded.has(type),shown=open?list:list.slice(0,5);return `<section class="gsearch-group" style="--g:${color}"><div class="gsearch-section-head"><h2>${esc(label)}<small>${list.length}</small></h2>${list.length>5?`<button type="button" class="gsearch-link" data-gs-more="${type}">${open?'閉じる':'すべて表示'}</button>`:''}</div><div class="group">${shown.map(r=>`<button type="button" class="row press gsearch-result" data-gs-type="${type}" data-gs-id="${esc(r.id)}"><span class="gsearch-row-icon tinted" aria-hidden="true">${icon(r.sym||sym)}</span><div class="row-main"><div class="row-title">${searchHighlight(r.title,query)}</div><div class="row-sub">${searchHighlight(r.sub||'',query)}</div></div>${r.amount!=null&&r.type!=='setting'&&r.type!=='category'?`<div class="row-value">${yen(Math.abs(r.amount))}</div>`:''}<span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div></section>`}).join('')}<button type="button" class="secondary gsearch-save" id="pro4SaveSearch">この検索を保存</button>`:`<div class="gsearch-empty"><span aria-hidden="true">${icon('search')}</span><strong>「${esc(query)}」の結果はありません</strong><small>別の言葉や、金額・日付（例: 10/7, &gt;1000）で試してください。</small></div>`;
+        const res=runGlobalSearch(query,scope,{period,category}),by=new Map();for(const r of res){if(!by.has(r.type))by.set(r.type,[]);by.get(r.type).push(r)}
+        out.innerHTML=res.length?`<div class="gsearch-count">${res.length}件</div>${[...by].map(([type,list])=>{const [label,sym,color]=SEARCH_GROUP_META[type]||[type,'search','var(--accent)'],open=expanded.has(type),shown=open?list:list.slice(0,5);return `<section class="gsearch-group" style="--g:${color}"><div class="gsearch-section-head"><h2>${esc(label)}<small>${list.length}</small></h2>${list.length>5?`<button type="button" class="gsearch-link" data-gs-more="${type}">${open?'閉じる':'すべて表示'}</button>`:''}</div><div class="group">${shown.map(r=>`<button type="button" class="row press gsearch-result" data-gs-type="${type}" data-gs-id="${esc(r.id)}"><span class="gsearch-row-icon tinted" aria-hidden="true">${icon(r.sym||sym)}</span><div class="row-main"><div class="row-title">${searchHighlight(r.title,query)}</div><div class="row-sub">${searchHighlight(r.sub||'',query)}</div></div>${r.amount!=null&&r.type!=='setting'&&r.type!=='category'?`<div class="row-value">${yen(Math.abs(r.amount))}</div>`:''}<span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div></section>`}).join('')}<button type="button" class="secondary gsearch-save" id="pro4SaveSearch">この検索を保存</button>`:`<div class="gsearch-empty"><span aria-hidden="true">${icon('search')}</span><strong>${query.trim()?`「${esc(query)}」の結果はありません`:'条件に合う結果はありません'}</strong><small>別の言葉や、金額・日付（例: 10/7, &gt;1000）で試してください。</small></div>`;
         out._results=res;
       }
       bind();
@@ -252,15 +265,15 @@ function openGlobalSearch(initialScope='all'){
       out.querySelectorAll('[data-gs-recent]').forEach(b=>b.onclick=()=>{query=b.dataset.gsRecent;input.value=query;draw()});
       out.querySelectorAll('[data-gs-suggest]').forEach(b=>b.onclick=()=>{query=b.dataset.gsSuggest;input.value=query;draw()});
       out.querySelector('#gsClearRecent')?.addEventListener('click',()=>{try{safeCommit(()=>{data.recentSearches=[]},{render:false,label:'recent search clear',invalidateAcf:false})}catch(e){}draw()});
-      out.querySelectorAll('[data-load-search]').forEach(b=>b.onclick=()=>{const x=(data.savedSearches||[]).find(v=>v.id===b.dataset.loadSearch);if(!x)return;query=x.query||'';scope=SEARCH_SCOPE_TYPES[x.type]!==undefined?x.type:'all';input.value=query;drawScopes();draw()});
+      out.querySelectorAll('[data-load-search]').forEach(b=>b.onclick=()=>{const x=(data.savedSearches||[]).find(v=>v.id===b.dataset.loadSearch);if(!x)return;query=x.query||'';scope=SEARCH_SCOPE_TYPES[x.type]!==undefined?x.type:'all';period=x.period||'all';category=x.category||'';input.value=query;drawScopes();drawFilters();draw()});
       out.querySelectorAll('[data-gs-more]').forEach(b=>b.onclick=()=>{const t=b.dataset.gsMore;expanded.has(t)?expanded.delete(t):expanded.add(t);draw()});
       out.querySelectorAll('[data-gs-id]').forEach(b=>b.onclick=()=>{const r=(out._results||[]).find(x=>x.type===b.dataset.gsType&&x.id===b.dataset.gsId);if(!r)return;rememberSearch(query);r.open()});
-      const save=out.querySelector('#pro4SaveSearch');if(save)save.onclick=()=>{if((data.savedSearches||[]).some(v=>v.query===query&&(v.type||'all')===scope)){showToast('この検索は保存済みです');return}try{safeCommit(()=>{data.savedSearches=[...(data.savedSearches||[]),{id:uid('search'),name:query,query,type:scope,createdAt:new Date().toISOString()}].slice(-10)},{render:false,label:'save search'})}catch(e){return}showToast('検索を保存しました')};
+      const save=out.querySelector('#pro4SaveSearch');if(save)save.onclick=()=>{if((data.savedSearches||[]).some(v=>v.query===query&&(v.type||'all')===scope&&(v.period||'all')===period&&(v.category||'')===category)){showToast('この検索は保存済みです');return}try{safeCommit(()=>{data.savedSearches=[...(data.savedSearches||[]),{id:uid('search'),name:[query.trim(),period!=='all'?SEARCH_PERIODS.find(x=>x[0]===period)?.[1]:'',category].filter(Boolean).join('・')||'検索',query,type:scope,period,category,createdAt:new Date().toISOString()}].slice(-10)},{render:false,label:'save search'})}catch(e){return}showToast('検索を保存しました')};
     };
     let timer=0;input.oninput=()=>{query=input.value;clearTimeout(timer);timer=setTimeout(draw,90)};
     input.onkeydown=e=>{if(e.key==='Enter'){rememberSearch(query);input.blur()}};
     clear.onclick=()=>{query='';input.value='';draw();input.focus()};
-    drawScopes();draw();setTimeout(()=>input.focus({preventScroll:true}),320);
+    drawScopes();drawFilters();draw();setTimeout(()=>input.focus({preventScroll:true}),320);
   });
 }
 

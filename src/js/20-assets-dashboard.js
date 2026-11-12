@@ -70,8 +70,8 @@ function mm3RefreshAssetChart(){
   const root=document.getElementById('mm3AssetChartBlock');if(!root)return;root.innerHTML=`${mm3AssetChartHtml()}${mm3AssetRangeHtml()}`;const caption=document.getElementById('mm3AssetCaption');if(caption)caption.textContent=mm3AssetChartMode==='forecast'?'登録済みの予定に基づくATF残高。今回の試算は2026年11月30日まで。':'登録済みの残高履歴だけを使用。グラフをなぞると日付と残高を確認できます。';root.classList.remove('mm3-assets-chart-switch');void root.offsetWidth;root.classList.add('mm3-assets-chart-switch');mm3BindAssetChart();
 }
 function mm3AssetForecastIsHeavy(range=mm3AssetChartRange){return mm3AssetChartMode==='forecast'&&['3M','6M','1Y','ALL'].includes(range)}
-function mm3RefreshAssetChartMaybeBusy(){if(mm3AssetForecastIsHeavy())return runWithBusy(()=>mm3RefreshAssetChart(),{title:'資産予測を計算中…',sub:`${mm3AssetChartRange==='1Y'?'1年間':'長期'}の給与・カード・固定支払いを確認しています`});return mm3RefreshAssetChart()}
-function mm3RenderPaymentsMaybeBusy(month=paymentHomeMonth()){const [cy,cm]=ym().split('-').map(Number),[ty,tm]=String(month).split('-').map(Number),diff=(ty-cy)*12+(tm-cm);if(diff>=2)return runWithBusy(()=>renderPayments(),{title:'ATFを計算中…',sub:`${monthLabel(month)}までの資金見通しを計算しています`});return renderPayments()}
+function mm3RefreshAssetChartMaybeBusy(){if(mm3AssetForecastIsHeavy())return runInArea('#mm3AssetChartBlock',()=>mm3RefreshAssetChart(),{title:'資産予測を計算しています…',sub:`${mm3AssetChartRange==='1Y'?'1年間':'長期'}の給与・カード・固定支払いを確認しています`,label:'資産予測'});return mm3RefreshAssetChart()}
+function mm3RenderPaymentsMaybeBusy(month=paymentHomeMonth()){const [cy,cm]=ym().split('-').map(Number),[ty,tm]=String(month).split('-').map(Number),diff=(ty-cy)*12+(tm-cm);if(diff>=2)return runInArea('#paymentsContent',()=>renderPayments(),{title:'ATFを計算しています…',sub:`${monthLabel(month)}までの資金見通しを計算しています`,label:'資金見通し'});return renderPayments()}
 
 
 function mm3OpenAssetHistory(){

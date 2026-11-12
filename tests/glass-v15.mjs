@@ -78,6 +78,24 @@ await check(page,'G-55','その他: 起動時に開く画面＝支払い（再�
 
 console.log(errors.length?`errors: ${errors.join(' | ')}`:'no JS errors');
 if(errors.length)failed++;
+/* 取引の一覧（日付ごと・ガラスの検索欄・カテゴリのチップ）と詳細（ウォレットのような見た目）、行の左スワイプ */
+const seedTx=p=>p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData(),base=s.transactions[0];for(let i=0;i<5;i++)s.transactions.push({...base,id:'tx_g7_'+i,date:`2026-10-0${7-Math.floor(i/2)}`,category:i%2?'交通費':'食費',merchant:'巡回店'+i,amount:300+i*10,bankApplied:false});await t.replaceData(s);t.renderAll()});
+await check(page,'G-70','取引の一覧: 日付ごとの見出しと合計・ガラスの検索欄・カテゴリのチップ（シートで選ぶ）',async p=>{await seedTx(p);await tap(p,'#homeAllTransactions');
+  const heads=await p.locator('.push-view.show .txl-day-head').allInnerTexts();assert.ok(heads.length>=2&&/今日/.test(heads[0]),'日付ごとの見出し');assert.equal(await p.locator('.push-view.show select').count(),0,'選択リスト（select）は使わない');
+  await p.locator('#txCatFilter').click();await p.locator('[data-opt="交通費"]').click();await p.waitForTimeout(350);const cats=await p.locator('.push-view.show .txl-row .row-sub').allInnerTexts();assert.ok(cats.length&&cats.every(c=>c.startsWith('交通費')),'カテゴリで絞り込み');
+  return `見出し ${heads.length}日分（${heads[0].replace(/\s+/g,' ')}）、交通費 ${cats.length}件`},{writes:true});
+await check(page,'G-71','取引の詳細: 大きなアイコン・店名・金額・日付、編集と削除は文字のボタン行（削除は確認）',async p=>{await tap(p,'[data-home-tx]');
+  assert.equal(await p.locator('.push-view.show .txd-icon').count(),1);assert.match(await p.locator('.push-view.show .txd-amount').innerText(),/¥/);assert.equal(await p.locator('.push-view.show .txd-actions #txEdit').count(),1);
+  await p.locator('#txDelete').click();await p.waitForTimeout(250);assert.equal(await p.locator('#alertWrap.show').count(),1,'削除は確認');await p.locator('#alertWrap.show button',{hasText:'キャンセル'}).click();
+  return '記録の方法は「手入力」など日本語、削除は確認して取消できる'});
+await check(page,'G-72','取引の行を左へなぞると「編集」「削除」。削除は確認してから行い、一覧に留まる',async p=>{await seedTx(p);await tap(p,'#homeAllTransactions');const n0=await p.locator('.push-view.show .txl-row').count();
+  assert.equal(await p.locator('.swipe-act').count(),0,'なぞる前はボタンを置かない');const row=p.locator('.push-view.show .txl-row').nth(1),b=await row.boundingBox();
+  await p.mouse.move(b.x+300,b.y+b.height/2);await p.mouse.down();await p.mouse.move(b.x+60,b.y+b.height/2,{steps:8});await p.mouse.up();await p.waitForTimeout(350);
+  assert.equal(await p.locator('.swipe-act').count(),2,'編集と削除');const box=await p.locator('.swipe-act.delete').boundingBox();assert.ok(box.width>=44&&box.height>=44,'44pt以上');
+  await p.locator('.swipe-act.delete').click();await p.waitForTimeout(250);assert.equal(await p.locator('#alertWrap.show').count(),1,'確認');await p.locator('#alertWrap.show button',{hasText:'削除'}).click();await p.waitForTimeout(500);
+  assert.equal(await p.locator('.push-view.show .txl-row').count(),n0-1,'1件だけ削除');assert.match(await p.locator('.push-view.show .push-title').last().innerText(),/取引/);
+  await p.locator('.push-view.show .txl-row').first().click();await p.waitForTimeout(350);assert.match(await p.locator('.push-view.show .push-title').last().innerText(),/取引詳細/,'押すと詳細');
+  return `左へなぞる→削除→確認→${n0}件から${n0-1}件、一覧に留まる。押すと詳細`},{writes:true});
 writeFileSync(resolve(root,'docs/design/glass-v15-results.json'),JSON.stringify(results,null,1));
 await context.close();await closeHarness();
 console.log(`${Object.keys(results).length-failed}/${Object.keys(results).length} glass checks passed`);

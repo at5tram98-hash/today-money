@@ -48,7 +48,18 @@ try{
   await check(page,'N-005',{run:async p=>{await p.evaluate(()=>{const c=document.querySelector('#todayContent');c.scrollTop=200;c.dispatchEvent(new Event('scroll'))});await p.waitForTimeout(100);assert.ok(await p.locator('#todayTop').evaluate(el=>el.classList.contains('native-scrolled')),'スクロールで上部が縮む');return '縦スクロールで上部がコンパクト表示'}});
   /* ---- ホーム・ヘッダー ---- */
   await check(page,'H-001',{run:async p=>{assert.equal(await p.locator('#todayTop .large-title').innerText(),'ホーム');return '見出し「ホーム」（非操作）'}});
-  await check(page,'H-002',{run:async p=>{await tap(p,'#todaySearch');await expectPush(p,/検索/);assert.ok(await p.locator('#globalSearchInput').count(),'ガラスの検索欄');await closeAll(p);await expectScreen(p,'today');return '検索画面→閉じるとホームのまま'}});
+  /* H-002: 虫眼鏡が検索欄へ連続的に広がり（約260ms）、閉じると虫眼鏡へ戻る。動きを減らす設定では変形しない */
+  await check(page,'H-002',{run:async p=>{let btn,field;await p.emulateMedia({reducedMotion:'no-preference'});try{
+    await p.evaluate(()=>{globalThis.__morph=[];new MutationObserver(m=>{for(const r of m)for(const n of r.addedNodes)if(n.classList?.contains('gsearch-morph')){const b=n.getBoundingClientRect();globalThis.__morph.push({w:b.width,x:b.left,y:b.top})}}).observe(document.body,{childList:true})});
+    btn=await p.evaluate(()=>{const r=document.querySelector('#todaySearch').getBoundingClientRect();return{x:r.left,w:r.width}});
+    await p.locator('#todaySearch').click();await p.waitForTimeout(120);const mid=await p.evaluate(()=>{const m=document.querySelector('.gsearch-morph');return m?m.getBoundingClientRect().width:0});
+    await p.waitForTimeout(400);field=await p.evaluate(()=>document.querySelector('#globalSearchInput').closest('.gsearch-field').getBoundingClientRect().width);
+    const first=(await p.evaluate(()=>globalThis.__morph))[0];assert.ok(first&&Math.abs(first.x-btn.x)<2&&Math.abs(first.w-btn.w)<2,'虫眼鏡の位置と大きさから始まる');
+    assert.ok(mid>btn.w&&mid<field,`途中で連続的に広がる（${Math.round(btn.w)}→${Math.round(mid)}→${Math.round(field)}）`);assert.equal(await p.locator('.gsearch-morph').count(),0,'終わると変形用の部品は消える');
+    await p.locator('.push-view.show .back-btn').click();await p.waitForTimeout(60);const back=await p.evaluate(()=>globalThis.__morph.length);assert.ok(back>=2,'閉じると逆再生');await p.waitForTimeout(450);await expectScreen(p,'today');
+  }finally{await p.emulateMedia({reducedMotion:'reduce'})}
+    await p.evaluate(()=>{globalThis.__morph=[]});await tap(p,'#todaySearch');assert.equal(await p.evaluate(()=>globalThis.__morph.length),0,'動きを減らす設定では変形しない');await closeAll(p);
+    return `虫眼鏡（${Math.round(btn.w)}pt）→検索欄（${Math.round(field)}pt）へ連続変形、閉じると逆再生・ホームのまま。動きを減らす設定では変形なし`}});
   await check(page,'H-003',{run:async p=>{await tap(p,'#homeProfile');await expectSheet(p,/ホームの設定/);for(const id of ['ppBackup','ppNotices','ppEdit','ppSettings'])assert.equal(await p.locator('#'+id).count(),0,`他のタブへ移るボタン ${id} は置かない`);await tap(p,'#hsClose');assert.ok(!(await view(p)).sheet,'閉じる');return 'ホームの設定（全画面のガラスのシート）・他のタブへ移るボタンなし'}});
   await check(page,'H-004',{run:async p=>{await tap(p,'#homeProfile');const t=await p.locator('.hs-state').innerText();assert.ok(/保存|同期|未接続/.test(t));const s=await size(p,'.hs-avatar');assert.ok(s.w>=64,'大きいプロフィール');return `状態の文言「${t.trim()}」・写真 ${s.w}pt`}});
   await check(page,'H-005',{run:async p=>{await tap(p,'#homeProfile');await tap(p,'[data-home-pref="hideAmounts"]');await tap(p,'#hsClose');const v=await p.locator('#homeAssetsCard .home-card-value').innerText();assert.equal(v,'••••','金額を隠す');await tap(p,'#homeProfile');await tap(p,'[data-home-pref="hideAmounts"]');await tap(p,'#hsClose');assert.ok(/¥/.test(await p.locator('#homeAssetsCard .home-card-value').innerText()));return 'ホームの金額を隠す・戻す（記録は不変）'}});
@@ -98,6 +109,15 @@ try{
   await check(page,'Q-013',{run:async p=>{await tap(p,'#addHub');await hubPick(p,'支出を記録');const before=await p.evaluate(()=>globalThis.__mm3Test.getData().transactions.length);await p.locator('#qeAmount').click();await settle(p);for(const k of ['7','7','7'])await p.locator(`[data-k="${k}"]`).click();await p.locator('#calcDone').click();await settle(p);await p.locator('#qeSave').dblclick();await p.waitForTimeout(700);const after=await p.evaluate(()=>globalThis.__mm3Test.getData().transactions.length);assert.equal(after,before+1,'二重押しでも1件');return '二重押しでも1件だけ保存・ホームの合計も更新'},writes:true});
   await check(page,'Q-014',{run:async p=>{await tap(p,'#addHub');await hubPick(p,'支出を記録');await p.locator('#qeMerchant').fill('破棄確認');await tap(p,'#qeCancel');const v=await view(p);assert.ok(v.alert,'変更ありは破棄確認');await p.locator('#alertActions button',{hasText:'変更を破棄'}).click();await settle(p);return '変更ありは破棄確認'}});
   await check(page,'Q-015',{run:async p=>{await tap(p,'#todaySearch');const input=p.locator('#globalSearchInput');await input.fill('じゅんかい');await p.waitForTimeout(250);let n=await p.locator('.gsearch-result').count();await input.fill('巡回');await p.waitForTimeout(250);n=await p.locator('.gsearch-result').count();assert.ok(n>=1,'結果');assert.ok(await p.locator('.gsearch-result mark').count(),'一致部分の強調');const groups=await p.locator('.gsearch-group h2').allInnerTexts();await input.fill('>1000');await p.waitForTimeout(250);assert.ok(await p.locator('.gsearch-result').count()>=1,'金額の条件');await p.locator('[data-search-scope="setting"]').click();await input.fill('カテゴリ');await p.waitForTimeout(250);assert.ok(await p.locator('.gsearch-result').count()>=1,'設定も探せる');return `「巡回」${n}件（${groups.join('・').replace(/\n/g,'')}）・金額条件・設定の検索`}});
+  /* Q-016: 検索の期間・カテゴリの2個のチップ。選ぶと結果を更新、「すべて」に戻すと元の結果 */
+  await check(page,'Q-016',{setup:async p=>{await p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData(),base=s.transactions[0];s.transactions.push({...base,id:'tx_q16_a',date:'2026-09-20',category:'交通費',merchant:'巡回検査の電車',amount:420,bankApplied:false},{...base,id:'tx_q16_b',date:'2026-10-03',category:'食費',merchant:'巡回検査の昼食',amount:880,bankApplied:false});await t.replaceData(s);t.renderAll()})},run:async p=>{
+    await tap(p,'#todaySearch');assert.equal(await p.locator('#globalSearchFilters .gsearch-filter').count(),2,'チップは2個');const input=p.locator('#globalSearchInput');await input.fill('巡回検査');await p.waitForTimeout(250);
+    const ids=async()=>(await p.locator('.gsearch-result[data-gs-type="transaction"]').evaluateAll(n=>n.map(x=>x.dataset.gsId))).sort();const all=await ids();
+    await p.locator('#gsPeriodChip').click();await expectSheet(p,/期間/);await p.locator('[data-gsf="month"]').click();await p.waitForTimeout(350);const month=await ids();
+    assert.ok(!month.includes('tx_q16_a')&&month.includes('tx_q16_b'),'今月だけ');assert.match(await p.locator('#gsPeriodChip').innerText(),/今月/);
+    await p.locator('#gsCategoryChip').click();await p.locator('[data-gsf="食費"]').click();await p.waitForTimeout(350);const food=await ids();assert.ok(food.length>=1&&!food.includes('tx_q16_a'),'今月・食費');
+    await p.locator('#gsPeriodChip').click();await p.locator('[data-gsf="all"]').click();await p.locator('#gsCategoryChip').click();await p.locator('[data-gsf=""]').click();await p.waitForTimeout(350);assert.deepEqual(await ids(),all,'解除すると元の結果');
+    await closeAll(p);return `期間（すべて${all.length}件→今月${month.length}件）・カテゴリ（食費${food.length}件）で絞り込み、解除で元の${all.length}件`}});
   /* ---- 支払い・トップ ---- */
   await check(page,'P-001',{from:'payroot',run:async p=>{assert.equal(await p.locator('#payrootTop .large-title').innerText(),'支払い');await tap(p,'#payrootMenu');return `見出し・検索・管理メニュー ${await expectMenu(p,['請求一覧','カードを追加'])}`}});
   await check(page,'P-002',{from:'payroot',run:async p=>{if(!await p.locator('#payrootRisk').count())return '不足がない時は非表示';await tap(p,'#payrootRisk');await expectSheet(p,/./);await closeAll(p);await tap(p,'#payrootRiskClose');assert.equal(await p.locator('#payrootRisk').count(),0);return '最上段に表示→ATF・×で見た目だけ閉じる'}});
@@ -127,6 +147,32 @@ try{
   await check(page,'D-005',{run:async p=>{await tap(p,'#homeAssetsCard');await expectScreen(p,'assets');const row=p.locator('#assetsContent [data-bank-id],#assetsContent .mm3-assets-watchrow').first();assert.ok(await row.count(),'銀行別の行');return '銀行別残高表'}});
   await check(page,'D-013',{run:async p=>{await p.evaluate(()=>globalThis.__mm3Test.call('openBankDetail',['$bank']));await settle(p);await expectPush(p,/./);return '口座詳細'}});
   await check(page,'D-014',{run:async p=>{await tap(p,'[data-home-tx]');assert.ok(await p.locator('#txEdit').count()&&await p.locator('#txDelete').count());return '取引詳細の下部に編集と削除（削除は確認）'}});
+  /* D-002: 支出グラフ（日/週/月/6か月/年）。なぞると値にスナップ、棒を押すとその期間の内訳 */
+  await check(page,'D-002',{setup:async p=>{await p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData(),base=s.transactions[0];for(let i=0;i<12;i++){const d=new Date(2026,9,7-i);s.transactions.push({...base,id:'tx_d2_'+i,date:`2026-10-${String(d.getDate()).padStart(2,'0')}`,amount:200+i*50,bankApplied:false,createdAt:new Date(2026,9,7-i,9+i%10).toISOString()})}await t.replaceData(s);t.renderAll()})},run:async p=>{
+    await tap(p,'#homeSpendCard');await expectScreen(p,'day');const card=p.locator('#dayContent [data-spend-chart]');assert.equal(await card.count(),1,'今日の支出にグラフ');
+    const labels=await card.locator('[data-sc-range]').allInnerTexts();assert.deepEqual(labels.map(x=>x.trim()),['日','週','月','6か月','年']);
+    const titles=[];for(const r of ['D','W','M','6M','Y']){await p.locator(`#dayContent [data-sc-range="${r}"]`).click();await p.waitForTimeout(80);assert.equal(await p.locator(`#dayContent [data-sc-range="${r}"]`).getAttribute('aria-checked'),'true');titles.push((await p.locator('#dayContent .sc-range').innerText()).split('・')[0])}
+    assert.equal(new Set(titles).size,5,'期間ごとに見出しが変わる');
+    await p.locator('#dayContent [data-sc-range="W"]').click();await p.waitForTimeout(80);const plot=p.locator('#dayContent .sc-plot');await plot.scrollIntoViewIfNeeded();const b=await plot.boundingBox();
+    await p.mouse.move(b.x+20,b.y+b.height/2);await p.mouse.down();await p.mouse.move(b.x+b.width*.55,b.y+b.height/2,{steps:6});const sel=await p.locator('#dayContent .sc-head.is-sel .sc-kicker').innerText();await p.mouse.up();assert.match(sel,/月\d+日/,'なぞると日付と金額にスナップ');
+    await p.locator('#dayContent .sc-page[data-sc-page="-1"]').click();await p.waitForTimeout(80);assert.notEqual((await p.locator('#dayContent .sc-range').innerText()).split('・')[0],titles[1],'前の期間へ');await p.locator('#dayContent .sc-page[data-sc-page="1"]').click();
+    const b2=await p.locator('#dayContent .sc-plot').boundingBox();await p.mouse.click(b2.x+b2.width*.1,b2.y+b2.height/2);await p.waitForTimeout(350);await expectPush(p,/支出の内訳/);
+    await closeAll(p);await p.locator('#dayContent .sc-plot').focus();await p.keyboard.press('ArrowRight');assert.equal(await p.locator('#dayContent .sc-head.is-sel').count(),1,'矢印キーでも選べる');
+    await p.evaluate(()=>globalThis.__mm3Test.switchTab('month'));await settle(p);assert.equal(await p.locator('#monthContent [data-spend-chart]').count(),1,'今月の支出にもグラフ');
+    return `日/週/月/6か月/年の切替（${titles.join('｜')}）、なぞると「${sel}」に吸着、棒を押すと内訳、前の期間へ、矢印キー`}});
+  /* N-006: 重い計算はデータ領域だけを骨格で覆う（全面の待機表示を出さない）。失敗すると前の金額を残して「再試行」 */
+  await check(page,'N-006',{run:async p=>{
+    await tap(p,'#homeAssetsCard');await expectScreen(p,'assets');const before=await p.locator('#assetsContent').innerText();
+    await p.evaluate(()=>{globalThis.__areaP=globalThis.__mm3Test.assetChart('forecast','1Y')});await p.waitForTimeout(60);
+    const during=await p.evaluate(()=>({skel:!!document.querySelector('#mm3AssetChartBlock > .area-skel'),status:document.querySelector('#mm3AssetChartBlock .area-status b')?.textContent||'',overlay:!!document.querySelector('.busy-overlay.show'),tab:getComputedStyle(document.getElementById('tabbar')).visibility}));
+    assert.ok(during.skel,'資産推移の領域だけに骨格');assert.ok(/計算/.test(during.status),'日本語の状態行');assert.equal(during.overlay,false,'全面の待機表示は出ない');
+    await p.evaluate(()=>globalThis.__areaP);await p.waitForTimeout(350);assert.equal(await p.locator('#mm3AssetChartBlock .area-skel').count(),0,'終わると骨格は消える');
+    const amount=await p.locator('#mm3AssetChartBlock').innerText();
+    await p.evaluate(()=>{globalThis.__mm3Test.runInArea('#mm3AssetChartBlock',()=>{throw new Error('計算失敗')},{label:'資産予測',retry:()=>globalThis.__mm3Test.runInArea('#mm3AssetChartBlock',()=>globalThis.__mm3Test.refreshAssetChart(),{label:'資産予測'})}).catch(()=>{})});await p.waitForTimeout(150);
+    assert.equal(await p.locator('#mm3AssetChartBlock .area-error .area-retry').count(),1,'その領域に再試行');assert.ok((await p.locator('#mm3AssetChartBlock').innerText()).includes(amount.split('\n').filter(Boolean).at(-1)),'失敗しても前の表示を残す（0円にしない）');
+    assert.equal(await p.locator('.busy-overlay.show').count(),0);await p.locator('#mm3AssetChartBlock .area-retry').click();await p.waitForTimeout(600);assert.equal(await p.locator('#mm3AssetChartBlock .area-error').count(),0,'再試行で回復');
+    await p.evaluate(()=>globalThis.__mm3Test.assetChart('actual','1M'));
+    return `資産推移の領域だけ骨格＋「${during.status.trim()}」、全面表示なし、失敗時は前の表示を残して再試行→回復`}});
   if(errors.length)results['JavaScriptエラー']={result:'不合格',note:[...new Set(errors)].slice(0,3).join(' | ')};
   await context.close();
 }finally{await closeHarness()}
