@@ -1,112 +1,112 @@
 ﻿設計ID,ボタン・カード名,優先度,現行HTML ID・セレクタ,ソースファイルと関数,変更前画面,変更後画面,操作・遷移テスト,副作用テスト,コミットSHA,完了状態,補足
-N-001,ホームタブ,P0,#homeTab（data-tab=home）,src/js/07-navigation.js switchRoot/switchTab,旧: 現行DOM:homeTab;旧ラベル:今日,test-results/v14/N-001.png,合格：その他→ホーム、再タップで先頭,会計データ不変（操作前後で一致）,abc90b5,完了,
-N-002,支払いタブ,P0,#paymentsTab（data-tab=payments）,src/js/07-navigation.js switchRoot,旧: 現行:data-tab=payments,test-results/v14/N-002.png,合格：支払いroot,会計データ不変（操作前後で一致）,abc90b5,完了,
-N-003,その他タブ,P0,#settingsTab（data-tab=settings）,src/js/07-navigation.js switchRoot,旧: 現行DOM:settingsTab;旧設定,test-results/v14/N-003.png,合格：その他root,会計データ不変（操作前後で一致）,abc90b5,完了,
-N-004,タブのガラス背景,P1,nav#tabbar,src/js/07-navigation.js installTabSlide・src/css/navigation.css,旧: 現行DOM:tabbar,test-results/v14/N-004.png,合格：nav・blur(26px) saturate(2) brightness(1.04),会計データ不変（操作前後で一致）,abc90b5,完了,
-N-005,スクロール連動ナビ,P1,.topbar.native-scrolled,src/js/24-accessibility.js decorate,旧: 旧G-003,test-results/v14/N-005.png,合格：縦スクロールで上部がコンパクト表示,会計データ不変（操作前後で一致）,abc90b5,完了,
-N-006,エラー／読み込み状態,P1,.busy-overlay（全面）,src/js/02-state-and-commits.js runWithBusy,旧: 旧G-001,,,,,未対応,重い計算（ATF・資産予測）では今も全面の待機表示を使う。データ領域だけのスケルトンと領域別の再試行は未実装
-H-001,ホーム見出し,P0,#todayTop .large-title,src/js/home-v14.js homeHeaderHtml,旧: 旧todayTop,test-results/v14/H-001.png,合格：見出し「ホーム」（非操作）,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-002,検索ボタン,P0,#todaySearch→#globalSearchInput,src/js/home-v14.js bindHome→src/js/glass-v15.js openGlobalSearch,旧: 旧HOME-001 / todaySearch（旧台帳）,test-results/v14/H-002.png,合格：検索画面→閉じるとホームのまま,会計データ不変（操作前後で一致）,,一部,ガラスの検索欄・種類の切替・最近の検索・強調表示の検索画面（push遷移）。虫眼鏡から検索欄への連続変形アニメーションは未実装
-H-003,プロフィールボタン,P0,#homeProfile→ホームの設定（全画面のシート）,src/js/glass-v15.js openHomeSettings,旧: 現行profileSettingsは旧設定内の入口,test-results/v14/H-003.png,合格：ホームの設定（全画面のガラスのシート）・他のタブへ移るボタンなし,会計データ不変（操作前後で一致）,abc90b5,完了,利用者の指示で、プロフィールボタンはホーム専用の設定（表示する項目・並び順・期間・金額を隠す・グラフ・補足・警告・にじみ・詰めて表示・件数・初期化）にした。他のタブへ移るボタンは置かない
-H-004,プロフィール状態表示,P1,.hs-state・.profile-btn.ring-*,src/js/home-v14.js profileState,旧: 現行 settings.js のプロフィール関連,test-results/v14/H-004.png,合格：状態の文言「端末に保存済み」・写真 72pt,保存は1回だけ,abc90b5,完了,状態は「端末に保存済み／保存できません／Gmail同期中・連携中」。バックアップ作成日時は記録が無いため表示しない
+N-001,ホームタブ,P0,#homeTab（data-tab=home）,src/js/07-navigation.js switchRoot/switchTab,旧: 現行DOM:homeTab;旧ラベル:今日,test-results/v14/N-001.png,合格：その他→ホーム、再タップで先頭,会計データ不変（操作前後で一致）,87f15e9,完了,
+N-002,支払いタブ,P0,#paymentsTab（data-tab=payments）,src/js/07-navigation.js switchRoot,旧: 現行:data-tab=payments,test-results/v14/N-002.png,合格：支払いroot,会計データ不変（操作前後で一致）,87f15e9,完了,
+N-003,その他タブ,P0,#settingsTab（data-tab=settings）,src/js/07-navigation.js switchRoot,旧: 現行DOM:settingsTab;旧設定,test-results/v14/N-003.png,合格：その他root,会計データ不変（操作前後で一致）,87f15e9,完了,
+N-004,タブのガラス背景,P1,nav#tabbar,src/js/07-navigation.js installTabSlide・src/css/navigation.css,旧: 現行DOM:tabbar,test-results/v14/N-004.png,合格：nav・blur(26px) saturate(2) brightness(1.04),会計データ不変（操作前後で一致）,87f15e9,完了,
+N-005,スクロール連動ナビ,P1,.topbar.native-scrolled,src/js/24-accessibility.js decorate,旧: 旧G-003,test-results/v14/N-005.png,合格：縦スクロールで上部がコンパクト表示,会計データ不変（操作前後で一致）,87f15e9,完了,
+N-006,エラー／読み込み状態,P1,#mm3AssetChartBlock・#paymentsContent・#payContent・#atfMonthContent など（.area-skel／.area-error .area-retry）,src/js/ios-polish.js runInArea（呼び出し: 07-navigation.js・20-assets-dashboard.js・19-payments-and-atf.js・11-home-and-month.js・17-acf-refinements.js）,旧: 旧G-001,test-results/v14/N-006.png,合格：資産推移の領域だけ骨格＋「資産予測を計算しています…」、全面表示なし、失敗時は前の表示を残して再試行→回復,会計データ不変（操作前後で一致）,87f15e9,完了,重い計算（資産予測・ATF・給与の月切替・生活費の見通し）は、データ領域だけを骨格で覆い日本語の状態行を出す。失敗時は前の表示を残して、その領域に「再試行」。保存中の待機表示（runWithBusy）は従来どおり
+H-001,ホーム見出し,P0,#todayTop .large-title,src/js/home-v14.js homeHeaderHtml,旧: 旧todayTop,test-results/v14/H-001.png,合格：見出し「ホーム」（非操作）,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-002,検索ボタン,P0,#todaySearch→.gsearch-morph→#globalSearchInput,src/js/home-v14.js bindHome→src/js/ios-polish.js openGlobalSearch（変形）→src/js/glass-v15.js openGlobalSearchView,旧: 旧HOME-001 / todaySearch（旧台帳）,test-results/v14/H-002.png,合格：虫眼鏡（44pt）→検索欄（361pt）へ連続変形、閉じると逆再生・ホームのまま。動きを減らす設定では変形なし,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-003,プロフィールボタン,P0,#homeProfile→ホームの設定（全画面のシート）,src/js/glass-v15.js openHomeSettings,旧: 現行profileSettingsは旧設定内の入口,test-results/v14/H-003.png,合格：ホームの設定（全画面のガラスのシート）・他のタブへ移るボタンなし,会計データ不変（操作前後で一致）,87f15e9,完了,利用者の指示で、プロフィールボタンはホーム専用の設定（表示する項目・並び順・期間・金額を隠す・グラフ・補足・警告・にじみ・詰めて表示・件数・初期化）にした。他のタブへ移るボタンは置かない
+H-004,プロフィール状態表示,P1,.hs-state・.profile-btn.ring-*,src/js/home-v14.js profileState,旧: 現行 settings.js のプロフィール関連,test-results/v14/H-004.png,合格：状態の文言「端末に保存済み」・写真 72pt,保存は1回だけ,87f15e9,完了,状態は「端末に保存済み／保存できません／Gmail同期中・連携中」。バックアップ作成日時は記録が無いため表示しない
 H-005,アカウントカード,P1,（プロフィールには置かない）→その他「プロフィール」#profileSettings,src/js/settings.js openProfileEdit,旧: 旧SET-105;DOM:profileSettings,test-results/v14/H-005.png,合格：ホームの金額を隠す・戻す（記録は不変）,会計データ不変（操作前後で一致）,,指示により置かない,利用者の指示（二重ボタン禁止・他のタブへ飛ぶボタンを作らない）で、プロフィール編集の入口は「その他」の1か所
 H-006,バックアップ状態カード,P1,（プロフィールには置かない）→その他「データとバックアップ」#dataSettings,src/js/settings.js openDataSettings,旧: 旧BACKUP-207/208,test-results/v14/H-006.png,合格：≡ を上へ2行なぞる → salary・spend・assets・acf・payment,会計データ不変（操作前後で一致）,,指示により置かない,同上。バックアップの入口は「その他」の1か所
 H-007,通知一覧入口,P1,（プロフィールには置かない）→その他「システムのお知らせ」#systemNoticesRow・その他タブの未読数,src/js/settings.js openNotices・src/js/glass-v15.js applyAppPrefs,旧: 旧HOME-002,test-results/v14/H-007.png,合格：キーボード（≡ に合わせて上矢印）で並び替え,会計データ不変（操作前後で一致）,,指示により置かない,同上。お知らせの入口は「その他」の1か所。未読数はその他タブのバッジで表示
-H-008,重要なお知らせ,P1,#homeAlert,src/js/home-v14.js homeAlertHtml,旧: 旧HOME-002 / 旧通知カード,test-results/v14/H-008.png,合格：警告→お知らせ一覧,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-009,閉じる×,P1,#homeAlertClose,src/js/home-v14.js bindHome,旧: 新規:設計ID,test-results/v14/H-009.png,合格：×で非表示・一覧には残る,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-010,今日／今月切替,P0,#homePeriodToday・#homePeriodMonth,src/js/home-v14.js setHomePeriod・installPeriodDrag,旧: 旧MONTH-041 / UPDATE-304,test-results/v14/H-010.png,合格：タップとドラッグで切替,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-011,日付,P1,#homeDate,src/js/home-v14.js openDayCalendar・openDayWheel,旧: 旧PICKER-125〜128,test-results/v14/H-011.png,合格：カレンダー（取消で不変）・長押しでホイール,会計データ不変（操作前後で一致）,abc90b5,完了,長押しの「日付ホイール」は月ホイール→日のカレンダーの2段階
-H-020,支出カード全体,P0,#homeSpendCard,src/js/home-v14.js homeSpendCardHtml,"旧: 旧HOME-004,MONTH-044",test-results/v14/H-020.png,合格：支出詳細（今日の支出）・長押し 支出を記録／支出履歴／目標設定,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-021,支出額表示,P1,#homeSpendCard .home-card-value,src/js/home-v14.js homeSpendCardHtml,旧: 旧MONTH-044,test-results/v14/H-021.png,"合格：主役の表示「¥1,234」",会計データ不変（操作前後で一致）,abc90b5,完了,
-H-022,支出ミニグラフ,P1,#homeSpendCard .mini-bars,src/js/home-v14.js miniBarsSvg・installMiniScrub,旧: 旧MONTH-044/046,test-results/v14/H-022.png,合格：なぞり「22時台・¥0」・遷移しない,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-023,支出目標ステータス,P1,#homeGoalStatus,src/js/home-v14.js homeSpendCardHtml,旧: 旧GOAL-013〜034,test-results/v14/H-023.png,合格：「目標未設定・目標をつくる」→目標,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-030,総資産カード全体,P0,#homeAssetsCard,src/js/home-v14.js homeAssetsCardHtml,"旧: 旧ASSETS-101/104,BANK-147〜153",test-results/v14/H-030.png,合格：資産詳細・長押しで口座残高プレビュー,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-031,口座割合ドーナツ,P1,#homeAssetsCard .mini-donut,src/js/home-v14.js miniDonutSvg,旧: 旧ASSETS-102,test-results/v14/H-031.png,合格：ドーナツ表示,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-032,更新時刻,P1,#homeAssetsCard .home-card-caption,src/js/home-v14.js homeTimeLabel,旧: 旧BANK-148,test-results/v14/H-032.png,合格：更新 10/7 21:00,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-040,給与カード全体,P0,#homeSalaryCard,src/js/home-v14.js homeSalaryCardHtml,旧: 旧PAY-079〜087,test-results/v14/H-040.png,合格：給与詳細・長押しで勤務先別,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-041,給与グラフ,P1,#homeSalaryCard .mini-bars,src/js/home-v14.js miniBarsSvg,旧: 旧PAY-082,test-results/v14/H-041.png,合格：6か月の棒グラフ（未登録なら説明）,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-042,次の給料日,P1,#homeNextPayday,src/js/home-v14.js homeNextPayday,旧: 旧BANK-162/163,test-results/v14/H-042.png,合格：給与詳細へ,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-050,ACF予測カード,P0,#homeAcfCard,src/js/home-v14.js homeAcfCardHtml,旧: 旧ACF-248〜269,test-results/v14/H-050.png,合格：ACF詳細・長押し 計算条件／再計算,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-051,ACFミニ予測グラフ,P1,#homeAcfCard .mini-spark,src/js/home-v14.js miniSparkSvg,旧: 旧ACF-251/252,test-results/v14/H-051.png,合格：折れ線＋安全残高の点線,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-060,直近の支払いカード,P0,#homePaymentCard,src/js/home-v14.js homePaymentCardHtml・openPaymentEvent,旧: 旧PAYMENTS-088〜100,test-results/v14/H-060.png,合格：支払いの詳細 大型支出計画,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-061,支払いタブで確認,P1,#homeAllPayments,src/js/home-v14.js bindHome→switchRoot,旧: 旧PAYMENTS-091,test-results/v14/H-061.png,合格：支払いrootへ,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-070,最近の動き見出し,P1,.home-section-head,src/js/home-v14.js homeRowsHtml,旧: 旧取引/分析エリア,test-results/v14/H-070.png,合格：見出し（非操作）,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-071,カテゴリ別支出テーブル,P1,[data-home-cat],src/js/home-v14.js categoryTableRowHtml,"旧: 旧MONTH-046/047,TX-036",test-results/v14/H-071.png,合格：1行・カテゴリの取引一覧,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-072,カテゴリをすべて見る,P1,#homeAllCategories,src/js/home-v14.js openHomeCategoryList,旧: 旧MONTH-046,test-results/v14/H-072.png,合格：カテゴリ一覧,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-073,最近の取引表,P1,[data-home-tx],src/js/home-v14.js homeRowsHtml,旧: 旧TX-035〜040,test-results/v14/H-073.png,合格：1行・取引詳細・長押し 編集／削除,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-074,すべての取引,P1,#homeAllTransactions,src/js/11-home-and-month.js openTransactionList,旧: 旧MONTH-049,test-results/v14/H-074.png,合格：検索・絞込つき取引一覧,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-075,日締め状況行,P1,#homeDayClose,src/js/home-v14.js homeRowsHtml→openDayClosingJournal,旧: 旧DAYCLOSE-129〜146,test-results/v14/H-075.png,合格：日締めジャーナル,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-076,収支比較行,P1,#homeCompare,src/js/home-v14.js homeRowsHtml→openMonthAnalysis,旧: 旧MONTH-051/analysis,test-results/v14/H-076.png,合格：月次比較,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-077,生活費見通し表,P1,（ホームでは非表示）・ACF詳細 #acfViewMode,src/js/17-acf-refinements.js,旧: 旧ACF-251/252,test-results/v14/H-077.png,合格：ホームでは非表示・ACF詳細で表とカレンダー切替,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-078,メール取引・照合行,P1,#homeMail,src/js/home-v14.js homeRowsHtml,"旧: 旧HOME-012,STATEMENT-211〜231",test-results/v14/H-078.png,合格：照合センター,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-079,大型支出計画行,P1,#homeLarge,src/js/home-v14.js openLargeExpenseList,旧: 旧LARGE-066〜078,test-results/v14/H-079.png,合格：大型支出一覧・長押しで計画追加,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-080,予定・特別目標行,P1,#homeGoals,src/js/home-v14.js homeRowsHtml→openEventGoals,旧: 旧EVENT-232〜247,test-results/v14/H-080.png,合格：目標一覧・長押しで新規,会計データ不変（操作前後で一致）,abc90b5,完了,
-H-081,一覧表示オプション,P1,#homeProfile→ホームの設定 #hsCards・#hsRows（右の ≡ を上下になぞる）,src/js/glass-v15.js openHomeSettings・installDragReorder,旧: 新規:設計ID,test-results/v14/H-081.png,合格：表示・非表示と ≡ のドラッグで並び順（会計データは変えない）,会計データ不変（操作前後で一致）,abc90b5,完了,上下ボタンは使わない（利用者の指示）。≡ のドラッグ、キーボードでは ≡ に合わせて上下の矢印キー
-Q-001,＋入力ボタン,P0,#addHub→全画面の新規入力 #entryHub,src/js/glass-v15.js openEntryHub・src/index.html,"旧: 旧HOME-004〜006,MONTH-053",test-results/v14/Q-001.png,合格：＋ 52×52 → 全画面「新規入力」 支出を記録／臨時収入／残高を更新／給与を登録,会計データ不変（操作前後で一致）,abc90b5,完了,利用者の指示で、＋を押すとすぐ全画面の「新規入力」（よく使う4つの大きなタイル＋すばやく入力＋新しく登録）
-Q-002,支出を記録,P0,＋→「支出を記録」,src/js/08-transactions.js openQuickExpense,旧: 旧HOME-004,test-results/v14/Q-002.png,合格：支出入力,会計データ不変（操作前後で一致）,abc90b5,完了,
-Q-003,臨時収入,P1,＋→「臨時収入」,src/js/09-accounts-and-payroll.js openTempIncome,"旧: 旧HOME-006,BANK-149/150",test-results/v14/Q-003.png,合格：「クイック臨時収入入力」,会計データ不変（操作前後で一致）,abc90b5,完了,
-Q-004,残高を更新,P1,＋→「残高を更新」,src/js/09-accounts-and-payroll.js openQuickBank,"旧: 旧HOME-005,BANK-147/148",test-results/v14/Q-004.png,合格：「クイック銀行口座入力」,会計データ不変（操作前後で一致）,abc90b5,完了,
-Q-005,給与を登録,P1,＋→「給与を登録」,src/js/09-accounts-and-payroll.js openSalaryAdd,"旧: 旧PAY-085,BANK-164/165",test-results/v14/Q-005.png,合格：「給与記録を追加」,会計データ不変（操作前後で一致）,abc90b5,完了,
-Q-006,その他の入力,P1,＋→新規入力の「すばやく入力」「新しく登録」#ih*,src/js/glass-v15.js entryHubGroups,"旧: 旧BANK-151〜169,PAYMENTS-097〜100",test-results/v14/Q-006.png,合格：口座・勤務先・カード・デビット・固定・大型・請求額,会計データ不変（操作前後で一致）,abc90b5,完了,
-Q-007,入力種別タイトル,P1,#sheet .sheet-title・#qeCancel・#qeSave,src/js/08-transactions.js,旧: 新規:設計ID,test-results/v14/Q-007.png,合格：タイトル「クイック支出入力」・閉じる・保存,保存は1回だけ,abc90b5,完了,
-Q-008,金額・電卓,P1,#qeAmount→#calculator,src/js/calculator.js,旧: 旧CALC-116〜124,,,,abc90b5,別検査で確認,金額欄46種の電卓（npm run test:amount 164/164）。初期フォーカスは電卓を開く前の金額欄
-Q-009,カテゴリ選択,P1,#qeCat,src/js/08-transactions.js,"旧: 旧TX-036,SET-110",,,,abc90b5,別検査で確認,支出入力のカテゴリ選択（既存）。巡回で操作
-Q-010,口座選択,P1,#qePay,src/js/08-transactions.js,旧: 旧BANK-147/148,,,,abc90b5,別検査で確認,支払い方法・口座の選択（既存）。巡回で操作
-Q-011,日付選択,P1,支出入力の日付,src/js/08-transactions.js,旧: 旧PICKER-125〜128,,,,abc90b5,別検査で確認,既存の日付選択。確定まで保存しない（81画面シナリオ）
-Q-012,詳細を表示,P1,#qeMore（details）,src/js/08-transactions.js openQuickExpense,旧: 新規:設計ID,test-results/v14/Q-012.png,合格：「詳細を表示」で開閉・入力値保持,会計データ不変（操作前後で一致）,abc90b5,完了,
-Q-013,保存する,P0,#qeSave,src/js/08-transactions.js,"旧: 旧TX-038,BANK-148,INCOME-303",test-results/v14/Q-013.png,合格：二重押しでも1件だけ保存・ホームの合計も更新,保存は1回だけ,abc90b5,完了,
-Q-014,閉じる／キャンセル,P1,#qeCancel→破棄確認,src/js/07-navigation.js requestSheetClose,"旧: 旧CALC-116,BANK-147等",test-results/v14/Q-014.png,合格：変更ありは破棄確認,会計データ不変（操作前後で一致）,abc90b5,完了,
-Q-015,検索入力欄,P1,#todaySearch→#globalSearchInput・#globalSearchScopes,src/js/glass-v15.js openGlobalSearch・runGlobalSearch,"旧: 旧HOME-001,TX-035",test-results/v14/Q-015.png,合格：「巡回」3件（支払い1・支出1・目標1）・金額条件・設定の検索,会計データ不変（操作前後で一致）,abc90b5,完了,
-Q-016,期間とカテゴリフィルタ,P1,検索の種類の切替,src/js/16-analysis-and-goals.js,"旧: 旧HOME-009,TX-036",,,,,一部,種類（すべて・取引など）の切替は既存。期間とカテゴリの2個のチップは未実装
-Q-017,検索結果カード,P1,検索結果の行,src/js/16-analysis-and-goals.js,旧: 旧HOME-009,,,,abc90b5,別検査で確認,結果から各詳細へ（追加UIの照合で横断検索の結果行を確認）
-P-001,支払い見出し,P1,#payrootTop,src/js/home-v14.js renderPayRoot,旧: 旧paymentsTop,test-results/v14/P-001.png,合格：見出し・検索・管理メニュー 請求一覧を開く／カードの請求額を更新／明細照合センター／カードを追加／デビットカードを追加,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-002,不足警告カード,P0,#payrootRisk・#payrootRiskClose,src/js/home-v14.js renderPayRoot,旧: 旧PAYMENTS-093/094,test-results/v14/P-002.png,合格：最上段に表示→ATF・×で見た目だけ閉じる,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-003,支払予定サマリー,P0,#payrootSummary,src/js/home-v14.js renderPayRoot,旧: 旧PAYMENTS-088〜094,test-results/v14/P-003.png,合格：請求一覧（全予定）・長押しで内訳,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-004,次の引落カード,P1,#payrootNextDebit,src/js/home-v14.js renderPayRoot,旧: 旧PAYMENTS-093,test-results/v14/P-004.png,合格：対象請求の詳細・長押しで次の2件,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-005,カード別請求額一覧,P1,[data-payroot-card],src/js/home-v14.js renderPayRoot,旧: 旧PAYMENTS-091/092,test-results/v14/P-005.png,合格：3行・カード請求詳細,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-006,カード請求をすべて見る,P1,#payrootAllCards,src/js/home-v14.js bindPayRoot,旧: 旧PAYMENTS-091,test-results/v14/P-006.png,合格：請求一覧,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-007,固定支払いテーブル,P1,[data-payroot-fixed],src/js/home-v14.js bindPayRoot・openFixedPaymentList,旧: 旧PAYMENTS-099,test-results/v14/P-007.png,合格：固定支払い詳細（編集は保存まで反映しない）,保存は1回だけ,abc90b5,完了,
-P-008,大型支出の予定,P1,[data-payroot-large],src/js/home-v14.js renderPayRoot,"旧: 旧PAYMENTS-100,LARGE-066〜078",,,,abc90b5,別検査で確認,その月に計画中の大型支出がある時だけ表示（検査データの月には無いため、ホームの大型支出行 H-079 で同じ詳細を確認）
-P-009,ATFカード,P1,#payrootAtf,src/js/home-v14.js bindPayRoot→mm3OpenAtfSheet,旧: 旧PAYMENTS-090/094,test-results/v14/P-009.png,合格：ATF詳細,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-010,請求額を更新,P1,支払いの管理メニュー・＋その他の入力 #ihCard,src/js/12-salary-editors.js openQuickCardBilling,旧: 旧PAYMENTS-092,test-results/v14/P-010.png,合格：支払いの管理メニュー（＋その他の入力にも）,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-011,支払月,P1,#payrootMonth・#payrootPrev・#payrootNext,src/js/home-v14.js bindPayRoot,旧: 旧PAYMENTS-089,test-results/v14/P-011.png,合格：月ホイール（取消で不変）・左右の月送り,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-012,照合チェック,P1,カード請求詳細の照合チェック,src/js/15-pro-features.js openStatementReconciliation,旧: 旧SALARYEDIT-195/196,,,,abc90b5,別検査で確認,既存（第11版 SALARYEDIT-195/196、検証済み）。支払いrootのカード行の長押し「照合する」から
-P-013,口座残高にも反映する,P1,カード請求詳細「口座残高にも反映する」,src/js/12-salary-editors.js openCardPaidConfirmation,旧: 旧SALARYEDIT-199/200,,,,abc90b5,別検査で確認,既存（第11版 SALARYEDIT-199/200、検証済み）
-P-014,カード追加・デビット追加,P1,支払いの管理メニュー「カードを追加」「デビットカードを追加」,src/js/home-v14.js bindPayRoot,旧: 旧PAYMENTS-097/098,test-results/v14/P-014.png,合格：支払いの管理メニューに格納,会計データ不変（操作前後で一致）,abc90b5,完了,
-P-015,メール明細の照合行,P1,#payrootMail,src/js/home-v14.js renderPayRoot,旧: 旧STATEMENT-211〜231,test-results/v14/P-015.png,合格：明細照合センター,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-001,その他見出し,P0,#settingsTop・設定の一覧,src/js/settings.js renderSettings,旧: 旧settingsTop,test-results/v14/O-001.png,合格：設定の一覧だけ（給与・資産の入口はホームのみ）,会計データ不変（操作前後で一致）,abc90b5,完了,
+H-008,重要なお知らせ,P1,#homeAlert,src/js/home-v14.js homeAlertHtml,旧: 旧HOME-002 / 旧通知カード,test-results/v14/H-008.png,合格：警告→お知らせ一覧,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-009,閉じる×,P1,#homeAlertClose,src/js/home-v14.js bindHome,旧: 新規:設計ID,test-results/v14/H-009.png,合格：×で非表示・一覧には残る,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-010,今日／今月切替,P0,#homePeriodToday・#homePeriodMonth,src/js/home-v14.js setHomePeriod・installPeriodDrag,旧: 旧MONTH-041 / UPDATE-304,test-results/v14/H-010.png,合格：タップとドラッグで切替,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-011,日付,P1,#homeDate,src/js/home-v14.js openDayCalendar・openDayWheel,旧: 旧PICKER-125〜128,test-results/v14/H-011.png,合格：カレンダー（取消で不変）・長押しでホイール,会計データ不変（操作前後で一致）,87f15e9,完了,長押しの「日付ホイール」は月ホイール→日のカレンダーの2段階
+H-020,支出カード全体,P0,#homeSpendCard,src/js/home-v14.js homeSpendCardHtml,"旧: 旧HOME-004,MONTH-044",test-results/v14/H-020.png,合格：支出詳細（今日の支出）・長押し 支出を記録／支出履歴／目標設定,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-021,支出額表示,P1,#homeSpendCard .home-card-value,src/js/home-v14.js homeSpendCardHtml,旧: 旧MONTH-044,test-results/v14/H-021.png,"合格：主役の表示「¥1,234」",会計データ不変（操作前後で一致）,87f15e9,完了,
+H-022,支出ミニグラフ,P1,#homeSpendCard .mini-bars,src/js/home-v14.js miniBarsSvg・installMiniScrub,旧: 旧MONTH-044/046,test-results/v14/H-022.png,合格：なぞり「22時台・¥0」・遷移しない,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-023,支出目標ステータス,P1,#homeGoalStatus,src/js/home-v14.js homeSpendCardHtml,旧: 旧GOAL-013〜034,test-results/v14/H-023.png,合格：「目標未設定・目標をつくる」→目標,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-030,総資産カード全体,P0,#homeAssetsCard,src/js/home-v14.js homeAssetsCardHtml,"旧: 旧ASSETS-101/104,BANK-147〜153",test-results/v14/H-030.png,合格：資産詳細・長押しで口座残高プレビュー,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-031,口座割合ドーナツ,P1,#homeAssetsCard .mini-donut,src/js/home-v14.js miniDonutSvg,旧: 旧ASSETS-102,test-results/v14/H-031.png,合格：ドーナツ表示,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-032,更新時刻,P1,#homeAssetsCard .home-card-caption,src/js/home-v14.js homeTimeLabel,旧: 旧BANK-148,test-results/v14/H-032.png,合格：更新 10/7 21:00,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-040,給与カード全体,P0,#homeSalaryCard,src/js/home-v14.js homeSalaryCardHtml,旧: 旧PAY-079〜087,test-results/v14/H-040.png,合格：給与詳細・長押しで勤務先別,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-041,給与グラフ,P1,#homeSalaryCard .mini-bars,src/js/home-v14.js miniBarsSvg,旧: 旧PAY-082,test-results/v14/H-041.png,合格：6か月の棒グラフ（未登録なら説明）,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-042,次の給料日,P1,#homeNextPayday,src/js/home-v14.js homeNextPayday,旧: 旧BANK-162/163,test-results/v14/H-042.png,合格：給与詳細へ,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-050,ACF予測カード,P0,#homeAcfCard,src/js/home-v14.js homeAcfCardHtml,旧: 旧ACF-248〜269,test-results/v14/H-050.png,合格：ACF詳細・長押し 計算条件／再計算,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-051,ACFミニ予測グラフ,P1,#homeAcfCard .mini-spark,src/js/home-v14.js miniSparkSvg,旧: 旧ACF-251/252,test-results/v14/H-051.png,合格：折れ線＋安全残高の点線,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-060,直近の支払いカード,P0,#homePaymentCard,src/js/home-v14.js homePaymentCardHtml・openPaymentEvent,旧: 旧PAYMENTS-088〜100,test-results/v14/H-060.png,合格：支払いの詳細 大型支出計画,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-061,支払いタブで確認,P1,#homeAllPayments,src/js/home-v14.js bindHome→switchRoot,旧: 旧PAYMENTS-091,test-results/v14/H-061.png,合格：支払いrootへ,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-070,最近の動き見出し,P1,.home-section-head,src/js/home-v14.js homeRowsHtml,旧: 旧取引/分析エリア,test-results/v14/H-070.png,合格：見出し（非操作）,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-071,カテゴリ別支出テーブル,P1,[data-home-cat],src/js/home-v14.js categoryTableRowHtml,"旧: 旧MONTH-046/047,TX-036",test-results/v14/H-071.png,合格：1行・カテゴリの取引一覧,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-072,カテゴリをすべて見る,P1,#homeAllCategories,src/js/home-v14.js openHomeCategoryList,旧: 旧MONTH-046,test-results/v14/H-072.png,合格：カテゴリ一覧,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-073,最近の取引表,P1,[data-home-tx],src/js/home-v14.js homeRowsHtml,旧: 旧TX-035〜040,test-results/v14/H-073.png,合格：1行・取引詳細・長押し 編集／削除,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-074,すべての取引,P1,#homeAllTransactions,src/js/11-home-and-month.js openTransactionList,旧: 旧MONTH-049,test-results/v14/H-074.png,合格：検索・絞込つき取引一覧,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-075,日締め状況行,P1,#homeDayClose,src/js/home-v14.js homeRowsHtml→openDayClosingJournal,旧: 旧DAYCLOSE-129〜146,test-results/v14/H-075.png,合格：日締めジャーナル,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-076,収支比較行,P1,#homeCompare,src/js/home-v14.js homeRowsHtml→openMonthAnalysis,旧: 旧MONTH-051/analysis,test-results/v14/H-076.png,合格：月次比較,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-077,生活費見通し表,P1,（ホームでは非表示）・ACF詳細 #acfViewMode,src/js/17-acf-refinements.js,旧: 旧ACF-251/252,test-results/v14/H-077.png,合格：ホームでは非表示・ACF詳細で表とカレンダー切替,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-078,メール取引・照合行,P1,#homeMail,src/js/home-v14.js homeRowsHtml,"旧: 旧HOME-012,STATEMENT-211〜231",test-results/v14/H-078.png,合格：照合センター,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-079,大型支出計画行,P1,#homeLarge,src/js/home-v14.js openLargeExpenseList,旧: 旧LARGE-066〜078,test-results/v14/H-079.png,合格：大型支出一覧・長押しで計画追加,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-080,予定・特別目標行,P1,#homeGoals,src/js/home-v14.js homeRowsHtml→openEventGoals,旧: 旧EVENT-232〜247,test-results/v14/H-080.png,合格：目標一覧・長押しで新規,会計データ不変（操作前後で一致）,87f15e9,完了,
+H-081,一覧表示オプション,P1,#homeProfile→ホームの設定 #hsCards・#hsRows（右の ≡ を上下になぞる）,src/js/glass-v15.js openHomeSettings・installDragReorder,旧: 新規:設計ID,test-results/v14/H-081.png,合格：表示・非表示と ≡ のドラッグで並び順（会計データは変えない）,会計データ不変（操作前後で一致）,87f15e9,完了,上下ボタンは使わない（利用者の指示）。≡ のドラッグ、キーボードでは ≡ に合わせて上下の矢印キー
+Q-001,＋入力ボタン,P0,#addHub→全画面の新規入力 #entryHub,src/js/glass-v15.js openEntryHub・src/index.html,"旧: 旧HOME-004〜006,MONTH-053",test-results/v14/Q-001.png,合格：＋ 52×52 → 全画面「新規入力」 支出を記録／臨時収入／残高を更新／給与を登録,会計データ不変（操作前後で一致）,87f15e9,完了,利用者の指示で、＋を押すとすぐ全画面の「新規入力」（よく使う4つの大きなタイル＋すばやく入力＋新しく登録）
+Q-002,支出を記録,P0,＋→「支出を記録」,src/js/08-transactions.js openQuickExpense,旧: 旧HOME-004,test-results/v14/Q-002.png,合格：支出入力,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-003,臨時収入,P1,＋→「臨時収入」,src/js/09-accounts-and-payroll.js openTempIncome,"旧: 旧HOME-006,BANK-149/150",test-results/v14/Q-003.png,合格：「クイック臨時収入入力」,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-004,残高を更新,P1,＋→「残高を更新」,src/js/09-accounts-and-payroll.js openQuickBank,"旧: 旧HOME-005,BANK-147/148",test-results/v14/Q-004.png,合格：「クイック銀行口座入力」,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-005,給与を登録,P1,＋→「給与を登録」,src/js/09-accounts-and-payroll.js openSalaryAdd,"旧: 旧PAY-085,BANK-164/165",test-results/v14/Q-005.png,合格：「給与記録を追加」,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-006,その他の入力,P1,＋→新規入力の「すばやく入力」「新しく登録」#ih*,src/js/glass-v15.js entryHubGroups,"旧: 旧BANK-151〜169,PAYMENTS-097〜100",test-results/v14/Q-006.png,合格：口座・勤務先・カード・デビット・固定・大型・請求額,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-007,入力種別タイトル,P1,#sheet .sheet-title・#qeCancel・#qeSave,src/js/08-transactions.js,旧: 新規:設計ID,test-results/v14/Q-007.png,合格：タイトル「クイック支出入力」・閉じる・保存,保存は1回だけ,87f15e9,完了,
+Q-008,金額・電卓,P1,#qeAmount→#calculator,src/js/calculator.js,旧: 旧CALC-116〜124,,,,87f15e9,別検査で確認,金額欄46種の電卓（npm run test:amount 164/164）。初期フォーカスは電卓を開く前の金額欄
+Q-009,カテゴリ選択,P1,#qeCat,src/js/08-transactions.js,"旧: 旧TX-036,SET-110",,,,87f15e9,別検査で確認,支出入力のカテゴリ選択（既存）。巡回で操作
+Q-010,口座選択,P1,#qePay,src/js/08-transactions.js,旧: 旧BANK-147/148,,,,87f15e9,別検査で確認,支払い方法・口座の選択（既存）。巡回で操作
+Q-011,日付選択,P1,支出入力の日付,src/js/08-transactions.js,旧: 旧PICKER-125〜128,,,,87f15e9,別検査で確認,既存の日付選択。確定まで保存しない（81画面シナリオ）
+Q-012,詳細を表示,P1,#qeMore（details）,src/js/08-transactions.js openQuickExpense,旧: 新規:設計ID,test-results/v14/Q-012.png,合格：「詳細を表示」で開閉・入力値保持,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-013,保存する,P0,#qeSave,src/js/08-transactions.js,"旧: 旧TX-038,BANK-148,INCOME-303",test-results/v14/Q-013.png,合格：二重押しでも1件だけ保存・ホームの合計も更新,保存は1回だけ,87f15e9,完了,
+Q-014,閉じる／キャンセル,P1,#qeCancel→破棄確認,src/js/07-navigation.js requestSheetClose,"旧: 旧CALC-116,BANK-147等",test-results/v14/Q-014.png,合格：変更ありは破棄確認,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-015,検索入力欄,P1,#todaySearch→#globalSearchInput・#globalSearchScopes,src/js/glass-v15.js openGlobalSearch・runGlobalSearch,"旧: 旧HOME-001,TX-035",test-results/v14/Q-015.png,合格：「巡回」3件（支払い1・支出1・目標1）・金額条件・設定の検索,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-016,期間とカテゴリフィルタ,P1,#gsPeriodChip・#gsCategoryChip（選択はシート）,src/js/glass-v15.js openGlobalSearchView・runGlobalSearch（filters）,"旧: 旧HOME-009,TX-036",test-results/v14/Q-016.png,合格：期間（すべて3件→今月2件）・カテゴリ（食費2件）で絞り込み、解除で元の3件,会計データ不変（操作前後で一致）,87f15e9,完了,
+Q-017,検索結果カード,P1,検索結果の行,src/js/16-analysis-and-goals.js,旧: 旧HOME-009,,,,87f15e9,別検査で確認,結果から各詳細へ（追加UIの照合で横断検索の結果行を確認）
+P-001,支払い見出し,P1,#payrootTop,src/js/home-v14.js renderPayRoot,旧: 旧paymentsTop,test-results/v14/P-001.png,合格：見出し・検索・管理メニュー 請求一覧を開く／カードの請求額を更新／明細照合センター／カードを追加／デビットカードを追加,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-002,不足警告カード,P0,#payrootRisk・#payrootRiskClose,src/js/home-v14.js renderPayRoot,旧: 旧PAYMENTS-093/094,test-results/v14/P-002.png,合格：最上段に表示→ATF・×で見た目だけ閉じる,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-003,支払予定サマリー,P0,#payrootSummary,src/js/home-v14.js renderPayRoot,旧: 旧PAYMENTS-088〜094,test-results/v14/P-003.png,合格：請求一覧（全予定）・長押しで内訳,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-004,次の引落カード,P1,#payrootNextDebit,src/js/home-v14.js renderPayRoot,旧: 旧PAYMENTS-093,test-results/v14/P-004.png,合格：対象請求の詳細・長押しで次の2件,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-005,カード別請求額一覧,P1,[data-payroot-card],src/js/home-v14.js renderPayRoot,旧: 旧PAYMENTS-091/092,test-results/v14/P-005.png,合格：3行・カード請求詳細,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-006,カード請求をすべて見る,P1,#payrootAllCards,src/js/home-v14.js bindPayRoot,旧: 旧PAYMENTS-091,test-results/v14/P-006.png,合格：請求一覧,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-007,固定支払いテーブル,P1,[data-payroot-fixed],src/js/home-v14.js bindPayRoot・openFixedPaymentList,旧: 旧PAYMENTS-099,test-results/v14/P-007.png,合格：固定支払い詳細（編集は保存まで反映しない）,保存は1回だけ,87f15e9,完了,
+P-008,大型支出の予定,P1,[data-payroot-large],src/js/home-v14.js renderPayRoot,"旧: 旧PAYMENTS-100,LARGE-066〜078",,,,87f15e9,別検査で確認,その月に計画中の大型支出がある時だけ表示（検査データの月には無いため、ホームの大型支出行 H-079 で同じ詳細を確認）
+P-009,ATFカード,P1,#payrootAtf,src/js/home-v14.js bindPayRoot→mm3OpenAtfSheet,旧: 旧PAYMENTS-090/094,test-results/v14/P-009.png,合格：ATF詳細,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-010,請求額を更新,P1,支払いの管理メニュー・＋その他の入力 #ihCard,src/js/12-salary-editors.js openQuickCardBilling,旧: 旧PAYMENTS-092,test-results/v14/P-010.png,合格：支払いの管理メニュー（＋その他の入力にも）,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-011,支払月,P1,#payrootMonth・#payrootPrev・#payrootNext,src/js/home-v14.js bindPayRoot,旧: 旧PAYMENTS-089,test-results/v14/P-011.png,合格：月ホイール（取消で不変）・左右の月送り,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-012,照合チェック,P1,カード請求詳細の照合チェック,src/js/15-pro-features.js openStatementReconciliation,旧: 旧SALARYEDIT-195/196,,,,87f15e9,別検査で確認,既存（第11版 SALARYEDIT-195/196、検証済み）。支払いrootのカード行の長押し「照合する」から
+P-013,口座残高にも反映する,P1,カード請求詳細「口座残高にも反映する」,src/js/12-salary-editors.js openCardPaidConfirmation,旧: 旧SALARYEDIT-199/200,,,,87f15e9,別検査で確認,既存（第11版 SALARYEDIT-199/200、検証済み）
+P-014,カード追加・デビット追加,P1,支払いの管理メニュー「カードを追加」「デビットカードを追加」,src/js/home-v14.js bindPayRoot,旧: 旧PAYMENTS-097/098,test-results/v14/P-014.png,合格：支払いの管理メニューに格納,会計データ不変（操作前後で一致）,87f15e9,完了,
+P-015,メール明細の照合行,P1,#payrootMail,src/js/home-v14.js renderPayRoot,旧: 旧STATEMENT-211〜231,test-results/v14/P-015.png,合格：明細照合センター,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-001,その他見出し,P0,#settingsTop・設定の一覧,src/js/settings.js renderSettings,旧: 旧settingsTop,test-results/v14/O-001.png,合格：設定の一覧だけ（給与・資産の入口はホームのみ）,会計データ不変（操作前後で一致）,87f15e9,完了,
 O-002,給与,P0,（置かない）,,旧: 旧payTab;PAY-079〜087,,,,,指示により置かない,利用者の指示で、給与への入口はホームの給与カード（H-040）だけにした（ホームとその他の2つの動線をつくらない）
 O-003,資産,P0,（置かない）,,旧: 旧assetsTab;ASSETS-101〜104,,,,,指示により置かない,資産への入口はホームの総資産カード（H-030）だけ
 O-004,生活費の見通し,P1,（置かない）,,旧: 旧ACF-248〜269,,,,,指示により置かない,生活費の見通しへの入口はホームのカード（H-050）だけ。計算条件の設定は「その他」の設定行に残す
-O-005,データとバックアップ,P1,#dataSettings（設定の行）,src/js/settings.js renderSettings,旧: 現行DOM:dataSettings,test-results/v14/O-005.png,合格：データとバックアップ（設定の行）,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-006,プロフィール,P1,#profileSettings,src/js/settings.js,旧: 現行DOM:profileSettings,test-results/v14/O-006.png,合格：プロフィール編集（ホームの写真と同じ）,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-007,カテゴリ,P1,#categorySettings,src/js/settings.js,旧: 現行DOM:categorySettings,test-results/v14/O-007.png,合格：カテゴリ管理,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-008,タグ,P1,#tagSettings,src/js/settings.js,旧: 現行DOM:tagSettings,test-results/v14/O-008.png,合格：タグ,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-009,お気に入り,P1,#favoriteSettings,src/js/settings.js,旧: 現行DOM:favoriteSettings,test-results/v14/O-009.png,合格：お気に入り,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-010,通知設定,P1,#notificationSettings,src/js/settings.js,旧: 現行DOM:notificationSettings,test-results/v14/O-010.png,合格：通知設定,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-011,外観,P1,#appearanceSettings,src/js/settings.js,旧: 現行DOM:appearanceSettings,test-results/v14/O-011.png,合格：外観設定,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-012,操作フィードバック,P1,#feedbackSettingsRow,src/js/settings.js,旧: 現行DOM:feedbackSettingsRow,test-results/v14/O-012.png,合格：操作フィードバック,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-013,セキュリティ,P1,#securitySettings,src/js/settings.js,旧: 現行DOM:securitySettings,test-results/v14/O-013.png,合格：セキュリティ,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-014,Gmail連携,P1,#gmailSettings,src/js/settings.js,旧: 現行DOM:gmailSettings,test-results/v14/O-014.png,合格：Gmail自動取得,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-015,初期値と現在値,P1,#initialValuesSettings,src/js/settings.js,旧: 現行DOM:initialValuesSettings,test-results/v14/O-015.png,合格：初期データ・現在値,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-016,ヘルプ,P1,#helpSettings,src/js/settings.js,旧: 現行DOM:helpSettings,test-results/v14/O-016.png,合格：ヘルプ・お問い合わせ,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-017,PDFで書き出す,P1,#pdfExport,src/js/13-settings-and-backup.js,旧: 旧BACKUP-206,test-results/v14/O-017.png,合格：データ管理内「PDFで書き出すPDFを生成して共有」,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-018,バックアップ作成,P1,#backupExport,src/js/13-settings-and-backup.js,旧: 旧BACKUP-207,test-results/v14/O-018.png,合格：データ管理内「バックアップ作成JSONで全データを保存」,保存は1回だけ,abc90b5,完了,
-O-019,バックアップ復元,P1,#backupImport,src/js/13-settings-and-backup.js,旧: 旧BACKUP-208,test-results/v14/O-019.png,合格：データ管理内「バックアップを復元復元前の現在データは自動保護」,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-020,全データ削除,P1,#deleteAll,src/js/13-settings-and-backup.js,旧: 旧BACKUP-210,test-results/v14/O-020.png,合格：データ管理内「全データ削除取引・設定・Gmail認証・復旧コピーを削除」,会計データ不変（操作前後で一致）,abc90b5,完了,
-O-021,システムのお知らせ,P1,#systemNoticesRow,src/js/settings.js,旧: 旧HOME-002,test-results/v14/O-021.png,合格：システムからのお知らせ,会計データ不変（操作前後で一致）,abc90b5,完了,
-D-001,支出総額ヘッダ,P1,#screen-day（今日の支出）・#screen-month（今月の支出）,src/js/11-home-and-month.js renderDay/renderMonth,旧: 旧MONTH-044〜051,test-results/v14/D-001.png,合格：今日の支出（期間・支出・目標）,会計データ不変（操作前後で一致）,abc90b5,完了,
-D-002,支出詳細グラフ,P1,今月の支出・詳細分析のグラフ,src/js/11-home-and-month.js openMonthAnalysis,旧: 旧MONTH-046,,,,,一部,既存の分析グラフ（なぞりで値表示）を使用。日/週/月/6か月/年のセグメントは未実装
-D-003,カテゴリ内訳テーブル,P1,#dayContent [data-cat]・#monthContent [data-month-cat],src/js/09-accounts-and-payroll.js categoryCards,"旧: 旧TX-036,MONTH-047",test-results/v14/D-003.png,合格：カテゴリ内訳→明細,会計データ不変（操作前後で一致）,abc90b5,完了,
-D-004,総資産概要,P1,#assetsShare,src/js/20-assets-dashboard.js renderAssets,旧: 旧ASSETS-101〜104,test-results/v14/D-004.png,合格：総資産＋口座配分ドーナツ→口座一覧へ,会計データ不変（操作前後で一致）,abc90b5,完了,
-D-005,銀行別残高表,P1,#screen-assets の口座一覧,src/js/20-assets-dashboard.js,旧: 旧BANK-147〜153,test-results/v14/D-005.png,合格：銀行別残高表,会計データ不変（操作前後で一致）,abc90b5,完了,
-D-006,資産推移,P1,#screen-assets の資産推移,src/js/20-assets-dashboard.js,旧: 旧ASSETS-102/104,,,,abc90b5,別検査で確認,既存（なぞりで日付と残高、第11版で検証済み）
-D-007,今月の受取見込み,P1,#screen-pay 上部,src/js/18-salary-dashboard.js renderPay,旧: 旧PAY-079〜087,,,,abc90b5,別検査で確認,既存の給与画面（受取見込み・前月比）。第11版で検証済み
-D-008,勤務先別給与表,P1,#screen-pay の勤務先別,src/js/18-salary-dashboard.js,"旧: 旧PAY-085〜087,BANK-160〜166",,,,abc90b5,別検査で確認,既存（第11版 PAY系で検証済み）
-D-009,月別給与グラフ,P1,#screen-pay の給与推移,src/js/18-salary-dashboard.js,旧: 旧PAY-082,,,,abc90b5,別検査で確認,既存（勤務先別／給与推移の切替）
-D-010,安全残高・使える額,P1,ACF詳細,src/js/06-acf-views.js openAcfDetail,旧: 旧ACF-248〜269,,,,abc90b5,別検査で確認,既存（第11版 ACF系で検証済み）
-D-011,日別予測テーブル,P1,ACF詳細の日別資金表／カレンダー,src/js/17-acf-refinements.js・acf-calendar.js,旧: 旧ACF-251/252,,,,abc90b5,別検査で確認,既存（表とカレンダーの切替、日付から当日の詳細）
-D-012,計算条件設定,P1,ACF設定,src/js/17-acf-refinements.js openAcfSettings,旧: 旧ACF-255〜267,,,,abc90b5,別検査で確認,既存（キャンセルなら予測不変）
-D-013,口座残高更新,P1,口座詳細,src/js/12-salary-editors.js openBankDetail,旧: 旧SALARYEDIT-184〜188,test-results/v14/D-013.png,合格：口座詳細,会計データ不変（操作前後で一致）,abc90b5,完了,
-D-014,取引の編集,P1,#txEdit・#txDelete,src/js/11-home-and-month.js openTransactionDetail,旧: 旧TX-037〜040,test-results/v14/D-014.png,合格：取引詳細の下部に編集と削除（削除は確認）,会計データ不変（操作前後で一致）,abc90b5,完了,
-D-015,口座並び替え,P1,資産の口座の並び替え（手動）,src/js/20-assets-dashboard.js・21-gestures.js,旧: 旧ASSETS-103,,,,abc90b5,別検査で確認,既存（ボタンと長押しドラッグ、第11版で検証済み）
+O-005,データとバックアップ,P1,#dataSettings（設定の行）,src/js/settings.js renderSettings,旧: 現行DOM:dataSettings,test-results/v14/O-005.png,合格：データとバックアップ（設定の行）,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-006,プロフィール,P1,#profileSettings,src/js/settings.js,旧: 現行DOM:profileSettings,test-results/v14/O-006.png,合格：プロフィール編集（ホームの写真と同じ）,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-007,カテゴリ,P1,#categorySettings,src/js/settings.js,旧: 現行DOM:categorySettings,test-results/v14/O-007.png,合格：カテゴリ管理,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-008,タグ,P1,#tagSettings,src/js/settings.js,旧: 現行DOM:tagSettings,test-results/v14/O-008.png,合格：タグ,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-009,お気に入り,P1,#favoriteSettings,src/js/settings.js,旧: 現行DOM:favoriteSettings,test-results/v14/O-009.png,合格：お気に入り,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-010,通知設定,P1,#notificationSettings,src/js/settings.js,旧: 現行DOM:notificationSettings,test-results/v14/O-010.png,合格：通知設定,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-011,外観,P1,#appearanceSettings,src/js/settings.js,旧: 現行DOM:appearanceSettings,test-results/v14/O-011.png,合格：外観設定,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-012,操作フィードバック,P1,#feedbackSettingsRow,src/js/settings.js,旧: 現行DOM:feedbackSettingsRow,test-results/v14/O-012.png,合格：操作フィードバック,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-013,セキュリティ,P1,#securitySettings,src/js/settings.js,旧: 現行DOM:securitySettings,test-results/v14/O-013.png,合格：セキュリティ,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-014,Gmail連携,P1,#gmailSettings,src/js/settings.js,旧: 現行DOM:gmailSettings,test-results/v14/O-014.png,合格：Gmail自動取得,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-015,初期値と現在値,P1,#initialValuesSettings,src/js/settings.js,旧: 現行DOM:initialValuesSettings,test-results/v14/O-015.png,合格：初期データ・現在値,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-016,ヘルプ,P1,#helpSettings,src/js/settings.js,旧: 現行DOM:helpSettings,test-results/v14/O-016.png,合格：ヘルプ・お問い合わせ,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-017,PDFで書き出す,P1,#pdfExport,src/js/13-settings-and-backup.js,旧: 旧BACKUP-206,test-results/v14/O-017.png,合格：データ管理内「PDFで書き出すPDFを生成して共有」,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-018,バックアップ作成,P1,#backupExport,src/js/13-settings-and-backup.js,旧: 旧BACKUP-207,test-results/v14/O-018.png,合格：データ管理内「バックアップ作成JSONで全データを保存」,保存は1回だけ,87f15e9,完了,
+O-019,バックアップ復元,P1,#backupImport,src/js/13-settings-and-backup.js,旧: 旧BACKUP-208,test-results/v14/O-019.png,合格：データ管理内「バックアップを復元復元前の現在データは自動保護」,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-020,全データ削除,P1,#deleteAll,src/js/13-settings-and-backup.js,旧: 旧BACKUP-210,test-results/v14/O-020.png,合格：データ管理内「全データ削除取引・設定・Gmail認証・復旧コピーを削除」,会計データ不変（操作前後で一致）,87f15e9,完了,
+O-021,システムのお知らせ,P1,#systemNoticesRow,src/js/settings.js,旧: 旧HOME-002,test-results/v14/O-021.png,合格：システムからのお知らせ,会計データ不変（操作前後で一致）,87f15e9,完了,
+D-001,支出総額ヘッダ,P1,#screen-day（今日の支出）・#screen-month（今月の支出）,src/js/11-home-and-month.js renderDay/renderMonth,旧: 旧MONTH-044〜051,test-results/v14/D-001.png,合格：今日の支出（期間・支出・目標）,会計データ不変（操作前後で一致）,87f15e9,完了,
+D-002,支出詳細グラフ,P1,[data-spend-chart]（#dayContent・#monthContent・月間詳細分析）,src/js/ios-polish.js spendChartCardHtml・bindSpendCharts・openSpendBreakdown,旧: 旧MONTH-046,test-results/v14/D-002.png,合格：日/週/月/6か月/年の切替（10月7日（水）｜10月4日〜10月10日｜2026年10月｜2026年5月〜10月｜2026年）、なぞると「10月8日（木）」に吸着、棒を押すと内訳、前の期間へ、矢印キー,会計データ不変（操作前後で一致）,87f15e9,完了,
+D-003,カテゴリ内訳テーブル,P1,#dayContent [data-cat]・#monthContent [data-month-cat],src/js/09-accounts-and-payroll.js categoryCards,"旧: 旧TX-036,MONTH-047",test-results/v14/D-003.png,合格：カテゴリ内訳→明細,会計データ不変（操作前後で一致）,87f15e9,完了,
+D-004,総資産概要,P1,#assetsShare,src/js/20-assets-dashboard.js renderAssets,旧: 旧ASSETS-101〜104,test-results/v14/D-004.png,合格：総資産＋口座配分ドーナツ→口座一覧へ,会計データ不変（操作前後で一致）,87f15e9,完了,
+D-005,銀行別残高表,P1,#screen-assets の口座一覧,src/js/20-assets-dashboard.js,旧: 旧BANK-147〜153,test-results/v14/D-005.png,合格：銀行別残高表,会計データ不変（操作前後で一致）,87f15e9,完了,
+D-006,資産推移,P1,#screen-assets の資産推移,src/js/20-assets-dashboard.js,旧: 旧ASSETS-102/104,,,,87f15e9,別検査で確認,既存（なぞりで日付と残高、第11版で検証済み）
+D-007,今月の受取見込み,P1,#screen-pay 上部,src/js/18-salary-dashboard.js renderPay,旧: 旧PAY-079〜087,,,,87f15e9,別検査で確認,既存の給与画面（受取見込み・前月比）。第11版で検証済み
+D-008,勤務先別給与表,P1,#screen-pay の勤務先別,src/js/18-salary-dashboard.js,"旧: 旧PAY-085〜087,BANK-160〜166",,,,87f15e9,別検査で確認,既存（第11版 PAY系で検証済み）
+D-009,月別給与グラフ,P1,#screen-pay の給与推移,src/js/18-salary-dashboard.js,旧: 旧PAY-082,,,,87f15e9,別検査で確認,既存（勤務先別／給与推移の切替）
+D-010,安全残高・使える額,P1,ACF詳細,src/js/06-acf-views.js openAcfDetail,旧: 旧ACF-248〜269,,,,87f15e9,別検査で確認,既存（第11版 ACF系で検証済み）
+D-011,日別予測テーブル,P1,ACF詳細の日別資金表／カレンダー,src/js/17-acf-refinements.js・acf-calendar.js,旧: 旧ACF-251/252,,,,87f15e9,別検査で確認,既存（表とカレンダーの切替、日付から当日の詳細）
+D-012,計算条件設定,P1,ACF設定,src/js/17-acf-refinements.js openAcfSettings,旧: 旧ACF-255〜267,,,,87f15e9,別検査で確認,既存（キャンセルなら予測不変）
+D-013,口座残高更新,P1,口座詳細,src/js/12-salary-editors.js openBankDetail,旧: 旧SALARYEDIT-184〜188,test-results/v14/D-013.png,合格：口座詳細,会計データ不変（操作前後で一致）,87f15e9,完了,
+D-014,取引の編集,P1,#txEdit・#txDelete,src/js/11-home-and-month.js openTransactionDetail,旧: 旧TX-037〜040,test-results/v14/D-014.png,合格：取引詳細の下部に編集と削除（削除は確認）,会計データ不変（操作前後で一致）,87f15e9,完了,
+D-015,口座並び替え,P1,資産の口座の並び替え（手動）,src/js/20-assets-dashboard.js・21-gestures.js,旧: 旧ASSETS-103,,,,87f15e9,別検査で確認,既存（ボタンと長押しドラッグ、第11版で検証済み）

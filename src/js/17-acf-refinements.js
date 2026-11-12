@@ -135,7 +135,7 @@ function _openAcfDetailImmediate(){
     };root.__refreshAcf=draw;draw()
   })
 }
-function openAcfDetail(){return runWithBusy(_openAcfDetailImmediate,{title:'ACFを更新中…',sub:'給与・カード・固定支払いを確認しています'}).catch(error=>{console.error('ACF view failed',error);showToast('ACFを表示できませんでした',{tone:'error'})})}
+function openAcfDetail(){return runInArea(()=>{const top=pushStack.at(-1),v=top&&document.getElementById(top.id);return v?v.querySelector('.push-body'):document.querySelector('.screen.active .scroll')},_openAcfDetailImmediate,{title:'生活費の見通しを計算しています…',sub:'給与・カード・固定支払いを確認しています',label:'生活費の見通し'}).catch(error=>{console.error('ACF view failed',error);showToast('ACFを表示できませんでした',{tone:'error'})})}
 
 function openAcfSettings(){
   const settings={...acfDefaultSettings(),creditAllowedCategoryIds:[...(acfDefaultSettings().creditAllowedCategoryIds||[])],creditAllowedMerchants:[...(acfDefaultSettings().creditAllowedMerchants||[])],creditBlockedMerchants:[...(acfDefaultSettings().creditBlockedMerchants||[])]};

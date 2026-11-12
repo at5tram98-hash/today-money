@@ -24,8 +24,8 @@ const H='src/js/home-v14.js',N='src/js/07-navigation.js',S='src/js/settings.js';
 const map={
  'N-001':['#homeTab（data-tab=home）',`${N} switchRoot/switchTab`],'N-002':['#paymentsTab（data-tab=payments）',`${N} switchRoot`],'N-003':['#settingsTab（data-tab=settings）',`${N} switchRoot`],
  'N-004':['nav#tabbar',`${N} installTabSlide・src/css/navigation.css`],'N-005':['.topbar.native-scrolled','src/js/24-accessibility.js decorate'],
- 'N-006':['.busy-overlay（全面）','src/js/02-state-and-commits.js runWithBusy','未対応','重い計算（ATF・資産予測）では今も全面の待機表示を使う。データ領域だけのスケルトンと領域別の再試行は未実装'],
- 'H-001':['#todayTop .large-title',`${H} homeHeaderHtml`],'H-002':['#todaySearch→#globalSearchInput',`${H} bindHome→src/js/glass-v15.js openGlobalSearch`,'一部','ガラスの検索欄・種類の切替・最近の検索・強調表示の検索画面（push遷移）。虫眼鏡から検索欄への連続変形アニメーションは未実装'],
+ 'N-006':['#mm3AssetChartBlock・#paymentsContent・#payContent・#atfMonthContent など（.area-skel／.area-error .area-retry）','src/js/ios-polish.js runInArea（呼び出し: 07-navigation.js・20-assets-dashboard.js・19-payments-and-atf.js・11-home-and-month.js・17-acf-refinements.js）','','重い計算（資産予測・ATF・給与の月切替・生活費の見通し）は、データ領域だけを骨格で覆い日本語の状態行を出す。失敗時は前の表示を残して、その領域に「再試行」。保存中の待機表示（runWithBusy）は従来どおり'],
+ 'H-001':['#todayTop .large-title',`${H} homeHeaderHtml`],'H-002':['#todaySearch→.gsearch-morph→#globalSearchInput',`${H} bindHome→src/js/ios-polish.js openGlobalSearch（変形）→src/js/glass-v15.js openGlobalSearchView`],
  'H-003':['#homeProfile→ホームの設定（全画面のシート）','src/js/glass-v15.js openHomeSettings','','利用者の指示で、プロフィールボタンはホーム専用の設定（表示する項目・並び順・期間・金額を隠す・グラフ・補足・警告・にじみ・詰めて表示・件数・初期化）にした。他のタブへ移るボタンは置かない'],'H-004':['.hs-state・.profile-btn.ring-*',`${H} profileState`,'','状態は「端末に保存済み／保存できません／Gmail同期中・連携中」。バックアップ作成日時は記録が無いため表示しない'],
  'H-005':['（プロフィールには置かない）→その他「プロフィール」#profileSettings','src/js/settings.js openProfileEdit','指示により置かない','利用者の指示（二重ボタン禁止・他のタブへ飛ぶボタンを作らない）で、プロフィール編集の入口は「その他」の1か所'],'H-006':['（プロフィールには置かない）→その他「データとバックアップ」#dataSettings','src/js/settings.js openDataSettings','指示により置かない','同上。バックアップの入口は「その他」の1か所'],'H-007':['（プロフィールには置かない）→その他「システムのお知らせ」#systemNoticesRow・その他タブの未読数','src/js/settings.js openNotices・src/js/glass-v15.js applyAppPrefs','指示により置かない','同上。お知らせの入口は「その他」の1か所。未読数はその他タブのバッジで表示'],
  'H-008':['#homeAlert',`${H} homeAlertHtml`],'H-009':['#homeAlertClose',`${H} bindHome`],'H-010':['#homePeriodToday・#homePeriodMonth',`${H} setHomePeriod・installPeriodDrag`],
@@ -44,7 +44,7 @@ const map={
  'Q-011':['支出入力の日付','src/js/08-transactions.js','別検査で確認','既存の日付選択。確定まで保存しない（81画面シナリオ）'],
  'Q-012':['#qeMore（details）','src/js/08-transactions.js openQuickExpense'],
  'Q-013':['#qeSave','src/js/08-transactions.js'],'Q-014':['#qeCancel→破棄確認','src/js/07-navigation.js requestSheetClose'],'Q-015':['#todaySearch→#globalSearchInput・#globalSearchScopes','src/js/glass-v15.js openGlobalSearch・runGlobalSearch'],
- 'Q-016':['検索の種類の切替','src/js/16-analysis-and-goals.js','一部','種類（すべて・取引など）の切替は既存。期間とカテゴリの2個のチップは未実装'],
+ 'Q-016':['#gsPeriodChip・#gsCategoryChip（選択はシート）','src/js/glass-v15.js openGlobalSearchView・runGlobalSearch（filters）'],
  'Q-017':['検索結果の行','src/js/16-analysis-and-goals.js','別検査で確認','結果から各詳細へ（追加UIの照合で横断検索の結果行を確認）'],
  'P-001':['#payrootTop',`${H} renderPayRoot`],'P-002':['#payrootRisk・#payrootRiskClose',`${H} renderPayRoot`],'P-003':['#payrootSummary',`${H} renderPayRoot`],'P-004':['#payrootNextDebit',`${H} renderPayRoot`],'P-005':['[data-payroot-card]',`${H} renderPayRoot`],
  'P-006':['#payrootAllCards',`${H} bindPayRoot`],'P-007':['[data-payroot-fixed]',`${H} bindPayRoot・openFixedPaymentList`],'P-008':['[data-payroot-large]',`${H} renderPayRoot`,'別検査で確認','その月に計画中の大型支出がある時だけ表示（検査データの月には無いため、ホームの大型支出行 H-079 で同じ詳細を確認）'],
@@ -56,7 +56,7 @@ const map={
  'O-006':['#profileSettings',S],'O-007':['#categorySettings',S],'O-008':['#tagSettings',S],'O-009':['#favoriteSettings',S],'O-010':['#notificationSettings',S],'O-011':['#appearanceSettings',S],'O-012':['#feedbackSettingsRow',S],'O-013':['#securitySettings',S],'O-014':['#gmailSettings',S],'O-015':['#initialValuesSettings',S],'O-016':['#helpSettings',S],
  'O-017':['#pdfExport','src/js/13-settings-and-backup.js'],'O-018':['#backupExport','src/js/13-settings-and-backup.js'],'O-019':['#backupImport','src/js/13-settings-and-backup.js'],'O-020':['#deleteAll','src/js/13-settings-and-backup.js'],'O-021':['#systemNoticesRow',S],
  'D-001':['#screen-day（今日の支出）・#screen-month（今月の支出）','src/js/11-home-and-month.js renderDay/renderMonth'],
- 'D-002':['今月の支出・詳細分析のグラフ','src/js/11-home-and-month.js openMonthAnalysis','一部','既存の分析グラフ（なぞりで値表示）を使用。日/週/月/6か月/年のセグメントは未実装'],
+ 'D-002':['[data-spend-chart]（#dayContent・#monthContent・月間詳細分析）','src/js/ios-polish.js spendChartCardHtml・bindSpendCharts・openSpendBreakdown'],
  'D-003':['#dayContent [data-cat]・#monthContent [data-month-cat]','src/js/09-accounts-and-payroll.js categoryCards'],
  'D-004':['#assetsShare','src/js/20-assets-dashboard.js renderAssets'],
  'D-005':['#screen-assets の口座一覧','src/js/20-assets-dashboard.js'],'D-006':['#screen-assets の資産推移','src/js/20-assets-dashboard.js','別検査で確認','既存（なぞりで日付と残高、第11版で検証済み）'],
@@ -75,8 +75,8 @@ write('ui-111.csv',['設計ID','ボタン・カード名','優先度','現行HTM
 
 const byTransition=new Map();for(const r of uiRows)for(const t of String(r.transition).split(/[\/,、]/).map(s=>s.trim()).filter(s=>/^T-\d+/.test(s))){if(!byTransition.has(t))byTransition.set(t,[]);byTransition.get(t).push(r)}
 const trRows=tr.map(t=>{const id=t['遷移ID'],users=byTransition.get(id)||[],tested=users.filter(u=>u.status==='完了'),other=users.filter(u=>u.status==='別検査で確認');
-  const status=users.length&&tested.length===users.length?'検証済み':tested.length?'一部検証':other.length?'別検査で確認':users.length?'未確認':'該当なし';
-  return[id,t['起点ボタン・画面'],t['遷移先'],users.map(u=>`${u.id}(${u.status})`).join(' '),status,id==='T-080'?'データ領域だけの再読込は未実装（N-006）':id==='T-004'?'検索はpush遷移。虫眼鏡の連続変形は未実装':id==='T-030'||id==='T-031'||id==='T-032'||id==='T-033'?'＋から開く入力は右下を起点に広がる（280ms、ページめくりの代替）':'']});
+  const omitted=users.filter(u=>u.status==='指示により置かない'),status=users.length&&tested.length&&tested.length+omitted.length===users.length?'検証済み':users.length&&omitted.length===users.length?'指示により置かない':users.length&&tested.length+omitted.length+other.length===users.length&&other.length?'別検査で確認':tested.length?'一部検証':other.length?'別検査で確認':users.length?'未確認':'該当なし';
+  return[id,t['起点ボタン・画面'],t['遷移先'],users.map(u=>`${u.id}(${u.status})`).join(' '),status,id==='T-030'||id==='T-031'||id==='T-032'||id==='T-033'?'＋から開く入力は右下を起点に広がる（280ms、ページめくりの代替）':'']});
 write('transitions-85.csv',['遷移ID','起点','遷移先','使っている設計ID（状態）','検証状態','補足'],trRows);
 
 /* 旧304: 旧画面（IDの接頭辞）→ 3タブからの新しい入口。旧台帳の識別子をそのまま新DOMと見なさず、入口の検査（v14-ui）と旧操作の検査（第11版の巡回・81画面・P0・残りの操作。第14版の入口で再実行）を合わせて証拠にする */
@@ -98,6 +98,7 @@ const lines=[
 `| ボタン／カード／UI | ${uiRows.length} | ${st('完了')} | ${st('別検査で確認')} | ${st('一部')} | ${st('未対応')} | ${st('不合格')+st('未確認')} |`,
 `| （うち、利用者の指示で置かない） | ${st('指示により置かない')} | | | | | |`,
 `| 画面遷移 | ${trRows.length} | ${count(trRows,r=>r[4]==='検証済み')} | ${count(trRows,r=>r[4]==='別検査で確認')} | ${count(trRows,r=>r[4]==='一部検証')} | — | ${count(trRows,r=>['未確認','該当なし'].includes(r[4]))} |`,
+`| （うち、利用者の指示で入口を置かない遷移） | ${count(trRows,r=>r[4]==='指示により置かない')} | | | | | |`,
 `| 旧304操作の移設 | ${legacyRows.length} | ${count(legacyRows,r=>r[8]==='新しい入口から到達・動作を確認')} | — | — | — | ${count(legacyRows,r=>r[8]!=='新しい入口から到達・動作を確認')} |`,'',
 '- 「完了」= `tests/v14-ui.mjs` で実際の要素を押し・長押し・なぞり、行き先・戻り・会計データ不変・44ptを確認した。結果は `ui-results.json`、画面は `test-results/v14/<ID>.png`。',
 '- 「別検査で確認」= 第11版から続く既存の画面・機能。第14版の入口（`relocation.json`）からたどって81画面シナリオ・P0・残りの操作・金額欄・巡回で確認。',

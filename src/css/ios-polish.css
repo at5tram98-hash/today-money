@@ -1,0 +1,136 @@
+/* 第16段: 支出グラフ（ヘルスケアの詳細グラフのような見た目）・検索のフィルタと変形・領域の読み込み */
+
+/* ---------- 支出グラフ ---------- */
+.sc-card { background: var(--card); border-radius: 24px; padding: 12px 14px 6px; box-shadow: 0 1px 2px rgba(0,0,0,.04); margin-bottom: 4px }
+.sc-top { margin: 0 -4px 12px }
+.sc-seg > button { padding: 0 4px; font-size: 13px }
+.sc-headrow { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; min-height: 76px }
+.sc-head { min-width: 0; animation: scFade .18s ease-out }
+.sc-kicker { font-size: 13px; font-weight: 600; color: var(--label2); letter-spacing: .1px }
+.sc-value { font-family: var(--font-rounded, inherit); font-size: 30px; font-weight: 700; letter-spacing: -.6px; line-height: 1.15; font-variant-numeric: tabular-nums; color: var(--label) }
+.sc-range { font-size: 13px; color: var(--label2); margin-top: 1px }
+.sc-head.is-sel .sc-value { color: var(--orange) }
+.sc-pager { display: flex; gap: 6px; flex: none }
+.sc-page { width: 44px; height: 44px; border-radius: 50%; border: 0; display: grid; place-items: center; color: var(--accent); background: var(--fill); box-shadow: inset 0 0 0 .5px var(--lg-stroke, rgba(0,0,0,.06)); transition: transform .18s var(--spring), opacity .18s }
+.sc-page svg { width: 18px; height: 18px }
+.sc-page:active { transform: scale(.9) }
+.sc-page:disabled { opacity: .35 }
+.sc-plot { position: relative; margin: 6px -2px 4px; height: 188px; border-radius: 12px; touch-action: pan-y; outline: none; -webkit-user-select: none; user-select: none; cursor: crosshair }
+.sc-plot:focus-visible { box-shadow: 0 0 0 3px var(--accent-soft) }
+.sc-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible }
+.sc-grid { stroke: var(--sep); stroke-width: .6; vector-effect: non-scaling-stroke }
+.sc-labels { position: absolute; inset: 0; pointer-events: none }
+.sc-axis, .sc-tick { position: absolute; color: var(--label3); font-size: 11px; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums }
+.sc-axis { right: 0; transform: translateY(-50%) }
+.sc-tick { bottom: 2px; transform: translateX(-50%) }
+.sc-bar { fill: var(--orange); transition: opacity .16s ease-out }
+.sc-bar.dim { opacity: .32 }
+.sc-avg { stroke: var(--label3); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke }
+.sc-cursor { stroke: var(--label2); stroke-width: 1; vector-effect: non-scaling-stroke }
+.sc-sub { margin: 10px 2px 6px; font-size: 13px; font-weight: 600; color: var(--label2) }
+.sc-cats { margin: 0 -14px; border-radius: 0; box-shadow: none; background: transparent }
+.sc-cats .row { min-height: 56px }
+.sc-cat-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--c); flex: none; margin-right: 12px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 18%, transparent) }
+.sc-cat-bar { height: 4px; border-radius: 2px; background: var(--fill); margin-top: 6px; overflow: hidden }
+.sc-cat-bar > i { display: block; height: 100%; border-radius: 2px }
+.sc-cat .row-value { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.2 }
+.sc-cat .row-value small { font-size: 12px; color: var(--label2); font-weight: 500 }
+.sc-empty { padding: 18px 4px 16px; text-align: center; color: var(--label2); font-size: 14px }
+.sc-detail-hero { padding: 6px 4px 4px }
+.sc-detail-hero .sc-value { font-size: 34px }
+.sc-section { margin: 22px 4px 10px; font-size: 22px; font-weight: 700; letter-spacing: -.4px }
+@keyframes scFade { from { opacity: .4 } to { opacity: 1 } }
+html.motion-off .sc-head, html.reduce-motion .sc-head { animation: none }
+@media (prefers-reduced-motion: reduce) { .sc-head { animation: none } .sc-bar { transition: none } }
+
+/* ---------- 検索の期間・カテゴリ（Q-016） ---------- */
+.gsearch-filters { display: flex; gap: 8px; margin: -4px 0 14px }
+.gsearch-filter { flex: 1 1 0; min-width: 0; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 12px; border: 0; border-radius: 999px; background: var(--card); color: var(--label); font-size: 15px; font-weight: 500; box-shadow: inset 0 0 0 .5px var(--sep), 0 1px 2px rgba(0,0,0,.04); transition: transform .18s var(--spring), background .2s ease-out, color .2s ease-out }
+.gsearch-filter > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.gsearch-filter > svg { width: 16px; height: 16px; flex: none; color: var(--accent) }
+.gsearch-filter > svg:last-child { width: 12px; height: 12px; color: var(--label3) }
+.gsearch-filter.on { background: var(--accent); color: #fff; box-shadow: 0 2px 10px color-mix(in srgb, var(--accent) 35%, transparent) }
+.gsearch-filter.on > svg { color: #fff }
+.gsearch-filter:active { transform: scale(.95) }
+.gsearch-filter-sheet .group { margin-top: 4px }
+
+/* ---------- 虫眼鏡から検索欄への変形（H-002） ---------- */
+.gsearch-morph { position: fixed; z-index: 2000; pointer-events: none; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 .5px var(--lg-stroke, rgba(0,0,0,.08)), 0 6px 18px rgba(0,0,0,.12); display: flex; align-items: center; padding-left: 12px; color: var(--accent); overflow: hidden }
+.gsearch-morph svg { width: 20px; height: 20px; flex: none }
+.gsearch-morph span { margin-left: 8px; color: var(--label3); font-size: 17px; white-space: nowrap; opacity: 0 }
+.push-view.gsearch-morphing { transition: none !important; transform: none !important }
+.push-view.gsearch-morphing .gsearch-field { visibility: hidden }
+.push-view.gsearch-morphing .push-body > .gsearch > :not(.gsearch-bar) { animation: gsIn .26s ease-out both }
+@keyframes gsIn { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+.push-view.gsearch-morphing { animation: gsViewIn .22s ease-out both }
+@keyframes gsViewIn { from { opacity: 0 } to { opacity: 1 } }
+.push-view.gsearch-closing { transition: opacity .22s ease-out !important; transform: none !important; opacity: 0 }
+
+/* ---------- 領域だけの読み込み・再試行（N-006） ---------- */
+.area-busy { position: relative }
+.area-skel { position: absolute; left: 0; right: 0; z-index: 5; padding: 14px 16px; background: var(--bg); border-radius: inherit; display: flex; flex-direction: column; gap: 14px; overflow: hidden; animation: areaIn .16s ease-out both }
+.area-status { display: flex; align-items: center; gap: 10px; align-self: center; padding: 8px 14px 8px 10px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 .5px var(--lg-stroke, rgba(0,0,0,.06)), 0 4px 14px rgba(0,0,0,.08); max-width: 100% }
+.area-status > span:last-child { display: flex; flex-direction: column; min-width: 0 }
+.area-status b { font-size: 14px; font-weight: 600 }
+.area-status small { font-size: 12px; color: var(--label2) }
+.area-skel-rows { display: flex; flex-direction: column; gap: 12px }
+.area-skel-rows .sk { display: block; height: 16px; border-radius: 8px; width: 100% }
+.area-skel-rows .sk-title { width: 42%; height: 20px }
+.area-skel-rows .sk-value { width: 60%; height: 34px; border-radius: 10px }
+.area-skel-rows .sk-chart { height: 150px; border-radius: 18px }
+.area-skel-rows .sk-short { width: 70% }
+.area-skel.compact { justify-content: center; padding: 8px }
+.area-skel.compact .area-skel-rows { display: none }
+.area-fresh { animation: areaFresh .24s ease-out }
+@keyframes areaIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes areaFresh { from { opacity: .55 } to { opacity: 1 } }
+.area-error { display: flex; align-items: center; gap: 10px; margin: 8px 0 12px; padding: 10px 10px 10px 14px; border-radius: 18px; background: color-mix(in srgb, var(--red) 10%, var(--card)); box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--red) 30%, transparent) }
+.area-error-icon { color: var(--red); display: grid; place-items: center }
+.area-error-icon svg { width: 20px; height: 20px }
+.area-error-text { flex: 1; min-width: 0; display: flex; flex-direction: column }
+.area-error-text b { font-size: 15px }
+.area-error-text small { font-size: 13px; color: var(--label2) }
+.area-retry { min-height: 44px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; flex: none; transition: transform .18s var(--spring) }
+.area-retry:active { transform: scale(.94) }
+html.motion-off .area-skel, html.motion-off .area-fresh { animation: none }
+@media (prefers-reduced-motion: reduce) { .area-skel, .area-fresh { animation: none } }
+
+/* ---------- 取引の一覧と詳細 ---------- */
+.txl-bar { margin: 0 0 12px }
+.txl-bar .gsearch-field { display: flex }
+.txl-filters { margin: 0 0 6px }
+.txl-filters .gsearch-filter { flex: 0 1 auto; padding: 0 16px }
+.txl-summary { margin: 10px 4px 0; font-size: 13px; color: var(--label2) }
+.txl-day-head { display: flex; align-items: baseline; justify-content: space-between; margin: 20px 4px 8px; font-size: 20px; font-weight: 700; letter-spacing: -.3px }
+.txl-day-head small { margin-left: 8px; font-size: 13px; font-weight: 500; color: var(--label2); letter-spacing: 0 }
+.txl-day-total { font-size: 15px; font-weight: 600; color: var(--label2); font-variant-numeric: tabular-nums }
+.txl-row { width: 100%; text-align: left; min-height: 60px }
+.txl-icon, .txd-icon { display: grid; place-items: center; flex: none; border-radius: 10px; background: var(--c); color: #fff }
+.txl-icon { width: 34px; height: 34px; margin-right: 12px }
+.txl-icon svg { width: 19px; height: 19px }
+.txd-hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 8px 12px 20px }
+.txd-icon { width: 64px; height: 64px; border-radius: 18px; box-shadow: 0 8px 24px color-mix(in srgb, var(--c) 35%, transparent) }
+.txd-icon svg { width: 34px; height: 34px }
+.txd-merchant { margin-top: 12px; font-size: 20px; font-weight: 600 }
+.txd-amount { margin-top: 2px; font-family: var(--font-rounded, inherit); font-size: 44px; font-weight: 700; letter-spacing: -1px; font-variant-numeric: tabular-nums }
+.txd-date { font-size: 14px; color: var(--label2) }
+.txd-cat { display: inline-flex; align-items: center; gap: 6px }
+.txd-cat i { width: 9px; height: 9px; border-radius: 50% }
+.txd-memo .row-sub { white-space: pre-wrap }
+.txd-actions { margin-top: 18px }
+.txd-action { width: 100%; justify-content: center; color: var(--accent); font-size: 17px; font-weight: 500; min-height: 50px; border-left: 0; border-right: 0; border-top: 0; background: transparent }
+.txd-action.danger { color: var(--red) }
+.txl-row { touch-action: pan-y; position: relative; z-index: 1 }
+.txl-row.swiping { background: var(--card) !important }
+.swipe-actions { position: absolute; right: 0; width: 148px; display: flex; z-index: 0 }
+.swipe-act { flex: 1; border: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #fff; font-size: 13px; font-weight: 600; min-height: 44px }
+.swipe-act svg { width: 20px; height: 20px }
+.swipe-act.edit { background: #8E8E93 }
+.swipe-act.delete { background: var(--red) }
+/* iOSの一覧は押すと行が灰色になる（縮まない） */
+#app .group > .row.press:active, #pushLayer .group > .row.press:active, #sheet .group > .row.press:active { transform: none; opacity: 1; background: var(--fill) }
+
+/* トーストはガラスのカプセル（iOSの通知の帯のような見た目） */
+.toast { border-radius: 999px; padding: 10px 18px; background: rgba(30,30,32,.78); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); box-shadow: inset 0 .5px 0 rgba(255,255,255,.18), 0 10px 30px rgba(0,0,0,.22); font-weight: 500 }
+.toast.error { background: rgba(140,30,26,.82) }
+html.reduce-transparency .toast, html.glass-solid-pref .toast { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(44,44,46,.97) }

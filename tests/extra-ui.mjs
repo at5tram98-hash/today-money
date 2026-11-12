@@ -145,7 +145,7 @@ try{
     await expect(p,'A8R-0068',{re:/^テスト大型支出2026-10-06・必須¥2,000$/});
   }});
   await screen(page,'取引一覧',{open:p=>click(p,'#homeAllTransactions'),checks:async p=>{
-    await expect(p,'A8R-0092',{re:/^別店舗2026-10-07・交通費・現金・その他¥500$/});
+    await expect(p,'A8R-0092',{re:/^別店舗交通費・現金・その他¥500$/});
   }});
   await screen(page,'旅行・プレゼント',{open:p=>call(p,'openEventGoals'),checks:async p=>{
     await expect(p,'A8R-0172',{re:/期限 11月6日（金）・1費目未回収あり総費用¥2,000自分の最終負担¥1,000支払済み¥0未回収¥1,000$/});

@@ -210,9 +210,9 @@ function mm3OpenAtfSheet(atf){
       const month=event.target.closest('[data-atf-month]');if(month){
         if(month.disabled||month.classList.contains('on'))return;
         month.disabled=true;
-        runWithBusy(()=>{
+        runInArea(()=>root.querySelector('#atfMonthContent'),()=>{
           if(!showMonth(month.dataset.atfMonth))showToast('この月は対象期間外です',{tone:'error'});
-        },{title:'ATFを計算中…',sub:`${monthLabel(month.dataset.atfMonth)}の残高とカード枠を確認しています`})
+        },{title:'ATFを計算しています…',sub:`${monthLabel(month.dataset.atfMonth)}の残高とカード枠を確認しています`,label:'月別の試算'})
           .catch(error=>{console.error('ATF month calculation failed',error);showToast('月別の試算に失敗しました',{tone:'error'})})
           .finally(()=>{if(month.isConnected)month.disabled=false});
         return;
@@ -220,7 +220,7 @@ function mm3OpenAtfSheet(atf){
       const upcoming=event.target.closest('#mm3AtfNextEvent');if(upcoming){
         const date=upcoming.dataset.atfEventDate,month=date.slice(0,7);
         if(root.querySelector('[data-atf-month].on')?.dataset.atfMonth===month)mm3AtfOpenDay(root,date);
-        else{upcoming.disabled=true;runWithBusy(()=>{if(showMonth(month))mm3AtfOpenDay(root,date)},{title:'ATFを計算中…',sub:`${monthLabel(month)}の予定を確認しています`})
+        else{upcoming.disabled=true;runInArea(()=>root.querySelector('#atfMonthContent'),()=>{if(showMonth(month))mm3AtfOpenDay(root,date)},{title:'ATFを計算しています…',sub:`${monthLabel(month)}の予定を確認しています`,label:'予定'})
           .catch(error=>{console.error('ATF event navigation failed',error);showToast('予定を表示できませんでした',{tone:'error'})})
           .finally(()=>{if(upcoming.isConnected)upcoming.disabled=false})}
         return;
@@ -262,7 +262,7 @@ function bindPayments(){
   document.querySelector('#screen-payments [data-financial-update]')?.addEventListener('click',()=>openFinancialUpdates('cards',paymentHomeMonth()));
   document.getElementById('mm3PaymentQuickBillingAction')?.addEventListener('click',()=>openQuickCardBilling(paymentHomeMonth()));
   const month=document.getElementById('mm3PaymentMonth');if(month)month.onclick=()=>openAssetBillingMonthPicker(m=>mm3RenderPaymentsMaybeBusy(m));
-  const atfOpen=document.getElementById('mm3AtfOpen');if(atfOpen)atfOpen.onclick=()=>{atfOpen.disabled=true;runWithBusy(()=>mm3OpenAtfSheet(mm3PaymentAtfState),{title:'ATFを計算中…',sub:'日別の残高とカードの利用可能額を確認しています'}).catch(error=>{console.error('ATF sheet failed',error);showToast('ATFを開けませんでした',{tone:'error'})}).finally(()=>{if(atfOpen.isConnected)atfOpen.disabled=false})};
+  const atfOpen=document.getElementById('mm3AtfOpen');if(atfOpen)atfOpen.onclick=()=>{atfOpen.disabled=true;runInArea(()=>atfOpen.closest('.mm3-payment-card,section,.card,.group')||atfOpen.parentElement,()=>mm3OpenAtfSheet(mm3PaymentAtfState),{title:'ATFを計算しています…',sub:'日別の残高とカードの利用可能額を確認しています',label:'ATF'}).catch(error=>{console.error('ATF sheet failed',error);showToast('ATFを開けませんでした',{tone:'error'})}).finally(()=>{if(atfOpen.isConnected)atfOpen.disabled=false})};
   mm3BindAtfScrubber(mm3PaymentAtfState);
   document.querySelectorAll('#screen-payments [data-card]').forEach(b=>b.onclick=()=>openCardDetail(b.dataset.card,paymentHomeMonth()));
   const next=document.querySelector('#screen-payments [data-mm3-next-card]');if(next)next.onclick=()=>openCardDetail(next.dataset.mm3NextCard,paymentHomeMonth());
