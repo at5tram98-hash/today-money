@@ -144,7 +144,7 @@ function nextUiFrame(){
   return new Promise(resolve=>{let finished=false,frame,timer;const done=()=>{if(finished)return;finished=true;clearTimeout(timer);cancelAnimationFrame(frame);resolve()};frame=requestAnimationFrame(done);timer=setTimeout(done,100)});
 }
 async function waitForUiPaint(){await nextUiFrame();await nextUiFrame()}
-function beginBusy(title,sub,{minimumMs=/ATF|ACF|予測/.test(title)?1800:700}={}){
+function beginBusy(title,sub,{minimumMs=/ACF|ACF|予測/.test(title)?1800:700}={}){
   const token=Symbol('busy');busyJobs.set(token,{title,sub,phase:'work',minimumMs,started:performance.now()});showBusy(title,sub);return token;
 }
 function updateBusy(token,title,sub,phase='work'){const job=busyJobs.get(token);if(!job)return;Object.assign(job,{title,sub,phase});showBusy(title,sub,phase)}
@@ -159,7 +159,7 @@ async function runWithBusy(fn,{title='ACFを計算中…',sub='給与・カー�
   const token=beginBusy(title,sub,minimumMs==null?{}:{minimumMs});
   try{
     await waitForUiPaint();const result=await fn();
-    updateBusy(token,title,/ATF|ACF|予測/.test(title)?'計算結果を画面に反映しています':sub,'paint');
+    updateBusy(token,title,/ACF|ACF|予測/.test(title)?'計算結果を画面に反映しています':sub,'paint');
     return result;
   }finally{await endBusy(token)}
 }

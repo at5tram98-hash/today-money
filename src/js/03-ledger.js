@@ -158,4 +158,4 @@ function financialEventsFrom(from=ymd(),days=90){
 }
 function nextFinancialEvent(from=ymd(),days=90){return financialEventsFrom(from,days)[0]||null}
 function nextFinancialEventHtml(){const e=nextFinancialEvent();if(!e)return'';const diff=Math.max(0,Math.round((parseYmd(e.date)-parseYmd(ymd()))/86400000)),symbol=e.type==='income'?'¥':e.type==='card'?'$':e.type==='large'?'●':'•';return `<button type="button" class="financial-event-card" id="nextMoneyEvent" data-date="${e.date}"><span class="financial-event-symbol ${e.type}">${symbol}</span><span class="financial-event-main"><span class="financial-event-title">次の動き　${esc(e.title)}</span><span class="financial-event-sub">${diff===0?'今日':`あと${diff}日`}・${Number(e.date.slice(5,7))}/${Number(e.date.slice(8,10))}${e.detail?`・${esc(e.detail)}`:''}</span></span><span class="financial-event-value ${e.amount<0?'red':e.amount>0?'green':''}">${e.amount?`${e.amount>0?'+':''}${yen(e.amount)}`:'予定'}</span></button>`}
-/* ACF: daily spending capacity. The ATF scenario calculator is separate below. */
+/* ACF: daily spending capacity. The ACF scenario calculator is separate below. */

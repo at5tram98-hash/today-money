@@ -19,7 +19,7 @@ function renderSettings(){
     ['お金',[
       {id:'categorySettings',symbol:'grid',color:'var(--orange)',title:'カテゴリ',value:`${data.categories.length}件`},
       {id:'initialValuesSettings',symbol:'bank',color:'var(--blue)',title:'初期データ・現在値',detail:'銀行残高・カード現在請求額'},
-      {id:'acfSettingsRow',symbol:'chart',color:'var(--teal)',title:'生活費の見通し',detail:'安全残高・カード支払い・利用ルール'}
+      {id:'acfSettingsRow',symbol:'chart',color:'var(--teal)',title:'ACF',detail:'安全残高・カード支払い・利用ルール'}
     ]],
     ['整理',[
       {id:'favoriteSettings',symbol:'star',color:'var(--orange)',title:'お気に入り',value:`${favoriteOrder().length}件`},

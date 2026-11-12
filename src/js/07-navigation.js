@@ -125,7 +125,7 @@ function switchTab(tab){
     /* N-006: 移動先の画面を先に出し、データ領域だけを骨格で覆って計算する */
     document.querySelectorAll('.screen').forEach(el=>el.classList.toggle('active',el.id===`screen-${target}`));
     return runInArea(`#screen-${target} .scroll`,perform,{
-      title:heavyAssets?'資産予測を計算しています…':'ATFを計算しています…',
+      title:heavyAssets?'資産予測を計算しています…':'ACFを計算しています…',
       sub:heavyAssets?'長期の給与・カード・固定支払いを確認しています':`${monthLabel(paymentHomeMonth())}までの資金見通しを計算しています`,
       label:heavyAssets?'資産予測':'資金見通し'
     }).catch(error=>{console.error('heavy tab render failed',error)});
