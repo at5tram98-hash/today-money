@@ -242,12 +242,12 @@ async function verifyExistingGestures(page){
   await drag(nav.x+nav.width/2-40,ny,nav.x+nav.width/2+60,ny);assert.ok((await state()).trackingDate<day,'swiping right shows the previous day');
   await drag(nav.x+nav.width/2+40,ny,nav.x+nav.width/2-60,ny);assert.equal((await state()).trackingDate,day,'swiping left returns');
   // 第14版: 最近の支出の再利用は＋入力ハブの「その他の入力」から（旧: 支出入力ボタンの長押し）
-  await page.locator('#addHub').click();await page.locator('#entryHub').waitFor();await page.locator('#ihRepeat').click();
+  await page.locator('#addHub').click();await page.locator('#entryCalc').waitFor();await page.locator('#entryRecent').click();
   await page.locator('#qrClose').waitFor();await page.locator('#qrClose').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));
   assert.equal(await page.locator('#qeSave').count(),0,'opening recent expenses does not also open the expense form');
   await page.evaluate(()=>globalThis.__mm3Test.popView());
   // シートのつまみ: 上へ引くと全画面、下へ引くと半分の高さへ戻る（支出の記録は＋入力ハブから）
-  await page.locator('#addHub').click();await page.locator('#entryExpense').click();await page.locator('#qeSave').waitFor();await page.waitForTimeout(350);
+  await page.locator('#addHub').click();await page.locator('#entryDetail').click();await page.locator('#qeSave').waitFor();await page.waitForTimeout(350);
   const mode=()=>page.locator('#sheet').evaluate(el=>el.classList.contains('full')?'full':'half');
   if(await mode()==='half'){let g=await page.locator('#sheet .grabber').boundingBox();await drag(g.x+g.width/2,g.y+g.height/2,g.x+g.width/2,g.y-90);assert.equal(await mode(),'full','pulling up expands the sheet');g=await page.locator('#sheet .grabber').boundingBox();await drag(g.x+g.width/2,g.y+g.height/2,g.x+g.width/2,g.y+90);assert.equal(await mode(),'half','pulling down returns to half height');assert.equal(await sheetShown(),true)}
   await page.locator('#qeCancel').click();if(await page.locator('#alertWrap.show').count())await alertButton(page,'変更を破棄').click();await page.waitForFunction(()=>!document.getElementById('sheet').classList.contains('show'));

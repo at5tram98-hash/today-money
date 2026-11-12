@@ -14,9 +14,9 @@
 393-light-search,search,ホーム右上の検索（H-002）,393,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
 393-light-notices,notices,その他→システムのお知らせ（プロフィールはホーム専用の設定にしたため、お知らせの入口は「その他」の1か所）,393,light,○,○,0,0,0,○,「その他に戻る」,○,合格
 393-light-home-menu,home-menu,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,メニューを閉じる → 「ホームに戻る」,○,合格
-393-light-expense,expense,＋（全画面の新規入力）→支出を記録（Q-002）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
-393-light-quick-bank,quick-bank,＋（全画面の新規入力）→残高を更新（Q-004）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
-393-light-quick-income,quick-income,＋（全画面の新規入力）→臨時収入（Q-003）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
+393-light-expense,expense,＋（電卓）→詳細入力（Q-002）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
+393-light-quick-bank,quick-bank,＋（電卓）→残高→詳細入力（Q-004）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
+393-light-quick-income,quick-income,＋（電卓）→臨時収入→詳細入力（Q-003）,393,light,○,○,0,0,0,○,シートの「キャンセル」,○,合格
 393-light-salary-menu,salary-menu,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,メニューを閉じる → 「ホームに戻る」,○,合格
 393-light-salary-add,salary-add,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
 393-light-payment-menu,payment-menu,支払い→カード請求をすべて見る → 請求一覧（旧「支払い」画面）,393,light,○,○,0,0,0,○,メニューを閉じる → 「支払いに戻る」,○,合格
@@ -31,8 +31,8 @@
 393-light-daily-budget,daily-budget,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格
 393-light-acf,acf,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
 393-light-financial-update,financial-update,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「ホームに戻る」,○,合格
-393-light-today-repeat,today-repeat,＋（全画面の新規入力）→最近の支出を再利用（Q-006）,393,light,○,○,0,0,0,○,シートの「閉じる」,○,合格
-393-light-today-one-line,today-one-line,＋（全画面の新規入力）→一行入力（Q-006）,393,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
+393-light-today-repeat,today-repeat,＋（電卓）→最近（Q-006）,393,light,○,○,0,0,0,○,シートの「閉じる」,○,合格
+393-light-today-one-line,today-one-line,＋（電卓）→一行入力（Q-006）,393,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
 393-light-today-cross-search,today-cross-search,ホーム右上の検索（H-002・横断検索）,393,light,○,○,0,0,0,○,「ホームに戻る」,○,合格
 393-light-today-analysis,today-analysis,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格
 393-light-today-transactions,today-transactions,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格

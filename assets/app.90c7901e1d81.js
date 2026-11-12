@@ -2568,7 +2568,7 @@ function refreshTransferPlansView(){refreshFinancialViews()}
 
 
 function openQuickBank(preselectedBankId=''){if(!data.banks.length)return showAlert('銀行口座がありません','先に銀行口座を登録してください');const selectedId=typeof preselectedBankId==='string'&&preselectedBankId?preselectedBankId:data.banks[0].id;if(!bankById(selectedId))return showAlert('口座が見つかりません','一覧を開き直してください。');let amount=Number(bankById(selectedId).balance)||0;openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="qbCancel">キャンセル</button><div class="sheet-title">クイック銀行口座入力</div><button type="button" class="nav-text bold" id="qbSave">保存</button></div><div class="sheet-body"><div class="form-group-title">口座</div><div class="form-card"><div class="form-section"><div class="form-label">銀行口座</div><select class="field field-select" id="qbBank">${data.banks.map(b=>`<option value="${b.id}" ${b.id===selectedId?'selected':''}>${esc(b.name)}${b.label?'・'+esc(b.label):''}</option>`).join('')}</select></div><div class="form-section">${moneyButton('qbAmount','銀行残高',amount)}</div></div><div class="form-group-title">メモ</div><div class="form-card"><div class="form-section"><input class="field" id="qbMemo" placeholder="残高確認・調整など"></div></div></div>`,'half',root=>{const a=root.querySelector('#qbAmount'),sel=root.querySelector('#qbBank'),set=v=>{amount=Number(v)||0;markSheetDirty();a.querySelector('.val').textContent=yen(amount)};sel.onchange=()=>set(bankById(sel.value)?.balance||0);a.onclick=()=>openCalculator('銀行残高',amount,set);root.querySelector('#qbCancel').onclick=requestSheetClose;root.querySelector('#qbSave').onclick=()=>{if(amount<0)return showAlert('金額を確認してください','残高は0円以上で入力してください。');const id=sel.value,memo=root.querySelector('#qbMemo').value.trim()||'クイック残高入力';if(!bankById(id))return showAlert('口座が見つかりません','口座を選び直してください。');runSaveAction(root.querySelector('#qbSave'),()=>{requireFinancialEntity('bank',id);reconcileBankBalance(id,amount,memo)},{label:'quick bank',busy:true,busyTitle:'残高を保存中…',afterCommit:refreshFinancialViews,close:closeSheet})}})}
-function openTempIncome(date=trackingDate){let amount=0,toType='cash',bankId=data.banks[0]?.id||'';openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="tiCancel">キャンセル</button><div class="sheet-title">クイック臨時収入入力</div><button type="button" class="nav-text bold" id="tiSave">保存</button></div><div class="sheet-body"><div class="form-group-title">収入</div><div class="form-card"><div class="form-section"><div class="form-label">収入源</div><input class="field" id="tiSource" placeholder="例：単発バイト、返金"></div><div class="form-section">${moneyButton('tiAmount','金額',0)}</div></div><div class="form-group-title">入金先</div><div class="form-card"><div class="form-section"><div class="seg" id="tiSeg"><button type="button" class="on" data-v="cash">未入金・手持ち</button><button type="button" data-v="bank">銀行口座</button></div></div><div class="form-section hidden" id="tiBankWrap"><div class="form-label">銀行口座</div><select class="field field-select" id="tiBank">${data.banks.map(b=>`<option value="${b.id}">${esc(b.name)}</option>`).join('')}</select></div></div><div class="form-group-title">メモ</div><div class="form-card"><div class="form-section"><input class="field" id="tiMemo" placeholder="任意"></div></div></div>`,'half',root=>{root.querySelectorAll('#tiSeg button').forEach(b=>b.onclick=()=>{toType=b.dataset.v;root.querySelectorAll('#tiSeg button').forEach(x=>x.classList.toggle('on',x===b));root.querySelector('#tiBankWrap').classList.toggle('hidden',toType!=='bank')});const a=root.querySelector('#tiAmount');a.onclick=()=>openCalculator('収入額',amount,v=>{amount=v;a.querySelector('.val').textContent=yen(v)});root.querySelector('#tiCancel').onclick=requestSheetClose;root.querySelector('#tiSave').onclick=()=>{const src=root.querySelector('#tiSource').value.trim()||'臨時収入';bankId=root.querySelector('#tiBank')?.value||'';if(!amount)return showAlert('金額を入力してください','収入額を入力してください。');if(toType==='bank'&&!bankId)return showAlert('銀行口座がありません','銀行口座を登録してください。');try{safeCommit(()=>{const temp={id:uid('tmp'),date,amount,sourceName:src,toType,bankId,memo:root.querySelector('#tiMemo').value.trim(),incomeId:'',receivedConfirmed:false};const inc=recordIncome({date,amount,sourceName:src,toType,bankId,memo:temp.memo,kind:'temporary',tempIncomeId:temp.id,applyNow:false,saveNow:false});temp.incomeId=inc?.id||'';data.tempIncomes.push(temp)},{label:'temporary income add'})}catch(e){return}closeSheet();renderAll()}})}
+function openTempIncome(date=trackingDate,initialAmount=0){let amount=Math.max(0,Math.round(Number(initialAmount)||0)),toType='cash',bankId=data.banks[0]?.id||'';openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="tiCancel">キャンセル</button><div class="sheet-title">クイック臨時収入入力</div><button type="button" class="nav-text bold" id="tiSave">保存</button></div><div class="sheet-body"><div class="form-group-title">収入</div><div class="form-card"><div class="form-section"><div class="form-label">収入源</div><input class="field" id="tiSource" placeholder="例：単発バイト、返金"></div><div class="form-section">${moneyButton('tiAmount','金額',amount)}</div></div><div class="form-group-title">入金先</div><div class="form-card"><div class="form-section"><div class="seg" id="tiSeg"><button type="button" class="on" data-v="cash">未入金・手持ち</button><button type="button" data-v="bank">銀行口座</button></div></div><div class="form-section hidden" id="tiBankWrap"><div class="form-label">銀行口座</div><select class="field field-select" id="tiBank">${data.banks.map(b=>`<option value="${b.id}">${esc(b.name)}</option>`).join('')}</select></div></div><div class="form-group-title">メモ</div><div class="form-card"><div class="form-section"><input class="field" id="tiMemo" placeholder="任意"></div></div></div>`,'half',root=>{root.querySelectorAll('#tiSeg button').forEach(b=>b.onclick=()=>{toType=b.dataset.v;root.querySelectorAll('#tiSeg button').forEach(x=>x.classList.toggle('on',x===b));root.querySelector('#tiBankWrap').classList.toggle('hidden',toType!=='bank')});const a=root.querySelector('#tiAmount');a.onclick=()=>openCalculator('収入額',amount,v=>{amount=v;a.querySelector('.val').textContent=yen(v)});root.querySelector('#tiCancel').onclick=requestSheetClose;root.querySelector('#tiSave').onclick=()=>{const src=root.querySelector('#tiSource').value.trim()||'臨時収入';bankId=root.querySelector('#tiBank')?.value||'';if(!amount)return showAlert('金額を入力してください','収入額を入力してください。');if(toType==='bank'&&!bankId)return showAlert('銀行口座がありません','銀行口座を登録してください。');try{safeCommit(()=>{const temp={id:uid('tmp'),date,amount,sourceName:src,toType,bankId,memo:root.querySelector('#tiMemo').value.trim(),incomeId:'',receivedConfirmed:false};const inc=recordIncome({date,amount,sourceName:src,toType,bankId,memo:temp.memo,kind:'temporary',tempIncomeId:temp.id,applyNow:false,saveNow:false});temp.incomeId=inc?.id||'';data.tempIncomes.push(temp)},{label:'temporary income add'})}catch(e){return}closeSheet();renderAll()}})}
 
 
 function openAddBank(existing=null){const entityId=typeof existing==='string'?existing:existing?.id||'';existing=entityId?financialEntityById('bank',entityId):null;if(entityId&&!existing)return showAlert('項目が見つかりません','一覧を開き直してください。');let balance=Number(existing?.balance)||0,threshold=Number(existing?.threshold)||0;openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="abCancel">キャンセル</button><div class="sheet-title">${existing?'銀行口座を編集':'銀行口座登録'}</div><button type="button" class="nav-text bold" id="abSave">保存</button></div><div class="sheet-body"><div class="form-group-title">口座</div><div class="form-card"><div class="form-section"><div class="form-label">銀行名</div><input class="field" id="abName" value="${esc(existing?.name||'')}" placeholder="例：三井住友銀行"></div><div class="form-section"><div class="form-label">口座名</div><input class="field" id="abLabel" value="${esc(existing?.label||'')}" placeholder="普通口座など"></div><div class="form-section">${moneyButton('abBalance','現在残高',balance)}</div></div><div class="form-group-title">アラート</div><div class="form-card"><div class="form-section">${moneyButton('abThreshold','残高アラート',threshold)}</div></div><div class="form-helper">残高を保存した時点を基準日時として記録し、それ以前のGmail履歴で現在残高を再変動させません。</div>${existing?'<button type="button" class="secondary danger" id="abDelete">この口座を削除</button>':''}</div>`,'full',root=>{const bb=root.querySelector('#abBalance'),tt=root.querySelector('#abThreshold');bb.onclick=()=>openCalculator('銀行残高',balance,v=>{balance=v;bb.querySelector('.val').textContent=yen(v);markSheetDirty()});tt.onclick=()=>openCalculator('残高アラート',threshold,v=>{threshold=v;tt.querySelector('.val').textContent=yen(v);markSheetDirty()});root.querySelector('#abCancel').onclick=requestSheetClose;root.querySelector('#abSave').onclick=()=>{const name=root.querySelector('#abName').value.trim();if(!name)return showAlert('銀行名を入力してください','銀行名は必須です。');if(!Number.isFinite(balance)||balance<0)return showAlert('金額を確認してください','残高は0円以上にしてください。');runSaveAction(root.querySelector('#abSave'),()=>{let saved;const current=entityId?requireFinancialEntity('bank',entityId):null;if(current){const balanceChanged=Number(current.balance)!==Number(balance);Object.assign(current,{name,label:root.querySelector('#abLabel').value.trim(),threshold});if(balanceChanged)reconcileBankBalance(entityId,balance,'口座編集');else current.updatedAt=new Date().toISOString();saved=current}else{const now=new Date().toISOString();saved={id:uid('bank'),name,label:root.querySelector('#abLabel').value.trim(),balance,threshold,updatedAt:now,balanceAsOf:now};data.banks.push(saved);bankSnapshot(saved,'口座登録')}relinkMailEntities();},{label:'bank save',busy:true,afterCommit:refreshFinancialViews,close:closeSheet})};root.querySelector('#abDelete')?.addEventListener('click',()=>deleteFinancialEntity('bank',entityId,root.querySelector('#abDelete')))})}
@@ -2929,7 +2929,7 @@ function bindMoneyTicker(context='today'){
 /* ===== end Money Snapshot ticker ===== */
 
 /* 第14版: 旧「今日」画面は、ホームの支出カードから開く専用画面「今日の支出」(screen-day) になった。入力ボタンは＋ハブへ集約 */
-function renderDay(){const n=unreadNotices(),pending=data.mailImports.filter(x=>x.status==='pending').length,tx=txForDate(trackingDate);document.getElementById('dayTop').innerHTML=topbar('今日の支出','',`<button class="icon-btn" id="todayMenu" aria-label="メニュー">${icon('menu')}</button>`);document.getElementById('dayContent').innerHTML=`${moneyTickerHtml('today',ym())}${dateNavigatorHtml(trackingDate)}${ringHtml(trackingDate,'today')}${dayClosingCardHtml(trackingDate)}${acfMiniCardHtml()}${nextFinancialEventHtml()}<div class="section-head">支出のグラフ</div>${spendChartCardHtml('day')}<div class="section-head">本日の収入</div>${todayIncomeHtml(trackingDate)}<div class="section-head">詳細</div><div class="group"><button class="row press" id="todayAnalysis"><span class="row-icon">${icon('chart')}</span><div class="row-main"><div class="row-title">詳細分析</div><div class="row-sub">時間帯・カテゴリ・予算状況</div></div><span class="chev">›</span></button><button class="row press" id="todayTransactions"><span class="row-icon">${icon('list')}</span><div class="row-main"><div class="row-title">実績済支払い取引一覧</div><div class="row-sub">${tx.length}件の支出記録</div></div><span class="chev">›</span></button></div><div class="section-head">カテゴリ別支出</div>${categoryCards(trackingDate)}<div class="section-head">メール取引</div><div class="group"><button class="row press" id="todayMail"><div class="gmail-row-icon settings-icon">${icon('mail')}</div><div class="row-main"><div class="row-title">メール取引</div><div class="row-sub">${gmailConnected()?'同期済み':'未接続'}・未確認 ${pending}件</div></div>${pending?`<span class="badge">${pending}</span>`:''}<span class="chev">›</span></button></div>`;bindDay()}
+function renderDay(){const n=unreadNotices(),pending=data.mailImports.filter(x=>x.status==='pending').length,tx=txForDate(trackingDate);document.getElementById('dayTop').innerHTML=topbar('今日の支出','',`<button class="icon-btn" id="todayMenu" aria-label="メニュー">${icon('menu')}</button>`);document.getElementById('dayContent').innerHTML=`${spendChartCardHtml('day')}<div class="section-head">${trackingDate===ymd()?'今日':'この日'}</div>${dateNavigatorHtml(trackingDate)}${ringHtml(trackingDate,'today')}${dayClosingCardHtml(trackingDate)}<div class="section-head">これからのお金</div>${acfMiniCardHtml()}${nextFinancialEventHtml()}<div class="section-head">カテゴリ</div>${categoryCards(trackingDate)}${incomesForDate(trackingDate).length?`<div class="section-head">収入</div>${todayIncomeHtml(trackingDate)}`:''}<div class="section-head">記録</div><div class="group"><button class="row press" id="todayTransactions"><span class="row-icon">${icon('list')}</span><div class="row-main"><div class="row-title">取引</div><div class="row-sub">${tx.length}件の支出</div></div><span class="chev">›</span></button><button class="row press" id="todayAnalysis"><span class="row-icon">${icon('chart')}</span><div class="row-main"><div class="row-title">詳細分析</div><div class="row-sub">時間帯・カテゴリ・予算</div></div><span class="chev">›</span></button><button class="row press" id="todayMail"><span class="row-icon">${icon('mail')}</span><div class="row-main"><div class="row-title">メール取引</div><div class="row-sub">${gmailConnected()?'同期済み':'未接続'}・未確認 ${pending}件</div></div>${pending?`<span class="badge">${pending}</span>`:''}<span class="chev">›</span></button></div>`;bindDay()}
 function bindDay(){bindSpendCharts(document.getElementById('dayContent'));document.getElementById('todayDayClose')?.addEventListener('click',()=>openDayClosing(trackingDate));bindMoneyTicker('today');document.getElementById('dayPrev').onclick=()=>shiftTrackingDate(-1);document.getElementById('dayNext').onclick=()=>shiftTrackingDate(1);installHorizontalSwipe(document.getElementById('todayDateNavigator'),()=>shiftTrackingDate(1),()=>shiftTrackingDate(-1));document.getElementById('todayHero').onclick=()=>openDailyCorrectionDetail(trackingDate);document.getElementById('todayGoalAction').onclick=()=>openDailyGoalPlanner(trackingDate);document.getElementById('acfToday')?.addEventListener('click',openAcf);document.getElementById('nextMoneyEvent')?.addEventListener('click',e=>openFinancialDayInspector(e.currentTarget.dataset.date));document.getElementById('todayAnalysis').onclick=()=>openDailyAnalysis(trackingDate);document.getElementById('todayTransactions').onclick=()=>openTransactionList({date:trackingDate,title:`${dayLabel(trackingDate)}の支払い`});document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>openTransactionList({date:trackingDate,category:b.dataset.cat,title:b.dataset.cat}));document.getElementById('todayMail').onclick=openMailOverview;document.getElementById('todayMenu').onclick=e=>openMenu(e.currentTarget,[{label:'生活費の見通し',icon:'chart',action:openAcf},{label:dailyGoal(trackingDate).total?'目標を見直す':'目標をつくる',icon:'target',action:()=>openDailyGoalPlanner(trackingDate)},{label:'最近の支出を再利用',icon:'repeat',action:()=>openQuickRepeat(trackingDate)},{label:'実質金額を確認',icon:'calc',action:()=>openDailyCorrectionDetail(trackingDate)},{label:'メール取引',icon:'mail',action:openMailOverview}])}
 function hasDailySpendData(date){return txForDate(date).length>0||data.dailyCorrections[date]!=null}
 function hasMonthSpendData(month){return txForMonth(month).length>0||data.monthlyCorrections[month]!=null}
@@ -3113,7 +3113,7 @@ function goalAcfStepHtml(state){ensureGoalDailyPlan(state);const f=goalPlannerFo
 function renderMonth(){
   const spent=spentMonth(currentMonth),g=monthlyGoal(currentMonth),rate=goalRate(spent,g.total),prev=addMonths(currentMonth,-1),ps=spentMonth(prev),pg=monthlyGoal(prev).total,pr=goalRate(ps,pg),pending=data.mailImports.filter(x=>x.status==='pending').length,planBudget=monthlyPlanBudgetBreakdown(currentMonth,g.total,g.daily||{});
   document.getElementById('monthTop').innerHTML=`<div class="topbar-main"><button type="button" class="month-name-btn" id="monthName">${monthLabel(currentMonth)} ${icon('chevronDown')}</button></div><div class="nav-actions">${actionBtn('target','monthGoal','月間目標')}<button class="icon-btn" id="monthSearch" aria-label="横断検索">${icon('search')}</button><button class="icon-btn" id="monthMenu" aria-label="メニュー">${icon('menu')}</button></div>`;
-  document.getElementById('monthContent').innerHTML=`${moneyTickerHtml('month',currentMonth)}<button type="button" class="hero hero-button" id="monthHero"><div class="hero-kicker">今月使った金額</div><div class="hero-value">${yen(spent)}</div><div class="month-progress"><div class="month-progress-fill ${rate>100?'over':''}" style="width:${clamp(rate,0,100)}%"></div></div><div class="month-stats"><span>目標 ${g.total?yen(g.total):'未設定'}</span><span>${g.total?rate+'%':'—'}</span></div><div class="month-hero-meta"><div><span>先月</span><strong>${yen(ps)}</strong></div><div><span>先月達成率</span><strong>${pg?pr+'%':'—'}</strong></div></div><div class="goal-plan-action" style="margin:12px -16px -16px;padding-left:16px"><span>${g.total?`目標 ${yen(g.total)}・残り ${yen(Math.max(0,g.total-spent))}`:'目標を計画する'}</span><span>›</span></div></button><div class="section-head">支出のグラフ</div>${spendChartCardHtml('month')}<div class="section-head">今月の収入</div>${acfMonthIncomeHtml(currentMonth)}<div class="section-head">生活費の見通し</div>${acfMonthCardHtml(currentMonth)}<div class="section-head">月カレンダー</div>${monthCalendarHtml(currentMonth)}${g.total?`<div class="month-plan-tools"><div class="month-plan-summary">${currentMonth===ym()?`使用済み ${yen(planBudget.used)}・今後計画 ${yen(planBudget.planned)}`:`日別計画 ${yen(planBudget.planned)}`}<br><span class="${planBudget.gap<0?'red':''}">${planBudget.gap>=0?'未割当':'超過'} ${yen(Math.abs(planBudget.gap))}</span></div><button type="button" class="month-plan-edit" id="monthPlanEdit">${monthPlanEditMode?'調整を終了':'日別計画を調整'}</button></div>`:''}<div class="section-head">大型支出計画</div>${largeExpenseMonthListHtml(currentMonth)}${eventGoalMonthBannerHtml(currentMonth)}<div class="section-head">カテゴリ別月間支出</div>${monthCategoryList(currentMonth)}<div class="section-head">計画と実績 / 詳細分析</div><div class="group"><button class="row press" id="monthAnalysis"><div class="row-main"><div class="row-title">詳細分析</div><div class="row-sub">計画差異・前月比較・カテゴリ構成</div></div><span class="chev">›</span></button><button class="row press" id="monthReasonAnalysis"><div class="row-main"><div class="row-title">理由が分かる分析</div><div class="row-sub">カテゴリ・店舗・曜日・支払方法を同じ期間で比較</div></div><span class="chev">›</span></button><button class="row press" id="monthCloseReview"><div class="row-main"><div class="row-title">月締めレビュー</div><div class="row-sub">未確認請求・未入金・割り勘回収・残高を点検</div></div><span class="chev">›</span></button><button class="row press" id="monthTransactions"><div class="row-main"><div class="row-title">今月の実績済支払い取引一覧</div><div class="row-sub">検索・絞り込み</div></div><span class="chev">›</span></button></div><div class="section-head">メール取引</div><div class="group"><button class="row press" id="monthMail"><div class="gmail-row-icon settings-icon">${icon('mail')}</div><div class="row-main"><div class="row-title">メール取引</div><div class="row-sub">今月 ${data.mailImports.filter(x=>String(x.date).slice(0,7)===currentMonth&&x.status!=='ignored').length}件・未確認 ${pending}件</div></div>${pending?`<span class="badge">${pending}</span>`:''}<span class="chev">›</span></button></div>`;
+  document.getElementById('monthContent').innerHTML=`${spendChartCardHtml('month')}<div class="section-head">目標</div><button type="button" class="hero hero-button" id="monthHero"><div class="hero-kicker">今月使った金額</div><div class="hero-value">${yen(spent)}</div><div class="month-progress"><div class="month-progress-fill ${rate>100?'over':''}" style="width:${clamp(rate,0,100)}%"></div></div><div class="month-stats"><span>目標 ${g.total?yen(g.total):'未設定'}</span><span>${g.total?rate+'%':'—'}</span></div><div class="month-hero-meta"><div><span>先月</span><strong>${yen(ps)}</strong></div><div><span>先月達成率</span><strong>${pg?pr+'%':'—'}</strong></div></div><div class="goal-plan-action" style="margin:12px -16px -16px;padding-left:16px"><span>${g.total?`目標 ${yen(g.total)}・残り ${yen(Math.max(0,g.total-spent))}`:'目標を計画する'}</span><span>›</span></div></button><div class="section-head">今月の収入</div>${acfMonthIncomeHtml(currentMonth)}<div class="section-head">生活費の見通し</div>${acfMonthCardHtml(currentMonth)}<div class="section-head">月カレンダー</div>${monthCalendarHtml(currentMonth)}${g.total?`<div class="month-plan-tools"><div class="month-plan-summary">${currentMonth===ym()?`使用済み ${yen(planBudget.used)}・今後計画 ${yen(planBudget.planned)}`:`日別計画 ${yen(planBudget.planned)}`}<br><span class="${planBudget.gap<0?'red':''}">${planBudget.gap>=0?'未割当':'超過'} ${yen(Math.abs(planBudget.gap))}</span></div><button type="button" class="month-plan-edit" id="monthPlanEdit">${monthPlanEditMode?'調整を終了':'日別計画を調整'}</button></div>`:''}<div class="section-head">大型支出計画</div>${largeExpenseMonthListHtml(currentMonth)}${eventGoalMonthBannerHtml(currentMonth)}<div class="section-head">カテゴリ別月間支出</div>${monthCategoryList(currentMonth)}<div class="section-head">分析</div><div class="group"><button class="row press" id="monthAnalysis"><div class="row-main"><div class="row-title">詳細分析</div><div class="row-sub">計画差異・前月比較・カテゴリ構成</div></div><span class="chev">›</span></button><button class="row press" id="monthReasonAnalysis"><div class="row-main"><div class="row-title">理由が分かる分析</div><div class="row-sub">カテゴリ・店舗・曜日・支払方法を同じ期間で比較</div></div><span class="chev">›</span></button><button class="row press" id="monthCloseReview"><div class="row-main"><div class="row-title">月締めレビュー</div><div class="row-sub">未確認請求・未入金・割り勘回収・残高を点検</div></div><span class="chev">›</span></button><button class="row press" id="monthTransactions"><div class="row-main"><div class="row-title">今月の実績済支払い取引一覧</div><div class="row-sub">検索・絞り込み</div></div><span class="chev">›</span></button></div><div class="section-head">メール取引</div><div class="group"><button class="row press" id="monthMail"><div class="gmail-row-icon settings-icon">${icon('mail')}</div><div class="row-main"><div class="row-title">メール取引</div><div class="row-sub">今月 ${data.mailImports.filter(x=>String(x.date).slice(0,7)===currentMonth&&x.status!=='ignored').length}件・未確認 ${pending}件</div></div>${pending?`<span class="badge">${pending}</span>`:''}<span class="chev">›</span></button></div>`;
   bindMonth()
 }
 function monthShift(n){currentMonth=addMonths(currentMonth,n);renderAll()}
@@ -3241,9 +3241,9 @@ function openBankDetail(id,period='1m'){const b=bankById(id);if(!b)return;const 
 function donutHtml(items){const vals=items.filter(x=>x.value>0),tot=sum(vals,x=>x.value);if(!tot)return'<div class="empty">データがありません。</div>';let acc=0,parts=vals.map(x=>{const a=acc/tot*360;acc+=x.value;const b=acc/tot*360;return `${x.color} ${a}deg ${b}deg`});return `<div class="donut-wrap"><div class="donut" style="border-radius:50%;background:conic-gradient(${parts.join(',')})"></div><div class="legend">${vals.map(x=>`<div class="legend-row"><span class="dot" style="background:${x.color}"></span><span style="flex:1">${esc(x.label)}</span><strong>${yen(x.value)}</strong></div>`).join('')}</div></div>`}
 
 function openAssetBillingMonthPicker(onChange=null){openDisplayMonthPicker({title:'支払いの月',value:assetBillingMonth,onApply:m=>{assetBillingMonth=m;if(typeof onChange==='function')return onChange(m);if(activeTab==='payments')renderPayments();else renderAssets()}})}
-function openQuickCardBilling(paymentMonth=assetBillingMonth,preselectedCardId='',preselectedBillingMonth=''){
+function openQuickCardBilling(paymentMonth=assetBillingMonth,preselectedCardId='',preselectedBillingMonth='',initialAmount=0){
   if(!data.cards.length)return showAlert('カードがありません','先にクレジットカードを登録してください。');if(preselectedCardId&&!cardById(preselectedCardId))return showAlert('カードが見つかりません','一覧を開き直してください。');
-  let cardId=preselectedCardId||data.cards[0].id,billingMonth=preselectedBillingMonth||'',amount=0,paymentDate=`${paymentMonth}-01`,status='confirmed',balanceMode='none';
+  let cardId=preselectedCardId||data.cards[0].id,billingMonth=preselectedBillingMonth||'',amount=Math.max(0,Math.round(Number(initialAmount)||0)),paymentDate=`${paymentMonth}-01`,status='confirmed',balanceMode='none';
   openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="qcbCancel">キャンセル</button><div class="sheet-title">カード請求額を更新</div><button type="button" class="nav-text bold" id="qcbSave">保存</button></div><div class="sheet-body"><div class="form-group-title">請求</div><div class="form-card"><div class="form-section"><div class="form-label">カード</div><select class="field field-select" id="qcbCard">${data.cards.map(c=>`<option value="${c.id}" ${c.id===cardId?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="form-section" id="qcbStatementWrap"><div class="form-label">対象請求</div><select class="field field-select" id="qcbStatement"></select></div><div class="form-section"><div class="form-label">実際の支払日</div><input class="field" id="qcbDate" type="date" value="${esc(paymentDate)}"></div><div class="form-section">${moneyButton('qcbAmount','請求額',amount)}</div></div><div class="form-group-title">状態</div><div class="seg" id="qcbStatus"><button type="button" data-v="estimated">見込み</button><button type="button" data-v="confirmed" class="on">確定</button><button type="button" data-v="paid">支払済み</button></div><div id="qcbBalanceWrap" class="hidden"><div class="form-group-title">引落口座の現在残高</div><div class="seg" id="qcbBalanceMode"><button type="button" data-v="apply">残高にも反映</button><button type="button" data-v="reconciled">すでに反映済み</button></div><div class="form-helper" id="qcbBalanceHelp"></div></div><div class="card card-pad"><div class="row-title">反映内容</div><div class="hero-sub" id="qcbInfo"></div></div></div>`,'full',root=>{
     const amountBtn=root.querySelector('#qcbAmount'),saveBtn=root.querySelector('#qcbSave'),info=root.querySelector('#qcbInfo'),balanceWrap=root.querySelector('#qcbBalanceWrap'),balanceHelp=root.querySelector('#qcbBalanceHelp'),statementSelect=root.querySelector('#qcbStatement');
     const choices=()=>{const card=cardById(cardId),items=cardStatementsForPaymentMonth(cardId,paymentMonth);if(items.length)return items;const bm=billingMonth||billingMonthForPaymentMonth(card,paymentMonth);return[cardStatementItem(card,bm,paymentMonth)]};
@@ -3983,6 +3983,7 @@ function renderSettings(){
   const level={many:'多め',minimal:'最小限',recommended:'おすすめ'}[data.notificationSettings.level]||'おすすめ';
   const appearance={system:'システム',dark:'ダーク',light:'ライト'}[data.appearance]||'システム';
   const groups=[
+    ['登録',[{id:'accountsSettings',symbol:'bank',color:'var(--accent)',title:'口座とカード',value:`${data.banks.length+data.cards.length+(data.debitCards||[]).length}件`},{id:'employersSettings',symbol:'briefcase',color:'var(--teal)',title:'勤務先',value:`${data.employers.length}件`}],'口座・カード・勤務先の追加と編集はここで行います。'],
     ['連携',[{id:'gmailSettings',symbol:'mail',color:'#EA4335',title:'Gmail連携',detail:gmailStatusLabel()}]],
     ['お金',[
       {id:'categorySettings',symbol:'grid',color:'var(--orange)',title:'カテゴリ',value:`${data.categories.length}件`},
@@ -4021,6 +4022,7 @@ function bindSettings(){
     notificationSettings:openNotificationSettings,appearanceSettings:openAppearanceSettings,
     feedbackSettingsRow:openFeedbackSettings,securitySettings:openSecuritySettings,
     helpSettings:openHelp,dataSettings:openDataSettings,systemNoticesRow:openNotices,
+    accountsSettings:openAccountsSettings,employersSettings:openEmployersSettings,
   };
   const root=document.getElementById('settingsContent');
   for(const [id,action] of Object.entries(actions))root.querySelector('#'+id).onclick=action;
@@ -6167,7 +6169,7 @@ function homeSettingsHtml(){
   const item=(k)=>`<div class="row hs-row" data-reorder-key="${k}"><button type="button" class="switch ${L.hidden.has(k)?'':'on'}" data-layout-toggle="${k}" role="switch" aria-checked="${!L.hidden.has(k)}" aria-label="${esc(HOME_SECTION_LABELS[k])}を表示"></button><div class="row-main"><div class="row-title">${esc(HOME_SECTION_LABELS[k])}</div></div>${dragHandleHtml(HOME_SECTION_LABELS[k])}</div>`;
   const sw=(k,title,sub='')=>`<div class="row hs-row"><div class="row-main"><div class="row-title">${esc(title)}</div>${sub?`<div class="row-sub">${esc(sub)}</div>`:''}</div><button type="button" class="switch ${P[k]?'on':''}" data-home-pref="${k}" role="switch" aria-checked="${!!P[k]}" aria-label="${esc(title)}"></button></div>`;
   const seg=(k,label,opts)=>`<div class="hs-seg-block"><div class="hs-seg-label">${esc(label)}</div><div class="glass-seg" role="radiogroup" aria-label="${esc(label)}">${opts.map(([v,l])=>`<button type="button" role="radio" aria-checked="${String(P[k])===String(v)}" data-home-pref-set="${k}" data-value="${v}">${esc(l)}</button>`).join('')}</div></div>`;
-  return `<div class="hs-hero"><div class="hs-avatar">${profileAvatarHtml('hs-avatar-img')}</div><div class="hs-hero-copy"><div class="hs-name">${esc(data.profile?.name||'ホーム')}</div><div class="hs-state"><span class="profile-state-mark ring-${st.key}" aria-hidden="true"></span>${esc(st.label)}</div></div></div>
+  return `<div class="hs-hero hs-hero-center"><div class="hs-avatar ring-${st.key}">${profileAvatarHtml('hs-avatar-img')}</div><div class="hs-name">${esc(data.profile?.name||'ホーム')}</div><div class="hs-state"><span class="profile-state-mark ring-${st.key}" aria-hidden="true"></span>${esc(st.label)}<span class="hs-state-note">${esc(st.note||'')}</span></div></div>
   <h2 class="section-head">カード</h2><p class="hs-help">右の ≡ を上下になぞると並び順が変わります。スイッチで表示・非表示。</p><div class="group hs-list" id="hsCards">${L.cards.map(item).join('')}</div>
   <h2 class="section-head">最近の動き</h2><div class="group hs-list" id="hsRows">${L.rows.map(item).join('')}</div>
   <h2 class="section-head">支出カード</h2><div class="group hs-block">${seg('startPeriod','開いた時の期間',[['last','前回のまま'],['today','今日'],['month','今月']])}</div>
@@ -6448,6 +6450,8 @@ function spendHourOf(t){const at=t.createdAt?new Date(t.createdAt):null;return a
 function spendWeekStart(s){const d=parseYmd(s),ws=Number(appPrefs().weekStart)||0;d.setDate(d.getDate()-((d.getDay()-ws+7)%7));return ymd(d)}
 function spendShortDay(s){const d=parseYmd(s);return `${d.getMonth()+1}/${d.getDate()}`}
 function spendJpDay(s){const d=parseYmd(s);return `${d.getMonth()+1}月${d.getDate()}日`}
+function spendDayGoal(d){const m=d.slice(0,7),v=Number(dayGoalForMonth(m,Number(d.slice(8,10))))||0;if(v)return v;const t=Number(monthlyGoal(m).total)||0;return t?Math.round(t/spendMonthDays(m)):0}
+function spendGoalRange(start,end){let t=0;for(let d=start;d<=end;d=spendAddDays(d,1))t+=spendDayGoal(d);return t}
 function spendSumRange(start,end){let total=0;for(let d=start;d<=end;d=spendAddDays(d,1))total+=spentDate(d);return total}
 function spendAnchor(scope){return scope==='day'?trackingDate:scope==='month'||scope==='analysis'?(currentMonth===ym()?ymd():`${currentMonth}-${pad(spendMonthDays(currentMonth))}`):ymd()}
 /* 区切りごとの集計。start/end は日付（日の表示では時刻 hour も持つ） */
@@ -6455,34 +6459,36 @@ function spendSeries(scope){
   const st=spendChartState[scope],anchor=spendAnchor(scope),today=ymd(),b=[];let title='',unit='日',start,end;
   if(st.range==='D'){
     const day=spendAddDays(anchor,st.offset);start=end=day;title=dayLabel(day);unit='時間';
-    const tx=txForDate(day);for(let h=0;h<24;h++)b.push({label:`${h}時`,tick:h%6===0?`${h}時`:'',start:day,end:day,hour:h,value:sum(tx.filter(t=>spendHourOf(t)===h),t=>t.amount),future:day>today});
+    const tx=txForDate(day);for(let h=0;h<24;h++)b.push({label:`${h}時`,tick:h%6===0?`${h}時`:'',start:day,end:day,hour:h,value:sum(tx.filter(t=>spendHourOf(t)===h),t=>t.amount),future:day>today,goal:0});b.dayGoal=spendDayGoal(day);
   }else if(st.range==='W'){
     start=spendAddDays(spendWeekStart(anchor),st.offset*7);end=spendAddDays(start,6);title=`${spendJpDay(start)}〜${spendJpDay(end)}`;
-    for(let i=0;i<7;i++){const d=spendAddDays(start,i),w='日月火水木金土'[parseYmd(d).getDay()];b.push({label:dayLabel(d),tick:w,start:d,end:d,value:spentDate(d),future:d>today})}
+    for(let i=0;i<7;i++){const d=spendAddDays(start,i),w='日月火水木金土'[parseYmd(d).getDay()];b.push({label:dayLabel(d),tick:w,start:d,end:d,value:spentDate(d),future:d>today,goal:spendDayGoal(d)})}
   }else if(st.range==='M'){
     const month=addMonths(anchor.slice(0,7),st.offset),n=spendMonthDays(month);start=`${month}-01`;end=`${month}-${pad(n)}`;title=monthLabel(month);
-    for(let i=1;i<=n;i++){const d=`${month}-${pad(i)}`;b.push({label:dayLabel(d),tick:[1,8,15,22,29].includes(i)?String(i):'',start:d,end:d,value:spentDate(d),future:d>today})}
+    for(let i=1;i<=n;i++){const d=`${month}-${pad(i)}`;b.push({label:dayLabel(d),tick:[1,8,15,22,29].includes(i)?String(i):'',start:d,end:d,value:spentDate(d),future:d>today,goal:spendDayGoal(d)})}
   }else if(st.range==='6M'){
     const last=addMonths(anchor.slice(0,7),st.offset*6),first=addMonths(last,-5);start=spendWeekStart(`${first}-01`);end=`${last}-${pad(spendMonthDays(last))}`;title=`${monthLabel(first)}〜${monthLabel(last).replace(/^\d+年/,'')}`;unit='週';
-    let prevMonth='';for(let d=start;d<=end;d=spendAddDays(d,7)){const e=spendAddDays(d,6)>end?end:spendAddDays(d,6),m=d.slice(0,7),tick=m!==prevMonth&&d.slice(8)<='07'?`${Number(m.slice(5))}月`:'';if(tick)prevMonth=m;b.push({label:`${spendJpDay(d)}〜${spendJpDay(e)}の週`,tick,start:d,end:e,value:spendSumRange(d,e),future:d>today})}
+    let prevMonth='';for(let d=start;d<=end;d=spendAddDays(d,7)){const e=spendAddDays(d,6)>end?end:spendAddDays(d,6),m=d.slice(0,7),tick=m!==prevMonth&&d.slice(8)<='07'?`${Number(m.slice(5))}月`:'';if(tick)prevMonth=m;b.push({label:`${spendJpDay(d)}〜${spendJpDay(e)}の週`,tick,start:d,end:e,value:spendSumRange(d,e),future:d>today,goal:spendGoalRange(d,e)})}
   }else{
     const year=Number(anchor.slice(0,4))+st.offset;start=`${year}-01-01`;end=`${year}-12-31`;title=`${year}年`;unit='か月';
-    for(let i=1;i<=12;i++){const m=`${year}-${pad(i)}`;b.push({label:monthLabel(m),tick:i%3===1?`${i}月`:'',start:`${m}-01`,end:`${m}-${pad(spendMonthDays(m))}`,month:m,value:spentMonth(m),future:`${m}-01`>today})}
+    for(let i=1;i<=12;i++){const m=`${year}-${pad(i)}`;b.push({label:monthLabel(m),tick:i%3===1?`${i}月`:'',start:`${m}-01`,end:`${m}-${pad(spendMonthDays(m))}`,month:m,value:spentMonth(m),future:`${m}-01`>today,goal:Number(monthlyGoal(m).total)||0})}
   }
-  const total=sum(b,x=>x.value),counted=b.filter(x=>!x.future),avg=counted.length?Math.round(sum(counted,x=>x.value)/counted.length):0;
-  return {buckets:b,title,unit,start,end,total,avg,range:st.range};
+  const total=sum(b,x=>x.value),counted=b.filter(x=>!x.future),avg=counted.length?Math.round(sum(counted,x=>x.value)/counted.length):0,goals=b.filter(x=>x.goal>0),goalTotal=st.range==='D'?(b.dayGoal||0):sum(b,x=>x.goal||0),goalLine=goals.length?Math.round(sum(goals,x=>x.goal)/goals.length):0;
+  return {buckets:b,title,unit,start,end,total,avg,range:st.range,goalTotal,goalLine};
 }
 function spendNiceMax(v){if(v<=0)return 1000;const p=Math.pow(10,Math.floor(Math.log10(v))),n=v/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p}
 function spendAxisYen(v){return v>=10000?`${Math.round(v/1000)/10}万`:v>=1000?`${Math.round(v/100)/10}千`:String(v)}
 function spendChartSvg(s,sel){
-  const W=340,H=176,top=10,bottom=22,right=40,n=s.buckets.length,max=spendNiceMax(Math.max(...s.buckets.map(x=>x.value),s.avg)),plotW=W-right,step=plotW/n,bw=Math.max(2,Math.min(26,step*.62)),y=v=>top+(H-top-bottom)*(1-v/max),pct=(v,t)=>(v/t*100).toFixed(2)+'%';
+  const W=340,H=176,top=10,bottom=22,right=40,n=s.buckets.length,max=spendNiceMax(Math.max(...s.buckets.map(x=>x.value),s.avg,s.goalLine||0)),plotW=W-right,step=plotW/n,bw=Math.max(2,Math.min(26,step*.62)),y=v=>top+(H-top-bottom)*(1-v/max),pct=(v,t)=>(v/t*100).toFixed(2)+'%';
   const grid=[0,.5,1].map(f=>`<line class="sc-grid" x1="0" x2="${plotW}" y1="${y(max*f)}" y2="${y(max*f)}"/>`).join('');
   const axis=[0,.5,1].map(f=>`<span class="sc-axis" style="top:${pct(y(max*f),H)}">${f===0?'0':spendAxisYen(max*f)}</span>`).join('');
-  const bars=s.buckets.map((b,i)=>{const x=i*step+(step-bw)/2,h=Math.max(b.value>0?2:0,(H-top-bottom)-(y(b.value)-top)),r=Math.min(bw/2,4);return h?`<path class="sc-bar${sel===i?' on':''}${sel!=null&&sel!==i?' dim':''}" d="M${x},${y(0)} v${-(h-r)} q0,${-r} ${r},${-r} h${bw-2*r} q${r},0 ${r},${r} v${h-r} z"/>`:''}).join('');
+  const bars=s.buckets.map((b,i)=>{const x=i*step+(step-bw)/2,h=Math.max(b.value>0?2:0,(H-top-bottom)-(y(b.value)-top)),r=Math.min(bw/2,4);return h?`<path class="sc-bar${sel===i?' on':''}${sel!=null&&sel!==i?' dim':''}${b.goal>0&&b.value>b.goal?' over':''}" d="M${x},${y(0)} v${-(h-r)} q0,${-r} ${r},${-r} h${bw-2*r} q${r},0 ${r},${r} v${h-r} z"/>`:''}).join('');
   const ticks=s.buckets.map((b,i)=>b.tick?`<span class="sc-tick" style="left:${pct(i*step+step/2,W)}">${esc(b.tick)}</span>`:'').join('');
-  const avg=s.avg>0&&s.range!=='D'?`<line class="sc-avg" x1="0" x2="${plotW}" y1="${y(s.avg)}" y2="${y(s.avg)}"/>`:'';
+  const avg=s.avg>0&&s.range!=='D'&&!s.goalLine?`<line class="sc-avg" x1="0" x2="${plotW}" y1="${y(s.avg)}" y2="${y(s.avg)}"/>`:'';
+  const goal=s.goalLine>0&&s.range!=='D'?`<line class="sc-goal" x1="0" x2="${plotW}" y1="${y(s.goalLine)}" y2="${y(s.goalLine)}"/>`:'';
+  const goalLabel=goal?`<span class="sc-goal-label" style="top:${pct(y(s.goalLine),H)}">目標<br>${spendAxisYen(s.goalLine)}</span>`:'';
   const cursor=sel!=null?`<line class="sc-cursor" x1="${sel*step+step/2}" x2="${sel*step+step/2}" y1="${top-6}" y2="${y(0)}"/>`:'';
-  return `<svg class="sc-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" data-step="${step}" data-plotw="${plotW}">${grid}${avg}${cursor}${bars}</svg><div class="sc-labels" aria-hidden="true">${axis}${ticks}</div>`;
+  return `<svg class="sc-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" data-step="${step}" data-plotw="${plotW}">${grid}${avg}${goal}${cursor}${bars}</svg><div class="sc-labels" aria-hidden="true">${goal?'':axis}${goalLabel}${ticks}</div>`;
 }
 function spendBreakdown(start,end,hour=null){
   const tx=data.transactions.filter(t=>t.date>=start&&t.date<=end&&(hour==null||spendHourOf(t)===hour)),by=new Map();
@@ -6493,8 +6499,8 @@ function spendCatRowsHtml(cats,attr){return cats.map(c=>`<button type="button" c
 function spendChartHeadHtml(s,sel){
   const b=sel!=null?s.buckets[sel]:null;
   if(b)return `<div class="sc-head is-sel"><div class="sc-kicker">${esc(b.label)}</div><div class="sc-value">${yen(b.value)}</div><div class="sc-range">棒を押すと内訳を表示</div></div>`;
-  const kicker=s.range==='D'?'合計':'合計';const avgText=s.range==='D'?`${s.buckets.filter(x=>x.value>0).length}時間に支出`:`1${s.unit}の平均 ${yen(s.avg)}`;
-  return `<div class="sc-head"><div class="sc-kicker">${kicker}</div><div class="sc-value">${yen(s.total)}</div><div class="sc-range">${esc(s.title)}<span aria-hidden="true">・</span>${esc(avgText)}</div></div>`;
+  const avgLabel=s.range==='D'?'支出した時間':`1${s.unit}の平均`,avgVal=s.range==='D'?`${s.buckets.filter(x=>x.value>0).length}<small>時間</small>`:yen(s.avg);
+  return `<div class="sc-head sc-metrics"><div class="sc-metric" style="--c:var(--orange)"><span>支出</span><b>${yen(s.total)}</b></div><div class="sc-metric" style="--c:var(--green)"><span>目標</span><b>${s.goalTotal?yen(s.goalTotal):'—'}</b></div><div class="sc-metric" style="--c:var(--accent)"><span>${avgLabel}</span><b>${avgVal}</b></div><div class="sc-range">${esc(s.title)}${s.goalTotal?`・目標の${Math.round(s.total/s.goalTotal*100)}%`:''}</div></div>`;
 }
 function spendChartCardHtml(scope){
   const st=spendChartState[scope],s=spendSeries(scope),bd=spendBreakdown(s.start,s.end),label=`${s.title}の支出は${yen(s.total)}。${s.range==='D'?'':`1${s.unit}の平均は${yen(s.avg)}。`}左右の矢印キーで期間を選び、Enterで内訳を開きます。`;
@@ -6630,6 +6636,229 @@ function installRowSwipeActions(root,{selector='.txl-row',actions}){
   });
 }
 function bindTransactionRowSwipes(root){installRowSwipeActions(root,{actions:[{key:'edit',label:'編集',icon:'edit',tone:'edit',run:id=>openTransactionEdit(id)},{key:'delete',label:'削除',icon:'trash',tone:'delete',run:id=>deleteTransactionFlow(id,{pop:false})}]})}
+/* 第4段: iOS（Liquid Glass）らしさの作り直し
+   - ＋: 紙がめくれるように開く全画面の電卓。「支出・臨時収入・残高・給与・カード」をガラスのレンズで選ぶ
+   - ナビゲーションバー: 丸いガラスのボタン、右側はひとつのガラスのカプセル、主な操作は色つきの丸（✓）
+   - タブバー: 横にコンパクト、押すとレンズがふくらみ、指に付いて滑る
+   - プロフィール: ヘルスケアのような中央の写真と名前
+   - 今日／今月の支出: アクティビティのような期間の切替・数値の列・大きなグラフ */
+
+/* ---------- ＋ = 電卓（新規入力） ---------- */
+const ENTRY_MODES=[
+  {id:'entryExpense',key:'expense',label:'支出',sym:'cart',color:'var(--orange)'},
+  {id:'entryIncome',key:'income',label:'臨時収入',sym:'wallet',color:'var(--green)'},
+  {id:'entryBank',key:'bank',label:'残高',sym:'bank',color:'var(--accent)'},
+  {id:'entrySalary',key:'salary',label:'給与',sym:'briefcase',color:'var(--teal)'},
+  {id:'entryCard',key:'card',label:'カード請求',sym:'card',color:'var(--purple)'}
+];
+let entryLastMode='expense';
+function entryEval(expr){
+  const tokens=String(expr).match(/\d+|[+\-×÷]/g)||[];if(!tokens.length)return 0;
+  /* 掛け算・割り算を先に */
+  const seq=[];for(const t of tokens){if(/\d/.test(t))seq.push(Number(t));else seq.push(t)}
+  while(seq.length&&typeof seq[0]==='string')seq.shift();
+  while(seq.length&&typeof seq.at(-1)==='string')seq.pop();
+  const pass1=[];for(let k=0;k<seq.length;k++){const t=seq[k];if(t==='×'||t==='÷'){const a=pass1.pop(),b=seq[++k];pass1.push(t==='×'?a*b:(b?a/b:a))}else pass1.push(t)}
+  let total=Number(pass1[0])||0;for(let k=1;k<pass1.length;k+=2){const op=pass1[k],b=Number(pass1[k+1])||0;total=op==='+'?total+b:total-b}
+  return Math.max(0,Math.round(total));
+}
+function entryPaymentChoices(){return [{method:'other',id:'',label:'現金・その他'},...data.banks.map(b=>({method:'bank',id:b.id,label:b.name})),...(data.debitCards||[]).map(d=>({method:'debit',id:d.id,label:d.name})),...data.cards.map(c=>({method:'card',id:c.id,label:c.name}))]}
+function openEntryHub(){openEntryCalc()}
+function openEntryCalc(initialMode='expense'){
+  const date0=['today','day'].includes(activeTab)?trackingDate:ymd(),smart=quickExpenseSmartDefault();
+  const st={mode:ENTRY_MODES.some(m=>m.key===initialMode)?initialMode:'expense',expr:'',date:date0,cat:smart.category||data.categories[0]?.name||'その他',pay:{method:smart.paymentMethod||'other',id:smart.paymentId||''},merchant:'',toType:'cash',bankId:data.banks[0]?.id||'',empId:data.employers[0]?.id||'',cardId:data.cards[0]?.id||'',typed:false,saving:false};
+  const amount=()=>entryEval(st.expr);
+  const modeOf=k=>ENTRY_MODES.find(m=>m.key===k);
+  const keys=[['C','clear','すべて消す'],['⌫','back','1文字消す'],['÷','op','割る'],['×','op','掛ける'],['7'],['8'],['9'],['−','op','引く'],['4'],['5'],['6'],['+','op','足す'],['1'],['2'],['3'],['=','eq','計算する'],['0'],['00']];
+  const html=`<div class="sheet-nav entry-nav"><button type="button" class="nav-text" id="entryClose">閉じる</button><div class="sheet-title">新規入力</div><div class="entry-nav-right"><button type="button" class="entry-plan-btn" id="entryPlan" aria-haspopup="menu">${icon('calendar')}<span>予定</span></button><button type="button" class="nav-text bold" id="entrySave">保存</button></div></div>
+  <div class="sheet-body entry-calc" id="entryCalc">
+    <div class="entry-modes glass-lensbar" role="radiogroup" aria-label="入力の種類" id="entryModes"><span class="lens" aria-hidden="true"></span>${ENTRY_MODES.map(m=>`<button type="button" role="radio" id="${m.id}" data-entry-mode="${m.key}" style="--m:${m.color}" aria-checked="${m.key===st.mode}">${icon(m.sym)}<span>${m.label}</span></button>`).join('')}</div>
+    <div class="entry-display" id="entryDisplay" aria-live="polite"></div>
+    <div class="entry-context" id="entryContext"></div>
+    <div class="entry-keys" id="entryKeys">${keys.map(([k,kind='num',label])=>`<button type="button" class="entry-key ${kind}${k==='0'?' zero':''}${k==='='?' eq':''}" data-key="${k}" ${label?`aria-label="${label}"`:''}>${k}</button>`).join('')}</div>
+  </div>`;
+  openSheet(html,'full',root=>{
+    const sheet=root.closest('#sheet');sheet?.classList.add('glass-sheet','entry-sheet');
+    entryPageCurl(sheet);
+    const $=s=>root.querySelector(s),display=$('#entryDisplay'),context=$('#entryContext'),modes=$('#entryModes'),lens=modes.querySelector('.lens');
+    const placeLens=(animate=true)=>{const b=modes.querySelector(`[data-entry-mode="${st.mode}"]`);if(!b)return;lens.style.transition=animate&&!mm3MotionReduced()?'':'none';lens.style.width=b.offsetWidth+'px';lens.style.transform=`translateX(${b.offsetLeft}px)`;lens.style.setProperty('--m',modeOf(st.mode).color)};
+    const drawDisplay=()=>{const m=modeOf(st.mode),a=amount(),bank=st.mode==='bank'?bankById(st.bankId):null;
+      display.style.setProperty('--m',m.color);
+      display.innerHTML=`<div class="entry-expr">${esc(/[+\-×÷]/.test(st.expr)?st.expr:'')}</div><div class="entry-amount-line"><span class="entry-mode-label">${esc(m.label)}</span><span class="entry-amount">${yen(a)}</span></div><div class="entry-hint">${st.mode==='bank'&&bank?`現在の残高 ${yen(bank.balance)}・入力した金額に置き換えます`:st.mode==='salary'?'保存すると給与の記録を開きます（総支給額）':st.mode==='card'?'保存すると請求の記録を開きます':st.mode==='income'?'給与以外の入金':'使った金額'}</div>`;
+      markSheetDirty(a>0&&st.typed)};
+    const dateChip=()=>{const d=parseYmd(st.date);return `<label class="entry-date" title="日付">${icon('calendar')}<span>${st.date===ymd()?'今日':`${d.getMonth()+1}/${d.getDate()}`}</span><input type="date" id="entryDate" value="${esc(st.date)}" aria-label="日付（${esc(dayLabel(st.date))}）"></label>`};
+    const bindDate=()=>{const d=context.querySelector('#entryDate');if(d)d.onchange=()=>{if(d.value){st.date=d.value;drawContext()}}};
+    const chip=(attr,val,label,on,extra='')=>`<button type="button" class="entry-chip${on?' on':''}" ${attr}="${esc(val)}" aria-pressed="${on}" ${extra}>${label}</button>`;
+    const drawContext=()=>{let h='';
+      if(st.mode==='expense'){
+        const pays=entryPaymentChoices(),pay=pays.find(p=>p.method===st.pay.method&&p.id===st.pay.id)||pays[0],recent=recentExpenseTemplates(4);
+        h=`<div class="entry-chips" role="group" aria-label="カテゴリとすばやく入力">${data.categories.map(c=>chip('data-entry-cat',c.name,`<i style="background:${c.color}"></i>${esc(c.name)}`,c.name===st.cat)).join('')}<span class="entry-chip-sep" aria-hidden="true"></span><button type="button" class="entry-chip ghost" id="entryDetail">${icon('list')}詳細入力</button><button type="button" class="entry-chip ghost" id="entryOneLine">${icon('edit')}一行入力</button><button type="button" class="entry-chip ghost" id="entryRecent">${icon('repeat')}最近</button>${recent.map((r,i)=>`<button type="button" class="entry-chip tpl" data-entry-tpl="${i}">${esc(r.merchant)} ${yen(r.amount)}</button>`).join('')}</div>
+        <div class="entry-row2">${dateChip()}<button type="button" class="entry-field-btn" id="entryPay" aria-haspopup="menu">${icon('card')}<span>${esc(pay.label)}</span>${icon('chevronDown')}</button><label class="entry-field"><input type="text" id="entryMerchant" placeholder="店名・メモ" value="${esc(st.merchant)}" aria-label="店名・メモ"></label></div>`;
+        context.innerHTML=h;bindDate();
+        context.querySelectorAll('[data-entry-cat]').forEach(b=>b.onclick=()=>{st.cat=b.dataset.entryCat;feedback?.selection?.();drawContext()});
+        $('#entryPay').onclick=()=>openEntryOptions('支払い方法',pays.map(p=>[`${p.method}|${p.id}`,p.label]),`${st.pay.method}|${st.pay.id}`,v=>{const [m,id]=v.split('|');st.pay={method:m,id:id||''};drawContext()});
+        $('#entryMerchant').oninput=e=>{st.merchant=e.target.value};
+        $('#entryOneLine').onclick=()=>{context.replaceChildren();closeSheet();openSmartInputSearch('input')};
+        $('#entryDetail').onclick=()=>{const a=amount(),pre={amount:a,category:st.cat,paymentMethod:st.pay.method,paymentId:st.pay.id,merchant:(st.merchant||'').trim()};closeSheet();openQuickExpense(st.date,pre)};
+        $('#entryRecent')?.addEventListener('click',()=>{context.replaceChildren();closeSheet();openQuickRepeat(st.date)});
+        context.querySelectorAll('[data-entry-tpl]').forEach(b=>b.onclick=()=>{const r=recent[Number(b.dataset.entryTpl)];st.expr=String(r.amount);st.cat=r.category;st.pay={method:r.paymentMethod,id:r.paymentId};st.merchant=r.merchant;st.typed=true;feedback?.selection?.();drawDisplay();drawContext()});
+        return;
+      }
+      if(st.mode==='income')h=`<div class="entry-chips" role="group" aria-label="入金先">${chip('data-entry-to','cash|','手持ち・未入金',st.toType==='cash')}${data.banks.map(b=>chip('data-entry-to',`bank|${b.id}`,`${icon('bank')}${esc(b.name)}`,st.toType==='bank'&&st.bankId===b.id)).join('')}<span class="entry-chip-sep" aria-hidden="true"></span><button type="button" class="entry-chip ghost" id="entryIncomeDetail">${icon('list')}詳細入力</button></div><div class="entry-row2">${dateChip()}<label class="entry-field wide"><input type="text" id="entrySource" placeholder="収入源（例：単発バイト・返金）" value="${esc(st.merchant)}" aria-label="収入源"></label></div>`;
+      if(st.mode==='bank')h=data.banks.length?`<div class="entry-chips" role="group" aria-label="口座">${data.banks.map(b=>chip('data-entry-bank',b.id,`${icon('bank')}${esc(b.name)}`,st.bankId===b.id)).join('')}<span class="entry-chip-sep" aria-hidden="true"></span><button type="button" class="entry-chip ghost" id="entryBankDetail">${icon('list')}詳細入力</button></div>`:`<div class="entry-empty">銀行口座がありません。「その他」→「口座とカード」で追加できます。</div>`;
+      if(st.mode==='salary')h=data.employers.length?`<div class="entry-chips" role="group" aria-label="勤務先">${data.employers.map(e=>chip('data-entry-emp',e.id,`${icon('briefcase')}${esc(e.name)}`,st.empId===e.id)).join('')}</div>`:`<div class="entry-empty">勤務先がありません。「その他」→「給与と勤務先」で追加できます。</div>`;
+      if(st.mode==='card')h=data.cards.length?`<div class="entry-chips" role="group" aria-label="カード">${data.cards.map(c=>chip('data-entry-card',c.id,`${icon('card')}${esc(c.name)}`,st.cardId===c.id)).join('')}</div>`:`<div class="entry-empty">クレジットカードがありません。「その他」→「口座とカード」で追加できます。</div>`;
+      context.innerHTML=h;bindDate();
+      context.querySelectorAll('[data-entry-to]').forEach(b=>b.onclick=()=>{const [t,id]=b.dataset.entryTo.split('|');st.toType=t;if(id)st.bankId=id;drawContext()});
+      $('#entrySource')?.addEventListener('input',e=>{st.merchant=e.target.value});
+      $('#entryIncomeDetail')?.addEventListener('click',()=>{const a=amount();closeSheet();openTempIncome(st.date,a)});
+      $('#entryBankDetail')?.addEventListener('click',()=>{closeSheet();openQuickBank(st.bankId)});
+      context.querySelectorAll('[data-entry-bank]').forEach(b=>b.onclick=()=>{st.bankId=b.dataset.entryBank;if(!st.typed)st.expr=String(Math.round(Number(bankById(st.bankId)?.balance)||0));drawContext();drawDisplay()});
+      context.querySelectorAll('[data-entry-emp]').forEach(b=>b.onclick=()=>{st.empId=b.dataset.entryEmp;drawContext()});
+      context.querySelectorAll('[data-entry-card]').forEach(b=>b.onclick=()=>{st.cardId=b.dataset.entryCard;drawContext()});
+    };
+    const setMode=k=>{if(!modeOf(k))return;const was=st.mode;st.mode=k;entryLastMode=k;if(k!=='expense'&&was==='expense'&&!st.typed)st.merchant='';
+      if(k==='bank'&&!st.typed&&bankById(st.bankId))st.expr=String(Math.round(Number(bankById(st.bankId).balance)||0));else if(was==='bank'&&!st.typed)st.expr='';
+      modes.querySelectorAll('[data-entry-mode]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.entryMode===k)));placeLens();drawDisplay();drawContext()};
+    installLensDrag(modes,'[data-entry-mode]',b=>{if(b.dataset.entryMode!==st.mode){feedback?.selection?.();setMode(b.dataset.entryMode)}});
+    /* 金額を左右になぞると種類が変わる */
+    let sw=null;display.addEventListener('pointerdown',e=>{if(e.target.closest('input,label'))return;sw={x:e.clientX,y:e.clientY}});display.addEventListener('pointerup',e=>{if(!sw)return;const dx=e.clientX-sw.x,dy=e.clientY-sw.y;sw=null;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){const i=ENTRY_MODES.findIndex(m=>m.key===st.mode),n=ENTRY_MODES[(i+(dx<0?1:-1)+ENTRY_MODES.length)%ENTRY_MODES.length];feedback?.selection?.();setMode(n.key)}});
+    const press=k=>{
+      if(k==='C')st.expr='';
+      else if(k==='⌫')st.expr=st.expr.slice(0,-1);
+      else if(k==='=')st.expr=String(amount());
+      else if(/[+\-−×÷]/.test(k)){const op=k==='−'?'-':k;if(!st.expr)return;st.expr=/[+\-×÷]$/.test(st.expr)?st.expr.slice(0,-1)+op:st.expr+op}
+      else{const next=(st.expr==='0'?'':st.expr)+k;const last=next.split(/[+\-×÷]/).at(-1);if(last.length>9)return;st.expr=next.replace(/^0+(?=\d)/,'')}
+      st.typed=true;drawDisplay()};
+    $('#entryKeys').querySelectorAll('[data-key]').forEach(b=>b.onclick=()=>{feedback?.selection?.();press(b.dataset.key)});
+    const onKey=e=>{if(!document.getElementById('entryCalc')||e.target.closest?.('input'))return;const map={'*':'×','/':'÷','-':'−','Backspace':'⌫','Escape':null,'Enter':'=','Delete':'C'};const k=/^[0-9+]$/.test(e.key)?e.key:map[e.key];if(k){e.preventDefault();press(k)}};
+    document.addEventListener('keydown',onKey);
+    $('#entryClose').onclick=requestSheetClose;
+    $('#entryPlan').onclick=e=>openMenu(e.currentTarget,[{label:'固定支払いを追加',sub:'家賃・サブスクなど毎月の支払い',icon:'repeat',action:()=>{closeSheet();openFixedPayment()}},{label:'大型支出を計画',sub:'家電・旅行など大きな出費',icon:'cart',action:()=>{closeSheet();openLargeExpenseEditor(null,{after:renderAll})}},{label:'旅行・プレゼントを計画',sub:'目標額と期限を決めて貯める',icon:'gift',action:()=>{closeSheet();openEventGoalEditor()}}],{label:'予定を追加'});
+    $('#entrySave').onclick=()=>entrySave(st,amount());
+    setMode(st.mode);requestAnimationFrame(()=>placeLens(false));
+    return()=>document.removeEventListener('keydown',onKey);
+  });
+}
+function openEntryOptions(title,options,current,apply){
+  const menuItems=options.map(([v,l])=>({label:l,icon:v===current?'check':'',action:()=>apply(v)}));
+  const anchor=document.getElementById('entryPay')||document.getElementById('entryCalc');openMenu(anchor,menuItems,{label:title});
+}
+function entrySave(st,a){
+  if(st.saving)return;
+  if(st.mode==='expense'||st.mode==='income'||st.mode==='salary'||st.mode==='card'){if(!a)return showAlert('金額を入力してください','電卓で金額を入力してから保存します。')}
+  if(st.mode==='expense'){
+    st.saving=true;const m=(st.merchant||'').trim()||st.cat||'支出';
+    try{safeCommit(()=>recordExpense({date:st.date,amount:a,category:st.cat,merchant:m,paymentMethod:st.pay.method,paymentId:st.pay.id,saveNow:false}),{render:true,label:'entry expense'})}catch(e){st.saving=false;return}
+    feedback.success();closeSheet();showToast(`${st.cat} ${yen(a)} を記録しました`);return;
+  }
+  if(st.mode==='income'){
+    if(st.toType==='bank'&&!bankById(st.bankId))return showAlert('口座を選んでください','入金先の口座を選びます。');
+    st.saving=true;const src=(st.merchant||'').trim()||'臨時収入';
+    try{safeCommit(()=>{const temp={id:uid('tmp'),date:st.date,amount:a,sourceName:src,toType:st.toType,bankId:st.toType==='bank'?st.bankId:'',memo:'',incomeId:'',receivedConfirmed:false};const inc=recordIncome({date:st.date,amount:a,sourceName:src,toType:st.toType,bankId:temp.bankId,memo:'',kind:'temporary',tempIncomeId:temp.id,applyNow:false,saveNow:false});temp.incomeId=inc?.id||'';data.tempIncomes.push(temp)},{render:true,label:'entry temporary income'})}catch(e){st.saving=false;return}
+    feedback.success();closeSheet();showToast(`臨時収入 ${yen(a)} を記録しました`);return;
+  }
+  if(st.mode==='bank'){
+    if(!bankById(st.bankId))return showAlert('口座がありません','「その他」→「口座とカード」で口座を追加してください。');
+    st.saving=true;
+    try{safeCommit(()=>{requireFinancialEntity('bank',st.bankId);reconcileBankBalance(st.bankId,a,'残高の更新')},{render:true,label:'entry bank balance'})}catch(e){st.saving=false;return}
+    feedback.success();closeSheet();refreshFinancialViews?.();showToast(`${bankById(st.bankId)?.name||'口座'}の残高を ${yen(a)} にしました`);return;
+  }
+  if(st.mode==='salary'){
+    if(!data.employers.length)return showAlert('勤務先がありません','「その他」→「給与と勤務先」で勤務先を追加してください。');
+    closeSheet();openSalaryAdd(null,st.empId,{gross:a,selectedId:st.empId});return;
+  }
+  if(st.mode==='card'){
+    if(!data.cards.length)return showAlert('カードがありません','「その他」→「口座とカード」でカードを追加してください。');
+    closeSheet();openQuickCardBilling(paymentHomeMonth(),st.cardId,'',a);return;
+  }
+}
+/* 紙がめくれるように開く（右下の＋から、折り目が斜めに上がる） */
+function entryPageCurl(sheet){
+  if(!sheet||mm3MotionReduced()){return}
+  sheet.classList.add('curl-open');
+  requestAnimationFrame(()=>{
+    const r=sheet.getBoundingClientRect(),w=r.width,h=r.height,steps=10,frames=[];
+    for(let i=0;i<=steps;i++){const t=i/steps,e=1-Math.pow(1-t,2.2),D=e*(w+h);const pts=[[w,h],[Math.max(0,w-D),h],[0,Math.max(0,h-Math.max(0,D-w))],[Math.max(0,w-Math.max(0,D-h)),0],[w,Math.max(0,h-D)]];if(D<w)pts[2]=[w-D,h];if(D<h)pts[3]=[w,h-D];frames.push({clipPath:`polygon(${pts.map(([x,y])=>`${x.toFixed(1)}px ${y.toFixed(1)}px`).join(',')})`})}
+    const anim=sheet.animate(frames,{duration:320,easing:'linear'});
+    const band=document.createElement('div');band.className='curl-band';band.setAttribute('aria-hidden','true');const diag=Math.hypot(w,h);Object.assign(band.style,{left:r.left+'px',top:r.top+'px',width:w+'px',height:h+'px'});
+    band.innerHTML=`<i style="width:${diag*1.6}px"></i>`;document.body.appendChild(band);
+    const bandFrames=[];for(let i=0;i<=steps;i++){const t=i/steps,e=1-Math.pow(1-t,2.2),c=(w+h)*(1-e),x=w/2+(c-w/2-h/2)/2,y=h/2+(c-w/2-h/2)/2;bandFrames.push({transform:`translate(${x}px,${y}px) translate(-50%,-50%) rotate(-45deg)`,opacity:i===steps?0:1})}
+    band.firstElementChild.animate(bandFrames,{duration:320,easing:'linear',fill:'forwards'});
+    const done=()=>{band.remove();sheet.classList.remove('curl-open')};anim.onfinish=done;anim.oncancel=done;
+  });
+}
+/* レンズの付いたガラスのバー: 押すとレンズがふくらみ、指に付いて滑り、離した位置の項目を選ぶ */
+function installLensDrag(bar,itemSel,onPick){
+  if(!bar||bar.__lensDrag)return;bar.__lensDrag=true;
+  const lens=bar.querySelector('.lens');let g=null;
+  const items=()=>[...bar.querySelectorAll(itemSel)];
+  const nearest=x=>{let best=null,dist=1e9;for(const b of items()){const r=b.getBoundingClientRect(),c=r.left+r.width/2,d=Math.abs(x-c);if(d<dist){dist=d;best=b}}return best};
+  bar.addEventListener('pointerdown',e=>{const b=e.target.closest(itemSel);if(!b)return;g={x:e.clientX,moved:false,id:e.pointerId,start:b};bar.classList.add('lens-active')});
+  bar.addEventListener('pointermove',e=>{if(!g||e.pointerId!==g.id||!lens)return;if(Math.abs(e.clientX-g.x)>6)g.moved=true;if(!g.moved)return;try{bar.setPointerCapture(e.pointerId)}catch(_){}const r=bar.getBoundingClientRect(),w=lens.offsetWidth,x=Math.max(2,Math.min(r.width-w-2,e.clientX-r.left-w/2));lens.style.transition='none';lens.style.transform=`translateX(${x}px)`;const n=nearest(e.clientX);items().forEach(b=>b.classList.toggle('lens-over',b===n))});
+  const end=e=>{if(!g)return;const moved=g.moved;g=null;bar.classList.remove('lens-active');items().forEach(b=>b.classList.remove('lens-over'));if(lens)lens.style.transition='';if(moved){const n=nearest(e.clientX);bar.__suppressClick=true;setTimeout(()=>bar.__suppressClick=false,50);if(n)onPick(n);else onPick(items().find(b=>b.getAttribute('aria-checked')==='true'||b.classList.contains('active')))}};
+  bar.addEventListener('pointerup',end);bar.addEventListener('pointercancel',()=>{g=null;bar.classList.remove('lens-active')});
+  bar.addEventListener('click',e=>{const b=e.target.closest(itemSel);if(bar.__suppressClick){e.preventDefault();e.stopImmediatePropagation();return}if(b)onPick(b)},true);
+}
+
+/* ---------- その他 → 登録（口座とカード・勤務先）。＋には置かない ---------- */
+function regRowsHtml(items,attr){return items.map(x=>`<button type="button" class="row press reg-row" ${attr}="${esc(x.id)}"><span class="reg-icon" style="--c:${x.color}" aria-hidden="true">${icon(x.sym)}</span><div class="row-main"><div class="row-title">${esc(x.name)}</div>${x.sub?`<div class="row-sub">${esc(x.sub)}</div>`:''}</div>${x.value!=null?`<div class="row-value">${esc(x.value)}</div>`:''}<span class="chev">${icon('chevronRight')}</span></button>`).join('')}
+function regAddHtml(id,label){return `<button type="button" class="row press reg-add" id="${id}"><span class="reg-add-icon" aria-hidden="true">${icon('plus')}</span><div class="row-main"><div class="row-title">${esc(label)}</div></div></button>`}
+function openAccountsSettings(){
+  const draw=()=>settingsDetailView('口座とカード',`
+    <h2 class="reg-head">銀行口座</h2><div class="group">${regRowsHtml(data.banks.map(b=>({id:b.id,name:b.name,sub:b.label||'',value:yen(b.balance),sym:'bank',color:'var(--accent)'})),'data-reg-bank')}${regAddHtml('regAddBank','銀行口座を追加')}</div>
+    <h2 class="reg-head">クレジットカード</h2><div class="group">${regRowsHtml(data.cards.map(c=>({id:c.id,name:c.name,sub:c.closingDay?`締め ${c.closingDay}日・支払い ${c.paymentDay||'—'}日`:'',sym:'card',color:'var(--purple)'})),'data-reg-card')}${regAddHtml('regAddCard','クレジットカードを追加')}</div>
+    <h2 class="reg-head">デビットカード</h2><div class="group">${regRowsHtml((data.debitCards||[]).map(d=>({id:d.id,name:d.name,sub:bankById(d.bankId)?.name||'',sym:'card',color:'var(--green)'})),'data-reg-debit')}${regAddHtml('regAddDebit','デビットカードを追加')}</div>
+    <p class="settings-section-footer">残高の更新や支出の記録は、ホームの＋から行えます。</p>`,root=>{
+      root.querySelectorAll('[data-reg-bank]').forEach(b=>b.onclick=()=>openBankDetail(b.dataset.regBank));
+      root.querySelectorAll('[data-reg-card]').forEach(b=>b.onclick=()=>openCardDetail(b.dataset.regCard));
+      root.querySelectorAll('[data-reg-debit]').forEach(b=>b.onclick=()=>openDebitDetail(b.dataset.regDebit));
+      root.querySelector('#regAddBank').onclick=()=>openAddBank();root.querySelector('#regAddCard').onclick=()=>openAddCard();root.querySelector('#regAddDebit').onclick=()=>openAddDebit();
+      root.__refreshRegistrations=draw;
+    });
+  draw();
+}
+function openEmployersSettings(){
+  const draw=()=>settingsDetailView('勤務先',`<h2 class="reg-head">勤務先</h2><div class="group">${regRowsHtml(data.employers.map(e=>({id:e.id,name:e.name,sub:e.payDay?`給料日 ${e.payDay}日`:'',sym:'briefcase',color:'var(--teal)'})),'data-reg-emp')}${regAddHtml('regAddEmployer','勤務先を追加')}</div><p class="settings-section-footer">給与の記録はホームの＋（給与）から行えます。</p>`,root=>{
+    root.querySelectorAll('[data-reg-emp]').forEach(b=>b.onclick=()=>openEmployerDetail(b.dataset.regEmp));
+    root.querySelector('#regAddEmployer').onclick=()=>openEmployerCreate(()=>{renderAll();draw()});
+  });
+  draw();
+}
+
+/* ---------- シートのナビゲーション: 閉じる→×、保存→✓（文字は読み上げ用に残す） ---------- */
+const NAV_CLOSE_RE=/^(キャンセル|閉じる|やめる)$/,NAV_PRIMARY_RE=/^(保存|完了|追加|登録|適用|決定|確定|更新|設定して開始|作成|OK)$/;
+function decorateSheetNav(nav){
+  if(!nav)return;
+  for(const b of nav.querySelectorAll(':scope > button.nav-text, :scope > div > button.nav-text, :scope > span > button.nav-text')){
+    const label=(b.querySelector('.nav-icon-label')?.textContent||b.textContent||'').trim();
+    if(b.classList.contains('nav-icon')&&b.querySelector('.nav-glyph'))continue;
+    const close=NAV_CLOSE_RE.test(label),primary=!close&&(NAV_PRIMARY_RE.test(label)||(b.classList.contains('bold')&&label.length<=4&&!/削除|中…|中\.\.\./.test(label)));
+    if(!close&&!primary){b.classList.remove('nav-icon','primary');continue}
+    b.classList.add('nav-icon');b.classList.toggle('primary',primary);
+    if(!b.getAttribute('aria-label'))b.setAttribute('aria-label',label);else if(b.dataset.navAuto)b.setAttribute('aria-label',label);
+    b.dataset.navAuto='1';
+    b.innerHTML=`<span class="nav-glyph" aria-hidden="true">${icon(close?'close':'check')}</span><span class="nav-icon-label">${esc(label)}</span>`;
+  }
+}
+(function installNavDecorators(){
+  const sheet=document.getElementById('sheet');if(!sheet)return;
+  let busy=false;const run=()=>{if(busy)return;busy=true;try{decorateSheetNav(sheet.querySelector('.sheet-nav'))}finally{busy=false}};
+  new MutationObserver(muts=>{if(busy)return;if(muts.some(m=>m.target===sheet||m.target.closest?.('.sheet-nav')||[...m.addedNodes].some(n=>n.classList?.contains('sheet-nav')||n.querySelector?.('.sheet-nav'))))run()}).observe(sheet,{childList:true,subtree:true,characterData:true});
+  run();
+  /* タブバー: 押している間はレンズがふくらむ */
+  const bar=document.getElementById('tabbar');if(bar){let t=0;bar.addEventListener('pointerdown',()=>{clearTimeout(t);bar.classList.add('lens-press')});const off=()=>{clearTimeout(t);t=setTimeout(()=>bar.classList.remove('lens-press'),140)};['pointerup','pointercancel','pointerleave'].forEach(ev=>bar.addEventListener(ev,off))}
+})();
+
+/* ---------- 今日の目標: 輪をやめ、アクティビティのような3つの数値と細い棒 ---------- */
+function ringHtml(date,prefix='today'){
+  const s=spentDate(date),g=dailyGoal(date).total||spendDayGoal(date),rate=goalRate(s,g),y=addDays(date,-1),ys=spentDate(y),has=g>0,over=has&&s>g;
+  return `<div class="hero today-goal-hero dg-card"><button class="today-spend-tap" id="${prefix}Hero" type="button" aria-label="${date===ymd()?'今日':'この日'}使った金額 ${yen(s)}・目標 ${has?yen(g):'未設定'}">
+    <div class="dg-metrics"><div class="dg-metric" style="--c:var(--orange)"><span>使った金額</span><b>${yen(s)}</b></div><div class="dg-metric" style="--c:var(--green)"><span>目標</span><b>${has?yen(g):'—'}</b></div><div class="dg-metric" style="--c:var(--accent)"><span>昨日</span><b>${yen(ys)}</b></div></div>
+    <div class="dg-bar${over?' over':''}" aria-hidden="true"><i style="width:${has?clamp(rate,0,100):0}%"></i></div>
+    <div class="dg-note">${has?(over?`目標を ${yen(s-g)} 超えています`:`目標の ${rate}%・あと ${yen(g-s)} 使えます`):'目標を決めると、使える残りがわかります'}</div>
+  </button><button type="button" class="goal-plan-action" id="${prefix}GoalAction"><span>${has?'目標を見直す':'目標をつくる'}</span><span>›</span></button></div>`;
+}
 /* ======================================================================
    UI-20260917 · Presentation/accessibility lifecycle
    No data migration, storage keys, amount formulas or import rules change.

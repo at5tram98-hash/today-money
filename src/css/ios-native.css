@@ -1,0 +1,194 @@
+/* 第4段: iOS（Liquid Glass）の操作基盤
+   - ナビゲーションのボタンは48ptの丸いガラス（メモアプリのように大きく）。右側の複数のボタンはひとつのカプセルにまとめる
+   - シートの「閉じる」は × の丸、「保存」は色つきの ✓ の丸
+   - タブバーは横にコンパクト。押すとレンズがバーよりふくらみ、指に付いて滑る
+   - ＋は紙がめくれるように開く電卓 */
+
+:root {
+  --ln-size: 48px;
+  --ln-glass: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.28) 60%, rgba(255,255,255,.4)), var(--lg-fill);
+  --ln-rim: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(0,0,0,.04), inset 0 0 0 .5px rgba(255,255,255,.7), 0 0 0 .5px rgba(0,0,0,.07), 0 6px 18px rgba(0,0,0,.08);
+  --ln-spring: cubic-bezier(.34,1.45,.64,1);
+}
+html.dark {
+  --ln-glass: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.05) 60%, rgba(255,255,255,.09)), var(--lg-fill);
+  --ln-rim: inset 0 1px 0 rgba(255,255,255,.22), inset 0 0 0 .5px rgba(255,255,255,.12), 0 0 0 .5px rgba(0,0,0,.6), 0 6px 18px rgba(0,0,0,.4);
+}
+
+/* ---------- ナビゲーションのボタン ---------- */
+#app .detail-back, #pushLayer .push-nav .back-btn, #app .topbar .icon-btn, #pushLayer .push-right .icon-btn, #app .topbar .profile-btn {
+  width: var(--ln-size); height: var(--ln-size); min-width: var(--ln-size); border-radius: 50%; padding: 0; display: grid; place-items: center;
+  background: var(--ln-glass) !important; -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8); box-shadow: var(--ln-rim) !important; border: 0; color: var(--label);
+  transition: transform .26s var(--ln-spring), background .2s ease-out;
+}
+#app .detail-back svg, #pushLayer .push-nav .back-btn svg { width: 24px; height: 24px; margin: 0 2px 0 0; stroke-width: 2.4 }
+#app .topbar .icon-btn svg, #pushLayer .push-right .icon-btn svg { width: 24px; height: 24px }
+#app .detail-back:active, #pushLayer .push-nav .back-btn:active, #app .topbar .icon-btn:active, #pushLayer .push-right .icon-btn:active { transform: scale(.88) }
+/* 右側に2個以上あればひとつのカプセルに */
+#app .nav-actions:has(> .icon-btn ~ .icon-btn), #pushLayer .push-right:has(> .icon-btn ~ .icon-btn) { display: inline-flex; align-items: center; gap: 0; height: var(--ln-size); padding: 0 2px; border-radius: 999px; background: var(--ln-glass); -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8); box-shadow: var(--ln-rim) }
+#app .nav-actions:has(> .icon-btn ~ .icon-btn) > .icon-btn, #pushLayer .push-right:has(> .icon-btn ~ .icon-btn) > .icon-btn { width: 46px; min-width: 44px; height: 44px; background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none; backdrop-filter: none }
+#app .nav-actions { gap: 10px; align-items: center }
+#app .screen > .topbar.has-detail-back { grid-template-columns: var(--ln-size) minmax(0,1fr) minmax(var(--ln-size),auto) }
+#pushLayer .push-nav { min-height: calc(var(--ln-size) + 12px); grid-template-columns: var(--ln-size) minmax(0,1fr) minmax(var(--ln-size),auto) }
+#app .topbar .profile-btn { overflow: hidden }
+
+/* シートの「閉じる」= ×、「保存」= ✓（色つき） */
+.sheet-nav .nav-icon { width: var(--ln-size); height: var(--ln-size); min-width: var(--ln-size); padding: 0; border-radius: 50%; display: grid; place-items: center; border: 0; background: var(--ln-glass); -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8); box-shadow: var(--ln-rim); color: var(--label); transition: transform .26s var(--ln-spring), opacity .2s }
+.sheet-nav .nav-icon svg { width: 22px; height: 22px; stroke-width: 2.4 }
+.sheet-nav .nav-icon.primary { background: var(--accent); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 4px rgba(0,0,0,.08), 0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent) }
+.sheet-nav .nav-icon.primary.danger { background: var(--red) }
+.sheet-nav .nav-icon:active { transform: scale(.88) }
+.sheet-nav .nav-icon:disabled { opacity: .4 }
+.sheet-nav .nav-icon .nav-icon-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap }
+.sheet-nav:has(.nav-icon) { min-height: calc(var(--ln-size) + 16px); align-items: center }
+
+/* ---------- タブバー（コンパクト・レンズ） ---------- */
+#app .tabbar { left: 0; right: 0; margin-inline: auto; width: min(330px, calc(100% - 40px)) }
+#app .tabbar .tab-selection { transition: transform .32s var(--ln-spring), width .32s var(--ln-spring), scale .26s var(--ln-spring), background .2s, box-shadow .2s }
+#app .tabbar.lens-press .tab-selection, #app .tabbar.tab-dragging .tab-selection { scale: 1.18 1.32; background: radial-gradient(130% 150% at 50% 0%, rgba(255,255,255,.75), rgba(255,255,255,.28) 55%, rgba(255,255,255,.18)); -webkit-backdrop-filter: brightness(1.12) saturate(1.6) blur(2px); backdrop-filter: brightness(1.12) saturate(1.6) blur(2px); box-shadow: inset 0 1.5px 0 #fff, inset 0 -1px 2px rgba(0,0,0,.06), inset 0 0 0 1px rgba(255,255,255,.85), 0 10px 26px rgba(0,0,0,.16) }
+html.dark #app .tabbar.lens-press .tab-selection, html.dark #app .tabbar.tab-dragging .tab-selection { background: radial-gradient(130% 150% at 50% 0%, rgba(255,255,255,.3), rgba(255,255,255,.1) 55%, rgba(255,255,255,.08)); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px rgba(255,255,255,.2), 0 10px 26px rgba(0,0,0,.5) }
+#app .tabbar.lens-press .tab.active svg, #app .tabbar.tab-dragging .tab.active svg { transform: scale(1.14) }
+#app .tabbar .tab svg { transition: transform .26s var(--ln-spring) }
+#app .add-hub { width: 56px; height: 56px }
+
+/* ---------- レンズのバー（＋の種類・セグメント共通） ---------- */
+.glass-lensbar { position: relative; display: flex; padding: 4px; border-radius: 999px; background: var(--ln-glass); -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8); box-shadow: var(--ln-rim); touch-action: pan-y }
+.glass-lensbar > .lens { position: absolute; top: 4px; bottom: 4px; left: 0; border-radius: 999px; background: radial-gradient(120% 140% at 50% 0%, #fff, rgba(255,255,255,.86)); box-shadow: inset 0 1px 0 #fff, 0 3px 10px rgba(0,0,0,.12), 0 0 0 .5px rgba(0,0,0,.04); transition: transform .32s var(--ln-spring), width .32s var(--ln-spring), scale .24s var(--ln-spring); z-index: 0; pointer-events: none }
+html.dark .glass-lensbar > .lens { background: rgba(255,255,255,.22); box-shadow: inset 0 1px 0 rgba(255,255,255,.3) }
+.glass-lensbar.lens-active > .lens { scale: 1.08 1.22; background: radial-gradient(130% 150% at 50% 0%, rgba(255,255,255,.8), rgba(255,255,255,.35)); -webkit-backdrop-filter: brightness(1.1) saturate(1.5); backdrop-filter: brightness(1.1) saturate(1.5); box-shadow: inset 0 1.5px 0 #fff, inset 0 0 0 1px rgba(255,255,255,.9), 0 8px 22px rgba(0,0,0,.16) }
+.glass-lensbar > button { position: relative; z-index: 1; flex: 1 1 0; min-width: 0; min-height: 52px; border: 0; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: var(--label2); font-size: 12px; font-weight: 600; transition: color .2s, transform .26s var(--ln-spring) }
+.glass-lensbar > button svg { width: 22px; height: 22px }
+.glass-lensbar > button[aria-checked=true] { color: var(--m, var(--accent)) }
+.glass-lensbar > button.lens-over { transform: scale(1.06) }
+.glass-lensbar > button span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100% }
+
+/* ---------- ＋の電卓 ---------- */
+#sheet.entry-sheet .sheet-body.entry-calc { display: flex; flex-direction: column; gap: 10px; padding: 4px 16px calc(12px + var(--safe-b)); overflow-y: auto }
+.entry-nav-right { display: flex; align-items: center; gap: 10px; justify-self: end }
+.entry-plan-btn { height: 44px; min-width: 44px; padding: 0 14px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 999px; background: var(--ln-glass); box-shadow: var(--ln-rim); color: var(--label); font-size: 15px; font-weight: 600 }
+.entry-plan-btn svg { width: 18px; height: 18px; color: var(--accent) }
+.entry-display { --m: var(--orange); padding: 6px 6px 0; text-align: right; touch-action: pan-y; -webkit-user-select: none; user-select: none }
+.entry-display-top { display: flex; align-items: center; justify-content: space-between; gap: 8px }
+.entry-mode-label { font-size: 15px; font-weight: 700; color: var(--m) }
+.entry-date { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 .5px var(--sep); color: var(--label) }
+.entry-date svg { width: 16px; height: 16px; color: var(--accent) }
+.entry-date input { border: 0; background: transparent; font: inherit; font-size: 15px; color: inherit; min-height: 40px; max-width: 150px }
+.entry-expr { min-height: 20px; font-size: 16px; color: var(--label2); font-variant-numeric: tabular-nums }
+.entry-amount { font-family: var(--font-rounded, inherit); font-size: clamp(40px, 13vw, 60px); font-weight: 700; letter-spacing: -1.5px; line-height: 1.05; color: var(--label); font-variant-numeric: tabular-nums; overflow-wrap: anywhere }
+.entry-hint { font-size: 13px; color: var(--label2); margin-top: 2px }
+.entry-context { display: flex; flex-direction: column; gap: 8px; min-height: 48px }
+.entry-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 4px; margin: 0 -16px; padding-inline: 16px; scroll-snap-type: x proximity }
+.entry-chips::-webkit-scrollbar { display: none }
+.entry-chip { flex: none; scroll-snap-align: start; min-height: 44px; padding: 0 14px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 999px; background: var(--card); box-shadow: inset 0 0 0 .5px var(--sep), 0 1px 2px rgba(0,0,0,.04); color: var(--label); font-size: 15px; font-weight: 500; white-space: nowrap; transition: transform .22s var(--ln-spring), background .2s, color .2s }
+.entry-chip i { width: 9px; height: 9px; border-radius: 50% }
+.entry-chip svg { width: 17px; height: 17px }
+.entry-chip.on { background: var(--label); color: var(--bg); box-shadow: 0 4px 12px rgba(0,0,0,.14) }
+.entry-chip.on i { box-shadow: 0 0 0 2px var(--bg) }
+.entry-chip.ghost { background: var(--ln-glass); box-shadow: var(--ln-rim); color: var(--accent); font-weight: 600 }
+.entry-chip.tpl { color: var(--label2) }
+.entry-chip:active { transform: scale(.94) }
+.entry-row2 { display: flex; gap: 8px }
+.entry-field-btn { flex: 0 1 auto; min-width: 0; min-height: 44px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 14px; background: var(--card); box-shadow: inset 0 0 0 .5px var(--sep); color: var(--label); font-size: 15px }
+.entry-field-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 9em }
+.entry-field-btn svg { width: 16px; height: 16px; flex: none; color: var(--label2) }
+.entry-field { flex: 1; min-width: 0; display: flex }
+.entry-field input { flex: 1; min-width: 0; min-height: 44px; padding: 0 12px; border: 0; border-radius: 14px; background: var(--card); box-shadow: inset 0 0 0 .5px var(--sep); font: inherit; font-size: 16px; color: var(--label) }
+.entry-empty { padding: 12px 4px; font-size: 14px; color: var(--label2) }
+.entry-keys { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(5, minmax(48px, 1fr)); gap: 8px; margin-top: auto; padding-top: 4px }
+.entry-key { border: 0; border-radius: 22px; min-height: 48px; font-family: var(--font-rounded, inherit); font-size: 26px; font-weight: 500; color: var(--label); background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 1px 2px rgba(0,0,0,.06), 0 0 0 .5px rgba(0,0,0,.04); transition: transform .18s var(--ln-spring), background .12s }
+html.dark .entry-key { box-shadow: inset 0 1px 0 rgba(255,255,255,.08) }
+.entry-key:active { transform: scale(.92); background: var(--fill) }
+.entry-key.op, .entry-key.clear, .entry-key.back { background: var(--ln-glass); color: var(--accent); font-size: 24px }
+.entry-key.clear, .entry-key.back { color: var(--label) }
+.entry-key.eq { grid-column: 4; grid-row: 4 / span 2; background: var(--accent); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 16px color-mix(in srgb, var(--accent) 30%, transparent) }
+.entry-key.zero { grid-column: 1 / span 2 }
+@media (max-height: 700px) { .entry-keys { grid-template-rows: repeat(5, 46px); gap: 6px } .entry-amount { font-size: 40px } .glass-lensbar > button { min-height: 46px } .glass-lensbar > button svg { width: 19px; height: 19px } }
+
+/* 紙がめくれるように開く */
+#sheet.curl-open { transition: none !important; will-change: clip-path }
+.curl-band { position: fixed; z-index: 1200; pointer-events: none; overflow: hidden; border-radius: 28px 28px 0 0 }
+.curl-band > i { position: absolute; left: 0; top: 0; height: 120px; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.10) 34%, rgba(0,0,0,.2) 48%, rgba(255,255,255,.95) 52%, rgba(240,240,244,.9) 70%, rgba(255,255,255,0) 100%); filter: blur(.5px) }
+html.dark .curl-band > i { background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.3) 40%, rgba(0,0,0,.45) 48%, rgba(90,90,96,.9) 52%, rgba(60,60,66,.7) 70%, rgba(60,60,66,0) 100%) }
+
+/* その他 → 登録 */
+.reg-head { margin: 22px 4px 8px; font-size: 20px; font-weight: 700; letter-spacing: -.3px }
+.reg-icon { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--c); color: #fff; margin-right: 12px; flex: none }
+.reg-icon svg { width: 19px; height: 19px }
+.reg-add { color: var(--accent); width: 100%; text-align: left }
+.reg-add-icon { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); margin-right: 12px; flex: none }
+.reg-add-icon svg { width: 18px; height: 18px }
+.reg-add .row-title { color: var(--accent); font-weight: 500 }
+
+@media (prefers-reduced-motion: reduce) { .glass-lensbar > .lens, #app .tabbar .tab-selection, .entry-key, .entry-chip { transition: none } }
+html.motion-off .glass-lensbar > .lens, html.motion-off #app .tabbar .tab-selection { transition: none }
+html.reduce-transparency .glass-lensbar, html.glass-solid-pref .glass-lensbar, html.reduce-transparency .sheet-nav .nav-icon:not(.primary), html.glass-solid-pref .sheet-nav .nav-icon:not(.primary) { background: var(--glass-solid) !important; -webkit-backdrop-filter: none; backdrop-filter: none }
+
+/* ---------- プロフィール（ホームの設定）: ヘルスケアのような中央の写真と名前 ---------- */
+.home-settings .hs-hero.hs-hero-center { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; padding: 8px 12px 18px; margin: 0; background: none !important; box-shadow: none !important; border: 0 }
+.hs-hero-center .hs-avatar { width: 104px; height: 104px; border-radius: 50%; padding: 0; background: none; box-shadow: 0 10px 30px rgba(0,0,0,.14), 0 0 0 4px var(--bg), 0 0 0 5.5px color-mix(in srgb, var(--green) 70%, transparent); overflow: hidden; display: grid; place-items: center }
+.hs-hero-center .hs-avatar.ring-warning { box-shadow: 0 10px 30px rgba(0,0,0,.14), 0 0 0 4px var(--bg), 0 0 0 5.5px var(--orange) }
+.hs-hero-center .hs-avatar-img { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(160deg, #c9d3e3, #9aa7bd); color: #fff; margin: 0 }
+html.dark .hs-hero-center .hs-avatar-img { background: linear-gradient(160deg, #4a5262, #2e3440) }
+.hs-hero-center .hs-avatar-img svg { width: 56px; height: 56px; margin: 0; position: static }
+.hs-hero-center .hs-avatar-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 50% }
+.hs-hero-center .hs-name { margin-top: 16px; font-size: 30px; font-weight: 800; letter-spacing: -.6px; color: var(--label) }
+.hs-hero-center .hs-state { margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 6px; font-size: 14px; color: var(--label2) }
+.hs-state-note { flex-basis: 100%; font-size: 13px; color: var(--label3) }
+.home-settings .section-head { margin: 26px 6px 10px; font-size: 22px; font-weight: 800; letter-spacing: -.4px; color: var(--label); text-transform: none }
+.home-settings .hs-help { margin: -4px 8px 10px; font-size: 13px; color: var(--label2) }
+.home-settings .group { border-radius: 26px }
+.home-settings .hs-row { min-height: 60px }
+
+/* ---------- 支出グラフ: アクティビティのような数値の列と目標の線 ---------- */
+.sc-headrow { position: relative; display: block; min-height: 0 }
+.sc-metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0; animation: scFade .18s ease-out }
+.sc-metric { display: flex; flex-direction: column; min-width: 0; padding: 0 8px; border-left: .5px solid var(--sep) }
+.sc-metric:first-child { padding-left: 0; border-left: 0 }
+.sc-metric > span { font-size: 13px; font-weight: 700; color: var(--c) }
+.sc-metric > b { font-family: var(--font-rounded, inherit); font-size: 22px; font-weight: 700; letter-spacing: -.4px; color: var(--label); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums }
+.sc-metric > b small { font-size: 13px; font-weight: 600; color: var(--label2); margin-left: 2px }
+.sc-metrics .sc-range { grid-column: 1 / -1; margin-top: 6px; padding-right: 104px; min-height: 44px; display: flex; align-items: center }
+.sc-headrow .sc-pager { position: absolute; right: 0; bottom: 0 }
+.sc-head.is-sel { padding-right: 104px; min-height: 76px }
+.sc-goal { stroke: var(--green); stroke-width: 1.4; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke }
+.sc-goal-label { position: absolute; right: 0; transform: translateY(-50%); font-size: 11px; line-height: 1.15; font-weight: 700; color: var(--green); text-align: right }
+.sc-bar.over { fill: var(--red) }
+@media (max-width: 360px) { .sc-metric > b { font-size: 18px } }
+
+/* 今日／今月: 目標のカード（輪をやめ、横の細い棒で） */
+#dayContent .today-goal-hero, #monthContent #monthHero { border-radius: 24px }
+#dayContent .date-navigator { margin-bottom: 10px }
+
+/* カードに入っていない入力欄も、iOSの設定のようなまとまり（角丸の白い面）にする */
+:is(.sheet-body, .push-body) > .form-section { background: var(--card); margin: 0; padding: 10px 16px; border-bottom: .5px solid var(--sep) }
+:is(.sheet-body, .push-body) > .form-section:first-child, :is(.sheet-body, .push-body) > :not(.form-section) + .form-section { border-top-left-radius: 20px; border-top-right-radius: 20px; margin-top: 8px }
+:is(.sheet-body, .push-body) > .form-section:last-child, :is(.sheet-body, .push-body) > .form-section:has(+ :not(.form-section)) { border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; border-bottom: 0; margin-bottom: 16px }
+:is(.sheet-body, .push-body) > .form-section .field { background: transparent; padding-left: 0; padding-right: 0 }
+.form-card { border-radius: 20px }
+.form-label { font-size: 13px; font-weight: 600; color: var(--label2) }
+/* 電卓: 小さな画面でもキーが隠れない配置 */
+.entry-amount-line { display: flex; align-items: baseline; justify-content: space-between; gap: 10px }
+.entry-amount-line .entry-mode-label { flex: none }
+.entry-date { position: relative; flex: none; min-height: 44px; padding: 0 12px; border-radius: 14px; font-size: 15px; font-weight: 600 }
+.entry-date input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; max-width: none; min-height: 0; cursor: pointer }
+.entry-chip-sep { flex: none; width: .5px; align-self: stretch; margin: 8px 2px; background: var(--sep) }
+@media (max-height: 700px) { .entry-hint { display: none } .entry-expr { min-height: 0; font-size: 13px } #sheet.entry-sheet .sheet-body.entry-calc { gap: 8px } .entry-keys { grid-template-rows: repeat(5, 44px); gap: 6px } .entry-key { min-height: 44px; font-size: 22px; border-radius: 18px } }
+@media (max-height: 600px) { .entry-amount { font-size: 34px } .entry-expr:empty { display: none } }
+#sheet.entry-sheet .entry-calc > :not(.entry-keys) { flex-shrink: 0 }
+.entry-keys { flex: 1 1 auto; min-height: 0; max-height: 430px; grid-template-rows: repeat(5, minmax(44px, 1fr)) }
+@media (max-height: 700px) { .entry-keys { flex: 0 0 auto; grid-template-rows: repeat(5, 44px) } }
+@media (max-height: 600px) { .entry-modes.glass-lensbar > button { min-height: 44px; font-size: 13px } .entry-modes.glass-lensbar > button svg { display: none } .entry-expr { display: none } #sheet.entry-sheet .sheet-body.entry-calc { gap: 6px; padding-top: 0 } #sheet.entry-sheet .sheet-nav { min-height: 56px } }
+.dg-card { padding: 0 !important; overflow: hidden }
+.dg-card .today-spend-tap { display: block; width: 100%; text-align: left; padding: 16px 16px 12px; border: 0; background: transparent; color: inherit }
+.dg-metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)) }
+.dg-metric { display: flex; flex-direction: column; min-width: 0; padding: 0 10px; border-left: .5px solid var(--sep) }
+.dg-metric:first-child { padding-left: 0; border-left: 0 }
+.dg-metric > span { font-size: 13px; font-weight: 700; color: var(--c) }
+.dg-metric > b { font-family: var(--font-rounded, inherit); font-size: 22px; font-weight: 700; letter-spacing: -.4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums }
+.dg-bar { height: 8px; margin: 14px 0 8px; border-radius: 4px; background: var(--fill) }
+.dg-bar > i { display: block; height: 100%; border-radius: 4px; background: var(--green); transition: width .3s ease-out }
+.dg-bar.over > i { background: var(--red) }
+.dg-note { font-size: 13px; color: var(--label2) }
+.dg-card .goal-plan-action { margin: 0 !important; padding: 0 16px; min-height: 50px; border-top: .5px solid var(--sep) }
+@media (max-width: 360px) { .dg-metric > b { font-size: 18px } }
+html.native-keyboard #sheet { transition-property: transform !important }

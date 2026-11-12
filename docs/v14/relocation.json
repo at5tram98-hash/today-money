@@ -70,41 +70,43 @@
       "root": "home",
       "via": [
         "#addHub",
-        "#entryExpense"
+        "#entryDetail"
       ],
-      "label": "＋（全画面の新規入力）→支出を記録（Q-002）"
+      "label": "＋（電卓）→詳細入力（Q-002）"
     },
     "#quickIncome": {
       "root": "home",
       "via": [
         "#addHub",
-        "#entryIncome"
+        "#entryIncome",
+        "#entryIncomeDetail"
       ],
-      "label": "＋（全画面の新規入力）→臨時収入（Q-003）"
+      "label": "＋（電卓）→臨時収入→詳細入力（Q-003）"
     },
     "#quickBank": {
       "root": "home",
       "via": [
         "#addHub",
-        "#entryBank"
+        "#entryBank",
+        "#entryBankDetail"
       ],
-      "label": "＋（全画面の新規入力）→残高を更新（Q-004）"
+      "label": "＋（電卓）→残高→詳細入力（Q-004）"
     },
     "#todayRepeat": {
       "root": "home",
       "via": [
         "#addHub",
-        "#ihRepeat"
+        "#entryRecent"
       ],
-      "label": "＋（全画面の新規入力）→最近の支出を再利用（Q-006）"
+      "label": "＋（電卓）→最近（Q-006）"
     },
     "#todayOneLine": {
       "root": "home",
       "via": [
         "#addHub",
-        "#ihOneLine"
+        "#entryOneLine"
       ],
-      "label": "＋（全画面の新規入力）→一行入力（Q-006）"
+      "label": "＋（電卓）→一行入力（Q-006）"
     },
     "#mm3AssetHistoryTop": {
       "tabs": [
