@@ -36,13 +36,14 @@ function spendSeries(scope){
 function spendNiceMax(v){if(v<=0)return 1000;const p=Math.pow(10,Math.floor(Math.log10(v))),n=v/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p}
 function spendAxisYen(v){return v>=10000?`${Math.round(v/1000)/10}万`:v>=1000?`${Math.round(v/100)/10}千`:String(v)}
 function spendChartSvg(s,sel){
-  const W=340,H=176,top=10,bottom=22,right=34,n=s.buckets.length,max=spendNiceMax(Math.max(...s.buckets.map(x=>x.value),s.avg)),plotW=W-right,step=plotW/n,bw=Math.max(2,Math.min(26,step*.62)),y=v=>top+(H-top-bottom)*(1-v/max);
-  const grid=[0,.5,1].map(f=>{const v=max*f,yy=y(v);return `<line class="sc-grid" x1="0" x2="${plotW}" y1="${yy}" y2="${yy}"/><text class="sc-axis" x="${W-2}" y="${yy+3.5}" text-anchor="end">${f===0?'0':spendAxisYen(v)}</text>`}).join('');
+  const W=340,H=176,top=10,bottom=22,right=40,n=s.buckets.length,max=spendNiceMax(Math.max(...s.buckets.map(x=>x.value),s.avg)),plotW=W-right,step=plotW/n,bw=Math.max(2,Math.min(26,step*.62)),y=v=>top+(H-top-bottom)*(1-v/max),pct=(v,t)=>(v/t*100).toFixed(2)+'%';
+  const grid=[0,.5,1].map(f=>`<line class="sc-grid" x1="0" x2="${plotW}" y1="${y(max*f)}" y2="${y(max*f)}"/>`).join('');
+  const axis=[0,.5,1].map(f=>`<span class="sc-axis" style="top:${pct(y(max*f),H)}">${f===0?'0':spendAxisYen(max*f)}</span>`).join('');
   const bars=s.buckets.map((b,i)=>{const x=i*step+(step-bw)/2,h=Math.max(b.value>0?2:0,(H-top-bottom)-(y(b.value)-top)),r=Math.min(bw/2,4);return h?`<path class="sc-bar${sel===i?' on':''}${sel!=null&&sel!==i?' dim':''}" d="M${x},${y(0)} v${-(h-r)} q0,${-r} ${r},${-r} h${bw-2*r} q${r},0 ${r},${r} v${h-r} z"/>`:''}).join('');
-  const ticks=s.buckets.map((b,i)=>b.tick?`<text class="sc-tick" x="${i*step+step/2}" y="${H-6}" text-anchor="middle">${esc(b.tick)}</text>`:'').join('');
+  const ticks=s.buckets.map((b,i)=>b.tick?`<span class="sc-tick" style="left:${pct(i*step+step/2,W)}">${esc(b.tick)}</span>`:'').join('');
   const avg=s.avg>0&&s.range!=='D'?`<line class="sc-avg" x1="0" x2="${plotW}" y1="${y(s.avg)}" y2="${y(s.avg)}"/>`:'';
   const cursor=sel!=null?`<line class="sc-cursor" x1="${sel*step+step/2}" x2="${sel*step+step/2}" y1="${top-6}" y2="${y(0)}"/>`:'';
-  return `<svg class="sc-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" data-step="${step}" data-plotw="${plotW}">${grid}${avg}${cursor}${bars}${ticks}</svg>`;
+  return `<svg class="sc-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" data-step="${step}" data-plotw="${plotW}">${grid}${avg}${cursor}${bars}</svg><div class="sc-labels" aria-hidden="true">${axis}${ticks}</div>`;
 }
 function spendBreakdown(start,end,hour=null){
   const tx=data.transactions.filter(t=>t.date>=start&&t.date<=end&&(hour==null||spendHourOf(t)===hour)),by=new Map();
