@@ -78,17 +78,19 @@
       "root": "home",
       "via": [
         "#addHub",
-        "#entryIncome"
+        "#entryIncome",
+        "#entryIncomeDetail"
       ],
-      "label": "＋（電卓）→臨時収入（Q-003）"
+      "label": "＋（電卓）→臨時収入→詳細入力（Q-003）"
     },
     "#quickBank": {
       "root": "home",
       "via": [
         "#addHub",
-        "#entryBank"
+        "#entryBank",
+        "#entryBankDetail"
       ],
-      "label": "＋（電卓）→残高（Q-004）"
+      "label": "＋（電卓）→残高→詳細入力（Q-004）"
     },
     "#todayRepeat": {
       "root": "home",
