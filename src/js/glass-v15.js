@@ -47,10 +47,10 @@ function installDragReorder(list,onReorder){
 /* ---------- ホームの設定（プロフィールボタン） ---------- */
 const HOME_PREF_DEFAULTS={startPeriod:'last',hideAmounts:false,showCharts:true,showCaptions:true,showAlert:true,recentCount:3,wash:true,compact:false};
 function homePrefs(){return{...HOME_PREF_DEFAULTS,...(data.homePrefs&&typeof data.homePrefs==='object'?data.homePrefs:{})}}
-let homeSessionPeriod=null;
-function homePeriod(){if(homeSessionPeriod)return homeSessionPeriod;const p=homePrefs().startPeriod;if(p==='today'||p==='month')return p;return data.homeViewMode==='month'?'month':'today'}
+let homeSessionPeriod=null,homeSessionData=null;
+function homePeriod(){if(homeSessionData!==data)homeSessionPeriod=null;if(homeSessionPeriod)return homeSessionPeriod;const p=homePrefs().startPeriod;if(p==='today'||p==='month')return p;return data.homeViewMode==='month'?'month':'today'}
 function setHomePeriod(mode){
-  if(homePeriod()===mode)return;homeSessionPeriod=mode;
+  if(homePeriod()===mode&&data.homeViewMode===mode)return;homeSessionPeriod=mode;homeSessionData=data;
   try{safeCommit(()=>{data.homeViewMode=mode},{label:'home period',invalidateAcf:false})}catch(e){}
   feedback?.selection?.();renderToday();
 }
@@ -80,7 +80,7 @@ function openHomeSettings(){
     const bind=()=>{
       body.querySelectorAll('[data-layout-toggle]').forEach(b=>b.onclick=()=>{const k=b.dataset.layoutToggle;if(saveHomeSettings(n=>{const h=n.layout.hidden;n.layout.hidden=h.includes(k)?h.filter(x=>x!==k):[...h,k]})){feedback?.selection?.();redraw()}});
       body.querySelectorAll('[data-home-pref]').forEach(b=>b.onclick=()=>{const k=b.dataset.homePref;if(saveHomeSettings(n=>{n.prefs[k]=!n.prefs[k]})){feedback?.selection?.();redraw()}});
-      body.querySelectorAll('[data-home-pref-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.homePrefSet,v=k==='recentCount'?Number(b.dataset.value):b.dataset.value;if(k==='startPeriod')homeSessionPeriod=v==='last'?null:v;if(saveHomeSettings(n=>{n.prefs[k]=v})){feedback?.selection?.();redraw()}});
+      body.querySelectorAll('[data-home-pref-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.homePrefSet,v=k==='recentCount'?Number(b.dataset.value):b.dataset.value;if(k==='startPeriod'){homeSessionPeriod=v==='last'?null:v;homeSessionData=data}if(saveHomeSettings(n=>{n.prefs[k]=v})){feedback?.selection?.();redraw()}});
       installDragReorder(body.querySelector('#hsCards'),order=>{if(saveHomeSettings(n=>{n.layout.cards=order}))redraw()});
       installDragReorder(body.querySelector('#hsRows'),order=>{if(saveHomeSettings(n=>{n.layout.rows=order}))redraw()});
       body.querySelector('#hsReset').onclick=async()=>{if(!await showAlert('ホームの表示を戻しますか？','カードの並び・表示と、このページの設定を初期の状態に戻します。記録は変わりません。',{okText:'戻す',destructive:true}))return;homeSessionPeriod=null;try{safeCommit(()=>{data.homeLayout={};data.homePrefs={}},{label:'home settings reset',invalidateAcf:false})}catch(e){return}renderToday();redraw();showToast('ホームの表示を初期の状態に戻しました')};
