@@ -38,6 +38,7 @@
     "src/js/home-v14.js",
     "src/js/glass-v15.js",
     "src/js/ios-polish.js",
+    "src/js/ios-native.js",
     "src/js/24-accessibility.js",
     "src/js/25-finish.js",
     "src/bootstrap-close.txt"
@@ -60,7 +61,8 @@
     "src/css/settings.css",
     "src/css/components.css",
     "src/css/liquid-glass.css",
-    "src/css/ios-polish.css"
+    "src/css/ios-polish.css",
+    "src/css/ios-native.css"
   ],
   "baseline": {
     "blob": "2a33e9e643db3c53347d211fa77b67c3ac580072",

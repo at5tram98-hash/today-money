@@ -24,7 +24,7 @@ for(const appearance of ['light','dark']){
   await page.evaluate(()=>document.querySelector('#screen-settings .scroll')?.scrollTo(0,9999));await shot('settings2');
   await tap(page,'#homeTab');await tap(page,'#homeSalaryCard');await shot('pay');
   await tap(page,'#homeTab');await tap(page,'#homeAssetsCard');await shot('assets');
-  await tap(page,'#homeTab');await tap(page,'#addHub');await tap(page,'#entryExpense');await shot('sheet');await closeAll();
+  await tap(page,'#homeTab');await tap(page,'#addHub');await tap(page,'#entryDetail');await shot('sheet');await closeAll();
   await tap(page,'#homeAllTransactions');await shot('push');await closeAll();
   await closeAll();
   await page.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData(),base=s.transactions[0],cats=['食費','交通費','日用品','娯楽費'];for(let i=0;i<40;i++){const d=new Date(2026,9,7-i);s.transactions.push({...base,id:'tx_shot'+i,date:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,amount:300+((i*737)%2600),category:cats[i%4],merchant:['コンビニ','電車','ドラッグストア','映画'][i%4],bankApplied:false,createdAt:new Date(2026,9,7-i,8+(i%12)).toISOString()})}await t.replaceData(s);t.renderAll()});await settle(page);

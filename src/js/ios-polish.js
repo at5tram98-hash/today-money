@@ -9,6 +9,8 @@ function spendHourOf(t){const at=t.createdAt?new Date(t.createdAt):null;return a
 function spendWeekStart(s){const d=parseYmd(s),ws=Number(appPrefs().weekStart)||0;d.setDate(d.getDate()-((d.getDay()-ws+7)%7));return ymd(d)}
 function spendShortDay(s){const d=parseYmd(s);return `${d.getMonth()+1}/${d.getDate()}`}
 function spendJpDay(s){const d=parseYmd(s);return `${d.getMonth()+1}月${d.getDate()}日`}
+function spendDayGoal(d){const m=d.slice(0,7),v=Number(dayGoalForMonth(m,Number(d.slice(8,10))))||0;if(v)return v;const t=Number(monthlyGoal(m).total)||0;return t?Math.round(t/spendMonthDays(m)):0}
+function spendGoalRange(start,end){let t=0;for(let d=start;d<=end;d=spendAddDays(d,1))t+=spendDayGoal(d);return t}
 function spendSumRange(start,end){let total=0;for(let d=start;d<=end;d=spendAddDays(d,1))total+=spentDate(d);return total}
 function spendAnchor(scope){return scope==='day'?trackingDate:scope==='month'||scope==='analysis'?(currentMonth===ym()?ymd():`${currentMonth}-${pad(spendMonthDays(currentMonth))}`):ymd()}
 /* 区切りごとの集計。start/end は日付（日の表示では時刻 hour も持つ） */
@@ -16,34 +18,36 @@ function spendSeries(scope){
   const st=spendChartState[scope],anchor=spendAnchor(scope),today=ymd(),b=[];let title='',unit='日',start,end;
   if(st.range==='D'){
     const day=spendAddDays(anchor,st.offset);start=end=day;title=dayLabel(day);unit='時間';
-    const tx=txForDate(day);for(let h=0;h<24;h++)b.push({label:`${h}時`,tick:h%6===0?`${h}時`:'',start:day,end:day,hour:h,value:sum(tx.filter(t=>spendHourOf(t)===h),t=>t.amount),future:day>today});
+    const tx=txForDate(day);for(let h=0;h<24;h++)b.push({label:`${h}時`,tick:h%6===0?`${h}時`:'',start:day,end:day,hour:h,value:sum(tx.filter(t=>spendHourOf(t)===h),t=>t.amount),future:day>today,goal:0});b.dayGoal=spendDayGoal(day);
   }else if(st.range==='W'){
     start=spendAddDays(spendWeekStart(anchor),st.offset*7);end=spendAddDays(start,6);title=`${spendJpDay(start)}〜${spendJpDay(end)}`;
-    for(let i=0;i<7;i++){const d=spendAddDays(start,i),w='日月火水木金土'[parseYmd(d).getDay()];b.push({label:dayLabel(d),tick:w,start:d,end:d,value:spentDate(d),future:d>today})}
+    for(let i=0;i<7;i++){const d=spendAddDays(start,i),w='日月火水木金土'[parseYmd(d).getDay()];b.push({label:dayLabel(d),tick:w,start:d,end:d,value:spentDate(d),future:d>today,goal:spendDayGoal(d)})}
   }else if(st.range==='M'){
     const month=addMonths(anchor.slice(0,7),st.offset),n=spendMonthDays(month);start=`${month}-01`;end=`${month}-${pad(n)}`;title=monthLabel(month);
-    for(let i=1;i<=n;i++){const d=`${month}-${pad(i)}`;b.push({label:dayLabel(d),tick:[1,8,15,22,29].includes(i)?String(i):'',start:d,end:d,value:spentDate(d),future:d>today})}
+    for(let i=1;i<=n;i++){const d=`${month}-${pad(i)}`;b.push({label:dayLabel(d),tick:[1,8,15,22,29].includes(i)?String(i):'',start:d,end:d,value:spentDate(d),future:d>today,goal:spendDayGoal(d)})}
   }else if(st.range==='6M'){
     const last=addMonths(anchor.slice(0,7),st.offset*6),first=addMonths(last,-5);start=spendWeekStart(`${first}-01`);end=`${last}-${pad(spendMonthDays(last))}`;title=`${monthLabel(first)}〜${monthLabel(last).replace(/^\d+年/,'')}`;unit='週';
-    let prevMonth='';for(let d=start;d<=end;d=spendAddDays(d,7)){const e=spendAddDays(d,6)>end?end:spendAddDays(d,6),m=d.slice(0,7),tick=m!==prevMonth&&d.slice(8)<='07'?`${Number(m.slice(5))}月`:'';if(tick)prevMonth=m;b.push({label:`${spendJpDay(d)}〜${spendJpDay(e)}の週`,tick,start:d,end:e,value:spendSumRange(d,e),future:d>today})}
+    let prevMonth='';for(let d=start;d<=end;d=spendAddDays(d,7)){const e=spendAddDays(d,6)>end?end:spendAddDays(d,6),m=d.slice(0,7),tick=m!==prevMonth&&d.slice(8)<='07'?`${Number(m.slice(5))}月`:'';if(tick)prevMonth=m;b.push({label:`${spendJpDay(d)}〜${spendJpDay(e)}の週`,tick,start:d,end:e,value:spendSumRange(d,e),future:d>today,goal:spendGoalRange(d,e)})}
   }else{
     const year=Number(anchor.slice(0,4))+st.offset;start=`${year}-01-01`;end=`${year}-12-31`;title=`${year}年`;unit='か月';
-    for(let i=1;i<=12;i++){const m=`${year}-${pad(i)}`;b.push({label:monthLabel(m),tick:i%3===1?`${i}月`:'',start:`${m}-01`,end:`${m}-${pad(spendMonthDays(m))}`,month:m,value:spentMonth(m),future:`${m}-01`>today})}
+    for(let i=1;i<=12;i++){const m=`${year}-${pad(i)}`;b.push({label:monthLabel(m),tick:i%3===1?`${i}月`:'',start:`${m}-01`,end:`${m}-${pad(spendMonthDays(m))}`,month:m,value:spentMonth(m),future:`${m}-01`>today,goal:Number(monthlyGoal(m).total)||0})}
   }
-  const total=sum(b,x=>x.value),counted=b.filter(x=>!x.future),avg=counted.length?Math.round(sum(counted,x=>x.value)/counted.length):0;
-  return {buckets:b,title,unit,start,end,total,avg,range:st.range};
+  const total=sum(b,x=>x.value),counted=b.filter(x=>!x.future),avg=counted.length?Math.round(sum(counted,x=>x.value)/counted.length):0,goals=b.filter(x=>x.goal>0),goalTotal=st.range==='D'?(b.dayGoal||0):sum(b,x=>x.goal||0),goalLine=goals.length?Math.round(sum(goals,x=>x.goal)/goals.length):0;
+  return {buckets:b,title,unit,start,end,total,avg,range:st.range,goalTotal,goalLine};
 }
 function spendNiceMax(v){if(v<=0)return 1000;const p=Math.pow(10,Math.floor(Math.log10(v))),n=v/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p}
 function spendAxisYen(v){return v>=10000?`${Math.round(v/1000)/10}万`:v>=1000?`${Math.round(v/100)/10}千`:String(v)}
 function spendChartSvg(s,sel){
-  const W=340,H=176,top=10,bottom=22,right=40,n=s.buckets.length,max=spendNiceMax(Math.max(...s.buckets.map(x=>x.value),s.avg)),plotW=W-right,step=plotW/n,bw=Math.max(2,Math.min(26,step*.62)),y=v=>top+(H-top-bottom)*(1-v/max),pct=(v,t)=>(v/t*100).toFixed(2)+'%';
+  const W=340,H=176,top=10,bottom=22,right=40,n=s.buckets.length,max=spendNiceMax(Math.max(...s.buckets.map(x=>x.value),s.avg,s.goalLine||0)),plotW=W-right,step=plotW/n,bw=Math.max(2,Math.min(26,step*.62)),y=v=>top+(H-top-bottom)*(1-v/max),pct=(v,t)=>(v/t*100).toFixed(2)+'%';
   const grid=[0,.5,1].map(f=>`<line class="sc-grid" x1="0" x2="${plotW}" y1="${y(max*f)}" y2="${y(max*f)}"/>`).join('');
   const axis=[0,.5,1].map(f=>`<span class="sc-axis" style="top:${pct(y(max*f),H)}">${f===0?'0':spendAxisYen(max*f)}</span>`).join('');
-  const bars=s.buckets.map((b,i)=>{const x=i*step+(step-bw)/2,h=Math.max(b.value>0?2:0,(H-top-bottom)-(y(b.value)-top)),r=Math.min(bw/2,4);return h?`<path class="sc-bar${sel===i?' on':''}${sel!=null&&sel!==i?' dim':''}" d="M${x},${y(0)} v${-(h-r)} q0,${-r} ${r},${-r} h${bw-2*r} q${r},0 ${r},${r} v${h-r} z"/>`:''}).join('');
+  const bars=s.buckets.map((b,i)=>{const x=i*step+(step-bw)/2,h=Math.max(b.value>0?2:0,(H-top-bottom)-(y(b.value)-top)),r=Math.min(bw/2,4);return h?`<path class="sc-bar${sel===i?' on':''}${sel!=null&&sel!==i?' dim':''}${b.goal>0&&b.value>b.goal?' over':''}" d="M${x},${y(0)} v${-(h-r)} q0,${-r} ${r},${-r} h${bw-2*r} q${r},0 ${r},${r} v${h-r} z"/>`:''}).join('');
   const ticks=s.buckets.map((b,i)=>b.tick?`<span class="sc-tick" style="left:${pct(i*step+step/2,W)}">${esc(b.tick)}</span>`:'').join('');
-  const avg=s.avg>0&&s.range!=='D'?`<line class="sc-avg" x1="0" x2="${plotW}" y1="${y(s.avg)}" y2="${y(s.avg)}"/>`:'';
+  const avg=s.avg>0&&s.range!=='D'&&!s.goalLine?`<line class="sc-avg" x1="0" x2="${plotW}" y1="${y(s.avg)}" y2="${y(s.avg)}"/>`:'';
+  const goal=s.goalLine>0&&s.range!=='D'?`<line class="sc-goal" x1="0" x2="${plotW}" y1="${y(s.goalLine)}" y2="${y(s.goalLine)}"/>`:'';
+  const goalLabel=goal?`<span class="sc-goal-label" style="top:${pct(y(s.goalLine),H)}">目標<br>${spendAxisYen(s.goalLine)}</span>`:'';
   const cursor=sel!=null?`<line class="sc-cursor" x1="${sel*step+step/2}" x2="${sel*step+step/2}" y1="${top-6}" y2="${y(0)}"/>`:'';
-  return `<svg class="sc-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" data-step="${step}" data-plotw="${plotW}">${grid}${avg}${cursor}${bars}</svg><div class="sc-labels" aria-hidden="true">${axis}${ticks}</div>`;
+  return `<svg class="sc-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" data-step="${step}" data-plotw="${plotW}">${grid}${avg}${goal}${cursor}${bars}</svg><div class="sc-labels" aria-hidden="true">${goal?'':axis}${goalLabel}${ticks}</div>`;
 }
 function spendBreakdown(start,end,hour=null){
   const tx=data.transactions.filter(t=>t.date>=start&&t.date<=end&&(hour==null||spendHourOf(t)===hour)),by=new Map();
@@ -54,8 +58,8 @@ function spendCatRowsHtml(cats,attr){return cats.map(c=>`<button type="button" c
 function spendChartHeadHtml(s,sel){
   const b=sel!=null?s.buckets[sel]:null;
   if(b)return `<div class="sc-head is-sel"><div class="sc-kicker">${esc(b.label)}</div><div class="sc-value">${yen(b.value)}</div><div class="sc-range">棒を押すと内訳を表示</div></div>`;
-  const kicker=s.range==='D'?'合計':'合計';const avgText=s.range==='D'?`${s.buckets.filter(x=>x.value>0).length}時間に支出`:`1${s.unit}の平均 ${yen(s.avg)}`;
-  return `<div class="sc-head"><div class="sc-kicker">${kicker}</div><div class="sc-value">${yen(s.total)}</div><div class="sc-range">${esc(s.title)}<span aria-hidden="true">・</span>${esc(avgText)}</div></div>`;
+  const avgLabel=s.range==='D'?'支出した時間':`1${s.unit}の平均`,avgVal=s.range==='D'?`${s.buckets.filter(x=>x.value>0).length}<small>時間</small>`:yen(s.avg);
+  return `<div class="sc-head sc-metrics"><div class="sc-metric" style="--c:var(--orange)"><span>支出</span><b>${yen(s.total)}</b></div><div class="sc-metric" style="--c:var(--green)"><span>目標</span><b>${s.goalTotal?yen(s.goalTotal):'—'}</b></div><div class="sc-metric" style="--c:var(--accent)"><span>${avgLabel}</span><b>${avgVal}</b></div><div class="sc-range">${esc(s.title)}${s.goalTotal?`・目標の${Math.round(s.total/s.goalTotal*100)}%`:''}</div></div>`;
 }
 function spendChartCardHtml(scope){
   const st=spendChartState[scope],s=spendSeries(scope),bd=spendBreakdown(s.start,s.end),label=`${s.title}の支出は${yen(s.total)}。${s.range==='D'?'':`1${s.unit}の平均は${yen(s.avg)}。`}左右の矢印キーで期間を選び、Enterで内訳を開きます。`;
