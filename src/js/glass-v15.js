@@ -255,7 +255,7 @@ function openGlobalSearch(initialScope='all'){
       out.querySelectorAll('[data-load-search]').forEach(b=>b.onclick=()=>{const x=(data.savedSearches||[]).find(v=>v.id===b.dataset.loadSearch);if(!x)return;query=x.query||'';scope=SEARCH_SCOPE_TYPES[x.type]!==undefined?x.type:'all';input.value=query;drawScopes();draw()});
       out.querySelectorAll('[data-gs-more]').forEach(b=>b.onclick=()=>{const t=b.dataset.gsMore;expanded.has(t)?expanded.delete(t):expanded.add(t);draw()});
       out.querySelectorAll('[data-gs-id]').forEach(b=>b.onclick=()=>{const r=(out._results||[]).find(x=>x.type===b.dataset.gsType&&x.id===b.dataset.gsId);if(!r)return;rememberSearch(query);r.open()});
-      const save=out.querySelector('#pro4SaveSearch');if(save)save.onclick=()=>{try{safeCommit(()=>{data.savedSearches=[...(data.savedSearches||[]),{id:uid('search'),name:query,query,type:scope,createdAt:new Date().toISOString()}].slice(-10)},{render:false,label:'save search'})}catch(e){return}showToast('検索を保存しました')};
+      const save=out.querySelector('#pro4SaveSearch');if(save)save.onclick=()=>{if((data.savedSearches||[]).some(v=>v.query===query&&(v.type||'all')===scope)){showToast('この検索は保存済みです');return}try{safeCommit(()=>{data.savedSearches=[...(data.savedSearches||[]),{id:uid('search'),name:query,query,type:scope,createdAt:new Date().toISOString()}].slice(-10)},{render:false,label:'save search'})}catch(e){return}showToast('検索を保存しました')};
     };
     let timer=0;input.oninput=()=>{query=input.value;clearTimeout(timer);timer=setTimeout(draw,90)};
     input.onkeydown=e=>{if(e.key==='Enter'){rememberSearch(query);input.blur()}};
