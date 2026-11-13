@@ -246,12 +246,12 @@ function animateScreenSwap(prev,next){
   Promise.all(anims.map(x=>x.finished.catch(()=>{}))).then(done);
 }
 
-/* ---------- ホーム・支払いのカード: どこを押しても開き、押している間はカード全体が少し縮む ---------- */
+/* ---------- 支払いなどのカード: どこを押しても開き、押している間はカード全体が少し縮む（ホームは 26-liquid-v16.js が受け持つ） ---------- */
 (function installCardTaps(){
   const skip='button,a,input,select,textarea,label,[role=button],[role=radio],[role=switch],.home-period';
-  document.addEventListener('click',e=>{const wrap=e.target.closest?.('.home-card-wrap');if(!wrap||e.target.closest(skip))return;const body=wrap.querySelector('.home-card-body');if(body&&!body.disabled){e.preventDefault();body.click()}});
+  document.addEventListener('click',e=>{const wrap=e.target.closest?.('.home-card-wrap');if(!wrap||wrap.closest('#todayContent')||e.target.closest(skip))return;const body=wrap.querySelector('.home-card-body');if(body&&!body.disabled){e.preventDefault();body.click()}});
   let pressed=null;const clear=()=>{pressed?.classList.remove('card-pressing');pressed=null};
-  document.addEventListener('pointerdown',e=>{const wrap=e.target.closest?.('.home-card-wrap');if(!wrap||e.target.closest('.home-period,input,select,textarea'))return;if(!wrap.querySelector('.home-card-body'))return;pressed=wrap;wrap.classList.add('card-pressing')},true);
+  document.addEventListener('pointerdown',e=>{const wrap=e.target.closest?.('.home-card-wrap');if(!wrap||wrap.closest('#todayContent')||e.target.closest('.home-period,input,select,textarea'))return;if(!wrap.querySelector('.home-card-body'))return;pressed=wrap;wrap.classList.add('card-pressing')},true);
   for(const ev of ['pointerup','pointercancel','pointerleave','scroll'])document.addEventListener(ev,clear,true);
   document.addEventListener('pointermove',e=>{if(pressed&&(Math.abs(e.movementY)>4||Math.abs(e.movementX)>6))clear()},true);
 })();
