@@ -10,6 +10,9 @@ function acfDefaultSettings(){
   x.creditBlockedMerchants=Array.isArray(x.creditBlockedMerchants)?[...new Set(x.creditBlockedMerchants.map(String).filter(Boolean))]:[];
   x.preferredCardId=String(x.preferredCardId||'');
   x.horizon='two_months';
+  /* C100モード（試算）: 今日から現金を使わず、すべてカードで払う前提。カードの限度額と引落後の残高の安全確認は残す。記録・設定は変えない */
+  x.c100Mode=x.c100Mode===true;
+  if(x.c100Mode){x.creditFallbackEnabled=true;x.creditAggressiveness=100;x.creditAllowAllCategories=true;x.creditBlockedMerchants=[];x.creditDailyLimit=Math.max(x.creditDailyLimit,99999999)}
   return x
 }
 

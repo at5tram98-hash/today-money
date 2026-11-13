@@ -679,6 +679,9 @@ function acfDefaultSettings(){
   x.creditBlockedMerchants=Array.isArray(x.creditBlockedMerchants)?[...new Set(x.creditBlockedMerchants.map(String).filter(Boolean))]:[];
   x.preferredCardId=String(x.preferredCardId||'');
   x.horizon='two_months';
+  /* C100モード（試算）: 今日から現金を使わず、すべてカードで払う前提。カードの限度額と引落後の残高の安全確認は残す。記録・設定は変えない */
+  x.c100Mode=x.c100Mode===true;
+  if(x.c100Mode){x.creditFallbackEnabled=true;x.creditAggressiveness=100;x.creditAllowAllCategories=true;x.creditBlockedMerchants=[];x.creditDailyLimit=Math.max(x.creditDailyLimit,99999999)}
   return x
 }
 
@@ -1449,6 +1452,7 @@ function switchTab(tab){
     else detailOrigin=target;
     activeTab=target;
     document.querySelectorAll('.screen').forEach(el=>el.classList.toggle('active',el.id===`screen-${target}`));
+    if(typeof animateScreenSwap==='function')animateScreenSwap(previous,target);
     syncTabButtons();
     feedback?.selection?.();
     renderAll();
@@ -1517,7 +1521,8 @@ function showAlert(title,message,opts={}){return new Promise(resolve=>{const w=d
 /* 第11版 HOME-003ほか: メニューは背景を少し暗くし、押したボタンの位置から0.98→1倍で開く（160ms）。閉じる時は130ms */
 function closeMenu(){const m=document.getElementById('menuLayer');m?.classList.remove('show');document.getElementById('menuScrim')?.classList.remove('show');for(const x of document.querySelectorAll('.icon-btn.menu-anchor-active'))x.classList.remove('menu-anchor-active')}/* items: {label, sub?, icon, action, danger?, preview?}。preview は押しても何もしない読み取り専用の行（長押しのプレビュー用）。
    opts.html を渡すと、項目の代わりにその内容をパネルとして同じ位置・同じ動きで開く（opts.bind で結び付け） */
-function openMenu(anchor,items,opts={}){const menu=document.getElementById('menuLayer');if(!menu||!anchor)return;closeMenu();const visible=(items||[]).filter(x=>!x.disabled),r=anchor.getBoundingClientRect(),width=opts.width||Math.min(320,innerWidth-16,Math.max(220,...visible.map(x=>Math.max(String(x.label||'').length,String(x.sub||'').length*.8)*17+76)));menu.style.width=width+'px';menu.classList.toggle('menu-panel',!!opts.html);menu.setAttribute('aria-label',opts.label||'メニュー');menu.innerHTML=opts.html||visible.map((x,i)=>x.preview?`<div class="menu-item menu-preview" role="none"><span class="menu-label">${esc(x.label)}${x.sub?`<small>${esc(x.sub)}</small>`:''}</span>${x.value?`<span class="menu-value">${esc(x.value)}</span>`:''}</div>`:`<button type="button" class="menu-item ${x.danger?'danger':''}" data-menu-index="${i}" role="menuitem"><span class="menu-label">${esc(x.label)}${x.sub?`<small>${esc(x.sub)}</small>`:''}</span><span class="menu-icon">${menuSymbol(x.icon)}</span></button>`).join('');opts.bind?.(menu);menu.classList.add('measuring');const h=menu.offsetHeight,left=clamp(r.right-width,8,innerWidth-width-8),spaceBelow=innerHeight-r.bottom-8,top=spaceBelow>=h?Math.min(innerHeight-h-8,r.bottom+5):Math.max(8,r.top-h-5);menu.style.left=left+'px';menu.style.right='auto';menu.style.top=top+'px';menu.style.transformOrigin=`${clamp(r.left+r.width/2-left,18,width-18)}px ${spaceBelow>=h?'0':'100%'}`;menu.classList.remove('measuring');void menu.offsetWidth;menu.classList.add('show');if(anchor.classList.contains('icon-btn'))anchor.classList.add('menu-anchor-active');document.getElementById('menuScrim')?.classList.add('show');menu.onclick=e=>{const b=e.target.closest('[data-menu-index]');if(!b)return;const item=visible[Number(b.dataset.menuIndex)];closeMenu();item?.action?.()}}document.addEventListener('pointerdown',e=>{const m=document.getElementById('menuLayer');if(m?.classList.contains('show')&&!m.contains(e.target)&&!e.target.closest('.icon-btn,#addHub'))closeMenu()},{capture:true});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()})
+let menuAnchorEl=null,menuClosedAnchor=null,menuClosedAt=0;
+function openMenu(anchor,items,opts={}){const menu=document.getElementById('menuLayer');if(!menu||!anchor)return;if(menu.classList.contains('show')&&menuAnchorEl===anchor){closeMenu();return}if(menuClosedAnchor===anchor&&performance.now()-menuClosedAt<450){menuClosedAnchor=null;return}closeMenu();menuAnchorEl=anchor;const visible=(items||[]).filter(x=>!x.disabled),r=anchor.getBoundingClientRect(),width=opts.width||Math.min(320,innerWidth-16,Math.max(220,...visible.map(x=>Math.max(String(x.label||'').length,String(x.sub||'').length*.8)*17+76)));menu.style.width=width+'px';menu.classList.toggle('menu-panel',!!opts.html);menu.setAttribute('aria-label',opts.label||'メニュー');menu.innerHTML=opts.html||visible.map((x,i)=>x.preview?`<div class="menu-item menu-preview" role="none"><span class="menu-label">${esc(x.label)}${x.sub?`<small>${esc(x.sub)}</small>`:''}</span>${x.value?`<span class="menu-value">${esc(x.value)}</span>`:''}</div>`:`<button type="button" class="menu-item ${x.danger?'danger':''}" data-menu-index="${i}" role="menuitem"><span class="menu-label">${esc(x.label)}${x.sub?`<small>${esc(x.sub)}</small>`:''}</span><span class="menu-icon">${menuSymbol(x.icon)}</span></button>`).join('');opts.bind?.(menu);menu.classList.add('measuring');const h=menu.offsetHeight,left=clamp(r.right-width,8,innerWidth-width-8),spaceBelow=innerHeight-r.bottom-8,top=spaceBelow>=h?Math.min(innerHeight-h-8,r.bottom+5):Math.max(8,r.top-h-5);menu.style.left=left+'px';menu.style.right='auto';menu.style.top=top+'px';menu.style.transformOrigin=`${clamp(r.left+r.width/2-left,18,width-18)}px ${spaceBelow>=h?'0':'100%'}`;menu.classList.remove('measuring');void menu.offsetWidth;menu.classList.add('show');if(anchor.classList.contains('icon-btn'))anchor.classList.add('menu-anchor-active');document.getElementById('menuScrim')?.classList.add('show');menu.onclick=e=>{const b=e.target.closest('[data-menu-index]');if(!b)return;const item=visible[Number(b.dataset.menuIndex)];closeMenu();item?.action?.()}}document.addEventListener('pointerdown',e=>{const m=document.getElementById('menuLayer');if(!m?.classList.contains('show'))menuClosedAnchor=null;if(m?.classList.contains('show')&&!m.contains(e.target)&&!e.target.closest('.icon-btn,#addHub')){const r=menuAnchorEl?.getBoundingClientRect();if(r&&e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){menuClosedAnchor=menuAnchorEl;menuClosedAt=performance.now()}closeMenu()}},{capture:true});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()})
 function markSheetDirty(value=true){sheetDirtyState=!!value}
 let nativeSheetClosePending=false;
 async function requestSheetClose(){
@@ -2799,135 +2804,9 @@ function todayIncomeHtml(date){const list=incomesForDate(date);if(!list.length)r
 function openDailyCorrectionDetail(date=trackingDate){const raw=rawSpentDate(date),actual=spentDate(date),delta=actual-raw,corrected=data.dailyCorrections[date]!=null;openSheet(`<div class="sheet-nav"><button class="nav-text" id="dcClose">閉じる</button><div class="sheet-title">実質使った金額</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="group"><div class="row"><div class="row-main"><div class="row-title">自動集計</div></div><div class="row-value">${yen(raw)}</div></div><div class="row"><div class="row-main"><div class="row-title">実質金額</div></div><div class="row-value">${yen(actual)}</div></div><div class="row"><div class="row-main"><div class="row-title">修正差額</div></div><div class="row-value ${delta>0?'red':delta<0?'green':''}">${delta>0?'+':''}${yen(delta)}</div></div></div><button class="primary" id="dcEdit">実質金額を修正</button>${corrected?'<button class="secondary" id="dcReset" style="margin-top:9px">自動集計に戻す</button>':''}</div>`,'half',()=>{document.getElementById('dcClose').onclick=requestSheetClose;document.getElementById('dcEdit').onclick=()=>openCalculator('実質使った金額',actual,async v=>{if(!await confirmAmountDraft('実質使った金額',actual,v))return;try{safeCommit(()=>{data.dailyCorrections[date]=v},{label:'daily correction edit'})}catch(e){return}closeSheet();renderAll()});document.getElementById('dcReset')?.addEventListener('click',()=>{try{safeCommit(()=>{delete data.dailyCorrections[date]},{label:'daily correction reset'})}catch(e){return}closeSheet();renderAll()})})}
 let openMailOverview;
 
-/* ===== Money Snapshot ticker ===== */
-const moneyTickerControllers=new Map();
-
-function moneyTickerTotalSeries(days=31){
-  const cutoff=addDays(ymd(),-Math.max(1,days));
-  const rows=(data.assetSnapshots||[])
-    .filter(s=>s.bankTotal!=null&&String(s.date||'')>=cutoff)
-    .map(s=>({date:String(s.date||String(s.createdAt||'').slice(0,10)),value:Number(s.bankTotal)||0,createdAt:String(s.createdAt||s.date||'')}))
-    .filter(x=>x.date)
-    .sort((a,b)=>(a.date+a.createdAt).localeCompare(b.date+b.createdAt));
-  const latestByDay=new Map();
-  for(const r of rows) latestByDay.set(r.date,r);
-  return [...latestByDay.values()];
-}
-
-function moneyTickerCardSeries(cardId,paymentMonth){
-  const rows=[];for(let i=-5;i<=0;i++){const m=addMonths(paymentMonth,i),agg=cardStatementsAggregate(cardId,m);if(agg.items.length||agg.amount>0)rows.push({date:m+'-01',value:agg.amount})}return rows
-}
-
-function moneyTickerSparklineHtml(points){
-  const p=(points||[]).filter(x=>Number.isFinite(Number(x.value))).slice(-12);
-  if(p.length<2)return '<span class="money-ticker-spark-empty">履歴<br>不足</span>';
-  const w=52,h=31,pad=1.5,vals=p.map(x=>Number(x.value)||0),min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;
-  const xy=p.map((v,i)=>({x:pad+i*(w-pad*2)/Math.max(1,p.length-1),y:h-pad-(Number(v.value)-min)/range*(h-pad*2)}));
-  const line=xy.map((c,i)=>(i?'L':'M')+c.x.toFixed(1)+','+c.y.toFixed(1)).join(' ');
-  const area=`${line} L${xy[xy.length-1].x.toFixed(1)},${h} L${xy[0].x.toFixed(1)},${h} Z`;
-  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="money-ticker-spark-fill" d="${area}"/><path class="money-ticker-spark-line" d="${line}"/></svg>`;
-}
-
-function moneyTickerItems(context='today',paymentMonth=ym()){
-  const items=[],total=totalDeposits(),totalSeries=moneyTickerTotalSeries(31),totalDelta=totalSeries.length>1?totalSeries.at(-1).value-totalSeries[0].value:null;
-  items.push({kind:'assets',id:'',title:'現金・預金',value:total,primary:totalDelta==null?'現在残高合計':`${totalDelta>=0?'+':'−'}${yen(Math.abs(totalDelta))}・30日`,secondary:'資産を表示',points:totalSeries});
-  for(const b of data.banks){const d=bankDeltaInfo(b.id,31),pts=bankSnapshotSeries(b.id,31);items.push({kind:'bank',id:b.id,title:b.name,value:Number(b.balance)||0,primary:d.known?`${d.delta>=0?'+':'−'}${yen(Math.abs(d.delta))}・30日`:'30日比較は履歴不足',secondary:b.balanceAsOf?`確認 ${compactDateTime(b.balanceAsOf)}`:'残高未確認',points:pts})}
-  for(const c of data.cards){const agg=cardStatementsAggregate(c.id,paymentMonth),st=agg.next,count=agg.count,multi=count>1?`・${count}件`:'';const due=st?.paymentDate?`${dayLabel(st.paymentDate)}${multi}`:(c.dueDay?`${c.dueDay}日支払い${multi}`:'支払日未設定');items.push({kind:'card',id:c.id,title:c.name,value:agg.amount,primary:`${monthLabel(paymentMonth)}請求・${cardStatementStatusLabel(agg.status)}${multi}`,secondary:due,points:moneyTickerCardSeries(c.id,paymentMonth),state:agg.status==='paid'?'paid':(!st?.paymentDate&&agg.amount>0?'warning':'')})}
-  return items
-}
-
-function moneyTickerCardHtml(item,{duplicate=false,month=ym()}={}){
-  const stateClass=item.state==='warning'?' is-warning':item.state==='danger'?' is-danger':item.state==='paid'?' is-paid':'';
-  const valueText=yen(item.value),valueClass=valueText.length>=15?' very-large-value large-value':valueText.length>=12?' large-value':'';
-  const ariaPrefix=item.kind==='card'?'請求額':item.kind==='bank'?'残高':'合計残高';
-  return `<button type="button" class="money-ticker-card${stateClass}${valueClass}" data-kind="${esc(item.kind)}" data-id="${esc(item.id||'')}" data-month="${esc(month)}"${duplicate?' data-duplicate="1" tabindex="-1" aria-hidden="true"':''} aria-label="${esc(item.title)} ${ariaPrefix} ${esc(valueText)}"><div class="money-ticker-name">${esc(item.title)}</div><div class="money-ticker-value">${valueText}</div><div class="money-ticker-spark">${moneyTickerSparklineHtml(item.points)}</div><div class="money-ticker-meta"><strong>${esc(item.primary||'')}</strong><span>${esc(item.secondary||'')}</span></div></button>`;
-}
-
-function moneyTickerHtml(context='today',paymentMonth=ym()){
-  const items=moneyTickerItems(context,paymentMonth);
-  if(!items.length)return'';
-  const primary=items.map(x=>moneyTickerCardHtml(x,{month:paymentMonth})).join('');
-  const duplicate=items.map(x=>moneyTickerCardHtml(x,{duplicate:true,month:paymentMonth})).join('');
-  return `<div class="money-ticker-shell" data-money-ticker-shell="${esc(context)}"><div class="money-ticker-viewport" id="moneyTicker-${esc(context)}" role="region" aria-label="銀行残高とカード請求のスナップショット"><div class="money-ticker-track"><div class="money-ticker-copy money-ticker-primary">${primary}</div><div class="money-ticker-copy money-ticker-duplicate" aria-hidden="true">${duplicate}</div></div></div></div>`;
-}
-
-function stopMoneyTicker(context){
-  const ctl=moneyTickerControllers.get(context);
-  if(!ctl)return;
-  ctl.stopped=true;
-  if(ctl.raf)cancelAnimationFrame(ctl.raf);
-  if(ctl.resumeTimer)clearTimeout(ctl.resumeTimer);
-  moneyTickerControllers.delete(context);
-}
-
-function openMoneyTickerItem(button){
-  const kind=button?.dataset.kind,id=button?.dataset.id,month=button?.dataset.month||ym();
-  if(kind==='assets')return switchTab('assets');
-  if(kind==='bank'&&id)return openBankDetail(id);
-  if(kind==='card'&&id)return openCardDetail(id,month);
-}
-
-function bindMoneyTicker(context='today'){
-  const viewport=document.getElementById(`moneyTicker-${context}`);
-  if(!viewport)return;
-  stopMoneyTicker(context);
-
-  let pointerStart=null,moved=false;
-  const pause=(ms=2600)=>{
-    const ctl=moneyTickerControllers.get(context);
-    if(!ctl)return;
-    ctl.pausedUntil=performance.now()+ms;
-    viewport.closest('.money-ticker-shell')?.classList.add('money-ticker-paused');
-    if(ctl.resumeTimer)clearTimeout(ctl.resumeTimer);
-    ctl.resumeTimer=setTimeout(()=>viewport.closest('.money-ticker-shell')?.classList.remove('money-ticker-paused'),ms);
-  };
-
-  viewport.addEventListener('pointerdown',e=>{pointerStart={x:e.clientX,y:e.clientY,t:performance.now()};moved=false;pause(3200)},{passive:true});
-  viewport.addEventListener('pointermove',e=>{if(pointerStart&&Math.hypot(e.clientX-pointerStart.x,e.clientY-pointerStart.y)>7)moved=true},{passive:true});
-  viewport.addEventListener('pointerup',()=>{if(pointerStart&&performance.now()-pointerStart.t>350)moved=true;pointerStart=null;pause(2200)},{passive:true});
-  viewport.addEventListener('pointercancel',()=>{pointerStart=null;pause(1600)},{passive:true});
-  viewport.addEventListener('wheel',()=>pause(3200),{passive:true});
-  viewport.addEventListener('focusin',()=>pause(5000));
-  viewport.addEventListener('mouseenter',()=>pause(1800),{passive:true});
-
-  viewport.querySelectorAll('.money-ticker-card').forEach(btn=>{
-    btn.addEventListener('click',e=>{if(moved){e.preventDefault();e.stopPropagation();moved=false;return}openMoneyTickerItem(btn)});
-  });
-
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches||data.feedbackSettings?.motion===false;
-  const first=viewport.querySelector('.money-ticker-primary');
-  const duplicate=viewport.querySelector('.money-ticker-duplicate');
-  if(reduce||!first||!duplicate){
-    duplicate?.setAttribute('hidden','');
-    return;
-  }
-  const initialFirstWidth=first.getBoundingClientRect().width;
-  if(initialFirstWidth<=viewport.clientWidth+8){
-    duplicate.setAttribute('hidden','');
-    return;
-  }
-
-  const ctl={stopped:false,raf:0,resumeTimer:0,pausedUntil:performance.now()+1300,last:performance.now(),position:viewport.scrollLeft};
-  moneyTickerControllers.set(context,ctl);
-  viewport.addEventListener('scroll',()=>{if(performance.now()<ctl.pausedUntil)ctl.position=viewport.scrollLeft},{passive:true});
-  const tick=now=>{
-    if(ctl.stopped||!document.body.contains(viewport)){if(ctl.raf)cancelAnimationFrame(ctl.raf);return}
-    const screen=viewport.closest('.screen'),active=!!screen?.classList.contains('active');
-    const firstWidth=first.getBoundingClientRect().width;
-    const canMove=firstWidth>viewport.clientWidth+8;
-    if(active&&document.visibilityState==='visible'&&canMove&&now>=ctl.pausedUntil){
-      const dt=Math.min(40,Math.max(0,now-ctl.last));
-      ctl.position+=dt*0.018;
-      if(firstWidth>0&&ctl.position>=firstWidth)ctl.position-=firstWidth;
-      viewport.scrollLeft=ctl.position;
-    }
-    ctl.last=now;
-    ctl.raf=requestAnimationFrame(tick);
-  };
-  ctl.raf=requestAnimationFrame(tick);
-}
-/* ===== end Money Snapshot ticker ===== */
-
+/* 横に自動で流れる帯（マネーティッカー）は第4段で廃止。呼び出し側の互換のため空の関数だけ残す */
+function bindMoneyTicker(){}
+function stopMoneyTicker(){}
 /* 第14版: 旧「今日」画面は、ホームの支出カードから開く専用画面「今日の支出」(screen-day) になった。入力ボタンは＋ハブへ集約 */
 function renderDay(){const n=unreadNotices(),pending=data.mailImports.filter(x=>x.status==='pending').length,tx=txForDate(trackingDate);document.getElementById('dayTop').innerHTML=topbar('今日の支出','',`<button class="icon-btn" id="todayMenu" aria-label="メニュー">${icon('menu')}</button>`);document.getElementById('dayContent').innerHTML=`${spendChartCardHtml('day')}<div class="section-head">${trackingDate===ymd()?'今日':'この日'}</div>${dateNavigatorHtml(trackingDate)}${ringHtml(trackingDate,'today')}${dayClosingCardHtml(trackingDate)}<div class="section-head">これからのお金</div>${acfMiniCardHtml()}${nextFinancialEventHtml()}<div class="section-head">カテゴリ</div>${categoryCards(trackingDate)}${incomesForDate(trackingDate).length?`<div class="section-head">収入</div>${todayIncomeHtml(trackingDate)}`:''}<div class="section-head">記録</div><div class="group"><button class="row press" id="todayTransactions"><span class="row-icon">${icon('list')}</span><div class="row-main"><div class="row-title">取引</div><div class="row-sub">${tx.length}件の支出</div></div><span class="chev">›</span></button><button class="row press" id="todayAnalysis"><span class="row-icon">${icon('chart')}</span><div class="row-main"><div class="row-title">詳細分析</div><div class="row-sub">時間帯・カテゴリ・予算</div></div><span class="chev">›</span></button><button class="row press" id="todayMail"><span class="row-icon">${icon('mail')}</span><div class="row-main"><div class="row-title">メール取引</div><div class="row-sub">${gmailConnected()?'同期済み':'未接続'}・未確認 ${pending}件</div></div>${pending?`<span class="badge">${pending}</span>`:''}<span class="chev">›</span></button></div>`;bindDay()}
 function bindDay(){bindSpendCharts(document.getElementById('dayContent'));document.getElementById('todayDayClose')?.addEventListener('click',()=>openDayClosing(trackingDate));bindMoneyTicker('today');document.getElementById('dayPrev').onclick=()=>shiftTrackingDate(-1);document.getElementById('dayNext').onclick=()=>shiftTrackingDate(1);installHorizontalSwipe(document.getElementById('todayDateNavigator'),()=>shiftTrackingDate(1),()=>shiftTrackingDate(-1));document.getElementById('todayHero').onclick=()=>openDailyCorrectionDetail(trackingDate);document.getElementById('todayGoalAction').onclick=()=>openDailyGoalPlanner(trackingDate);document.getElementById('acfToday')?.addEventListener('click',openAcf);document.getElementById('nextMoneyEvent')?.addEventListener('click',e=>openFinancialDayInspector(e.currentTarget.dataset.date));document.getElementById('todayAnalysis').onclick=()=>openDailyAnalysis(trackingDate);document.getElementById('todayTransactions').onclick=()=>openTransactionList({date:trackingDate,title:`${dayLabel(trackingDate)}の支払い`});document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>openTransactionList({date:trackingDate,category:b.dataset.cat,title:b.dataset.cat}));document.getElementById('todayMail').onclick=openMailOverview;document.getElementById('todayMenu').onclick=e=>openMenu(e.currentTarget,[{label:'ACF',icon:'chart',action:openAcf},{label:dailyGoal(trackingDate).total?'目標を見直す':'目標をつくる',icon:'target',action:()=>openDailyGoalPlanner(trackingDate)},{label:'最近の支出を再利用',icon:'repeat',action:()=>openQuickRepeat(trackingDate)},{label:'実質金額を確認',icon:'calc',action:()=>openDailyCorrectionDetail(trackingDate)},{label:'メール取引',icon:'mail',action:openMailOverview}])}
@@ -3261,7 +3140,7 @@ function openQuickCardBilling(paymentMonth=assetBillingMonth,preselectedCardId='
 }
 function cardDetailHtml(id,paymentMonth=assetBillingMonth,selectedBillingMonth=''){
   const c=cardById(id);if(!c)return'';let items=cardStatementsForPaymentMonth(id,paymentMonth);if(!items.length)items=[cardStatementForPaymentMonth(id,paymentMonth)].filter(Boolean);const total=sum(items,x=>Number(x.amount)||0),st=(selectedBillingMonth?items.find(x=>x.billingMonth===selectedBillingMonth):null)||items.find(x=>x.status!=='paid')||items[0],billingMonth=st?.billingMonth||billingMonthForPaymentMonth(c,paymentMonth),list=cardTransactionsForBillingCycle(id,billingMonth).sort((a,b)=>b.date.localeCompare(a.date)),base=cardBaseUsage(id,billingMonth),adj=cardAdjustmentInfo(id,billingMonth),billing=Number(st?.amount)||0,newUse=st?.newUse||0,deltaAtEdit=adj?.deltaAtEdit||0,status=st?.status||'estimated',cycle=billingCycleForCard(c,billingMonth),handling=cardStatementBankHandling(id,billingMonth),history=cardMonthHistory(id,paymentMonth,6),unpaid=cardUnpaidEstimate(id),exposureThrough=paymentMonth>=ym()?monthEndDate(paymentMonth):ymd(),projectedExposure=acfProjectedCardExposureThrough(id,exposureThrough),estimatedAvailable=projectedExposure.minAvailable,cats=data.categories.map(x=>({label:x.name,value:sum(list.filter(t=>t.category===x.name),t=>t.amount),color:x.color})),selector=items.length>1?`<div class="pro-section-title">この月の請求</div><div class="group">${items.map(x=>`<button type="button" class="row press" data-card-statement="${esc(x.billingMonth)}"><div class="row-main"><div class="row-title">${esc(monthLabel(x.billingMonth))}対象</div><div class="row-sub">${x.paymentDate?dayLabel(x.paymentDate):'支払日未設定'}・${cardStatementStatusLabel(x.status)}</div></div><div class="row-value ${x.billingMonth===billingMonth?'blue':''}">${yen(x.amount)}</div><span class="chev">›</span></button>`).join('')}</div>`:'';
-  return `<div class="pro-finance-surface"><div class="card-statement-nav date-navigator"><button type="button" class="date-nav-btn" id="cardPrevPay" aria-label="前月">${icon('chevronLeft')}</button><div class="date-nav-label">${monthLabel(paymentMonth)}支払い</div><button type="button" class="date-nav-btn" id="cardNextPay" aria-label="次月">${icon('chevronRight')}</button></div><div class="pro-finance-head"><div class="pro-finance-eyebrow">CREDIT CARD</div><div class="pro-finance-title">${esc(c.name)}</div><div class="pro-finance-subtitle">${esc(c.company||'カード')}</div><div class="pro-finance-value">${yen(total)}</div><div class="pro-finance-change ${items.every(x=>x.status==='paid')?'green':''}">${items.length>1?`${items.length}件の請求`:`${esc(cardStatementStatusLabel(status))}${st?.paymentDate?`・${dayLabel(st.paymentDate)}`:''}`}</div><div class="pro-finance-subtitle">選択中：対象利用期間 ${esc(cycle.label)}</div></div><div class="pro-periods"><button type="button" class="pro-period on">6か月</button><button type="button" class="pro-period" id="cardBillingMonth">支払月を選ぶ</button></div>${cardBarChartHtml(history,paymentMonth)}<div class="pro-chart-readout"><span>選択月の請求合計</span><strong>${yen(total)}</strong></div>${selector}<div class="pro-metrics"><div class="pro-metric"><span>未払い残高</span><strong>${yen(unpaid)}</strong></div><div class="pro-metric"><span>利用限度額</span><strong>${Number(c.limit)>0?yen(c.limit):'未設定'}</strong></div><div class="pro-metric"><span>利用可能額（予定込み最小）</span><strong>${Number(c.limit)>0?yen(estimatedAvailable):'未確認'}</strong></div></div><div class="pro-action-row"><button type="button" class="pro-action-btn" id="cardBillingFix">選択請求を更新</button><button type="button" class="pro-action-btn" id="cardPaidToggle">${status==='paid'?'未払いに戻す':'支払を確認'}</button><button type="button" class="pro-action-btn" id="cardReconcile">選択請求を照合</button></div><div class="pro-section-title">選択請求の内訳</div><div class="group"><div class="row"><div class="row-main"><div class="row-title">記録上の利用</div></div><div class="row-value">${yen(base)}</div></div><div class="row"><div class="row-main"><div class="row-title">確認時の修正差額</div></div><div class="row-value ${deltaAtEdit>0?'red':deltaAtEdit<0?'green':''}">${deltaAtEdit>0?'+':''}${yen(deltaAtEdit)}</div></div>${newUse?`<div class="row"><div class="row-main"><div class="row-title">確定後の新しい利用</div></div><div class="row-value">${yen(newUse)}</div></div>`:''}<div class="row"><div class="row-main"><div class="row-title">口座残高への反映</div></div><div class="row-value">${esc(handling.label)}</div></div></div><div class="pro-section-title">カテゴリ別</div><div class="chart-card">${donutHtml(cats)}</div><div class="pro-section-title">利用明細</div><div class="group">${list.length?list.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(x.merchant)}</div><div class="row-sub">${x.date}・${esc(x.category)}</div></div><div class="row-value">${yen(x.amount)}</div></div>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">対象期間の明細はありません</div></div></div>'}</div><div class="pro-section-title">カード設定</div><div class="group"><div class="row"><div class="row-main"><div class="row-title">締め日</div></div><div class="row-value">${c.closingDay==null?'未設定':String(c.closingDay)==='月末'?'月末':`${c.closingDay}日`}</div></div><div class="row"><div class="row-main"><div class="row-title">通常支払日</div></div><div class="row-value">${c.dueDay==null?'未設定':`${c.dueDay}日`}</div></div></div>${cardScheduleCalendar(c,billingMonth)}</div>`
+  return `<div class="pro-finance-surface"><div class="card-statement-nav date-navigator"><button type="button" class="date-nav-btn" id="cardPrevPay" aria-label="前月">${icon('chevronLeft')}</button><div class="date-nav-label">${monthLabel(paymentMonth)}支払い</div><button type="button" class="date-nav-btn" id="cardNextPay" aria-label="次月">${icon('chevronRight')}</button></div><div class="pro-finance-head card-art" style="--art:${cardArtGradient(c)}"><div class="card-art-top"><div class="pro-finance-eyebrow">CREDIT CARD</div><span class="card-art-chip" aria-hidden="true"></span></div><div class="pro-finance-title">${esc(c.name)}</div>${c.company&&c.company!==c.name?`<div class="pro-finance-subtitle">${esc(c.company)}</div>`:''}<div class="pro-finance-value">${yen(total)}</div><div class="pro-finance-change ${items.every(x=>x.status==='paid')?'green':''}">${items.length>1?`${items.length}件の請求`:`${esc(cardStatementStatusLabel(status))}${st?.paymentDate?`・${dayLabel(st.paymentDate)}`:''}`}</div><div class="pro-finance-subtitle">選択中：対象利用期間 ${esc(cycle.label)}</div></div><div class="pro-periods"><button type="button" class="pro-period on">6か月</button><button type="button" class="pro-period" id="cardBillingMonth">支払月を選ぶ</button></div>${cardBarChartHtml(history,paymentMonth)}<div class="pro-chart-readout"><span>選択月の請求合計</span><strong>${yen(total)}</strong></div>${selector}<div class="pro-metrics"><div class="pro-metric"><span>未払い残高</span><strong>${yen(unpaid)}</strong></div><div class="pro-metric"><span>利用限度額</span><strong>${Number(c.limit)>0?yen(c.limit):'未設定'}</strong></div><div class="pro-metric"><span>利用可能額（予定込み最小）</span><strong>${Number(c.limit)>0?yen(estimatedAvailable):'未確認'}</strong></div></div><div class="pro-action-row"><button type="button" class="pro-action-btn" id="cardBillingFix">請求額を更新</button><button type="button" class="pro-action-btn" id="cardPaidToggle">${status==='paid'?'未払いに戻す':'支払いを確認'}</button><button type="button" class="pro-action-btn" id="cardReconcile">明細と照合</button></div><div class="pro-section-title">選択請求の内訳</div><div class="group"><div class="row"><div class="row-main"><div class="row-title">記録上の利用</div></div><div class="row-value">${yen(base)}</div></div><div class="row"><div class="row-main"><div class="row-title">確認時の修正差額</div></div><div class="row-value ${deltaAtEdit>0?'red':deltaAtEdit<0?'green':''}">${deltaAtEdit>0?'+':''}${yen(deltaAtEdit)}</div></div>${newUse?`<div class="row"><div class="row-main"><div class="row-title">確定後の新しい利用</div></div><div class="row-value">${yen(newUse)}</div></div>`:''}<div class="row"><div class="row-main"><div class="row-title">口座残高への反映</div></div><div class="row-value">${esc(handling.label)}</div></div></div><div class="pro-section-title">カテゴリ別</div><div class="chart-card">${donutHtml(cats)}</div><div class="pro-section-title">利用明細</div><div class="group">${list.length?list.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(x.merchant)}</div><div class="row-sub">${x.date}・${esc(x.category)}</div></div><div class="row-value">${yen(x.amount)}</div></div>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">対象期間の明細はありません</div></div></div>'}</div><div class="pro-section-title">カード設定</div><div class="group"><div class="row"><div class="row-main"><div class="row-title">締め日</div></div><div class="row-value">${c.closingDay==null?'未設定':String(c.closingDay)==='月末'?'月末':`${c.closingDay}日`}</div></div><div class="row"><div class="row-main"><div class="row-title">通常支払日</div></div><div class="row-value">${c.dueDay==null?'未設定':`${c.dueDay}日`}</div></div></div>${cardScheduleCalendar(c,billingMonth)}</div>`
 }
 /* 第11版 SALARYEDIT-193/197: 支払月は下書きのホイールで選び、「この支払月を表示」だけが親画面を切り替える。 */
 function openCardBillingMonthPicker(cardId,selectedMonth=assetBillingMonth){
@@ -3618,7 +3497,23 @@ ${body}`),combined=`${subject}
 ${body}`,financeWords=/利用|決済|デビット|クレジット|カード|口座振替|引落|引き落とし|支払い|返金|取消|請求|cl利用/i,ref=referenceDateForMail(msg,h),date=extractTransactionDate(subject,body,msg,h);if(sourceName==='三井住友カード'&&!(Number(amount)>0))return{id:uid('mail'),emailId:msg.id,threadId:msg.threadId||'',date,receivedAt:ref.toISOString(),from,subject,sourceName,type:type0,amount:0,merchant:'',category:'',categorySource:'',status:'ignored',direction:'expense',paymentMethod:'card',paymentId:'',excludedByUser:false,ignoredReason:'三井住友カード金額なし',createdAt:new Date().toISOString(),transactionId:'',bankApplied:false,bankReconciled:false,parserVersion:GMAIL_PARSER_VERSION};if(type0==='unknown'&&!financeWords.test(combined))return null;if(!amount&&type0==='unknown')return null;const merchant=extractMerchant(subject,body);let type=type0;if(type==='bank_debit'&&merchant&&/カード|vpass|paypayカード|visa.*カード/i.test(merchant))type='card_settlement';let category=categoryForMerchant(merchant,combined),categorySource=category?'rules':'';if(!category&&merchant){category=await onlineCategorizeMerchant(merchant);if(category)categorySource='online'}const entity=matchFinancialEntity(sourceName,type),selected=Array.isArray(data.gmailSettings.sourceIds)?data.gmailSettings.sourceIds:[],excluded=selected.length>0&&(!entity.id||!selected.includes(entity.id)),ignored=type==='card_statement'||type==='card_settlement'||excluded;return{id:uid('mail'),emailId:msg.id,threadId:msg.threadId||'',date,receivedAt:ref.toISOString(),from,subject,sourceName,type,amount:amount||0,merchant,category:category||'',categorySource,status:ignored?'ignored':(amount&&category&&merchant?'imported':'pending'),direction:type==='refund'?'refund':'expense',paymentMethod:entity.method,paymentId:entity.id,linkedBankId:entity.linkedBankId||'',excludedByUser:excluded,createdAt:new Date().toISOString(),transactionId:'',bankApplied:false,bankReconciled:false,parserVersion:GMAIL_PARSER_VERSION}}
 function importMailToLedger(mi,{saveNow=true}={}){requireStateCommit('importMailToLedger');if(mi.status!=='imported'||!mi.amount||!mi.category)return null;const existing=data.transactions.find(x=>x.mailImportId===mi.id)||(mi.transactionId?data.transactions.find(x=>x.id===mi.transactionId):null);if(existing){mi.transactionId=existing.id;mi.linkedBankId=transactionBankId(existing);mi.bankApplied=!!existing.bankApplied;mi.bankReconciled=!!existing.bankReconciled;return existing}const args={date:mi.date,amount:mi.amount,category:mi.category,merchant:mi.merchant||mi.sourceName,paymentMethod:mi.paymentMethod,paymentId:mi.paymentId,linkedBankId:mi.linkedBankId||'',source:'gmail',mailImportId:mi.id,respectBalanceAsOf:true,eventAt:mi.receivedAt||`${mi.date}T12:00:00`,saveNow:false},tx=mi.direction==='refund'?recordRefund(args):recordExpense(args);mi.transactionId=tx?.id||'';mi.linkedBankId=transactionBankId(tx);mi.bankApplied=!!tx?.bankApplied;mi.bankReconciled=!!tx?.bankReconciled;if(saveNow)save();return tx}
 function gmailRequestToken(forceConsent=false){return new Promise((resolve,reject)=>{const id=String(data.gmailSettings.clientId||'').trim();if(!id)return reject(new Error('Google OAuth クライアントIDを設定してください。'));if(!window.google?.accounts?.oauth2)return reject(new Error('Google認証ライブラリを読み込めませんでした。'));const tc=google.accounts.oauth2.initTokenClient({client_id:id,scope:GMAIL_SCOPE,callback:r=>{if(r?.error)return reject(new Error(r.error_description||r.error));gmailAccessToken=r.access_token||'';gmailTokenExpiresAt=Date.now()+(Number(r.expires_in)||3600)*1000;sessionStorage.setItem(GMAIL_TOKEN_KEY,gmailAccessToken);sessionStorage.setItem(GMAIL_TOKEN_EXP_KEY,String(gmailTokenExpiresAt));resolve(r)}});tc.requestAccessToken({prompt:forceConsent?'consent':''})})}
-async function gmailFetch(url){const r=await fetch(url,{headers:{Authorization:`Bearer ${gmailAccessToken}`}});if(r.status===401){gmailAccessToken='';gmailTokenExpiresAt=0;sessionStorage.removeItem(GMAIL_TOKEN_KEY);sessionStorage.removeItem(GMAIL_TOKEN_EXP_KEY);throw new Error('Gmailの認証期限が切れました。再接続してください。')}if(!r.ok){let msg='';try{msg=(await r.json())?.error?.message||''}catch(e){}throw new Error(msg||`Gmail APIエラー (${r.status})`)}return r.json()}
+async function gmailFetch(url,{attempts=4,timeoutMs=20000}={}){
+  /* 安定取得: 時間切れ・通信断・429/5xx は待ってから再試行（1→2→4秒＋ゆらぎ）。401は再接続、他の4xxはすぐ失敗 */
+  let lastError=null;
+  for(let n=0;n<attempts;n++){
+    if(n)await new Promise(r=>setTimeout(r,Math.min(8000,1000*2**(n-1))+Math.round(Math.random()*400)));
+    const ctl=typeof AbortController==='function'?new AbortController():null,timer=ctl?setTimeout(()=>ctl.abort(),timeoutMs):0;
+    let r;
+    try{r=await fetch(url,{headers:{Authorization:`Bearer ${gmailAccessToken}`},signal:ctl?.signal})}
+    catch(e){clearTimeout(timer);lastError=new Error(e?.name==='AbortError'?'Gmailの応答がありません（時間切れ）':'通信できませんでした。電波の良い所でもう一度お試しください。');continue}
+    clearTimeout(timer);
+    if(r.status===401){gmailAccessToken='';gmailTokenExpiresAt=0;sessionStorage.removeItem(GMAIL_TOKEN_KEY);sessionStorage.removeItem(GMAIL_TOKEN_EXP_KEY);throw new Error('Gmailの認証期限が切れました。再接続してください。')}
+    if(r.status===429||r.status>=500){lastError=new Error(r.status===429?'Gmailの利用回数の上限に達しました。少し待ってから再試行します。':`Gmailが一時的に応答していません (${r.status})`);continue}
+    if(!r.ok){let msg='';try{msg=(await r.json())?.error?.message||''}catch(e){}throw new Error(msg||`Gmail APIエラー (${r.status})`)}
+    return r.json();
+  }
+  throw lastError||new Error('Gmailから取得できませんでした');
+}
 async function refreshGmailProfile(){const p=await gmailFetch('https://gmail.googleapis.com/gmail/v1/users/me/profile');safeCommit(()=>{data.gmailSettings.emailAddress=p.emailAddress||''},{label:'gmail profile'})}
 async function connectGmail(){try{await gmailRequestToken(true);await refreshGmailProfile();renderAll();await syncGmail()}catch(e){showAlert('Gmail接続に失敗しました',e.message)}}
 function disconnectGmail(){const token=gmailAccessToken;try{safeCommit(()=>{data.gmailSettings.emailAddress=''},{label:'disconnect Gmail'})}catch(e){console.error('Gmail disconnect settings failed',e);return}gmailAccessToken='';gmailTokenExpiresAt=0;sessionStorage.removeItem(GMAIL_TOKEN_KEY);sessionStorage.removeItem(GMAIL_TOKEN_EXP_KEY);renderAll();try{if(token&&window.google?.accounts?.oauth2)google.accounts.oauth2.revoke(token,()=>{})}catch(e){console.error('Gmail token revocation failed',e)}}
@@ -4488,8 +4383,8 @@ function _openAcfDetailImmediate(){
       const visibleEnd=acfVisibleEnd(current.startDate),months=[...new Set(current.rows.filter(r=>r.date<=visibleEnd).map(r=>r.date.slice(0,7)))];
       if(!months.includes(month))month=months[0]||ym();
       const ratio=current.settings.creditFallbackEnabled===false?0:Math.round(Number(current.settings.creditAggressiveness)||0),cash=Number(current.safeCashBudget)||0,card=Number(current.safeCreditBudget)||0;
-      body.innerHTML=`<div class="hero"><div class="summary-hero-head"><div><div class="hero-kicker">ACF</div><div class="hero-value">${yen(current.safeTotalBudget)}</div><div class="hero-sub">今日使える目安</div></div><span class="status-chip ${acfStatusClass(current.status)}">${current.status}</span></div><div class="acf-home-split"><div><span>カードで支払う目安</span><strong>${yen(card)}</strong></div><div><span>現金で支払う目安</span><strong>${yen(cash)}</strong></div><div class="ratio"><span>カード比率</span><strong>${ratio}%</strong></div></div><div class="acf-plain-note">設定比率は支払い方法の希望です。カードの限度額・1日上限・禁止カテゴリ・将来の引落残高をACFが確認し、安全な範囲に制限します。</div></div>${acfShortageCalloutHtml(current)}<div class="section-head">日別資金表</div><div class="hero-sub">${dayLabel(current.startDate)}〜${dayLabel(visibleEnd)}を月ごとに表示。カード利用後の請求は${dayLabel(current.endDate)}まで確認します。</div><div class="seg acf-view-mode" id="acfViewMode" aria-label="日別資金表の表示形式"><button type="button" data-view="table" class="${viewMode==='table'?'on':''}" aria-pressed="${viewMode==='table'}">${icon('list')}表</button><button type="button" data-view="calendar" class="${viewMode==='calendar'?'on':''}" aria-pressed="${viewMode==='calendar'}">${icon('calendar')}カレンダー</button></div><div class="acf-month-nav"><label for="acfMonthSelect">表示月<select id="acfMonthSelect" aria-label="日別資金表の表示月">${months.map(m=>`<option value="${m}" ${m===month?'selected':''}>${Number(m.slice(0,4))}年${Number(m.slice(5))}月</option>`).join('')}</select></label></div><div class="seg" id="acfTableMode"><button type="button" class="${!important?'on':''}" data-v="all" aria-pressed="${!important}">すべての日</button><button type="button" class="${important?'on':''}" data-v="important" aria-pressed="${important}">重要日のみ</button></div><div id="acfTablePanel">${acfTableHtml(current,important,month)}</div><div class="hero-sub">現金余力は、必須の入出金後に将来残せる最低残高と安全残高の差です。計画生活費は含めません。「計画支出（現金）」は実際の引落しではありません。ACFが想定した生活費を使う場合の金額を「計画後の残高」から引きます。カードで使う目安は利用日の現金からは引かず、後日の請求に反映します。日付列をタップすると詳細を開けます。</div>${cashFlowProChartHtml(current)}${acfBudgetTrendHtml(current)}${acfCashCardGraphHtml(current)}<div class="section-head">次の重要な資金イベント</div>${acfTimelineHtml(current)}<div class="section-head">計算内訳</div><div class="acf-summary-grid"><div class="acf-summary-tile"><span>現在預金</span><strong>${yen(current.currentDeposits)}</strong></div><button type="button" class="acf-summary-tile hero-button" id="acfProtected"><span>確保しておく金額</span><strong>${yen(current.protectedCashNow)}</strong></button><div class="acf-summary-tile"><span>最低残したい金額</span><strong>${yen(current.reserveFloor)}</strong></div><div class="acf-summary-tile"><span>月末予測</span><strong>${yen(current.monthEndForecast)}</strong></div></div><div class="section-head">もし使ったら？</div><div class="group"><button type="button" class="row press" id="acfSimulator"><div class="row-main"><div class="row-title">購入前シミュレーション</div><div class="row-sub">保存前に現在と使用後のお金の流れを比較</div></div><span class="chev">›</span></button></div>${canApply?`<button type="button" class="secondary" id="acfApplyGoal">ACFの安全予算を日別計画へ反映</button>`:''}<div class="section-head">予測の信頼度</div><div class="card card-pad"><div class="summary-hero-head"><div><div class="row-title">予測の信頼度 ${conf.label}</div><div class="row-sub">${conf.score}%・登録情報の鮮度と完全性から算出</div></div><strong>${conf.score}%</strong></div><div class="confidence-meter"><i style="width:${conf.score}%"></i></div>${conf.reasons.length?`<div class="group" style="margin-top:12px;margin-bottom:0">${conf.reasons.map((r,i)=>`<button type="button" class="row press" data-confidence="${i}"><div class="row-main"><div class="row-title">${esc(r.text)}</div></div><span class="chev">›</span></button>`).join('')}</div>`:'<div class="hero-sub">大きな未確認項目はありません。</div>'}</div><div class="section-head">注意点</div>${acfRiskHtml(current)}${next?`<div class="hero-sub" style="margin-top:8px">次のカード引落予定：${dayLabel(next.date)} ${yen(next.amount)}</div>`:''}<div class="section-head">設定</div><div class="group"><button type="button" class="row press" id="acfOpenSettings"><div class="row-main"><div class="row-title">ACF設定</div><div class="row-sub">最低残高・カード比率・詳細条件</div></div><span class="chev">›</span></button></div>`;
-      bindFinanceChart(body,cashFlowProChartPoints(current));
+      body.innerHTML=`<div class="hero"><div class="summary-hero-head"><div><div class="hero-kicker">ACF</div><div class="hero-value">${yen(current.safeTotalBudget)}</div><div class="hero-sub">今日使える目安</div></div><span class="status-chip ${acfStatusClass(current.status)}">${current.status}</span></div><div class="acf-home-split"><div><span>カードで支払う目安</span><strong>${yen(card)}</strong></div><div><span>現金で支払う目安</span><strong>${yen(cash)}</strong></div><div class="ratio"><span>カード比率</span><strong>${ratio}%</strong></div></div><div class="acf-plain-note">設定比率は支払い方法の希望です。カードの限度額・1日上限・禁止カテゴリ・将来の引落残高をACFが確認し、安全な範囲に制限します。</div></div>${acfC100ToggleHtml()}${acfShortageCalloutHtml(current)}<div class="section-head">日別資金表</div><div class="hero-sub">${dayLabel(current.startDate)}〜${dayLabel(visibleEnd)}を月ごとに表示。カード利用後の請求は${dayLabel(current.endDate)}まで確認します。</div><div class="seg acf-view-mode" id="acfViewMode" aria-label="日別資金表の表示形式"><button type="button" data-view="table" class="${viewMode==='table'?'on':''}" aria-pressed="${viewMode==='table'}">${icon('list')}表</button><button type="button" data-view="calendar" class="${viewMode==='calendar'?'on':''}" aria-pressed="${viewMode==='calendar'}">${icon('calendar')}カレンダー</button></div><div class="acf-month-nav"><label for="acfMonthSelect">表示月<select id="acfMonthSelect" aria-label="日別資金表の表示月">${months.map(m=>`<option value="${m}" ${m===month?'selected':''}>${Number(m.slice(0,4))}年${Number(m.slice(5))}月</option>`).join('')}</select></label></div><div class="seg" id="acfTableMode"><button type="button" class="${!important?'on':''}" data-v="all" aria-pressed="${!important}">すべての日</button><button type="button" class="${important?'on':''}" data-v="important" aria-pressed="${important}">重要日のみ</button></div><div id="acfTablePanel">${acfTableHtml(current,important,month)}</div><div class="hero-sub">現金余力は、必須の入出金後に将来残せる最低残高と安全残高の差です。計画生活費は含めません。「計画支出（現金）」は実際の引落しではありません。ACFが想定した生活費を使う場合の金額を「計画後の残高」から引きます。カードで使う目安は利用日の現金からは引かず、後日の請求に反映します。日付列をタップすると詳細を開けます。</div>${cashFlowProChartHtml(current)}${acfBudgetTrendHtml(current)}${acfCashCardGraphHtml(current)}<div class="section-head">次の重要な資金イベント</div>${acfTimelineHtml(current)}<div class="section-head">計算内訳</div><div class="acf-summary-grid"><div class="acf-summary-tile"><span>現在預金</span><strong>${yen(current.currentDeposits)}</strong></div><button type="button" class="acf-summary-tile hero-button" id="acfProtected"><span>確保しておく金額</span><strong>${yen(current.protectedCashNow)}</strong></button><div class="acf-summary-tile"><span>最低残したい金額</span><strong>${yen(current.reserveFloor)}</strong></div><div class="acf-summary-tile"><span>月末予測</span><strong>${yen(current.monthEndForecast)}</strong></div></div><div class="section-head">もし使ったら？</div><div class="group"><button type="button" class="row press" id="acfSimulator"><div class="row-main"><div class="row-title">購入前シミュレーション</div><div class="row-sub">保存前に現在と使用後のお金の流れを比較</div></div><span class="chev">›</span></button></div>${canApply?`<button type="button" class="secondary" id="acfApplyGoal">ACFの安全予算を日別計画へ反映</button>`:''}<div class="section-head">予測の信頼度</div><div class="card card-pad"><div class="summary-hero-head"><div><div class="row-title">予測の信頼度 ${conf.label}</div><div class="row-sub">${conf.score}%・登録情報の鮮度と完全性から算出</div></div><strong>${conf.score}%</strong></div><div class="confidence-meter"><i style="width:${conf.score}%"></i></div>${conf.reasons.length?`<div class="group" style="margin-top:12px;margin-bottom:0">${conf.reasons.map((r,i)=>`<button type="button" class="row press" data-confidence="${i}"><div class="row-main"><div class="row-title">${esc(r.text)}</div></div><span class="chev">›</span></button>`).join('')}</div>`:'<div class="hero-sub">大きな未確認項目はありません。</div>'}</div><div class="section-head">注意点</div>${acfRiskHtml(current)}${next?`<div class="hero-sub" style="margin-top:8px">次のカード引落予定：${dayLabel(next.date)} ${yen(next.amount)}</div>`:''}<div class="section-head">設定</div><div class="group"><button type="button" class="row press" id="acfOpenSettings"><div class="row-main"><div class="row-title">ACF設定</div><div class="row-sub">最低残高・カード比率・詳細条件</div></div><span class="chev">›</span></button></div>`;
+      bindFinanceChart(body,cashFlowProChartPoints(current));bindAcfC100(body,draw);
       body.querySelector('#acfProtected').onclick=()=>openProtectedCashDetail(current);
       const tablePanel=body.querySelector('#acfTablePanel');
       const updateTable=()=>{
@@ -4554,7 +4449,7 @@ async function syncGmail({silent=false}={}){
   if(gmailSyncing)return;
   if(!gmailTokenValid()){if(!silent)await connectGmail();return}
   gmailSyncing=true;
-  const reviewIds=[];let added=0,reparsed=0;
+  const reviewIds=[];let added=0,reparsed=0,failedMessages=0;
   const busyToken=!silent&&!document.querySelector('.mail-center-view')?beginBusy('メールを確認しています…','Gmailから新しい金融メールを探しています'):null;
   try{
     const q=String(data.gmailSettings.query||DEFAULT_DATA.gmailSettings.query).trim();let pageToken='',ids=[],pages=0;
@@ -4562,10 +4457,13 @@ async function syncGmail({silent=false}={}){
     if(!silent){if(busyToken)updateBusy(busyToken,'金額と利用先を読み取っています…',`${Math.min(ids.length,200)}件まで確認します`);await new Promise(r=>requestAnimationFrame(r))}
     const parsedMessages=[],byEmail=new Map(data.mailImports.map(x=>[x.emailId,x])),targets=ids.filter(id=>{const old=byEmail.get(id);return !old||Number(old.parserVersion||0)<GMAIL_PARSER_VERSION}).slice(0,200);
     for(let i=0;i<targets.length;i+=6){
-      const batch=targets.slice(i,i+6),messages=await Promise.all(batch.map(id=>gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(id)}?format=full`)));
-      for(const msg of messages){
-        parsedMessages.push({msg,parsed:await parseFinancialMessage(msg)});
+      const batch=targets.slice(i,i+6),settled=await Promise.allSettled(batch.map(id=>gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(id)}?format=full`)));
+      /* 1通の失敗で同期全体を止めない。失敗したメールは次回の同期で取り直す（取込記録を作らない） */
+      for(const res of settled){
+        if(res.status!=='fulfilled'){failedMessages++;if(/認証期限/.test(res.reason?.message||''))throw res.reason;continue}
+        try{parsedMessages.push({msg:res.value,parsed:await parseFinancialMessage(res.value)})}catch(e){failedMessages++;console.error('mail parse failed',e)}
       }
+      if(!silent&&busyToken)updateBusy(busyToken,'金額と利用先を読み取っています…',`${Math.min(i+6,targets.length)} / ${targets.length}件`);
     }
     safeCommit(()=>{const byEmail=new Map(data.mailImports.map(x=>[x.emailId,x]));for(const {msg,parsed} of parsedMessages){
         const old=byEmail.get(msg.id);
@@ -4573,12 +4471,12 @@ async function syncGmail({silent=false}={}){
         if(old.userResolved||old.transactionId){if(parsed){old.date=parsed.date;old.receivedAt=parsed.receivedAt;old.parserVersion=GMAIL_PARSER_VERSION}reparsed++;continue}
         if(!parsed){Object.assign(old,{status:'ignored',parserVersion:GMAIL_PARSER_VERSION,ignoredReason:'金融取引対象外',transactionId:'',bankApplied:false,bankReconciled:false,reviewPending:false});reparsed++;continue}
         const keep={id:old.id,createdAt:old.createdAt||parsed.createdAt};Object.assign(old,parsed,keep,{transactionId:''});if(old.status!=='ignored'){prepareMailForReview(old);reviewIds.push(old.id)}reparsed++
-}data.gmailSettings.lastSyncAt=new Date().toISOString()},{label:'gmail sync'});
+}data.gmailSettings.lastSyncAt=new Date().toISOString();data.gmailSettings.lastError=failedMessages?`${failedMessages}件のメールを取得できませんでした（次回の同期で取り直します）`:'';data.gmailSettings.lastErrorAt=failedMessages?new Date().toISOString():''},{label:'gmail sync'});
     refreshUnknownMailView();
     if(!silent){if(busyToken){updateBusy(busyToken,'読み取り結果を準備しています…',reviewIds.length?`${reviewIds.length}件を確認してください`:'新しい取引はありません');await endBusy(busyToken)}if(reviewIds.length)openGmailReview(reviewIds);else await showAlert('メールを確認しました','新しい支払いメールはありませんでした。',{okText:'OK',cancelText:'閉じる'})}
     else if(reviewIds.length)addNotice('Gmailに確認待ちの取引があります',`${reviewIds.length}件の読み取り結果を確認してください。`,'warning',false);
     renderAll()
-  }catch(e){console.error(e);if(busyToken)await endBusy(busyToken);if(!silent)showAlert('Gmail同期に失敗しました',e.message)}finally{gmailSyncing=false;for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();if(busyToken)await endBusy(busyToken)}
+  }catch(e){console.error(e);try{safeCommit(()=>{data.gmailSettings.lastError=String(e?.message||'同期に失敗しました');data.gmailSettings.lastErrorAt=new Date().toISOString()},{render:false,label:'gmail sync error',invalidateAcf:false})}catch(_){}if(busyToken)await endBusy(busyToken);if(!silent)showAlert('Gmail同期に失敗しました',`${e.message}\n記録済みの取引はそのままです。メール取引センターの「再試行」からもう一度同期できます。`)}finally{gmailSyncing=false;for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();if(busyToken)await endBusy(busyToken)}
 };
 
 /* Pending now means any mail waiting for user review, not only an unknown category. */
@@ -5675,7 +5573,7 @@ function mm3SalaryRecordsOpen(month){
     const preview=options===true||options.mode==='preview',st=mm3MailHistoryStatus(mi),pending=mi.status==='pending'&&st.key==='pending',match=pending?mm3MailUiMatch(mi):null;
     const label=pending?(st.duplicate?'重複候補':mailReviewConfidence(mi).ready?'取引候補':'要確認'):st.label,ready=pending&&!mi.transactionId&&!mi.excludedByUser&&!mm3MailInfoOnly(mi)&&mailReviewConfidence(mi).ready&&validateFinancialPayment(mi.paymentMethod,mi.paymentId)&&(!st.duplicate||!!(match?.tx&&match.exact));
     const note=pending?'まだ家計には反映されていません。':st.note,checkTitle=ready?(match?'既存取引に紐づける':'取引に反映'):'詳細を開いて内容・照合候補を確認してください';
-    return `<div class="mail-item ${preview?'mail-item-preview':''}" data-mail-card="${esc(mi.id)}" style="--mail-delay:${Math.min(index,6)*25}ms"><button type="button" class="mail-item-content" data-mail-id="${esc(mi.id)}"><span class="mail-item-top"><span class="mail-item-name">${esc(mi.merchant||mi.subject||mi.sourceName||'利用先不明')}</span><span class="mail-item-amount">${Number(mi.amount)?yen(mi.direction==='refund'?-Math.abs(mi.amount):mi.amount):'金額不明'}</span></span><span class="mail-item-meta">${esc(mi.date||'日付不明')} · ${esc(mi.sourceName||'Gmail')}</span><span class="mail-item-meta">${esc(paymentLabel(mi))}</span></button><div class="mail-item-bottom"><div class="mail-item-state"><span class="mail-state ${st.duplicate?'duplicate':st.key}">${esc(label)}</span><span class="mail-caption">${esc(note)}</span></div>${pending?`<div class="mail-inline-actions"><button type="button" class="mail-action mail-action-ignore" data-mail-ignore="${esc(mi.id)}" aria-label="${esc(mi.merchant||'このメール')}を対象外にする" ${mi.transactionId?'disabled':''}><span class="mail-action-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg></span></button><button type="button" class="mail-action mail-action-approve ${st.duplicate?'mail-action-match':''}" data-mail-approve="${esc(mi.id)}" aria-label="${esc(checkTitle)}" title="${esc(checkTitle)}" ${ready?'':'disabled'}><span class="mail-action-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 4 4 8-9"/></svg></span></button></div>`:''}</div></div>`;
+    return `<div class="mail-item ${preview?'mail-item-preview':''}" data-mail-card="${esc(mi.id)}" style="--mail-delay:${Math.min(index,6)*25}ms"><button type="button" class="mail-item-content" data-mail-id="${esc(mi.id)}"><span class="mail-item-top"><span class="mail-item-name">${esc(mi.merchant||mi.subject||mi.sourceName||'利用先不明')}</span><span class="mail-item-amount">${Number(mi.amount)?yen(mi.direction==='refund'?-Math.abs(mi.amount):mi.amount):'金額不明'}</span></span><span class="mail-item-meta">${esc(/^\d{4}-\d{2}-\d{2}$/.test(mi.date||'')?dayLabel(mi.date):(mi.date||'日付不明'))} · ${esc(mi.sourceName||'Gmail')}</span><span class="mail-item-meta">${esc(paymentLabel(mi))}</span></button><div class="mail-item-bottom"><div class="mail-item-state"><span class="mail-state ${st.duplicate?'duplicate':st.key}">${esc(label)}</span><span class="mail-caption">${esc(note)}</span></div>${pending?`<div class="mail-inline-actions"><button type="button" class="mail-action mail-action-ignore" data-mail-ignore="${esc(mi.id)}" aria-label="${esc(mi.merchant||'このメール')}を対象外にする" ${mi.transactionId?'disabled':''}><span class="mail-action-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg></span></button><button type="button" class="mail-action mail-action-approve ${st.duplicate?'mail-action-match':''}" data-mail-approve="${esc(mi.id)}" aria-label="${esc(checkTitle)}" title="${esc(checkTitle)}" ${ready?'':'disabled'}><span class="mail-action-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 4 4 8-9"/></svg></span></button></div>`:''}</div></div>`;
   }
   const mm3MailInlineBusy=new Set();
   const mm3MailViewRefreshers=new Set();
@@ -5744,8 +5642,9 @@ function mm3SalaryRecordsOpen(month){
       const draw=()=>{
         const entries=data.mailImports.map(mi=>({mi,st:mm3MailHistoryStatus(mi)})),allPending=entries.filter(x=>x.st.key==='pending'),pending=allPending.filter(x=>!x.st.duplicate),duplicates=entries.filter(x=>x.st.duplicate),count=k=>entries.filter(x=>x.st.key===k).length;
         const last=data.gmailSettings.lastSyncAt,date=last?new Date(last):null,time=date&&Number.isFinite(date.getTime())?date.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}):'未同期';
-        body.innerHTML=`<div class="mail-panel"><div class="mail-status-head"><div><strong>メール取引</strong><span class="mail-caption">${gmailConnected()?'Gmail 接続済み':'Gmail 未接続'}</span></div><div class="mail-status-actions">${gmailSyncing?'<span class="mail-spinner" role="status" aria-label="同期中"></span>':''}<button type="button" id="mailSyncOverview" ${gmailSyncing?'disabled':''}>${gmailConnected()?'同期':'接続'}</button></div></div><div class="mail-metrics"><div><span>最終同期</span><strong>${esc(time)}</strong></div><div><span>確認待ち</span><strong>${allPending.length}件</strong></div></div></div>${allPending.length?`<h2 class="mail-section-title">要確認</h2><p class="mail-section-note">まだ家計には反映されていません。</p><div class="mail-items">${pending.map((x,i)=>mm3MailItemHtml(x.mi,i)).join('')}</div>`:'<div class="mail-empty">✓ すべて確認済み</div>'}<div class="mail-summary">${[['imported','反映済み'],['info','情報のみ'],['ignored','対象外']].map(([k,label])=>`<button type="button" data-mail-state="${k}"><span>${label}</span><strong>${count(k)}<small>件</small></strong></button>`).join('')}</div>${duplicates.length?`<h2 class="mail-section-title">カード明細との照合</h2><p class="mail-section-note">カード明細または既存取引との照合が必要です。</p><div class="mail-items">${duplicates.map((x,i)=>mm3MailItemHtml(x.mi,i)).join('')}</div>`:''}<button type="button" class="mail-history-link" id="mailHistoryOverview"><span>すべてのメール取引を見る</span><span class="chev">›</span></button>`;
-        mm3BindMailItems(body);body.querySelectorAll('[data-mail-state]').forEach(b=>b.onclick=()=>openMailHistory(b.dataset.mailState));body.querySelector('#mailHistoryOverview').onclick=()=>openMailHistory();body.querySelector('#mailSyncOverview').onclick=async()=>{const work=gmailConnected()?syncGmail():openGmailSettings();draw();try{await work}finally{if(root.isConnected)draw()}};
+        const errText=data.gmailSettings.lastError||'',syncLabel=last&&typeof homeTimeLabel==='function'?homeTimeLabel(last):time;
+        body.innerHTML=`<div class="mail-hero"><span class="mail-hero-icon" aria-hidden="true">${icon('mail')}</span><div class="mail-hero-count ${allPending.length?'warn':''}"><b>${allPending.length}</b><span>${allPending.length?'件の確認待ち':'確認待ちはありません'}</span></div><div class="mail-hero-sync"><span>${gmailConnected()?`前回の同期: ${esc(syncLabel||'未同期')}`:'Gmail 未接続'}</span><span aria-hidden="true">・</span><button type="button" id="mailSyncOverview" ${gmailSyncing?'disabled':''}>${gmailSyncing?'<span class="mail-spinner" role="status" aria-label="同期中"></span>同期中…':gmailConnected()?'今すぐ同期':'Gmailに接続'}</button></div>${errText?`<div class="mail-error" role="alert"><span class="mail-error-icon" aria-hidden="true">${icon('warning')}</span><span class="mail-error-text">${esc(errText)}</span><button type="button" id="mailSyncRetry" ${gmailSyncing?'disabled':''}>再試行</button></div>`:''}</div>${allPending.length?`<h2 class="mail-section-title">要確認</h2><p class="mail-section-note">まだ家計には反映されていません。</p><div class="mail-items">${pending.map((x,i)=>mm3MailItemHtml(x.mi,i)).join('')}</div>`:`<div class="mail-empty"><span aria-hidden="true">${icon('check')}</span>すべて確認済み</div>`}<div class="mail-summary">${[['imported','反映済み'],['info','情報のみ'],['ignored','対象外']].map(([k,label])=>`<button type="button" data-mail-state="${k}"><span>${label}</span><strong>${count(k)}<small>件</small></strong></button>`).join('')}</div>${duplicates.length?`<h2 class="mail-section-title">カード明細との照合</h2><p class="mail-section-note">カード明細または既存取引との照合が必要です。</p><div class="mail-items">${duplicates.map((x,i)=>mm3MailItemHtml(x.mi,i)).join('')}</div>`:''}<button type="button" class="mail-history-link" id="mailHistoryOverview"><span>すべてのメール取引を見る</span><span class="chev">›</span></button>`;
+        mm3BindMailItems(body);body.querySelectorAll('[data-mail-state]').forEach(b=>b.onclick=()=>openMailHistory(b.dataset.mailState));body.querySelector('#mailHistoryOverview').onclick=()=>openMailHistory();const sync=async()=>{const work=gmailConnected()?syncGmail():openGmailSettings();draw();try{await work}finally{if(root.isConnected)draw()}};body.querySelector('#mailSyncOverview').onclick=sync;body.querySelector('#mailSyncRetry')?.addEventListener('click',sync);
       };mm3WatchMailView(root,draw);
     });
   };
@@ -6057,7 +5956,6 @@ function openDayWheel(initial,onApply){
 function syncAddHub(){const b=document.getElementById('addHub');if(b)b.hidden=false}
 /* ＋は全画面の「新規入力」（openEntryHub、glass-v15.js） */
 /* ＋から開く入力シートは右下（＋の位置）を起点に広がる（Q-002「右下を起点に全画面入力へ」。ページめくりはWebで不安定なため、仕様の代替である連続拡大にする） */
-function fromHub(fn){return()=>{const s=document.getElementById('sheet');s?.classList.add('from-hub');s?.addEventListener('animationend',()=>s.classList.remove('from-hub'),{once:true});setTimeout(()=>s?.classList.remove('from-hub'),600);fn()}}
 
 /* ---------- 支払いroot（P-001〜015） ---------- */
 let payrootDismissedRisk='';
@@ -6076,7 +5974,7 @@ function renderPayRoot(){
   <div class="home-cards">
   <section class="home-card-wrap"><h2 class="home-card-title">${month===ym()?'今月':'この月'}の支払予定</h2><div class="home-card"><button type="button" class="home-card-body" id="payrootSummary" aria-label="${esc(`支払予定 ${yen(summary.remaining)}・請求一覧を開く`)}"><span class="home-card-left"><span class="home-card-value">${yen(summary.remaining)}</span><span class="home-card-caption">これから支払う額</span></span><span class="home-card-right">${parts.length?miniDonutSvg(parts,'支払予定の内訳'):'<span class="home-card-empty">予定はありません</span>'}</span></button><p class="home-card-readout" hidden aria-live="polite"></p></div></section>
   <section class="home-card-wrap"><h2 class="home-card-title">次の引落</h2><div class="home-card"><button type="button" class="home-card-body" id="payrootNextDebit" aria-label="${esc(next[0]?`次の引落 ${next[0].title} ${homeShortDate(next[0].date)} ${yen(Math.abs(next[0].amount))}`:'次の引落・予定なし')}">${next[0]?`<span class="home-card-left"><span class="home-card-value">${yen(Math.abs(next[0].amount))}</span><span class="home-card-caption">${esc(next[0].title)}・${homeShortDate(next[0].date)}</span><span class="home-card-caption sub">${esc(next[0].detail||'')}</span></span>`:'<span class="home-card-left"><span class="home-card-value small">60日以内の引落はありません</span></span>'}</button></div></section></div>
-  <h2 class="section-head">カード別の請求</h2><div class="group home-table">${cards.length?cards.slice(0,3).map(st=>`<button type="button" class="row press home-row" data-payroot-card="${esc(st.cardId)}"><span class="row-icon">${icon('card')}</span><div class="row-main"><div class="row-title">${esc(st.cardName)}</div><div class="row-sub">${st.paymentDate?`${homeShortDate(st.paymentDate)}引落・`:''}${status(st)}</div></div><div class="row-value">${yen(st.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">この月のカード請求はありません</div></div></div>'}<button type="button" class="row press home-row link-row" id="payrootAllCards"><div class="row-main"><div class="row-title">カード請求をすべて見る</div></div><span class="chev">${icon('chevronRight')}</span></button></div>
+  <h2 class="section-head">カード別の請求</h2><div class="group home-table">${cards.length?cards.slice(0,3).map(st=>`<button type="button" class="row press home-row" data-payroot-card="${esc(st.cardId)}"><span class="mini-card-art" style="--art:${cardArtGradient(cardById(st.cardId)||{name:st.cardName})}" aria-hidden="true"><i></i></span><div class="row-main"><div class="row-title">${esc(st.cardName)}</div><div class="row-sub">${st.paymentDate?`${homeShortDate(st.paymentDate)}引落・`:''}${status(st)}</div></div><div class="row-value">${yen(st.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">この月のカード請求はありません</div></div></div>'}<button type="button" class="row press home-row link-row" id="payrootAllCards"><div class="row-main"><div class="row-title">カード請求をすべて見る</div></div><span class="chev">${icon('chevronRight')}</span></button></div>
   <h2 class="section-head">固定支払い</h2><div class="group home-table">${data.fixedPayments.length?data.fixedPayments.slice(0,3).map(f=>`<button type="button" class="row press home-row" data-payroot-fixed="${esc(f.id)}"><span class="row-icon">${icon('repeat')}</span><div class="row-main"><div class="row-title">${esc(f.name||'固定支払い')}</div><div class="row-sub">${f.day?`毎月${f.day}日`:''}</div></div><div class="row-value">${yen(f.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">固定支払いはありません</div><div class="row-sub">＋の「その他の入力」から追加できます</div></div></div>'}${data.fixedPayments.length>3?`<button type="button" class="row press home-row link-row" id="payrootAllFixed"><div class="row-main"><div class="row-title">固定支払いをすべて表示</div></div><span class="chev">${icon('chevronRight')}</span></button>`:''}</div>
   ${largeRows.length?`<h2 class="section-head">大型支出の予定</h2><div class="group home-table">${largeRows.map(p=>`<button type="button" class="row press home-row" data-payroot-large="${esc(p.id)}"><span class="row-icon">${icon('cart')}</span><div class="row-main"><div class="row-title">${esc(p.name)}</div><div class="row-sub">${homeShortDate(p.date)}・${p.priority==='required'?'必須':'任意'}</div></div><div class="row-value">${yen(p.amount)}</div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}</div>`:''}
   ${pendingMail?`<div class="group home-table"><button type="button" class="row press home-row" id="payrootMail"><span class="row-icon">${icon('mail')}</span><div class="row-main"><div class="row-title">未確認の明細 ${pendingMail}件</div><div class="row-sub">明細照合センターで確認</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`:''}
@@ -6203,43 +6101,10 @@ function applyHomePrefs(){
 }
 
 /* ---------- ＋ = 全画面の「新規入力」 ---------- */
-function entryHubGroups(){
-  const date=['today','day'].includes(activeTab)?trackingDate:ymd();
-  return[
-    {title:'よく使う入力',big:true,items:[
-      {id:'entryExpense',sym:'cart',color:'var(--orange)',title:'支出を記録',sub:'使った金額を記録',run:()=>openQuickExpense(date)},
-      {id:'entryIncome',sym:'wallet',color:'var(--green)',title:'臨時収入',sub:'給与以外の入金',run:()=>openTempIncome(date)},
-      {id:'entryBank',sym:'bank',color:'var(--accent)',title:'残高を更新',sub:'口座の今の残高',run:openQuickBank},
-      {id:'entrySalary',sym:'briefcase',color:'var(--teal)',title:'給与を登録',sub:'今月の給与・予定',run:openSalaryAdd}]},
-    {title:'すばやく入力',items:[
-      {id:'ihCard',sym:'card',color:'var(--purple)',title:'カードの請求額を更新',sub:'カードを選んで今月の請求額を入力',run:()=>openQuickCardBilling(paymentHomeMonth())},
-      {id:'ihRepeat',sym:'repeat',color:'var(--orange)',title:'最近の支出を再利用',sub:'前に記録した支出から選ぶ',run:()=>openQuickRepeat(trackingDate)},
-      {id:'ihOneLine',sym:'edit',color:'var(--accent)',title:'一行入力',sub:'「コンビニ 580円」のように書いて記録',run:()=>openSmartInputSearch('input')}]},
-    {title:'新しく登録',items:[
-      {id:'ihBank',sym:'bank',color:'var(--accent)',title:'銀行口座を追加',sub:'',run:openAddBank},
-      {id:'ihEmployer',sym:'briefcase',color:'var(--teal)',title:'勤務先を追加',sub:'',run:()=>openEmployerCreate(()=>renderAll())},
-      {id:'ihCredit',sym:'card',color:'var(--purple)',title:'クレジットカードを追加',sub:'',run:()=>openAddCard()},
-      {id:'ihDebit',sym:'card',color:'var(--green)',title:'デビットカードを追加',sub:'',run:()=>openAddDebit()},
-      {id:'ihFixed',sym:'repeat',color:'var(--red)',title:'固定支払いを追加',sub:'家賃・サブスクなど',run:()=>openFixedPayment()},
-      {id:'ihLarge',sym:'cart',color:'var(--orange)',title:'大型支出を計画',sub:'',run:()=>openLargeExpenseEditor(null,{after:renderAll})},
-      {id:'ihGoal',sym:'gift',color:'var(--purple)',title:'旅行・プレゼント目標',sub:'',run:()=>openEventGoalEditor()}]}
-  ];
-}
-function openEntryHub(){
-  const groups=entryHubGroups(),all=groups.flatMap(g=>g.items);
-  const tile=x=>`<button type="button" class="entry-tile" id="${x.id}" style="--tile:${x.color}"><span class="entry-tile-icon" aria-hidden="true">${icon(x.sym)}</span><span class="entry-tile-title">${esc(x.title)}</span><span class="entry-tile-sub">${esc(x.sub)}</span></button>`;
-  const row=x=>`<button type="button" class="row press entry-row" id="${x.id}" style="--tile:${x.color}"><span class="entry-row-icon" aria-hidden="true">${icon(x.sym)}</span><div class="row-main"><div class="row-title">${esc(x.title)}</div>${x.sub?`<div class="row-sub">${esc(x.sub)}</div>`:''}</div><span class="chev">${icon('chevronRight')}</span></button>`;
-  const html=`<div class="sheet-nav"><button type="button" class="nav-text" id="entryClose">閉じる</button><div class="sheet-title">新規入力</div><span></span></div><div class="sheet-body entry-hub" id="entryHub"><p class="entry-lead">何を入力しますか？</p>${groups.map(g=>`<h2 class="section-head">${esc(g.title)}</h2>${g.big?`<div class="entry-grid">${g.items.map(tile).join('')}</div>`:`<div class="group">${g.items.map(row).join('')}</div>`}`).join('')}</div>`;
-  openSheet(html,'full',root=>{
-    const sheet=root.closest('#sheet');sheet?.classList.add('glass-sheet','from-hub');setTimeout(()=>sheet?.classList.remove('from-hub'),600);
-    root.querySelector('#entryClose').onclick=closeSheet;
-    for(const x of all)root.querySelector('#'+x.id).onclick=()=>{feedback?.selection?.();closeSheet();x.run()};
-  });
-}
+/* ＋の中身は ios-native.js openEntryCalc（電卓）。ここではボタンの結び付けだけ */
 document.getElementById('addHub')?.addEventListener('click',()=>{feedback?.selection?.();openEntryHub()});
 /* 旧「その他の入力」（push画面）も同じ「新規入力」へ */
 function openOtherInputs(){openEntryHub()}
-function addHubItems(){return entryHubGroups().flatMap(g=>g.items).map(x=>({label:x.title,icon:x.sym,action:x.run}))}
 
 /* ---------- 専用画面の左端スワイプで戻る ---------- */
 (function installDetailEdgeBack(){
@@ -6261,7 +6126,7 @@ function addHubItems(){return entryHubGroups().flatMap(g=>g.items).map(x=>({labe
     if(!g)return;if(!g.horizontal){g=null;return}e.stopPropagation();
     const t=e.changedTouches?.[0],x=t?.clientX??g.lastX,dx=Math.max(0,x-g.sx),v=Math.max(0,(x-g.lastX)/Math.max(1,performance.now()-g.lastAt)),w=g.screen.clientWidth,done=dx>w*.31||(dx>24&&v>.5);
     const cur=g;const ease='transform .26s cubic-bezier(.22,.88,.22,1),opacity .26s';cur.screen.style.transition=ease;cur.under.style.transition=ease;
-    if(done){cur.screen.style.transform='translateX(100%)';cur.under.style.transform='translateX(0)';cur.under.style.opacity='1';setTimeout(()=>{g=cur;reset();closeDetailScreen()},265)}
+    if(done){cur.screen.style.transform='translateX(100%)';cur.under.style.transform='translateX(0)';cur.under.style.opacity='1';setTimeout(()=>{g=cur;reset();screenSwapSkip=true;closeDetailScreen()},265)}
     else{cur.screen.style.transform='translateX(0)';cur.under.style.transform='translateX(-30%)';setTimeout(()=>{g=cur;reset()},270)}
     g=null;
   };
@@ -6417,7 +6282,7 @@ function bindAppPrefRows(root){
   on('prefReadability',()=>openSwitchPrefs('読みやすさ',[['boldText','文字を太くする','画面の文字を少し太く表示'],['buttonShapes','ボタンの形を表示','文字だけのボタンに背景を付ける'],['contrast','コントラストを上げる','薄い文字と境界を濃くする']],'端末の設定とは別に、このアプリだけに使います。'));
   on('prefPrivacy',()=>openSwitchPrefs('画面のぼかしとバッジ',[['privacyBlur','アプリを離れたらぼかす','アプリの切り替え画面で金額が見えないようにする'],['tabBadge','その他タブに未読数を表示','システムのお知らせの未読数']],'記録の内容は変わりません。'));
 }
-function applyAppPrefs(){
+function applyAppPrefs(){document.documentElement.classList.toggle('acf-c100',data.acfSettings?.c100Mode===true);
   const P=appPrefs(),h=document.documentElement;
   h.classList.toggle('glass-subtle',P.glass==='subtle');h.classList.toggle('glass-solid-pref',P.glass==='solid');
   h.classList.toggle('num-standard',P.numberFont==='standard');h.classList.toggle('bold-text',!!P.boldText);h.classList.toggle('button-shapes',!!P.buttonShapes);h.classList.toggle('more-contrast',!!P.contrast);
@@ -6859,6 +6724,56 @@ function ringHtml(date,prefix='today'){
     <div class="dg-note">${has?(over?`目標を ${yen(s-g)} 超えています`:`目標の ${rate}%・あと ${yen(g-s)} 使えます`):'目標を決めると、使える残りがわかります'}</div>
   </button><button type="button" class="goal-plan-action" id="${prefix}GoalAction"><span>${has?'目標を見直す':'目標をつくる'}</span><span>›</span></button></div>`;
 }
+
+/* ---------- 画面の行き来: 専用画面は右から入り、戻ると右へ出る（iOSのpushと同じ）。rootどうしは短いクロスフェード ---------- */
+let screenSwapSkip=false;
+function animateScreenSwap(prev,next){
+  if(screenSwapSkip){screenSwapSkip=false;return}
+  if(!prev||prev===next||mm3MotionReduced())return;
+  const a=document.getElementById(`screen-${prev}`),b=document.getElementById(`screen-${next}`);if(!a||!b)return;
+  const enterDetail=isDetailScreen(next)&&!isDetailScreen(prev),leaveDetail=isDetailScreen(prev)&&!isDetailScreen(next),detailToDetail=isDetailScreen(prev)&&isDetailScreen(next);
+  const ease='cubic-bezier(.32,.72,0,1)',dur=320;
+  a.classList.add('screen-leaving');
+  const done=()=>{a.classList.remove('screen-leaving');for(const el of [a,b]){el.style.zIndex='';el.style.boxShadow=''}};
+  let anims=[];
+  if(enterDetail||detailToDetail){
+    b.style.zIndex='3';b.style.boxShadow='-12px 0 30px rgba(0,0,0,.12)';a.style.zIndex='2';
+    anims=[b.animate([{transform:'translateX(100%)'},{transform:'translateX(0)'}],{duration:dur,easing:ease}),a.animate([{transform:'translateX(0)',filter:'brightness(1)'},{transform:'translateX(-28%)',filter:'brightness(.92)'}],{duration:dur,easing:ease})];
+  }else if(leaveDetail){
+    a.style.zIndex='3';a.style.boxShadow='-12px 0 30px rgba(0,0,0,.12)';b.style.zIndex='2';
+    anims=[a.animate([{transform:'translateX(0)'},{transform:'translateX(100%)'}],{duration:dur-40,easing:ease}),b.animate([{transform:'translateX(-28%)',filter:'brightness(.92)'},{transform:'translateX(0)',filter:'brightness(1)'}],{duration:dur-40,easing:ease})];
+  }else{
+    b.style.zIndex='3';a.style.zIndex='2';
+    anims=[b.animate([{opacity:0},{opacity:1}],{duration:160,easing:'ease-out'})];
+  }
+  Promise.all(anims.map(x=>x.finished.catch(()=>{}))).then(done);
+}
+
+/* ---------- 支払いなどのカード: どこを押しても開き、押している間はカード全体が少し縮む（ホームは 26-liquid-v16.js が受け持つ） ---------- */
+(function installCardTaps(){
+  const skip='button,a,input,select,textarea,label,[role=button],[role=radio],[role=switch],.home-period';
+  document.addEventListener('click',e=>{const wrap=e.target.closest?.('.home-card-wrap');if(!wrap||wrap.closest('#todayContent')||e.target.closest(skip))return;const body=wrap.querySelector('.home-card-body');if(body&&!body.disabled){e.preventDefault();body.click()}});
+  let pressed=null;const clear=()=>{pressed?.classList.remove('card-pressing');pressed=null};
+  document.addEventListener('pointerdown',e=>{const wrap=e.target.closest?.('.home-card-wrap');if(!wrap||wrap.closest('#todayContent')||e.target.closest('.home-period,input,select,textarea'))return;if(!wrap.querySelector('.home-card-body'))return;pressed=wrap;wrap.classList.add('card-pressing')},true);
+  for(const ev of ['pointerup','pointercancel','pointerleave','scroll'])document.addEventListener(ev,clear,true);
+  document.addEventListener('pointermove',e=>{if(pressed&&(Math.abs(e.movementY)>4||Math.abs(e.movementX)>6))clear()},true);
+})();
+
+/* ---------- カードのプレビュー（ウォレットのようなカードの絵） ---------- */
+const CARD_ARTS=['linear-gradient(135deg,#5E5CE6 0%,#3A2FB8 55%,#1C1B4D 100%)','linear-gradient(135deg,#FF375F 0%,#C2185B 55%,#4A0D2E 100%)','linear-gradient(135deg,#30B0C7 0%,#0A6E8A 55%,#08304A 100%)','linear-gradient(135deg,#3C3C43 0%,#1C1C1E 60%,#000 100%)','linear-gradient(135deg,#FF9F0A 0%,#E0561B 55%,#5A1D07 100%)','linear-gradient(135deg,#34C759 0%,#0F7A4A 55%,#06331F 100%)'];
+function cardArtGradient(c){const key=String(c?.name||'')+String(c?.id||'');let h=0;for(const ch of key)h=(h*31+ch.charCodeAt(0))>>>0;return CARD_ARTS[h%CARD_ARTS.length]}
+
+/* ---------- ACF C100モード（カード100%の試算）: トグルでON/OFF ---------- */
+function acfC100ToggleHtml(){
+  const on=data.acfSettings?.c100Mode===true;
+  return `<div class="acf-c100${on?' on':''}"><div class="acf-c100-badge" aria-hidden="true">C100</div><div class="acf-c100-text"><b>C100モード（試算）</b><small>${on?'今日からずっと現金を使わず、すべてカードで払う前提で計算しています。カードの限度額と引落後の残高は確認します。記録と設定は変わりません。':'今日からずっと現金を使わず、すべてカードで払ったらどうなるかを試算します。'}</small></div><button type="button" class="switch${on?' on':''}" id="acfC100Toggle" role="switch" aria-checked="${on}" aria-label="C100モード（カード100%の試算）"></button></div>`;
+}
+function setAcfC100(on){
+  try{safeCommit(()=>{data.acfSettings={...(data.acfSettings||{}),c100Mode:!!on}},{render:true,label:'acf c100 mode'})}catch(e){return false}
+  document.documentElement.classList.toggle('acf-c100',!!on);feedback?.selection?.();
+  showToast(on?'C100モード：カード100%で試算しています':'C100モードを終了しました');return true;
+}
+function bindAcfC100(root,redraw){const b=root.querySelector('#acfC100Toggle');if(b)b.onclick=()=>{if(setAcfC100(!(data.acfSettings?.c100Mode===true)))redraw?.()}}
 /* ======================================================================
    UI-20260917 · Presentation/accessibility lifecycle
    No data migration, storage keys, amount formulas or import rules change.

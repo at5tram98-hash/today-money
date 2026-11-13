@@ -221,3 +221,53 @@ function ringHtml(date,prefix='today'){
     <div class="dg-note">${has?(over?`目標を ${yen(s-g)} 超えています`:`目標の ${rate}%・あと ${yen(g-s)} 使えます`):'目標を決めると、使える残りがわかります'}</div>
   </button><button type="button" class="goal-plan-action" id="${prefix}GoalAction"><span>${has?'目標を見直す':'目標をつくる'}</span><span>›</span></button></div>`;
 }
+
+/* ---------- 画面の行き来: 専用画面は右から入り、戻ると右へ出る（iOSのpushと同じ）。rootどうしは短いクロスフェード ---------- */
+let screenSwapSkip=false;
+function animateScreenSwap(prev,next){
+  if(screenSwapSkip){screenSwapSkip=false;return}
+  if(!prev||prev===next||mm3MotionReduced())return;
+  const a=document.getElementById(`screen-${prev}`),b=document.getElementById(`screen-${next}`);if(!a||!b)return;
+  const enterDetail=isDetailScreen(next)&&!isDetailScreen(prev),leaveDetail=isDetailScreen(prev)&&!isDetailScreen(next),detailToDetail=isDetailScreen(prev)&&isDetailScreen(next);
+  const ease='cubic-bezier(.32,.72,0,1)',dur=320;
+  a.classList.add('screen-leaving');
+  const done=()=>{a.classList.remove('screen-leaving');for(const el of [a,b]){el.style.zIndex='';el.style.boxShadow=''}};
+  let anims=[];
+  if(enterDetail||detailToDetail){
+    b.style.zIndex='3';b.style.boxShadow='-12px 0 30px rgba(0,0,0,.12)';a.style.zIndex='2';
+    anims=[b.animate([{transform:'translateX(100%)'},{transform:'translateX(0)'}],{duration:dur,easing:ease}),a.animate([{transform:'translateX(0)',filter:'brightness(1)'},{transform:'translateX(-28%)',filter:'brightness(.92)'}],{duration:dur,easing:ease})];
+  }else if(leaveDetail){
+    a.style.zIndex='3';a.style.boxShadow='-12px 0 30px rgba(0,0,0,.12)';b.style.zIndex='2';
+    anims=[a.animate([{transform:'translateX(0)'},{transform:'translateX(100%)'}],{duration:dur-40,easing:ease}),b.animate([{transform:'translateX(-28%)',filter:'brightness(.92)'},{transform:'translateX(0)',filter:'brightness(1)'}],{duration:dur-40,easing:ease})];
+  }else{
+    b.style.zIndex='3';a.style.zIndex='2';
+    anims=[b.animate([{opacity:0},{opacity:1}],{duration:160,easing:'ease-out'})];
+  }
+  Promise.all(anims.map(x=>x.finished.catch(()=>{}))).then(done);
+}
+
+/* ---------- 支払いなどのカード: どこを押しても開き、押している間はカード全体が少し縮む（ホームは 26-liquid-v16.js が受け持つ） ---------- */
+(function installCardTaps(){
+  const skip='button,a,input,select,textarea,label,[role=button],[role=radio],[role=switch],.home-period';
+  document.addEventListener('click',e=>{const wrap=e.target.closest?.('.home-card-wrap');if(!wrap||wrap.closest('#todayContent')||e.target.closest(skip))return;const body=wrap.querySelector('.home-card-body');if(body&&!body.disabled){e.preventDefault();body.click()}});
+  let pressed=null;const clear=()=>{pressed?.classList.remove('card-pressing');pressed=null};
+  document.addEventListener('pointerdown',e=>{const wrap=e.target.closest?.('.home-card-wrap');if(!wrap||wrap.closest('#todayContent')||e.target.closest('.home-period,input,select,textarea'))return;if(!wrap.querySelector('.home-card-body'))return;pressed=wrap;wrap.classList.add('card-pressing')},true);
+  for(const ev of ['pointerup','pointercancel','pointerleave','scroll'])document.addEventListener(ev,clear,true);
+  document.addEventListener('pointermove',e=>{if(pressed&&(Math.abs(e.movementY)>4||Math.abs(e.movementX)>6))clear()},true);
+})();
+
+/* ---------- カードのプレビュー（ウォレットのようなカードの絵） ---------- */
+const CARD_ARTS=['linear-gradient(135deg,#5E5CE6 0%,#3A2FB8 55%,#1C1B4D 100%)','linear-gradient(135deg,#FF375F 0%,#C2185B 55%,#4A0D2E 100%)','linear-gradient(135deg,#30B0C7 0%,#0A6E8A 55%,#08304A 100%)','linear-gradient(135deg,#3C3C43 0%,#1C1C1E 60%,#000 100%)','linear-gradient(135deg,#FF9F0A 0%,#E0561B 55%,#5A1D07 100%)','linear-gradient(135deg,#34C759 0%,#0F7A4A 55%,#06331F 100%)'];
+function cardArtGradient(c){const key=String(c?.name||'')+String(c?.id||'');let h=0;for(const ch of key)h=(h*31+ch.charCodeAt(0))>>>0;return CARD_ARTS[h%CARD_ARTS.length]}
+
+/* ---------- ACF C100モード（カード100%の試算）: トグルでON/OFF ---------- */
+function acfC100ToggleHtml(){
+  const on=data.acfSettings?.c100Mode===true;
+  return `<div class="acf-c100${on?' on':''}"><div class="acf-c100-badge" aria-hidden="true">C100</div><div class="acf-c100-text"><b>C100モード（試算）</b><small>${on?'今日からずっと現金を使わず、すべてカードで払う前提で計算しています。カードの限度額と引落後の残高は確認します。記録と設定は変わりません。':'今日からずっと現金を使わず、すべてカードで払ったらどうなるかを試算します。'}</small></div><button type="button" class="switch${on?' on':''}" id="acfC100Toggle" role="switch" aria-checked="${on}" aria-label="C100モード（カード100%の試算）"></button></div>`;
+}
+function setAcfC100(on){
+  try{safeCommit(()=>{data.acfSettings={...(data.acfSettings||{}),c100Mode:!!on}},{render:true,label:'acf c100 mode'})}catch(e){return false}
+  document.documentElement.classList.toggle('acf-c100',!!on);feedback?.selection?.();
+  showToast(on?'C100モード：カード100%で試算しています':'C100モードを終了しました');return true;
+}
+function bindAcfC100(root,redraw){const b=root.querySelector('#acfC100Toggle');if(b)b.onclick=()=>{if(setAcfC100(!(data.acfSettings?.c100Mode===true)))redraw?.()}}

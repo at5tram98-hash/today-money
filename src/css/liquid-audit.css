@@ -64,7 +64,7 @@ html.more-contrast .lg-lens { box-shadow: inset 0 0 0 1.5px var(--accent) }
 }
 html.dark #app .tabbar.lg-tab { background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0) 60%), var(--lg16-bar); box-shadow: inset 0 0 0 .5px var(--lg16-rim), inset 0 1px 0 rgba(255,255,255,.12), var(--lg16-shadow) }
 #app .tabbar.lg-tab .tab { flex: 1 1 0; min-width: 0; gap: 2px; color: var(--label) }
-#app .tabbar.lg-tab .tab .tab-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0 }
+#app .tabbar.lg-tab .tab .tab-label { font-size: 11px; font-weight: 600; letter-spacing: 0 }
 #app .tabbar.lg-tab .tab svg { width: 25px; height: 25px }
 #app .tabbar.lg-tab .tab.active { color: var(--accent) }
 #app .tabbar.lg-tab .tab.active .tf { fill: currentColor; fill-opacity: .16 }
@@ -147,7 +147,7 @@ html.dark .lg-seg > .lg-lens, html.dark .lg-gseg > .lg-lens, html.dark .lg-range
 .acfcc-svg .yl, .acfcc-svg .avgl { font-size: 9.5px; fill: var(--label2) }
 .acfcc-svg .avgl.v { font-weight: 700; fill: var(--label) }
 .acfcc-svg .avg { stroke: var(--label2); stroke-width: 1; stroke-dasharray: 3 3 }
-.acfcc-svg .x { font-size: 10px; fill: var(--label2) }
+.acfcc-svg .x { font-size: 11px; fill: var(--label2) }
 .acfcc-svg .bc { fill: var(--purple); opacity: .45 } .acfcc-svg .bs { fill: var(--accent); opacity: .45 }
 .acfcc-svg .sel .bc, .acfcc-svg .sel .bs { opacity: 1 }
 .acfcc-svg .sel .x { fill: var(--label); font-weight: 700 }
@@ -175,7 +175,7 @@ html.dark .lg-seg > .lg-lens, html.dark .lg-gseg > .lg-lens, html.dark .lg-range
 .lg-ruler-track i::before { content: ''; position: absolute; left: 4.5px; top: 6px; width: 1px; height: 12px; border-radius: 1px; background: var(--label3) }
 .lg-ruler-track i.mid::before { height: 18px; background: var(--label2) }
 .lg-ruler-track i.major::before { width: 1.5px; height: 24px; background: var(--label) }
-.lg-ruler-track i b { position: absolute; left: 5px; top: 32px; transform: translateX(-50%); font-size: 10px; font-weight: 600; color: var(--label2); white-space: nowrap }
+.lg-ruler-track i b { position: absolute; left: 5px; top: 32px; transform: translateX(-50%); font-size: 11px; font-weight: 600; color: var(--label2); white-space: nowrap }
 .lg-ruler-needle { position: sticky; display: block; left: calc(50% - 1.5px); top: 0; width: 3px; height: 30px; margin-top: -54px; border-radius: 2px; background: var(--tone); box-shadow: 0 0 0 2px var(--card); pointer-events: none }
 .lg-ruler:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); border-radius: 12px }
 .lg-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px }
@@ -195,7 +195,7 @@ html.dark .lg-seg > .lg-lens, html.dark .lg-gseg > .lg-lens, html.dark .lg-range
 .lg-slider::-moz-range-track { height: 6px; border-radius: 999px; background: var(--fill) }
 .lg-slider::-moz-range-thumb { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 3px 10px rgba(0,0,0,.18) }
 .lg-slider:disabled { opacity: .4 }
-.lg-ratio-ticks { display: flex; justify-content: space-between; padding: 0 10px; font-size: 10px; color: var(--label3); font-variant-numeric: tabular-nums }
+.lg-ratio-ticks { display: flex; justify-content: space-between; padding: 0 10px; font-size: 11px; color: var(--label3); font-variant-numeric: tabular-nums }
 .lg-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
 .lg-facts > div { padding: 12px 14px; border-radius: 16px; background: var(--card) }
 .lg-facts span { display: block; font-size: 12px; color: var(--label2) } .lg-facts strong { font-size: 17px; font-variant-numeric: tabular-nums }
@@ -271,7 +271,7 @@ select.lg-native { position: absolute !important; width: 1px !important; height:
 .lg-daydial button { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 46px; height: 54px; border: 0; border-radius: 16px; background: var(--fill); color: var(--label); scroll-snap-align: center; transition: transform .3s var(--lg16-spring), background .2s }
 .lg-daydial button:not(:has(b)) { width: auto; padding: 0 14px; font-size: 13px; font-weight: 600 }
 .lg-daydial button b { font-size: 19px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums }
-.lg-daydial button small { font-size: 10px; color: var(--label2); margin-top: 2px }
+.lg-daydial button small { font-size: 11px; color: var(--label2); margin-top: 2px }
 .lg-daydial button.on { background: var(--accent); color: #fff; transform: scale(1.06) }
 .lg-daydial button.on small { color: rgba(255,255,255,.8) }
 .lg-pick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px }
