@@ -267,7 +267,7 @@ function acfC100ToggleHtml(){
 }
 function setAcfC100(on){
   try{safeCommit(()=>{data.acfSettings={...(data.acfSettings||{}),c100Mode:!!on}},{render:true,label:'acf c100 mode'})}catch(e){return false}
-  document.documentElement.classList.toggle('acf-c100',!!on);feedback?.selection?.();
+  document.documentElement.classList.toggle('c100-active',!!on);feedback?.selection?.();
   showToast(on?'C100モード：カード100%で試算しています':'C100モードを終了しました');return true;
 }
 function bindAcfC100(root,redraw){const b=root.querySelector('#acfC100Toggle');if(b)b.onclick=()=>{if(setAcfC100(!(data.acfSettings?.c100Mode===true)))redraw?.()}}
