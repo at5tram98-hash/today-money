@@ -73,10 +73,10 @@
 393-light-salary-allocation-picker,salary-allocation-picker,ホーム→今月の給与カード→給与（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
 393-light-bank-transfer-plans,bank-transfer-plans,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,「資産に戻る」 → 「ホームに戻る」,○,合格
 393-light-bank-transfer-editor,bank-transfer-editor,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「ホームに戻る」,○,合格
-393-light-budget-rebalance,budget-rebalance,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,393,light,○,○,0,0,0,○,ダイアログの取消 → 「ホームに戻る」,○,合格
-393-light-acf-setup,acf-setup,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
-393-light-acf-simulator,acf-simulator,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
-393-light-acf-settings,acf-settings,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格
-393-light-day-closing-journal,day-closing-journal,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,「今日の支出に戻る」 → 「ホームに戻る」,○,合格
-393-light-asset-billing-month,asset-billing-month,ホーム→総資産カード→資産（入口はホームだけ）,393,light,○,○,0,0,0,○,シートの「キャンセル」 → 「ホームに戻る」,○,合格
-393-light-quick-repeat-direct,quick-repeat-direct,ホーム→支出カード（今日）→ 今日の支出（旧「今日」画面の内容）,393,light,○,○,0,0,0,○,シートの「閉じる」 → 「ホームに戻る」,○,合格
+393-light-budget-rebalance,budget-rebalance,ホーム→支出カード（今月）→ 今月の支出（旧「今月」画面）,393,light,○,○,0,0,0,○,,×,不合格
+393-light-acf-setup,acf-setup,,393,light,×,×,0,0,0,×,,×,不合格
+393-light-acf-simulator,acf-simulator,,393,light,×,×,0,0,0,×,,×,不合格
+393-light-acf-settings,acf-settings,,393,light,×,×,0,0,0,×,,×,不合格
+393-light-day-closing-journal,day-closing-journal,,393,light,×,×,0,0,0,×,,×,不合格
+393-light-asset-billing-month,asset-billing-month,,393,light,×,×,0,0,0,×,,×,不合格
+393-light-quick-repeat-direct,quick-repeat-direct,,393,light,×,×,0,0,0,×,,×,不合格

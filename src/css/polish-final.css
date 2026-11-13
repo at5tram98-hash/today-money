@@ -1,10 +1,8 @@
 /* 第17版 仕上げ（最後に読み込む） */
 
 /* 1. 起動画面: 下の「読み込み中」は出さない。3秒以上かかった時だけ静かに出す */
-.boot-status { opacity: 0; animation: bootStatusLate .3s var(--spring) 3s forwards }
-@keyframes bootStatusLate { from { opacity: 0; transform: translate(-50%, 8px) } to { opacity: 1; transform: translateX(-50%) } }
-html.motion-off .boot-status { animation: none }
-@media (prefers-reduced-motion: reduce) { .boot-status { animation: bootStatusLateStill 0s 3s forwards } @keyframes bootStatusLateStill { to { opacity: 1 } } }
+.boot-status { opacity: 0; animation: none; transition: opacity .3s ease }
+.storage-boot.slow .boot-status { opacity: 1 }
 /* 2. 起動画面の骨組みを今の画面（中央の小さなタブバー・右上の丸ボタン・＋）に合わせる */
 .boot-tabbar { left: 0; right: 0; margin: 0 auto; width: 232px; justify-content: space-evenly }
 .boot-tabbar i { width: 26px; height: 26px; border-radius: 50% }

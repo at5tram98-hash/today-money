@@ -140,9 +140,9 @@ await check(page,'G-84','ACF指標の作り直し: ホームのカードは半�
   const w=await p.evaluate(()=>document.getElementById('app').getBoundingClientRect().width);assert.ok(w>300,'#appの幅が残る');
   return `カード: 指標${card.value}・棒2本・${card.foot.trim()} / 詳細:「${d.sentence}」・÷なし`},{writes:true});
 await check(page,'G-85','起動画面: 下の「読み込み中」の帯は最初は見えない（3秒以上かかった時だけ出る）。骨組みのタブバーは中央の小さな形',async p=>{
-  const r=await p.evaluate(async()=>{const box=document.createElement('div');box.innerHTML='<div class="boot-status"></div><div class="boot-tabbar"></div>';document.body.append(box);await new Promise(r=>setTimeout(r,400));const s=getComputedStyle(box.firstChild),t=box.lastChild.getBoundingClientRect();const out={op:+s.opacity,delay:s.animationDelay,tw:Math.round(t.width)};box.remove();return out});
-  assert.equal(r.op,0,'最初は見えない');assert.equal(r.delay,'3s');assert.equal(r.tw,232);
-  return `0.4秒後の不透明度${r.op}・表示は${r.delay}後から・タブバー幅${r.tw}px`});
+  const r=await p.evaluate(async()=>{const box=document.createElement('div');box.innerHTML='<div class="boot-status"></div><div class="boot-tabbar"></div>';document.body.append(box);await new Promise(r=>setTimeout(r,400));const s=getComputedStyle(box.firstChild),t=box.lastChild.getBoundingClientRect();const op=+s.opacity;box.className='storage-boot slow';await new Promise(r=>setTimeout(r,400));const out={op,slow:+getComputedStyle(box.firstChild).opacity,tw:Math.round(t.width)};box.remove();return out});
+  assert.equal(r.op,0,'最初は見えない');assert.equal(r.slow,1,'3秒以上かかったら出る');assert.equal(r.tw,232);
+  return `最初の不透明度${r.op}・3秒以上かかった時は${r.slow}・タブバー幅${r.tw}px`});
 await check(page,'G-86','ホームを下に引っぱると更新（印が回り「最新の状態にしました」）。少しだけなら更新しない',async p=>{
   await p.evaluate(()=>{const t=globalThis.__mm3Test;t.closeSheet();while(document.querySelector('#pushLayer .push-view.show'))if(t.popView()===false)break;t.switchTab('today');document.getElementById('todayContent').scrollTop=0});await settle(p);
   const r=await p.evaluate(async()=>{const sc=document.getElementById('todayContent'),fire=(type,y)=>{const e=new Event(type,{bubbles:true});Object.defineProperty(e,'touches',{value:y==null?[]:[{clientY:y,clientX:200}]});sc.dispatchEvent(e)};
@@ -152,6 +152,13 @@ await check(page,'G-86','ホームを下に引っぱると更新（印が回り�
     return{small,ready,spin,title,toast:[...document.querySelectorAll('.toast')].map(x=>x.textContent).join('|'),cards:document.querySelectorAll('#todayContent .home-card-wrap').length}});
   assert.ok(!r.small,'少しだけなら更新しない');assert.ok(r.ready&&r.spin,'引っぱると印が回る');assert.match(r.toast,/最新の状態にしました/);assert.ok(r.cards>=4,'更新後もカードが表示される');
   return `引っぱり120px→更新・トースト「最新の状態にしました」・カード${r.cards}枚${r.title?'・大見出しが伸びる':''}`},{writes:true});
+await check(page,'G-87','C100モードの試算値（カード1日上限99,999,999円・比率100%）が設定画面に出たり、設定として保存されたりしない。保存されてしまった記録は元に戻す',async p=>{
+  const r=await p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData();s.acfSettings={...s.acfSettings,initialized:true,c100Mode:true,creditDailyLimit:500,creditAggressiveness:30};await t.replaceData(s);t.renderAll();
+    const {calc,stored}=t.acfSettingsPair();t.openAcfSettings();await new Promise(r=>setTimeout(r,450));const top=document.querySelector('#sheet.show')||[...document.querySelectorAll('#pushLayer .push-view.show')].at(-1);const text=top?.textContent||'';t.closeSheet();while(document.querySelector('#pushLayer .push-view.show'))if(t.popView()===false)break;
+    const s2=t.getData();s2.acfSettings={...s2.acfSettings,c100Mode:false,creditDailyLimit:99999999};await t.replaceData(s2);const repaired=t.getData().acfSettings.creditDailyLimit;
+    return{calcLimit:calc.creditDailyLimit,storedLimit:stored.creditDailyLimit,storedRatio:stored.creditAggressiveness,bad:/99,999,999|9{6,}/.test(text),repaired}});
+  assert.ok(r.calcLimit>=99999999,'計算ではC100が効く');assert.equal(r.storedLimit,500,'設定は500のまま');assert.equal(r.storedRatio,30);assert.ok(!r.bad,'設定画面に999…が出ない');assert.equal(r.repaired,1000,'保存済みの999…は元に戻る');
+  return `計算は上限なし・設定画面は¥500/30%のまま・保存済みの99,999,999→¥1,000`},{writes:true});
 writeFileSync(resolve(root,'docs/design/glass-v15-results.json'),JSON.stringify(results,null,1));
 await context.close();await closeHarness();
 console.log(`${Object.keys(results).length-failed}/${Object.keys(results).length} glass checks passed`);
