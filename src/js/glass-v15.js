@@ -98,43 +98,10 @@ function applyHomePrefs(){
 }
 
 /* ---------- ＋ = 全画面の「新規入力」 ---------- */
-function entryHubGroups(){
-  const date=['today','day'].includes(activeTab)?trackingDate:ymd();
-  return[
-    {title:'よく使う入力',big:true,items:[
-      {id:'entryExpense',sym:'cart',color:'var(--orange)',title:'支出を記録',sub:'使った金額を記録',run:()=>openQuickExpense(date)},
-      {id:'entryIncome',sym:'wallet',color:'var(--green)',title:'臨時収入',sub:'給与以外の入金',run:()=>openTempIncome(date)},
-      {id:'entryBank',sym:'bank',color:'var(--accent)',title:'残高を更新',sub:'口座の今の残高',run:openQuickBank},
-      {id:'entrySalary',sym:'briefcase',color:'var(--teal)',title:'給与を登録',sub:'今月の給与・予定',run:openSalaryAdd}]},
-    {title:'すばやく入力',items:[
-      {id:'ihCard',sym:'card',color:'var(--purple)',title:'カードの請求額を更新',sub:'カードを選んで今月の請求額を入力',run:()=>openQuickCardBilling(paymentHomeMonth())},
-      {id:'ihRepeat',sym:'repeat',color:'var(--orange)',title:'最近の支出を再利用',sub:'前に記録した支出から選ぶ',run:()=>openQuickRepeat(trackingDate)},
-      {id:'ihOneLine',sym:'edit',color:'var(--accent)',title:'一行入力',sub:'「コンビニ 580円」のように書いて記録',run:()=>openSmartInputSearch('input')}]},
-    {title:'新しく登録',items:[
-      {id:'ihBank',sym:'bank',color:'var(--accent)',title:'銀行口座を追加',sub:'',run:openAddBank},
-      {id:'ihEmployer',sym:'briefcase',color:'var(--teal)',title:'勤務先を追加',sub:'',run:()=>openEmployerCreate(()=>renderAll())},
-      {id:'ihCredit',sym:'card',color:'var(--purple)',title:'クレジットカードを追加',sub:'',run:()=>openAddCard()},
-      {id:'ihDebit',sym:'card',color:'var(--green)',title:'デビットカードを追加',sub:'',run:()=>openAddDebit()},
-      {id:'ihFixed',sym:'repeat',color:'var(--red)',title:'固定支払いを追加',sub:'家賃・サブスクなど',run:()=>openFixedPayment()},
-      {id:'ihLarge',sym:'cart',color:'var(--orange)',title:'大型支出を計画',sub:'',run:()=>openLargeExpenseEditor(null,{after:renderAll})},
-      {id:'ihGoal',sym:'gift',color:'var(--purple)',title:'旅行・プレゼント目標',sub:'',run:()=>openEventGoalEditor()}]}
-  ];
-}
-function openEntryHub(){
-  const groups=entryHubGroups(),all=groups.flatMap(g=>g.items);
-  const tile=x=>`<button type="button" class="entry-tile" id="${x.id}" style="--tile:${x.color}"><span class="entry-tile-icon" aria-hidden="true">${icon(x.sym)}</span><span class="entry-tile-title">${esc(x.title)}</span><span class="entry-tile-sub">${esc(x.sub)}</span></button>`;
-  const row=x=>`<button type="button" class="row press entry-row" id="${x.id}" style="--tile:${x.color}"><span class="entry-row-icon" aria-hidden="true">${icon(x.sym)}</span><div class="row-main"><div class="row-title">${esc(x.title)}</div>${x.sub?`<div class="row-sub">${esc(x.sub)}</div>`:''}</div><span class="chev">${icon('chevronRight')}</span></button>`;
-  const html=`<div class="sheet-nav"><button type="button" class="nav-text" id="entryClose">閉じる</button><div class="sheet-title">新規入力</div><span></span></div><div class="sheet-body entry-hub" id="entryHub"><p class="entry-lead">何を入力しますか？</p>${groups.map(g=>`<h2 class="section-head">${esc(g.title)}</h2>${g.big?`<div class="entry-grid">${g.items.map(tile).join('')}</div>`:`<div class="group">${g.items.map(row).join('')}</div>`}`).join('')}</div>`;
-  openSheet(html,'full',root=>{
-    const sheet=root.closest('#sheet');sheet?.classList.add('glass-sheet','from-hub');setTimeout(()=>sheet?.classList.remove('from-hub'),600);
-    root.querySelector('#entryClose').onclick=closeSheet;
-    for(const x of all)root.querySelector('#'+x.id).onclick=()=>{feedback?.selection?.();closeSheet();x.run()};
-  });
-}
+/* ＋の中身は ios-native.js openEntryCalc（電卓）。ここではボタンの結び付けだけ */
 document.getElementById('addHub')?.addEventListener('click',()=>{feedback?.selection?.();openEntryHub()});
 /* 旧「その他の入力」（push画面）も同じ「新規入力」へ */
 function openOtherInputs(){openEntryHub()}
-function addHubItems(){return entryHubGroups().flatMap(g=>g.items).map(x=>({label:x.title,icon:x.sym,action:x.run}))}
 
 /* ---------- 専用画面の左端スワイプで戻る ---------- */
 (function installDetailEdgeBack(){

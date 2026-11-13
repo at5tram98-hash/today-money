@@ -291,9 +291,7 @@ input:not([type=checkbox]):not([type=radio]) { min-height: 44px }
   .group,
   .card { border-color: currentColor }
 }
-.money-ticker-card { --ticker-accent: var(--blue); width: clamp(154px,42vw,188px); min-height: 92px; border: 0; border-radius: 17px; background: var(--card); color: var(--label); padding: 11px 12px 10px; display: grid; grid-template-columns: minmax(0,1fr) 52px; grid-template-rows: auto auto 1fr; column-gap: 9px; text-align: left; box-shadow: inset 0 0 0 .5px var(--sep); flex: 0 0 auto; position: relative; overflow: hidden }
 @media (max-width:390px) {
-  .money-ticker-card { width: clamp(150px,47vw,174px); min-height: 90px }
 }
 @media (max-width:370px) {
   .calendar-card { padding-left: 3px; padding-right: 3px }
@@ -423,9 +421,6 @@ button.switch:after { top: 8.5px }
 .simple-hero { padding: 15px 2px 12px; margin-bottom: 6px }
 .hero { padding: 18px; border-radius: var(--r) }
 .today-goal-hero { overflow: hidden; padding: 0 }
-.money-ticker-shell { position: relative; margin: 1px -16px 13px; overflow: hidden }
-.money-ticker-name { grid-column: 1/-1; font-size: 11px; font-weight: 700; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--label) }
-.money-ticker-value { grid-column: 1/2; font-size: 19px; font-weight: 760; letter-spacing: -.45px; line-height: 1.12; margin-top: 4px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .month-name-btn { font-size: 34px; line-height: 1.18; letter-spacing: -.8px; font-weight: 700; overflow: visible; text-overflow: clip; min-height: var(--tap-min) !important; gap: 8px; white-space: nowrap }
 .pro-chart-svg { display: block; width: 100%; height: 232px; overflow: visible; touch-action: pan-y }
 .pro3-event-list { background: var(--card); border-radius: 15px; overflow: hidden }

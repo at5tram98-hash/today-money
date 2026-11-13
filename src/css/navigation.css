@@ -147,9 +147,7 @@
 .topbar .icon-btn { width: 44px; height: 44px; min-width: 44px; background: var(--glass-bg) !important; box-shadow: inset 0 0 0 .5px var(--glass-edge),0 2px 8px #00000008; border-radius: 50%; color: var(--label) }
 .pro3-fchart svg { width: 100%; height: 210px; display: block; overflow: visible; touch-action: pan-y }
 .pro4-searchbar svg { width: 18px; height: 18px; color: var(--label2); fill: none; stroke: currentColor; stroke-width: 2 }
-.money-ticker-spark svg { display: block; width: 52px; height: 31px; overflow: visible }
 @media (max-width:340px) {
-  .money-ticker-spark svg { width: 44px }
 }
 .mm3-action-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.85; stroke-linecap: round; stroke-linejoin: round }
 .stmt-import-icon svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.8 }
@@ -169,7 +167,6 @@ html.dark .stock-detail-view { background: #000 }
 .pro3-legend i.forecast { border-top-style: dashed }
 .pro3-legend i.floor { border-color: var(--orange); border-top-style: dotted }
 .pro4-dup-toggle.on i { background: var(--blue); border-color: var(--blue); color: white }
-html.dark .money-ticker-card { background: #1C1C1E; box-shadow: inset 0 0 0 .5px #2C2C2E }
 .stmt-filterbar button.on { background: var(--label); color: var(--bg) }
 html.dark .stmt-sticky-actions { background: linear-gradient(to bottom,rgba(0,0,0,0),var(--bg) 20%) }
 .back-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }

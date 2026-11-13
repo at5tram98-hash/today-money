@@ -2801,135 +2801,9 @@ function todayIncomeHtml(date){const list=incomesForDate(date);if(!list.length)r
 function openDailyCorrectionDetail(date=trackingDate){const raw=rawSpentDate(date),actual=spentDate(date),delta=actual-raw,corrected=data.dailyCorrections[date]!=null;openSheet(`<div class="sheet-nav"><button class="nav-text" id="dcClose">閉じる</button><div class="sheet-title">実質使った金額</div><span style="min-width:64px"></span></div><div class="sheet-body"><div class="group"><div class="row"><div class="row-main"><div class="row-title">自動集計</div></div><div class="row-value">${yen(raw)}</div></div><div class="row"><div class="row-main"><div class="row-title">実質金額</div></div><div class="row-value">${yen(actual)}</div></div><div class="row"><div class="row-main"><div class="row-title">修正差額</div></div><div class="row-value ${delta>0?'red':delta<0?'green':''}">${delta>0?'+':''}${yen(delta)}</div></div></div><button class="primary" id="dcEdit">実質金額を修正</button>${corrected?'<button class="secondary" id="dcReset" style="margin-top:9px">自動集計に戻す</button>':''}</div>`,'half',()=>{document.getElementById('dcClose').onclick=requestSheetClose;document.getElementById('dcEdit').onclick=()=>openCalculator('実質使った金額',actual,async v=>{if(!await confirmAmountDraft('実質使った金額',actual,v))return;try{safeCommit(()=>{data.dailyCorrections[date]=v},{label:'daily correction edit'})}catch(e){return}closeSheet();renderAll()});document.getElementById('dcReset')?.addEventListener('click',()=>{try{safeCommit(()=>{delete data.dailyCorrections[date]},{label:'daily correction reset'})}catch(e){return}closeSheet();renderAll()})})}
 let openMailOverview;
 
-/* ===== Money Snapshot ticker ===== */
-const moneyTickerControllers=new Map();
-
-function moneyTickerTotalSeries(days=31){
-  const cutoff=addDays(ymd(),-Math.max(1,days));
-  const rows=(data.assetSnapshots||[])
-    .filter(s=>s.bankTotal!=null&&String(s.date||'')>=cutoff)
-    .map(s=>({date:String(s.date||String(s.createdAt||'').slice(0,10)),value:Number(s.bankTotal)||0,createdAt:String(s.createdAt||s.date||'')}))
-    .filter(x=>x.date)
-    .sort((a,b)=>(a.date+a.createdAt).localeCompare(b.date+b.createdAt));
-  const latestByDay=new Map();
-  for(const r of rows) latestByDay.set(r.date,r);
-  return [...latestByDay.values()];
-}
-
-function moneyTickerCardSeries(cardId,paymentMonth){
-  const rows=[];for(let i=-5;i<=0;i++){const m=addMonths(paymentMonth,i),agg=cardStatementsAggregate(cardId,m);if(agg.items.length||agg.amount>0)rows.push({date:m+'-01',value:agg.amount})}return rows
-}
-
-function moneyTickerSparklineHtml(points){
-  const p=(points||[]).filter(x=>Number.isFinite(Number(x.value))).slice(-12);
-  if(p.length<2)return '<span class="money-ticker-spark-empty">履歴<br>不足</span>';
-  const w=52,h=31,pad=1.5,vals=p.map(x=>Number(x.value)||0),min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;
-  const xy=p.map((v,i)=>({x:pad+i*(w-pad*2)/Math.max(1,p.length-1),y:h-pad-(Number(v.value)-min)/range*(h-pad*2)}));
-  const line=xy.map((c,i)=>(i?'L':'M')+c.x.toFixed(1)+','+c.y.toFixed(1)).join(' ');
-  const area=`${line} L${xy[xy.length-1].x.toFixed(1)},${h} L${xy[0].x.toFixed(1)},${h} Z`;
-  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="money-ticker-spark-fill" d="${area}"/><path class="money-ticker-spark-line" d="${line}"/></svg>`;
-}
-
-function moneyTickerItems(context='today',paymentMonth=ym()){
-  const items=[],total=totalDeposits(),totalSeries=moneyTickerTotalSeries(31),totalDelta=totalSeries.length>1?totalSeries.at(-1).value-totalSeries[0].value:null;
-  items.push({kind:'assets',id:'',title:'現金・預金',value:total,primary:totalDelta==null?'現在残高合計':`${totalDelta>=0?'+':'−'}${yen(Math.abs(totalDelta))}・30日`,secondary:'資産を表示',points:totalSeries});
-  for(const b of data.banks){const d=bankDeltaInfo(b.id,31),pts=bankSnapshotSeries(b.id,31);items.push({kind:'bank',id:b.id,title:b.name,value:Number(b.balance)||0,primary:d.known?`${d.delta>=0?'+':'−'}${yen(Math.abs(d.delta))}・30日`:'30日比較は履歴不足',secondary:b.balanceAsOf?`確認 ${compactDateTime(b.balanceAsOf)}`:'残高未確認',points:pts})}
-  for(const c of data.cards){const agg=cardStatementsAggregate(c.id,paymentMonth),st=agg.next,count=agg.count,multi=count>1?`・${count}件`:'';const due=st?.paymentDate?`${dayLabel(st.paymentDate)}${multi}`:(c.dueDay?`${c.dueDay}日支払い${multi}`:'支払日未設定');items.push({kind:'card',id:c.id,title:c.name,value:agg.amount,primary:`${monthLabel(paymentMonth)}請求・${cardStatementStatusLabel(agg.status)}${multi}`,secondary:due,points:moneyTickerCardSeries(c.id,paymentMonth),state:agg.status==='paid'?'paid':(!st?.paymentDate&&agg.amount>0?'warning':'')})}
-  return items
-}
-
-function moneyTickerCardHtml(item,{duplicate=false,month=ym()}={}){
-  const stateClass=item.state==='warning'?' is-warning':item.state==='danger'?' is-danger':item.state==='paid'?' is-paid':'';
-  const valueText=yen(item.value),valueClass=valueText.length>=15?' very-large-value large-value':valueText.length>=12?' large-value':'';
-  const ariaPrefix=item.kind==='card'?'請求額':item.kind==='bank'?'残高':'合計残高';
-  return `<button type="button" class="money-ticker-card${stateClass}${valueClass}" data-kind="${esc(item.kind)}" data-id="${esc(item.id||'')}" data-month="${esc(month)}"${duplicate?' data-duplicate="1" tabindex="-1" aria-hidden="true"':''} aria-label="${esc(item.title)} ${ariaPrefix} ${esc(valueText)}"><div class="money-ticker-name">${esc(item.title)}</div><div class="money-ticker-value">${valueText}</div><div class="money-ticker-spark">${moneyTickerSparklineHtml(item.points)}</div><div class="money-ticker-meta"><strong>${esc(item.primary||'')}</strong><span>${esc(item.secondary||'')}</span></div></button>`;
-}
-
-function moneyTickerHtml(context='today',paymentMonth=ym()){
-  const items=moneyTickerItems(context,paymentMonth);
-  if(!items.length)return'';
-  const primary=items.map(x=>moneyTickerCardHtml(x,{month:paymentMonth})).join('');
-  const duplicate=items.map(x=>moneyTickerCardHtml(x,{duplicate:true,month:paymentMonth})).join('');
-  return `<div class="money-ticker-shell" data-money-ticker-shell="${esc(context)}"><div class="money-ticker-viewport" id="moneyTicker-${esc(context)}" role="region" aria-label="銀行残高とカード請求のスナップショット"><div class="money-ticker-track"><div class="money-ticker-copy money-ticker-primary">${primary}</div><div class="money-ticker-copy money-ticker-duplicate" aria-hidden="true">${duplicate}</div></div></div></div>`;
-}
-
-function stopMoneyTicker(context){
-  const ctl=moneyTickerControllers.get(context);
-  if(!ctl)return;
-  ctl.stopped=true;
-  if(ctl.raf)cancelAnimationFrame(ctl.raf);
-  if(ctl.resumeTimer)clearTimeout(ctl.resumeTimer);
-  moneyTickerControllers.delete(context);
-}
-
-function openMoneyTickerItem(button){
-  const kind=button?.dataset.kind,id=button?.dataset.id,month=button?.dataset.month||ym();
-  if(kind==='assets')return switchTab('assets');
-  if(kind==='bank'&&id)return openBankDetail(id);
-  if(kind==='card'&&id)return openCardDetail(id,month);
-}
-
-function bindMoneyTicker(context='today'){
-  const viewport=document.getElementById(`moneyTicker-${context}`);
-  if(!viewport)return;
-  stopMoneyTicker(context);
-
-  let pointerStart=null,moved=false;
-  const pause=(ms=2600)=>{
-    const ctl=moneyTickerControllers.get(context);
-    if(!ctl)return;
-    ctl.pausedUntil=performance.now()+ms;
-    viewport.closest('.money-ticker-shell')?.classList.add('money-ticker-paused');
-    if(ctl.resumeTimer)clearTimeout(ctl.resumeTimer);
-    ctl.resumeTimer=setTimeout(()=>viewport.closest('.money-ticker-shell')?.classList.remove('money-ticker-paused'),ms);
-  };
-
-  viewport.addEventListener('pointerdown',e=>{pointerStart={x:e.clientX,y:e.clientY,t:performance.now()};moved=false;pause(3200)},{passive:true});
-  viewport.addEventListener('pointermove',e=>{if(pointerStart&&Math.hypot(e.clientX-pointerStart.x,e.clientY-pointerStart.y)>7)moved=true},{passive:true});
-  viewport.addEventListener('pointerup',()=>{if(pointerStart&&performance.now()-pointerStart.t>350)moved=true;pointerStart=null;pause(2200)},{passive:true});
-  viewport.addEventListener('pointercancel',()=>{pointerStart=null;pause(1600)},{passive:true});
-  viewport.addEventListener('wheel',()=>pause(3200),{passive:true});
-  viewport.addEventListener('focusin',()=>pause(5000));
-  viewport.addEventListener('mouseenter',()=>pause(1800),{passive:true});
-
-  viewport.querySelectorAll('.money-ticker-card').forEach(btn=>{
-    btn.addEventListener('click',e=>{if(moved){e.preventDefault();e.stopPropagation();moved=false;return}openMoneyTickerItem(btn)});
-  });
-
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches||data.feedbackSettings?.motion===false;
-  const first=viewport.querySelector('.money-ticker-primary');
-  const duplicate=viewport.querySelector('.money-ticker-duplicate');
-  if(reduce||!first||!duplicate){
-    duplicate?.setAttribute('hidden','');
-    return;
-  }
-  const initialFirstWidth=first.getBoundingClientRect().width;
-  if(initialFirstWidth<=viewport.clientWidth+8){
-    duplicate.setAttribute('hidden','');
-    return;
-  }
-
-  const ctl={stopped:false,raf:0,resumeTimer:0,pausedUntil:performance.now()+1300,last:performance.now(),position:viewport.scrollLeft};
-  moneyTickerControllers.set(context,ctl);
-  viewport.addEventListener('scroll',()=>{if(performance.now()<ctl.pausedUntil)ctl.position=viewport.scrollLeft},{passive:true});
-  const tick=now=>{
-    if(ctl.stopped||!document.body.contains(viewport)){if(ctl.raf)cancelAnimationFrame(ctl.raf);return}
-    const screen=viewport.closest('.screen'),active=!!screen?.classList.contains('active');
-    const firstWidth=first.getBoundingClientRect().width;
-    const canMove=firstWidth>viewport.clientWidth+8;
-    if(active&&document.visibilityState==='visible'&&canMove&&now>=ctl.pausedUntil){
-      const dt=Math.min(40,Math.max(0,now-ctl.last));
-      ctl.position+=dt*0.018;
-      if(firstWidth>0&&ctl.position>=firstWidth)ctl.position-=firstWidth;
-      viewport.scrollLeft=ctl.position;
-    }
-    ctl.last=now;
-    ctl.raf=requestAnimationFrame(tick);
-  };
-  ctl.raf=requestAnimationFrame(tick);
-}
-/* ===== end Money Snapshot ticker ===== */
-
+/* 横に自動で流れる帯（マネーティッカー）は第4段で廃止。呼び出し側の互換のため空の関数だけ残す */
+function bindMoneyTicker(){}
+function stopMoneyTicker(){}
 /* 第14版: 旧「今日」画面は、ホームの支出カードから開く専用画面「今日の支出」(screen-day) になった。入力ボタンは＋ハブへ集約 */
 function renderDay(){const n=unreadNotices(),pending=data.mailImports.filter(x=>x.status==='pending').length,tx=txForDate(trackingDate);document.getElementById('dayTop').innerHTML=topbar('今日の支出','',`<button class="icon-btn" id="todayMenu" aria-label="メニュー">${icon('menu')}</button>`);document.getElementById('dayContent').innerHTML=`${spendChartCardHtml('day')}<div class="section-head">${trackingDate===ymd()?'今日':'この日'}</div>${dateNavigatorHtml(trackingDate)}${ringHtml(trackingDate,'today')}${dayClosingCardHtml(trackingDate)}<div class="section-head">これからのお金</div>${acfMiniCardHtml()}${nextFinancialEventHtml()}<div class="section-head">カテゴリ</div>${categoryCards(trackingDate)}${incomesForDate(trackingDate).length?`<div class="section-head">収入</div>${todayIncomeHtml(trackingDate)}`:''}<div class="section-head">記録</div><div class="group"><button class="row press" id="todayTransactions"><span class="row-icon">${icon('list')}</span><div class="row-main"><div class="row-title">取引</div><div class="row-sub">${tx.length}件の支出</div></div><span class="chev">›</span></button><button class="row press" id="todayAnalysis"><span class="row-icon">${icon('chart')}</span><div class="row-main"><div class="row-title">詳細分析</div><div class="row-sub">時間帯・カテゴリ・予算</div></div><span class="chev">›</span></button><button class="row press" id="todayMail"><span class="row-icon">${icon('mail')}</span><div class="row-main"><div class="row-title">メール取引</div><div class="row-sub">${gmailConnected()?'同期済み':'未接続'}・未確認 ${pending}件</div></div>${pending?`<span class="badge">${pending}</span>`:''}<span class="chev">›</span></button></div>`;bindDay()}
 function bindDay(){bindSpendCharts(document.getElementById('dayContent'));document.getElementById('todayDayClose')?.addEventListener('click',()=>openDayClosing(trackingDate));bindMoneyTicker('today');document.getElementById('dayPrev').onclick=()=>shiftTrackingDate(-1);document.getElementById('dayNext').onclick=()=>shiftTrackingDate(1);installHorizontalSwipe(document.getElementById('todayDateNavigator'),()=>shiftTrackingDate(1),()=>shiftTrackingDate(-1));document.getElementById('todayHero').onclick=()=>openDailyCorrectionDetail(trackingDate);document.getElementById('todayGoalAction').onclick=()=>openDailyGoalPlanner(trackingDate);document.getElementById('acfToday')?.addEventListener('click',openAcf);document.getElementById('nextMoneyEvent')?.addEventListener('click',e=>openFinancialDayInspector(e.currentTarget.dataset.date));document.getElementById('todayAnalysis').onclick=()=>openDailyAnalysis(trackingDate);document.getElementById('todayTransactions').onclick=()=>openTransactionList({date:trackingDate,title:`${dayLabel(trackingDate)}の支払い`});document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>openTransactionList({date:trackingDate,category:b.dataset.cat,title:b.dataset.cat}));document.getElementById('todayMail').onclick=openMailOverview;document.getElementById('todayMenu').onclick=e=>openMenu(e.currentTarget,[{label:'生活費の見通し',icon:'chart',action:openAcf},{label:dailyGoal(trackingDate).total?'目標を見直す':'目標をつくる',icon:'target',action:()=>openDailyGoalPlanner(trackingDate)},{label:'最近の支出を再利用',icon:'repeat',action:()=>openQuickRepeat(trackingDate)},{label:'実質金額を確認',icon:'calc',action:()=>openDailyCorrectionDetail(trackingDate)},{label:'メール取引',icon:'mail',action:openMailOverview}])}
@@ -6079,7 +5953,6 @@ function openDayWheel(initial,onApply){
 function syncAddHub(){const b=document.getElementById('addHub');if(b)b.hidden=false}
 /* ＋は全画面の「新規入力」（openEntryHub、glass-v15.js） */
 /* ＋から開く入力シートは右下（＋の位置）を起点に広がる（Q-002「右下を起点に全画面入力へ」。ページめくりはWebで不安定なため、仕様の代替である連続拡大にする） */
-function fromHub(fn){return()=>{const s=document.getElementById('sheet');s?.classList.add('from-hub');s?.addEventListener('animationend',()=>s.classList.remove('from-hub'),{once:true});setTimeout(()=>s?.classList.remove('from-hub'),600);fn()}}
 
 /* ---------- 支払いroot（P-001〜015） ---------- */
 let payrootDismissedRisk='';
@@ -6225,43 +6098,10 @@ function applyHomePrefs(){
 }
 
 /* ---------- ＋ = 全画面の「新規入力」 ---------- */
-function entryHubGroups(){
-  const date=['today','day'].includes(activeTab)?trackingDate:ymd();
-  return[
-    {title:'よく使う入力',big:true,items:[
-      {id:'entryExpense',sym:'cart',color:'var(--orange)',title:'支出を記録',sub:'使った金額を記録',run:()=>openQuickExpense(date)},
-      {id:'entryIncome',sym:'wallet',color:'var(--green)',title:'臨時収入',sub:'給与以外の入金',run:()=>openTempIncome(date)},
-      {id:'entryBank',sym:'bank',color:'var(--accent)',title:'残高を更新',sub:'口座の今の残高',run:openQuickBank},
-      {id:'entrySalary',sym:'briefcase',color:'var(--teal)',title:'給与を登録',sub:'今月の給与・予定',run:openSalaryAdd}]},
-    {title:'すばやく入力',items:[
-      {id:'ihCard',sym:'card',color:'var(--purple)',title:'カードの請求額を更新',sub:'カードを選んで今月の請求額を入力',run:()=>openQuickCardBilling(paymentHomeMonth())},
-      {id:'ihRepeat',sym:'repeat',color:'var(--orange)',title:'最近の支出を再利用',sub:'前に記録した支出から選ぶ',run:()=>openQuickRepeat(trackingDate)},
-      {id:'ihOneLine',sym:'edit',color:'var(--accent)',title:'一行入力',sub:'「コンビニ 580円」のように書いて記録',run:()=>openSmartInputSearch('input')}]},
-    {title:'新しく登録',items:[
-      {id:'ihBank',sym:'bank',color:'var(--accent)',title:'銀行口座を追加',sub:'',run:openAddBank},
-      {id:'ihEmployer',sym:'briefcase',color:'var(--teal)',title:'勤務先を追加',sub:'',run:()=>openEmployerCreate(()=>renderAll())},
-      {id:'ihCredit',sym:'card',color:'var(--purple)',title:'クレジットカードを追加',sub:'',run:()=>openAddCard()},
-      {id:'ihDebit',sym:'card',color:'var(--green)',title:'デビットカードを追加',sub:'',run:()=>openAddDebit()},
-      {id:'ihFixed',sym:'repeat',color:'var(--red)',title:'固定支払いを追加',sub:'家賃・サブスクなど',run:()=>openFixedPayment()},
-      {id:'ihLarge',sym:'cart',color:'var(--orange)',title:'大型支出を計画',sub:'',run:()=>openLargeExpenseEditor(null,{after:renderAll})},
-      {id:'ihGoal',sym:'gift',color:'var(--purple)',title:'旅行・プレゼント目標',sub:'',run:()=>openEventGoalEditor()}]}
-  ];
-}
-function openEntryHub(){
-  const groups=entryHubGroups(),all=groups.flatMap(g=>g.items);
-  const tile=x=>`<button type="button" class="entry-tile" id="${x.id}" style="--tile:${x.color}"><span class="entry-tile-icon" aria-hidden="true">${icon(x.sym)}</span><span class="entry-tile-title">${esc(x.title)}</span><span class="entry-tile-sub">${esc(x.sub)}</span></button>`;
-  const row=x=>`<button type="button" class="row press entry-row" id="${x.id}" style="--tile:${x.color}"><span class="entry-row-icon" aria-hidden="true">${icon(x.sym)}</span><div class="row-main"><div class="row-title">${esc(x.title)}</div>${x.sub?`<div class="row-sub">${esc(x.sub)}</div>`:''}</div><span class="chev">${icon('chevronRight')}</span></button>`;
-  const html=`<div class="sheet-nav"><button type="button" class="nav-text" id="entryClose">閉じる</button><div class="sheet-title">新規入力</div><span></span></div><div class="sheet-body entry-hub" id="entryHub"><p class="entry-lead">何を入力しますか？</p>${groups.map(g=>`<h2 class="section-head">${esc(g.title)}</h2>${g.big?`<div class="entry-grid">${g.items.map(tile).join('')}</div>`:`<div class="group">${g.items.map(row).join('')}</div>`}`).join('')}</div>`;
-  openSheet(html,'full',root=>{
-    const sheet=root.closest('#sheet');sheet?.classList.add('glass-sheet','from-hub');setTimeout(()=>sheet?.classList.remove('from-hub'),600);
-    root.querySelector('#entryClose').onclick=closeSheet;
-    for(const x of all)root.querySelector('#'+x.id).onclick=()=>{feedback?.selection?.();closeSheet();x.run()};
-  });
-}
+/* ＋の中身は ios-native.js openEntryCalc（電卓）。ここではボタンの結び付けだけ */
 document.getElementById('addHub')?.addEventListener('click',()=>{feedback?.selection?.();openEntryHub()});
 /* 旧「その他の入力」（push画面）も同じ「新規入力」へ */
 function openOtherInputs(){openEntryHub()}
-function addHubItems(){return entryHubGroups().flatMap(g=>g.items).map(x=>({label:x.title,icon:x.sym,action:x.run}))}
 
 /* ---------- 専用画面の左端スワイプで戻る ---------- */
 (function installDetailEdgeBack(){

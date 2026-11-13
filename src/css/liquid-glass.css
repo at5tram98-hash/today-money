@@ -327,21 +327,6 @@ html.dark .home-period-indicator { background: radial-gradient(120% 150% at 50% 
 .hs-reset { margin-top: 22px; color: var(--red) }
 
 /* ---- 新規入力（＋） ---- */
-.entry-hub { padding-bottom: 40px }
-.entry-lead { margin: 2px 4px 14px; font-size: 28px; font-weight: 700; letter-spacing: -.6px }
-.entry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px }
-.entry-tile { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-height: 132px; padding: 16px; border: 0; border-radius: 24px; text-align: left; color: var(--label); background: linear-gradient(160deg, color-mix(in srgb, var(--tile) 16%, transparent), transparent 70%), var(--card); box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--tile) 30%, transparent), 0 1px 2px rgba(0,0,0,.04), 0 8px 22px rgba(0,0,0,.05); transition: transform .18s var(--spring) }
-.entry-tile:active { transform: scale(.96) }
-.entry-tile-icon { width: 44px; height: 44px; margin-bottom: auto; border-radius: 14px; display: grid; place-items: center; color: #fff; background: var(--tile); box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 6px 14px color-mix(in srgb, var(--tile) 35%, transparent) }
-.entry-tile-icon svg { width: 24px; height: 24px }
-.entry-tile-title { margin-top: 14px; font-size: 17px; font-weight: 700 }
-.entry-tile-sub { font-size: 13px; color: var(--label2) }
-.entry-row-icon { width: 32px; height: 32px; flex: none; margin-right: 12px; border-radius: 9px; display: grid; place-items: center; color: #fff; background: var(--tile) }
-.entry-row-icon svg { width: 19px; height: 19px }
-.entry-row { display: flex; align-items: center }
-@keyframes entryIn { from { opacity: 0; transform: translateY(14px) scale(.97) } }
-#sheet.show .entry-tile, #sheet.show .entry-hub .group { animation: entryIn .3s var(--spring) both }
-#sheet.show .entry-tile:nth-child(2) { animation-delay: 30ms } #sheet.show .entry-tile:nth-child(3) { animation-delay: 60ms } #sheet.show .entry-tile:nth-child(4) { animation-delay: 90ms }
 
 /* ---- ホーム: 次の支払い（文字は大きくしない。日付の札＋行） ---- */
 .np-body { display: block; padding-top: 0 }
@@ -444,7 +429,6 @@ html.dark.more-contrast { --label2: rgba(250,250,255,.86); --label3: rgba(250,25
 html.more-contrast .tabbar, html.more-contrast .home-card, html.more-contrast .hl-card { box-shadow: 0 0 0 1px var(--sep) }
 
 @media (prefers-reduced-motion:reduce) {
-  #sheet.show .entry-tile, #sheet.show .entry-hub .group { animation: none }
   [data-reorder-key], .glass-seg > button, .home-period-indicator { transition: none }
 }
 

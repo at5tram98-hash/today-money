@@ -250,7 +250,6 @@ function openDayWheel(initial,onApply){
 function syncAddHub(){const b=document.getElementById('addHub');if(b)b.hidden=false}
 /* ＋は全画面の「新規入力」（openEntryHub、glass-v15.js） */
 /* ＋から開く入力シートは右下（＋の位置）を起点に広がる（Q-002「右下を起点に全画面入力へ」。ページめくりはWebで不安定なため、仕様の代替である連続拡大にする） */
-function fromHub(fn){return()=>{const s=document.getElementById('sheet');s?.classList.add('from-hub');s?.addEventListener('animationend',()=>s.classList.remove('from-hub'),{once:true});setTimeout(()=>s?.classList.remove('from-hub'),600);fn()}}
 
 /* ---------- 支払いroot（P-001〜015） ---------- */
 let payrootDismissedRisk='';

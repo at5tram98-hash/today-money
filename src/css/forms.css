@@ -106,7 +106,6 @@
 .pro4-insight strong { display: block; font-size: 13px }
 .pro4-review-state strong { font-size: 14px }
 .pro4-review-issue strong { display: block; font-size: 12.5px }
-.money-ticker-meta strong { display: block; font-size: var(--type-min); font-weight: 700; color: var(--ticker-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .acf-home-split strong { display: block; font-family: var(--font-rounded); font-size: 16px; margin-top: 2px; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .acf-graph-head strong { font-size: 14px }
 @media (max-width:390px) {
@@ -170,7 +169,6 @@
 .pro4-insight span { display: block; font-size: 11px; color: var(--label2); line-height: 1.45; margin-top: 4px }
 .pro4-review-state span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 3px }
 .pro4-review-issue span { display: block; font-size: var(--type-min); color: var(--label2); margin-top: 2px }
-.money-ticker-meta span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px }
 .acf-home-split span { display: block; font-size: 11px; color: var(--label2) }
 .acf-graph-head span { font-size: var(--type-min); color: var(--label2) }
 .stmt-import-hero span { display: block; color: var(--label2); font-size: 12px; line-height: 1.5; margin-top: 4px }
