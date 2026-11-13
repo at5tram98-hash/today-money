@@ -39,6 +39,7 @@
     "src/js/glass-v15.js",
     "src/js/ios-polish.js",
     "src/js/ios-native.js",
+    "src/js/shift-import.js",
     "src/js/24-accessibility.js",
     "src/js/25-finish.js",
     "src/js/26-liquid-v16.js",

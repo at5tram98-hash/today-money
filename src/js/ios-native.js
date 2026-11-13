@@ -68,7 +68,7 @@ function openEntryCalc(initialMode='expense'){
       }
       if(st.mode==='income')h=`<div class="entry-chips" role="group" aria-label="入金先">${chip('data-entry-to','cash|','手持ち・未入金',st.toType==='cash')}${data.banks.map(b=>chip('data-entry-to',`bank|${b.id}`,`${icon('bank')}${esc(b.name)}`,st.toType==='bank'&&st.bankId===b.id)).join('')}<span class="entry-chip-sep" aria-hidden="true"></span><button type="button" class="entry-chip ghost" id="entryIncomeDetail">${icon('list')}詳細入力</button></div><div class="entry-row2">${dateChip()}<label class="entry-field wide"><input type="text" id="entrySource" placeholder="収入源（例：単発バイト・返金）" value="${esc(st.merchant)}" aria-label="収入源"></label></div>`;
       if(st.mode==='bank')h=data.banks.length?`<div class="entry-chips" role="group" aria-label="口座">${data.banks.map(b=>chip('data-entry-bank',b.id,`${icon('bank')}${esc(b.name)}`,st.bankId===b.id)).join('')}<span class="entry-chip-sep" aria-hidden="true"></span><button type="button" class="entry-chip ghost" id="entryBankDetail">${icon('list')}詳細入力</button></div>`:`<div class="entry-empty">銀行口座がありません。「その他」→「口座とカード」で追加できます。</div>`;
-      if(st.mode==='salary')h=data.employers.length?`<div class="entry-chips" role="group" aria-label="勤務先">${data.employers.map(e=>chip('data-entry-emp',e.id,`${icon('briefcase')}${esc(e.name)}`,st.empId===e.id)).join('')}</div>`:`<div class="entry-empty">勤務先がありません。「その他」→「給与と勤務先」で追加できます。</div>`;
+      if(st.mode==='salary')h=data.employers.length?`<div class="entry-chips" role="group" aria-label="勤務先">${data.employers.map(e=>chip('data-entry-emp',e.id,`${icon('briefcase')}${esc(e.name)}`,st.empId===e.id)).join('')}<span class="entry-chip-sep" aria-hidden="true"></span><button type="button" class="entry-chip ghost" id="entryShift">${icon('calendar')}シフトから</button></div>`:`<div class="entry-empty">勤務先がありません。「その他」→「給与と勤務先」で追加できます。</div>`;
       if(st.mode==='card')h=data.cards.length?`<div class="entry-chips" role="group" aria-label="カード">${data.cards.map(c=>chip('data-entry-card',c.id,`${icon('card')}${esc(c.name)}`,st.cardId===c.id)).join('')}</div>`:`<div class="entry-empty">クレジットカードがありません。「その他」→「口座とカード」で追加できます。</div>`;
       context.innerHTML=h;bindDate();
       context.querySelectorAll('[data-entry-to]').forEach(b=>b.onclick=()=>{const [t,id]=b.dataset.entryTo.split('|');st.toType=t;if(id)st.bankId=id;drawContext()});
@@ -77,6 +77,7 @@ function openEntryCalc(initialMode='expense'){
       $('#entryBankDetail')?.addEventListener('click',()=>{closeSheet();openQuickBank(st.bankId)});
       context.querySelectorAll('[data-entry-bank]').forEach(b=>b.onclick=()=>{st.bankId=b.dataset.entryBank;if(!st.typed)st.expr=String(Math.round(Number(bankById(st.bankId)?.balance)||0));drawContext();drawDisplay()});
       context.querySelectorAll('[data-entry-emp]').forEach(b=>b.onclick=()=>{st.empId=b.dataset.entryEmp;drawContext()});
+      $('#entryShift')?.addEventListener('click',()=>{context.replaceChildren();closeSheet();openShiftGuide()});
       context.querySelectorAll('[data-entry-card]').forEach(b=>b.onclick=()=>{st.cardId=b.dataset.entryCard;drawContext()});
     };
     const setMode=k=>{if(!modeOf(k))return;const was=st.mode;st.mode=k;entryLastMode=k;if(k!=='expense'&&was==='expense'&&!st.typed)st.merchant='';
@@ -181,9 +182,10 @@ function openAccountsSettings(){
   draw();
 }
 function openEmployersSettings(){
-  const draw=()=>settingsDetailView('勤務先',`<h2 class="reg-head">勤務先</h2><div class="group">${regRowsHtml(data.employers.map(e=>({id:e.id,name:e.name,sub:e.payDay?`給料日 ${e.payDay}日`:'',sym:'briefcase',color:'var(--teal)'})),'data-reg-emp')}${regAddHtml('regAddEmployer','勤務先を追加')}</div><p class="settings-section-footer">給与の記録はホームの＋（給与）から行えます。</p>`,root=>{
+  const draw=()=>settingsDetailView('勤務先',`<h2 class="reg-head">勤務先</h2><div class="group">${regRowsHtml(data.employers.map(e=>({id:e.id,name:e.name,sub:e.payDay?`給料日 ${e.payDay}日`:'',sym:'briefcase',color:'var(--teal)'})),'data-reg-emp')}${regAddHtml('regAddEmployer','勤務先を追加')}</div><h2 class="reg-head">シフト</h2><div class="group"><button type="button" class="row press reg-row" id="regShiftImport"><span class="reg-icon" style="--c:var(--purple)" aria-hidden="true">${icon('calendar')}</span><div class="row-main"><div class="row-title">シフトから給料を見込む</div><div class="row-sub">シフトボード（カレンダー）から来月の給料を計算</div></div><span class="chev">${icon('chevronRight')}</span></button></div><p class="settings-section-footer">給与の記録はホームの＋（給与）から行えます。</p>`,root=>{
     root.querySelectorAll('[data-reg-emp]').forEach(b=>b.onclick=()=>openEmployerDetail(b.dataset.regEmp));
     root.querySelector('#regAddEmployer').onclick=()=>openEmployerCreate(()=>{renderAll();draw()});
+    root.querySelector('#regShiftImport').onclick=()=>openShiftGuide();
   });
   draw();
 }
@@ -263,11 +265,14 @@ function cardArtGradient(c){const key=String(c?.name||'')+String(c?.id||'');let 
 /* ---------- ACF C100モード（カード100%の試算）: トグルでON/OFF ---------- */
 function acfC100ToggleHtml(){
   const on=data.acfSettings?.c100Mode===true;
-  return `<div class="acf-c100${on?' on':''}"><div class="acf-c100-badge" aria-hidden="true">C100</div><div class="acf-c100-text"><b>C100モード（試算）</b><small>${on?'今日からずっと現金を使わず、すべてカードで払う前提で計算しています。カードの限度額と引落後の残高は確認します。記録と設定は変わりません。':'今日からずっと現金を使わず、すべてカードで払ったらどうなるかを試算します。'}</small></div><button type="button" class="switch${on?' on':''}" id="acfC100Toggle" role="switch" aria-checked="${on}" aria-label="C100モード（カード100%の試算）"></button></div>`;
+  return `<div class="group acf-c100-row"><div class="row"><div class="row-main"><div class="row-title">C100モード${on?'<span class="c100-tag">試算中</span>':''}</div><div class="row-sub">${on?'現金を使わず、すべてカードで払う前提で計算中':'今日から現金を使わず、すべてカードで払ったら'}</div></div><button type="button" class="switch${on?' on':''}" id="acfC100Toggle" role="switch" aria-checked="${on}" aria-label="C100モード（カード100%の試算）"></button></div></div>`;
 }
 function setAcfC100(on){
   try{safeCommit(()=>{data.acfSettings={...(data.acfSettings||{}),c100Mode:!!on}},{render:true,label:'acf c100 mode'})}catch(e){return false}
-  document.documentElement.classList.toggle('c100-active',!!on);feedback?.selection?.();
+  document.documentElement.classList.toggle('c100-active',!!on);applyC100HomeTag();
   showToast(on?'C100モード：カード100%で試算しています':'C100モードを終了しました');return true;
 }
-function bindAcfC100(root,redraw){const b=root.querySelector('#acfC100Toggle');if(b)b.onclick=()=>{if(setAcfC100(!(data.acfSettings?.c100Mode===true)))redraw?.()}}
+/* スイッチはまず滑らかに動かし（0.26秒）、動き終わってから計算し直す */
+function bindAcfC100(root,redraw){const b=root.querySelector('#acfC100Toggle');if(!b)return;b.onclick=()=>{if(b.dataset.busy)return;b.dataset.busy='1';const next=!(data.acfSettings?.c100Mode===true);b.classList.toggle('on',next);b.setAttribute('aria-checked',String(next));feedback?.selection?.();setTimeout(()=>{if(setAcfC100(next))redraw?.()},mm3MotionReduced()?0:280)}}
+/* ホームのACFカードの小さな「C100」の印 */
+function applyC100HomeTag(){const on=data.acfSettings?.c100Mode===true;document.querySelectorAll('.c100-home-tag').forEach(x=>x.remove());if(!on)return;const t=document.querySelector('#todayContent [data-home-section="acf"] .home-card-title');if(t)t.insertAdjacentHTML('beforeend','<span class="c100-tag c100-home-tag">C100</span>')}
