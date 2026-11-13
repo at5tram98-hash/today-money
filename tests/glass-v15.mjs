@@ -128,6 +128,30 @@ await check(page,'G-83','Googleカレンダーから自動で取り込む: 1日1
       return{first,second,gross:rec?.gross,transport:rec?.transport,status:rec?.status,lastCount:d.shiftSettings.calendar.lastCount,toast,plans:d.shiftPlans.length}}finally{window.fetch=real}});
   assert.equal(r.first,1,'1回だけ読み取る');assert.equal(r.second,1,'同じ日は2回目を読まない');assert.equal(r.gross,9425+7963);assert.equal(r.status,'予定');assert.equal(r.lastCount,2,'終日の予定は除く');assert.match(r.toast,/Googleで更新/,'許可が切れていれば案内');
   return `カレンダーの2件→GU 2026年11月勤務分 ¥${r.gross.toLocaleString()}（予定）・同日2回目は読まない・許可切れは「Googleで更新」`},{writes:true});
+await check(page,'G-84','ACF指標の作り直し: ホームのカードは半円メーターではなく「使えるお金」「予定の支払い」の2本の棒と余る見込み。詳細画面に「÷」の式は出さず一文で説明',async p=>{
+  await p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData();s.acfSettings={...s.acfSettings,initialized:true,c100Mode:false};await t.replaceData(s);t.closeSheet();while(document.querySelector('#pushLayer .push-view.show'))if(t.popView()===false)break;t.switchTab('today');t.renderAll()});await settle(p);
+  const card=await p.evaluate(()=>{const c=document.querySelector('#homeAcfCard');return{bars:c.querySelectorAll('.acfb-track > i').length,gauge:!!c.querySelector('svg.acf-gauge, .acf-gauge'),value:c.querySelector('.acfc-value')?.textContent,foot:c.querySelector('.acfc-foot')?.textContent}});
+  assert.equal(card.bars,2,'2本の棒');assert.ok(!card.gauge,'半円メーターなし');assert.match(card.value,/^\d+\.\d+$|^∞$/);assert.match(card.foot,/見込み/);
+  await p.locator('#homeAcfCard').click();await settle(p);
+  const d=await p.evaluate(()=>{const v=[...document.querySelectorAll('#pushLayer .push-view.show')].at(-1);return{eq:!!v.querySelector('.acf-idx-eq'),div:/÷/.test(v.textContent),sentence:v.querySelector('.acfd-sentence')?.textContent,bars:v.querySelectorAll('.acfb.large .acfb-track').length,links:!!v.querySelector('#acfIdxDetail')&&!!v.querySelector('#acfIdxSettings'),parallax:document.documentElement.classList.contains('mm3-push-open')}});
+  assert.ok(!d.eq&&!d.div,'÷の式なし');assert.match(d.sentence,/使えるお金|予定の支払い/);assert.equal(d.bars,2);assert.ok(d.links);assert.ok(d.parallax,'奥の画面がずれる');
+  await p.evaluate(()=>globalThis.__mm3Test.popView());await settle(p);await p.waitForTimeout(350);
+  assert.ok(!(await p.evaluate(()=>document.documentElement.classList.contains('mm3-push-open'))),'戻ると奥の画面が元に戻る');
+  const w=await p.evaluate(()=>document.getElementById('app').getBoundingClientRect().width);assert.ok(w>300,'#appの幅が残る');
+  return `カード: 指標${card.value}・棒2本・${card.foot.trim()} / 詳細:「${d.sentence}」・÷なし`},{writes:true});
+await check(page,'G-85','起動画面: 下の「読み込み中」の帯は最初は見えない（3秒以上かかった時だけ出る）。骨組みのタブバーは中央の小さな形',async p=>{
+  const r=await p.evaluate(async()=>{const box=document.createElement('div');box.innerHTML='<div class="boot-status"></div><div class="boot-tabbar"></div>';document.body.append(box);await new Promise(r=>setTimeout(r,400));const s=getComputedStyle(box.firstChild),t=box.lastChild.getBoundingClientRect();const out={op:+s.opacity,delay:s.animationDelay,tw:Math.round(t.width)};box.remove();return out});
+  assert.equal(r.op,0,'最初は見えない');assert.equal(r.delay,'3s');assert.equal(r.tw,232);
+  return `0.4秒後の不透明度${r.op}・表示は${r.delay}後から・タブバー幅${r.tw}px`});
+await check(page,'G-86','ホームを下に引っぱると更新（印が回り「最新の状態にしました」）。少しだけなら更新しない',async p=>{
+  await p.evaluate(()=>{const t=globalThis.__mm3Test;t.closeSheet();while(document.querySelector('#pushLayer .push-view.show'))if(t.popView()===false)break;t.switchTab('today');document.getElementById('todayContent').scrollTop=0});await settle(p);
+  const r=await p.evaluate(async()=>{const sc=document.getElementById('todayContent'),fire=(type,y)=>{const e=new Event(type,{bubbles:true});Object.defineProperty(e,'touches',{value:y==null?[]:[{clientY:y,clientX:200}]});sc.dispatchEvent(e)};
+    document.querySelectorAll('.toast').forEach(x=>x.remove());
+    fire('touchstart',200);fire('touchmove',230);fire('touchend');await new Promise(r=>setTimeout(r,800));const small=[...document.querySelectorAll('.toast')].some(x=>/最新/.test(x.textContent));
+    fire('touchstart',200);fire('touchmove',260);const title=document.querySelector('#screen-today .large-title')?.style.transform||'';fire('touchmove',320);const ready=document.getElementById('pullRefresh')?.classList.contains('ready');fire('touchend');const spin=document.getElementById('pullRefresh')?.classList.contains('spinning');await new Promise(r=>setTimeout(r,900));
+    return{small,ready,spin,title,toast:[...document.querySelectorAll('.toast')].map(x=>x.textContent).join('|'),cards:document.querySelectorAll('#todayContent .home-card-wrap').length}});
+  assert.ok(!r.small,'少しだけなら更新しない');assert.ok(r.ready&&r.spin,'引っぱると印が回る');assert.match(r.toast,/最新の状態にしました/);assert.ok(r.cards>=4,'更新後もカードが表示される');
+  return `引っぱり120px→更新・トースト「最新の状態にしました」・カード${r.cards}枚${r.title?'・大見出しが伸びる':''}`},{writes:true});
 writeFileSync(resolve(root,'docs/design/glass-v15-results.json'),JSON.stringify(results,null,1));
 await context.close();await closeHarness();
 console.log(`${Object.keys(results).length-failed}/${Object.keys(results).length} glass checks passed`);
