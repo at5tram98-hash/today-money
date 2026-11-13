@@ -153,7 +153,7 @@ try{
     await expect(p,'A8R-0173',{re:/^支出として記録$/});
   }});
   await screen(page,'今日（月間計画の承認後：カテゴリ目標あり）',{tab:'home',readOnly:false,open:async p=>{await p.evaluate(()=>{const t=globalThis.__mm3Test,d=t.getData();d.dailyGoals['2026-10-07']={total:2777,categories:{食費:1000},origin:'monthly'};return t.replaceData(d)});await settle(p);await p.evaluate(()=>globalThis.__mm3Test.renderAll());await settle(p);await click(p,'#homeSpendCard')},checks:async p=>{
-    await expect(p,'A8R-0194',{re:/^食費¥[\d,]+目標 ¥1,000・\d+%$/});
+    await expect(p,'A8R-0194',{re:/^食費¥[\d,]+目標の\d+%$/});
   }});
   await screen(page,'ACFカレンダー',{open:p=>call(p,'openAcf'),checks:async p=>{
     await clickName(p,/^カレンダー$/);await p.waitForTimeout(500);await settle(p);

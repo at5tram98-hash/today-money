@@ -3470,6 +3470,13 @@ html:not(.dark) :is(.home-card-wrap, .hl-card, .lg-metric, .lg-prev-idx, .acf-id
 .hl-card[style*="orange"] .hl-bar:not(.muted) > span, .hl-card[style*="yellow"] .hl-bar:not(.muted) > span { color: #3D2200; text-shadow: none }
 .hl-bar.muted > span { color: var(--label); text-shadow: none }
 .hl-card:is([style*="green"],[style*="teal"]) .hl-bar:not(.muted) > span { color: #052A14; text-shadow: none }
+/* 第16版の選択チップを使う欄は、元の選択リストを画面から外す（値の保持だけに使う） */
+select.lg-native { display: none !important }
+input.field:not([type=checkbox]):not([type=radio]):not([type=range]), textarea.field { min-height: 44px !important }
+/* 検索の種類（8個）は横にスクロール（第16版のレンズでもはみ出さない） */
+#globalSearchScopes { max-width: 100%; overflow-x: auto !important; overflow-y: hidden; scrollbar-width: none; overscroll-behavior-x: contain }
+#globalSearchScopes::-webkit-scrollbar { display: none }
+#globalSearchScopes > button { flex: 0 0 auto; min-width: 52px }
 /* ===================================================================
    第16版 UI監査: Liquid Glass のレンズ・ヘルスケア風の数値表示
    =================================================================== */
