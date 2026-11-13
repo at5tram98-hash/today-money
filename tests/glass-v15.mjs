@@ -109,6 +109,16 @@ await check(page,'G-81','ACFのC100モード: トグルでON/OFF。ONではカ�
   await p.locator('#acfC100Toggle').click();await p.waitForTimeout(1500);await p.waitForSelector('#acfC100Toggle');const back=await read();assert.deepEqual(back,off,'OFFで元の試算');
   const after=JSON.parse(await ledger()),b0=JSON.parse(before);assert.deepEqual(after,b0,'記録・残高・比率の設定は変わらない');
   return `OFF カード${off[0]}・現金${off[1]}（${off[2]}） → ON カード${on[0]}・現金${on[1]}（${on[2]}） → OFFで元どおり`},{writes:true});
+await check(page,'G-82','シフトボード連携: カレンダーのシフト（テキスト）を取り込み、休憩・深夜割増・交通費で計算し、勤務先・勤務月ごとの給与を「予定」として保存。入金済みは変えない',async p=>{
+  await tap(p,'#settingsTab');await tap(p,'#employersSettings');await tap(p,'#regShiftImport');
+  await p.locator('#shiftPaste').fill('2026-11-02 10:00-18:00 GU\n2026-11-04 17:00-23:30 GU\n11/06 09:00〜15:00 GU\n2026/11/08 22:00-06:00 無印良品');await tap(p,'#shiftPasteImport');
+  assert.match(await p.locator('#sheet.show .sheet-title').innerText(),/シフトの取り込み/);assert.match(await p.locator('.shift-hero-value').innerText(),/39,488/,'合計（GU 25,188＋交通費2,520、無印 10,800＋980）');
+  await p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData();const r=s.salaryRecords.find(x=>x.employerId==='emp_seed_muji'&&x.month==='2026-11');if(r)r.status='入金済み';await t.replaceData(s)});
+  await tap(p,'#shiftSave');await p.waitForTimeout(400);
+  const d=await p.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{plans:d.shiftPlans.length,gu:d.salaryRecords.find(r=>r.employerId==='emp_seed_gu'&&r.month==='2026-11'),muji:d.salaryRecords.filter(r=>r.employerId==='emp_seed_muji'&&r.month==='2026-11')}});
+  assert.equal(d.plans,4,'シフトを4件記録');assert.equal(d.gu.gross,25188);assert.equal(d.gu.transport,2520);assert.equal(d.gu.status,'予定');
+  assert.ok(d.muji.every(r=>r.status!=='予定'||r.source!=='shift'||d.muji.length===1),'入金済みの給与は変えない');
+  return `4件→GU 2026年11月勤務分 ¥25,188＋交通費¥2,520（予定）、無印は入金済みのため変えない`},{writes:true});
 writeFileSync(resolve(root,'docs/design/glass-v15-results.json'),JSON.stringify(results,null,1));
 await context.close();await closeHarness();
 console.log(`${Object.keys(results).length-failed}/${Object.keys(results).length} glass checks passed`);
