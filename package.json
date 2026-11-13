@@ -17,7 +17,9 @@
     "push:deploy": "node worker/deploy.mjs",
     "test:push-live": "node tests/push-production.mjs",
     "test:extra": "MM3_EXTRA_STRICT=1 node tests/extra-ui.mjs",
-    "test:glass": "node tests/glass-v15.mjs"
+    "test:glass": "node tests/glass-v15.mjs",
+    "test:ui-score": "node tests/ui-score.mjs",
+    "test:monkey": "MM3_MONKEY_STRICT=1 node tests/monkey.mjs"
   },
   "devDependencies": {
     "acorn": "8.19.0",
