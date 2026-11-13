@@ -314,7 +314,7 @@ html:not(.dark) :is(.home-card-wrap, .hl-card, .lg-metric, .lg-prev-idx, .acf-id
 .hl-bar.muted > span { color: var(--label); text-shadow: none }
 .hl-card:is([style*="green"],[style*="teal"]) .hl-bar:not(.muted) > span { color: #052A14; text-shadow: none }
 /* 第16版の選択チップを使う欄は、元の選択リストを画面から外す（値の保持だけに使う） */
-select.lg-native { display: none !important }
+select.lg-native { position: absolute !important; width: 1px !important; height: 1px !important; min-height: 0 !important; padding: 0 !important; overflow: hidden; clip-path: inset(50%); pointer-events: none !important; opacity: 0 !important }
 input.field:not([type=checkbox]):not([type=radio]):not([type=range]), textarea.field { min-height: 44px !important }
 /* 検索の種類（8個）は横にスクロール（第16版のレンズでもはみ出さない） */
 #globalSearchScopes { max-width: 100%; overflow-x: auto !important; overflow-y: hidden; scrollbar-width: none; overscroll-behavior-x: contain }

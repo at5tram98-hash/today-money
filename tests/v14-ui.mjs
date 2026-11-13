@@ -82,7 +82,8 @@ try{
   await check(page,'H-041',{run:async p=>{assert.ok(await p.locator('#homeSalaryCard .mini-bars').count()||await p.locator('#homeSalaryCard .home-card-empty').count());return '6か月の棒グラフ（未登録なら説明）'}});
   await check(page,'H-042',{run:async p=>{if(!await p.locator('#homeNextPayday').count())return '次の給料日が無いので非表示';await tap(p,'#homeNextPayday');await expectScreen(p,'pay');return '給与詳細へ'}});
   await check(page,'H-050',{setup:enableAcf,run:async p=>{await longPress(p,'#homeAcfCard');await expectMenu(p,['計算条件を見る','再計算']);await closeAll(p);await tap(p,'#homeAcfCard');const v=await view(p);assert.ok(v.push.length||v.sheet,'ACF詳細');return 'ACF詳細・長押し 計算条件／再計算'},writes:true});
-  await check(page,'H-051',{setup:enableAcf,run:async p=>{assert.ok(await p.locator('#homeAcfCard .mini-spark').count(),'折れ線');assert.ok(await p.locator('#homeAcfCard .spark-threshold').count(),'安全残高の点線');return '折れ線＋安全残高の点線'},writes:true});
+  /* 第16版: ホームのACFカードは折れ線ではなくACF指標（使えるお金÷予定支出）のゲージ */
+  await check(page,'H-051',{setup:enableAcf,run:async p=>{assert.ok(await p.locator('#homeAcfCard .acf-gauge').count(),'ACF指標のゲージ');const t=(await p.locator('#homeAcfCard').innerText()).replace(/\s+/g,' ');assert.match(t,/\d/,'指標の数値');return `ACF指標のゲージ「${t.slice(0,30)}」`},writes:true});
   await check(page,'H-060',{run:async p=>{await longPress(p,'#homePaymentCard');await expectMenu(p,[]);await closeAll(p);await tap(p,'#homePaymentCard');const v=await view(p);assert.ok(v.push.length||v.sheet||v.screen!=='screen-today','支払いの詳細');return `支払いの詳細 ${v.push.at(-1)||v.sheet||v.screen}`}});
   await check(page,'H-061',{run:async p=>{await tap(p,'#homeAllPayments');await expectScreen(p,'payroot');return '支払いrootへ'}});
   /* ---- ホーム・表と一覧 ---- */
@@ -93,7 +94,7 @@ try{
   await check(page,'H-074',{run:async p=>{await tap(p,'#homeAllTransactions');await expectPush(p,/すべての取引/);return '検索・絞込つき取引一覧'}});
   await check(page,'H-075',{run:async p=>{await longPress(p,'#homeDayClose');await expectMenu(p,['日付を選んで日締め']);await closeAll(p);await tap(p,'#homeDayClose');await expectPush(p,/日締め/);return '日締めジャーナル'}});
   await check(page,'H-076',{run:async p=>{await tap(p,'#homeCompare');await expectPush(p,/分析|比較/);return '月次比較'}});
-  await check(page,'H-077',{setup:enableAcf,run:async p=>{assert.equal(await p.locator('#todayContent [data-home-section="acf-table"]').count(),0,'ホームでは表を出さない');await tap(p,'#homeAcfCard');assert.ok(await p.locator('#acfViewMode').count(),'詳細に表／カレンダーの切替');return 'ホームでは非表示・ACF詳細で表とカレンダー切替'},writes:true});
+  await check(page,'H-077',{setup:enableAcf,run:async p=>{assert.equal(await p.locator('#todayContent [data-home-section="acf-table"]').count(),0,'ホームでは表を出さない');await tap(p,'#homeAcfCard');if(await p.locator('#acfIdxDetail').count())await tap(p,'#acfIdxDetail');await p.waitForSelector('#acfViewMode',{timeout:15000});assert.ok(await p.locator('#acfViewMode').count(),'詳細に表／カレンダーの切替');return 'ホームでは非表示・ACF指標→詳細で表とカレンダー切替'},writes:true});
   await check(page,'H-078',{run:async p=>{assert.ok(await p.locator('#homeMail').count(),'未確認がある時だけ');await tap(p,'#homeMail');await expectPush(p,/メール/);return '照合センター'}});
   await check(page,'H-079',{run:async p=>{assert.ok(await p.locator('#homeLarge').count());await longPress(p,'#homeLarge');await expectMenu(p,['大型支出を計画']);await closeAll(p);await tap(p,'#homeLarge');await expectPush(p,/大型支出/);return '大型支出一覧・長押しで計画追加'}});
   await check(page,'H-080',{run:async p=>{assert.ok(await p.locator('#homeGoals').count());await longPress(p,'#homeGoals');await expectMenu(p,['新しい目標']);await closeAll(p);await tap(p,'#homeGoals');await expectPush(p,/旅行|目標/);return '目標一覧・長押しで新規'}});
