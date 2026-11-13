@@ -3453,6 +3453,23 @@ button.primary:disabled, button.secondary:disabled { opacity: .45; box-shadow: n
 .hero .hero-value { font-family: var(--font-rounded, inherit); font-size: 36px; font-weight: 800; letter-spacing: -1px }
 .hero .hero-sub { font-size: 14px; color: var(--label2) }
 :is(button.secondary, button.primary) + :is(p, .form-helper, .settings-section-footer) { margin-top: 10px }
+
+/* ACF C100モード */
+.acf-c100 { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; padding: 14px 14px 14px 16px; border-radius: 22px; background: var(--card); box-shadow: 0 1px 2px rgba(0,0,0,.04) }
+.acf-c100.on { background: linear-gradient(135deg, color-mix(in srgb, var(--purple) 16%, var(--card)), var(--card)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--purple) 40%, transparent) }
+.acf-c100-badge { flex: none; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; font-size: 14px; font-weight: 800; letter-spacing: -.3px; color: #fff; background: linear-gradient(135deg, #8E8E93, #636366) }
+.acf-c100.on .acf-c100-badge { background: linear-gradient(135deg, #BF5AF2, #5E5CE6); box-shadow: 0 6px 16px rgba(94,92,230,.35) }
+.acf-c100-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px }
+.acf-c100-text b { font-size: 16px }
+.acf-c100-text small { font-size: 13px; color: var(--label2); line-height: 1.35 }
+html.acf-c100 [data-home-section="acf"] .home-card-title::after { content: "C100"; margin-left: 8px; padding: 2px 7px; border-radius: 999px; font-size: 11px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #BF5AF2, #5E5CE6); vertical-align: 2px }
+.hl-bar { min-width: max-content !important; overflow: visible !important }
+/* 色つきの見出しの文字は、ライトでは少し濃くして読みやすく（塗りの色はそのまま） */
+html:not(.dark) :is(.home-card-wrap, .hl-card, .lg-metric, .lg-prev-idx, .acf-idx-hero, .acf-idx-value, .home-card-title, .sc-metrics, .dg-metrics, .entry-display, .hl-head, .pro-metrics, .acf-idx-badge, .pro4-review-icon, [class*="acf-idx"], .acf-dial-value, .acf-settings-hero) { --orange: #C45A00; --green: #1F8A3B; --teal: #0B7A8A; --yellow: #8F6200 }
+.hl-bar > span { color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.18) }
+.hl-card[style*="orange"] .hl-bar:not(.muted) > span, .hl-card[style*="yellow"] .hl-bar:not(.muted) > span { color: #3D2200; text-shadow: none }
+.hl-bar.muted > span { color: var(--label); text-shadow: none }
+.hl-card:is([style*="green"],[style*="teal"]) .hl-bar:not(.muted) > span { color: #052A14; text-shadow: none }
 /* ===================================================================
    第16版 UI監査: Liquid Glass のレンズ・ヘルスケア風の数値表示
    =================================================================== */

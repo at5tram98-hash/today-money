@@ -19,7 +19,8 @@
     "test:extra": "MM3_EXTRA_STRICT=1 node tests/extra-ui.mjs",
     "test:glass": "node tests/glass-v15.mjs",
     "test:ui-score": "node tests/ui-score.mjs",
-    "test:monkey": "MM3_MONKEY_STRICT=1 node tests/monkey.mjs"
+    "test:monkey": "MM3_MONKEY_STRICT=1 node tests/monkey.mjs",
+    "test:text": "MM3_TEXT_STRICT=1 node tests/text-layout.mjs"
   },
   "devDependencies": {
     "acorn": "8.19.0",
