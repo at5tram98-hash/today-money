@@ -6282,7 +6282,7 @@ function bindAppPrefRows(root){
   on('prefReadability',()=>openSwitchPrefs('読みやすさ',[['boldText','文字を太くする','画面の文字を少し太く表示'],['buttonShapes','ボタンの形を表示','文字だけのボタンに背景を付ける'],['contrast','コントラストを上げる','薄い文字と境界を濃くする']],'端末の設定とは別に、このアプリだけに使います。'));
   on('prefPrivacy',()=>openSwitchPrefs('画面のぼかしとバッジ',[['privacyBlur','アプリを離れたらぼかす','アプリの切り替え画面で金額が見えないようにする'],['tabBadge','その他タブに未読数を表示','システムのお知らせの未読数']],'記録の内容は変わりません。'));
 }
-function applyAppPrefs(){document.documentElement.classList.toggle('acf-c100',data.acfSettings?.c100Mode===true);
+function applyAppPrefs(){document.documentElement.classList.toggle('c100-active',data.acfSettings?.c100Mode===true);
   const P=appPrefs(),h=document.documentElement;
   h.classList.toggle('glass-subtle',P.glass==='subtle');h.classList.toggle('glass-solid-pref',P.glass==='solid');
   h.classList.toggle('num-standard',P.numberFont==='standard');h.classList.toggle('bold-text',!!P.boldText);h.classList.toggle('button-shapes',!!P.buttonShapes);h.classList.toggle('more-contrast',!!P.contrast);
@@ -6770,7 +6770,7 @@ function acfC100ToggleHtml(){
 }
 function setAcfC100(on){
   try{safeCommit(()=>{data.acfSettings={...(data.acfSettings||{}),c100Mode:!!on}},{render:true,label:'acf c100 mode'})}catch(e){return false}
-  document.documentElement.classList.toggle('acf-c100',!!on);feedback?.selection?.();
+  document.documentElement.classList.toggle('c100-active',!!on);feedback?.selection?.();
   showToast(on?'C100モード：カード100%で試算しています':'C100モードを終了しました');return true;
 }
 function bindAcfC100(root,redraw){const b=root.querySelector('#acfC100Toggle');if(b)b.onclick=()=>{if(setAcfC100(!(data.acfSettings?.c100Mode===true)))redraw?.()}}
