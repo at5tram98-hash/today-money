@@ -156,7 +156,7 @@ function addHubItems(){return entryHubGroups().flatMap(g=>g.items).map(x=>({labe
     if(!g)return;if(!g.horizontal){g=null;return}e.stopPropagation();
     const t=e.changedTouches?.[0],x=t?.clientX??g.lastX,dx=Math.max(0,x-g.sx),v=Math.max(0,(x-g.lastX)/Math.max(1,performance.now()-g.lastAt)),w=g.screen.clientWidth,done=dx>w*.31||(dx>24&&v>.5);
     const cur=g;const ease='transform .26s cubic-bezier(.22,.88,.22,1),opacity .26s';cur.screen.style.transition=ease;cur.under.style.transition=ease;
-    if(done){cur.screen.style.transform='translateX(100%)';cur.under.style.transform='translateX(0)';cur.under.style.opacity='1';setTimeout(()=>{g=cur;reset();closeDetailScreen()},265)}
+    if(done){cur.screen.style.transform='translateX(100%)';cur.under.style.transform='translateX(0)';cur.under.style.opacity='1';setTimeout(()=>{g=cur;reset();screenSwapSkip=true;closeDetailScreen()},265)}
     else{cur.screen.style.transform='translateX(0)';cur.under.style.transform='translateX(-30%)';setTimeout(()=>{g=cur;reset()},270)}
     g=null;
   };

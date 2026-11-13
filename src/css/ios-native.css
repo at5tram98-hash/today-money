@@ -192,3 +192,53 @@ html.dark .hs-hero-center .hs-avatar-img { background: linear-gradient(160deg, #
 .dg-card .goal-plan-action { margin: 0 !important; padding: 0 16px; min-height: 50px; border-top: .5px solid var(--sep) }
 @media (max-width: 360px) { .dg-metric > b { font-size: 18px } }
 html.native-keyboard #sheet { transition-property: transform !important }
+/* なぞっている間はレンズを指に直接付ける（位置のアニメーションを止める）。離すとばねで止まる */
+#app .tabbar.tab-dragging .tab-selection { transition: scale .2s var(--ln-spring), background .2s, box-shadow .2s !important }
+.glass-lensbar.lens-active > .lens { transition: scale .2s var(--ln-spring), background .2s !important }
+/* 画面の行き来の間だけ、出ていく画面も表示しておく */
+.screen.screen-leaving { display: flex !important; pointer-events: none }
+/* カードはどこを押しても反応（押している間は全体が少し縮む） */
+.home-card-wrap { transition: transform .22s var(--ln-spring) }
+.home-card-wrap:has(.home-card-body) { cursor: pointer }
+.home-card-wrap.card-pressing { transform: scale(.975) }
+.home-card-wrap.card-pressing .home-card-body:active { transform: none; opacity: 1 }
+@media (prefers-reduced-motion: reduce) { .home-card-wrap { transition: none } }
+
+/* ---------- クレジットカードの詳細: ウォレットのようなカード・アクティビティのような数値 ---------- */
+.pro-finance-head.card-art { position: relative; margin: 6px 0 18px; padding: 18px 20px 20px; border: 0 !important; border-radius: 22px; aspect-ratio: 1.586; display: flex; flex-direction: column; color: #fff; background: var(--art); box-shadow: 0 18px 40px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.25); overflow: hidden }
+.pro-finance-head.card-art::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 80% at 0% 0%, rgba(255,255,255,.28), transparent 55%); pointer-events: none }
+.card-art-top { display: flex; align-items: center; justify-content: space-between }
+.card-art .pro-finance-eyebrow { color: rgba(255,255,255,.78); font-size: 12px; font-weight: 700; letter-spacing: 1.4px }
+.card-art-chip { width: 38px; height: 28px; border-radius: 7px; background: linear-gradient(135deg,#f5d77a,#c9a640); box-shadow: inset 0 0 0 1px rgba(0,0,0,.15) }
+.card-art .pro-finance-title { margin-top: 10px; color: #fff; font-size: 24px; font-weight: 800; letter-spacing: -.4px; line-height: 1.15 }
+.card-art .pro-finance-subtitle { color: rgba(255,255,255,.75); font-size: 13px }
+.card-art .pro-finance-value { margin-top: auto; color: #fff; font-family: var(--font-rounded, inherit); font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1.05 }
+.card-art .pro-finance-change { color: rgba(255,255,255,.92) !important; font-size: 14px; font-weight: 600 }
+.card-art .pro-finance-change + .pro-finance-subtitle { margin-top: 2px; font-size: 12px; color: rgba(255,255,255,.7) }
+@media (max-width: 360px) { .pro-finance-head.card-art { aspect-ratio: auto; min-height: 190px } .card-art .pro-finance-value { font-size: 32px } }
+.pro-finance-surface .card-statement-nav { margin: 0 0 6px }
+.pro-periods { gap: 8px; padding: 6px 0 4px }
+.pro-period { min-height: 44px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--ln-glass); box-shadow: var(--ln-rim); color: var(--label); font-size: 15px; font-weight: 600 }
+.pro-period.on { background: var(--label); color: var(--bg); box-shadow: none }
+.pro-bar-chart { border-bottom: 0; background: var(--card); border-radius: 22px; padding: 16px 12px 10px; margin-top: 8px; height: auto }
+.pro-bar { background: color-mix(in srgb, var(--purple) 45%, transparent); border-radius: 6px 6px 3px 3px }
+.pro-bar-col.selected .pro-bar { background: var(--purple) }
+.pro-bar-col.selected .pro-bar-value, .pro-bar-col.selected .pro-bar-label { color: var(--purple); font-weight: 700 }
+.pro-chart-readout { padding: 10px 4px }
+.pro-metrics { border-bottom: 0; background: var(--card); border-radius: 22px; padding: 14px 4px; gap: 0 }
+.pro-metric { border-left: .5px solid var(--sep); padding: 0 12px }
+.pro-metric:first-child { border-left: 0 }
+.pro-metric > span { font-size: 13px; font-weight: 700; color: var(--purple) }
+.pro-metric:nth-child(2) > span { color: var(--label2) }
+.pro-metric:nth-child(3) > span { color: var(--green) }
+.pro-metric > strong { font-family: var(--font-rounded, inherit); font-size: 19px }
+.pro-action-row { display: flex !important; flex-direction: column; gap: 0; background: var(--card); border-radius: 22px; overflow: hidden; margin: 14px 0 18px }
+.pro-action-row .pro-action-btn { min-height: 52px; border: 0; border-radius: 0; background: transparent; color: var(--accent); font-size: 17px; font-weight: 500; border-bottom: .5px solid var(--sep); text-align: center; grid-column: auto !important }
+.pro-action-row .pro-action-btn:last-child { border-bottom: 0 }
+.pro-action-row .pro-action-btn:active { background: var(--fill) }
+/* 右側のボタン（文字のボタンを含む）も2個以上ならひとつのカプセル */
+#pushLayer .push-right:has(> button ~ button) { display: inline-flex; align-items: center; height: var(--ln-size); padding: 0 4px; border-radius: 999px; background: var(--ln-glass); -webkit-backdrop-filter: blur(20px) saturate(1.8); backdrop-filter: blur(20px) saturate(1.8); box-shadow: var(--ln-rim) }
+#pushLayer .push-right:has(> button ~ button) > button { background: transparent !important; box-shadow: none !important; -webkit-backdrop-filter: none; backdrop-filter: none; min-height: 44px; min-width: 44px }
+#pushLayer .push-right > button:not(.icon-btn) { min-height: 44px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--ln-glass); box-shadow: var(--ln-rim); color: var(--accent); font-size: 17px; font-weight: 600 }
+.mini-card-art { position: relative; flex: none; width: 42px; height: 28px; margin-right: 12px; border-radius: 6px; background: var(--art); box-shadow: 0 2px 6px rgba(0,0,0,.18), inset 0 .5px 0 rgba(255,255,255,.35) }
+.mini-card-art > i { position: absolute; left: 6px; top: 8px; width: 9px; height: 7px; border-radius: 2px; background: linear-gradient(135deg,#f5d77a,#c9a640) }
