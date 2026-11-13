@@ -174,7 +174,7 @@ async function syncGmail({silent=false}={}){
   if(gmailSyncing)return;
   if(!gmailTokenValid()){if(!silent)await connectGmail();return}
   gmailSyncing=true;
-  const reviewIds=[];let added=0,reparsed=0;
+  const reviewIds=[];let added=0,reparsed=0,failedMessages=0;
   const busyToken=!silent&&!document.querySelector('.mail-center-view')?beginBusy('メールを確認しています…','Gmailから新しい金融メールを探しています'):null;
   try{
     const q=String(data.gmailSettings.query||DEFAULT_DATA.gmailSettings.query).trim();let pageToken='',ids=[],pages=0;
@@ -182,10 +182,13 @@ async function syncGmail({silent=false}={}){
     if(!silent){if(busyToken)updateBusy(busyToken,'金額と利用先を読み取っています…',`${Math.min(ids.length,200)}件まで確認します`);await new Promise(r=>requestAnimationFrame(r))}
     const parsedMessages=[],byEmail=new Map(data.mailImports.map(x=>[x.emailId,x])),targets=ids.filter(id=>{const old=byEmail.get(id);return !old||Number(old.parserVersion||0)<GMAIL_PARSER_VERSION}).slice(0,200);
     for(let i=0;i<targets.length;i+=6){
-      const batch=targets.slice(i,i+6),messages=await Promise.all(batch.map(id=>gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(id)}?format=full`)));
-      for(const msg of messages){
-        parsedMessages.push({msg,parsed:await parseFinancialMessage(msg)});
+      const batch=targets.slice(i,i+6),settled=await Promise.allSettled(batch.map(id=>gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(id)}?format=full`)));
+      /* 1通の失敗で同期全体を止めない。失敗したメールは次回の同期で取り直す（取込記録を作らない） */
+      for(const res of settled){
+        if(res.status!=='fulfilled'){failedMessages++;if(/認証期限/.test(res.reason?.message||''))throw res.reason;continue}
+        try{parsedMessages.push({msg:res.value,parsed:await parseFinancialMessage(res.value)})}catch(e){failedMessages++;console.error('mail parse failed',e)}
       }
+      if(!silent&&busyToken)updateBusy(busyToken,'金額と利用先を読み取っています…',`${Math.min(i+6,targets.length)} / ${targets.length}件`);
     }
     safeCommit(()=>{const byEmail=new Map(data.mailImports.map(x=>[x.emailId,x]));for(const {msg,parsed} of parsedMessages){
         const old=byEmail.get(msg.id);
@@ -193,12 +196,12 @@ async function syncGmail({silent=false}={}){
         if(old.userResolved||old.transactionId){if(parsed){old.date=parsed.date;old.receivedAt=parsed.receivedAt;old.parserVersion=GMAIL_PARSER_VERSION}reparsed++;continue}
         if(!parsed){Object.assign(old,{status:'ignored',parserVersion:GMAIL_PARSER_VERSION,ignoredReason:'金融取引対象外',transactionId:'',bankApplied:false,bankReconciled:false,reviewPending:false});reparsed++;continue}
         const keep={id:old.id,createdAt:old.createdAt||parsed.createdAt};Object.assign(old,parsed,keep,{transactionId:''});if(old.status!=='ignored'){prepareMailForReview(old);reviewIds.push(old.id)}reparsed++
-}data.gmailSettings.lastSyncAt=new Date().toISOString()},{label:'gmail sync'});
+}data.gmailSettings.lastSyncAt=new Date().toISOString();data.gmailSettings.lastError=failedMessages?`${failedMessages}件のメールを取得できませんでした（次回の同期で取り直します）`:'';data.gmailSettings.lastErrorAt=failedMessages?new Date().toISOString():''},{label:'gmail sync'});
     refreshUnknownMailView();
     if(!silent){if(busyToken){updateBusy(busyToken,'読み取り結果を準備しています…',reviewIds.length?`${reviewIds.length}件を確認してください`:'新しい取引はありません');await endBusy(busyToken)}if(reviewIds.length)openGmailReview(reviewIds);else await showAlert('メールを確認しました','新しい支払いメールはありませんでした。',{okText:'OK',cancelText:'閉じる'})}
     else if(reviewIds.length)addNotice('Gmailに確認待ちの取引があります',`${reviewIds.length}件の読み取り結果を確認してください。`,'warning',false);
     renderAll()
-  }catch(e){console.error(e);if(busyToken)await endBusy(busyToken);if(!silent)showAlert('Gmail同期に失敗しました',e.message)}finally{gmailSyncing=false;for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();if(busyToken)await endBusy(busyToken)}
+  }catch(e){console.error(e);try{safeCommit(()=>{data.gmailSettings.lastError=String(e?.message||'同期に失敗しました');data.gmailSettings.lastErrorAt=new Date().toISOString()},{render:false,label:'gmail sync error',invalidateAcf:false})}catch(_){}if(busyToken)await endBusy(busyToken);if(!silent)showAlert('Gmail同期に失敗しました',`${e.message}\n記録済みの取引はそのままです。メール取引センターの「再試行」からもう一度同期できます。`)}finally{gmailSyncing=false;for(const view of pushStack)document.getElementById(view.id)?.__refreshDayClosing?.();if(busyToken)await endBusy(busyToken)}
 };
 
 /* Pending now means any mail waiting for user review, not only an unknown category. */

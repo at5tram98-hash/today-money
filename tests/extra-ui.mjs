@@ -166,11 +166,11 @@ try{
     await expect(p,'A8R-0219',{re:/^予定に追加$/});
   }});
   await screen(page,'メール取引センター',{tab:'payments',open:p=>click(p,'#mm3PaymentMail'),checks:async p=>{
-    await expect(p,'A8R-0224',{re:/^架空メール店舗¥4502026-10-07 · 監査用メール現金・その他$/});
+    await expect(p,'A8R-0224',{re:/^架空メール店舗¥45010月7日（水） · 監査用メール現金・その他$/});
     await expect(p,'A8R-0225',{re:/^架空メール店舗を対象外にする$/});
-    await expect(p,'A8R-0227',{re:/^対象外メール¥7772026-10-07 · Gmail現金・その他$/});
+    await expect(p,'A8R-0227',{re:/^対象外メール¥77710月7日（水） · Gmail現金・その他$/});
     await expect(p,'A8R-0228',{re:/^対象外メールを対象外にする$/});
-    await expect(p,'A8R-0229',{re:/^テスト店舗¥1,2342026-10-07 · Gmail現金・その他$/});
+    await expect(p,'A8R-0229',{re:/^テスト店舗¥1,23410月7日（水） · Gmail現金・その他$/});
     await expect(p,'A8R-0230',{re:/^テスト店舗を対象外にする$/});
     await expect(p,'A8R-0231',{re:/^既存取引に紐づける$/});
   }});
