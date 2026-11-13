@@ -6,5 +6,5 @@ function appMaintenance(){
   try{const noticesChanged=pruneExpiredSystemNotices(),journalChanged=pruneDayClosingJournal();if(noticesChanged||journalChanged)renderAll()}catch(e){console.error('app maintenance failed',e)}
   queuePushSummary();maybeAutoSyncGmail(false);
 }
-setTimeout(()=>maybeAutoSyncGmail(true),1800);setInterval(appMaintenance,60000);
+setTimeout(()=>maybeAutoSyncGmail(true),1800);setTimeout(()=>{try{maybeAutoSyncShifts()}catch(e){}},2600);setInterval(appMaintenance,60000);
 try{const stateGuardMode=new URLSearchParams(location.search).get('mm3StateGuard');if(['warn','throw'].includes(stateGuardMode))enableMM3StateGuard(stateGuardMode)}catch(e){console.warn('state write guard unavailable',e)}

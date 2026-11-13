@@ -120,9 +120,10 @@ function openShiftImport(text){
 const SHIFT_APP_URL='https://at5tram98-hash.github.io/today-money/';
 function openShiftGuide(){
   const last=(data.shiftPlans||[]).slice(-1)[0];
-  settingsDetailView('シフトから給料を見込む',`
-    <div class="shift-hero small"><span class="shift-hero-icon" aria-hidden="true">${icon('calendar')}</span><div class="shift-hero-kicker">シフトボード → カレンダー → このアプリ</div><div class="shift-hero-sub">シフトボードがiPhoneのカレンダーに書き出したシフトから、時給・深夜割増・交通費で来月の給料を計算します。</div></div>
-    <div class="group"><button type="button" class="row press" id="shiftFromClipboard"><span class="reg-icon" style="--c:var(--accent)" aria-hidden="true">${icon('download')}</span><div class="row-main"><div class="row-title">クリップボードから取り込む</div><div class="row-sub">ショートカットを実行してから押す</div></div><span class="chev">${icon('chevronRight')}</span></button></div>
+  const draw=()=>settingsDetailView('シフトから給料を見込む',`
+    <div class="shift-hero small"><span class="shift-hero-icon" aria-hidden="true">${icon('calendar')}</span><div class="shift-hero-kicker">シフトボード → カレンダー → このアプリ</div><div class="shift-hero-sub">シフトボードがカレンダーに書き出したシフトから、時給・深夜割増・交通費で来月の給料を計算します。</div></div>
+    ${shiftCalendarSectionHtml()}
+    <h2 class="reg-head">手動で取り込む</h2><div class="group"><button type="button" class="row press" id="shiftFromClipboard"><span class="reg-icon" style="--c:var(--accent)" aria-hidden="true">${icon('download')}</span><div class="row-main"><div class="row-title">クリップボードから取り込む</div><div class="row-sub">ショートカットを実行してから押す</div></div><span class="chev">${icon('chevronRight')}</span></button></div>
     <h2 class="reg-head">貼り付けて取り込む</h2><div class="group shift-paste"><textarea class="field" id="shiftPaste" rows="4" placeholder="2026-12-01 10:00-18:00 GU&#10;2026-12-03 17:00-22:30 GU" aria-label="シフトを貼り付け"></textarea><button type="button" class="row press reg-add" id="shiftPasteImport"><span class="reg-add-icon" aria-hidden="true">${icon('check')}</span><div class="row-main"><div class="row-title">この内容で取り込む</div></div></button></div>
     <h2 class="reg-head">ショートカットの作り方（1回だけ）</h2>
     <ol class="shift-steps">
@@ -137,7 +138,9 @@ function openShiftGuide(){
     ${last?`<p class="settings-section-footer">前回の取り込み: ${esc(dayLabel(last.importedAt.slice(0,10)))}・保存したシフト ${(data.shiftPlans||[]).length}件</p>`:''}`,root=>{
       root.querySelector('#shiftFromClipboard').onclick=async()=>{let text='';try{text=await navigator.clipboard.readText()}catch(e){return showAlert('クリップボードを読めませんでした','「貼り付けて取り込む」の欄に貼り付けてください。')}openShiftImport(text)};
       root.querySelector('#shiftPasteImport').onclick=()=>openShiftImport(root.querySelector('#shiftPaste').value);
+      bindShiftCalendarSection(root,draw);
     });
+  draw();
 }
 /* URLに ?shifts=… が付いていたら、読み込み後に取り込みの確認を開く（URLからは消す） */
 function maybeOpenShiftImportFromUrl(){
@@ -146,4 +149,85 @@ function maybeOpenShiftImportFromUrl(){
     u.searchParams.delete('shifts');history.replaceState(null,'',u.pathname+(u.search?u.search:'')+u.hash);
     setTimeout(()=>openShiftImport(t),400);
   }catch(e){}
+}
+
+/* ---------- Googleカレンダーから自動で取り込む（1日1回） ----------
+   シフトボードのシフトがGoogleカレンダーにあれば、アプリを開いた時に1日1回だけ自動で読み取り、
+   給与の見込み（予定）を更新する。読み取りだけの許可（calendar.readonly）を使い、カレンダーは変更しない。
+   Googleの許可は1時間ほどで切れるため、切れていたら「Googleで更新」を1回押してもらう。 */
+const CAL_SCOPE='https://www.googleapis.com/auth/calendar.readonly',CAL_TOKEN_KEY='mm3CalToken',CAL_EXP_KEY='mm3CalTokenExp';
+let calAccessToken='',calTokenExpiresAt=0,calSyncing=false,calPromptedDay='';
+try{calAccessToken=sessionStorage.getItem(CAL_TOKEN_KEY)||'';calTokenExpiresAt=Number(sessionStorage.getItem(CAL_EXP_KEY))||0}catch(e){}
+function shiftCal(){return{enabled:false,calendarId:'',calendarName:'',keyword:'',lastSyncAt:'',lastDay:'',lastCount:0,lastTotal:0,lastError:'',...(data.shiftSettings?.calendar||{})}}
+function setShiftCal(patch,label='shift calendar'){try{safeCommit(()=>{data.shiftSettings={...shiftSettings(),calendar:{...shiftCal(),...patch}}},{render:false,label,invalidateAcf:false})}catch(e){}}
+function calTokenValid(){return !!calAccessToken&&Date.now()<calTokenExpiresAt-60000}
+function calRequestToken(consent=false){return new Promise((resolve,reject)=>{const id=String(data.gmailSettings?.clientId||'').trim();if(!id)return reject(new Error('先に「その他→Gmail連携」でGoogleのクライアントIDを設定してください。'));if(!window.google?.accounts?.oauth2)return reject(new Error('Google認証ライブラリを読み込めませんでした。通信状態を確認してください。'));const tc=google.accounts.oauth2.initTokenClient({client_id:id,scope:CAL_SCOPE,include_granted_scopes:true,callback:r=>{if(r?.error)return reject(new Error(r.error_description||r.error));calAccessToken=r.access_token||'';calTokenExpiresAt=Date.now()+(Number(r.expires_in)||3600)*1000;try{sessionStorage.setItem(CAL_TOKEN_KEY,calAccessToken);sessionStorage.setItem(CAL_EXP_KEY,String(calTokenExpiresAt))}catch(e){}resolve(r)}});tc.requestAccessToken({prompt:consent?'consent':''})})}
+async function calFetch(url){
+  let last=null;
+  for(let n=0;n<3;n++){
+    if(n)await new Promise(r=>setTimeout(r,1000*2**(n-1)));
+    const ctl=typeof AbortController==='function'?new AbortController():null,timer=ctl?setTimeout(()=>ctl.abort(),20000):0;let r;
+    try{r=await fetch(url,{headers:{Authorization:`Bearer ${calAccessToken}`},signal:ctl?.signal})}catch(e){clearTimeout(timer);last=new Error('通信できませんでした');continue}
+    clearTimeout(timer);
+    if(r.status===401){calAccessToken='';calTokenExpiresAt=0;try{sessionStorage.removeItem(CAL_TOKEN_KEY)}catch(e){}throw new Error('Googleの許可が切れました。「Googleで更新」を押してください。')}
+    if(r.status===403){let m='';try{m=(await r.json())?.error?.message||''}catch(e){}throw new Error(/disabled|has not been used/i.test(m)?'Google Calendar APIが有効になっていません。Google Cloudで有効にしてください。':(m||'カレンダーを読む許可がありません'))}
+    if(r.status===429||r.status>=500){last=new Error(`Googleが一時的に応答していません (${r.status})`);continue}
+    if(!r.ok){let m='';try{m=(await r.json())?.error?.message||''}catch(e){}throw new Error(m||`Google Calendar APIエラー (${r.status})`)}
+    return r.json();
+  }
+  throw last||new Error('カレンダーを読めませんでした');
+}
+async function listGoogleCalendars(){const j=await calFetch('https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=reader&maxResults=100');return(j.items||[]).map(c=>({id:c.id,name:c.summaryOverride||c.summary||c.id,primary:!!c.primary}))}
+/* 今日から来月末までの予定 → シフトの行（終日の予定は除く） */
+async function fetchCalendarShifts(cal){
+  const now=parseYmd(ymd()),start=new Date(now.getFullYear(),now.getMonth(),now.getDate()),end=new Date(now.getFullYear(),now.getMonth()+2,1);
+  const u=new URL(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.calendarId)}/events`);
+  u.searchParams.set('timeMin',start.toISOString());u.searchParams.set('timeMax',end.toISOString());u.searchParams.set('singleEvents','true');u.searchParams.set('orderBy','startTime');u.searchParams.set('maxResults','250');
+  const j=await calFetch(u.toString()),kw=String(cal.keyword||'').trim();
+  const hm=d=>`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  return(j.items||[]).filter(e=>e.status!=='cancelled'&&e.start?.dateTime&&e.end?.dateTime&&(!kw||String(e.summary||'').includes(kw))).map(e=>{const a=new Date(e.start.dateTime),b=new Date(e.end.dateTime);return{date:ymd(a),start:hm(a),end:hm(b),title:String(e.summary||'').trim()}});
+}
+async function syncShiftCalendar({silent=false}={}){
+  const cal=shiftCal();if(calSyncing||!cal.calendarId)return null;
+  if(!calTokenValid()){if(silent)return null;await calRequestToken(false)}
+  calSyncing=true;
+  try{
+    const shifts=await fetchCalendarShifts(cal),s=shiftSettings();
+    if(!shifts.length){setShiftCal({lastSyncAt:new Date().toISOString(),lastDay:ymd(),lastCount:0,lastTotal:0,lastError:''});if(!silent)showToast('来月までのシフトは見つかりませんでした');return{count:0,total:0}}
+    const groups=shiftEstimate(shifts.map(x=>({...x,employerId:shiftEmployerFor(x.title,s)})),s),results=saveShiftImport(groups,{}),total=groups.reduce((a,g)=>a+g.gross+g.transport,0);
+    setShiftCal({lastSyncAt:new Date().toISOString(),lastDay:ymd(),lastCount:shifts.length,lastTotal:total,lastError:''});
+    showToast(`カレンダーのシフト${shifts.length}件から給料の見込みを更新しました（${yen(total)}）`);
+    try{refreshSalaryOpenView()}catch(e){}
+    return{count:shifts.length,total,results};
+  }catch(e){setShiftCal({lastError:String(e?.message||e)});if(!silent)showAlert('シフトを取り込めませんでした',e.message);return null}
+  finally{calSyncing=false}
+}
+/* アプリを開いた時・戻った時: 1日1回だけ自動で取り込む。許可が切れていれば「Googleで更新」を1回だけ案内する */
+function maybeAutoSyncShifts(){
+  const cal=shiftCal();if(!cal.enabled||!cal.calendarId||cal.lastDay===ymd()||calSyncing)return;
+  if(calTokenValid()){syncShiftCalendar({silent:true});return}
+  if(calPromptedDay===ymd())return;calPromptedDay=ymd();
+  showToast('今日のシフトをまだ取り込んでいません',{actionLabel:'Googleで更新',action:()=>syncShiftCalendar({silent:false})});
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(()=>{try{maybeAutoSyncShifts()}catch(e){}},1200)});
+/* 設定の部品（シフトから給料を見込む画面の上部） */
+function shiftCalendarSectionHtml(){
+  const cal=shiftCal(),connected=calTokenValid(),last=cal.lastSyncAt?`${homeTimeLabel?homeTimeLabel(cal.lastSyncAt):cal.lastSyncAt.slice(0,16)}・${cal.lastCount}件・${yen(cal.lastTotal)}`:'まだ取り込んでいません';
+  return `<h2 class="reg-head">Googleカレンダーから自動で取り込む</h2><div class="group">
+    <div class="row"><div class="row-main"><div class="row-title">自動で取り込む（1日1回）</div><div class="row-sub">アプリを開いた時に、今日から来月末までのシフトを読み取ります</div></div><button type="button" class="switch${cal.enabled?' on':''}" id="shiftCalAuto" role="switch" aria-checked="${cal.enabled}" aria-label="Googleカレンダーから自動で取り込む"></button></div>
+    <button type="button" class="row press" id="shiftCalPick"><div class="row-main"><div class="row-title">カレンダー</div><div class="row-sub">${cal.calendarId?esc(cal.calendarName||cal.calendarId):'シフトボードのシフトが入っているGoogleカレンダーを選ぶ'}</div></div><span class="chev">${icon('chevronRight')}</span></button>
+    <button type="button" class="row press" id="shiftCalSyncNow"><div class="row-main"><div class="row-title">${connected?'今すぐ取り込む':'Googleで更新'}</div><div class="row-sub">前回: ${esc(last)}</div></div><span class="chev">${icon('chevronRight')}</span></button>
+    ${cal.lastError?`<div class="row shift-cal-error" role="alert"><div class="row-main"><div class="row-title">取り込めませんでした</div><div class="row-sub">${esc(cal.lastError)}</div></div></div>`:''}
+  </div><p class="settings-section-footer">はじめに一度だけ: Gmail連携と同じGoogle Cloudのプロジェクトで「Google Calendar API」を有効にし、OAuth同意画面に「…/auth/calendar.readonly」（読み取りのみ）を追加してください。カレンダーを変更することはありません。Googleの許可は1時間ほどで切れるため、切れている日は「Googleで更新」を1回押すと取り込みます。</p>`;
+}
+function bindShiftCalendarSection(root,redraw){
+  root.querySelector('#shiftCalAuto')?.addEventListener('click',e=>{const b=e.currentTarget,on=!shiftCal().enabled;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));setTimeout(()=>{setShiftCal({enabled:on});if(on&&!shiftCal().calendarId)pickShiftCalendar(redraw);else redraw()},mm3MotionReduced()?0:280)});
+  root.querySelector('#shiftCalPick')?.addEventListener('click',()=>pickShiftCalendar(redraw));
+  root.querySelector('#shiftCalSyncNow')?.addEventListener('click',async()=>{if(!shiftCal().calendarId)return pickShiftCalendar(redraw);await syncShiftCalendar({silent:false});redraw()});
+}
+async function pickShiftCalendar(redraw){
+  let cals;try{if(!calTokenValid())await calRequestToken(true);cals=await listGoogleCalendars()}catch(e){setShiftCal({lastError:String(e.message)});redraw?.();return showAlert('Googleカレンダーを開けませんでした',e.message)}
+  if(!cals.length)return showAlert('カレンダーがありません','Googleアカウントのカレンダーが見つかりませんでした。');
+  const cur=shiftCal().calendarId,guess=cals.find(c=>/シフト|shift/i.test(c.name));
+  openOptionSheet('シフトのカレンダー',cals.map(c=>[c.id,`${c.name}${c.primary?'（メイン）':''}${!cur&&guess?.id===c.id?'（おすすめ）':''}`]),cur||guess?.id||'',v=>{const c=cals.find(x=>x.id===v);setShiftCal({calendarId:v,calendarName:c?.name||v,enabled:true,lastError:''});redraw?.();syncShiftCalendar({silent:false}).then(()=>redraw?.())});
 }
