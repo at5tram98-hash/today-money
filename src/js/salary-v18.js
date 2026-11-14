@@ -226,12 +226,14 @@ async function openShiftRelayGuide(){
       <li>「カレンダーの予定を検索」を追加。<b>カレンダー</b>が「シフトボードのカレンダー」、<b>開始日</b>が「次の60日間」（「すべての条件に一致」）、並び順は「開始日」、上限はオフ</li>
       <li>「各項目を繰り返す」を追加し、中に「テキスト」を置いて<br><code>［開始日］-［終了日］ ［タイトル］</code><br>とする。開始日の書式は「カスタム: yyyy-MM-dd HH:mm」、終了日は「カスタム: HH:mm」</li>
       <li>繰り返しのあとに「テキストを結合」（区切り: 改行）</li>
-      <li>「URLの内容を取得」を追加し、下のURLを貼る。<b>方法</b>は POST、<b>ヘッダ</b>に「Authorization」＝下の鍵、<b>本文を要求</b>は JSON で、キー「text」の値に「結合されたテキスト」</li>
+      <li>「URL」アクションを追加し、下のURLを貼る（前後に空白や改行を入れない）</li>
+      <li>「URLの内容を取得」を追加。URLの欄が青い「URL」になっていることを確認（「結合されたテキスト」になっていたら、押して「消去」→「URL」を選ぶ）。<b>方法</b>は POST、<b>ヘッダ</b>に「Authorization」＝下の鍵、<b>本文を要求</b>は JSON で、キー「text」の値に「結合されたテキスト」</li>
     </ol>
+    <p class="settings-section-footer">「テキストをURLに変換できませんでした」と出た時は、URLの欄にシフトの文字（結合されたテキスト）が入っています。URLの欄だけを上の「URL」にしてください。</p>
     <div class="group relay-copy"><button type="button" class="row press" id="copyUrl"><div class="row-main"><div class="row-title">URL</div><div class="row-sub relay-code">${esc(url)}</div></div><span class="pill-btn">コピー</span></button><button type="button" class="row press" id="copyAuth"><div class="row-main"><div class="row-title">Authorization（鍵）</div><div class="row-sub relay-code">Bearer ${esc(key.slice(0,6))}…${esc(key.slice(-4))}</div></div><span class="pill-btn">コピー</span></button></div>
     <p class="settings-section-footer">鍵はこの端末で作った合言葉です。人に見せないでください。鍵を変えると、ショートカットの鍵も入れ直す必要があります。</p>
     <h2 class="reg-head">2. 毎日自動で動かす</h2>
-    <ol class="shift-steps" start="7"><li>ショートカットの「オートメーション」→＋→「時刻」→ 毎日 5:00（好きな時刻）</li><li>「すぐに実行」を選び、「シフトを送る」を選ぶ</li><li>一度「シフトを送る」を手で実行し、下の「受け取りを確認」を押す</li></ol>
+    <ol class="shift-steps" start="8"><li>ショートカットの「オートメーション」→＋→「時刻」→ 毎日 5:00（好きな時刻）</li><li>「すぐに実行」を選び、「シフトを送る」を選ぶ</li><li>一度「シフトを送る」を手で実行し、下の「受け取りを確認」を押す</li></ol>
     <p class="settings-section-footer">受け取ったシフトはこのアプリに残るので、働き終わった日の分も給料の計算に入ります。今月すでに働いた分は、最初に一度だけ「その他の取り込み方法」から貼り付けて入れてください。</p>
     <div class="group"><button type="button" class="row press reg-add" id="relayTest"><span class="reg-add-icon" aria-hidden="true">${icon('check')}</span><div class="row-main"><div class="row-title">受け取りを確認</div></div></button><button type="button" class="row press" id="relayRekey"><div class="row-main"><div class="row-title">鍵を作り直す</div><div class="row-sub">鍵が人に知られた時だけ</div></div><span class="chev">${icon('chevronRight')}</span></button></div>
     <p class="settings-section-footer">受け取ったシフトは、時給×働いた時間（休憩ルールで休憩を引く・深夜は25%増し）＋交通費（往復・月の上限あり）で計算し、勤務先・勤務月ごとの給与（予定）にします。シフトは受け渡しサーバーに最後の1回分だけ保管し、30日で消えます。</p>`,root=>{
