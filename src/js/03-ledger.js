@@ -29,7 +29,8 @@ function totalDeposits(){return totalBankBalance()}
 
 function salaryRecordEffectiveDate(record){const linked=linkedIncomeForSalary(record);return record?.status==='入金済'?(record?.actualReceivedDate||linked?.date||record?.date||''):(record?.date||'')}
 function salaryRecordExpectedOrReceivedAmount(record){return salaryRecordDisplayStatus(record)==='入金済み'?salaryRecordCashAmount(record):Math.max(0,Number(record?.gross)||0)}
-function salaryRecordsPayableInMonth(month=payViewMonth){return data.salaryRecords.filter(x=>String(salaryRecordEffectiveDate(x)||'').slice(0,7)===month)}
+/* 第19版: 給与は「予定の入金日」の月に表示する。入金済みにして実際の入金日が別の月になっても、その月から消えない（「この月の給与は未登録」「履歴不足」にならない） */
+function salaryRecordsPayableInMonth(month=payViewMonth){return data.salaryRecords.filter(x=>String(x.date||salaryRecordEffectiveDate(x)||'').slice(0,7)===month)}
 
 
 function linkedIncomeForTemp(temp){return data.incomes.find(x=>x.id===temp?.incomeId)||data.incomes.find(x=>x.tempIncomeId===temp?.id)}

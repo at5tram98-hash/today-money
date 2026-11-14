@@ -42,12 +42,12 @@ for(const [width,appearance] of [[393,'light'],[320,'dark']]){
     const r=await p.evaluate(async()=>{const t=globalThis.__mm3Test;t.shiftV18.setRelay({enabled:true});const out=await t.shiftV18.sync({silent:true,force:true});const d=t.getData(),emp=n=>d.employers.find(e=>e.name===n).id;
       const gu=d.salaryRecords.find(x=>x.employerId===emp('GU')&&x.month==='2026-10'),mu=d.salaryRecords.find(x=>x.employerId===emp('無印良品')&&x.month==='2026-11');return{count:out?.count,unmatched:out?.unmatched,gu,mu,relay:t.shiftV18.relay()}});
     assert.equal(r.count,14,'勤務先に当たる14件だけ使う');assert.deepEqual(r.unmatched,['歯医者']);
-    /* GU: 8時間(休憩60)=7h×1300=9100、5時間(休憩30)=4.5h×1300=5850 → 14950・交通費840×2=1680 */
-    assert.equal(r.gu.gross,14950);assert.equal(r.gu.transport,1680);assert.equal(r.gu.source,'shift');
+    /* GU: 8時間(休憩60)=7h×1300=9100、5時間(休憩30)=4.5h×1300=5850 → 14950・交通費840×2=1680。総支給額は交通費込み（交通費は内訳） */
+    assert.equal(r.gu.gross,16630);assert.equal(r.gu.transport,1680);assert.equal(r.gu.source,'shift');
     /* 無印: 11日以降は11月勤務分（10日締め）。6時間×1250=7500×12=90000・交通費980×12=11760→上限10000 */
-    assert.equal(r.mu.gross,90000);assert.equal(r.mu.transport,10000);
+    assert.equal(r.mu.gross,100000);assert.equal(r.mu.transport,10000);
     assert.equal(r.relay.lastCount,14);assert.deepEqual(r.relay.unmatched,['歯医者']);
-    return `GU ¥${r.gu.gross}+¥${r.gu.transport}・無印 ¥${r.mu.gross}+¥${r.mu.transport}（上限）`},{page});
+    return `GU ¥${r.gu.gross}（交通費¥${r.gu.transport}込み）・無印 ¥${r.mu.gross}（交通費¥${r.mu.transport}込み・上限）`},{page});
 
   await check(`S-4 ${cfg}`,'手入力した給与は7日間自動で上書きしない。8日たつと自動に戻る',async p=>{
     const r=await p.evaluate(async()=>{const t=globalThis.__mm3Test,emp=n=>t.getData().employers.find(e=>e.name===n).id,gid=emp('GU');
@@ -56,8 +56,8 @@ for(const [width,appearance] of [[393,'light'],[320,'dark']]){
       d=t.getData();d.salaryRecords.find(x=>x.employerId===gid&&x.month==='2026-10').manualAt=new Date(Date.now()-8*864e5).toISOString();await t.replaceData(d);
       await t.shiftV18.sync({silent:true,force:true});const after=t.getData().salaryRecords.find(x=>x.employerId===gid&&x.month==='2026-10');
       return{state:a.results.find(x=>x.g.employerId===gid)?.state,kept,after:after.gross,manualAt:after.manualAt||''}});
-    assert.equal(r.state,'manual');assert.equal(r.kept,20000);assert.equal(r.after,14950);assert.equal(r.manualAt,'');
-    return '手入力¥20,000は維持 → 8日後に¥14,950へ'},{page});
+    assert.equal(r.state,'manual');assert.equal(r.kept,20000);assert.equal(r.after,16630);assert.equal(r.manualAt,'');
+    return '手入力¥20,000は維持 → 8日後に¥16,630へ'},{page});
 
   await check(`S-5 ${cfg}`,'1日1回: 同じ日・同じ内容なら受け取り直さない。新しいシフトが届けば反映する',async p=>{
     const before=relayHits;await p.evaluate(()=>globalThis.__mm3Test.shiftV18.sync({silent:true}));const second=relayHits-before;
@@ -66,8 +66,8 @@ for(const [width,appearance] of [[393,'light'],[320,'dark']]){
     relayText='2026-10-01 10:00-18:00 GU\n2026-10-03 10:00-18:00 GU';relayAt=2000;
     const {g,toast}=await p.evaluate(async()=>{const t=globalThis.__mm3Test;document.getElementById('toastLayer')?.replaceChildren();await t.shiftV18.sync({silent:true,force:true});const d=t.getData(),gid=d.employers.find(e=>e.name==='GU').id;return{g:d.salaryRecords.find(x=>x.employerId===gid&&x.month==='2026-10').gross,toast:document.getElementById('toastLayer')?.textContent||''}});
     assert.ok(!/シフト/.test(toast),'自動の取り込みではお知らせを出さない');
-    assert.equal(g,18200,'消えたシフト（10/2）は外れ、10/3が入る');
-    return '2回目は通信なし・更新後 GU ¥18,200'},{page});
+    assert.equal(g,19880,'消えたシフト（10/2）は外れ、10/3が入る（18200＋交通費1680）');
+    return '2回目は通信なし・更新後 GU ¥19,880'},{page});
 
   await check(`S-6 ${cfg}`,'ACF指標の期間は毎月28日まで（月末を過ぎたら翌月28日）。日付の指定もできる',async p=>{
     const r=await p.evaluate(async()=>{const t=globalThis.__mm3Test,e=t.shiftV18.acfEnd;const a=e('2026-10-07'),b=e('2026-10-29'),c=e('2026-10-28');let d=t.getData();d.acfSettings={...d.acfSettings,indexEndDay:31};await t.replaceData(d);const f=e('2027-02-03');d=t.getData();d.acfSettings={...d.acfSettings,indexEndDay:28,indexEndDate:'2026-10-20'};await t.replaceData(d);const g=e('2026-10-07'),h=e('2026-10-21');d=t.getData();d.acfSettings={...d.acfSettings,indexEndDate:''};await t.replaceData(d);return{a,b,c,f,g,h}});
@@ -101,6 +101,36 @@ for(const [width,appearance] of [[393,'light'],[320,'dark']]){
     const r=await p.evaluate(async()=>{const s=document.getElementById('salarySyncStrip');if(!s)return{};const text=s.textContent;s.click();await new Promise(r=>setTimeout(r,450));return{text,title:[...document.querySelectorAll('#pushLayer .push-view.show')].at(-1)?.querySelector('.push-title,.nav-title,h1')?.textContent||document.querySelector('#pushLayer .push-view.show:last-child')?.textContent.slice(0,40)}});
     assert.match(r.text||'',/シフトから計算・.*更新/);assert.match(r.title||'',/給与・勤務先/);
     return r.text.replace(/\s+/g,' ').trim().slice(0,40)},{page});
+
+  await check(`S-14 ${cfg}`,'同じ日に2回働いても交通費は1日分。終日の予定（00:00-00:00）は勤務にしない。午前/午後の表記も読める',async p=>{
+    relayText='2026-10-04 10:00-14:00 GU\n2026-10-04 17:00-21:00 GU\n2026-10-05 00:00-00:00 GU\n2026-10-06 午前10:00-午後2:00 GU';relayAt=3000;
+    const r=await p.evaluate(async()=>{const t=globalThis.__mm3Test;await t.shiftV18.sync({silent:true,force:true});const d=t.getData(),gid=d.employers.find(e=>e.name==='GU').id,rec=d.salaryRecords.find(x=>x.employerId===gid&&x.month==='2026-10');return{gross:rec.gross,transport:rec.transport,n:rec.shiftCount}});
+    /* 前に届いた10/1・10/3（各7h=9100）は残る。10/4: 4時間×2（各30分休憩）=7h=9100、10/6: 3.5h=4550。交通費は4日分 840×4（10/4は1日分） */
+    assert.equal(r.n,5);assert.equal(r.transport,3360);assert.equal(r.gross,9100*3+4550+3360);
+    return `5回・4日 → ¥${r.gross}（交通費¥${r.transport}）`},{page});
+
+  await check(`S-15 ${cfg}`,'シフトボードで消した月の給与予定は残らない',async p=>{
+    relayText='2026-10-08 10:00-18:00 GU\n2026-11-03 10:00-18:00 GU';relayAt=4000;
+    const a=await p.evaluate(async()=>{const t=globalThis.__mm3Test;await t.shiftV18.sync({silent:true,force:true});const d=t.getData(),gid=d.employers.find(e=>e.name==='GU').id;return d.salaryRecords.filter(x=>x.employerId===gid&&x.month==='2026-11').length});
+    relayText='2026-10-08 10:00-18:00 GU';relayAt=5000;
+    const b=await p.evaluate(async()=>{const t=globalThis.__mm3Test;await t.shiftV18.sync({silent:true,force:true});const d=t.getData(),gid=d.employers.find(e=>e.name==='GU').id;return d.salaryRecords.filter(x=>x.employerId===gid&&x.month==='2026-11'&&x.source==='shift').length});
+    assert.equal(a,1);assert.equal(b,0);return '11月のシフトを消す → 11月の給与予定も消える'},{page});
+
+  await check(`S-16 ${cfg}`,'給与画面で月を切り替えても、左上の戻るボタンが消えない',async p=>{
+    const r=await p.evaluate(async()=>{const t=globalThis.__mm3Test;t.ev("detailOrigin='today';activeTab='pay';renderAll()");await new Promise(r=>setTimeout(r,50));const before=!!document.querySelector('#screen-pay .detail-back');await t.ev("changeSalaryMonth('2026-12')");await new Promise(r=>setTimeout(r,500));const after=!!document.querySelector('#screen-pay .detail-back');t.ev("payViewMonth=ym();activeTab='today';renderAll()");return{before,after}});
+    assert.deepEqual(r,{before:true,after:true});return '切り替え後も ‹ ホーム'},{page});
+
+  await check(`S-17 ${cfg}`,'以前のシフトの給与予定（交通費が総支給額に入っていない）は一度だけ直す',async p=>{
+    const r=await p.evaluate(()=>{const t=globalThis.__mm3Test,f=t.ev('prepareLoadedData'),d=t.getData();d.meta={...d.meta,shiftGrossV19:false};d.salaryRecords=[{id:'x1',employerId:d.employers[0].id,month:'2026-12',date:'2027-01-10',gross:9100,transport:840,status:'予定',source:'shift'},{id:'x2',employerId:d.employers[0].id,month:'2027-01',date:'2027-02-10',gross:5000,transport:840,status:'予定',source:'manual'}];const once=f(d),twice=f(once);return{a:once.salaryRecords.map(x=>x.gross),b:twice.salaryRecords.map(x=>x.gross)}});
+    assert.deepEqual(r.a,[9940,5000]);assert.deepEqual(r.b,[9940,5000]);return 'シフト分だけ ¥9,100→¥9,940（2回目は変えない）'},{page});
+
+  await check(`S-18 ${cfg}`,'入金済みにしても、給与は予定の入金日の月に残る（「未登録」「履歴不足」にならない）。入金日の初期値は予定日',async p=>{
+    const r=await p.evaluate(async()=>{const t=globalThis.__mm3Test;let d=t.getData();const eid=d.employers[0].id;d.salaryRecords.push({id:'paid_test',employerId:eid,month:'2026-08',date:'2026-09-25',gross:30000,transport:0,status:'予定',source:'manual'});await t.replaceData(d);
+      t.ev("openSalaryRecordEdit('paid_test')");await new Promise(r=>setTimeout(r,300));document.querySelector('#srStatus [data-v="入金済"]').click();await new Promise(r=>setTimeout(r,100));const defaultDate=document.querySelector('#srActualDate').value;t.ev('closeSheet')();await new Promise(r=>setTimeout(r,300));
+      d=t.getData();Object.assign(d.salaryRecords.find(x=>x.id==='paid_test'),{status:'入金済',receivedAmount:30000,actualReceivedDate:'2026-10-07'});await t.replaceData(d);
+      const inSep=t.ev("salaryRecordsPayableInMonth('2026-09')").some(x=>x.id==='paid_test'),inOct=t.ev("salaryRecordsPayableInMonth('2026-10')").some(x=>x.id==='paid_test');
+      d=t.getData();d.salaryRecords=d.salaryRecords.filter(x=>x.id!=='paid_test');await t.replaceData(d);return{defaultDate,inSep,inOct}});
+    assert.deepEqual(r,{defaultDate:'2026-09-25',inSep:true,inOct:false});return '9/25予定→入金日の初期値9/25・10/7に入金済みでも9月に表示'},{page});
 
   await check(`S-13 ${cfg}`,'エラーが出ていない',async()=>{assert.deepEqual(errors.filter(e=>!/favicon|ERR_|Failed to load resource/.test(e)),[]);return '0件'},{page});
   await context.close();

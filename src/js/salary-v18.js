@@ -72,9 +72,15 @@ function applyShiftsAuto(shifts,{replace=true}={}){
   if(!mapped.length)return{count:0,total:0,results:[],unmatched:[...unmatched]};
   const from=mapped.reduce((m,x)=>x.date<m?x.date:m,mapped[0].date),keepFrom=addMonths(from.slice(0,7),-2)+'-01';
   const before=(data.shiftPlans||[]).filter(p=>p.date<from&&p.date>=keepFrom&&employerById(p.employerId)).map(p=>({date:p.date,start:p.start,end:p.end,title:p.title,employerId:p.employerId}));
-  const months=new Set(mapped.map(x=>`${x.employerId}|${shiftWorkMonth(employerById(x.employerId),x.date)}`));
+  const monthKey=p=>`${p.employerId}|${shiftWorkMonth(employerById(p.employerId),p.date)}`;
+  const months=new Set(mapped.map(monthKey));
+  /* シフトボードで消えたシフトの月も計算し直す（その月のシフトが0件になったら、シフトから作った給与予定を消す） */
+  const oldMonths=replace?new Set((data.shiftPlans||[]).filter(p=>p.source==='calendar'&&p.date>=from&&employerById(p.employerId)).map(monthKey)):new Set();
+  for(const k of oldMonths)months.add(k);
   const groups=shiftEstimate([...before,...mapped],s).filter(g=>months.has(`${g.employerId}|${g.month}`));
-  const results=saveShiftImport(groups,{},{auto:true,replaceFrom:replace?from:''});
+  const live=new Set(groups.map(g=>`${g.employerId}|${g.month}`)),emptied=[...oldMonths].filter(k=>!live.has(k));
+  const removeEmptied=()=>{if(!emptied.length)return;data.salaryRecords=data.salaryRecords.filter(r=>!(emptied.includes(`${r.employerId}|${r.month}`)&&r.source==='shift'&&r.status==='予定'&&!(salaryManualLockUntil(r)>Date.now())&&!(data.incomes||[]).some(i=>i.salaryRecordId===r.id)&&!(data.salaryAllocations||[]).some(x=>x.salaryRecordId===r.id)))};
+  const results=saveShiftImport(groups,{},{auto:true,replaceFrom:replace?from:'',extra:removeEmptied});
   const used=results.filter(r=>r.state==='created'||r.state==='updated');
   return{count:mapped.length,total:used.reduce((a,r)=>a+r.g.gross+r.g.transport,0),results,unmatched:[...unmatched]};
 }
@@ -131,7 +137,7 @@ function breakRuleText(r){const h=m=>{const x=m/60;return Number.isInteger(x)?`$
 function salaryUpcomingShiftPay(){
   const today=ymd(),list=(data.salaryRecords||[]).filter(r=>r.status!=='入金済'&&r.date>=today&&(r.source==='shift'||r.source==='manual')).sort((a,b)=>a.date.localeCompare(b.date));
   const first=list[0];if(!first)return null;const same=list.filter(r=>r.date===first.date);
-  return{date:first.date,total:same.reduce((s,r)=>s+(Number(r.gross)||0)+(Number(r.transport)||0),0),records:same};
+  return{date:first.date,total:same.reduce((s,r)=>s+(Number(r.gross)||0),0),records:same};
 }
 function salarySettingsHtml(){
   const r=shiftRelay(),s=shiftSettings(),next=salaryUpcomingShiftPay(),locked=salaryManualLocked();
@@ -146,7 +152,7 @@ function salarySettingsHtml(){
   </div>
   ${(r.unmatched||[]).length?`<h2 class="reg-head">勤務先が分からない予定</h2><div class="group">${r.unmatched.map(t=>`<div class="row shift-map"><div class="row-main"><div class="row-title">${esc(t)}</div><div class="row-sub">どの勤務先のシフトですか？</div></div><div class="shift-emp-chips">${data.employers.map(e=>`<button type="button" class="shift-chip" data-map-title="${esc(t)}" data-map-emp="${esc(e.id)}">${esc(e.name)}</button>`).join('')}</div></div>`).join('')}</div>`:''}
   <p class="settings-section-footer">給与を手で入力・修正すると、その月の給与は<b>7日間</b>自動で上書きしません（手入力が優先）。入金済みの給与は変えません。</p>
-  ${locked.length?`<h2 class="reg-head">手入力を優先している給与</h2><div class="group">${locked.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(employerById(x.employerId)?.name||'勤務先')}・${monthLabel(x.month)}勤務分 ${yen((Number(x.gross)||0)+(Number(x.transport)||0))}</div><div class="row-sub">あと${salaryLockDaysLeft(x)}日は自動で上書きしません</div></div><button type="button" class="pill-btn" data-unlock="${esc(x.id)}">自動に戻す</button></div>`).join('')}</div>`:''}
+  ${locked.length?`<h2 class="reg-head">手入力を優先している給与</h2><div class="group">${locked.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(employerById(x.employerId)?.name||'勤務先')}・${monthLabel(x.month)}勤務分 ${yen(Number(x.gross)||0)}</div><div class="row-sub">あと${salaryLockDaysLeft(x)}日は自動で上書きしません</div></div><button type="button" class="pill-btn" data-unlock="${esc(x.id)}">自動に戻す</button></div>`).join('')}</div>`:''}
   <h2 class="reg-head">ほかの取り込み方法</h2><div class="group"><button type="button" class="row press reg-row" id="regShiftImport"><span class="reg-icon" style="--c:var(--orange)" aria-hidden="true">${icon('calendar')}</span><div class="row-main"><div class="row-title">Googleカレンダー・貼り付けで取り込む</div><div class="row-sub">シフトを手動で取り込む時に使います</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`;
 }
 function refreshSalarySettings(){const top=pushStack.at(-1);if(top?.title==='給与・勤務先')openEmployersSettings()}
@@ -251,3 +257,12 @@ function salaryRecordSourceNoteHtml(r){
   if(r.source==='shift')return `<p class="sal-src-note">${icon('calendar')}<span>シフト${Number(r.shiftCount)||0}回${r.shiftMinutes?`・${shiftHoursLabel(r.shiftMinutes)}`:''}から自動で計算しました。金額を直すと、7日間は手入力が優先されます。</span></p>`;
   return '';
 }
+
+/* 第19版: 給与・資産・請求一覧・今日/今月の画面を単独で描き直した時（月の切り替えなど）も、左上の「‹」戻るボタンを付け直す。
+   これまでは上部のバーを作り直すと戻るボタンが消え、元の画面へ戻れなかった */
+function mm3KeepDetailBack(screen,orig){return function(...args){const r=orig.apply(this,args);try{if(activeTab===screen)placeDetailBack(screen)}catch(e){}return r}}
+if(typeof renderPay==='function')renderPay=mm3KeepDetailBack('pay',renderPay);
+if(typeof renderAssets==='function')renderAssets=mm3KeepDetailBack('assets',renderAssets);
+if(typeof renderPayments==='function')renderPayments=mm3KeepDetailBack('payments',renderPayments);
+if(typeof renderDay==='function')renderDay=mm3KeepDetailBack('day',renderDay);
+if(typeof renderMonth==='function')renderMonth=mm3KeepDetailBack('month',renderMonth);
