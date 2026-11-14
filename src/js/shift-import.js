@@ -9,18 +9,26 @@ const SHIFT_DEFAULTS={autoBreak:true,nightRate:25,titleMap:{}};
 function shiftSettings(){return{...SHIFT_DEFAULTS,...(data.shiftSettings||{}),titleMap:{...(data.shiftSettings?.titleMap||{})}}}
 function shiftPad(n){return String(n).padStart(2,'0')}
 function shiftNormDate(y,m,d){y=Number(y);m=Number(m);d=Number(d);if(!m||!d||m>12||d>31)return'';if(!y){const now=parseYmd(ymd());y=now.getFullYear();if(m<now.getMonth()+1-6)y++}return`${y}-${shiftPad(m)}-${shiftPad(d)}`}
+/* 「午後6:00」「6:00 PM」を 18:00 にそろえる（iPhoneが12時間表示の時） */
+function shiftNormAmPm(line){
+  const to24=(ap,h,m)=>{h=Number(h)%12;if(/午後|pm/i.test(ap))h+=12;return `${String(h).padStart(2,'0')}:${m}`};
+  return line.replace(/(午前|午後|AM|PM|am|pm)\s*(\d{1,2}):(\d{2})/g,(_,ap,h,m)=>to24(ap,h,m)).replace(/(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)\b/g,(_,h,m,ap)=>to24(ap,h,m));
+}
 function parseShiftText(text){
   const raw=String(text||'').trim();if(!raw)return[];
   try{const j=JSON.parse(raw);if(Array.isArray(j))return j.map(x=>({date:String(x.date||'').slice(0,10),start:String(x.start||'').slice(0,5),end:String(x.end||'').slice(0,5),title:String(x.title||'').trim()})).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.date)&&/^\d{1,2}:\d{2}$/.test(x.start)&&/^\d{1,2}:\d{2}$/.test(x.end))}catch(e){}
   const out=[];
   for(let line of raw.normalize('NFKC').split(/\r?\n|;/)){
     line=line.trim();if(!line)continue;
+    line=shiftNormAmPm(line);
     let m,date='';
     if((m=line.match(/(\d{4})[-/.年](\d{1,2})[-/.月](\d{1,2})日?/))){date=shiftNormDate(m[1],m[2],m[3]);line=line.replace(m[0],' ')}
     else if((m=line.match(/(\d{1,2})[/月](\d{1,2})日?/))){date=shiftNormDate(0,m[1],m[2]);line=line.replace(m[0],' ')}
     const t=line.match(/(\d{1,2}):(\d{2})\s*(?:[-〜~ー–—]|から|to)\s*(?:(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})\s*)?(\d{1,2}):(\d{2})/);
     if(!date||!t)continue;
     const start=`${shiftPad(t[1])}:${t[2]}`,end=`${shiftPad(t[6])}:${t[7]}`;
+    /* 終日の予定（休み・希望休など 00:00-00:00）や長さ0の予定は勤務にしない */
+    if(start===end)continue;
     const title=line.replace(t[0],' ').replace(/[|｜,、]/g,' ').replace(/\s+/g,' ').trim();
     out.push({date,start,end,title});
   }
@@ -60,7 +68,7 @@ function shiftEstimate(shifts,s=shiftSettings()){
     if(!groups.has(k))groups.set(k,{employerId:empId,employer:e,month,shifts:[],minutes:0,night:0,gross:0,transport:0});
     const g=groups.get(k);g.shifts.push({...x,employerId:empId,...d,pay});g.minutes+=d.work;g.night+=d.night;g.gross+=pay;
   }
-  for(const g of groups.values()){const t=Math.max(0,Number(g.employer.transport)||0),cap=Math.max(0,Number(g.employer.transportCap)||0);g.transport=g.employer.transportUnit==='per_shift'?t*g.shifts.length:t;if(cap>0&&g.transport>cap){g.transportUncapped=g.transport;g.transport=cap}g.payDate=employerPayDate(g.employer,g.month)}
+  for(const g of groups.values()){const t=Math.max(0,Number(g.employer.transport)||0),cap=Math.max(0,Number(g.employer.transportCap)||0);g.days=new Set(g.shifts.map(x=>x.date)).size;g.transport=g.employer.transportUnit==='per_shift'?t*g.days:t;if(cap>0&&g.transport>cap){g.transportUncapped=g.transport;g.transport=cap}g.payDate=employerPayDate(g.employer,g.month)}
   return [...groups.values()].sort((a,b)=>a.month.localeCompare(b.month)||a.employer.name.localeCompare(b.employer.name));
 }
 function shiftHoursLabel(min){const h=Math.floor(min/60),m=min%60;return m?`${h}時間${m}分`:`${h}時間`}
@@ -83,8 +91,8 @@ function saveShiftImport(groups,s,{auto=false,replaceFrom='',extra=null}={}){
       if(rec&&rec.status&&rec.status!=='予定'){results.push({g,state:'kept'});continue}
       /* 手入力した給与は、自動取得では7日間上書きしない */
       if(rec&&auto&&salaryManualLockUntil(rec)>Date.now()){results.push({g,state:'manual'});continue}
-      if(rec){Object.assign(rec,{gross:g.gross,transport:g.transport,date:g.payDate,source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,updatedAt:new Date().toISOString()});delete rec.manualAt;results.push({g,state:'updated'})}
-      else{data.salaryRecords.push({id:uid('salary'),employerId:g.employerId,month:g.month,date:g.payDate,gross:g.gross,transport:g.transport,status:'予定',source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,createdAt:new Date().toISOString()});results.push({g,state:'created'})}
+      if(rec){Object.assign(rec,{gross:g.gross+g.transport,transport:g.transport,date:g.payDate,source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,updatedAt:new Date().toISOString()});delete rec.manualAt;results.push({g,state:'updated'})}
+      else{data.salaryRecords.push({id:uid('salary'),employerId:g.employerId,month:g.month,date:g.payDate,gross:g.gross+g.transport,transport:g.transport,status:'予定',source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,createdAt:new Date().toISOString()});results.push({g,state:'created'})}
     }
   },{render:true,label:'shift import'});
   return results;

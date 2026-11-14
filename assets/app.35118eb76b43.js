@@ -152,7 +152,13 @@ function applyEmployerTermsV18(out){
   }
   out.meta.employerTermsV18=true;return out;
 }
-function prepareLoadedData(raw,{applySeed=true,allowLegacy=true}={}){let out=normalizeData(raw||{});if(allowLegacy)out=migrateLegacy(out);else out.meta.legacyMigrated=true;return applySeed?applyEmployerTermsV18(applyFirstRunSeed(out)):out}
+function prepareLoadedData(raw,{applySeed=true,allowLegacy=true}={}){let out=normalizeData(raw||{});if(allowLegacy)out=migrateLegacy(out);else out.meta.legacyMigrated=true;return applySeed?applyShiftGrossV19(applyEmployerTermsV18(applyFirstRunSeed(out))):applyShiftGrossV19(out)}
+/* 第19版: シフトから計算した給与も「総支給額＝給与＋交通費（交通費は内訳）」にそろえる（1回だけ） */
+function applyShiftGrossV19(out){
+  if(out.meta?.shiftGrossV19)return out;
+  for(const r of out.salaryRecords||[])if(r.source==='shift'&&r.status==='予定'&&Number(r.transport)>0)r.gross=(Number(r.gross)||0)+Number(r.transport);
+  out.meta={...(out.meta||{}),shiftGrossV19:true};return out;
+}
 function storageRecoveryKeys(){try{return Array.from({length:localStorage.length},(_,i)=>localStorage.key(i)).filter(k=>String(k||'').startsWith(RECOVERY_KEY_PREFIX)).sort().reverse()}catch(e){return[]}}
 function writeRecoverySnapshot(label,payload){try{const raw=typeof payload==='string'?payload:JSON.stringify(payload),stamp=new Date().toISOString().replace(/[:.]/g,'-'),key=`${RECOVERY_KEY_PREFIX}${stamp}_${String(label||'snapshot').replace(/[^a-z0-9_-]/gi,'_')}`;localStorage.setItem(key,raw);const keys=storageRecoveryKeys();keys.slice(3).forEach(k=>localStorage.removeItem(k));return key}catch(e){console.warn('recovery snapshot failed',e);return''}}
 function validateStoredShape(obj){if(!obj||typeof obj!=='object'||Array.isArray(obj))return{ok:false,error:'ルートがオブジェクトではありません'};const known=['version','transactions','incomes','banks','cards','employers','salaryRecords','dailyGoals','monthlyGoals','settings','gmailSettings','meta'];if(!known.some(k=>k in obj))return{ok:false,error:'My Moneyの保存データとして認識できる項目がありません'};for(const k of ['transactions','incomes','banks','cards','debitCards','employers','salaryRecords','tempIncomes','fixedPayments','largeExpensePlans','assetSnapshots','mailImports','cardStatementImports'])if(k in obj&&!Array.isArray(obj[k]))return{ok:false,error:`${k} の形式が不正です`};return{ok:true}}
@@ -6812,18 +6818,26 @@ const SHIFT_DEFAULTS={autoBreak:true,nightRate:25,titleMap:{}};
 function shiftSettings(){return{...SHIFT_DEFAULTS,...(data.shiftSettings||{}),titleMap:{...(data.shiftSettings?.titleMap||{})}}}
 function shiftPad(n){return String(n).padStart(2,'0')}
 function shiftNormDate(y,m,d){y=Number(y);m=Number(m);d=Number(d);if(!m||!d||m>12||d>31)return'';if(!y){const now=parseYmd(ymd());y=now.getFullYear();if(m<now.getMonth()+1-6)y++}return`${y}-${shiftPad(m)}-${shiftPad(d)}`}
+/* 「午後6:00」「6:00 PM」を 18:00 にそろえる（iPhoneが12時間表示の時） */
+function shiftNormAmPm(line){
+  const to24=(ap,h,m)=>{h=Number(h)%12;if(/午後|pm/i.test(ap))h+=12;return `${String(h).padStart(2,'0')}:${m}`};
+  return line.replace(/(午前|午後|AM|PM|am|pm)\s*(\d{1,2}):(\d{2})/g,(_,ap,h,m)=>to24(ap,h,m)).replace(/(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)\b/g,(_,h,m,ap)=>to24(ap,h,m));
+}
 function parseShiftText(text){
   const raw=String(text||'').trim();if(!raw)return[];
   try{const j=JSON.parse(raw);if(Array.isArray(j))return j.map(x=>({date:String(x.date||'').slice(0,10),start:String(x.start||'').slice(0,5),end:String(x.end||'').slice(0,5),title:String(x.title||'').trim()})).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.date)&&/^\d{1,2}:\d{2}$/.test(x.start)&&/^\d{1,2}:\d{2}$/.test(x.end))}catch(e){}
   const out=[];
   for(let line of raw.normalize('NFKC').split(/\r?\n|;/)){
     line=line.trim();if(!line)continue;
+    line=shiftNormAmPm(line);
     let m,date='';
     if((m=line.match(/(\d{4})[-/.年](\d{1,2})[-/.月](\d{1,2})日?/))){date=shiftNormDate(m[1],m[2],m[3]);line=line.replace(m[0],' ')}
     else if((m=line.match(/(\d{1,2})[/月](\d{1,2})日?/))){date=shiftNormDate(0,m[1],m[2]);line=line.replace(m[0],' ')}
     const t=line.match(/(\d{1,2}):(\d{2})\s*(?:[-〜~ー–—]|から|to)\s*(?:(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})\s*)?(\d{1,2}):(\d{2})/);
     if(!date||!t)continue;
     const start=`${shiftPad(t[1])}:${t[2]}`,end=`${shiftPad(t[6])}:${t[7]}`;
+    /* 終日の予定（休み・希望休など 00:00-00:00）や長さ0の予定は勤務にしない */
+    if(start===end)continue;
     const title=line.replace(t[0],' ').replace(/[|｜,、]/g,' ').replace(/\s+/g,' ').trim();
     out.push({date,start,end,title});
   }
@@ -6863,7 +6877,7 @@ function shiftEstimate(shifts,s=shiftSettings()){
     if(!groups.has(k))groups.set(k,{employerId:empId,employer:e,month,shifts:[],minutes:0,night:0,gross:0,transport:0});
     const g=groups.get(k);g.shifts.push({...x,employerId:empId,...d,pay});g.minutes+=d.work;g.night+=d.night;g.gross+=pay;
   }
-  for(const g of groups.values()){const t=Math.max(0,Number(g.employer.transport)||0),cap=Math.max(0,Number(g.employer.transportCap)||0);g.transport=g.employer.transportUnit==='per_shift'?t*g.shifts.length:t;if(cap>0&&g.transport>cap){g.transportUncapped=g.transport;g.transport=cap}g.payDate=employerPayDate(g.employer,g.month)}
+  for(const g of groups.values()){const t=Math.max(0,Number(g.employer.transport)||0),cap=Math.max(0,Number(g.employer.transportCap)||0);g.days=new Set(g.shifts.map(x=>x.date)).size;g.transport=g.employer.transportUnit==='per_shift'?t*g.days:t;if(cap>0&&g.transport>cap){g.transportUncapped=g.transport;g.transport=cap}g.payDate=employerPayDate(g.employer,g.month)}
   return [...groups.values()].sort((a,b)=>a.month.localeCompare(b.month)||a.employer.name.localeCompare(b.employer.name));
 }
 function shiftHoursLabel(min){const h=Math.floor(min/60),m=min%60;return m?`${h}時間${m}分`:`${h}時間`}
@@ -6886,8 +6900,8 @@ function saveShiftImport(groups,s,{auto=false,replaceFrom='',extra=null}={}){
       if(rec&&rec.status&&rec.status!=='予定'){results.push({g,state:'kept'});continue}
       /* 手入力した給与は、自動取得では7日間上書きしない */
       if(rec&&auto&&salaryManualLockUntil(rec)>Date.now()){results.push({g,state:'manual'});continue}
-      if(rec){Object.assign(rec,{gross:g.gross,transport:g.transport,date:g.payDate,source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,updatedAt:new Date().toISOString()});delete rec.manualAt;results.push({g,state:'updated'})}
-      else{data.salaryRecords.push({id:uid('salary'),employerId:g.employerId,month:g.month,date:g.payDate,gross:g.gross,transport:g.transport,status:'予定',source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,createdAt:new Date().toISOString()});results.push({g,state:'created'})}
+      if(rec){Object.assign(rec,{gross:g.gross+g.transport,transport:g.transport,date:g.payDate,source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,updatedAt:new Date().toISOString()});delete rec.manualAt;results.push({g,state:'updated'})}
+      else{data.salaryRecords.push({id:uid('salary'),employerId:g.employerId,month:g.month,date:g.payDate,gross:g.gross+g.transport,transport:g.transport,status:'予定',source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,createdAt:new Date().toISOString()});results.push({g,state:'created'})}
     }
   },{render:true,label:'shift import'});
   return results;
@@ -7676,9 +7690,15 @@ function applyShiftsAuto(shifts,{replace=true}={}){
   if(!mapped.length)return{count:0,total:0,results:[],unmatched:[...unmatched]};
   const from=mapped.reduce((m,x)=>x.date<m?x.date:m,mapped[0].date),keepFrom=addMonths(from.slice(0,7),-2)+'-01';
   const before=(data.shiftPlans||[]).filter(p=>p.date<from&&p.date>=keepFrom&&employerById(p.employerId)).map(p=>({date:p.date,start:p.start,end:p.end,title:p.title,employerId:p.employerId}));
-  const months=new Set(mapped.map(x=>`${x.employerId}|${shiftWorkMonth(employerById(x.employerId),x.date)}`));
+  const monthKey=p=>`${p.employerId}|${shiftWorkMonth(employerById(p.employerId),p.date)}`;
+  const months=new Set(mapped.map(monthKey));
+  /* シフトボードで消えたシフトの月も計算し直す（その月のシフトが0件になったら、シフトから作った給与予定を消す） */
+  const oldMonths=replace?new Set((data.shiftPlans||[]).filter(p=>p.source==='calendar'&&p.date>=from&&employerById(p.employerId)).map(monthKey)):new Set();
+  for(const k of oldMonths)months.add(k);
   const groups=shiftEstimate([...before,...mapped],s).filter(g=>months.has(`${g.employerId}|${g.month}`));
-  const results=saveShiftImport(groups,{},{auto:true,replaceFrom:replace?from:''});
+  const live=new Set(groups.map(g=>`${g.employerId}|${g.month}`)),emptied=[...oldMonths].filter(k=>!live.has(k));
+  const removeEmptied=()=>{if(!emptied.length)return;data.salaryRecords=data.salaryRecords.filter(r=>!(emptied.includes(`${r.employerId}|${r.month}`)&&r.source==='shift'&&r.status==='予定'&&!(salaryManualLockUntil(r)>Date.now())&&!(data.incomes||[]).some(i=>i.salaryRecordId===r.id)&&!(data.salaryAllocations||[]).some(x=>x.salaryRecordId===r.id)))};
+  const results=saveShiftImport(groups,{},{auto:true,replaceFrom:replace?from:'',extra:removeEmptied});
   const used=results.filter(r=>r.state==='created'||r.state==='updated');
   return{count:mapped.length,total:used.reduce((a,r)=>a+r.g.gross+r.g.transport,0),results,unmatched:[...unmatched]};
 }
@@ -7735,7 +7755,7 @@ function breakRuleText(r){const h=m=>{const x=m/60;return Number.isInteger(x)?`$
 function salaryUpcomingShiftPay(){
   const today=ymd(),list=(data.salaryRecords||[]).filter(r=>r.status!=='入金済'&&r.date>=today&&(r.source==='shift'||r.source==='manual')).sort((a,b)=>a.date.localeCompare(b.date));
   const first=list[0];if(!first)return null;const same=list.filter(r=>r.date===first.date);
-  return{date:first.date,total:same.reduce((s,r)=>s+(Number(r.gross)||0)+(Number(r.transport)||0),0),records:same};
+  return{date:first.date,total:same.reduce((s,r)=>s+(Number(r.gross)||0),0),records:same};
 }
 function salarySettingsHtml(){
   const r=shiftRelay(),s=shiftSettings(),next=salaryUpcomingShiftPay(),locked=salaryManualLocked();
@@ -7750,7 +7770,7 @@ function salarySettingsHtml(){
   </div>
   ${(r.unmatched||[]).length?`<h2 class="reg-head">勤務先が分からない予定</h2><div class="group">${r.unmatched.map(t=>`<div class="row shift-map"><div class="row-main"><div class="row-title">${esc(t)}</div><div class="row-sub">どの勤務先のシフトですか？</div></div><div class="shift-emp-chips">${data.employers.map(e=>`<button type="button" class="shift-chip" data-map-title="${esc(t)}" data-map-emp="${esc(e.id)}">${esc(e.name)}</button>`).join('')}</div></div>`).join('')}</div>`:''}
   <p class="settings-section-footer">給与を手で入力・修正すると、その月の給与は<b>7日間</b>自動で上書きしません（手入力が優先）。入金済みの給与は変えません。</p>
-  ${locked.length?`<h2 class="reg-head">手入力を優先している給与</h2><div class="group">${locked.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(employerById(x.employerId)?.name||'勤務先')}・${monthLabel(x.month)}勤務分 ${yen((Number(x.gross)||0)+(Number(x.transport)||0))}</div><div class="row-sub">あと${salaryLockDaysLeft(x)}日は自動で上書きしません</div></div><button type="button" class="pill-btn" data-unlock="${esc(x.id)}">自動に戻す</button></div>`).join('')}</div>`:''}
+  ${locked.length?`<h2 class="reg-head">手入力を優先している給与</h2><div class="group">${locked.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(employerById(x.employerId)?.name||'勤務先')}・${monthLabel(x.month)}勤務分 ${yen(Number(x.gross)||0)}</div><div class="row-sub">あと${salaryLockDaysLeft(x)}日は自動で上書きしません</div></div><button type="button" class="pill-btn" data-unlock="${esc(x.id)}">自動に戻す</button></div>`).join('')}</div>`:''}
   <h2 class="reg-head">ほかの取り込み方法</h2><div class="group"><button type="button" class="row press reg-row" id="regShiftImport"><span class="reg-icon" style="--c:var(--orange)" aria-hidden="true">${icon('calendar')}</span><div class="row-main"><div class="row-title">Googleカレンダー・貼り付けで取り込む</div><div class="row-sub">シフトを手動で取り込む時に使います</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`;
 }
 function refreshSalarySettings(){const top=pushStack.at(-1);if(top?.title==='給与・勤務先')openEmployersSettings()}
@@ -7855,4 +7875,13 @@ function salaryRecordSourceNoteHtml(r){
   if(r.source==='shift')return `<p class="sal-src-note">${icon('calendar')}<span>シフト${Number(r.shiftCount)||0}回${r.shiftMinutes?`・${shiftHoursLabel(r.shiftMinutes)}`:''}から自動で計算しました。金額を直すと、7日間は手入力が優先されます。</span></p>`;
   return '';
 }
+
+/* 第19版: 給与・資産・請求一覧・今日/今月の画面を単独で描き直した時（月の切り替えなど）も、左上の「‹」戻るボタンを付け直す。
+   これまでは上部のバーを作り直すと戻るボタンが消え、元の画面へ戻れなかった */
+function mm3KeepDetailBack(screen,orig){return function(...args){const r=orig.apply(this,args);try{if(activeTab===screen)placeDetailBack(screen)}catch(e){}return r}}
+if(typeof renderPay==='function')renderPay=mm3KeepDetailBack('pay',renderPay);
+if(typeof renderAssets==='function')renderAssets=mm3KeepDetailBack('assets',renderAssets);
+if(typeof renderPayments==='function')renderPayments=mm3KeepDetailBack('payments',renderPayments);
+if(typeof renderDay==='function')renderDay=mm3KeepDetailBack('day',renderDay);
+if(typeof renderMonth==='function')renderMonth=mm3KeepDetailBack('month',renderMonth);
 })().catch(e=>{console.error('app boot failed',e);mm3BootLayer.textContent='読み込みに失敗しました。画面を再読み込みしてください。'});

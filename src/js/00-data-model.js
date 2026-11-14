@@ -152,7 +152,13 @@ function applyEmployerTermsV18(out){
   }
   out.meta.employerTermsV18=true;return out;
 }
-function prepareLoadedData(raw,{applySeed=true,allowLegacy=true}={}){let out=normalizeData(raw||{});if(allowLegacy)out=migrateLegacy(out);else out.meta.legacyMigrated=true;return applySeed?applyEmployerTermsV18(applyFirstRunSeed(out)):out}
+function prepareLoadedData(raw,{applySeed=true,allowLegacy=true}={}){let out=normalizeData(raw||{});if(allowLegacy)out=migrateLegacy(out);else out.meta.legacyMigrated=true;return applySeed?applyShiftGrossV19(applyEmployerTermsV18(applyFirstRunSeed(out))):applyShiftGrossV19(out)}
+/* 第19版: シフトから計算した給与も「総支給額＝給与＋交通費（交通費は内訳）」にそろえる（1回だけ） */
+function applyShiftGrossV19(out){
+  if(out.meta?.shiftGrossV19)return out;
+  for(const r of out.salaryRecords||[])if(r.source==='shift'&&r.status==='予定'&&Number(r.transport)>0)r.gross=(Number(r.gross)||0)+Number(r.transport);
+  out.meta={...(out.meta||{}),shiftGrossV19:true};return out;
+}
 function storageRecoveryKeys(){try{return Array.from({length:localStorage.length},(_,i)=>localStorage.key(i)).filter(k=>String(k||'').startsWith(RECOVERY_KEY_PREFIX)).sort().reverse()}catch(e){return[]}}
 function writeRecoverySnapshot(label,payload){try{const raw=typeof payload==='string'?payload:JSON.stringify(payload),stamp=new Date().toISOString().replace(/[:.]/g,'-'),key=`${RECOVERY_KEY_PREFIX}${stamp}_${String(label||'snapshot').replace(/[^a-z0-9_-]/gi,'_')}`;localStorage.setItem(key,raw);const keys=storageRecoveryKeys();keys.slice(3).forEach(k=>localStorage.removeItem(k));return key}catch(e){console.warn('recovery snapshot failed',e);return''}}
 function validateStoredShape(obj){if(!obj||typeof obj!=='object'||Array.isArray(obj))return{ok:false,error:'ルートがオブジェクトではありません'};const known=['version','transactions','incomes','banks','cards','employers','salaryRecords','dailyGoals','monthlyGoals','settings','gmailSettings','meta'];if(!known.some(k=>k in obj))return{ok:false,error:'My Moneyの保存データとして認識できる項目がありません'};for(const k of ['transactions','incomes','banks','cards','debitCards','employers','salaryRecords','tempIncomes','fixedPayments','largeExpensePlans','assetSnapshots','mailImports','cardStatementImports'])if(k in obj&&!Array.isArray(obj[k]))return{ok:false,error:`${k} の形式が不正です`};return{ok:true}}
