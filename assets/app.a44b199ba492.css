@@ -3787,3 +3787,126 @@ select.lg-native { position: absolute !important; width: 1px !important; height:
 .lg-cardart strong { font-size: 22px; font-weight: 800; letter-spacing: .01em; text-shadow: 0 1px 2px rgba(0,0,0,.2) }
 .lg-cardart-limit { display: flex; align-items: baseline; gap: 6px; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums }
 .lg-cardart-limit small { font-size: 11px; font-weight: 600; opacity: .8 }
+/* 第17版 仕上げ（最後に読み込む） */
+
+/* 1. 起動画面: 下の「読み込み中」は出さない。3秒以上かかった時だけ静かに出す */
+.boot-status { opacity: 0; animation: none; transition: opacity .3s ease }
+.storage-boot.slow .boot-status { opacity: 1 }
+/* 2. 起動画面の骨組みを今の画面（中央の小さなタブバー・右上の丸ボタン・＋）に合わせる */
+.boot-tabbar { left: 0; right: 0; margin: 0 auto; width: 232px; justify-content: space-evenly }
+.boot-tabbar i { width: 26px; height: 26px; border-radius: 50% }
+.boot-hub { right: max(16px, calc(50% - 116px - 66px)); bottom: var(--tabbar-bottom); width: var(--tabbar-height); height: var(--tabbar-height); background: var(--lg-fill); box-shadow: inset 0 0 0 .5px var(--lg-stroke), var(--lg-shadow); opacity: 1 }
+.boot-top .sk-circle { width: 48px; height: 48px }
+
+/* 3. ACFカード（ホーム）: 数値・状態・期限 → 2本の比較バー → 余る見込み */
+.home-card-body:has(> .acfc) { display: block; padding-block: 14px 12px }
+.acfc { display: grid; gap: 12px; min-width: 0 }
+.acfc-top { display: flex; align-items: center; gap: 8px; min-width: 0 }
+.acfc-value { font-family: var(--font-rounded); font-size: 34px; line-height: 1; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums }
+.acfc-value.surplus { color: var(--green) } .acfc-value.tight { color: var(--orange) } .acfc-value.deficit { color: var(--red) }
+.acfc-state { flex: none; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; line-height: 1.2 }
+.acfc-state.surplus { color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent) }
+.acfc-state.tight { color: var(--orange); background: color-mix(in srgb, var(--orange) 16%, transparent) }
+.acfc-state.deficit { color: var(--red); background: color-mix(in srgb, var(--red) 14%, transparent) }
+.acfc-until { margin-left: auto; font-size: 13px; color: var(--label2); white-space: nowrap }
+.acfb { display: grid; gap: 10px; min-width: 0 }
+.acfb-row { display: grid; gap: 5px; min-width: 0 }
+.acfb-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; min-width: 0 }
+.acfb-label { font-size: 13px; font-weight: 600; color: var(--label2); white-space: nowrap }
+.acfb-amount { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap }
+.acfb-track { position: relative; height: 10px; border-radius: 999px; background: var(--fill); overflow: hidden }
+.acfb-track > i { position: absolute; inset: 0 auto 0 0; width: var(--w); border-radius: inherit; transform-origin: 0 50% }
+.acfb-row.have .acfb-track > i { background: linear-gradient(90deg, color-mix(in srgb, var(--green) 70%, #fff), var(--green)) }
+.acfb-row.need .acfb-track > i { background: linear-gradient(90deg, color-mix(in srgb, var(--orange) 70%, #fff), var(--orange)) }
+.acfb-sub { font-size: 12px; color: var(--label2); line-height: 1.35 }
+.acfb.large { gap: 16px } .acfb.large .acfb-track { height: 14px } .acfb.large .acfb-amount { font-size: 17px }
+.acfc-foot { display: flex; justify-content: space-between; align-items: baseline; padding-top: 10px; border-top: .5px solid var(--sep); font-size: 13px; color: var(--label2) }
+.acfc-foot b { font-size: 15px; font-variant-numeric: tabular-nums } .acfc-foot.plus b { color: var(--green) } .acfc-foot.minus b { color: var(--red) }
+html:not(.dark) .acfc { --green: #1F8A3B; --orange: #C45A00 }
+
+/* 4. ACF指標の詳細画面（割り算の式は出さない） */
+.acfd-hero { margin: 4px 0 10px; padding: 18px 18px 16px; border-radius: 22px; background: var(--card); display: grid; gap: 6px }
+.acfd-kicker { font-size: 13px; font-weight: 600; color: var(--label2) }
+.acfd-line { display: flex; align-items: center; gap: 10px }
+.acfd-big { font-family: var(--font-rounded); font-size: 52px; line-height: 1.02; font-weight: 700; letter-spacing: -.03em; font-variant-numeric: tabular-nums }
+.acfd-hero.surplus .acfd-big { color: var(--green) } .acfd-hero.tight .acfd-big { color: var(--orange) } .acfd-hero.deficit .acfd-big { color: var(--red) }
+.acfd-sentence { margin: 2px 0 0; font-size: 15px; font-weight: 600; line-height: 1.45 }
+.acfd-period { margin: 0 0 10px; font-size: 13px; color: var(--label2) }
+.acfd-result { display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px; padding-top: 12px; border-top: .5px solid var(--sep); font-size: 15px; font-weight: 600 }
+.acfd-result b { font-size: 20px; font-variant-numeric: tabular-nums } .acfd-result.plus b { color: var(--green) } .acfd-result.minus b { color: var(--red) }
+.acfd-help { margin: 0 4px 18px }
+.acfd-dot { flex: none; width: 8px; height: 8px; margin-right: 12px; border-radius: 50%; background: var(--orange) } .acfd-dot.in { background: var(--green) }
+html:not(.dark) :is(.acfd-hero, .acfd-dot) { --green: #1F8A3B; --orange: #C45A00 }
+
+/* 5. 引っぱって更新（ホーム） */
+#pullRefresh { position: absolute; left: 50%; top: calc(var(--safe-t) + 58px); z-index: 30; width: 30px; height: 30px; margin-top: -8px; display: grid; place-items: center; border-radius: 50%; background: var(--lg-fill-strong, var(--card)); box-shadow: 0 0 0 .5px var(--lg-rim, var(--sep)), 0 4px 14px rgba(0,0,0,.12); opacity: 0; transform: translate(-50%, 0); pointer-events: none }
+#pullRefresh .lg-spinner { width: 18px; height: 18px }
+#pullRefresh.ready { box-shadow: 0 0 0 1.5px var(--accent), 0 4px 14px rgba(0,0,0,.12) }
+#pullRefresh.spinning { transition: none; transform: translate(-50%, 44px) !important; opacity: 1 !important }
+
+/* 6. push画面の奥の画面が左へずれて少し暗くなる（iOSの視差） */
+#app .screen.active { transition: transform var(--motion-push) var(--spring), filter var(--motion-push) var(--spring) }
+html.mm3-push-open #app .screen.active { transform: translateX(-10%); filter: brightness(.94) }
+html.dark.mm3-push-open #app .screen.active { filter: brightness(.8) }
+#pushLayer .push-view.push-under { transform: translateX(-10%); filter: brightness(.94) }
+html.motion-off #app .screen.active, html.motion-off #pushLayer .push-view { transition: none }
+@media (prefers-reduced-motion: reduce) { html.mm3-push-open #app .screen.active, #pushLayer .push-view.push-under { transform: none } }
+
+/* 7. 通知（トースト）はばねのように下から出る */
+.toast { animation: toastSpring .32s cubic-bezier(.2,1.25,.4,1) forwards }
+@keyframes toastSpring { 0% { opacity: 0; transform: translateY(18px) scale(.9) } 60% { opacity: 1 } 100% { opacity: 1; transform: none } }
+
+/* 8. スイッチ: 押している間つまみが横に伸びる */
+button.switch:after { transition: transform .28s cubic-bezier(.3,1.3,.5,1), width .18s ease, left .18s ease }
+button.switch:active:after { width: 34px }
+button.switch.on:active:after { margin-left: -7px }
+
+/* 9. セグメント・小さなボタンの押し心地 */
+.seg button, .chip, .seg-btn, .pill-btn { transition: transform .16s cubic-bezier(.3,1.3,.5,1), opacity .12s, background-color .2s }
+.seg button:active, .chip:active, .seg-btn:active, .pill-btn:active { transform: scale(.94); opacity: .7 }
+
+/* 10. 一覧の行: 押した時の色がすっと付き、すっと消える */
+.group .row.press, .group button.row, .group a.row { transition: background-color .32s ease-out, transform .16s ease-out }
+.group .row.press:active, .group button.row:active, .group a.row:active { background-color: var(--fill); transition-duration: 0s, .08s }
+
+/* 11. ＋ボタン: 押すとばねで縮み、離すと戻る */
+#addHub { transition: transform .32s cubic-bezier(.3,1.4,.5,1), box-shadow .2s }
+#addHub:active { transform: scale(.86); transition-duration: .1s }
+
+/* 12. シート: 角を大きく、つまみ（グラバー）を表示 */
+#sheet { border-top-left-radius: 34px; border-top-right-radius: 34px }
+#sheet .sheet-body, #pushLayer .push-body, .screen > .scroll { overscroll-behavior-y: contain }
+
+/* 13. 金額は桁がそろう等幅数字 */
+.row-value, .home-card-value, .hero-value, .amount, .money, .sc-metric b, .dg-value { font-variant-numeric: tabular-nums }
+
+/* 14. タップした時の灰色の四角・長押しメニューを出さない */
+html { -webkit-tap-highlight-color: transparent }
+button, .tab, .row.press, .home-card-body, .glass-btn, .icon-btn { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none }
+
+/* 15. ダークモードのカードの縁を細く光らせる */
+html.dark .home-card, html.dark .group, html.dark .acfd-hero { box-shadow: inset 0 0 0 .5px rgba(255,255,255,.07) }
+
+/* 16. 区切りの見出しの大きさ・余白をそろえる */
+.section-head { font-size: 20px; font-weight: 700; letter-spacing: -.01em; margin: 22px 4px 8px }
+
+/* 17. 戻る矢印（シェブロン）の色・太さをそろえる */
+.chev { color: var(--label3) } .chev svg { width: 14px; height: 14px; stroke-width: 2.6 }
+
+/* 18. ホームのカード: 押すと少し沈み、影も弱くなる */
+.home-card { transition: transform .3s cubic-bezier(.3,1.3,.5,1), box-shadow .2s }
+.home-card:has(> .home-card-body:active) { transform: scale(.985); box-shadow: none }
+
+/* 19. 大きな数字が切り替わる時に、ふわっと入れ替わる */
+.home-card-value, .acfc-value { transition: opacity .2s }
+
+/* 20. フォーカスの輪郭はキーボード操作の時だけ（iOSらしい見た目） */
+button:focus:not(:focus-visible), .row:focus:not(:focus-visible) { outline: none }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+
+/* 21. 入力欄にフォーカスした時に縁が青く光る */
+input.field, textarea.field, select.field { transition: box-shadow .2s ease, background-color .2s ease }
+input.field:focus, textarea.field:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent) }
+
+/* 22. 何もない時の表示を中央にやわらかく */
+.empty-state, .empty { color: var(--label2); text-align: center }

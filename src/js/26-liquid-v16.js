@@ -205,12 +205,12 @@ function lgSyncRatio(root,ratio,on){const box=root.querySelector('.lg-ratio');if
 
 /* ---------- #6 ACF設定（初回シート） ---------- */
 function openAcfSetup(){
-  let reserve=acfDefaultSettings().reserveFloor,useCard=data.acfSettings.creditFallbackEnabled!==false,ratio=clamp(Number(data.acfSettings.creditAggressiveness??100)||0,0,100);
+  let reserve=acfStoredSettings().reserveFloor,useCard=data.acfSettings.creditFallbackEnabled!==false,ratio=clamp(Number(data.acfSettings.creditAggressiveness??100)||0,0,100);
   openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="acfSetupCancel">閉じる</button><div class="sheet-title">ACFを設定</div><span style="min-width:64px"></span></div><div class="sheet-body lg-acf">
     <div class="lg-acf-intro">${icon('chart')}<div><strong>ACF</strong><span>給与・カード引落・固定支払い・大型支出を日付順に見て、給料日までの収支を ACF指標 で示します。</span></div></div>
     <section class="lg-metric orange"><header>${icon('wallet')}<span>最低残したい金額</span></header><button type="button" class="lg-metric-value" id="acfSetupReserve"><span class="val">${yen(reserve)}</span><small>タップして入力</small></button>${lgRulerHtml('acfSetupRuler',{value:reserve,step:1000,max:300000})}${lgChipsHtml('data-reserve-chip',[0,10000,20000,30000,50000],reserve)}</section>
     <section class="lg-metric purple"><header>${icon('card')}<span>カードで支払う割合</span><button type="button" class="switch ${useCard?'on':''}" id="acfSetupUseCard" role="switch" aria-checked="${useCard}" aria-label="カードを利用"></button></header><strong class="lg-metric-num" id="acfSetupRatioText">${useCard?Math.round(ratio)+'%':'OFF'}</strong>${lgRatioHtml('acfSetupRatio',ratio,!useCard)}</section>
-    <div class="lg-facts"><div><span>現在の全銀行預金</span><strong>${yen(totalDeposits())}</strong></div><div><span>カード1日上限</span><strong>${yen(acfDefaultSettings().creditDailyLimit)}</strong></div></div>
+    <div class="lg-facts"><div><span>現在の全銀行預金</span><strong>${yen(totalDeposits())}</strong></div><div><span>カード1日上限</span><strong>${yen(acfStoredSettings().creditDailyLimit)}</strong></div></div>
     <button type="button" class="primary" id="acfSetupStart">設定して開始</button></div>`,'full',root=>{
     const reserveBtn=root.querySelector('#acfSetupReserve'),ruler=root.querySelector('#acfSetupRuler'),toggle=root.querySelector('#acfSetupUseCard'),range=root.querySelector('#acfSetupRatio'),txt=root.querySelector('#acfSetupRatioText');
     const setReserve=(v,fromRuler)=>{reserve=v;reserveBtn.querySelector('.val').textContent=yen(v);root.querySelectorAll('[data-reserve-chip]').forEach(c=>c.classList.toggle('on',Number(c.dataset.reserveChip)===v));if(!fromRuler)ruler.__set?.(v)};
@@ -220,13 +220,13 @@ function openAcfSetup(){
     toggle.onclick=e=>{useCard=!useCard;e.currentTarget.classList.toggle('on',useCard);e.currentTarget.setAttribute('aria-checked',String(useCard));range.disabled=!useCard;txt.textContent=useCard?`${Math.round(ratio)}%`:'OFF';lgSyncRatio(root,ratio,useCard)};
     range.oninput=e=>{ratio=Number(e.target.value)||0;txt.textContent=`${Math.round(ratio)}%`;lgSyncRatio(root,ratio,useCard);if(ratio%25===0)lgTick()};
     root.querySelector('#acfSetupCancel').onclick=requestSheetClose;
-    root.querySelector('#acfSetupStart').onclick=()=>{try{safeCommit(()=>{data.acfSettings={...acfDefaultSettings(),reserveFloor:reserve,creditFallbackEnabled:useCard,creditAggressiveness:ratio,initialized:true}},{render:true,label:'acf setup'});feedback.success();closeSheet();openAcfDetail()}catch(e){}}
+    root.querySelector('#acfSetupStart').onclick=()=>{try{safeCommit(()=>{data.acfSettings={...acfStoredSettings(),reserveFloor:reserve,creditFallbackEnabled:useCard,creditAggressiveness:ratio,initialized:true}},{render:true,label:'acf setup'});feedback.success();closeSheet();openAcfDetail()}catch(e){}}
   })
 }
 
 /* ---------- #6 ACF設定（画面） ---------- */
 function openAcfSettings(){
-  const settings={...acfDefaultSettings(),creditAllowedCategoryIds:[...(acfDefaultSettings().creditAllowedCategoryIds||[])],creditAllowedMerchants:[...(acfDefaultSettings().creditAllowedMerchants||[])],creditBlockedMerchants:[...(acfDefaultSettings().creditBlockedMerchants||[])]};
+  const settings={...acfStoredSettings(),creditAllowedCategoryIds:[...(acfStoredSettings().creditAllowedCategoryIds||[])],creditAllowedMerchants:[...(acfStoredSettings().creditAllowedMerchants||[])],creditBlockedMerchants:[...(acfStoredSettings().creditBlockedMerchants||[])]};
   let timer=0,detailsOpen=false;
   pushView('ACF設定',`<div class="lg-acf">
     <div class="lg-acf-preview" id="acfCreditPreview"><div class="acf-preview-loading">計算中…</div></div>

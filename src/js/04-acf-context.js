@@ -1,4 +1,5 @@
-function acfDefaultSettings(){
+/* 保存されている設定（C100モードの試算値を含まない）。設定画面・初期設定はこちらを使う */
+function acfStoredSettings(){
   const x={...DEFAULT_DATA.acfSettings,...(data.acfSettings||{})};
   x.reserveFloor=Math.max(0,Number(x.reserveFloor)||0,typeof activeSalaryAllocationReserve==='function'?activeSalaryAllocationReserve():0);
   x.creditFallbackEnabled=x.creditFallbackEnabled!==false;
@@ -10,8 +11,13 @@ function acfDefaultSettings(){
   x.creditBlockedMerchants=Array.isArray(x.creditBlockedMerchants)?[...new Set(x.creditBlockedMerchants.map(String).filter(Boolean))]:[];
   x.preferredCardId=String(x.preferredCardId||'');
   x.horizon='two_months';
-  /* C100モード（試算）: 今日から現金を使わず、すべてカードで払う前提。カードの限度額と引落後の残高の安全確認は残す。記録・設定は変えない */
+  if(x.creditDailyLimit>=99999999)x.creditDailyLimit=Number(DEFAULT_DATA.acfSettings.creditDailyLimit)||1000;
   x.c100Mode=x.c100Mode===true;
+  return x
+}
+/* 計算に使う設定。C100モード（試算）: 今日から現金を使わず、すべてカードで払う前提。カードの限度額と引落後の残高の安全確認は残す。記録・設定は変えない */
+function acfDefaultSettings(){
+  const x=acfStoredSettings();
   if(x.c100Mode){x.creditFallbackEnabled=true;x.creditAggressiveness=100;x.creditAllowAllCategories=true;x.creditBlockedMerchants=[];x.creditDailyLimit=Math.max(x.creditDailyLimit,99999999)}
   return x
 }
