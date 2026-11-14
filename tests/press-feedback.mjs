@@ -26,7 +26,7 @@ const report={rows:[],checked:0};
 for(const [width,appearance] of [[393,'light'],[320,'dark']]){
   const {page,context}=await createPage('app',{width,appearance});
   const close=()=>page.evaluate(()=>{const t=globalThis.__mm3Test;t.closeSheet();t.closeMenu?.();while(document.querySelector('#pushLayer .push-view.show'))if(t.popView()===false)break;document.getElementById('alertWrap')?.classList.remove('show')});
-  const probe=async key=>{const items=await list(page);for(const it of items){const before=await snap(page,it.i);if(before==null)continue;await page.mouse.move(it.x,it.y);await page.mouse.down();await page.waitForTimeout(140);const during=await snap(page,it.i);await page.mouse.move(2,2);await page.mouse.up();await page.waitForTimeout(40);report.checked++;
+  const probe=async key=>{const items=await list(page);for(const it of items){await page.mouse.move(it.x,it.y);await page.waitForTimeout(260);/* ホバー（スマホにはない）の変化を除くため、指を乗せてから比べる */const before=await snap(page,it.i);if(before==null)continue;await page.mouse.down();await page.waitForTimeout(140);const during=await snap(page,it.i);await page.mouse.move(2,2);await page.mouse.up();await page.waitForTimeout(40);report.checked++;
       /* 押した結果、画面が変わったら（離す前に開くタイプ）押下反応ありとみなす */
       const gone=during==null;if(!gone&&before===during){const k=`${key}|${it.name}`;if(!report.rows.some(r=>r.k===k))report.rows.push({k,cfg:`${width}-${appearance}`,screen:key,where:it.name})}}
     await page.evaluate(()=>document.querySelectorAll('[data-press-probe]').forEach(e=>e.removeAttribute('data-press-probe')));};
