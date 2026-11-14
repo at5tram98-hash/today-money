@@ -206,7 +206,7 @@ function openSalaryAdd(existing=null,presetEmployerId='',draft=null){
           closeSheet();
           openSalaryRecordEdit(duplicate.id)
         }return
-      }const date=employerPayDate(e,workMonth),obj={employerId:e.id,month:workMonth,date,gross,transport,status:(existingId?data.salaryRecords.find(x=>x.id===existingId)?.status:existing?.status)||'予定'};
+      }const date=employerPayDate(e,workMonth),obj={employerId:e.id,month:workMonth,date,gross,transport,status:(existingId?data.salaryRecords.find(x=>x.id===existingId)?.status:existing?.status)||'予定',source:'manual',manualAt:new Date().toISOString()};
       return runSaveAction(saveBtn,()=>{
         if(existingId){
           const target=data.salaryRecords.find(x=>x.id===existingId);

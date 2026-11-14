@@ -28,17 +28,22 @@ function parseShiftText(text){
 }
 function shiftMinutes(s){const [h,m]=s.split(':').map(Number);return h*60+m}
 /* 勤務時間（分）と深夜（22〜翌5時）の分。終了が開始より前なら日をまたぐ */
-function shiftDuration(start,end,autoBreak=true){
+/* 休憩: 勤務先に休憩ルール（例: 4時間以上7時間未満は30分、7時間以上は60分）があればそれを使う */
+function shiftBreakMinutes(total,autoBreak=true,rules=null){
+  if(Array.isArray(rules)&&rules.length){let best=0;for(const r of rules){const from=Math.max(0,Number(r.from)||0),to=r.to==null||r.to===''?Infinity:Number(r.to);if(total>=from&&total<to)best=Math.max(best,Math.max(0,Number(r.minutes)||0))}return Math.min(best,total)}
+  return autoBreak?(total>480?60:total>360?45:0):0;
+}
+function shiftDuration(start,end,autoBreak=true,rules=null){
   let a=shiftMinutes(start),b=shiftMinutes(end);if(b<=a)b+=1440;const total=b-a;
   let night=0;for(let t=a;t<b;t++){const h=Math.floor((t%1440)/60);if(h>=22||h<5)night++}
-  const brk=autoBreak?(total>480?60:total>360?45:0):0;
+  const brk=shiftBreakMinutes(total,autoBreak,rules);
   /* 休憩は深夜でない時間から先に引く */
   const day=Math.max(0,total-night-brk),nightPaid=Math.max(0,night-Math.max(0,brk-(total-night)));
   return{total,brk,work:day+nightPaid,night:nightPaid};
 }
 function shiftEmployerFor(title,s=shiftSettings()){
   if(s.titleMap[title]&&employerById(s.titleMap[title]))return s.titleMap[title];
-  const t=normalizeMerchantKey(title);const hit=data.employers.find(e=>{const n=normalizeMerchantKey(e.name);return n&&t&&(t.includes(n)||n.includes(t))});
+  const t=normalizeMerchantKey(title);const hit=data.employers.find(e=>[e.name,...(Array.isArray(e.aliases)?e.aliases:[])].some(x=>{const n=normalizeMerchantKey(x);return n&&t&&(t.includes(n)||n.includes(t))}));
   return hit?.id||data.employers[0]?.id||'';
 }
 function shiftWorkMonth(e,date){
@@ -50,29 +55,36 @@ function shiftEstimate(shifts,s=shiftSettings()){
   const groups=new Map();
   for(const x of shifts){
     const empId=x.employerId||shiftEmployerFor(x.title,s),e=employerById(empId);if(!e)continue;
-    const d=shiftDuration(x.start,x.end,s.autoBreak),hourly=Math.max(0,Number(e.hourly)||0),pay=Math.round(hourly*d.work/60+hourly*(Number(s.nightRate)||0)/100*d.night/60);
+    const d=shiftDuration(x.start,x.end,s.autoBreak,e.breakRules),hourly=Math.max(0,Number(e.hourly)||0),pay=Math.round(hourly*d.work/60+hourly*(Number(s.nightRate)||0)/100*d.night/60);
     const month=shiftWorkMonth(e,x.date),k=`${empId}|${month}`;
     if(!groups.has(k))groups.set(k,{employerId:empId,employer:e,month,shifts:[],minutes:0,night:0,gross:0,transport:0});
     const g=groups.get(k);g.shifts.push({...x,employerId:empId,...d,pay});g.minutes+=d.work;g.night+=d.night;g.gross+=pay;
   }
-  for(const g of groups.values()){const t=Math.max(0,Number(g.employer.transport)||0);g.transport=g.employer.transportUnit==='per_shift'?t*g.shifts.length:t;g.payDate=employerPayDate(g.employer,g.month)}
+  for(const g of groups.values()){const t=Math.max(0,Number(g.employer.transport)||0),cap=Math.max(0,Number(g.employer.transportCap)||0);g.transport=g.employer.transportUnit==='per_shift'?t*g.shifts.length:t;if(cap>0&&g.transport>cap){g.transportUncapped=g.transport;g.transport=cap}g.payDate=employerPayDate(g.employer,g.month)}
   return [...groups.values()].sort((a,b)=>a.month.localeCompare(b.month)||a.employer.name.localeCompare(b.employer.name));
 }
 function shiftHoursLabel(min){const h=Math.floor(min/60),m=min%60;return m?`${h}時間${m}分`:`${h}時間`}
 /* 保存: シフトの記録と、給与（予定）の作成・更新 */
-function saveShiftImport(groups,s){
+const SALARY_MANUAL_LOCK_MS=7*864e5;
+function salaryManualLockUntil(r){const t=Date.parse(r?.manualAt||'');return Number.isFinite(t)?t+SALARY_MANUAL_LOCK_MS:0}
+function saveShiftImport(groups,s,{auto=false,replaceFrom='',extra=null}={}){
   const results=[];
   safeCommit(()=>{
     data.shiftSettings={...shiftSettings(),...s};
     if(!Array.isArray(data.shiftPlans))data.shiftPlans=[];
+    /* カレンダーから送られた期間は、その期間のシフトを入れ替える（消えたシフトを残さない） */
+    if(replaceFrom)data.shiftPlans=data.shiftPlans.filter(p=>!(p.source==='calendar'&&p.date>=replaceFrom));
+    extra?.();
     for(const g of groups){
       const dates=new Set(g.shifts.map(x=>x.date));
       data.shiftPlans=data.shiftPlans.filter(p=>!(p.employerId===g.employerId&&dates.has(p.date)));
       for(const x of g.shifts)data.shiftPlans.push({id:uid('shift'),employerId:g.employerId,date:x.date,start:x.start,end:x.end,title:x.title,workMinutes:x.work,nightMinutes:x.night,pay:x.pay,source:'calendar',importedAt:new Date().toISOString()});
       const rec=data.salaryRecords.find(r=>r.employerId===g.employerId&&r.month===g.month);
       if(rec&&rec.status&&rec.status!=='予定'){results.push({g,state:'kept'});continue}
-      if(rec){Object.assign(rec,{gross:g.gross,transport:g.transport,date:g.payDate,source:'shift',shiftCount:g.shifts.length,updatedAt:new Date().toISOString()});results.push({g,state:'updated'})}
-      else{data.salaryRecords.push({id:uid('salary'),employerId:g.employerId,month:g.month,date:g.payDate,gross:g.gross,transport:g.transport,status:'予定',source:'shift',shiftCount:g.shifts.length,createdAt:new Date().toISOString()});results.push({g,state:'created'})}
+      /* 手入力した給与は、自動取得では7日間上書きしない */
+      if(rec&&auto&&salaryManualLockUntil(rec)>Date.now()){results.push({g,state:'manual'});continue}
+      if(rec){Object.assign(rec,{gross:g.gross,transport:g.transport,date:g.payDate,source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,updatedAt:new Date().toISOString()});delete rec.manualAt;results.push({g,state:'updated'})}
+      else{data.salaryRecords.push({id:uid('salary'),employerId:g.employerId,month:g.month,date:g.payDate,gross:g.gross,transport:g.transport,status:'予定',source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,createdAt:new Date().toISOString()});results.push({g,state:'created'})}
     }
   },{render:true,label:'shift import'});
   return results;
@@ -89,7 +101,7 @@ function openShiftImport(text){
     return `<div class="shift-hero"><span class="shift-hero-icon" aria-hidden="true">${icon('briefcase')}</span><div class="shift-hero-kicker">${shifts.length}件のシフトから</div><div class="shift-hero-value">${yen(total)}</div><div class="shift-hero-sub">${groups.map(g=>`${esc(g.employer.name)}・${monthLabel(g.month)}勤務分（${Number(g.payDate.slice(5,7))}/${Number(g.payDate.slice(8,10))}入金予定）`).join('<br>')}</div></div>
     ${noWage.length?`<div class="shift-warn" role="alert">${icon('warning')}<span>${noWage.map(g=>esc(g.employer.name)).join('・')}の時給が未設定です。「その他→勤務先」で時給を入れると金額が出ます。</span></div>`:''}
     <h2 class="shift-head">勤務先の割り当て</h2><div class="group">${titles.map(t=>`<div class="row shift-map"><div class="row-main"><div class="row-title">${esc(t)}</div><div class="row-sub">${shifts.filter(x=>(x.title||'（名前なし）')===t).length}件</div></div><div class="shift-emp-chips">${data.employers.map(e=>`<button type="button" class="shift-chip${s.titleMap[t]===e.id?' on':''}" data-shift-title="${esc(t)}" data-shift-emp="${esc(e.id)}" aria-pressed="${s.titleMap[t]===e.id}">${esc(e.name)}</button>`).join('')}</div></div>`).join('')}</div>
-    <h2 class="shift-head">計算のしかた</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">休憩を自動で引く</div><div class="row-sub">6時間超は45分・8時間超は60分</div></div><button type="button" class="switch${s.autoBreak?' on':''}" id="shiftAutoBreak" role="switch" aria-checked="${s.autoBreak}" aria-label="休憩を自動で引く"></button></div><div class="row"><div class="row-main"><div class="row-title">深夜割増（22時〜5時）</div><div class="row-sub">時給の${s.nightRate}%を上乗せ</div></div><button type="button" class="switch${s.nightRate>0?' on':''}" id="shiftNight" role="switch" aria-checked="${s.nightRate>0}" aria-label="深夜割増"></button></div></div>
+    <h2 class="shift-head">計算のしかた</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">休憩を自動で引く</div><div class="row-sub">勤務先の休憩ルールで引きます（ルールがない勤務先は6時間超45分・8時間超60分）</div></div><button type="button" class="switch${s.autoBreak?' on':''}" id="shiftAutoBreak" role="switch" aria-checked="${s.autoBreak}" aria-label="休憩を自動で引く"></button></div><div class="row"><div class="row-main"><div class="row-title">深夜割増（22時〜5時）</div><div class="row-sub">時給の${s.nightRate}%を上乗せ</div></div><button type="button" class="switch${s.nightRate>0?' on':''}" id="shiftNight" role="switch" aria-checked="${s.nightRate>0}" aria-label="深夜割増"></button></div></div>
     ${groups.map(g=>`<h2 class="shift-head">${esc(g.employer.name)}・${monthLabel(g.month)}勤務分</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">${g.shifts.length}回・${shiftHoursLabel(g.minutes)}${g.night?`（深夜 ${shiftHoursLabel(g.night)}）`:''}</div><div class="row-sub">時給 ${yen(Number(g.employer.hourly)||0)}・交通費 ${yen(g.transport)}</div></div><div class="row-value">${yen(g.gross+g.transport)}</div></div>${g.shifts.map(x=>`<div class="row shift-row"><div class="row-main"><div class="row-title">${esc(dayLabel(x.date))} ${x.start}〜${x.end}</div><div class="row-sub">${shiftHoursLabel(x.work)}${x.brk?`・休憩${x.brk}分`:''}${x.night?`・深夜${shiftHoursLabel(x.night)}`:''}</div></div><div class="row-value">${yen(x.pay)}</div></div>`).join('')}</div>`).join('')}
     <p class="settings-section-footer">保存すると、勤務先・勤務月ごとの給与を「予定」として作ります（同じ月の予定は更新、入金済みの給与は変えません）。</p>`;
   };
@@ -194,7 +206,7 @@ async function syncShiftCalendar({silent=false}={}){
   try{
     const shifts=await fetchCalendarShifts(cal),s=shiftSettings();
     if(!shifts.length){setShiftCal({lastSyncAt:new Date().toISOString(),lastDay:ymd(),lastCount:0,lastTotal:0,lastError:''});if(!silent)showToast('来月までのシフトは見つかりませんでした');return{count:0,total:0}}
-    const groups=shiftEstimate(shifts.map(x=>({...x,employerId:shiftEmployerFor(x.title,s)})),s),results=saveShiftImport(groups,{}),total=groups.reduce((a,g)=>a+g.gross+g.transport,0);
+    const groups=shiftEstimate(shifts.map(x=>({...x,employerId:shiftEmployerFor(x.title,s)})),s),results=saveShiftImport(groups,{},{auto:true}),total=groups.reduce((a,g)=>a+g.gross+g.transport,0);
     setShiftCal({lastSyncAt:new Date().toISOString(),lastDay:ymd(),lastCount:shifts.length,lastTotal:total,lastError:''});
     showToast(`カレンダーのシフト${shifts.length}件から給料の見込みを更新しました（${yen(total)}）`);
     try{refreshSalaryOpenView()}catch(e){}

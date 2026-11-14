@@ -99,3 +99,22 @@ test('code redeployment and subscription recovery preserve device tokens and sch
 test('cancelling enrollment revokes a completed registration as well as an unconfirmed one',async()=>{
   const {env,sql}=fixture();let proof;const deliver=async(url,options)=>{proof=JSON.parse(ece.decrypt(options.body,{version:'aes128gcm',privateKey:ecdh,authSecret:auth}));return new Response(null,{status:201})};const response=await handleRequest(request('/v1/enroll','',{subscription,summary}),env),{token}=await response.json();await handleRequest(request('/v1/enroll/send',token),env,deliver);await handleRequest(request('/v1/enroll/confirm','',{id:proof.id,challenge:proof.challenge}),env);assert.equal((await handleRequest(request('/v1/enroll/cancel',token),env)).status,200);assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM devices').get().n,0);assert.equal((await handleRequest(request('/v1/status',token),env)).status,401);sql.close();
 });
+test('shift relay: shortcut posts calendar text, app reads it with the same key only',async()=>{
+  const {env,sql}=fixture(),key=randomBytes(32).toString('base64url'),url='https://money.workers.dev/v1/shifts';
+  /* ショートカットは Origin なし・JSON {text} で送る */
+  const post=await handleRequest(new Request(url,{method:'POST',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({text:'2026-12-01 10:00-18:00 GU\n2026-12-02 17:00-22:00 無印良品'})}),env);
+  assert.equal(post.status,200);assert.equal((await post.json()).lines,2);
+  /* ファイル（文字そのまま）でも受け付ける。上書きされる */
+  assert.equal((await handleRequest(new Request(url,{method:'POST',headers:{Authorization:'Bearer '+key},body:'2026-12-03 09:00-13:00 GU'}),env)).status,200);
+  const got=await handleRequest(new Request(url,{method:'GET',headers:{Origin:'https://at5tram98-hash.github.io',Authorization:'Bearer '+key}}),env);
+  assert.equal(got.status,200);assert.equal(got.headers.get('Access-Control-Allow-Origin'),'https://at5tram98-hash.github.io');const j=await got.json();assert.equal(j.text,'2026-12-03 09:00-13:00 GU');assert.ok(j.updatedAt>0);
+  /* 鍵は平文で保存しない。別の鍵では読めない。短い鍵・他のサイトからは拒否 */
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM shift_inbox WHERE key_hash=?').get(key).n,0);
+  const other=await handleRequest(new Request(url,{method:'GET',headers:{Authorization:'Bearer '+randomBytes(32).toString('base64url')}}),env);assert.equal((await other.json()).text,'');
+  assert.equal((await handleRequest(new Request(url,{method:'GET',headers:{Authorization:'Bearer short'}}),env)).status,401);
+  assert.equal((await handleRequest(new Request(url,{method:'GET',headers:{Origin:'https://evil.example',Authorization:'Bearer '+key}}),env)).status,403);
+  assert.equal((await handleRequest(new Request(url,{method:'POST',headers:{Authorization:'Bearer '+key},body:'x'.repeat(40000)}),env)).status,413);
+  /* 30日で消える */
+  await runScheduled(env,Date.now()+31*86400000,async()=>new Response(null,{status:201}));assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM shift_inbox').get().n,0);
+  sql.close();
+});

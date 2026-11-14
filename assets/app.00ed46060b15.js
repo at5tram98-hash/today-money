@@ -7,8 +7,8 @@ const RECOVERY_KEY_PREFIX='myMoney2_recovery_v1_';
 const CATEGORY_DEFAULTS=[
  {id:'food',name:'食費',icon:'fork',color:'#34C759'},{id:'transport',name:'交通費',icon:'tram',color:'#007AFF'},{id:'daily',name:'日用品',icon:'bag',color:'#30B0C7'},{id:'clothes',name:'衣服費',icon:'tshirt',color:'#AF52DE'},{id:'fun',name:'娯楽費',icon:'ticket',color:'#FF9500'},{id:'subscription',name:'サブスク',icon:'repeat',color:'#5856D6'},{id:'education',name:'教育費',icon:'book',color:'#64D2FF'},{id:'utilities',name:'光熱費',icon:'bolt',color:'#FFCC00'},{id:'other',name:'その他',icon:'ellipsis',color:'#8E8E93'}
 ];
-const FIRST_RUN_SEED={"banks":[{"id":"bank_seed_sbi_shinsei","name":"SBI新生銀行","label":"現金7,000円を含む合算残高","balance":99330,"threshold":15000},{"id":"bank_seed_yucho","name":"ゆうちょ銀行","label":"","balance":0,"threshold":0},{"id":"bank_seed_paypay","name":"PayPay銀行","label":"","balance":0,"threshold":0},{"id":"bank_seed_smbc_olive","name":"三井住友銀行 Olive","label":"","balance":0,"threshold":0}],"cards":[{"id":"card_seed_smbc","company":"三井住友カード","name":"三井住友カード","closingDay":"月末","dueDay":26,"limit":100000,"availableSnapshot":11000,"bankId":"bank_seed_sbi_shinsei"},{"id":"card_seed_merpay","company":"メルペイカード","name":"メルペイカード","closingDay":"月末","dueDay":21,"limit":100000,"availableSnapshot":86000,"bankId":"bank_seed_sbi_shinsei"},{"id":"card_seed_paypay","company":"PayPayカード","name":"PayPayカード","closingDay":"月末","dueDay":27,"limit":100000,"availableSnapshot":5000,"bankId":"bank_seed_paypay"}],"employers":[{"id":"emp_seed_gu","name":"GU","hourly":1300,"transport":840,"closingType":"month_end","closingDay":null,"closingMonthOffset":0,"payType":"day","payDay":10,"payMonthOffset":1,"bankId":"","transportUnit":"per_shift"},{"id":"emp_seed_muji","name":"無印良品","hourly":1200,"transport":980,"closingType":"day","closingDay":10,"closingMonthOffset":0,"payType":"day","payDay":25,"payMonthOffset":0,"bankId":"","transportUnit":"per_shift"}],"salaryRecords":[{"id":"salary_seed_gu_202610","employerId":"emp_seed_gu","month":"2026-09","date":"2026-10-10","gross":28452,"transport":0,"status":"予定","amountBasis":"net"},{"id":"salary_seed_muji_202610","employerId":"emp_seed_muji","month":"2026-10","date":"2026-10-25","gross":57640,"transport":0,"status":"予定","amountBasis":"net"},{"id":"salary_seed_gu_202611","employerId":"emp_seed_gu","month":"2026-10","date":"2026-11-10","gross":48810,"transport":0,"status":"予定","amountBasis":"net"},{"id":"salary_seed_muji_202611","employerId":"emp_seed_muji","month":"2026-11","date":"2026-11-25","gross":34300,"transport":0,"status":"予定","amountBasis":"net"}],"tempIncomes":[{"id":"temp_seed_20261005","date":"2026-10-05","amount":45000,"sourceName":"臨時収入（10/5までの見込み）","status":"予定"},{"id":"temp_seed_20261020","date":"2026-10-20","amount":6000,"sourceName":"臨時収入（10/20ごろの見込み）","status":"予定"}],"fixedPayments":[{"id":"fixed_seed_pass","name":"定期券 13,000円（カード予定）","amount":13000,"day":25,"frequency":"monthly","startMonth":"2026-10","paymentMethod":"card","paymentId":"card_seed_paypay","skippedDates":[]}],"largeExpensePlans":[{"id":"large_seed_pass_now","name":"定期券の更新（現金で払う場合）","date":"2026-09-26","amount":13000,"priority":"required","status":"planned","paymentMethod":"other","paymentId":"","splits":[],"atfOptionalPass":true,"memo":"現金更新する場合の仮定。まだ購入済み扱いにはしない。"},{"id":"large_seed_birthday","name":"誕生日代（仮の分割案）","date":"2026-10-06","amount":60000,"priority":"required","status":"planned","paymentMethod":"card","paymentId":"card_seed_smbc","splits":[{"paymentMethod":"card","paymentId":"card_seed_smbc","amount":38000},{"paymentMethod":"card","paymentId":"card_seed_merpay","amount":22000}],"atfInstallments":{"card_seed_smbc":3,"card_seed_merpay":2},"memo":"38,000円/22,000円の仮案。手数料は未確認。"},{"id":"large_seed_fw_oct","name":"FW 10月（前半の最終日を仮置き）","date":"2026-10-15","amount":56000,"priority":"required","status":"planned","paymentMethod":"bank","paymentId":"bank_seed_sbi_shinsei","splits":[]},{"id":"large_seed_fw_nov","name":"FW 11月","date":"2026-11-08","amount":45000,"priority":"required","status":"planned","paymentMethod":"bank","paymentId":"bank_seed_sbi_shinsei","splits":[]}],"cardAdjustments":{"2026-08|card_seed_smbc":{"mode":"confirmed_total","confirmedTotal":27528,"baseAtEdit":0,"status":"confirmed","paymentDateOverride":"2026-09-28"},"2026-08|card_seed_paypay":{"mode":"confirmed_total","confirmedTotal":42142,"baseAtEdit":0,"status":"confirmed","paymentDateOverride":"2026-09-28"},"2026-09|card_seed_smbc":{"mode":"confirmed_total","confirmedTotal":34364,"baseAtEdit":0,"status":"estimated","paymentDateOverride":"2026-10-26"},"2026-09|card_seed_paypay":{"mode":"confirmed_total","confirmedTotal":41923,"baseAtEdit":0,"status":"estimated","paymentDateOverride":"2026-10-27"},"2026-09|card_seed_merpay":{"mode":"confirmed_total","confirmedTotal":3000,"baseAtEdit":0,"status":"estimated","paymentDateOverride":"2026-10-21"}}};
-const DEFAULT_DATA={version:DATA_VERSION,profile:{name:'',icon:''},categories:CATEGORY_DEFAULTS,transactions:[],incomes:[],dailyGoals:{},monthlyGoals:{},dailyCorrections:{},monthlyCorrections:{},cardAdjustments:{},banks:[],cards:[],debitCards:[],employers:[],salaryRecords:[],tempIncomes:[],fixedPayments:[],largeExpensePlans:[],assetSnapshots:[],mailImports:[],cardStatementImports:[],savedScenarios:[],salaryAllocations:[],transferPlans:[],statementReconciliations:[],budgetRebalanceHistory:[],eventGoals:[],reimbursements:[],savedSearches:[],merchantRules:{},quickInputRules:{},monthReviews:{},dayClosings:{},pushPreferences:{dayClose:true,closeTime:'21:00',atf:true,mail:true,spending:false,spendTimes:['12:00','18:00'],showAmount:false},gmailSettings:{clientId:'',query:'newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}',autoSync:true,syncMinutes:5,lastSyncAt:null,emailAddress:'',lookbackDays:30,sourceIds:[]},atfSettings:{reserveFloor:15000,dailyCardSpend:500,birthdayReduction:0,birthdayFee:null,renewPassCash:true,extraEarlyShifts:false,extraLateShifts:false,asOf:'2026-09-26'},acfSettings:{reserveFloor:15000,horizon:'two_months',useWeekdayWeights:true,includeRequiredLargeExpenses:true,riskNotifications:true,creditFallbackEnabled:true,creditDailyLimit:1000,creditAggressiveness:100,creditAllowAllCategories:true,creditAllowedCategoryIds:[],creditAllowedMerchants:[],creditBlockedMerchants:[],preferredCardId:'',initialized:false},feedbackSettings:{sound:true,haptic:true,motion:true,volume:.45},notices:[],notificationSettings:{goal:true,salary:true,payment:true,unknown:true,balance:true},appearance:'system',security:{enabled:false,passcode:'',relock:'immediate'},meta:{legacyMigrated:false,lastScheduleDate:'',seedVersion:0}};
+const FIRST_RUN_SEED={"banks":[{"id":"bank_seed_sbi_shinsei","name":"SBI新生銀行","label":"現金7,000円を含む合算残高","balance":99330,"threshold":15000},{"id":"bank_seed_yucho","name":"ゆうちょ銀行","label":"","balance":0,"threshold":0},{"id":"bank_seed_paypay","name":"PayPay銀行","label":"","balance":0,"threshold":0},{"id":"bank_seed_smbc_olive","name":"三井住友銀行 Olive","label":"","balance":0,"threshold":0}],"cards":[{"id":"card_seed_smbc","company":"三井住友カード","name":"三井住友カード","closingDay":"月末","dueDay":26,"limit":100000,"availableSnapshot":11000,"bankId":"bank_seed_sbi_shinsei"},{"id":"card_seed_merpay","company":"メルペイカード","name":"メルペイカード","closingDay":"月末","dueDay":21,"limit":100000,"availableSnapshot":86000,"bankId":"bank_seed_sbi_shinsei"},{"id":"card_seed_paypay","company":"PayPayカード","name":"PayPayカード","closingDay":"月末","dueDay":27,"limit":100000,"availableSnapshot":5000,"bankId":"bank_seed_paypay"}],"employers":[{"id":"emp_seed_gu","name":"GU","hourly":1300,"transport":840,"closingType":"month_end","closingDay":null,"closingMonthOffset":0,"payType":"day","payDay":10,"payMonthOffset":1,"bankId":"","transportUnit":"per_shift","transportCap":0,"breakRules":[{"from":240,"to":420,"minutes":30},{"from":420,"to":null,"minutes":60}],"aliases":["ジーユー"]},{"id":"emp_seed_muji","name":"無印良品","hourly":1250,"transport":980,"closingType":"day","closingDay":10,"closingMonthOffset":0,"payType":"day","payDay":25,"payMonthOffset":0,"bankId":"","transportUnit":"per_shift","transportCap":10000,"breakRules":[{"from":420,"to":null,"minutes":60}],"aliases":["MUJI","無印"]}],"salaryRecords":[{"id":"salary_seed_gu_202610","employerId":"emp_seed_gu","month":"2026-09","date":"2026-10-10","gross":28452,"transport":0,"status":"予定","amountBasis":"net"},{"id":"salary_seed_muji_202610","employerId":"emp_seed_muji","month":"2026-10","date":"2026-10-25","gross":57640,"transport":0,"status":"予定","amountBasis":"net"},{"id":"salary_seed_gu_202611","employerId":"emp_seed_gu","month":"2026-10","date":"2026-11-10","gross":48810,"transport":0,"status":"予定","amountBasis":"net"},{"id":"salary_seed_muji_202611","employerId":"emp_seed_muji","month":"2026-11","date":"2026-11-25","gross":34300,"transport":0,"status":"予定","amountBasis":"net"}],"tempIncomes":[{"id":"temp_seed_20261005","date":"2026-10-05","amount":45000,"sourceName":"臨時収入（10/5までの見込み）","status":"予定"},{"id":"temp_seed_20261020","date":"2026-10-20","amount":6000,"sourceName":"臨時収入（10/20ごろの見込み）","status":"予定"}],"fixedPayments":[{"id":"fixed_seed_pass","name":"定期券 13,000円（カード予定）","amount":13000,"day":25,"frequency":"monthly","startMonth":"2026-10","paymentMethod":"card","paymentId":"card_seed_paypay","skippedDates":[]}],"largeExpensePlans":[{"id":"large_seed_pass_now","name":"定期券の更新（現金で払う場合）","date":"2026-09-26","amount":13000,"priority":"required","status":"planned","paymentMethod":"other","paymentId":"","splits":[],"atfOptionalPass":true,"memo":"現金更新する場合の仮定。まだ購入済み扱いにはしない。"},{"id":"large_seed_birthday","name":"誕生日代（仮の分割案）","date":"2026-10-06","amount":60000,"priority":"required","status":"planned","paymentMethod":"card","paymentId":"card_seed_smbc","splits":[{"paymentMethod":"card","paymentId":"card_seed_smbc","amount":38000},{"paymentMethod":"card","paymentId":"card_seed_merpay","amount":22000}],"atfInstallments":{"card_seed_smbc":3,"card_seed_merpay":2},"memo":"38,000円/22,000円の仮案。手数料は未確認。"},{"id":"large_seed_fw_oct","name":"FW 10月（前半の最終日を仮置き）","date":"2026-10-15","amount":56000,"priority":"required","status":"planned","paymentMethod":"bank","paymentId":"bank_seed_sbi_shinsei","splits":[]},{"id":"large_seed_fw_nov","name":"FW 11月","date":"2026-11-08","amount":45000,"priority":"required","status":"planned","paymentMethod":"bank","paymentId":"bank_seed_sbi_shinsei","splits":[]}],"cardAdjustments":{"2026-08|card_seed_smbc":{"mode":"confirmed_total","confirmedTotal":27528,"baseAtEdit":0,"status":"confirmed","paymentDateOverride":"2026-09-28"},"2026-08|card_seed_paypay":{"mode":"confirmed_total","confirmedTotal":42142,"baseAtEdit":0,"status":"confirmed","paymentDateOverride":"2026-09-28"},"2026-09|card_seed_smbc":{"mode":"confirmed_total","confirmedTotal":34364,"baseAtEdit":0,"status":"estimated","paymentDateOverride":"2026-10-26"},"2026-09|card_seed_paypay":{"mode":"confirmed_total","confirmedTotal":41923,"baseAtEdit":0,"status":"estimated","paymentDateOverride":"2026-10-27"},"2026-09|card_seed_merpay":{"mode":"confirmed_total","confirmedTotal":3000,"baseAtEdit":0,"status":"estimated","paymentDateOverride":"2026-10-21"}}};
+const DEFAULT_DATA={version:DATA_VERSION,profile:{name:'',icon:''},categories:CATEGORY_DEFAULTS,transactions:[],incomes:[],dailyGoals:{},monthlyGoals:{},dailyCorrections:{},monthlyCorrections:{},cardAdjustments:{},banks:[],cards:[],debitCards:[],employers:[],salaryRecords:[],tempIncomes:[],fixedPayments:[],largeExpensePlans:[],assetSnapshots:[],mailImports:[],cardStatementImports:[],savedScenarios:[],salaryAllocations:[],transferPlans:[],statementReconciliations:[],budgetRebalanceHistory:[],eventGoals:[],reimbursements:[],savedSearches:[],merchantRules:{},quickInputRules:{},monthReviews:{},dayClosings:{},pushPreferences:{dayClose:true,closeTime:'21:00',atf:true,mail:true,spending:false,spendTimes:['12:00','18:00'],showAmount:false},gmailSettings:{clientId:'',query:'newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}',autoSync:true,syncMinutes:5,lastSyncAt:null,emailAddress:'',lookbackDays:30,sourceIds:[]},atfSettings:{reserveFloor:15000,dailyCardSpend:500,birthdayReduction:0,birthdayFee:null,renewPassCash:true,extraEarlyShifts:false,extraLateShifts:false,asOf:'2026-09-26'},acfSettings:{reserveFloor:15000,horizon:'two_months',useWeekdayWeights:true,includeRequiredLargeExpenses:true,riskNotifications:true,creditFallbackEnabled:true,creditDailyLimit:1000,creditAggressiveness:100,creditAllowAllCategories:true,creditAllowedCategoryIds:[],creditAllowedMerchants:[],creditBlockedMerchants:[],preferredCardId:'',initialized:false,indexEndDay:28,indexEndDate:''},feedbackSettings:{sound:true,haptic:true,motion:true,volume:.45},notices:[],notificationSettings:{goal:true,salary:true,payment:true,unknown:true,balance:true},appearance:'system',security:{enabled:false,passcode:'',relock:'immediate'},meta:{legacyMigrated:false,lastScheduleDate:'',seedVersion:0}};
 const clone=x=>JSON.parse(JSON.stringify(x));
 const uid=(p='id')=>p+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8);
 const pad=n=>String(n).padStart(2,'0');
@@ -70,7 +70,7 @@ function normalizeData(raw){
   out.debitCards=out.debitCards.map(x=>({...x,name:x.name||'デビットカード',bankId:x.bankId||'',createdAt:x.createdAt||new Date().toISOString()}));
   out.transactions=out.transactions.map(t=>{let linked=t.linkedBankId||'';if(t.paymentMethod==='debit'){let debit=out.debitCards.find(x=>x.id===t.paymentId);if(!debit&&out.banks.some(b=>b.id===t.paymentId))debit=out.debitCards.find(x=>x.bankId===t.paymentId);if(debit){t={...t,paymentId:debit.id};linked=linked||debit.bankId}else if(out.banks.some(b=>b.id===t.paymentId))linked=linked||t.paymentId}const bankLike=t.paymentMethod==='bank'||t.paymentMethod==='debit',bankId=linked||(t.paymentMethod==='bank'?t.paymentId:''),bank=out.banks.find(b=>b.id===bankId),applied=typeof t.bankApplied==='boolean'?t.bankApplied:bankLike,effectAt=t.bankEffectAt||t.createdAt||null,baselineMs=Date.parse(bank?.balanceAsOf||''),effectMs=Date.parse(effectAt||''),dateBeforeBaseline=!!(bank?.balanceAsOf&&t.date&&t.date<ymd(new Date(baselineMs))),reconciled=typeof t.bankReconciled==='boolean'?t.bankReconciled:(!applied&&bankLike&&Number.isFinite(baselineMs)&&(dateBeforeBaseline||(Number.isFinite(effectMs)&&effectMs<=baselineMs)));return {...t,linkedBankId:linked,bankApplied:applied,bankReconciled:reconciled,bankEffectAt:effectAt}});
   out.incomes=out.incomes.map(x=>{const bank=out.banks.find(b=>b.id===x.bankId),applied=typeof x.bankApplied==='boolean'?x.bankApplied:(x.toType==='bank'&&!!x.bankId),effectAt=x.bankEffectAt||x.createdAt||null,baselineMs=Date.parse(bank?.balanceAsOf||''),effectMs=Date.parse(effectAt||''),dateBeforeBaseline=!!(bank?.balanceAsOf&&x.date&&x.date<ymd(new Date(baselineMs))),reconciled=typeof x.bankReconciled==='boolean'?x.bankReconciled:(!applied&&x.toType==='bank'&&Number.isFinite(baselineMs)&&(dateBeforeBaseline||(Number.isFinite(effectMs)&&effectMs<=baselineMs)));return {...x,bankApplied:applied,bankReconciled:reconciled,bankEffectAt:effectAt}});
-  out.employers=out.employers.map(e=>{const closingRaw=String(e.closingType||''),closingType=e.closingType==='day'||(/^\d+$/.test(closingRaw))?'day':(e.closingDay?'day':'month_end'),payType=e.payType==='month_end'?'month_end':'day';return {...e,closingType,closingDay:closingType==='day'?clamp(Number(e.closingDay||closingRaw)||1,1,31):null,closingMonthOffset:clamp(Number(e.closingMonthOffset)||0,0,1),payType,payDay:payType==='day'?clamp(Number(e.payDay)||25,1,31):null,payMonthOffset:clamp(Number(e.payMonthOffset)||0,0,1),transport:Number(e.transport)||0,hourly:Number(e.hourly)||0,bankId:e.bankId||''}});
+  out.employers=out.employers.map(e=>{const closingRaw=String(e.closingType||''),closingType=e.closingType==='day'||(/^\d+$/.test(closingRaw))?'day':(e.closingDay?'day':'month_end'),payType=e.payType==='month_end'?'month_end':'day';return {...e,closingType,closingDay:closingType==='day'?clamp(Number(e.closingDay||closingRaw)||1,1,31):null,closingMonthOffset:clamp(Number(e.closingMonthOffset)||0,0,1),payType,payDay:payType==='day'?clamp(Number(e.payDay)||25,1,31):null,payMonthOffset:clamp(Number(e.payMonthOffset)||0,0,1),transport:Number(e.transport)||0,hourly:Number(e.hourly)||0,bankId:e.bankId||'',transportCap:Math.max(0,Number(e.transportCap)||0),breakRules:Array.isArray(e.breakRules)?e.breakRules.filter(r=>r&&Number(r.minutes)>0).map(r=>({from:Math.max(0,Number(r.from)||0),to:r.to==null||r.to===''?null:Math.max(0,Number(r.to)||0),minutes:Math.max(0,Number(r.minutes)||0)})):[],aliases:Array.isArray(e.aliases)?e.aliases.map(String).filter(Boolean).slice(0,12):[]}});
   out.salaryRecords=out.salaryRecords.map(r=>{const employer=out.employers.find(e=>e.id===r.employerId),workMonth=/^\d{4}-\d{2}$/.test(String(r.month||''))?String(r.month):String(r.date||'').slice(0,7)||ym(),date=/^\d{4}-\d{2}-\d{2}$/.test(String(r.date||''))?String(r.date):(employer?employerPayDate(employer,workMonth):`${workMonth}-01`);return {...r,id:r.id||uid('salary'),month:workMonth,date,gross:Math.max(0,Number(r.gross)||0),transport:Math.max(0,Number(r.transport)||0),status:r.status==='入金済'?'入金済':'予定'}});
   out.fixedPayments=out.fixedPayments.map(f=>({...f,annualMonth:clamp(Number(f.annualMonth)||Number(String(f.startMonth||'').slice(5,7))||1,1,12),skippedDates:Array.isArray(f.skippedDates)?[...new Set(f.skippedDates.map(String))]:[]}));
   out.largeExpensePlans=out.largeExpensePlans.map(p=>{const method=['bank','debit','card','other'].includes(p.paymentMethod)?p.paymentMethod:'other',status=['planned','completed','cancelled','postponed'].includes(p.status)?p.status:'planned',priority=p.priority==='optional'?'optional':'required',splits=Array.isArray(p.splits)?p.splits.map(s=>({paymentMethod:['bank','debit','card','other'].includes(s.paymentMethod)?s.paymentMethod:'other',paymentId:s.paymentId||'',linkedBankId:s.linkedBankId||'',amount:Math.max(0,Number(s.amount)||0)})).filter(s=>s.amount>0):[];return {...p,id:p.id||uid('large'),name:p.name||'大型支出',date:/^\d{4}-\d{2}-\d{2}$/.test(String(p.date||''))?p.date:ymd(),amount:Math.max(0,Number(p.amount)||0),category:p.category||'その他',priority,paymentMethod:method,paymentId:p.paymentId||'',linkedBankId:p.linkedBankId||(method==='debit'?(out.debitCards.find(x=>x.id===p.paymentId)?.bankId||out.banks.find(x=>x.id===p.paymentId)?.id||''):''),status,memo:p.memo||'',splits,createdAt:p.createdAt||new Date().toISOString(),updatedAt:p.updatedAt||p.createdAt||new Date().toISOString()}});
@@ -137,7 +137,22 @@ function applyFirstRunSeed(out){
   out.meta.seedVersion=SEED_VERSION;
   return out;
 }
-function prepareLoadedData(raw,{applySeed=true,allowLegacy=true}={}){let out=normalizeData(raw||{});if(allowLegacy)out=migrateLegacy(out);else out.meta.legacyMigrated=true;return applySeed?applyFirstRunSeed(out):out}
+/* 第18版: 勤務先の給与条件（ご本人から指定された初期値）を一度だけ入れる。名前が合う勤務先は時給・交通費・休憩ルールだけ更新し、締め日・支給日・口座は変えない */
+const EMPLOYER_TERMS_V18=[
+  {match:/^(gu|ジーユー)$/i,seed:'emp_seed_gu',name:'GU',hourly:1300,transport:840,transportUnit:'per_shift',transportCap:0,breakRules:[{from:240,to:420,minutes:30},{from:420,to:null,minutes:60}],aliases:['ジーユー'],closingType:'month_end',closingDay:null,closingMonthOffset:0,payType:'day',payDay:10,payMonthOffset:1},
+  {match:/^(無印良品|無印|muji)$/i,seed:'emp_seed_muji',name:'無印良品',hourly:1250,transport:980,transportUnit:'per_shift',transportCap:10000,breakRules:[{from:420,to:null,minutes:60}],aliases:['MUJI','無印'],closingType:'day',closingDay:10,closingMonthOffset:0,payType:'day',payDay:25,payMonthOffset:0}
+];
+function applyEmployerTermsV18(out){
+  if(out.meta?.employerTermsV18)return out;
+  for(const t of EMPLOYER_TERMS_V18){
+    const terms={hourly:t.hourly,transport:t.transport,transportUnit:t.transportUnit,transportCap:t.transportCap,breakRules:clone(t.breakRules)};
+    const e=out.employers.find(x=>x.id===t.seed)||out.employers.find(x=>t.match.test(String(x.name||'').normalize('NFKC').replace(/\s+/g,'')));
+    if(e){Object.assign(e,terms);e.aliases=[...new Set([...(Array.isArray(e.aliases)?e.aliases:[]),...t.aliases])]}
+    else out.employers.push({id:uid('emp'),name:t.name,...terms,aliases:[...t.aliases],closingType:t.closingType,closingDay:t.closingDay,closingMonthOffset:t.closingMonthOffset,payType:t.payType,payDay:t.payDay,payMonthOffset:t.payMonthOffset,bankId:'',createdAt:new Date().toISOString()});
+  }
+  out.meta.employerTermsV18=true;return out;
+}
+function prepareLoadedData(raw,{applySeed=true,allowLegacy=true}={}){let out=normalizeData(raw||{});if(allowLegacy)out=migrateLegacy(out);else out.meta.legacyMigrated=true;return applySeed?applyEmployerTermsV18(applyFirstRunSeed(out)):out}
 function storageRecoveryKeys(){try{return Array.from({length:localStorage.length},(_,i)=>localStorage.key(i)).filter(k=>String(k||'').startsWith(RECOVERY_KEY_PREFIX)).sort().reverse()}catch(e){return[]}}
 function writeRecoverySnapshot(label,payload){try{const raw=typeof payload==='string'?payload:JSON.stringify(payload),stamp=new Date().toISOString().replace(/[:.]/g,'-'),key=`${RECOVERY_KEY_PREFIX}${stamp}_${String(label||'snapshot').replace(/[^a-z0-9_-]/gi,'_')}`;localStorage.setItem(key,raw);const keys=storageRecoveryKeys();keys.slice(3).forEach(k=>localStorage.removeItem(k));return key}catch(e){console.warn('recovery snapshot failed',e);return''}}
 function validateStoredShape(obj){if(!obj||typeof obj!=='object'||Array.isArray(obj))return{ok:false,error:'ルートがオブジェクトではありません'};const known=['version','transactions','incomes','banks','cards','employers','salaryRecords','dailyGoals','monthlyGoals','settings','gmailSettings','meta'];if(!known.some(k=>k in obj))return{ok:false,error:'My Moneyの保存データとして認識できる項目がありません'};for(const k of ['transactions','incomes','banks','cards','debitCards','employers','salaryRecords','tempIncomes','fixedPayments','largeExpensePlans','assetSnapshots','mailImports','cardStatementImports'])if(k in obj&&!Array.isArray(obj[k]))return{ok:false,error:`${k} の形式が不正です`};return{ok:true}}
@@ -2709,7 +2724,7 @@ function openSalaryAdd(existing=null,presetEmployerId='',draft=null){
           closeSheet();
           openSalaryRecordEdit(duplicate.id)
         }return
-      }const date=employerPayDate(e,workMonth),obj={employerId:e.id,month:workMonth,date,gross,transport,status:(existingId?data.salaryRecords.find(x=>x.id===existingId)?.status:existing?.status)||'予定'};
+      }const date=employerPayDate(e,workMonth),obj={employerId:e.id,month:workMonth,date,gross,transport,status:(existingId?data.salaryRecords.find(x=>x.id===existingId)?.status:existing?.status)||'予定',source:'manual',manualAt:new Date().toISOString()};
       return runSaveAction(saveBtn,()=>{
         if(existingId){
           const target=data.salaryRecords.find(x=>x.id===existingId);
@@ -3089,13 +3104,13 @@ function openSalaryRecordEdit(recordId){
   const employerId=initial.employerId,getRecord=()=>data.salaryRecords.find(x=>x.id===recordId),getEmployer=()=>employerById(employerId),initialEmployer=getEmployer(),inc0=linkedIncomeForSalary(initial);
   const amountLabel=initial.amountBasis==='net'?'受取予定額（控除後）':'総支給額';
   let gross=Number(initial.gross)||0,transport=Number(initial.transport)||0,status=initial.status||'予定',workMonth=initial.month||ym(),receivedAmount=Math.max(0,Number(initial.receivedAmount??inc0?.amount??initial.gross)||0),actualDate=initial.actualReceivedDate||inc0?.date||(initial.status==='入金済'&&initial.date&&initial.date<=ymd()?initial.date:ymd()),receiptType=inc0?.toType||(initialEmployer?.bankId?'bank':'unassigned');
-  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="srCancel">キャンセル</button><div class="sheet-title">給与を編集</div><button type="button" class="nav-text bold" id="srSave">保存</button></div><div class="sheet-body"><div class="form-group-title">${esc(initialEmployer?.name||'勤務先')}</div><div class="form-card"><div class="form-section"><div class="form-label">勤務対象月</div><input class="field" id="srWorkMonth" type="month" value="${esc(workMonth)}"></div><div class="form-section"><div class="inline-value-row"><div class="form-label">自動算出の入金予定日</div><strong id="srPayDate">${esc(initial.date||'—')}</strong></div></div><div class="form-section">${moneyButton('srGross',amountLabel,gross)}</div><div class="form-section">${moneyButton('srTransport','交通費',transport)}</div></div><div class="form-group-title">入金状態</div><div class="form-card"><div class="form-section"><div class="seg" id="srStatus"><button type="button" data-v="予定" class="${status==='予定'?'on':''}">未確認・予定</button><button type="button" data-v="入金済" class="${status==='入金済'?'on':''}">入金済み</button></div></div><div id="srReceivedFields" class="${status==='入金済'?'':'hidden'}"><div class="form-section">${moneyButton('srReceivedAmount','実際の受取額',receivedAmount)}</div><div class="form-section"><div class="form-label">実際の入金日</div><input class="field" id="srActualDate" type="date" max="${ymd()}" value="${esc(actualDate)}"></div><div class="form-section"><div class="form-label">受取方法</div><select class="field field-select" id="srReceipt"><option value="unassigned" ${receiptType==='unassigned'?'selected':''}>未確認</option>${initialEmployer?.bankId?`<option value="bank" ${receiptType==='bank'?'selected':''}>銀行振込：${esc(bankById(initialEmployer.bankId)?.name||'設定口座')}</option>`:''}<option value="cash" ${receiptType==='cash'?'selected':''}>現金で受け取った</option></select></div></div></div><div class="form-helper" id="srStatusHelp">${salaryRecordDisplayStatus(initial)}</div></div><button type="button" class="secondary danger" id="srDelete">この給与記録を削除</button></div>`,'full',root=>{
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="srCancel">キャンセル</button><div class="sheet-title">給与を編集</div><button type="button" class="nav-text bold" id="srSave">保存</button></div><div class="sheet-body"><div class="form-group-title">${esc(initialEmployer?.name||'勤務先')}</div>${typeof salaryRecordSourceNoteHtml==='function'?salaryRecordSourceNoteHtml(initial):''}<div class="form-card"><div class="form-section"><div class="form-label">勤務対象月</div><input class="field" id="srWorkMonth" type="month" value="${esc(workMonth)}"></div><div class="form-section"><div class="inline-value-row"><div class="form-label">自動算出の入金予定日</div><strong id="srPayDate">${esc(initial.date||'—')}</strong></div></div><div class="form-section">${moneyButton('srGross',amountLabel,gross)}</div><div class="form-section">${moneyButton('srTransport','交通費',transport)}</div></div><div class="form-group-title">入金状態</div><div class="form-card"><div class="form-section"><div class="seg" id="srStatus"><button type="button" data-v="予定" class="${status==='予定'?'on':''}">未確認・予定</button><button type="button" data-v="入金済" class="${status==='入金済'?'on':''}">入金済み</button></div></div><div id="srReceivedFields" class="${status==='入金済'?'':'hidden'}"><div class="form-section">${moneyButton('srReceivedAmount','実際の受取額',receivedAmount)}</div><div class="form-section"><div class="form-label">実際の入金日</div><input class="field" id="srActualDate" type="date" max="${ymd()}" value="${esc(actualDate)}"></div><div class="form-section"><div class="form-label">受取方法</div><select class="field field-select" id="srReceipt"><option value="unassigned" ${receiptType==='unassigned'?'selected':''}>未確認</option>${initialEmployer?.bankId?`<option value="bank" ${receiptType==='bank'?'selected':''}>銀行振込：${esc(bankById(initialEmployer.bankId)?.name||'設定口座')}</option>`:''}<option value="cash" ${receiptType==='cash'?'selected':''}>現金で受け取った</option></select></div></div></div><div class="form-helper" id="srStatusHelp">${salaryRecordDisplayStatus(initial)}</div></div><button type="button" class="secondary danger" id="srDelete">この給与記録を削除</button></div>`,'full',root=>{
     root.classList.add('mm3-salary-edit-sheet');
     const g=root.querySelector('#srGross'),t=root.querySelector('#srTransport'),ra=root.querySelector('#srReceivedAmount'),workEl=root.querySelector('#srWorkMonth'),dateEl=root.querySelector('#srPayDate'),saveBtn=root.querySelector('#srSave'),receivedFields=root.querySelector('#srReceivedFields'),receipt=root.querySelector('#srReceipt'),actual=root.querySelector('#srActualDate');
     const plannedDate=()=>{const e=getEmployer(),r=getRecord();return e?employerPayDate(e,workMonth):(r?.date||initial.date)},refreshDate=()=>{dateEl.textContent=plannedDate()||'—';receivedFields.classList.toggle('hidden',status!=='入金済');root.querySelector('#srStatusHelp').textContent=status==='入金済'?'実際に受け取ったことを確認した状態です。':'日付を過ぎても自動で入金済みにはなりません。'};
     g.onclick=()=>openCalculator(amountLabel,gross,v=>{gross=v;g.querySelector('.val').textContent=yen(v)});t.onclick=()=>openCalculator('交通費',transport,v=>{transport=v;t.querySelector('.val').textContent=yen(v)});ra.onclick=()=>openCalculator('実際の受取額',receivedAmount,v=>{receivedAmount=v;ra.querySelector('.val').textContent=yen(v)});workEl.onchange=()=>{workMonth=workEl.value;refreshDate()};
     root.querySelectorAll('#srStatus button').forEach(b=>b.onclick=()=>{const next=b.dataset.v;if(next==='入金済'&&status!=='入金済'&&(!actual.value||actual.value>ymd())){actualDate=ymd();actual.value=actualDate}status=next;root.querySelectorAll('#srStatus button').forEach(x=>x.classList.toggle('on',x===b));markSheetDirty();refreshDate()});root.querySelector('#srCancel').onclick=requestSheetClose;
-    saveBtn.onclick=async()=>{const current=getRecord(),e=getEmployer();if(!current)return showAlert('給与記録が見つかりません','別の操作で削除された可能性があります。画面を閉じて再度開いてください。');if(!e)return showAlert('勤務先が見つかりません','勤務先データを確認してください。');workMonth=workEl.value;if(!/^[0-9]{4}-[0-9]{2}$/.test(workMonth))return showAlert('勤務対象月を確認してください','勤務対象月を選択してください。');const duplicate=data.salaryRecords.find(x=>x.employerId===current.employerId&&x.month===workMonth&&x.id!==recordId);if(duplicate)return showAlert('この勤務月の給与は登録済みです','同じ勤務先・勤務対象月の給与がすでにあります。');const newPlannedDate=plannedDate();if(status==='入金済'){actualDate=actual.value||ymd();receiptType=receipt.value;if(!(receivedAmount>0))return showAlert('受取額を確認してください','入金済みにする場合は、実際の受取額を入力してください。');if(!/^\d{4}-\d{2}-\d{2}$/.test(actualDate)||actualDate>ymd())return showAlert('実際の入金日を確認してください','実際の入金日は今日以前の日付を指定してください。');if(receiptType==='unassigned')return showAlert('受取方法を確認してください','銀行振込か現金受取を選んでください。')}return runSaveAction(saveBtn,()=>{const target=getRecord(),employer=getEmployer();if(!target||!employer)throw new Error('給与または勤務先が見つかりません');const oldIncome=linkedIncomeForSalary(target),touchedBanks=new Set();if(oldIncome){if(oldIncome.bankApplied&&oldIncome.bankId)touchedBanks.add(oldIncome.bankId);reverseBankEffectForIncome(oldIncome,{bankUpdateOptions:{snapshot:false,notify:false}});data.incomes=data.incomes.filter(x=>x.id!==oldIncome.id)}if(status==='入金済'){const useBank=receiptType==='bank'&&!!employer.bankId,newIncome=recordIncome({date:actualDate,amount:receivedAmount,sourceName:employer.name||'給与',toType:useBank?'bank':'cash',bankId:useBank?employer.bankId:'',kind:'salary',employerId:target.employerId,salaryRecordId:target.id,applyNow:useBank,respectBalanceAsOf:true,eventAt:`${actualDate}T23:59:59`,bankUpdateOptions:{snapshot:false,notify:false},saveNow:false});if(newIncome?.bankApplied&&newIncome.bankId)touchedBanks.add(newIncome.bankId);Object.assign(target,{receivedAmount,actualReceivedDate:actualDate})}else{delete target.receivedAmount;delete target.actualReceivedDate}Object.assign(target,{month:workMonth,gross,transport,status,date:newPlannedDate,updatedAt:new Date().toISOString()});const allocation=salaryAllocationForRecord(recordId);if(allocation&&(status!=='入金済'||Math.abs(Number(allocation.receivedAmount||0)-Number(receivedAmount||0))>.5)){allocation.status='released';allocation.updatedAt=new Date().toISOString()}for(const bankId of touchedBanks){const bank=bankById(bankId);if(bank)bankSnapshot(bank,'給与更新')}} ,{render:false,label:'salary edit',busy:true,success:status==='入金済'?'入金を確認して給与を更新しました':'給与を未確認・予定に戻しました',successAction:status==='入金済'?{actionLabel:'振り分け',action:()=>openSalaryAllocation(recordId)}:null,afterCommit:()=>{const saved=getRecord();payViewMonth=String(newPlannedDate||saved?.date||'').slice(0,7)||payViewMonth;closeSheet();renderAll();refreshSalaryOpenView()}})};
+    saveBtn.onclick=async()=>{const current=getRecord(),e=getEmployer();if(!current)return showAlert('給与記録が見つかりません','別の操作で削除された可能性があります。画面を閉じて再度開いてください。');if(!e)return showAlert('勤務先が見つかりません','勤務先データを確認してください。');workMonth=workEl.value;if(!/^[0-9]{4}-[0-9]{2}$/.test(workMonth))return showAlert('勤務対象月を確認してください','勤務対象月を選択してください。');const duplicate=data.salaryRecords.find(x=>x.employerId===current.employerId&&x.month===workMonth&&x.id!==recordId);if(duplicate)return showAlert('この勤務月の給与は登録済みです','同じ勤務先・勤務対象月の給与がすでにあります。');const newPlannedDate=plannedDate();if(status==='入金済'){actualDate=actual.value||ymd();receiptType=receipt.value;if(!(receivedAmount>0))return showAlert('受取額を確認してください','入金済みにする場合は、実際の受取額を入力してください。');if(!/^\d{4}-\d{2}-\d{2}$/.test(actualDate)||actualDate>ymd())return showAlert('実際の入金日を確認してください','実際の入金日は今日以前の日付を指定してください。');if(receiptType==='unassigned')return showAlert('受取方法を確認してください','銀行振込か現金受取を選んでください。')}return runSaveAction(saveBtn,()=>{const target=getRecord(),employer=getEmployer();if(!target||!employer)throw new Error('給与または勤務先が見つかりません');const oldIncome=linkedIncomeForSalary(target),touchedBanks=new Set();if(oldIncome){if(oldIncome.bankApplied&&oldIncome.bankId)touchedBanks.add(oldIncome.bankId);reverseBankEffectForIncome(oldIncome,{bankUpdateOptions:{snapshot:false,notify:false}});data.incomes=data.incomes.filter(x=>x.id!==oldIncome.id)}if(status==='入金済'){const useBank=receiptType==='bank'&&!!employer.bankId,newIncome=recordIncome({date:actualDate,amount:receivedAmount,sourceName:employer.name||'給与',toType:useBank?'bank':'cash',bankId:useBank?employer.bankId:'',kind:'salary',employerId:target.employerId,salaryRecordId:target.id,applyNow:useBank,respectBalanceAsOf:true,eventAt:`${actualDate}T23:59:59`,bankUpdateOptions:{snapshot:false,notify:false},saveNow:false});if(newIncome?.bankApplied&&newIncome.bankId)touchedBanks.add(newIncome.bankId);Object.assign(target,{receivedAmount,actualReceivedDate:actualDate})}else{delete target.receivedAmount;delete target.actualReceivedDate}if(Number(target.gross)!==Number(gross)||Number(target.transport)!==Number(transport)){target.manualAt=new Date().toISOString();target.source='manual'}Object.assign(target,{month:workMonth,gross,transport,status,date:newPlannedDate,updatedAt:new Date().toISOString()});const allocation=salaryAllocationForRecord(recordId);if(allocation&&(status!=='入金済'||Math.abs(Number(allocation.receivedAmount||0)-Number(receivedAmount||0))>.5)){allocation.status='released';allocation.updatedAt=new Date().toISOString()}for(const bankId of touchedBanks){const bank=bankById(bankId);if(bank)bankSnapshot(bank,'給与更新')}} ,{render:false,label:'salary edit',busy:true,success:status==='入金済'?'入金を確認して給与を更新しました':'給与を未確認・予定に戻しました',successAction:status==='入金済'?{actionLabel:'振り分け',action:()=>openSalaryAllocation(recordId)}:null,afterCommit:()=>{const saved=getRecord();payViewMonth=String(newPlannedDate||saved?.date||'').slice(0,7)||payViewMonth;closeSheet();renderAll();refreshSalaryOpenView()}})};
     root.querySelector('#srDelete').onclick=async()=>{if(!await showAlert('給与記録を削除しますか？','入金済みの場合は、紐づく収入記録と銀行残高も同時に戻します。給与の振り分けも削除します。',{destructive:true,okText:'削除'}))return;return runSaveAction(root.querySelector('#srDelete'),()=>{const target=getRecord();if(!target)throw new Error('給与記録が見つかりません');const inc=linkedIncomeForSalary(target),touchedBanks=new Set();if(inc){if(inc.bankApplied&&inc.bankId)touchedBanks.add(inc.bankId);reverseBankEffectForIncome(inc,{bankUpdateOptions:{snapshot:false,notify:false}});data.incomes=data.incomes.filter(x=>x.id!==inc.id)}data.salaryAllocations=data.salaryAllocations.filter(x=>x.salaryRecordId!==recordId);data.salaryRecords=data.salaryRecords.filter(x=>x.id!==recordId);for(const bankId of touchedBanks){const bank=bankById(bankId);if(bank)bankSnapshot(bank,'給与削除')}} ,{render:false,label:'salary delete',busy:true,busyTitle:'削除中…',success:'給与記録を削除しました',afterCommit:()=>{closeSheet();renderAll();refreshSalaryOpenView()}})};refreshDate()
   })
 }
@@ -3884,7 +3899,7 @@ function renderSettings(){
   const level={many:'多め',minimal:'最小限',recommended:'おすすめ'}[data.notificationSettings.level]||'おすすめ';
   const appearance={system:'システム',dark:'ダーク',light:'ライト'}[data.appearance]||'システム';
   const groups=[
-    ['登録',[{id:'accountsSettings',symbol:'bank',color:'var(--accent)',title:'口座とカード',value:`${data.banks.length+data.cards.length+(data.debitCards||[]).length}件`},{id:'employersSettings',symbol:'briefcase',color:'var(--teal)',title:'勤務先',value:`${data.employers.length}件`}],'口座・カード・勤務先の追加と編集はここで行います。'],
+    ['登録',[{id:'accountsSettings',symbol:'bank',color:'var(--accent)',title:'口座とカード',value:`${data.banks.length+data.cards.length+(data.debitCards||[]).length}件`},{id:'employersSettings',symbol:'briefcase',color:'var(--teal)',title:'給与・勤務先',value:shiftRelay().enabled?'自動':`${data.employers.length}件`}],'口座・カード・勤務先の追加と編集はここで行います。'],
     ['連携',[{id:'gmailSettings',symbol:'mail',color:'#EA4335',title:'Gmail連携',detail:gmailStatusLabel()}]],
     ['お金',[
       {id:'categorySettings',symbol:'grid',color:'var(--orange)',title:'カテゴリ',value:`${data.categories.length}件`},
@@ -4823,13 +4838,14 @@ function renderPay(){
   top.classList.add('mm3-salary-topbar');
   top.innerHTML=topbar('給与','',`<button class="icon-btn" id="salaryAddNav" aria-label="追加">${icon('plus')}</button><button class="icon-btn" id="salaryMenu" aria-label="メニュー">${icon('menu')}</button>`);
   const compare=delta.pct==null?`<span class="mm3-salary-compare-label">前月比較なし</span>`:`<div class="mm3-salary-primary-change ${delta.diff>=0?'green':'red'}"><span>${mm3SalarySignedYen(delta.diff)}</span><span>${delta.pct>=0?'+':''}${delta.pct.toFixed(1)}%</span><small>前月比</small></div>`;
-  content.innerHTML=`<div class="mm3-salary-shell"><div class="mm3-salary-monthline"><button type="button" class="display-month-button" id="mm3SalaryMonth" aria-label="給与の表示月">${monthLabel(payViewMonth)} ${icon('chevronDown')}</button><span class="mm3-salary-compare-label">${payViewMonth===ym()?'今月':'表示月'}</span></div><div class="mm3-salary-primary"><div class="mm3-salary-primary-label">${payViewMonth===ym()?'今月':'この月'}の受取見込み</div><div class="mm3-salary-primary-value">${yen(summary.total)}</div>${compare}</div>${financialUpdateAccessHtml('salary')}${hasNetPlans?'<p class="mm3-salary-section-caption mm3-salary-seed-note">登録済みの給与予定は控除後の金額です。交通費は別途加算していません。</p>':''}<div class="mm3-salary-section-head"><span class="mm3-salary-section-title" id="mm3SalaryVizTitle">${mm3SalaryChartMode==='trend'?'給与推移':'今月の給与構成'}</span><button type="button" class="mm3-salary-pull" id="mm3SalaryVizMenu">${mm3SalaryChartMode==='trend'?'給与推移':'勤務先別'} ${icon('chevronDown')}</button></div><div class="mm3-salary-section-caption" id="mm3SalaryVizCaption">${mm3SalaryChartMode==='trend'?'月ごとの受取額を比較':'今月の受取見込みを100%として勤務先別に表示'}</div><div class="mm3-salary-viz" id="mm3SalaryViz">${mm3SalaryVizHtml(summary)}</div><div class="mm3-salary-metrics"><div class="mm3-salary-metric"><span>入金済み</span><strong>${yen(summary.received)}</strong></div><div class="mm3-salary-metric"><span>これから</span><strong>${yen(summary.planned)}</strong></div><div class="mm3-salary-metric"><span>未確認</span><strong>${yen(summary.overdue)}</strong></div></div><div class="mm3-salary-section-head"><span class="mm3-salary-section-title">次の入金</span></div>${mm3SalaryNextEventHtml(summary)}<div class="mm3-salary-section-head"><span class="mm3-salary-section-title">勤務先</span><button type="button" class="mm3-salary-link" id="mm3SalaryEmployerManage">分析 ›</button></div>${mm3SalaryWatchlistHtml(summary)}<div class="mm3-salary-section-head"><span class="mm3-salary-section-title">詳細</span></div>${mm3SalaryDetailHtml(summary)}</div>`;
+  content.innerHTML=`<div class="mm3-salary-shell"><div class="mm3-salary-monthline"><button type="button" class="display-month-button" id="mm3SalaryMonth" aria-label="給与の表示月">${monthLabel(payViewMonth)} ${icon('chevronDown')}</button><span class="mm3-salary-compare-label">${payViewMonth===ym()?'今月':'表示月'}</span></div><div class="mm3-salary-primary"><div class="mm3-salary-primary-label">${payViewMonth===ym()?'今月':'この月'}の受取見込み</div><div class="mm3-salary-primary-value">${yen(summary.total)}</div>${compare}</div>${typeof salarySyncStripHtml==='function'?salarySyncStripHtml():''}${financialUpdateAccessHtml('salary')}${hasNetPlans?'<p class="mm3-salary-section-caption mm3-salary-seed-note">登録済みの給与予定は控除後の金額です。交通費は別途加算していません。</p>':''}<div class="mm3-salary-section-head"><span class="mm3-salary-section-title" id="mm3SalaryVizTitle">${mm3SalaryChartMode==='trend'?'給与推移':'今月の給与構成'}</span><button type="button" class="mm3-salary-pull" id="mm3SalaryVizMenu">${mm3SalaryChartMode==='trend'?'給与推移':'勤務先別'} ${icon('chevronDown')}</button></div><div class="mm3-salary-section-caption" id="mm3SalaryVizCaption">${mm3SalaryChartMode==='trend'?'月ごとの受取額を比較':'今月の受取見込みを100%として勤務先別に表示'}</div><div class="mm3-salary-viz" id="mm3SalaryViz">${mm3SalaryVizHtml(summary)}</div><div class="mm3-salary-metrics"><div class="mm3-salary-metric"><span>入金済み</span><strong>${yen(summary.received)}</strong></div><div class="mm3-salary-metric"><span>これから</span><strong>${yen(summary.planned)}</strong></div><div class="mm3-salary-metric"><span>未確認</span><strong>${yen(summary.overdue)}</strong></div></div><div class="mm3-salary-section-head"><span class="mm3-salary-section-title">次の入金</span></div>${mm3SalaryNextEventHtml(summary)}<div class="mm3-salary-section-head"><span class="mm3-salary-section-title">勤務先</span><button type="button" class="mm3-salary-link" id="mm3SalaryEmployerManage">分析 ›</button></div>${mm3SalaryWatchlistHtml(summary)}<div class="mm3-salary-section-head"><span class="mm3-salary-section-title">詳細</span></div>${mm3SalaryDetailHtml(summary)}</div>`;
   bindSalaryHome()
 }
 
 function bindSalaryHome(){
   document.querySelector('#screen-pay [data-financial-update]')?.addEventListener('click',()=>openFinancialUpdates('salary',payViewMonth));
   document.getElementById('mm3SalaryAllocation')?.addEventListener('click',openSalaryAllocationPicker);
+  document.getElementById('salarySyncStrip')?.addEventListener('click',()=>openEmployersSettings());
   document.getElementById('mm3SalaryRecon')?.addEventListener('click',mm3OpenReconPicker);
   const monthBtn=document.getElementById('mm3SalaryMonth');if(monthBtn)monthBtn.onclick=openPayMonthPicker;
   const vizMenu=document.getElementById('mm3SalaryVizMenu');if(vizMenu)vizMenu.onclick=e=>openMenu(e.currentTarget,[{label:`${mm3SalaryChartMode==='share'?'✓ ':''}勤務先別`,icon:mm3SalaryChartMode==='share'?'check':'chart',action:()=>{mm3SalaryChartMode='share';feedback?.selection?.();mm3RefreshSalaryViz()}},{label:`${mm3SalaryChartMode==='trend'?'✓ ':''}給与推移`,icon:mm3SalaryChartMode==='trend'?'check':'chart',action:()=>{mm3SalaryChartMode='trend';feedback?.selection?.();mm3RefreshSalaryViz()}}]);
@@ -5807,7 +5823,7 @@ function homeAssetsCardHtml(){
 function homeNextPayday(){const today=ymd();return data.salaryRecords.filter(r=>r.status!=='入金済'&&r.date&&r.date>=today).sort((a,b)=>a.date.localeCompare(b.date))[0]||null}
 function homeSalaryCardHtml(){
   const m=ym(),summary=mm3SalaryMonthSummary(m),has=data.employers.length||data.salaryRecords.length,values=Array.from({length:6},(_,i)=>{const mm=addMonths(m,i-5);return{label:monthLabel(mm),value:mm3SalaryMonthSummary(mm).total}}),next=homeNextPayday();
-  const body=has?`<span class="home-card-left"><span class="home-card-value">${yen(summary.total)}</span><span class="home-card-caption">今月の受取見込み</span></span><span class="home-card-right">${values.some(v=>v.value>0)?miniBarsSvg(values,'直近6か月の給与'):'<span class="home-card-empty">給与の記録がまだありません</span>'}</span>`:`<span class="home-card-left"><span class="home-card-value small">給与が未登録です</span><span class="home-card-caption">＋の「給与を登録」から記録できます</span></span>`;
+  const body=has?`<span class="home-card-left"><span class="home-card-value">${yen(summary.total)}</span><span class="home-card-caption">今月の受取見込み${(summary.records||[]).some(r=>r.source==="shift")?"・シフトから自動":""}</span></span><span class="home-card-right">${values.some(v=>v.value>0)?miniBarsSvg(values,'直近6か月の給与'):'<span class="home-card-empty">給与の記録がまだありません</span>'}</span>`:`<span class="home-card-left"><span class="home-card-value small">給与が未登録です</span><span class="home-card-caption">＋の「給与を登録」から記録できます</span></span>`;
   return `<section class="home-card-wrap" data-home-section="salary"><h2 class="home-card-title">今月の給与</h2><div class="home-card"><button type="button" class="home-card-body" id="homeSalaryCard" aria-label="${esc(`今月の給与 ${has?yen(summary.total):'未登録'}・給与詳細を開く`)}">${body}</button><p class="home-card-readout" hidden aria-live="polite"></p>${next?`<button type="button" class="home-card-status" id="homeNextPayday">次の給料日 ${homeShortDate(next.date)}${icon('chevronRight')}</button>`:''}</div></section>`;
 }
 function homeAcfCardHtml(){
@@ -6815,17 +6831,22 @@ function parseShiftText(text){
 }
 function shiftMinutes(s){const [h,m]=s.split(':').map(Number);return h*60+m}
 /* 勤務時間（分）と深夜（22〜翌5時）の分。終了が開始より前なら日をまたぐ */
-function shiftDuration(start,end,autoBreak=true){
+/* 休憩: 勤務先に休憩ルール（例: 4時間以上7時間未満は30分、7時間以上は60分）があればそれを使う */
+function shiftBreakMinutes(total,autoBreak=true,rules=null){
+  if(Array.isArray(rules)&&rules.length){let best=0;for(const r of rules){const from=Math.max(0,Number(r.from)||0),to=r.to==null||r.to===''?Infinity:Number(r.to);if(total>=from&&total<to)best=Math.max(best,Math.max(0,Number(r.minutes)||0))}return Math.min(best,total)}
+  return autoBreak?(total>480?60:total>360?45:0):0;
+}
+function shiftDuration(start,end,autoBreak=true,rules=null){
   let a=shiftMinutes(start),b=shiftMinutes(end);if(b<=a)b+=1440;const total=b-a;
   let night=0;for(let t=a;t<b;t++){const h=Math.floor((t%1440)/60);if(h>=22||h<5)night++}
-  const brk=autoBreak?(total>480?60:total>360?45:0):0;
+  const brk=shiftBreakMinutes(total,autoBreak,rules);
   /* 休憩は深夜でない時間から先に引く */
   const day=Math.max(0,total-night-brk),nightPaid=Math.max(0,night-Math.max(0,brk-(total-night)));
   return{total,brk,work:day+nightPaid,night:nightPaid};
 }
 function shiftEmployerFor(title,s=shiftSettings()){
   if(s.titleMap[title]&&employerById(s.titleMap[title]))return s.titleMap[title];
-  const t=normalizeMerchantKey(title);const hit=data.employers.find(e=>{const n=normalizeMerchantKey(e.name);return n&&t&&(t.includes(n)||n.includes(t))});
+  const t=normalizeMerchantKey(title);const hit=data.employers.find(e=>[e.name,...(Array.isArray(e.aliases)?e.aliases:[])].some(x=>{const n=normalizeMerchantKey(x);return n&&t&&(t.includes(n)||n.includes(t))}));
   return hit?.id||data.employers[0]?.id||'';
 }
 function shiftWorkMonth(e,date){
@@ -6837,29 +6858,36 @@ function shiftEstimate(shifts,s=shiftSettings()){
   const groups=new Map();
   for(const x of shifts){
     const empId=x.employerId||shiftEmployerFor(x.title,s),e=employerById(empId);if(!e)continue;
-    const d=shiftDuration(x.start,x.end,s.autoBreak),hourly=Math.max(0,Number(e.hourly)||0),pay=Math.round(hourly*d.work/60+hourly*(Number(s.nightRate)||0)/100*d.night/60);
+    const d=shiftDuration(x.start,x.end,s.autoBreak,e.breakRules),hourly=Math.max(0,Number(e.hourly)||0),pay=Math.round(hourly*d.work/60+hourly*(Number(s.nightRate)||0)/100*d.night/60);
     const month=shiftWorkMonth(e,x.date),k=`${empId}|${month}`;
     if(!groups.has(k))groups.set(k,{employerId:empId,employer:e,month,shifts:[],minutes:0,night:0,gross:0,transport:0});
     const g=groups.get(k);g.shifts.push({...x,employerId:empId,...d,pay});g.minutes+=d.work;g.night+=d.night;g.gross+=pay;
   }
-  for(const g of groups.values()){const t=Math.max(0,Number(g.employer.transport)||0);g.transport=g.employer.transportUnit==='per_shift'?t*g.shifts.length:t;g.payDate=employerPayDate(g.employer,g.month)}
+  for(const g of groups.values()){const t=Math.max(0,Number(g.employer.transport)||0),cap=Math.max(0,Number(g.employer.transportCap)||0);g.transport=g.employer.transportUnit==='per_shift'?t*g.shifts.length:t;if(cap>0&&g.transport>cap){g.transportUncapped=g.transport;g.transport=cap}g.payDate=employerPayDate(g.employer,g.month)}
   return [...groups.values()].sort((a,b)=>a.month.localeCompare(b.month)||a.employer.name.localeCompare(b.employer.name));
 }
 function shiftHoursLabel(min){const h=Math.floor(min/60),m=min%60;return m?`${h}時間${m}分`:`${h}時間`}
 /* 保存: シフトの記録と、給与（予定）の作成・更新 */
-function saveShiftImport(groups,s){
+const SALARY_MANUAL_LOCK_MS=7*864e5;
+function salaryManualLockUntil(r){const t=Date.parse(r?.manualAt||'');return Number.isFinite(t)?t+SALARY_MANUAL_LOCK_MS:0}
+function saveShiftImport(groups,s,{auto=false,replaceFrom='',extra=null}={}){
   const results=[];
   safeCommit(()=>{
     data.shiftSettings={...shiftSettings(),...s};
     if(!Array.isArray(data.shiftPlans))data.shiftPlans=[];
+    /* カレンダーから送られた期間は、その期間のシフトを入れ替える（消えたシフトを残さない） */
+    if(replaceFrom)data.shiftPlans=data.shiftPlans.filter(p=>!(p.source==='calendar'&&p.date>=replaceFrom));
+    extra?.();
     for(const g of groups){
       const dates=new Set(g.shifts.map(x=>x.date));
       data.shiftPlans=data.shiftPlans.filter(p=>!(p.employerId===g.employerId&&dates.has(p.date)));
       for(const x of g.shifts)data.shiftPlans.push({id:uid('shift'),employerId:g.employerId,date:x.date,start:x.start,end:x.end,title:x.title,workMinutes:x.work,nightMinutes:x.night,pay:x.pay,source:'calendar',importedAt:new Date().toISOString()});
       const rec=data.salaryRecords.find(r=>r.employerId===g.employerId&&r.month===g.month);
       if(rec&&rec.status&&rec.status!=='予定'){results.push({g,state:'kept'});continue}
-      if(rec){Object.assign(rec,{gross:g.gross,transport:g.transport,date:g.payDate,source:'shift',shiftCount:g.shifts.length,updatedAt:new Date().toISOString()});results.push({g,state:'updated'})}
-      else{data.salaryRecords.push({id:uid('salary'),employerId:g.employerId,month:g.month,date:g.payDate,gross:g.gross,transport:g.transport,status:'予定',source:'shift',shiftCount:g.shifts.length,createdAt:new Date().toISOString()});results.push({g,state:'created'})}
+      /* 手入力した給与は、自動取得では7日間上書きしない */
+      if(rec&&auto&&salaryManualLockUntil(rec)>Date.now()){results.push({g,state:'manual'});continue}
+      if(rec){Object.assign(rec,{gross:g.gross,transport:g.transport,date:g.payDate,source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,updatedAt:new Date().toISOString()});delete rec.manualAt;results.push({g,state:'updated'})}
+      else{data.salaryRecords.push({id:uid('salary'),employerId:g.employerId,month:g.month,date:g.payDate,gross:g.gross,transport:g.transport,status:'予定',source:'shift',shiftCount:g.shifts.length,shiftMinutes:g.minutes,createdAt:new Date().toISOString()});results.push({g,state:'created'})}
     }
   },{render:true,label:'shift import'});
   return results;
@@ -6876,7 +6904,7 @@ function openShiftImport(text){
     return `<div class="shift-hero"><span class="shift-hero-icon" aria-hidden="true">${icon('briefcase')}</span><div class="shift-hero-kicker">${shifts.length}件のシフトから</div><div class="shift-hero-value">${yen(total)}</div><div class="shift-hero-sub">${groups.map(g=>`${esc(g.employer.name)}・${monthLabel(g.month)}勤務分（${Number(g.payDate.slice(5,7))}/${Number(g.payDate.slice(8,10))}入金予定）`).join('<br>')}</div></div>
     ${noWage.length?`<div class="shift-warn" role="alert">${icon('warning')}<span>${noWage.map(g=>esc(g.employer.name)).join('・')}の時給が未設定です。「その他→勤務先」で時給を入れると金額が出ます。</span></div>`:''}
     <h2 class="shift-head">勤務先の割り当て</h2><div class="group">${titles.map(t=>`<div class="row shift-map"><div class="row-main"><div class="row-title">${esc(t)}</div><div class="row-sub">${shifts.filter(x=>(x.title||'（名前なし）')===t).length}件</div></div><div class="shift-emp-chips">${data.employers.map(e=>`<button type="button" class="shift-chip${s.titleMap[t]===e.id?' on':''}" data-shift-title="${esc(t)}" data-shift-emp="${esc(e.id)}" aria-pressed="${s.titleMap[t]===e.id}">${esc(e.name)}</button>`).join('')}</div></div>`).join('')}</div>
-    <h2 class="shift-head">計算のしかた</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">休憩を自動で引く</div><div class="row-sub">6時間超は45分・8時間超は60分</div></div><button type="button" class="switch${s.autoBreak?' on':''}" id="shiftAutoBreak" role="switch" aria-checked="${s.autoBreak}" aria-label="休憩を自動で引く"></button></div><div class="row"><div class="row-main"><div class="row-title">深夜割増（22時〜5時）</div><div class="row-sub">時給の${s.nightRate}%を上乗せ</div></div><button type="button" class="switch${s.nightRate>0?' on':''}" id="shiftNight" role="switch" aria-checked="${s.nightRate>0}" aria-label="深夜割増"></button></div></div>
+    <h2 class="shift-head">計算のしかた</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">休憩を自動で引く</div><div class="row-sub">勤務先の休憩ルールで引きます（ルールがない勤務先は6時間超45分・8時間超60分）</div></div><button type="button" class="switch${s.autoBreak?' on':''}" id="shiftAutoBreak" role="switch" aria-checked="${s.autoBreak}" aria-label="休憩を自動で引く"></button></div><div class="row"><div class="row-main"><div class="row-title">深夜割増（22時〜5時）</div><div class="row-sub">時給の${s.nightRate}%を上乗せ</div></div><button type="button" class="switch${s.nightRate>0?' on':''}" id="shiftNight" role="switch" aria-checked="${s.nightRate>0}" aria-label="深夜割増"></button></div></div>
     ${groups.map(g=>`<h2 class="shift-head">${esc(g.employer.name)}・${monthLabel(g.month)}勤務分</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">${g.shifts.length}回・${shiftHoursLabel(g.minutes)}${g.night?`（深夜 ${shiftHoursLabel(g.night)}）`:''}</div><div class="row-sub">時給 ${yen(Number(g.employer.hourly)||0)}・交通費 ${yen(g.transport)}</div></div><div class="row-value">${yen(g.gross+g.transport)}</div></div>${g.shifts.map(x=>`<div class="row shift-row"><div class="row-main"><div class="row-title">${esc(dayLabel(x.date))} ${x.start}〜${x.end}</div><div class="row-sub">${shiftHoursLabel(x.work)}${x.brk?`・休憩${x.brk}分`:''}${x.night?`・深夜${shiftHoursLabel(x.night)}`:''}</div></div><div class="row-value">${yen(x.pay)}</div></div>`).join('')}</div>`).join('')}
     <p class="settings-section-footer">保存すると、勤務先・勤務月ごとの給与を「予定」として作ります（同じ月の予定は更新、入金済みの給与は変えません）。</p>`;
   };
@@ -6981,7 +7009,7 @@ async function syncShiftCalendar({silent=false}={}){
   try{
     const shifts=await fetchCalendarShifts(cal),s=shiftSettings();
     if(!shifts.length){setShiftCal({lastSyncAt:new Date().toISOString(),lastDay:ymd(),lastCount:0,lastTotal:0,lastError:''});if(!silent)showToast('来月までのシフトは見つかりませんでした');return{count:0,total:0}}
-    const groups=shiftEstimate(shifts.map(x=>({...x,employerId:shiftEmployerFor(x.title,s)})),s),results=saveShiftImport(groups,{}),total=groups.reduce((a,g)=>a+g.gross+g.transport,0);
+    const groups=shiftEstimate(shifts.map(x=>({...x,employerId:shiftEmployerFor(x.title,s)})),s),results=saveShiftImport(groups,{},{auto:true}),total=groups.reduce((a,g)=>a+g.gross+g.transport,0);
     setShiftCal({lastSyncAt:new Date().toISOString(),lastDay:ymd(),lastCount:shifts.length,lastTotal:total,lastError:''});
     showToast(`カレンダーのシフト${shifts.length}件から給料の見込みを更新しました（${yen(total)}）`);
     try{refreshSalaryOpenView()}catch(e){}
@@ -7280,8 +7308,8 @@ document.addEventListener('pointerdown',e=>{const wrap=e.target.closest?.('#toda
 /* ---------- #14 ACF指標 ---------- */
 function acfIndexFor(f){
   const rows=f?.rows||[],start=f?.startDate||ymd();
-  const pay=rows.find(r=>r.date>start&&(r.salary||(r.events||[]).some(e=>e.type==='salary')));
-  const end=pay?pay.date:(rows.find(r=>r.date>=addDaysYmd(start,30))?.date||addDaysYmd(start,30));
+  /* 期間の終わり: クレジットカードの支払いが終わる日（初期値は毎月28日）。「今回だけ」の日付も指定できる */
+  const end=acfIndexEndDate(start),pay=null;
   const span=Math.max(1,Math.round((parseYmd(end)-parseYmd(start))/864e5)+1);
   /* 支払いはホームの「次の支払い」と同じ予定（カード・固定・大型）から数える */
   let fin=[];try{fin=financialEventsFrom(start,span).filter(e=>e.date>=start&&e.date<=end)}catch(_){}
@@ -7296,7 +7324,7 @@ function acfIndexFor(f){
   const finIn=fin.filter(e=>e.type==='income').map(e=>({label:e.title,amount:Math.abs(Number(e.amount)||0),date:e.date,dir:1}));
   const rowIn=finIn.length?[]:win.flatMap(r=>(r.events||[]).filter(e=>Number(e.amount)>0&&(e.type==='income'||e.type==='salary'||r.salary)&&!/支払|引落/.test(e.label)).map(e=>({label:e.label,amount:Math.abs(Number(e.amount)||0),date:r.date,dir:1})));
   const events=[...finIn,...rowIn,...payments.map(e=>({label:e.title,amount:Math.abs(Number(e.amount)||0),date:e.date,dir:-1}))].sort((a,b)=>a.date.localeCompare(b.date));
-  return {value,have,need,balance,income,out,reserve,surplus:have-need,start,end,payday:pay?.date||null,events};
+  return {value,have,need,balance,income,out,reserve,surplus:have-need,start,end,payday:null,endKind:acfIndexEndKind(start),events};
 }
 function addDaysYmd(s,n){const d=parseYmd(s);d.setDate(d.getDate()+n);return ymd(d)}
 function acfIndexText(v){return !Number.isFinite(v)?'∞':v>=10?v.toFixed(1):v.toFixed(2)}
@@ -7520,7 +7548,7 @@ function homeAcfCardHtml(){
   else{
     let f=null;try{f=buildCashFlowForecast()}catch(e){console.error('ACF index failed',e)}
     if(!f)body=`<span class="home-card-left"><span class="home-card-value small">計算できません</span></span>`;
-    else{const x=acfIndexFor(f),tone=acfIndexTone(x.value),until=x.payday?`給料日 ${Number(x.payday.slice(5,7))}/${Number(x.payday.slice(8,10))} まで`:'30日間';
+    else{const x=acfIndexFor(f),tone=acfIndexTone(x.value),until=acfIndexUntilText(x);
       body=`<span class="acfc"><span class="acfc-top"><span class="acfc-value ${tone}">${acfIndexText(x.value)}</span><span class="acfc-state ${tone}">${acfIndexLabel(x.value)}</span><span class="acfc-until">${until}</span></span>${acfCompareBarsHtml(x)}<span class="acfc-foot ${x.surplus>=0?'plus':'minus'}">${x.surplus>=0?'余る見込み':'足りない見込み'} <b>${x.surplus>=0?'＋':'−'}${yen(Math.abs(x.surplus))}</b></span></span>`;
       if(x.value<1)note=`<p class="home-card-note">給料日までの支払いと最低残高に ${yen(Math.abs(x.surplus))} 足りません</p>`}
   }
@@ -7529,12 +7557,13 @@ function homeAcfCardHtml(){
 function openAcfIndexDetail(){
   let f;try{f=buildCashFlowForecast()}catch(e){return openAcfDetail()}
   const x=acfIndexFor(f),tone=acfIndexTone(x.value),ev=x.events.slice(0,12);
-  pushView('ACF指標',`<div class="acfd-hero ${tone}"><div class="acfd-kicker">ACF指標</div><div class="acfd-line"><span class="acfd-big">${acfIndexText(x.value)}</span><span class="acfc-state ${tone}">${acfIndexLabel(x.value)}</span></div><p class="acfd-sentence">${esc(acfIndexSentence(x))}</p><p class="acfd-period">${dayLabel(x.start)}〜${dayLabel(x.end)}${x.payday?'（次の給料日まで）':'（30日間）'}</p>${acfCompareBarsHtml(x,{large:true})}<div class="acfd-result ${x.surplus>=0?'plus':'minus'}"><span>${x.surplus>=0?'余る見込み':'足りない見込み'}</span><b>${x.surplus>=0?'＋':'−'}${yen(Math.abs(x.surplus))}</b></div></div>
+  pushView('ACF指標',`<div class="acfd-hero ${tone}"><div class="acfd-kicker">ACF指標</div><div class="acfd-line"><span class="acfd-big">${acfIndexText(x.value)}</span><span class="acfc-state ${tone}">${acfIndexLabel(x.value)}</span></div><p class="acfd-sentence">${esc(acfIndexSentence(x))}</p><button type="button" class="acfd-period" id="acfIdxPeriod" aria-label="期間の終わりを変更"><span>${dayLabel(x.start)}〜${dayLabel(x.end)}${acfIndexPeriodNote(x)}</span><span class="acfd-period-edit">変更</span></button>${acfCompareBarsHtml(x,{large:true})}<div class="acfd-result ${x.surplus>=0?'plus':'minus'}"><span>${x.surplus>=0?'余る見込み':'足りない見込み'}</span><b>${x.surplus>=0?'＋':'−'}${yen(Math.abs(x.surplus))}</b></div></div>
     <p class="hs-help acfd-help">1.0で収支がちょうどです。1.0以上なら黒字、1.0未満なら赤字の見込みです（日々の生活費は含みません）。</p>
     <h2 class="section-head">対象期間の入出金</h2><div class="group">${ev.length?ev.map(e=>`<div class="row"><span class="acfd-dot ${e.dir>0?'in':'out'}" aria-hidden="true"></span><div class="row-main"><div class="row-title">${esc(e.label)}</div><div class="row-sub">${dayLabel(e.date)}</div></div><div class="row-value ${e.dir>0?'green':''}">${e.dir>0?'＋':'−'}${yen(e.amount)}</div></div>`).join(''):'<div class="row"><div class="row-main"><div class="row-title">予定された入出金はありません</div></div></div>'}</div>
     <div class="group"><button type="button" class="row press" id="acfIdxDetail"><div class="row-main"><div class="row-title">ACFの日別資金表</div><div class="row-sub">今日使える目安・カード配分・注意点</div></div><span class="chev">${icon('chevronRight')}</span></button><button type="button" class="row press" id="acfIdxSettings"><div class="row-main"><div class="row-title">ACF設定</div><div class="row-sub">最低残高・カード比率</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`,root=>{
     root.querySelector('#acfIdxDetail').onclick=()=>openAcfDetail();
     root.querySelector('#acfIdxSettings').onclick=()=>openAcfSettings();
+    root.querySelector('#acfIdxPeriod').onclick=()=>openAcfIndexPeriod(()=>{popView();openAcfIndexDetail()});
   });
 }
 
@@ -7563,7 +7592,7 @@ new MutationObserver(()=>{if(!polishIntroDone&&!document.getElementById('mm3Stor
   document.addEventListener('touchstart',e=>{const sc=e.target.closest?.('.screen.active > .scroll');if(!sc||sc.scrollTop>0||document.querySelector('#sheet.show,#pushLayer .push-view.show'))return;g={sc,y:e.touches[0].clientY,d:0,home:sc.closest('#screen-today')}},{passive:true});
   document.addEventListener('touchmove',e=>{if(!g)return;const d=Math.max(0,e.touches[0].clientY-g.y);g.d=d;if(g.sc.scrollTop>0){g.d=0;return}const title=g.sc.closest('.screen')?.querySelector('.topbar .large-title');if(title&&!mm3MotionReduced()){title.style.transition='none';title.style.transformOrigin='0 50%';title.style.transform=`scale(${1+Math.min(d,140)/1400})`}if(g.home){const el=indicator(),p=Math.min(1,d/TH);el.style.opacity=String(p);el.style.transform=`translate(-50%,${Math.min(d,TH)*.6}px) rotate(${p*270}deg)`;el.classList.toggle('ready',p>=1)}},{passive:true});
   const end=()=>{if(!g)return;const cur=g;g=null;const title=cur.sc.closest('.screen')?.querySelector('.topbar .large-title');if(title){title.style.transition='transform .32s cubic-bezier(.3,1.3,.5,1)';title.style.transform=''}
-    if(cur.home){const el=indicator();if(cur.d>=TH){el.classList.add('spinning');feedback?.selection?.();setTimeout(()=>{try{acfForecastCache=null}catch(e){}try{renderAll()}catch(e){}try{maybeAutoSyncGmail(true)}catch(e){}try{const c=shiftCal();if(c.enabled&&c.calendarId&&calTokenValid())syncShiftCalendar({silent:true})}catch(e){}el.classList.remove('spinning','ready');el.style.opacity='0';el.style.transform='';showToast('最新の状態にしました')},650)}else{el.style.transition='opacity .2s, transform .25s';el.style.opacity='0';el.style.transform='translate(-50%,0)';setTimeout(()=>{el.style.transition=''},260)}}};
+    if(cur.home){const el=indicator();if(cur.d>=TH){el.classList.add('spinning');feedback?.selection?.();setTimeout(()=>{try{acfForecastCache=null}catch(e){}try{renderAll()}catch(e){}try{maybeAutoSyncGmail(true)}catch(e){}try{if(shiftRelay().enabled)syncShiftRelay({silent:true,force:true})}catch(e){}try{const c=shiftCal();if(c.enabled&&c.calendarId&&calTokenValid())syncShiftCalendar({silent:true})}catch(e){}el.classList.remove('spinning','ready');el.style.opacity='0';el.style.transform='';showToast('最新の状態にしました')},650)}else{el.style.transition='opacity .2s, transform .25s';el.style.opacity='0';el.style.transform='translate(-50%,0)';setTimeout(()=>{el.style.transition=''},260)}}};
   document.addEventListener('touchend',end,{passive:true});document.addEventListener('touchcancel',end,{passive:true});
 })();
 
@@ -7573,4 +7602,261 @@ new MutationObserver(()=>{if(!polishIntroDone&&!document.getElementById('mm3Stor
   const apply=()=>{const views=[...layer.querySelectorAll('.push-view.show')];views.forEach((v,i)=>v.classList.toggle('push-under',i<views.length-1));document.documentElement.classList.toggle('mm3-push-open',views.length>0)};
   new MutationObserver(apply).observe(layer,{subtree:true,attributes:true,attributeFilter:['class'],childList:true});
 })();
+/* 第18版: シフトボード（iPhoneのカレンダー）から給与を自動で計算する
+   流れ: シフトボード → iPhoneのカレンダー → iOSショートカット（毎日の自動実行）→ 受け渡しサーバー → このアプリ
+   ・アプリを開いた時に1日1回（新しいシフトが届いていればその都度）受け取り、時給×勤務時間（勤務先の休憩ルールで休憩を引く・
+     深夜割増）＋交通費（1回ごと・月の上限あり）で、勤務先・勤務月ごとの給与（予定）を作り直す
+   ・給与を手で入力・修正した月は、7日間は自動で上書きしない（手入力が優先）
+   ・入金済みの給与は変えない */
+
+/* ---------- ACF指標の期間: カードの支払いが終わる日（毎月28日）まで ---------- */
+function acfIndexEndDay(){const d=Math.round(Number(data.acfSettings?.indexEndDay));return d>=1&&d<=31?d:28}
+function acfIndexEndKind(start=ymd()){const o=String(data.acfSettings?.indexEndDate||'');return /^\d{4}-\d{2}-\d{2}$/.test(o)&&o>=start?'custom':'monthly'}
+function acfIndexEndDate(start=ymd()){
+  if(acfIndexEndKind(start)==='custom')return data.acfSettings.indexEndDate;
+  const day=acfIndexEndDay(),d=parseYmd(start),at=(y,m)=>{const last=new Date(y,m+1,0).getDate();return ymd(new Date(y,m,Math.min(day,last)))};
+  let end=at(d.getFullYear(),d.getMonth());if(end<start)end=at(d.getFullYear(),d.getMonth()+1);return end;
+}
+function acfIndexDayText(){const d=acfIndexEndDay();return d>=31?'月末':`${d}日`}
+function acfIndexUntilText(x){return `${Number(x.end.slice(5,7))}/${Number(x.end.slice(8,10))} まで`}
+function acfIndexPeriodNote(x){return x.endKind==='custom'?'（指定した日まで）':`（カードの支払いが終わる毎月${acfIndexDayText()}まで）`}
+function openAcfIndexPeriod(after){
+  const s=data.acfSettings||{},start=ymd();let day=acfIndexEndDay(),custom=acfIndexEndKind(start)==='custom'?s.indexEndDate:'';
+  const days=Array.from({length:31},(_,i)=>i+1);
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="aipCancel">キャンセル</button><div class="sheet-title">ACF指標の期間</div><button type="button" class="nav-text bold" id="aipSave">保存</button></div><div class="sheet-body aip">
+    <p class="aip-lead">今日から、ここで決めた日までの支払いと入金でACF指標を計算します。</p>
+    <div class="form-group-title">毎月の終わりの日</div><div class="form-card"><label class="row aip-row"><div class="row-main"><div class="row-title">カードの支払いが終わる日</div><div class="row-sub">初期値は28日（カードの引き落としが28日までに終わるため）</div></div><select class="field aip-select" id="aipDay" aria-label="毎月の終わりの日">${days.map(d=>`<option value="${d}"${d===day?' selected':''}>${d>=31?'月末':`${d}日`}</option>`).join('')}</select></label></div>
+    <div class="form-group-title">今回だけ日付を指定</div><div class="form-card"><div class="row"><div class="row-main"><div class="row-title">日付を指定する</div><div class="row-sub">指定した日を過ぎると、毎月の日に戻ります</div></div><button type="button" class="switch${custom?' on':''}" id="aipCustom" role="switch" aria-checked="${!!custom}" aria-label="日付を指定する"></button></div><div class="row aip-date-row${custom?'':' hidden'}" id="aipDateRow"><div class="row-main"><div class="row-title">終わりの日</div></div><input class="field aip-date" type="date" id="aipDate" min="${start}" value="${esc(custom||acfIndexEndDate(start))}" aria-label="終わりの日"></div></div>
+    <p class="settings-section-footer" id="aipPreview"></p></div>`,'half',root=>{
+    const daySel=root.querySelector('#aipDay'),sw=root.querySelector('#aipCustom'),row=root.querySelector('#aipDateRow'),date=root.querySelector('#aipDate'),prev=root.querySelector('#aipPreview');
+    const preview=()=>{const save={...data.acfSettings};data.acfSettings={...save,indexEndDay:Number(daySel.value),indexEndDate:sw.classList.contains('on')?date.value:''};let e='';try{e=acfIndexEndDate(start)}finally{data.acfSettings=save}prev.textContent=`今回の期間: ${dayLabel(start)}〜${dayLabel(e)}`};
+    daySel.onchange=()=>{markSheetDirty(true);preview()};date.onchange=()=>{markSheetDirty(true);preview()};
+    sw.onclick=()=>{const on=!sw.classList.contains('on');sw.classList.toggle('on',on);sw.setAttribute('aria-checked',String(on));row.classList.toggle('hidden',!on);markSheetDirty(true);preview()};
+    root.querySelector('#aipCancel').onclick=requestSheetClose;
+    root.querySelector('#aipSave').onclick=()=>{
+      const on=sw.classList.contains('on'),d=date.value;
+      if(on&&!(/^\d{4}-\d{2}-\d{2}$/.test(d)&&d>=start))return showAlert('日付を確認してください','今日以降の日付を選んでください。');
+      try{safeCommit(()=>{data.acfSettings={...data.acfSettings,indexEndDay:Number(daySel.value)||28,indexEndDate:on?d:''}},{render:true,label:'acf index period'})}catch(e){return}
+      try{acfForecastCache=null}catch(e){}
+      markSheetDirty(false);closeSheet();feedback?.success?.();showToast(`ACF指標を ${dayLabel(acfIndexEndDate(start))} までで計算します`);after?.();
+    };
+    preview();
+  });
+}
+
+/* ---------- 受け渡しサーバー（iPhoneのショートカット → アプリ） ---------- */
+const SHIFT_RELAY_RECHECK_MS=3*3600e3;
+let shiftRelayBusy=false;
+function shiftRelay(){return{enabled:false,key:'',lastCheckAt:0,lastUpdatedAt:0,lastApplyDay:'',lastAppliedAt:'',lastCount:0,lastTotal:0,lastManual:0,lastError:'',unmatched:[],...(data.shiftSettings?.relay||{})}}
+function setShiftRelay(patch){try{safeCommit(()=>{data.shiftSettings={...shiftSettings(),relay:{...shiftRelay(),...patch}}},{render:false,label:'shift relay',invalidateAcf:false})}catch(e){}}
+function shiftRelayNewKey(){const b=new Uint8Array(32);crypto.getRandomValues(b);return btoa(String.fromCharCode(...b)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function shiftRelayKey(){let k=shiftRelay().key;if(!/^[A-Za-z0-9_-]{43,128}$/.test(k)){k=shiftRelayNewKey();setShiftRelay({key:k})}return k}
+async function shiftRelayBase(){
+  if(pushConfiguration?.apiBase)return pushConfiguration.apiBase;
+  try{const r=await fetch('./push-config.json',{cache:'no-store'});if(r.ok){const j=await r.json();if(/^https:\/\//.test(j.apiBase||''))return String(j.apiBase).replace(/\/$/,'')}}catch(e){}
+  return 'https://today-money-push.at5tram98.workers.dev';
+}
+async function shiftRelayFetch(){
+  const base=await shiftRelayBase(),ctl=typeof AbortController==='function'?new AbortController():null,timer=ctl?setTimeout(()=>ctl.abort(),15000):0;
+  let r;try{r=await fetch(base+'/v1/shifts',{headers:{Authorization:'Bearer '+shiftRelayKey()},cache:'no-store',signal:ctl?.signal})}catch(e){throw new Error('受け渡しサーバーに接続できませんでした。通信状態を確認してください。')}finally{clearTimeout(timer)}
+  if(r.status===404||r.status===405)throw new Error('受け渡しサーバーがまだ準備できていません（サーバーの更新待ち）。');
+  if(!r.ok)throw new Error(`受け渡しサーバーのエラー（${r.status}）`);
+  return r.json();
+}
+/* 勤務先の割り当て（自動）: 割り当て表 → 名前・別名 → 勤務先が1つだけならそれ。どれにも当たらない予定は使わない */
+function shiftEmployerStrict(title,s=shiftSettings()){
+  if(s.titleMap[title]&&employerById(s.titleMap[title]))return s.titleMap[title];
+  const t=normalizeMerchantKey(title);if(t){const hit=data.employers.find(e=>[e.name,...(e.aliases||[])].some(x=>{const n=normalizeMerchantKey(x);return n&&(t.includes(n)||n.includes(t))}));if(hit)return hit.id}
+  return data.employers.length===1?data.employers[0].id:'';
+}
+/* 送られてきたシフト＋その前に保存済みのシフト（同じ給与月の過去分）で、給与（予定）を作り直す */
+function applyShiftsAuto(shifts,{replace=true}={}){
+  const s=shiftSettings(),mapped=[],unmatched=new Set();
+  for(const x of shifts){const id=x.employerId&&employerById(x.employerId)?x.employerId:shiftEmployerStrict(x.title,s);if(id)mapped.push({...x,employerId:id});else unmatched.add(x.title||'（名前なし）')}
+  if(!mapped.length)return{count:0,total:0,results:[],unmatched:[...unmatched]};
+  const from=mapped.reduce((m,x)=>x.date<m?x.date:m,mapped[0].date),keepFrom=addMonths(from.slice(0,7),-2)+'-01';
+  const before=(data.shiftPlans||[]).filter(p=>p.date<from&&p.date>=keepFrom&&employerById(p.employerId)).map(p=>({date:p.date,start:p.start,end:p.end,title:p.title,employerId:p.employerId}));
+  const months=new Set(mapped.map(x=>`${x.employerId}|${shiftWorkMonth(employerById(x.employerId),x.date)}`));
+  const groups=shiftEstimate([...before,...mapped],s).filter(g=>months.has(`${g.employerId}|${g.month}`));
+  const results=saveShiftImport(groups,{},{auto:true,replaceFrom:replace?from:''});
+  const used=results.filter(r=>r.state==='created'||r.state==='updated');
+  return{count:mapped.length,total:used.reduce((a,r)=>a+r.g.gross+r.g.transport,0),results,unmatched:[...unmatched]};
+}
+async function syncShiftRelay({silent=true,force=false}={}){
+  const r=shiftRelay();if(shiftRelayBusy||!r.enabled)return null;
+  if(!force&&r.lastApplyDay===ymd()&&Date.now()-Number(r.lastCheckAt||0)<SHIFT_RELAY_RECHECK_MS)return null;
+  shiftRelayBusy=true;
+  try{
+    const j=await shiftRelayFetch(),updatedAt=Number(j.updatedAt)||0,text=String(j.text||'');
+    if(!text.trim()){setShiftRelay({lastCheckAt:Date.now(),lastError:'まだショートカットからシフトが届いていません'});if(!silent)showAlert('まだシフトが届いていません','iPhoneの「ショートカット」で「シフトを送る」を1回実行してから、もう一度お試しください。');return null}
+    if(!force&&updatedAt===Number(r.lastUpdatedAt)&&r.lastApplyDay===ymd()){setShiftRelay({lastCheckAt:Date.now(),lastError:''});return null}
+    const shifts=parseShiftText(text);
+    if(!shifts.length){setShiftRelay({lastCheckAt:Date.now(),lastUpdatedAt:updatedAt,lastError:'届いた内容からシフトを読み取れませんでした（日付と時刻の形式を確認してください）'});if(!silent)showAlert('シフトを読み取れませんでした','ショートカットの「テキスト」が「2026-12-01 10:00-18:00 GU」の形になっているか確認してください。');return null}
+    const out=applyShiftsAuto(shifts),manual=out.results.filter(x=>x.state==='manual').length;
+    setShiftRelay({lastCheckAt:Date.now(),lastUpdatedAt:updatedAt,lastApplyDay:ymd(),lastAppliedAt:new Date().toISOString(),lastCount:out.count,lastTotal:out.total,lastManual:manual,lastError:out.count?'':'シフトの予定名がどの勤務先にも当てはまりません',unmatched:out.unmatched.slice(0,8)});
+    if(out.count&&(!silent||out.results.some(x=>x.state==='created'||x.state==='updated')))showToast(`シフト${out.count}件から給料の見込みを更新しました${manual?`（手入力の${manual}件はそのまま）`:''}`);
+    try{refreshSalaryOpenView()}catch(e){}try{refreshSalarySettings()}catch(e){}
+    return out;
+  }catch(e){setShiftRelay({lastCheckAt:Date.now(),lastError:String(e?.message||e)});if(!silent)showAlert('シフトを受け取れませんでした',String(e?.message||e));return null}
+  finally{shiftRelayBusy=false}
+}
+/* 保存済みのシフトから計算し直す（時給・休憩ルールを変えた時） */
+function recalcSalaryFromSavedShifts(){
+  const from=addMonths(ym(),-1)+'-01',plans=(data.shiftPlans||[]).filter(p=>p.date>=from&&employerById(p.employerId));
+  if(!plans.length)return null;
+  return applyShiftsAuto(plans.map(p=>({date:p.date,start:p.start,end:p.end,title:p.title||'',employerId:p.employerId})),{replace:false});
+}
+/* 起動時・アプリに戻った時: iPhoneのカレンダー（ショートカット経由）→ Googleカレンダーの順に1日1回 */
+function maybeAutoSyncShifts(){
+  try{if(shiftRelay().enabled)syncShiftRelay({silent:true})}catch(e){}
+  const cal=shiftCal();if(!cal.enabled||!cal.calendarId||cal.lastDay===ymd()||calSyncing)return;
+  if(calTokenValid()){syncShiftCalendar({silent:true});return}
+  if(calPromptedDay===ymd())return;calPromptedDay=ymd();
+  showToast('今日のシフトをまだ取り込んでいません',{actionLabel:'Googleで更新',action:()=>syncShiftCalendar({silent:false})});
+}
+
+/* ---------- 給与画面の上の「シフトから自動計算」 ---------- */
+function salaryManualLocked(){return(data.salaryRecords||[]).filter(r=>r.status!=='入金済'&&salaryManualLockUntil(r)>Date.now())}
+function salaryLockDaysLeft(r){return Math.max(1,Math.ceil((salaryManualLockUntil(r)-Date.now())/864e5))}
+function salaryRelayStatus(){
+  const r=shiftRelay(),locked=salaryManualLocked().length;
+  if(!r.enabled)return{tone:'off',state:'設定',title:'シフトから自動で計算',sub:'iPhoneのカレンダーのシフトから、時給と交通費で毎日計算します'};
+  if(r.lastError&&!r.lastAppliedAt)return{tone:'warn',state:'確認',title:'シフトから自動計算',sub:r.lastError};
+  const when=r.lastAppliedAt?`${homeTimeLabel(r.lastAppliedAt)}に更新・${r.lastCount}件のシフト`:'まだ受け取っていません';
+  return{tone:r.lastError?'warn':'on',state:locked?`手入力 ${locked}件`:'自動',title:'シフトから自動計算',sub:r.lastError?`${when}・${r.lastError}`:when};
+}
+function salarySyncStripHtml(){
+  const st=salaryRelayStatus();
+  return `<div class="group sal-sync-group"><button type="button" class="row press sal-sync ${st.tone}" id="salarySyncStrip"><span class="sal-sync-icon" aria-hidden="true">${icon('calendar')}</span><div class="row-main"><div class="row-title">${esc(st.title)}</div><div class="row-sub">${esc(st.sub)}</div></div><span class="sal-sync-state">${esc(st.state)}</span><span class="chev">${icon('chevronRight')}</span></button></div>`;
+}
+
+/* ---------- その他 → 給与・勤務先 ---------- */
+function employerTermsText(e){
+  const parts=[`時給 ${yen(Number(e.hourly)||0)}`];
+  if(Number(e.transport)>0)parts.push(`交通費 ${e.transportUnit==='per_shift'?'往復':'月'} ${yen(e.transport)}${Number(e.transportCap)>0?`（上限 ${yen(e.transportCap)}）`:''}`);
+  parts.push(e.breakRules?.length?`休憩ルール ${e.breakRules.length}件`:'休憩ルールなし');
+  return parts.join('・');
+}
+function breakRuleText(r){const h=m=>{const x=m/60;return Number.isInteger(x)?`${x}時間`:`${Math.floor(x)}時間${m%60}分`};return `${h(r.from)}以上${r.to!=null?`${h(r.to)}未満`:''} → 休憩${r.minutes}分`}
+function salaryUpcomingShiftPay(){
+  const today=ymd(),list=(data.salaryRecords||[]).filter(r=>r.status!=='入金済'&&r.date>=today&&(r.source==='shift'||r.source==='manual')).sort((a,b)=>a.date.localeCompare(b.date));
+  const first=list[0];if(!first)return null;const same=list.filter(r=>r.date===first.date);
+  return{date:first.date,total:same.reduce((s,r)=>s+(Number(r.gross)||0)+(Number(r.transport)||0),0),records:same};
+}
+function salarySettingsHtml(){
+  const r=shiftRelay(),s=shiftSettings(),next=salaryUpcomingShiftPay(),locked=salaryManualLocked(),st=salaryRelayStatus();
+  return `<div class="salx-hero"><span class="salx-hero-icon" aria-hidden="true">${icon('briefcase')}</span><div class="salx-kicker">${next?`次の給料日 ${Number(next.date.slice(5,7))}/${Number(next.date.slice(8,10))}`:'次の給料'}</div><div class="salx-value">${next?yen(next.total):'—'}</div><div class="salx-sub">${next?esc(next.records.map(x=>`${employerById(x.employerId)?.name||'勤務先'} ${yen((Number(x.gross)||0)+(Number(x.transport)||0))}${x.source==='manual'?'（手入力）':''}`).join('・')):'シフトを取り込むと、時給と交通費から計算します'}</div><div class="salx-chip ${st.tone}">${esc(st.state==='設定'?'自動計算はオフ':st.sub)}</div></div>
+  <h2 class="reg-head">iPhoneのカレンダーから自動で取り込む</h2><div class="group">
+    <div class="row"><div class="row-main"><div class="row-title">毎日自動で取り込む</div><div class="row-sub">シフトボードがiPhoneのカレンダーに書き出したシフトを、1日1回受け取ります</div></div><button type="button" class="switch${r.enabled?' on':''}" id="relayAuto" role="switch" aria-checked="${r.enabled}" aria-label="毎日自動で取り込む"></button></div>
+    <button type="button" class="row press" id="relayGuide"><span class="reg-icon" style="--c:var(--purple)" aria-hidden="true">${icon('repeat')}</span><div class="row-main"><div class="row-title">ショートカットを設定</div><div class="row-sub">最初に1回だけ（約3分）</div></div><span class="chev">${icon('chevronRight')}</span></button>
+    <button type="button" class="row press" id="relayNow"><span class="reg-icon" style="--c:var(--accent)" aria-hidden="true">${icon('download')}</span><div class="row-main"><div class="row-title">今すぐ取り込む</div><div class="row-sub">${r.lastAppliedAt?`前回 ${esc(homeTimeLabel(r.lastAppliedAt))}・${r.lastCount}件・${yen(r.lastTotal)}`:'まだ取り込んでいません'}</div></div><span class="chev">${icon('chevronRight')}</span></button>
+    ${r.lastError?`<div class="row shift-cal-error" role="alert"><div class="row-main"><div class="row-title">確認が必要です</div><div class="row-sub">${esc(r.lastError)}</div></div></div>`:''}
+  </div>
+  ${(r.unmatched||[]).length?`<h2 class="reg-head">勤務先が分からない予定</h2><div class="group">${r.unmatched.map(t=>`<div class="row shift-map"><div class="row-main"><div class="row-title">${esc(t)}</div><div class="row-sub">どの勤務先のシフトですか？</div></div><div class="shift-emp-chips">${data.employers.map(e=>`<button type="button" class="shift-chip" data-map-title="${esc(t)}" data-map-emp="${esc(e.id)}">${esc(e.name)}</button>`).join('')}</div></div>`).join('')}</div>`:''}
+  <p class="settings-section-footer">給与を手で入力・修正すると、その月の給与は<b>7日間</b>自動で上書きしません（手入力が優先）。入金済みの給与は変えません。</p>
+  ${locked.length?`<h2 class="reg-head">手入力を優先している給与</h2><div class="group">${locked.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(employerById(x.employerId)?.name||'勤務先')}・${monthLabel(x.month)}勤務分 ${yen((Number(x.gross)||0)+(Number(x.transport)||0))}</div><div class="row-sub">あと${salaryLockDaysLeft(x)}日は自動で上書きしません</div></div><button type="button" class="pill-btn" data-unlock="${esc(x.id)}">自動に戻す</button></div>`).join('')}</div>`:''}
+  <h2 class="reg-head">勤務先と給与の条件</h2><div class="group">${data.employers.map(e=>`<button type="button" class="row press reg-row" data-terms="${esc(e.id)}"><span class="reg-icon" style="--c:var(--teal)" aria-hidden="true">${icon('briefcase')}</span><div class="row-main"><div class="row-title">${esc(e.name)}</div><div class="row-sub">${esc(employerTermsText(e))}</div></div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}${regAddHtml('regAddEmployer','勤務先を追加')}</div>
+  <h2 class="reg-head">計算のしかた</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">深夜割増（22時〜5時）</div><div class="row-sub">時給の25%を上乗せ</div></div><button type="button" class="switch${s.nightRate>0?' on':''}" id="salNight" role="switch" aria-checked="${s.nightRate>0}" aria-label="深夜割増"></button></div></div>
+  <h2 class="reg-head">ほかの取り込み方法</h2><div class="group"><button type="button" class="row press reg-row" id="regShiftImport"><span class="reg-icon" style="--c:var(--orange)" aria-hidden="true">${icon('calendar')}</span><div class="row-main"><div class="row-title">Googleカレンダー・貼り付けで取り込む</div><div class="row-sub">シフトを手動で取り込む時に使います</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`;
+}
+function refreshSalarySettings(){const top=pushStack.at(-1);if(top?.title==='給与・勤務先')openEmployersSettings()}
+function openEmployersSettings(){
+  const draw=()=>settingsDetailView('給与・勤務先',salarySettingsHtml(),root=>{
+    root.__refreshRegistrations=draw;
+    root.querySelector('#relayAuto').onclick=e=>{const b=e.currentTarget,on=!shiftRelay().enabled;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));feedback?.selection?.();setTimeout(()=>{setShiftRelay({enabled:on,key:shiftRelayKey()});if(on&&!shiftRelay().lastAppliedAt)openShiftRelayGuide();else{draw();if(on)syncShiftRelay({silent:false,force:true}).then(draw)}},mm3MotionReduced()?0:280)};
+    root.querySelector('#relayGuide').onclick=()=>openShiftRelayGuide();
+    root.querySelector('#relayNow').onclick=async e=>{if(!shiftRelay().enabled)setShiftRelay({enabled:true,key:shiftRelayKey()});const b=e.currentTarget;b.classList.add('loading');b.setAttribute('aria-busy','true');await syncShiftRelay({silent:false,force:true});draw()};
+    root.querySelectorAll('[data-map-title]').forEach(b=>b.onclick=()=>{const t=b.dataset.mapTitle;try{safeCommit(()=>{const s=shiftSettings();s.titleMap[t]=b.dataset.mapEmp;data.shiftSettings={...s,relay:{...shiftRelay(),unmatched:shiftRelay().unmatched.filter(x=>x!==t)}}},{render:false,label:'shift title map',invalidateAcf:false})}catch(_){}feedback?.selection?.();syncShiftRelay({silent:true,force:true}).then(draw);draw()});
+    root.querySelectorAll('[data-unlock]').forEach(b=>b.onclick=()=>{try{safeCommit(()=>{const x=data.salaryRecords.find(r=>r.id===b.dataset.unlock);if(x){delete x.manualAt;x.source='shift'}},{render:true,label:'salary unlock'})}catch(_){}feedback?.selection?.();const done=()=>{try{recalcSalaryFromSavedShifts()}catch(_){}draw();showToast('自動の計算に戻しました')};if(shiftRelay().enabled)syncShiftRelay({silent:true,force:true}).then(done);else done()});
+    root.querySelectorAll('[data-terms]').forEach(b=>b.onclick=()=>openEmployerPayTerms(b.dataset.terms));
+    root.querySelector('#regAddEmployer').onclick=()=>openEmployerCreate(()=>{renderAll();draw()});
+    root.querySelector('#regShiftImport').onclick=()=>openShiftGuide();
+    root.querySelector('#salNight').onclick=e=>{const b=e.currentTarget,on=!(shiftSettings().nightRate>0);b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));setTimeout(()=>{try{safeCommit(()=>{data.shiftSettings={...shiftSettings(),nightRate:on?25:0}},{render:false,label:'night rate',invalidateAcf:false})}catch(_){}try{recalcSalaryFromSavedShifts()}catch(_){}draw()},mm3MotionReduced()?0:280)};
+  });
+  draw();
+}
+
+/* ---------- 勤務先ごとの給与条件（時給・交通費・上限・休憩ルール・カレンダーの予定名） ---------- */
+function employerTermsExample(e){
+  const d=shiftDuration('10:00','18:00',true,e.breakRules),pay=Math.round((Number(e.hourly)||0)*d.work/60),t=Number(e.transport)>0&&e.transportUnit==='per_shift'?Number(e.transport):0;
+  return `<div class="salx-example"><div class="salx-example-head">計算の例: 10:00〜18:00（8時間）</div><div class="salx-example-line"><span>休憩 ${d.brk}分 → 働いた時間 ${shiftHoursLabel(d.work)}</span><b>${yen(pay)}</b></div>${t?`<div class="salx-example-line"><span>交通費（往復）</span><b>${yen(t)}</b></div>`:''}<div class="salx-example-line total"><span>この日の給料</span><b>${yen(pay+t)}</b></div></div>`;
+}
+function openEmployerPayTerms(id){
+  const title=()=>`${employerById(id)?.name||'勤務先'}の給与`;
+  const save=(mut,msg)=>{try{safeCommit(()=>{const e=employerById(id);if(e)mut(e)},{render:true,label:'employer terms'})}catch(_){return}feedback?.selection?.();let n=null;try{n=recalcSalaryFromSavedShifts()}catch(_){}if(msg)showToast(n&&n.count?`${msg}・保存済みのシフトで計算し直しました`:msg);draw();try{refreshSalarySettings()}catch(_){}};
+  const draw=()=>{const e=employerById(id);if(!e)return;settingsDetailView(title(),`${employerTermsExample(e)}
+    <h2 class="reg-head">給与</h2><div class="group">
+      <button type="button" class="row press" id="ptHourly"><div class="row-main"><div class="row-title">時給</div></div><div class="row-value">${yen(Number(e.hourly)||0)}</div><span class="chev">${icon('chevronRight')}</span></button>
+      <button type="button" class="row press" id="ptTransport"><div class="row-main"><div class="row-title">交通費</div><div class="row-sub">${e.transportUnit==='per_shift'?'出勤1回あたり（往復）':'毎月の定額'}</div></div><div class="row-value">${yen(Number(e.transport)||0)}</div><span class="chev">${icon('chevronRight')}</span></button>
+      <div class="row"><div class="row-main"><div class="row-title">出勤1回ごとに払われる</div><div class="row-sub">オフにすると毎月の定額として計算します</div></div><button type="button" class="switch${e.transportUnit==='per_shift'?' on':''}" id="ptPerShift" role="switch" aria-checked="${e.transportUnit==='per_shift'}" aria-label="交通費は出勤1回ごと"></button></div>
+      <button type="button" class="row press" id="ptCap"><div class="row-main"><div class="row-title">交通費の上限（1か月）</div></div><div class="row-value">${Number(e.transportCap)>0?yen(e.transportCap):'なし'}</div><span class="chev">${icon('chevronRight')}</span></button>
+    </div>
+    <h2 class="reg-head">休憩ルール</h2><div class="group">${(e.breakRules||[]).map((r,i)=>`<div class="row"><span class="reg-icon" style="--c:var(--orange)" aria-hidden="true">${icon('clock')}</span><div class="row-main"><div class="row-title">${esc(breakRuleText(r))}</div></div><button type="button" class="icon-btn pt-del" data-del-rule="${i}" aria-label="${esc(breakRuleText(r))}を削除">${icon('trash')}</button></div>`).join('')}${regAddHtml('ptAddRule','休憩ルールを追加')}</div>
+    <p class="settings-section-footer">シフトの開始〜終了の長さがこの範囲のときに、休憩を引いて計算します。ルールがない場合は、6時間超で45分・8時間超で60分を引きます。</p>
+    <h2 class="reg-head">カレンダーの予定名</h2><div class="group"><div class="row pt-alias-row"><div class="row-main"><div class="row-title">この名前の予定を${esc(e.name)}のシフトにする</div><input class="field pt-alias" id="ptAliases" value="${esc((e.aliases||[]).join('、'))}" placeholder="例: ジーユー、GU 渋谷店" aria-label="カレンダーの予定名（読点で区切る）" enterkeyhint="done"></div></div></div>
+    <p class="settings-section-footer">「${esc(e.name)}」を含む予定は自動で${esc(e.name)}になります。シフトボードの予定名が違う時は、ここに読点（、）で区切って追加してください。</p>
+    <h2 class="reg-head">支給日</h2><div class="group"><button type="button" class="row press" id="ptSchedule"><div class="row-main"><div class="row-title">締め日・給料日・振込口座</div><div class="row-sub">${e.closingType==='day'?`${e.closingDay}日締め`:'月末締め'}・${e.payMonthOffset?'翌月':'当月'}${e.payType==='day'?`${e.payDay}日`:'末日'}払い</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`,root=>{
+      const e2=()=>employerById(id);
+      root.querySelector('#ptHourly').onclick=()=>openCalculator('時給',Number(e2().hourly)||0,v=>save(x=>{x.hourly=Math.max(0,Math.round(v))},'時給を変更しました'));
+      root.querySelector('#ptTransport').onclick=()=>openCalculator('交通費',Number(e2().transport)||0,v=>save(x=>{x.transport=Math.max(0,Math.round(v))},'交通費を変更しました'));
+      root.querySelector('#ptCap').onclick=()=>openCalculator('交通費の上限（0でなし）',Number(e2().transportCap)||0,v=>save(x=>{x.transportCap=Math.max(0,Math.round(v))},'交通費の上限を変更しました'));
+      root.querySelector('#ptPerShift').onclick=ev=>{const b=ev.currentTarget,on=e2().transportUnit!=='per_shift';b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on));setTimeout(()=>save(x=>{x.transportUnit=on?'per_shift':'monthly'},'交通費の数え方を変更しました'),mm3MotionReduced()?0:280)};
+      root.querySelectorAll('[data-del-rule]').forEach(b=>b.onclick=async()=>{const i=Number(b.dataset.delRule);if(!await showAlert('この休憩ルールを削除しますか？',breakRuleText(e2().breakRules[i]),{destructive:true,okText:'削除'}))return;save(x=>{x.breakRules=(x.breakRules||[]).filter((_,k)=>k!==i)},'休憩ルールを削除しました')});
+      root.querySelector('#ptAddRule').onclick=()=>openBreakRuleSheet(r=>save(x=>{x.breakRules=[...(x.breakRules||[]),r].sort((a,b)=>a.from-b.from)},'休憩ルールを追加しました'));
+      const al=root.querySelector('#ptAliases');al.onchange=()=>{const list=[...new Set(al.value.normalize('NFKC').split(/[、,，\n]/).map(x=>x.trim()).filter(Boolean))].slice(0,12);save(x=>{x.aliases=list},'予定名を保存しました')};al.onkeydown=ev=>{if(ev.key==='Enter'){ev.preventDefault();al.blur()}};
+      root.querySelector('#ptSchedule').onclick=()=>openEmployerEdit(e2());
+    })};
+  draw();
+}
+function openBreakRuleSheet(onAdd){
+  const hours=Array.from({length:25},(_,i)=>i*30).filter(m=>m<=720),opt=(m,sel)=>`<option value="${m}"${m===sel?' selected':''}>${m%60?`${Math.floor(m/60)}時間${m%60}分`:`${m/60}時間`}</option>`;
+  openSheet(`<div class="sheet-nav"><button type="button" class="nav-text" id="brCancel">キャンセル</button><div class="sheet-title">休憩ルール</div><button type="button" class="nav-text bold" id="brSave">追加</button></div><div class="sheet-body"><div class="form-card">
+    <label class="row"><div class="row-main"><div class="row-title">勤務が</div></div><select class="field br-sel" id="brFrom" aria-label="何時間以上">${hours.filter(m=>m>0).map(m=>opt(m,240)).join('')}</select><span class="br-unit">以上</span></label>
+    <label class="row"><div class="row-main"><div class="row-title">上限</div></div><select class="field br-sel" id="brTo" aria-label="何時間未満"><option value="">なし</option>${hours.filter(m=>m>0).map(m=>opt(m,-1)).join('')}</select><span class="br-unit">未満</span></label>
+    <label class="row"><div class="row-main"><div class="row-title">休憩</div></div><select class="field br-sel" id="brMin" aria-label="休憩の分">${[15,30,45,60,75,90,120].map(m=>`<option value="${m}"${m===30?' selected':''}>${m}分</option>`).join('')}</select></label>
+  </div><p class="settings-section-footer" id="brPreview"></p></div>`,'half',root=>{
+    const f=root.querySelector('#brFrom'),t=root.querySelector('#brTo'),m=root.querySelector('#brMin'),p=root.querySelector('#brPreview');
+    const rule=()=>({from:Number(f.value),to:t.value===''?null:Number(t.value),minutes:Number(m.value)});
+    const upd=()=>{p.textContent=breakRuleText(rule())};[f,t,m].forEach(x=>x.onchange=()=>{markSheetDirty(true);upd()});upd();
+    root.querySelector('#brCancel').onclick=requestSheetClose;
+    root.querySelector('#brSave').onclick=()=>{const r=rule();if(r.to!=null&&r.to<=r.from)return showAlert('時間を確認してください','「未満」は「以上」より長くしてください。');markSheetDirty(false);closeSheet();onAdd(r)};
+  });
+}
+
+/* ---------- ショートカットの設定（最初に1回だけ） ---------- */
+async function copyShiftText(text,label){try{await navigator.clipboard.writeText(text);feedback?.success?.();showToast(`${label}をコピーしました`)}catch(e){showAlert('コピーできませんでした','長押しして選択し、コピーしてください。')}}
+async function openShiftRelayGuide(){
+  const key=shiftRelayKey(),base=await shiftRelayBase(),url=`${base}/v1/shifts`,auth=`Bearer ${key}`;
+  settingsDetailView('ショートカットの設定',`
+    <div class="shift-hero small"><span class="shift-hero-icon" aria-hidden="true">${icon('repeat')}</span><div class="shift-hero-kicker">シフトボード → iPhoneのカレンダー → ショートカット → このアプリ</div><div class="shift-hero-sub">iPhoneの「ショートカット」が毎朝カレンダーのシフトを送り、このアプリが開いた時に受け取って給料を計算します。</div></div>
+    <h2 class="reg-head">0. シフトボードの準備</h2><ol class="shift-steps"><li>シフトボードの「設定」→「カレンダー連携」をオンにし、書き出すカレンダー（例:「シフトボード」）を決める</li></ol>
+    <h2 class="reg-head">1. ショートカットを作る</h2>
+    <ol class="shift-steps" start="2">
+      <li>「ショートカット」アプリで＋を押し、名前を「シフトを送る」にする</li>
+      <li>「カレンダーの予定を検索」を追加。<b>カレンダー</b>が「シフトボードのカレンダー」、<b>開始日</b>が「次の60日間」（「すべての条件に一致」）、並び順は「開始日」、上限はオフ</li>
+      <li>「各項目を繰り返す」を追加し、中に「テキスト」を置いて<br><code>［開始日］-［終了日］ ［タイトル］</code><br>とする。開始日の書式は「カスタム: yyyy-MM-dd HH:mm」、終了日は「カスタム: HH:mm」</li>
+      <li>繰り返しのあとに「テキストを結合」（区切り: 改行）</li>
+      <li>「URLの内容を取得」を追加し、下のURLを貼る。<b>方法</b>は POST、<b>ヘッダ</b>に「Authorization」＝下の鍵、<b>本文を要求</b>は JSON で、キー「text」の値に「結合されたテキスト」</li>
+    </ol>
+    <div class="group relay-copy"><button type="button" class="row press" id="copyUrl"><div class="row-main"><div class="row-title">URL</div><div class="row-sub relay-code">${esc(url)}</div></div><span class="pill-btn">コピー</span></button><button type="button" class="row press" id="copyAuth"><div class="row-main"><div class="row-title">Authorization（鍵）</div><div class="row-sub relay-code">Bearer ${esc(key.slice(0,6))}…${esc(key.slice(-4))}</div></div><span class="pill-btn">コピー</span></button></div>
+    <p class="settings-section-footer">鍵はこの端末で作った合言葉です。人に見せないでください。鍵を変えると、ショートカットの鍵も入れ直す必要があります。</p>
+    <h2 class="reg-head">2. 毎日自動で動かす</h2>
+    <ol class="shift-steps" start="7"><li>ショートカットの「オートメーション」→＋→「時刻」→ 毎日 5:00（好きな時刻）</li><li>「すぐに実行」を選び、「シフトを送る」を選ぶ</li><li>一度「シフトを送る」を手で実行し、下の「受け取りを確認」を押す</li></ol>
+    <p class="settings-section-footer">受け取ったシフトはこのアプリに残るので、働き終わった日の分も給料の計算に入ります。今月すでに働いた分は、最初に一度だけ「その他の取り込み方法」から貼り付けて入れてください。</p>
+    <div class="group"><button type="button" class="row press reg-add" id="relayTest"><span class="reg-add-icon" aria-hidden="true">${icon('check')}</span><div class="row-main"><div class="row-title">受け取りを確認</div></div></button><button type="button" class="row press" id="relayRekey"><div class="row-main"><div class="row-title">鍵を作り直す</div><div class="row-sub">鍵が人に知られた時だけ</div></div><span class="chev">${icon('chevronRight')}</span></button></div>
+    <p class="settings-section-footer">受け取ったシフトは、時給×働いた時間（休憩ルールで休憩を引く・深夜は25%増し）＋交通費（往復・月の上限あり）で計算し、勤務先・勤務月ごとの給与（予定）にします。シフトは受け渡しサーバーに最後の1回分だけ保管し、30日で消えます。</p>`,root=>{
+      root.querySelector('#copyUrl').onclick=()=>copyShiftText(url,'URL');
+      root.querySelector('#copyAuth').onclick=()=>copyShiftText(auth,'鍵');
+      root.querySelector('#relayTest').onclick=async()=>{setShiftRelay({enabled:true});const out=await syncShiftRelay({silent:false,force:true});if(out&&out.count){feedback?.success?.();showAlert('受け取れました',`シフト${out.count}件から給料を計算しました（${yen(out.total)}）。これから毎日自動で更新します。`)}try{refreshSalarySettings()}catch(_){}};
+      root.querySelector('#relayRekey').onclick=async()=>{if(!await showAlert('鍵を作り直しますか？','ショートカットの「Authorization」も新しい鍵に入れ直す必要があります。',{okText:'作り直す'}))return;setShiftRelay({key:shiftRelayNewKey(),lastUpdatedAt:0});openShiftRelayGuide()};
+    });
+}
+
+/* 給与の編集画面: この給与がどこから来たか（シフトから自動・手入力） */
+function salaryRecordSourceNoteHtml(r){
+  if(r.status==='入金済')return '';
+  if(salaryManualLockUntil(r)>Date.now())return `<p class="sal-src-note manual">${icon('pencil')}<span>手入力の金額です。あと${salaryLockDaysLeft(r)}日は、シフトの自動計算で上書きしません。</span></p>`;
+  if(r.source==='shift')return `<p class="sal-src-note">${icon('calendar')}<span>シフト${Number(r.shiftCount)||0}回${r.shiftMinutes?`・${shiftHoursLabel(r.shiftMinutes)}`:''}から自動で計算しました。金額を直すと、7日間は手入力が優先されます。</span></p>`;
+  return '';
+}
 })().catch(e=>{console.error('app boot failed',e);mm3BootLayer.textContent='読み込みに失敗しました。画面を再読み込みしてください。'});
