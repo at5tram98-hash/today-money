@@ -50,6 +50,8 @@ export const operations=JSON.parse(ledger).map(o=>({...o,selector:o.dom.startsWi
 export async function createPage(version,{width,appearance}){
   const context=await browser.newContext({viewport:{width,height:width===320?568:852},isMobile:true,hasTouch:true,timezoneId:'Asia/Tokyo',colorScheme:appearance,reducedMotion:process.env.MM3_CRAWL_MOTION?'no-preference':'reduce'});
   await context.route('https://accounts.google.com/**',route=>route.fulfill({body:'',contentType:'text/javascript'}));
+  // 試験は外部へ通信しない: シフトの受け渡しサーバーは「まだ何も届いていない」を返す
+  await context.route('https://*.workers.dev/**',route=>route.fulfill({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify({text:'',updatedAt:0,ok:true})}));
   await context.addInitScript(()=>{
     const RealDate=Date;globalThis.__clock={now:new RealDate('2026-10-07T12:00:00Z').getTime()};
     globalThis.Date=class extends RealDate{constructor(...args){super(...(args.length?args:[globalThis.__clock.now]))}static now(){return globalThis.__clock.now}};
