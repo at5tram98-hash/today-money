@@ -99,3 +99,7 @@ button:disabled, .row[aria-disabled="true"] { opacity: .4 }
 /* 18. 給与画面: 自動取り込みは目立たせず、小さな一行だけ（押すと設定） */
 .sal-sync-note { display: block; margin: 6px 4px 10px; padding: 2px 0; border: 0; background: none; font: inherit; font-size: 12px; color: var(--label3); text-align: left; cursor: pointer }
 .sal-sync-note:active { opacity: .5 }
+
+/* 19. 選択の行（休憩ルール・ACFの期間）も押すと色が付く */
+.form-card label.row { transition: background-color .32s ease-out }
+.form-card label.row:active { background-color: var(--fill); transition-duration: 0s }
