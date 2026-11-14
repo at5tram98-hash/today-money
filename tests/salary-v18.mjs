@@ -124,6 +124,14 @@ for(const [width,appearance] of [[393,'light'],[320,'dark']]){
     const r=await p.evaluate(()=>{const t=globalThis.__mm3Test,f=t.ev('prepareLoadedData'),d=t.getData();d.meta={...d.meta,shiftGrossV19:false};d.salaryRecords=[{id:'x1',employerId:d.employers[0].id,month:'2026-12',date:'2027-01-10',gross:9100,transport:840,status:'予定',source:'shift'},{id:'x2',employerId:d.employers[0].id,month:'2027-01',date:'2027-02-10',gross:5000,transport:840,status:'予定',source:'manual'}];const once=f(d),twice=f(once);return{a:once.salaryRecords.map(x=>x.gross),b:twice.salaryRecords.map(x=>x.gross)}});
     assert.deepEqual(r.a,[9940,5000]);assert.deepEqual(r.b,[9940,5000]);return 'シフト分だけ ¥9,100→¥9,940（2回目は変えない）'},{page});
 
+  await check(`S-18 ${cfg}`,'入金済みにしても、給与は予定の入金日の月に残る（「未登録」「履歴不足」にならない）。入金日の初期値は予定日',async p=>{
+    const r=await p.evaluate(async()=>{const t=globalThis.__mm3Test;let d=t.getData();const eid=d.employers[0].id;d.salaryRecords.push({id:'paid_test',employerId:eid,month:'2026-08',date:'2026-09-25',gross:30000,transport:0,status:'予定',source:'manual'});await t.replaceData(d);
+      t.ev("openSalaryRecordEdit('paid_test')");await new Promise(r=>setTimeout(r,300));document.querySelector('#srStatus [data-v="入金済"]').click();await new Promise(r=>setTimeout(r,100));const defaultDate=document.querySelector('#srActualDate').value;t.ev('closeSheet')();await new Promise(r=>setTimeout(r,300));
+      d=t.getData();Object.assign(d.salaryRecords.find(x=>x.id==='paid_test'),{status:'入金済',receivedAmount:30000,actualReceivedDate:'2026-10-07'});await t.replaceData(d);
+      const inSep=t.ev("salaryRecordsPayableInMonth('2026-09')").some(x=>x.id==='paid_test'),inOct=t.ev("salaryRecordsPayableInMonth('2026-10')").some(x=>x.id==='paid_test');
+      d=t.getData();d.salaryRecords=d.salaryRecords.filter(x=>x.id!=='paid_test');await t.replaceData(d);return{defaultDate,inSep,inOct}});
+    assert.deepEqual(r,{defaultDate:'2026-09-25',inSep:true,inOct:false});return '9/25予定→入金日の初期値9/25・10/7に入金済みでも9月に表示'},{page});
+
   await check(`S-13 ${cfg}`,'エラーが出ていない',async()=>{assert.deepEqual(errors.filter(e=>!/favicon|ERR_|Failed to load resource/.test(e)),[]);return '0件'},{page});
   await context.close();
 }

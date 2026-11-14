@@ -116,9 +116,9 @@ await check(page,'G-82','シフトボード連携: カレンダーのシフト�
   await p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData();const r=s.salaryRecords.find(x=>x.employerId==='emp_seed_muji'&&x.month==='2026-11');if(r)r.status='入金済み';await t.replaceData(s)});
   await tap(p,'#shiftSave');await p.waitForTimeout(400);
   const d=await p.evaluate(()=>{const d=globalThis.__mm3Test.getData();return{plans:d.shiftPlans.length,gu:d.salaryRecords.find(r=>r.employerId==='emp_seed_gu'&&r.month==='2026-11'),muji:d.salaryRecords.filter(r=>r.employerId==='emp_seed_muji'&&r.month==='2026-11')}});
-  assert.equal(d.plans,4,'シフトを4件記録');assert.equal(d.gu.gross,24538);assert.equal(d.gu.transport,2520);assert.equal(d.gu.status,'予定');
+  assert.equal(d.plans,4,'シフトを4件記録');assert.equal(d.gu.gross,24538+2520,'総支給額は交通費込み（交通費は内訳）');assert.equal(d.gu.transport,2520);assert.equal(d.gu.status,'予定');
   assert.ok(d.muji.every(r=>r.status!=='予定'||r.source!=='shift'||d.muji.length===1),'入金済みの給与は変えない');
-  return `4件→GU 2026年11月勤務分 ¥24,538＋交通費¥2,520（予定）、無印は入金済みのため変えない`},{writes:true});
+  return `4件→GU 2026年11月勤務分 ¥27,058（うち交通費¥2,520・予定）、無印は入金済みのため変えない`},{writes:true});
 await check(page,'G-83','Googleカレンダーから自動で取り込む: 1日1回だけ読み取り、給与の見込み（予定）を更新。同じ日は2回目を読まない。許可が切れていれば「Googleで更新」を1回だけ案内',async p=>{
   await p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData();s.gmailSettings={...s.gmailSettings,clientId:'test.apps.googleusercontent.com'};s.shiftSettings={autoBreak:true,nightRate:25,titleMap:{},calendar:{enabled:true,calendarId:'shift@group.calendar.google.com',calendarName:'シフトボード',lastDay:''}};await t.replaceData(s)});
   const r=await p.evaluate(async()=>{const real=window.fetch;let calls=0;window.fetch=async(u)=>{calls++;const ev=(d,a,b,t)=>({status:'confirmed',summary:t,start:{dateTime:`${d}T${a}:00+09:00`},end:{dateTime:`${d}T${b}:00+09:00`}});return new Response(JSON.stringify({items:[ev('2026-11-02','10:00','18:00','GU'),ev('2026-11-04','17:00','23:30','GU'),{status:'confirmed',summary:'休み',start:{date:'2026-11-05'},end:{date:'2026-11-06'}}]}),{status:200})};
@@ -126,7 +126,7 @@ await check(page,'G-83','Googleカレンダーから自動で取り込む: 1日1
       const d=globalThis.__mm3Test.getData(),rec=d.salaryRecords.find(x=>x.employerId==='emp_seed_gu'&&x.month==='2026-11');
       T.setToken('');const cal={...d.shiftSettings.calendar,lastDay:''};d.shiftSettings.calendar=cal;await globalThis.__mm3Test.replaceData(d);T.resetPrompt();T.maybe();await new Promise(r=>setTimeout(r,200));const toast=[...document.querySelectorAll('.toast')].map(x=>x.textContent).join('|');
       return{first,second,gross:rec?.gross,transport:rec?.transport,status:rec?.status,lastCount:d.shiftSettings.calendar.lastCount,toast,plans:d.shiftPlans.length}}finally{window.fetch=real}});
-  assert.equal(r.first,1,'1回だけ読み取る');assert.equal(r.second,1,'同じ日は2回目を読まない');assert.equal(r.gross,9425+7963);assert.equal(r.status,'予定');assert.equal(r.lastCount,2,'終日の予定は除く');assert.match(r.toast,/Googleで更新/,'許可が切れていれば案内');
+  assert.equal(r.first,1,'1回だけ読み取る');assert.equal(r.second,1,'同じ日は2回目を読まない');assert.equal(r.gross,9425+7963+1680,'総支給額は交通費込み（2日分）');assert.equal(r.status,'予定');assert.equal(r.lastCount,2,'終日の予定は除く');assert.match(r.toast,/Googleで更新/,'許可が切れていれば案内');
   return `カレンダーの2件→GU 2026年11月勤務分 ¥${r.gross.toLocaleString()}（予定）・同日2回目は読まない・許可切れは「Googleで更新」`},{writes:true});
 await check(page,'G-84','ACF指標の作り直し: ホームのカードは半円メーターではなく「使えるお金」「予定の支払い」の2本の棒と余る見込み。詳細画面に「÷」の式は出さず一文で説明',async p=>{
   await p.evaluate(async()=>{const t=globalThis.__mm3Test,s=t.getData();s.acfSettings={...s.acfSettings,initialized:true,c100Mode:false};await t.replaceData(s);t.closeSheet();while(document.querySelector('#pushLayer .push-view.show'))if(t.popView()===false)break;t.switchTab('today');t.renderAll()});await settle(p);
