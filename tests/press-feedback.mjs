@@ -30,6 +30,9 @@ for(const [width,appearance] of [[393,'light'],[320,'dark']]){
       /* 押した結果、画面が変わったら（離す前に開くタイプ）押下反応ありとみなす */
       const gone=during==null;if(!gone&&before===during){const k=`${key}|${it.name}`;if(!report.rows.some(r=>r.k===k))report.rows.push({k,cfg:`${width}-${appearance}`,screen:key,where:it.name})}}
     await page.evaluate(()=>document.querySelectorAll('[data-press-probe]').forEach(e=>e.removeAttribute('data-press-probe')));};
+  /* 自己確認: 反応しないボタンを1つ置き、検出できることを確かめる */
+  await page.evaluate(()=>{const b=document.createElement('button');b.id='pressControl';b.textContent='対照';b.setAttribute('style','all:unset;display:block;position:relative;z-index:9;width:120px;height:44px;margin:200px auto 0;color:#000;background:#fff;transition:none!important');document.querySelector('.screen.active .scroll').prepend(b)});
+  {const before=report.rows.length;await probe('control');const hit=report.rows.slice(before).some(r=>r.where.includes('#pressControl'));report.rows=report.rows.slice(0,before);assert.ok(hit,'反応しないボタンを検出できる');report.selfTest='ok';await page.evaluate(()=>document.getElementById('pressControl')?.remove())}
   for(const tab of ['today','payroot','settings']){await close();await page.evaluate(t=>globalThis.__mm3Test.switchTab(t),tab);await settle(page);await probe('tab:'+tab)}
   for(const m of [...new Set(screenMethods)].filter(m=>!/Picker$|DayQuickMenu|Calculator|CalcAssist|MaybeOpen|Cancellation/.test(m)).slice(0,60)){await close();await settle(page);let ok=false;try{ok=await page.evaluate(m=>globalThis.__mm3Test.call(m,[]),m)}catch(e){}await settle(page);await page.waitForTimeout(150);if(ok)await probe(m)}
   await context.close();
