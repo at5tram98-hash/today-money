@@ -64,7 +64,8 @@ for(const [width,appearance] of [[393,'light'],[320,'dark']]){
     const r=await p.evaluate(()=>{const t=globalThis.__mm3Test,r=t.shiftV18.relay();return{day:r.lastApplyDay,checkAt:r.lastCheckAt}});
     assert.equal(second,0,'3時間以内の2回目は取りに行かない');assert.equal(r.day,'2026-10-07');
     relayText='2026-10-01 10:00-18:00 GU\n2026-10-03 10:00-18:00 GU';relayAt=2000;
-    const g=await p.evaluate(async()=>{const t=globalThis.__mm3Test;await t.shiftV18.sync({silent:true,force:true});const d=t.getData(),gid=d.employers.find(e=>e.name==='GU').id;return d.salaryRecords.find(x=>x.employerId===gid&&x.month==='2026-10').gross});
+    const {g,toast}=await p.evaluate(async()=>{const t=globalThis.__mm3Test;document.getElementById('toastLayer')?.replaceChildren();await t.shiftV18.sync({silent:true,force:true});const d=t.getData(),gid=d.employers.find(e=>e.name==='GU').id;return{g:d.salaryRecords.find(x=>x.employerId===gid&&x.month==='2026-10').gross,toast:document.getElementById('toastLayer')?.textContent||''}});
+    assert.ok(!/シフト/.test(toast),'自動の取り込みではお知らせを出さない');
     assert.equal(g,18200,'消えたシフト（10/2）は外れ、10/3が入る');
     return '2回目は通信なし・更新後 GU ¥18,200'},{page});
 
@@ -95,10 +96,10 @@ for(const [width,appearance] of [[393,'light'],[320,'dark']]){
       return label},{page});
   }
 
-  await check(`S-12 ${cfg}`,'給与画面の上に「シフトから自動計算」が出て、押すと給与・勤務先が開く',async p=>{
+  await check(`S-12 ${cfg}`,'給与画面の自動取り込みは目立たない小さな一行だけで、押すと給与・勤務先が開く。自動の時はお知らせを出さない',async p=>{
     await p.evaluate(()=>{const t=globalThis.__mm3Test;t.closeSheet();while(document.querySelector('#pushLayer .push-view.show'))if(t.popView()===false)break;t.switchTab('pay');t.renderAll()});await settle(p);
     const r=await p.evaluate(async()=>{const s=document.getElementById('salarySyncStrip');if(!s)return{};const text=s.textContent;s.click();await new Promise(r=>setTimeout(r,450));return{text,title:[...document.querySelectorAll('#pushLayer .push-view.show')].at(-1)?.querySelector('.push-title,.nav-title,h1')?.textContent||document.querySelector('#pushLayer .push-view.show:last-child')?.textContent.slice(0,40)}});
-    assert.match(r.text||'',/シフトから自動計算/);assert.match(r.title||'',/給与・勤務先/);
+    assert.match(r.text||'',/シフトから計算・.*更新/);assert.match(r.title||'',/給与・勤務先/);
     return r.text.replace(/\s+/g,' ').trim().slice(0,40)},{page});
 
   await check(`S-13 ${cfg}`,'エラーが出ていない',async()=>{assert.deepEqual(errors.filter(e=>!/favicon|ERR_|Failed to load resource/.test(e)),[]);return '0件'},{page});

@@ -3899,7 +3899,7 @@ function renderSettings(){
   const level={many:'多め',minimal:'最小限',recommended:'おすすめ'}[data.notificationSettings.level]||'おすすめ';
   const appearance={system:'システム',dark:'ダーク',light:'ライト'}[data.appearance]||'システム';
   const groups=[
-    ['登録',[{id:'accountsSettings',symbol:'bank',color:'var(--accent)',title:'口座とカード',value:`${data.banks.length+data.cards.length+(data.debitCards||[]).length}件`},{id:'employersSettings',symbol:'briefcase',color:'var(--teal)',title:'給与・勤務先',value:shiftRelay().enabled?'自動':`${data.employers.length}件`}],'口座・カード・勤務先の追加と編集はここで行います。'],
+    ['登録',[{id:'accountsSettings',symbol:'bank',color:'var(--accent)',title:'口座とカード',value:`${data.banks.length+data.cards.length+(data.debitCards||[]).length}件`},{id:'employersSettings',symbol:'briefcase',color:'var(--teal)',title:'給与・勤務先',value:`${data.employers.length}件`}],'口座・カード・勤務先の追加と編集はここで行います。'],
     ['連携',[{id:'gmailSettings',symbol:'mail',color:'#EA4335',title:'Gmail連携',detail:gmailStatusLabel()}]],
     ['お金',[
       {id:'categorySettings',symbol:'grid',color:'var(--orange)',title:'カテゴリ',value:`${data.categories.length}件`},
@@ -5823,7 +5823,7 @@ function homeAssetsCardHtml(){
 function homeNextPayday(){const today=ymd();return data.salaryRecords.filter(r=>r.status!=='入金済'&&r.date&&r.date>=today).sort((a,b)=>a.date.localeCompare(b.date))[0]||null}
 function homeSalaryCardHtml(){
   const m=ym(),summary=mm3SalaryMonthSummary(m),has=data.employers.length||data.salaryRecords.length,values=Array.from({length:6},(_,i)=>{const mm=addMonths(m,i-5);return{label:monthLabel(mm),value:mm3SalaryMonthSummary(mm).total}}),next=homeNextPayday();
-  const body=has?`<span class="home-card-left"><span class="home-card-value">${yen(summary.total)}</span><span class="home-card-caption">今月の受取見込み${(summary.records||[]).some(r=>r.source==="shift")?"・シフトから自動":""}</span></span><span class="home-card-right">${values.some(v=>v.value>0)?miniBarsSvg(values,'直近6か月の給与'):'<span class="home-card-empty">給与の記録がまだありません</span>'}</span>`:`<span class="home-card-left"><span class="home-card-value small">給与が未登録です</span><span class="home-card-caption">＋の「給与を登録」から記録できます</span></span>`;
+  const body=has?`<span class="home-card-left"><span class="home-card-value">${yen(summary.total)}</span><span class="home-card-caption">今月の受取見込み</span></span><span class="home-card-right">${values.some(v=>v.value>0)?miniBarsSvg(values,'直近6か月の給与'):'<span class="home-card-empty">給与の記録がまだありません</span>'}</span>`:`<span class="home-card-left"><span class="home-card-value small">給与が未登録です</span><span class="home-card-caption">＋の「給与を登録」から記録できます</span></span>`;
   return `<section class="home-card-wrap" data-home-section="salary"><h2 class="home-card-title">今月の給与</h2><div class="home-card"><button type="button" class="home-card-body" id="homeSalaryCard" aria-label="${esc(`今月の給与 ${has?yen(summary.total):'未登録'}・給与詳細を開く`)}">${body}</button><p class="home-card-readout" hidden aria-live="polite"></p>${next?`<button type="button" class="home-card-status" id="homeNextPayday">次の給料日 ${homeShortDate(next.date)}${icon('chevronRight')}</button>`:''}</div></section>`;
 }
 function homeAcfCardHtml(){
@@ -7694,7 +7694,7 @@ async function syncShiftRelay({silent=true,force=false}={}){
     if(!shifts.length){setShiftRelay({lastCheckAt:Date.now(),lastUpdatedAt:updatedAt,lastError:'届いた内容からシフトを読み取れませんでした（日付と時刻の形式を確認してください）'});if(!silent)showAlert('シフトを読み取れませんでした','ショートカットの「テキスト」が「2026-12-01 10:00-18:00 GU」の形になっているか確認してください。');return null}
     const out=applyShiftsAuto(shifts),manual=out.results.filter(x=>x.state==='manual').length;
     setShiftRelay({lastCheckAt:Date.now(),lastUpdatedAt:updatedAt,lastApplyDay:ymd(),lastAppliedAt:new Date().toISOString(),lastCount:out.count,lastTotal:out.total,lastManual:manual,lastError:out.count?'':'シフトの予定名がどの勤務先にも当てはまりません',unmatched:out.unmatched.slice(0,8)});
-    if(out.count&&(!silent||out.results.some(x=>x.state==='created'||x.state==='updated')))showToast(`シフト${out.count}件から給料の見込みを更新しました${manual?`（手入力の${manual}件はそのまま）`:''}`);
+    if(out.count&&!silent)showToast(`シフト${out.count}件から給料の見込みを更新しました${manual?`（手入力の${manual}件はそのまま）`:''}`);
     try{refreshSalaryOpenView()}catch(e){}try{refreshSalarySettings()}catch(e){}
     return out;
   }catch(e){setShiftRelay({lastCheckAt:Date.now(),lastError:String(e?.message||e)});if(!silent)showAlert('シフトを受け取れませんでした',String(e?.message||e));return null}
@@ -7718,16 +7718,10 @@ function maybeAutoSyncShifts(){
 /* ---------- 給与画面の上の「シフトから自動計算」 ---------- */
 function salaryManualLocked(){return(data.salaryRecords||[]).filter(r=>r.status!=='入金済'&&salaryManualLockUntil(r)>Date.now())}
 function salaryLockDaysLeft(r){return Math.max(1,Math.ceil((salaryManualLockUntil(r)-Date.now())/864e5))}
-function salaryRelayStatus(){
-  const r=shiftRelay(),locked=salaryManualLocked().length;
-  if(!r.enabled)return{tone:'off',state:'設定',title:'シフトから自動で計算',sub:'iPhoneのカレンダーのシフトから、時給と交通費で毎日計算します'};
-  if(r.lastError&&!r.lastAppliedAt)return{tone:'warn',state:'確認',title:'シフトから自動計算',sub:r.lastError};
-  const when=r.lastAppliedAt?`${homeTimeLabel(r.lastAppliedAt)}に更新・${r.lastCount}件のシフト`:'まだ受け取っていません';
-  return{tone:r.lastError?'warn':'on',state:locked?`手入力 ${locked}件`:'自動',title:'シフトから自動計算',sub:r.lastError?`${when}・${r.lastError}`:when};
-}
 function salarySyncStripHtml(){
-  const st=salaryRelayStatus();
-  return `<div class="group sal-sync-group"><button type="button" class="row press sal-sync ${st.tone}" id="salarySyncStrip"><span class="sal-sync-icon" aria-hidden="true">${icon('calendar')}</span><div class="row-main"><div class="row-title">${esc(st.title)}</div><div class="row-sub">${esc(st.sub)}</div></div><span class="sal-sync-state">${esc(st.state)}</span><span class="chev">${icon('chevronRight')}</span></button></div>`;
+  const r=shiftRelay();if(!r.enabled)return '';
+  const locked=salaryManualLocked().length,text=r.lastAppliedAt?`シフトから計算・${homeTimeLabel(r.lastAppliedAt)}更新${locked?`・手入力${locked}件`:''}`:'シフトの受け取り待ち';
+  return `<button type="button" class="sal-sync-note" id="salarySyncStrip" aria-label="給与・勤務先の設定を開く">${esc(text)}</button>`;
 }
 
 /* ---------- その他 → 給与・勤務先 ---------- */
@@ -7744,9 +7738,11 @@ function salaryUpcomingShiftPay(){
   return{date:first.date,total:same.reduce((s,r)=>s+(Number(r.gross)||0)+(Number(r.transport)||0),0),records:same};
 }
 function salarySettingsHtml(){
-  const r=shiftRelay(),s=shiftSettings(),next=salaryUpcomingShiftPay(),locked=salaryManualLocked(),st=salaryRelayStatus();
-  return `<div class="salx-hero"><span class="salx-hero-icon" aria-hidden="true">${icon('briefcase')}</span><div class="salx-kicker">${next?`次の給料日 ${Number(next.date.slice(5,7))}/${Number(next.date.slice(8,10))}`:'次の給料'}</div><div class="salx-value">${next?yen(next.total):'—'}</div><div class="salx-sub">${next?esc(next.records.map(x=>`${employerById(x.employerId)?.name||'勤務先'} ${yen((Number(x.gross)||0)+(Number(x.transport)||0))}${x.source==='manual'?'（手入力）':''}`).join('・')):'シフトを取り込むと、時給と交通費から計算します'}</div><div class="salx-chip ${st.tone}">${esc(st.state==='設定'?'自動計算はオフ':st.sub)}</div></div>
-  <h2 class="reg-head">iPhoneのカレンダーから自動で取り込む</h2><div class="group">
+  const r=shiftRelay(),s=shiftSettings(),next=salaryUpcomingShiftPay(),locked=salaryManualLocked();
+  return `<div class="salx-hero"><span class="salx-hero-icon" aria-hidden="true">${icon('briefcase')}</span><div class="salx-kicker">${next?`次の給料日 ${Number(next.date.slice(5,7))}/${Number(next.date.slice(8,10))}`:'次の給料'}</div><div class="salx-value">${next?yen(next.total):'—'}</div><div class="salx-sub">${next?esc(next.records.map(x=>`${employerById(x.employerId)?.name||'勤務先'} ${yen((Number(x.gross)||0)+(Number(x.transport)||0))}${x.source==='manual'?'（手入力）':''}`).join('・')):'シフトを取り込むと、時給と交通費から計算します'}</div></div>
+  <h2 class="reg-head">勤務先と給与の条件</h2><div class="group">${data.employers.map(e=>`<button type="button" class="row press reg-row" data-terms="${esc(e.id)}"><span class="reg-icon" style="--c:var(--teal)" aria-hidden="true">${icon('briefcase')}</span><div class="row-main"><div class="row-title">${esc(e.name)}</div><div class="row-sub">${esc(employerTermsText(e))}</div></div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}${regAddHtml('regAddEmployer','勤務先を追加')}</div>
+  <h2 class="reg-head">計算のしかた</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">深夜割増（22時〜5時）</div><div class="row-sub">時給の25%を上乗せ</div></div><button type="button" class="switch${s.nightRate>0?' on':''}" id="salNight" role="switch" aria-checked="${s.nightRate>0}" aria-label="深夜割増"></button></div></div>
+  <h2 class="reg-head">シフトの自動取り込み</h2><div class="group">
     <div class="row"><div class="row-main"><div class="row-title">毎日自動で取り込む</div><div class="row-sub">シフトボードがiPhoneのカレンダーに書き出したシフトを、1日1回受け取ります</div></div><button type="button" class="switch${r.enabled?' on':''}" id="relayAuto" role="switch" aria-checked="${r.enabled}" aria-label="毎日自動で取り込む"></button></div>
     <button type="button" class="row press" id="relayGuide"><span class="reg-icon" style="--c:var(--purple)" aria-hidden="true">${icon('repeat')}</span><div class="row-main"><div class="row-title">ショートカットを設定</div><div class="row-sub">最初に1回だけ（約3分）</div></div><span class="chev">${icon('chevronRight')}</span></button>
     <button type="button" class="row press" id="relayNow"><span class="reg-icon" style="--c:var(--accent)" aria-hidden="true">${icon('download')}</span><div class="row-main"><div class="row-title">今すぐ取り込む</div><div class="row-sub">${r.lastAppliedAt?`前回 ${esc(homeTimeLabel(r.lastAppliedAt))}・${r.lastCount}件・${yen(r.lastTotal)}`:'まだ取り込んでいません'}</div></div><span class="chev">${icon('chevronRight')}</span></button>
@@ -7755,8 +7751,6 @@ function salarySettingsHtml(){
   ${(r.unmatched||[]).length?`<h2 class="reg-head">勤務先が分からない予定</h2><div class="group">${r.unmatched.map(t=>`<div class="row shift-map"><div class="row-main"><div class="row-title">${esc(t)}</div><div class="row-sub">どの勤務先のシフトですか？</div></div><div class="shift-emp-chips">${data.employers.map(e=>`<button type="button" class="shift-chip" data-map-title="${esc(t)}" data-map-emp="${esc(e.id)}">${esc(e.name)}</button>`).join('')}</div></div>`).join('')}</div>`:''}
   <p class="settings-section-footer">給与を手で入力・修正すると、その月の給与は<b>7日間</b>自動で上書きしません（手入力が優先）。入金済みの給与は変えません。</p>
   ${locked.length?`<h2 class="reg-head">手入力を優先している給与</h2><div class="group">${locked.map(x=>`<div class="row"><div class="row-main"><div class="row-title">${esc(employerById(x.employerId)?.name||'勤務先')}・${monthLabel(x.month)}勤務分 ${yen((Number(x.gross)||0)+(Number(x.transport)||0))}</div><div class="row-sub">あと${salaryLockDaysLeft(x)}日は自動で上書きしません</div></div><button type="button" class="pill-btn" data-unlock="${esc(x.id)}">自動に戻す</button></div>`).join('')}</div>`:''}
-  <h2 class="reg-head">勤務先と給与の条件</h2><div class="group">${data.employers.map(e=>`<button type="button" class="row press reg-row" data-terms="${esc(e.id)}"><span class="reg-icon" style="--c:var(--teal)" aria-hidden="true">${icon('briefcase')}</span><div class="row-main"><div class="row-title">${esc(e.name)}</div><div class="row-sub">${esc(employerTermsText(e))}</div></div><span class="chev">${icon('chevronRight')}</span></button>`).join('')}${regAddHtml('regAddEmployer','勤務先を追加')}</div>
-  <h2 class="reg-head">計算のしかた</h2><div class="group"><div class="row"><div class="row-main"><div class="row-title">深夜割増（22時〜5時）</div><div class="row-sub">時給の25%を上乗せ</div></div><button type="button" class="switch${s.nightRate>0?' on':''}" id="salNight" role="switch" aria-checked="${s.nightRate>0}" aria-label="深夜割増"></button></div></div>
   <h2 class="reg-head">ほかの取り込み方法</h2><div class="group"><button type="button" class="row press reg-row" id="regShiftImport"><span class="reg-icon" style="--c:var(--orange)" aria-hidden="true">${icon('calendar')}</span><div class="row-main"><div class="row-title">Googleカレンダー・貼り付けで取り込む</div><div class="row-sub">シフトを手動で取り込む時に使います</div></div><span class="chev">${icon('chevronRight')}</span></button></div>`;
 }
 function refreshSalarySettings(){const top=pushStack.at(-1);if(top?.title==='給与・勤務先')openEmployersSettings()}
