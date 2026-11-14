@@ -44,6 +44,7 @@
     "src/js/25-finish.js",
     "src/js/26-liquid-v16.js",
     "src/js/polish-v17.js",
+    "src/js/salary-v18.js",
     "src/bootstrap-close.txt"
   ],
   "styles": [
@@ -67,7 +68,8 @@
     "src/css/ios-polish.css",
     "src/css/ios-native.css",
     "src/css/liquid-audit.css",
-    "src/css/polish-final.css"
+    "src/css/polish-final.css",
+    "src/css/salary-shift.css"
   ],
   "baseline": {
     "blob": "2a33e9e643db3c53347d211fa77b67c3ac580072",

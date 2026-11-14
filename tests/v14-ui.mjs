@@ -83,7 +83,7 @@ try{
   await check(page,'H-042',{run:async p=>{if(!await p.locator('#homeNextPayday').count())return '次の給料日が無いので非表示';await tap(p,'#homeNextPayday');await expectScreen(p,'pay');return '給与詳細へ'}});
   await check(page,'H-050',{setup:enableAcf,run:async p=>{await longPress(p,'#homeAcfCard');await expectMenu(p,['計算条件を見る','再計算']);await closeAll(p);await tap(p,'#homeAcfCard');const v=await view(p);assert.ok(v.push.length||v.sheet,'ACF詳細');return 'ACF詳細・長押し 計算条件／再計算'},writes:true});
   /* 第16版: ホームのACFカードは折れ線ではなくACF指標（使えるお金÷予定支出）のゲージ */
-  await check(page,'H-051',{setup:enableAcf,run:async p=>{assert.ok(await p.locator('#homeAcfCard .acf-gauge').count(),'ACF指標のゲージ');const t=(await p.locator('#homeAcfCard').innerText()).replace(/\s+/g,' ');assert.match(t,/\d/,'指標の数値');return `ACF指標のゲージ「${t.slice(0,30)}」`},writes:true});
+  await check(page,'H-051',{setup:enableAcf,run:async p=>{/* 第17版でゲージをやめ、「使えるお金」「予定の支払い」の2本の棒に変更。第18版で期間は毎月28日まで */assert.equal(await p.locator('#homeAcfCard .acfb-row').count(),2,'ACF指標の比較の棒2本');const t=(await p.locator('#homeAcfCard').innerText()).replace(/\s+/g,' ');assert.match(t,/\d\.\d/,'指標の数値');assert.match(t,/\d+\/\d+ まで/,'期間の終わり');return `ACF指標の棒「${t.slice(0,30)}」`},writes:true});
   await check(page,'H-060',{run:async p=>{await longPress(p,'#homePaymentCard');await expectMenu(p,[]);await closeAll(p);await tap(p,'#homePaymentCard');const v=await view(p);assert.ok(v.push.length||v.sheet||v.screen!=='screen-today','支払いの詳細');return `支払いの詳細 ${v.push.at(-1)||v.sheet||v.screen}`}});
   await check(page,'H-061',{run:async p=>{await tap(p,'#homeAllPayments');await expectScreen(p,'payroot');return '支払いrootへ'}});
   /* ---- ホーム・表と一覧 ---- */

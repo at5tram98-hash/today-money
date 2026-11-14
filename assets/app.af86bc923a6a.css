@@ -3910,3 +3910,108 @@ input.field:focus, textarea.field:focus { box-shadow: 0 0 0 2px color-mix(in srg
 
 /* 22. 何もない時の表示を中央にやわらかく */
 .empty-state, .empty { color: var(--label2); text-align: center }
+/* 第18版: 給与・シフト連携の画面と、iOSらしさの仕上げ */
+
+/* 1. 給与・勤務先の見出しカード（ヘルスケアの概要のように） */
+.salx-hero { margin: 4px 0 6px; padding: 20px 18px 18px; border-radius: 22px; background: var(--card); display: grid; justify-items: center; text-align: center; gap: 4px }
+.salx-hero-icon { width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; color: #fff; background: linear-gradient(160deg, #64D2FF, #30B0C7); box-shadow: 0 8px 20px rgba(48,176,199,.28), inset 0 1px 0 rgba(255,255,255,.35); margin-bottom: 6px }
+.salx-hero-icon svg { width: 28px; height: 28px }
+.salx-kicker { font-size: 14px; font-weight: 600; color: var(--label2) }
+.salx-value { font-family: var(--font-rounded, inherit); font-size: 40px; font-weight: 800; letter-spacing: -.03em; line-height: 1.08; font-variant-numeric: tabular-nums }
+.salx-sub { font-size: 13px; color: var(--label2); line-height: 1.45; max-width: 320px }
+.salx-chip { margin-top: 8px; max-width: 100%; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1.35; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent) }
+.salx-chip.on { color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent) }
+.salx-chip.warn { color: var(--orange); background: color-mix(in srgb, var(--orange) 15%, transparent) }
+html:not(.dark) :is(.salx-chip, .sal-sync) { --green: #1F8A3B; --orange: #C45A00 }
+
+/* 2. 計算の例（レシートのような行と合計） */
+.salx-example { margin: 4px 0 4px; padding: 14px 16px; border-radius: 18px; background: var(--card); display: grid; gap: 8px; font-size: 14px }
+.salx-example-head { font-size: 13px; font-weight: 600; color: var(--label2) }
+.salx-example-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; min-width: 0 }
+.salx-example-line > span { min-width: 0; color: var(--label2) }
+.salx-example-line b { flex: none; font-variant-numeric: tabular-nums }
+.salx-example-line.total { padding-top: 8px; border-top: .5px solid var(--sep); font-weight: 700 }
+.salx-example-line.total > span { color: var(--label) }
+.salx-example-line.total b { font-size: 18px; color: var(--green) }
+
+/* 3. 給与画面の「シフトから自動計算」 */
+.sal-sync-group { margin: 12px 0 }
+.sal-sync .row-main { min-width: 0 }
+.sal-sync-icon { width: 34px; height: 34px; margin-right: 12px; flex: none; border-radius: 10px; display: grid; place-items: center; color: #fff; background: var(--accent) }
+.sal-sync.on .sal-sync-icon { background: var(--green) } .sal-sync.warn .sal-sync-icon { background: var(--orange) }
+.sal-sync-icon svg { width: 19px; height: 19px }
+.sal-sync-state { flex: none; margin-left: 8px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); white-space: nowrap }
+.sal-sync.on .sal-sync-state { color: var(--green); background: color-mix(in srgb, var(--green) 14%, transparent) }
+.sal-sync.warn .sal-sync-state { color: var(--orange); background: color-mix(in srgb, var(--orange) 15%, transparent) }
+
+/* 4. 小さなカプセルのボタン（コピー・自動に戻す） */
+.pill-btn { flex: none; min-height: 32px; padding: 6px 14px; border: 0; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 600; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); white-space: nowrap; cursor: pointer; position: relative }
+.pill-btn::before { content: ''; position: absolute; inset: -6px -2px }
+
+/* 5. 受け渡しのURL・鍵は等幅で、長い時は「…」 */
+.relay-code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.relay-copy .row-main { min-width: 0 }
+
+/* 6. 押した後の読み込み中: 右の矢印がくるくるに変わり、二度押しできない */
+.row.loading { pointer-events: none }
+.row.loading > .chev { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--fill); border-top-color: var(--accent); animation: rowSpin .8s linear infinite }
+.row.loading > .chev svg { display: none }
+@keyframes rowSpin { to { transform: rotate(360deg) } }
+
+/* 7. 選択（時間・日付）: 値は右寄せ・等幅、iOSの選ぶ矢印つき */
+.aip-select, .br-sel, .aip-date { width: auto; min-width: 96px; max-width: 46%; flex: none; margin-left: 10px; padding: 8px 30px 8px 12px; border-radius: 10px; text-align: right; font-variant-numeric: tabular-nums; -webkit-appearance: none; appearance: none; background: var(--fill) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238E8E93' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 9 5-5 5 5M7 15l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 10px center }
+.aip-date { padding-right: 12px; background-image: none }
+.br-unit { flex: none; margin-left: 8px; font-size: 15px; color: var(--label2) }
+.aip-lead { margin: 2px 4px 12px; font-size: 14px; color: var(--label2); line-height: 1.5 }
+.aip-date-row.hidden { display: none }
+
+/* 8. ACF指標の期間: 押せるカプセル（カレンダーの日付と「変更」） */
+.acfd-period { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; margin: 2px 0 10px; padding: 9px 12px; border: 0; border-radius: 12px; font: inherit; font-size: 13px; line-height: 1.4; text-align: left; color: var(--label2); background: var(--fill); cursor: pointer; transition: transform .16s cubic-bezier(.3,1.3,.5,1), background-color .2s }
+.acfd-period:active { transform: scale(.98); background: color-mix(in srgb, var(--fill) 70%, var(--label3)) }
+.acfd-period > span:first-child { min-width: 0 }
+.acfd-period-edit { flex: none; font-weight: 700; color: var(--accent) }
+
+/* 9. 予定名の入力欄は行いっぱいに */
+.pt-alias-row .row-main { display: grid; gap: 8px; width: 100% }
+.pt-alias { width: 100% }
+.pt-del { flex: none; color: var(--red) }
+
+/* 10. 確認が必要な行は左に色の帯 */
+.shift-cal-error { box-shadow: inset 3px 0 0 var(--orange) }
+.shift-cal-error .row-title { color: var(--orange) }
+
+/* 11. 見出しの余白と大きさをそろえる（設定の各画面） */
+.reg-head + .group, .reg-head + .shift-steps { margin-top: 0 }
+.settings-section-footer b { color: var(--label) }
+
+/* 12. 手順の番号を丸い数字にする */
+.shift-steps { counter-reset: none }
+.shift-steps li::marker { color: var(--accent); font-weight: 700 }
+
+/* 13. 選択できない（押せない）ボタンは薄く */
+button:disabled, .row[aria-disabled="true"] { opacity: .4 }
+
+/* 14. 通知（トースト）はタブバーの上・横幅を抑えて中央に */
+.toast { max-width: min(92vw, 420px); margin-inline: auto }
+
+/* 15. スイッチの行は少し高く、文字と縦の中心をそろえる */
+.group .row:has(> .switch) { min-height: 56px }
+.group .row > .switch { align-self: center }
+
+/* 16. 勤務先の割り当てのチップ（押すとばねで縮む） */
+.shift-chip { transition: transform .16s cubic-bezier(.3,1.3,.5,1), background-color .2s, color .2s }
+.shift-chip:active { transform: scale(.92) }
+
+/* 17. 給与の編集画面: シフトから自動・手入力の説明 */
+.sal-src-note { display: flex; gap: 8px; align-items: flex-start; margin: -2px 4px 12px; padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.45; color: var(--label2); background: color-mix(in srgb, var(--accent) 9%, transparent) }
+.sal-src-note.manual { background: color-mix(in srgb, var(--orange) 11%, transparent) }
+.sal-src-note svg { flex: none; width: 16px; height: 16px; margin-top: 2px; color: var(--accent) }
+.sal-src-note.manual svg { color: var(--orange) }
+
+/* 18. 給与画面: 自動取り込みは目立たせず、小さな一行だけ（押すと設定） */
+.sal-sync-note { display: block; margin: 6px 4px 10px; padding: 2px 0; border: 0; background: none; font: inherit; font-size: 12px; color: var(--label3); text-align: left; cursor: pointer }
+.sal-sync-note:active { opacity: .5 }
+
+/* 19. 選択の行（休憩ルール・ACFの期間）も押すと色が付く */
+.form-card label.row { transition: background-color .32s ease-out }
+.form-card label.row:active { background-color: var(--fill); transition-duration: 0s }

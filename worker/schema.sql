@@ -20,3 +20,7 @@ CREATE TABLE IF NOT EXISTS enrollments (
 CREATE TABLE IF NOT EXISTS enrollment_limits (
   ip_hash TEXT PRIMARY KEY, window INTEGER NOT NULL, count INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS shift_inbox (
+  key_hash TEXT PRIMARY KEY, payload TEXT NOT NULL, updated_at INTEGER NOT NULL
+);

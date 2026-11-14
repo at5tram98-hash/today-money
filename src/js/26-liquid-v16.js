@@ -109,8 +109,8 @@ document.addEventListener('pointerdown',e=>{const wrap=e.target.closest?.('#toda
 /* ---------- #14 ACF指標 ---------- */
 function acfIndexFor(f){
   const rows=f?.rows||[],start=f?.startDate||ymd();
-  const pay=rows.find(r=>r.date>start&&(r.salary||(r.events||[]).some(e=>e.type==='salary')));
-  const end=pay?pay.date:(rows.find(r=>r.date>=addDaysYmd(start,30))?.date||addDaysYmd(start,30));
+  /* 期間の終わり: クレジットカードの支払いが終わる日（初期値は毎月28日）。「今回だけ」の日付も指定できる */
+  const end=acfIndexEndDate(start),pay=null;
   const span=Math.max(1,Math.round((parseYmd(end)-parseYmd(start))/864e5)+1);
   /* 支払いはホームの「次の支払い」と同じ予定（カード・固定・大型）から数える */
   let fin=[];try{fin=financialEventsFrom(start,span).filter(e=>e.date>=start&&e.date<=end)}catch(_){}
@@ -125,7 +125,7 @@ function acfIndexFor(f){
   const finIn=fin.filter(e=>e.type==='income').map(e=>({label:e.title,amount:Math.abs(Number(e.amount)||0),date:e.date,dir:1}));
   const rowIn=finIn.length?[]:win.flatMap(r=>(r.events||[]).filter(e=>Number(e.amount)>0&&(e.type==='income'||e.type==='salary'||r.salary)&&!/支払|引落/.test(e.label)).map(e=>({label:e.label,amount:Math.abs(Number(e.amount)||0),date:r.date,dir:1})));
   const events=[...finIn,...rowIn,...payments.map(e=>({label:e.title,amount:Math.abs(Number(e.amount)||0),date:e.date,dir:-1}))].sort((a,b)=>a.date.localeCompare(b.date));
-  return {value,have,need,balance,income,out,reserve,surplus:have-need,start,end,payday:pay?.date||null,events};
+  return {value,have,need,balance,income,out,reserve,surplus:have-need,start,end,payday:null,endKind:acfIndexEndKind(start),events};
 }
 function addDaysYmd(s,n){const d=parseYmd(s);d.setDate(d.getDate()+n);return ymd(d)}
 function acfIndexText(v){return !Number.isFinite(v)?'∞':v>=10?v.toFixed(1):v.toFixed(2)}

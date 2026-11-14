@@ -52,3 +52,11 @@ npm run test:worker
 所有者の`worker/.dev.vars`がある環境では`npm run test:push-live`で本番APIを検証できます。合成した通知登録だけを一時作成し、全通知をオフにして、終了時に削除します。実端末へPushは送りません。再配備の確認には`node tests/push-redeploy.mjs prepare`→再配備→`node tests/push-redeploy.mjs verify`を使用します。間の秘密テストトークンはgit対象外の`test-results`に置き、検証後に削除します。金融・Gmail情報は使いません。
 
 公式資料: [WebKit Web Push](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/)、[Cloudflare Secretsの維持](https://developers.cloudflare.com/workers/configuration/secrets/)、[Cloudflare Cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/)、[購読変更](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/pushsubscriptionchange_event)、[web-push](https://github.com/web-push-libs/web-push)。
+
+## シフトの受け渡し（`/v1/shifts`）
+
+iPhoneのカレンダー（シフトボードが書き出したシフト）をWebアプリへ渡すための場所です。iOSショートカットが `POST /v1/shifts`（`Authorization: Bearer <鍵>`、本文はJSON `{"text": …}` か文字そのまま）で送り、アプリが `GET /v1/shifts` で受け取ります。
+
+- 鍵（43文字以上のbase64url）はアプリが端末で作り、D1には `SHA-256("shift:"+鍵)` だけを保存します。
+- 鍵ごとに最後の1回分（32KBまで）だけ保管し、30日更新がなければCronで削除します。保管は全体で200件まで。
+- テーブル `shift_inbox` は `schema.sql` に追加済み（追加のみ）。`npm run push:deploy` でスキーマ適用と配備が行われます。

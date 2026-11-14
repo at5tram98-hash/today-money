@@ -14,7 +14,7 @@ function renderSettings(){
   const level={many:'多め',minimal:'最小限',recommended:'おすすめ'}[data.notificationSettings.level]||'おすすめ';
   const appearance={system:'システム',dark:'ダーク',light:'ライト'}[data.appearance]||'システム';
   const groups=[
-    ['登録',[{id:'accountsSettings',symbol:'bank',color:'var(--accent)',title:'口座とカード',value:`${data.banks.length+data.cards.length+(data.debitCards||[]).length}件`},{id:'employersSettings',symbol:'briefcase',color:'var(--teal)',title:'勤務先',value:`${data.employers.length}件`}],'口座・カード・勤務先の追加と編集はここで行います。'],
+    ['登録',[{id:'accountsSettings',symbol:'bank',color:'var(--accent)',title:'口座とカード',value:`${data.banks.length+data.cards.length+(data.debitCards||[]).length}件`},{id:'employersSettings',symbol:'briefcase',color:'var(--teal)',title:'給与・勤務先',value:`${data.employers.length}件`}],'口座・カード・勤務先の追加と編集はここで行います。'],
     ['連携',[{id:'gmailSettings',symbol:'mail',color:'#EA4335',title:'Gmail連携',detail:gmailStatusLabel()}]],
     ['お金',[
       {id:'categorySettings',symbol:'grid',color:'var(--orange)',title:'カテゴリ',value:`${data.categories.length}件`},

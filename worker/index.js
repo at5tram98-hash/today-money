@@ -1,5 +1,6 @@
 import webpush from "web-push";
 import { enrollment } from "./enrollment.js";
+import { shiftRelay, shiftCleanup } from "./shift-relay.js";
 
 const MAX_BODY = 16384,
   DAY_MS = 86400000;
@@ -266,6 +267,7 @@ export async function runScheduled(env, now = Date.now(), fetcher = fetch) {
     env.DB.prepare("DELETE FROM enrollment_limits WHERE window<?").bind(
       Math.floor(now / 60000) - 60,
     ),
+    shiftCleanup(env, now),
   ]);
 }
 async function readBody(request) {
@@ -297,7 +299,7 @@ export async function handleRequest(request, env, fetcher = fetch) {
       "Access-Control-Allow-Origin": origin,
       Vary: "Origin",
       "Access-Control-Allow-Headers": "Content-Type,Authorization",
-      "Access-Control-Allow-Methods": "POST,GET,OPTIONS",
+      "Access-Control-Allow-Methods": "POST,GET,DELETE,OPTIONS",
     };
   if (request.headers.get("Origin") && request.headers.get("Origin") !== origin)
     return json({ error: "origin denied" }, 403);
@@ -320,6 +322,13 @@ export async function handleRequest(request, env, fetcher = fetch) {
       configured ? 200 : 503,
       headers,
     );
+  }
+  if (path === "/v1/shifts") {
+    try {
+      return await shiftRelay(request, env, { json, sha }, headers);
+    } catch {
+      return json({ error: "invalid request" }, 400, headers);
+    }
   }
   if (request.method !== "POST")
     return json({ error: "method not allowed" }, 405, headers);
