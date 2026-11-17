@@ -40,10 +40,11 @@ struct PaymentsScreen: View {
                     }
                 }
                 Section {
-                    NavigationLink { CashFlowView() } label: {
-                        CashFlowPreview(month: month)
-                    }
-                } header: { Text("資金見通し") }
+                    NavigationLink { AcfDetailView() } label: { AcfPaymentsPreview() }
+                    NavigationLink { CashFlowView() } label: { Label("予定の入出金と残高（90日）", systemImage: "list.bullet.rectangle") }
+                } header: { Text("支払い後の資金見通し・ACF") } footer: {
+                    Text("給与・振込・カード引落を日別に試算。ACFを開くと、日別資金表・カレンダー・カードの配分を確認できます。")
+                }
 
                 Section("次の引落") {
                     if let n = next {
@@ -432,5 +433,39 @@ struct DebitUsageView: View {
             }
         }
         .navigationTitle("デビット・口座払い")
+    }
+}
+
+
+/// 支払いタブの ACF のまとめ（Web 版 renderPayments の資金見通し：月末予測・最低残高・状態）
+struct AcfPaymentsPreview: View {
+    @Environment(AppModel.self) private var model
+    var body: some View {
+        AcfLoader(lightweight: true) { f in
+            VStack(alignment: .leading, spacing: 8) {
+                Chart(f.rows.prefix(62)) { r in
+                    AreaMark(x: .value("日", Dates.date(r.date)), y: .value("残高", r.forecastBalance)).foregroundStyle(.teal.opacity(0.15)).interpolationMethod(.stepEnd)
+                    LineMark(x: .value("日", Dates.date(r.date)), y: .value("残高", r.forecastBalance)).foregroundStyle(.teal).interpolationMethod(.stepEnd)
+                    if f.reserveFloor > 0 { RuleMark(y: .value("最低残高", f.reserveFloor)).foregroundStyle(.orange).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3])) }
+                }
+                .chartXAxis { AxisMarks(values: .stride(by: .day, count: 14)) { AxisValueLabel(format: .dateTime.month(.defaultDigits).day()) } }
+                .frame(height: 120)
+                .accessibilityLabel("残高予測のグラフ")
+                let risk = f.risks.first { $0.action == "day" }
+                Text(risk.map { $0.title } ?? "登録済みの期間内に不足日はありません").font(.footnote).foregroundStyle(risk == nil ? Color.secondary : Color.red)
+                HStack {
+                    metric("月末予測", f.monthEndForecast.yen, f.monthEndForecast < 0)
+                    metric("最低残高", f.minForecastBalance.yen, f.minForecastBalance < 0)
+                    metric("状態", f.status, f.status == "不足" || f.status == "危険")
+                }
+            }
+            .padding(.vertical, 4)
+        }
+    }
+    private func metric(_ t: String, _ v: String, _ warn: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(t).font(.caption).foregroundStyle(.secondary)
+            Text(v).font(.subheadline.weight(.semibold)).monospacedDigit().foregroundStyle(warn ? .red : .primary)
+        }.frame(maxWidth: .infinity, alignment: .leading)
     }
 }

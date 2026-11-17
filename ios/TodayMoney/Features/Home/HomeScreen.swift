@@ -18,7 +18,9 @@ struct HomeScreen: View {
                     spendCard(doc, today: today, month: month)
                     NavigationLink { AssetsView() } label: { assetsCard(doc) }
                     NavigationLink { SalaryMonthView(month: month) } label: { salaryCard(doc, today: today, month: month) }
-                    NavigationLink { CashFlowView() } label: { cashCard(doc, today: today) }
+                    NavigationLink {
+                        if doc.acfStoredSettings.initialized { AcfIndexView() } else { AcfSettingsView() }
+                    } label: { AcfHomeCard() }
                     paymentsCard(doc, today: today)
                     highlightsCard(doc, month: month)
                     recentCard(doc, today: today)
@@ -37,6 +39,14 @@ struct HomeScreen: View {
                 }
             }
             .navigationDestination(isPresented: $searching) { TransactionListView(title: "検索") }
+            .navigationDestination(item: Binding(get: { model.route }, set: { model.route = $0 })) { r in
+                switch r {
+                case .acf: AcfDetailView()
+                case .acfIndex: AcfIndexView()
+                case .acfSettings: AcfSettingsView()
+                case .cashflow: CashFlowView()
+                }
+            }
             .sheet(isPresented: $goalSheet) { NavigationStack { GoalEditor(period: period, date: date) } }
             .onChange(of: model.today) { _, t in date = t }
         }

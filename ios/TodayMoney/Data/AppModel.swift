@@ -56,6 +56,9 @@ final class AppModel {
     var tab: Tab = .home
     /// 「＋」の新規入力（開くモード）
     var entryMode: EntryMode?
+    /// ディープリンクで開く画面（mymoney://acf など）
+    enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow }
+    var route: Route?
     /// 支払いタブで表示する月
     var paymentMonth: String = Dates.ym()
 
@@ -73,6 +76,20 @@ final class AppModel {
             persist()
         } catch {
             errorMessage = "保存できませんでした。変更は取り消しました。（\(error)）"
+        }
+    }
+
+    /// mymoney://<画面> を開く（ショートカットなどから）。entry/<種類> は新規入力
+    func open(_ url: URL) {
+        guard url.scheme == "mymoney" else { return }
+        let host = url.host ?? ""
+        switch host {
+        case "home": tab = .home
+        case "payments": tab = .payments
+        case "more": tab = .more
+        case "entry": entryMode = EntryMode(rawValue: url.pathComponents.dropFirst().first ?? "expense") ?? .expense
+        default:
+            if let r = Route(rawValue: host) { tab = .home; route = r }
         }
     }
 

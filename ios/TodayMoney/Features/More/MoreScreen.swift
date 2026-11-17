@@ -31,7 +31,7 @@ struct MoreScreen: View {
                 Section("お金") {
                     row("カテゴリ", "square.grid.2x2.fill", .orange, "\(doc.categories.count)件") { CategoriesView() }
                     row("初期データ・現在値", "building.columns.fill", .indigo, "") { InitialValuesView() }
-                    row("資金見通しの設定", "chart.line.uptrend.xyaxis", .teal, num(doc["acfSettings"]?["reserveFloor"]) > 0 ? "最低 \(num(doc["acfSettings"]?["reserveFloor"]).yen)" : "") { AcfSettingsView() }
+                    row("ACF", "chart.line.uptrend.xyaxis", .teal, doc.acfStoredSettings.initialized ? "最低 \(doc.acfStoredSettings.reserveFloor.yen)" : "未設定") { AcfSettingsView() }
                     row("給与の記録", "yensign.circle.fill", .green, "") { SalaryMonthView(month: model.thisMonth) }
                 }
                 Section("通知") {
@@ -220,36 +220,6 @@ struct InitialValuesView: View {
         .navigationTitle("初期データ・現在値")
         .sheet(item: Binding(get: { bank.map(IdBox.init) }, set: { bank = $0?.id })) { b in NavigationStack { BankEditor(bankId: b.id) } }
         .sheet(item: Binding(get: { card.map(IdBox.init) }, set: { card = $0?.id })) { b in NavigationStack { CardBillingEditor(cardId: b.id, billingMonth: nil, paymentMonth: pm) } }
-    }
-}
-
-/// 資金見通しの設定（Web 版 acfSettings のうち最低残高）
-struct AcfSettingsView: View {
-    @Environment(AppModel.self) private var model
-    @State private var floor = 0.0
-    @State private var required = true
-    var body: some View {
-        Form {
-            Section {
-                AmountField(title: "最低残したい金額", value: $floor)
-            } footer: { Text("口座残高の合計がこの金額を下回る日があると、ホームと支払いタブで知らせます。") }
-            Section {
-                Toggle("必須の大型支出を見通しに含める", isOn: $required)
-            }
-        }
-        .navigationTitle("資金見通しの設定")
-        .onAppear {
-            floor = num(model.doc["acfSettings"]?["reserveFloor"])
-            required = model.doc["acfSettings"]?["includeRequiredLargeExpenses"]?.boolValue ?? true
-        }
-        .onDisappear {
-            let (f, r) = (floor, required)
-            model.commit("資金見通しの設定") { d in
-                var a = d["acfSettings"]?.objectValue ?? [:]
-                a["reserveFloor"] = .number(f); a["includeRequiredLargeExpenses"] = .bool(r); a["initialized"] = .bool(true)
-                d["acfSettings"] = .object(a)
-            }
-        }
     }
 }
 

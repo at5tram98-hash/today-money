@@ -67,6 +67,7 @@ struct RootView: View {
         }
         .animation(.snappy, value: model.toast)
         .preferredColorScheme(appearance == "dark" ? .dark : appearance == "light" ? .light : nil)
+        .onOpenURL { model.open($0) }
         .onAppear {
             model.runScheduled()
             if lockEnabled { locked = true; unlock() }
