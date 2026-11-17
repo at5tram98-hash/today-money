@@ -339,8 +339,8 @@ public struct AcfContext: @unchecked Sendable {
 
 public extension MoneyDocument {
     /// Web 版 buildAcfBaseContext
-    func acfBaseContext(start: String, settings s: AcfSettings, today: String) -> AcfContext {
-        let end = acfHorizonEnd(start: start, settings: s)
+    func acfBaseContext(start: String, settings s: AcfSettings, today: String, horizonEnd: String? = nil) -> AcfContext {
+        let end = horizonEnd ?? acfHorizonEnd(start: start, settings: s)
         let dates = dateRange(start, end, 370)
         var events: [String: AcfRow] = Dictionary(uniqueKeysWithValues: dates.map { ($0, AcfRow(date: $0)) })
         func add(_ date: String, income: Double = 0, out: Double = 0, card cp: Double = 0, large: Double = 0, largeCash: Double = 0, fixed: Double = 0,
@@ -759,10 +759,29 @@ public extension MoneyDocument {
         return memo(key) { computeAcfForecast(today: today, settings: custom ?? acfSettings, lightweight: lightweight, now: now) }
     }
 
-    private func computeAcfForecast(today: String, settings s: AcfSettings, lightweight: Bool, now: Date) -> AcfForecast {
-        let ctx = acfBaseContext(start: today, settings: s, today: today)
+    /// 計画を指定した予測（Web 版 buildCashFlowForecast の flexibleBudgetPlan / planIncludesSpent / horizonEnd / largeExpensePlans）
+    func acfForecast(today: String, plan: [String: Double], planIncludesSpent: Bool = false, horizonEnd: String? = nil,
+                     largeExpensePlans plans: [LargeExpensePlan]? = nil, lightweight: Bool = true, now: Date = Date()) -> AcfForecast {
+        var doc = self
+        if let plans { doc.largeExpensePlans = plans }
+        return doc.computeAcfForecast(today: today, settings: doc.acfSettings, lightweight: lightweight, now: now,
+                                      explicit: plan, planIncludesSpent: planIncludesSpent, horizonEnd: horizonEnd)
+    }
+
+    private func computeAcfForecast(today: String, settings s: AcfSettings, lightweight: Bool, now: Date,
+                                    explicit: [String: Double]? = nil, planIncludesSpent: Bool = false, horizonEnd: String? = nil) -> AcfForecast {
+        let ctx = acfBaseContext(start: today, settings: s, today: today, horizonEnd: horizonEnd)
         let engine = AcfEngine(ctx: ctx, doc: self)
         let weights = s.useWeekdayWeights ? weekdaySpendingWeights(month: String(ctx.start.prefix(7)), weeks: 8) : Array(repeating: 1, count: 7)
+        if let explicit {
+            var plan: [String: Double] = [:]
+            for d in ctx.dates where d <= ctx.budgetEnd {
+                var v = max(0, explicit[d] ?? 0)
+                if planIncludesSpent && d == ctx.start { v = max(0, v - spent(on: d)) }
+                plan[d] = v
+            }
+            return finishForecast(ctx: ctx, engine: engine, sim: engine.simulate(plan), storedUsed: false, explicit: true, settings: s, lightweight: lightweight, today: today, now: now)
+        }
         let opt = engine.optimized(weights: weights)
         // 保存した目標（日・月）があれば、それを優先して配分する（Web 版 acfPlanWithStoredGoals）
         var basePlan: [String: Double] = [:], fixedPlan: [String: Double] = [:], stored = Set<String>()
@@ -797,6 +816,11 @@ public extension MoneyDocument {
                 }
             }
         }
+        return finishForecast(ctx: ctx, engine: engine, sim: sim, storedUsed: storedUsed, explicit: false, settings: s, lightweight: lightweight, today: today, now: now)
+    }
+
+    private func finishForecast(ctx: AcfContext, engine: AcfEngine, sim: AcfSimulation, storedUsed: Bool, explicit: Bool, settings s: AcfSettings,
+                                lightweight: Bool, today: String, now: Date) -> AcfForecast {
         // 日ごとの最大額（重い：lightweight では省く）
         var maximums: [(maxTotal: Double, cash: Double, credit: Double, plusOneSafe: Bool)] = []
         if lightweight {
@@ -853,7 +877,7 @@ public extension MoneyDocument {
             monthEndForecast: monthRow?.forecastBalance ?? deposits, endForecast: rows.last?.forecastBalance ?? deposits,
             minForecastBalance: minRow?.forecastBalance ?? deposits, minForecastDate: minRow?.date ?? ctx.start,
             minMandatoryBalance: minMand?.mandatoryBalance ?? deposits, minMandatoryDate: minMand?.date ?? ctx.start,
-            explicitPlan: false, storedPlanUsed: storedUsed, planFeasible: sim.feasible,
+            explicitPlan: explicit, storedPlanUsed: storedUsed, planFeasible: sim.feasible,
             planShortageTotal: max(0, sim.totalShortage), planShortageDate: firstShort?.date ?? "",
             desiredBudgetToday: desiredToday, todayShortage: max(0, desiredToday - first.safeTotalBudget), todayMode: mode,
             mandatoryBreakdown: (futureCard, fixedM, largeM, max(0, futureMand - futureCard - fixedM - largeM)),
@@ -907,6 +931,8 @@ public extension MoneyDocument {
         if f.planShortageTotal > 0 {
             let d = f.planShortageDate.isEmpty ? f.startDate : f.planShortageDate
             base.append(AcfRisk(severity: "warning", title: "\(Format.dayLabel(d))以降の計画に不足があります", detail: "安全に使える額に対して合計 \(Format.yen(f.planShortageTotal)) 不足しています。", date: d, action: "goal"))
+        } else if f.explicitPlan && f.minForecastBalance < f.reserveFloor {
+            base.append(AcfRisk(severity: "warning", title: "\(Format.dayLabel(f.minForecastDate))に計画が安全ラインを超えます", detail: "日別計画を \(Format.yen(f.reserveFloor - f.minForecastBalance)) 以上見直す必要があります。", date: f.minForecastDate, action: "goal"))
         }
         if f.settings.creditFallbackEnabled {
             for c in cards {
