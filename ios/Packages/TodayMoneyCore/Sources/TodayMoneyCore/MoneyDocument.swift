@@ -6,7 +6,11 @@ import Foundation
 /// - 記録の配列は型つきで読み書きできる。書き戻す時は各記録の未知の項目も残す。
 /// - Web 版の「バックアップを書き出す」で作った .json をそのまま読み込め、iOS から書き出した .json は Web 版で復元できる。
 public struct MoneyDocument: Equatable, Sendable {
-    public private(set) var root: [String: JSONValue]
+    public private(set) var root: [String: JSONValue] { didSet { cache = RecordCache() } }
+    /// 読み込んだ記録の配列（JSON から毎回作り直さないための控え。root が変わると捨てる）
+    private var cache = RecordCache()
+
+    public static func == (a: MoneyDocument, b: MoneyDocument) -> Bool { a.root == b.root }
 
     public init(root: [String: JSONValue] = [:]) { self.root = root }
 
@@ -24,6 +28,12 @@ public struct MoneyDocument: Equatable, Sendable {
         return .object(o)
     }
 
+    /// 計算結果の控え（同じデータなら計算し直さない）
+    public func memo<T>(_ key: String, _ make: () -> T) -> T {
+        if let hit = cache.get("memo|" + key) as? T { return hit }
+        let v = make(); cache.set("memo|" + key, v); return v
+    }
+
     public subscript(key: String) -> JSONValue? {
         get { root[key] }
         set { root[key] = newValue }
@@ -32,7 +42,11 @@ public struct MoneyDocument: Equatable, Sendable {
     // MARK: 記録の配列
 
     public func records<R: JSONRecord>(_ key: String, as _: R.Type = R.self) -> [R] {
-        (root[key]?.arrayValue ?? []).filter { $0.objectValue != nil }.map(R.init(json:))
+        let ck = "\(key)|\(R.self)"
+        if let hit = cache.get(ck) as? [R] { return hit }
+        let list = (root[key]?.arrayValue ?? []).filter { $0.objectValue != nil }.map(R.init(json:))
+        cache.set(ck, list)
+        return list
     }
     public mutating func setRecords<R: JSONRecord>(_ key: String, _ list: [R]) {
         root[key] = .array(list.map(\.json))
@@ -96,4 +110,12 @@ public struct ShiftSettings: Equatable, Sendable {
     var known: [String: JSONValue] {
         ["autoBreak": .bool(autoBreak), "nightRate": .number(nightRate), "titleMap": .object(titleMap.mapValues { .string($0) })]
     }
+}
+
+/// 記録の配列の控え（参照型なので、値のコピーどうしで共有される。root を変えた側は新しい控えに替わる）
+final class RecordCache: @unchecked Sendable {
+    private var store: [String: Any] = [:]
+    private let lock = NSLock()
+    func get(_ k: String) -> Any? { lock.lock(); defer { lock.unlock() }; return store[k] }
+    func set(_ k: String, _ v: Any) { lock.lock(); store[k] = v; lock.unlock() }
 }

@@ -1,7 +1,7 @@
 import Foundation
 
 /// Web 版の `Number(x)||0` と同じ読み方（文字列の数字も読む。読めなければ 0）
-@inlinable func num(_ v: JSONValue?) -> Double {
+@inlinable public func num(_ v: JSONValue?) -> Double {
     switch v {
     case .number(let n)?: return n.isFinite ? n : 0
     case .string(let s)?: return Double(s.trimmingCharacters(in: .whitespaces)) ?? 0
@@ -10,7 +10,7 @@ import Foundation
     }
 }
 /// Web 版の `String(x||'')`
-@inlinable func str(_ v: JSONValue?) -> String {
+@inlinable public func str(_ v: JSONValue?) -> String {
     switch v {
     case .string(let s)?: return s
     case .number(let n)?: return JSONValue.formatNumber(n)
@@ -18,7 +18,7 @@ import Foundation
     default: return ""
     }
 }
-@inlinable func optNum(_ v: JSONValue?) -> Double? {
+@inlinable public func optNum(_ v: JSONValue?) -> Double? {
     guard let v, !v.isNull else { return nil }
     if case .string(let s) = v, s.isEmpty { return nil }
     return num(v)

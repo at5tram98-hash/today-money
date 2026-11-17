@@ -139,6 +139,23 @@ public extension MoneyDocument {
         return paymentMonth
     }
 
+    /// 支払日 → 請求月（Web 版 billingMonthForPaymentDate）
+    func billingMonthForPaymentDate(_ card: Card?, date: String) -> String {
+        let paymentMonth = date.count >= 7 ? String(date.prefix(7)) : Dates.ym()
+        guard let card else { return paymentMonth }
+        var exact: [String] = []
+        for key in (root["cardAdjustments"]?.objectValue ?? [:]).keys {
+            let p = key.split(separator: "|", maxSplits: 1).map(String.init)
+            if p.count == 2, p[1] == card.id, cardAdjustment(card.id, billingMonth: p[0])?.paymentDateOverride == date { exact.append(p[0]) }
+        }
+        if let first = exact.sorted().first { return first }
+        for i in -2...1 {
+            let bm = Dates.addMonths(paymentMonth, i)
+            if cardPaymentDate(card, billingMonth: bm) == date { return bm }
+        }
+        return billingMonth(card, forPaymentMonth: paymentMonth)
+    }
+
     func statementItem(_ card: Card, billingMonth: String, paymentMonth: String) -> CardStatement {
         let adj = cardAdjustment(card.id, billingMonth: billingMonth)
         let date = (adj?.paymentDateOverride).flatMap { $0.isEmpty ? nil : $0 } ?? cardPaymentDate(card, billingMonth: billingMonth) ?? ""
@@ -334,7 +351,9 @@ public extension MoneyDocument {
     }
 
     /// カードの請求（予定を含む）（Web 版 mm3PaymentCardItems）
-    func paymentCardItems(month: String) -> [CardStatement] {
+    func paymentCardItems(month: String) -> [CardStatement] { memo("items|\(month)") { computePaymentCardItems(month: month) } }
+
+    private func computePaymentCardItems(month: String) -> [CardStatement] {
         var order: [String] = [], map: [String: CardStatement] = [:]
         for var st in cardPaymentStatements(inMonth: month, includePaid: true) {
             st.outstandingAmount = st.status == .paid ? 0 : st.amount
@@ -362,7 +381,9 @@ public extension MoneyDocument {
     }
 
     /// 支払いタブの月のまとめ（Web 版 mm3PaymentSummary）
-    func paymentSummary(month: String, today: String) -> PaymentSummary {
+    func paymentSummary(month: String, today: String) -> PaymentSummary { memo("summary|\(month)|\(today)") { computePaymentSummary(month: month, today: today) } }
+
+    private func computePaymentSummary(month: String, today: String) -> PaymentSummary {
         let statements = paymentCardItems(month: month)
         let cardTotal = statements.reduce(0) { $0 + $1.amount }
         let cardPaid = statements.reduce(0) { acc, x in
@@ -415,6 +436,10 @@ public extension MoneyDocument {
     // MARK: 予定の入出金（Web 版 financialEventsFrom）
 
     func financialEvents(from: String, days: Int = 90, today: String) -> [FinancialEvent] {
+        memo("events|\(from)|\(days)|\(today)") { computeFinancialEvents(from: from, days: days, today: today) }
+    }
+
+    private func computeFinancialEvents(from: String, days: Int, today: String) -> [FinancialEvent] {
         let end = Dates.addDays(from, days)
         var events: [FinancialEvent] = []
         for e in salaryPaymentEvents(start: from, end: end, today: today) {

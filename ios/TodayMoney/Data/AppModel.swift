@@ -50,6 +50,15 @@ final class AppModel {
     var today: String { Dates.ymd() }
     var thisMonth: String { Dates.ym() }
 
+    // MARK: 画面の状態（保存しない）
+
+    enum Tab: Hashable { case home, payments, more }
+    var tab: Tab = .home
+    /// 「＋」の新規入力（開くモード）
+    var entryMode: EntryMode?
+    /// 支払いタブで表示する月
+    var paymentMonth: String = Dates.ym()
+
     // MARK: 変更
 
     /// データを変える。変える前の状態を復元ポイントに残してから保存する
@@ -65,6 +74,22 @@ final class AppModel {
         } catch {
             errorMessage = "保存できませんでした。変更は取り消しました。（\(error)）"
         }
+    }
+
+    /// 起動時・画面に戻った時：日付が来た固定支払い・口座への反映を処理する（Web 版 processScheduled）
+    func runScheduled() {
+        let now = Date(), today = Dates.ymd(now)
+        var next = doc
+        next.processScheduled(now: now, today: today)
+        guard next != doc else { return }
+        let changedOnlyDate = { () -> Bool in var a = next, b = doc; a.meta = [:]; b.meta = [:]; return a == b }()
+        commit(changedOnlyDate ? "日付の更新" : "固定支払い・予定の反映") { $0 = next }
+    }
+
+    /// データを変える（今日の日付と時刻を渡す）。変える前の状態は復元ポイントに残る
+    func change(_ reason: String, _ mutate: (inout MoneyDocument, _ now: Date, _ today: String) throws -> Void) {
+        let now = Date(), today = Dates.ymd(now)
+        commit(reason) { try mutate(&$0, now, today) }
     }
 
     private func persist() {

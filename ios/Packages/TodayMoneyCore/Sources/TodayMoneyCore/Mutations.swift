@@ -107,7 +107,7 @@ public extension MoneyDocument {
     @discardableResult
     mutating func recordExpense(date: String, amount: Double, category: String, merchant: String, paymentMethod: String, paymentId: String,
                                 memo: String = "", source: String = "manual", fixedId: String = "", largePlanId: String = "", largePlanPartIndex: Int? = nil,
-                                linkedBankId: String = "", now: Date = Date(), today: String) -> Transaction? {
+                                linkedBankId: String = "", eventAt: String = "", now: Date = Date(), today: String) -> Transaction? {
         let amount = abs(amount)
         guard amount > 0 else { return nil }
         var t = Transaction(id: Self.uid("tx", now: now))
@@ -116,15 +116,15 @@ public extension MoneyDocument {
         t.fixedId = fixedId; t.largePlanId = largePlanId; t.largePlanPartIndex = largePlanPartIndex
         t.linkedBankId = linkedBankId.isEmpty ? (paymentMethod == "debit" ? paymentBankId(method: paymentMethod, id: paymentId) : "") : linkedBankId
         t.createdAt = ISODate.now(now)
-        if paymentMethod == "bank" || paymentMethod == "debit" { applyBankEffect(&t, now: now, today: today) }
+        if paymentMethod == "bank" || paymentMethod == "debit" { applyBankEffect(&t, eventAt: eventAt, now: now, today: today) }
         var list = transactions; list.append(t); transactions = list
         return t
     }
 
-    private mutating func applyBankEffect(_ t: inout Transaction, now: Date, today: String) {
+    private mutating func applyBankEffect(_ t: inout Transaction, eventAt: String = "", now: Date, today: String) {
         let bankId = transactionBankId(t)
         guard !bankId.isEmpty, bank(bankId) != nil else { t.bankApplied = false; t.bankReconciled = false; return }
-        if withinBaseline(bankId, date: t.date, createdAt: t.createdAt) {
+        if withinBaseline(bankId, date: t.date, createdAt: t.createdAt, eventAt: eventAt) {
             t.bankApplied = false; t.bankReconciled = true
             if t.linkedBankId.isEmpty { t.linkedBankId = bankId }
             return
@@ -315,5 +315,71 @@ extension CardAdjustment {
         raw = o; confirmedTotal = 0; baseAtEdit = 0; status = "confirmed"; paymentDateOverride = ""; confirmedTransactionIds = []
         confirmedThroughDate = ""; confirmedAt = ""; updatedAt = ""; bankApplied = false; bankReconciled = false; bankEffectAt = ""
         bankIdAtPayment = ""; paidAmount = nil; paidAt = ""; memo = ""
+    }
+}
+
+// MARK: - 大型支出・固定支払いを支出として記録する
+
+public extension MoneyDocument {
+    /// 大型支出を「支払った」にする：支払い方法ごとに支出を記録する（Web 版 completeLargeExpensePlan）
+    mutating func completeLargeExpense(_ planId: String, now: Date = Date(), today: String) {
+        guard let p = largeExpensePlans.first(where: { $0.id == planId }), p.status == "planned" else { return }
+        let parts = largeExpenseParts(p)
+        var ids: [String] = []
+        for (i, part) in parts.enumerated() {
+            var tx = largeExpensePartTransaction(p, part: part, index: i)
+            if tx == nil {
+                let memo = parts.count > 1 ? "\(p.memo)\(p.memo.isEmpty ? "" : "・")分割\(i + 1)/\(parts.count)" : p.memo
+                tx = recordExpense(date: p.date, amount: part.amount, category: p.category, merchant: p.name, paymentMethod: part.paymentMethod,
+                                   paymentId: part.paymentId, memo: memo, source: "large_plan", largePlanId: p.id, largePlanPartIndex: i,
+                                   linkedBankId: part.linkedBankId, now: now, today: today)
+            }
+            if let tx { ids.append(tx.id) }
+        }
+        var list = largeExpensePlans
+        if let i = list.firstIndex(where: { $0.id == planId }) {
+            list[i].status = "completed"; list[i].linkedTransactionIds = ids; list[i].linkedTransactionId = ids.first ?? ""
+            largeExpensePlans = list
+        }
+    }
+
+    /// 固定支払いをその日の支出として記録する（Web 版 processScheduled の1件分）
+    @discardableResult
+    mutating func recordFixedPayment(_ fixedId: String, date: String, now: Date = Date(), today: String) -> Transaction? {
+        guard let f = fixedPayments.first(where: { $0.id == fixedId }), !fixedRecorded(f, date: date) else { return nil }
+        return recordExpense(date: date, amount: f.amount, category: f.category, merchant: f.name,
+                             paymentMethod: f.paymentMethod, paymentId: f.paymentId, source: "fixed", fixedId: f.id, eventAt: "\(date)T00:00:00", now: now, today: today)
+    }
+
+    /// 起動時・日付が変わった時の処理（Web 版 processScheduled）：
+    /// 日付が来た口座・デビットの支出と口座への入金を残高に反映し、支払日が来た固定支払いを支出として記録する
+    mutating func processScheduled(now: Date = Date(), today: String) {
+        var txs = transactions
+        for i in txs.indices where !txs[i].date.isEmpty && txs[i].date <= today && (txs[i].paymentMethod == "bank" || txs[i].paymentMethod == "debit") && !txs[i].bankApplied && !txs[i].bankReconciled {
+            var t = txs[i]
+            applyBankEffect(&t, eventAt: t.createdAt.isEmpty ? "\(t.date)T00:00:00" : t.createdAt, now: now, today: today)
+            txs = transactions; txs[i] = t; transactions = txs
+        }
+        var incs = incomes
+        for i in incs.indices where !incs[i].date.isEmpty && incs[i].date <= today && incs[i].toType == "bank" && !incs[i].bankId.isEmpty && !incs[i].bankApplied && !incs[i].bankReconciled {
+            var x = incs[i]
+            if withinBaseline(x.bankId, date: x.date, createdAt: x.createdAt, eventAt: x.createdAt.isEmpty ? "\(x.date)T23:59:59" : x.createdAt) { x.bankReconciled = true }
+            else if bank(x.bankId) != nil {
+                updateBank(x.bankId, delta: x.amount, memo: x.sourceName.isEmpty ? "収入" : x.sourceName, now: now, today: today)
+                x.bankApplied = true; x.bankEffectAt = ISODate.now(now)
+            }
+            incs = incomes; incs[i] = x; incomes = incs
+        }
+        let earliest = fixedPayments.map(\.startMonth).filter(Dates.isYM).sorted().first ?? String(today.prefix(7))
+        let last = str(meta["lastScheduleDate"])
+        var m = last.isEmpty ? earliest : String(last.prefix(7))
+        let end = String(today.prefix(7))
+        while m <= end {
+            for f in fixedPayments {
+                for d in fixedDueDates(f, month: m) where d <= today && !f.skippedDates.contains(d) { recordFixedPayment(f.id, date: d, now: now, today: today) }
+            }
+            m = Dates.addMonths(m, 1)
+        }
+        if last != today { var mm = meta; mm["lastScheduleDate"] = .string(today); meta = mm }
     }
 }
