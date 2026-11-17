@@ -9,8 +9,10 @@ final class MutationCompatTests: XCTestCase {
         let today = str(fx["today"]), m0 = String(today.prefix(7))
         var d = try MoneyDocument(json: fx["document"]!)
         let b0 = d.banks[0].id, deb = d.debitCards[0].id
-        // Web 版と同じく、操作は少しずつ後の時刻に行う
-        var clock = Date()
+        // Web 版と同じく、操作は少しずつ後の時刻に行う。時計は照合データを作った時刻（口座の確認日時）から始める
+        // （実行した日の時刻にすると、日付が変わった後は「今日」の取引が確認済みの残高に含まれる扱いになってしまう）
+        let asOf = d.banks.compactMap { ISODate.ms($0.balanceAsOf) }.max() ?? Dates.date(today).timeIntervalSince1970 * 1000
+        var clock = Date(timeIntervalSince1970: asOf / 1000)
         func now() -> Date { clock = clock.addingTimeInterval(1); return clock }
 
         var steps: [(String, MoneyDocument)] = []
