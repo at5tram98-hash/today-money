@@ -1,0 +1,6529 @@
+{
+ "today": "2026-11-17",
+ "document": {
+  "version": 18,
+  "profile": {
+   "name": "",
+   "icon": ""
+  },
+  "categories": [
+   {
+    "id": "food",
+    "name": "食費",
+    "icon": "fork",
+    "color": "#34C759"
+   },
+   {
+    "id": "transport",
+    "name": "交通費",
+    "icon": "tram",
+    "color": "#007AFF"
+   },
+   {
+    "id": "daily",
+    "name": "日用品",
+    "icon": "bag",
+    "color": "#30B0C7"
+   },
+   {
+    "id": "clothes",
+    "name": "衣服費",
+    "icon": "tshirt",
+    "color": "#AF52DE"
+   },
+   {
+    "id": "fun",
+    "name": "娯楽費",
+    "icon": "ticket",
+    "color": "#FF9500"
+   },
+   {
+    "id": "subscription",
+    "name": "サブスク",
+    "icon": "repeat",
+    "color": "#5856D6"
+   },
+   {
+    "id": "education",
+    "name": "教育費",
+    "icon": "book",
+    "color": "#64D2FF"
+   },
+   {
+    "id": "utilities",
+    "name": "光熱費",
+    "icon": "bolt",
+    "color": "#FFCC00"
+   },
+   {
+    "id": "other",
+    "name": "その他",
+    "icon": "ellipsis",
+    "color": "#8E8E93"
+   }
+  ],
+  "transactions": [
+   {
+    "id": "tx_mwkp47ty_wsncbv",
+    "date": "2026-10-25",
+    "amount": 13000,
+    "category": "その他",
+    "merchant": "定期券 13,000円（カード予定）",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "memo": "",
+    "source": "fixed",
+    "mailImportId": "",
+    "fixedId": "fixed_seed_pass",
+    "largePlanId": "",
+    "largePlanPartIndex": null,
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "createdAt": "2026-11-17T12:55:55.558Z",
+    "bankEffectAt": "2026-11-17T12:55:55.558Z"
+   },
+   {
+    "id": "tx_fx_1",
+    "date": "2026-09-03",
+    "amount": 975,
+    "category": "食費",
+    "merchant": "店1",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-03T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-03T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_2",
+    "date": "2026-09-03",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店2",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-03T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-03T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_3",
+    "date": "2026-09-03",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店3",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-03T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-03T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_4",
+    "date": "2026-09-07",
+    "amount": 1003,
+    "category": "食費",
+    "merchant": "店4",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-07T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-07T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_5",
+    "date": "2026-09-07",
+    "amount": 78,
+    "category": "食費",
+    "merchant": "店5",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-07T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-07T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_6",
+    "date": "2026-09-07",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店6",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-07T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-07T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_7",
+    "date": "2026-09-11",
+    "amount": 1031,
+    "category": "食費",
+    "merchant": "店7",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-11T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-11T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_8",
+    "date": "2026-09-11",
+    "amount": 189,
+    "category": "食費",
+    "merchant": "店8",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-11T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-11T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_9",
+    "date": "2026-09-11",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店9",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-11T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-11T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_10",
+    "date": "2026-09-15",
+    "amount": 1059,
+    "category": "食費",
+    "merchant": "店10",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-15T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-15T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_11",
+    "date": "2026-09-15",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店11",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-15T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-15T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_12",
+    "date": "2026-09-15",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店12",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-15T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-15T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_13",
+    "date": "2026-09-19",
+    "amount": 1087,
+    "category": "食費",
+    "merchant": "店13",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-19T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-19T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_14",
+    "date": "2026-09-19",
+    "amount": 78,
+    "category": "食費",
+    "merchant": "店14",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-19T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-19T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_15",
+    "date": "2026-09-19",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店15",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-19T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-19T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_16",
+    "date": "2026-09-23",
+    "amount": 1115,
+    "category": "食費",
+    "merchant": "店16",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-23T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-23T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_17",
+    "date": "2026-09-23",
+    "amount": 189,
+    "category": "食費",
+    "merchant": "店17",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-23T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-23T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_18",
+    "date": "2026-09-23",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店18",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-23T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-23T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_19",
+    "date": "2026-09-27",
+    "amount": 1143,
+    "category": "食費",
+    "merchant": "店19",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-27T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-27T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_20",
+    "date": "2026-09-27",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店20",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-27T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-27T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_21",
+    "date": "2026-09-27",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店21",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-09-27T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-27T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_22",
+    "date": "2026-10-01",
+    "amount": 1171,
+    "category": "食費",
+    "merchant": "店22",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-01T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-01T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_23",
+    "date": "2026-10-01",
+    "amount": 78,
+    "category": "食費",
+    "merchant": "店23",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-01T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-01T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_24",
+    "date": "2026-10-01",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店24",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-01T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-01T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_25",
+    "date": "2026-10-05",
+    "amount": 1199,
+    "category": "食費",
+    "merchant": "店25",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-05T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-05T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_26",
+    "date": "2026-10-05",
+    "amount": 189,
+    "category": "食費",
+    "merchant": "店26",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-05T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-05T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_27",
+    "date": "2026-10-05",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店27",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-05T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-05T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_28",
+    "date": "2026-10-09",
+    "amount": 1227,
+    "category": "食費",
+    "merchant": "店28",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-09T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-09T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_29",
+    "date": "2026-10-09",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店29",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-09T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-09T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_30",
+    "date": "2026-10-09",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店30",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-09T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-09T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_31",
+    "date": "2026-10-13",
+    "amount": 1255,
+    "category": "食費",
+    "merchant": "店31",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-13T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-13T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_32",
+    "date": "2026-10-13",
+    "amount": 78,
+    "category": "食費",
+    "merchant": "店32",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-13T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-13T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_33",
+    "date": "2026-10-13",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店33",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-13T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-13T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_34",
+    "date": "2026-10-17",
+    "amount": 1283,
+    "category": "食費",
+    "merchant": "店34",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-17T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-17T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_35",
+    "date": "2026-10-17",
+    "amount": 189,
+    "category": "食費",
+    "merchant": "店35",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-17T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-17T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_36",
+    "date": "2026-10-17",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店36",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-17T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-17T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_37",
+    "date": "2026-10-21",
+    "amount": 1311,
+    "category": "食費",
+    "merchant": "店37",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-21T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-21T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_38",
+    "date": "2026-10-21",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店38",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-21T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-21T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_39",
+    "date": "2026-10-21",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店39",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-21T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-21T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_40",
+    "date": "2026-10-25",
+    "amount": 1339,
+    "category": "食費",
+    "merchant": "店40",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-25T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-25T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_41",
+    "date": "2026-10-25",
+    "amount": 78,
+    "category": "食費",
+    "merchant": "店41",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-25T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-25T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_42",
+    "date": "2026-10-25",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店42",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-25T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-25T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_43",
+    "date": "2026-10-29",
+    "amount": 1367,
+    "category": "食費",
+    "merchant": "店43",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-29T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-29T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_44",
+    "date": "2026-10-29",
+    "amount": 189,
+    "category": "食費",
+    "merchant": "店44",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-29T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-29T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_45",
+    "date": "2026-10-29",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店45",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-29T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-29T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_46",
+    "date": "2026-11-02",
+    "amount": 1395,
+    "category": "食費",
+    "merchant": "店46",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-02T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-02T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_47",
+    "date": "2026-11-02",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店47",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-02T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-02T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_48",
+    "date": "2026-11-02",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店48",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-02T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-02T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_49",
+    "date": "2026-11-06",
+    "amount": 1423,
+    "category": "食費",
+    "merchant": "店49",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-06T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-06T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_50",
+    "date": "2026-11-06",
+    "amount": 78,
+    "category": "食費",
+    "merchant": "店50",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-06T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-06T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_51",
+    "date": "2026-11-06",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店51",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-06T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-06T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_52",
+    "date": "2026-11-10",
+    "amount": 1451,
+    "category": "食費",
+    "merchant": "店52",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-10T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-10T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_53",
+    "date": "2026-11-10",
+    "amount": 189,
+    "category": "食費",
+    "merchant": "店53",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-10T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-10T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_54",
+    "date": "2026-11-10",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店54",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-10T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-10T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_55",
+    "date": "2026-11-14",
+    "amount": 1479,
+    "category": "食費",
+    "merchant": "店55",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-14T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-14T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_56",
+    "date": "2026-11-14",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店56",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-14T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-14T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_57",
+    "date": "2026-11-14",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店57",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-14T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-14T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_58",
+    "date": "2026-11-18",
+    "amount": 1507,
+    "category": "食費",
+    "merchant": "店58",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-18T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-18T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_59",
+    "date": "2026-11-18",
+    "amount": 411,
+    "category": "食費",
+    "merchant": "店59",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-18T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-18T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_60",
+    "date": "2026-11-18",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店60",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-18T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-18T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_61",
+    "date": "2026-11-22",
+    "amount": 1535,
+    "category": "食費",
+    "merchant": "店61",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-22T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-22T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_62",
+    "date": "2026-11-22",
+    "amount": 522,
+    "category": "食費",
+    "merchant": "店62",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-22T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-22T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_63",
+    "date": "2026-11-22",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店63",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-22T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-22T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_64",
+    "date": "2026-11-26",
+    "amount": 1563,
+    "category": "食費",
+    "merchant": "店64",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-26T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-26T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_65",
+    "date": "2026-11-26",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店65",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-26T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-26T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_66",
+    "date": "2026-11-26",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店66",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-26T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-26T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_67",
+    "date": "2026-11-30",
+    "amount": 1591,
+    "category": "食費",
+    "merchant": "店67",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-30T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-30T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_68",
+    "date": "2026-11-30",
+    "amount": 411,
+    "category": "食費",
+    "merchant": "店68",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-30T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-30T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_69",
+    "date": "2026-11-30",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店69",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-30T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-30T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_70",
+    "date": "2026-12-04",
+    "amount": 1619,
+    "category": "食費",
+    "merchant": "店70",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-04T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-04T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_71",
+    "date": "2026-12-04",
+    "amount": 522,
+    "category": "食費",
+    "merchant": "店71",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-04T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-04T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_72",
+    "date": "2026-12-04",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店72",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-04T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-04T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_73",
+    "date": "2026-12-08",
+    "amount": 1647,
+    "category": "食費",
+    "merchant": "店73",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-08T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-08T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_74",
+    "date": "2026-12-08",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店74",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-08T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-08T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_75",
+    "date": "2026-12-08",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店75",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-08T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-08T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_76",
+    "date": "2026-12-12",
+    "amount": 1675,
+    "category": "食費",
+    "merchant": "店76",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-12T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-12T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_77",
+    "date": "2026-12-12",
+    "amount": 411,
+    "category": "食費",
+    "merchant": "店77",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-12T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-12T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_78",
+    "date": "2026-12-12",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店78",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-12T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-12T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_79",
+    "date": "2026-12-16",
+    "amount": 1703,
+    "category": "食費",
+    "merchant": "店79",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-16T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-16T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_80",
+    "date": "2026-12-16",
+    "amount": 522,
+    "category": "食費",
+    "merchant": "店80",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-16T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-16T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_81",
+    "date": "2026-12-16",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店81",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-16T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-16T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_82",
+    "date": "2026-12-20",
+    "amount": 1731,
+    "category": "食費",
+    "merchant": "店82",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-20T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-20T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_83",
+    "date": "2026-12-20",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "店83",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-20T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-20T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_84",
+    "date": "2026-12-20",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店84",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-20T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-20T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_85",
+    "date": "2026-12-24",
+    "amount": 1759,
+    "category": "食費",
+    "merchant": "店85",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-24T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-24T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_86",
+    "date": "2026-12-24",
+    "amount": 411,
+    "category": "食費",
+    "merchant": "店86",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-24T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-24T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_87",
+    "date": "2026-12-24",
+    "amount": 1200,
+    "category": "食費",
+    "merchant": "店87",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-12-24T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-12-24T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_88",
+    "date": "2026-10-28",
+    "amount": 800,
+    "category": "食費",
+    "merchant": "店88",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-10-28T03:00:00.000Z",
+    "bankApplied": true,
+    "linkedBankId": "",
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-28T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_89",
+    "date": "2026-11-02",
+    "amount": 800,
+    "category": "食費",
+    "merchant": "店89",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-02T03:00:00.000Z",
+    "bankApplied": true,
+    "linkedBankId": "",
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-02T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_90",
+    "date": "2026-11-07",
+    "amount": 800,
+    "category": "食費",
+    "merchant": "店90",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-07T03:00:00.000Z",
+    "bankApplied": true,
+    "linkedBankId": "",
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-07T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_91",
+    "date": "2026-11-12",
+    "amount": 800,
+    "category": "食費",
+    "merchant": "店91",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-12T03:00:00.000Z",
+    "bankApplied": true,
+    "linkedBankId": "",
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-12T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_92",
+    "date": "2026-11-17",
+    "amount": 800,
+    "category": "食費",
+    "merchant": "店92",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-17T03:00:00.000Z",
+    "bankApplied": true,
+    "linkedBankId": "",
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-17T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_93",
+    "date": "2026-11-22",
+    "amount": 800,
+    "category": "食費",
+    "merchant": "店93",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-22T03:00:00.000Z",
+    "bankApplied": true,
+    "linkedBankId": "",
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-22T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_94",
+    "date": "2026-11-15",
+    "amount": 2500,
+    "category": "食費",
+    "merchant": "店94",
+    "paymentMethod": "other",
+    "paymentId": "",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-15T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-15T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_95",
+    "date": "2026-11-16",
+    "amount": -400,
+    "category": "食費",
+    "merchant": "店95",
+    "paymentMethod": "card",
+    "paymentId": "card_t31",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-16T03:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-16T03:00:00.000Z"
+   },
+   {
+    "id": "tx_fx_96",
+    "date": "2026-11-17",
+    "amount": 999,
+    "category": "食費",
+    "merchant": "店96",
+    "paymentMethod": "debit",
+    "paymentId": "debit_seed_olive",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-11-17T03:00:00.000Z",
+    "bankReconciled": true,
+    "linkedBankId": "bank_seed_smbc_olive",
+    "bankApplied": true,
+    "bankEffectAt": "2026-11-17T03:00:00.000Z"
+   }
+  ],
+  "incomes": [],
+  "dailyGoals": {},
+  "monthlyGoals": {},
+  "dailyCorrections": {
+   "2026-11-15": 1111
+  },
+  "monthlyCorrections": {},
+  "cardAdjustments": {
+   "2026-08|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 27528,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-08|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 42142,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 34364,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-26",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 41923,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-27",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_merpay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 3000,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-21",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-10|card_t15": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 12345,
+    "baseAtEdit": 10000,
+    "status": "confirmed",
+    "paymentDateOverride": "",
+    "confirmedTransactionIds": [],
+    "confirmedThroughDate": "2026-10-12",
+    "confirmedAt": "2026-01-01T00:00:00.000Z",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-11|card_t25": {
+    "baseAtEdit": 1000,
+    "delta": 777,
+    "status": "paid",
+    "paymentDateOverride": "2026-12-03",
+    "paidAmount": 1777,
+    "mode": "confirmed_total",
+    "confirmedTotal": 1777,
+    "deltaAtEdit": 777,
+    "paidAt": "2026-11-17T13:00:05.572Z",
+    "bankApplied": false,
+    "bankReconciled": true,
+    "bankEffectAt": "",
+    "bankIdAtPayment": ""
+   }
+  },
+  "banks": [
+   {
+    "id": "bank_seed_sbi_shinsei",
+    "name": "SBI新生銀行",
+    "label": "現金7,000円を含む合算残高",
+    "balance": 99330,
+    "threshold": 15000,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_yucho",
+    "name": "ゆうちょ銀行",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_paypay",
+    "name": "PayPay銀行",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_smbc_olive",
+    "name": "三井住友銀行 Olive",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "cards": [
+   {
+    "id": "card_seed_smbc",
+    "company": "三井住友カード",
+    "name": "三井住友カード",
+    "closingDay": "月末",
+    "dueDay": 26,
+    "limit": 100000,
+    "availableSnapshot": 11000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_merpay",
+    "company": "メルペイカード",
+    "name": "メルペイカード",
+    "closingDay": "月末",
+    "dueDay": 21,
+    "limit": 100000,
+    "availableSnapshot": 86000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_paypay",
+    "company": "PayPayカード",
+    "name": "PayPayカード",
+    "closingDay": "月末",
+    "dueDay": 27,
+    "limit": 100000,
+    "availableSnapshot": 5000,
+    "bankId": "bank_seed_paypay",
+    "tagIds": []
+   },
+   {
+    "id": "card_t15",
+    "company": "テスト",
+    "name": "15日締めカード",
+    "closingDay": 15,
+    "dueDay": 10,
+    "limit": 50000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_t25",
+    "company": "テスト",
+    "name": "25日締め翌月27日",
+    "closingDay": 25,
+    "dueDay": 27,
+    "limit": 50000,
+    "bankId": "bank_seed_yucho",
+    "tagIds": []
+   },
+   {
+    "id": "card_t31",
+    "company": "テスト",
+    "name": "31日締め",
+    "closingDay": 31,
+    "dueDay": 5,
+    "limit": 50000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_nodue",
+    "company": "テスト",
+    "name": "引落日なし",
+    "closingDay": null,
+    "dueDay": null,
+    "limit": 0,
+    "bankId": "",
+    "tagIds": []
+   }
+  ],
+  "debitCards": [
+   {
+    "id": "debit_seed_olive",
+    "name": "Oliveデビットカード",
+    "bankId": "bank_seed_smbc_olive",
+    "createdAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "employers": [
+   {
+    "id": "emp_seed_gu",
+    "name": "GU",
+    "hourly": 1300,
+    "transport": 840,
+    "closingType": "month_end",
+    "closingDay": null,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 10,
+    "payMonthOffset": 1,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 0,
+    "breakRules": [
+     {
+      "from": 240,
+      "to": 420,
+      "minutes": 30
+     },
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "ジーユー"
+    ],
+    "tagIds": []
+   },
+   {
+    "id": "emp_seed_muji",
+    "name": "無印良品",
+    "hourly": 1250,
+    "transport": 980,
+    "closingType": "day",
+    "closingDay": 10,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 25,
+    "payMonthOffset": 0,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 10000,
+    "breakRules": [
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "MUJI",
+     "無印"
+    ],
+    "tagIds": []
+   }
+  ],
+  "salaryRecords": [
+   {
+    "id": "salary_seed_gu_202610",
+    "employerId": "emp_seed_gu",
+    "month": "2026-09",
+    "date": "2026-10-10",
+    "gross": 28452,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202610",
+    "employerId": "emp_seed_muji",
+    "month": "2026-10",
+    "date": "2026-10-25",
+    "gross": 57640,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_gu_202611",
+    "employerId": "emp_seed_gu",
+    "month": "2026-10",
+    "date": "2026-11-10",
+    "gross": 48810,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202611",
+    "employerId": "emp_seed_muji",
+    "month": "2026-11",
+    "date": "2026-11-25",
+    "gross": 34300,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   }
+  ],
+  "tempIncomes": [
+   {
+    "id": "temp_seed_20261005",
+    "date": "2026-10-05",
+    "amount": 45000,
+    "sourceName": "臨時収入（10/5までの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   },
+   {
+    "id": "temp_seed_20261020",
+    "date": "2026-10-20",
+    "amount": 6000,
+    "sourceName": "臨時収入（10/20ごろの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   }
+  ],
+  "fixedPayments": [
+   {
+    "id": "fixed_seed_pass",
+    "name": "定期券 13,000円（カード予定）",
+    "amount": 13000,
+    "day": 25,
+    "frequency": "monthly",
+    "startMonth": "2026-10",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "skippedDates": [],
+    "tagIds": [],
+    "annualMonth": 10
+   },
+   {
+    "id": "fx_bi",
+    "name": "2か月ごと",
+    "amount": 3000,
+    "day": 31,
+    "frequency": "bimonthly",
+    "startMonth": "2026-08",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "skippedDates": [],
+    "tagIds": [],
+    "annualMonth": 8
+   },
+   {
+    "id": "fx_year",
+    "name": "年払い",
+    "amount": 12000,
+    "day": 15,
+    "frequency": "yearly",
+    "startMonth": "2025-09",
+    "annualMonth": 12,
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "skippedDates": [],
+    "tagIds": []
+   },
+   {
+    "id": "fx_mon",
+    "name": "サブスク",
+    "amount": 980,
+    "day": 3,
+    "frequency": "monthly",
+    "startMonth": "2026-09",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "skippedDates": [
+     "2026-11-03"
+    ],
+    "tagIds": [],
+    "annualMonth": 9
+   },
+   {
+    "id": "fx_cash",
+    "name": "家賃",
+    "amount": 40000,
+    "day": 27,
+    "frequency": "monthly",
+    "startMonth": "2026-05",
+    "paymentMethod": "other",
+    "paymentId": "",
+    "skippedDates": [],
+    "tagIds": [],
+    "annualMonth": 5
+   }
+  ],
+  "largeExpensePlans": [
+   {
+    "id": "large_seed_pass_now",
+    "name": "定期券の更新（現金で払う場合）",
+    "date": "2026-09-26",
+    "amount": 13000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "other",
+    "paymentId": "",
+    "splits": [],
+    "atfOptionalPass": true,
+    "memo": "現金更新する場合の仮定。まだ購入済み扱いにはしない。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.572Z",
+    "updatedAt": "2026-11-17T13:00:05.572Z"
+   },
+   {
+    "id": "large_seed_birthday",
+    "name": "誕生日代（仮の分割案）",
+    "date": "2026-10-06",
+    "amount": 60000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "splits": [
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_smbc",
+      "linkedBankId": "",
+      "amount": 38000
+     },
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_merpay",
+      "linkedBankId": "",
+      "amount": 22000
+     }
+    ],
+    "atfInstallments": {
+     "card_seed_smbc": 3,
+     "card_seed_merpay": 2
+    },
+    "memo": "38,000円/22,000円の仮案。手数料は未確認。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.572Z",
+    "updatedAt": "2026-11-17T13:00:05.572Z"
+   },
+   {
+    "id": "large_seed_fw_oct",
+    "name": "FW 10月（前半の最終日を仮置き）",
+    "date": "2026-10-15",
+    "amount": 56000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.572Z",
+    "updatedAt": "2026-11-17T13:00:05.572Z"
+   },
+   {
+    "id": "large_seed_fw_nov",
+    "name": "FW 11月",
+    "date": "2026-11-08",
+    "amount": 45000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.572Z",
+    "updatedAt": "2026-11-17T13:00:05.572Z"
+   },
+   {
+    "id": "lg_card",
+    "name": "パソコン",
+    "date": "2026-11-26",
+    "amount": 90000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "card",
+    "paymentId": "card_t15",
+    "splits": [],
+    "atfInstallments": {
+     "card_t15": 3
+    },
+    "atfFee": 500,
+    "category": "その他",
+    "memo": "",
+    "linkedBankId": "",
+    "tagIds": [],
+    "createdAt": "2026-11-17T13:00:05.572Z",
+    "updatedAt": "2026-11-17T13:00:05.572Z"
+   },
+   {
+    "id": "lg_split",
+    "name": "旅行",
+    "date": "2026-12-07",
+    "amount": 50000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "card",
+    "paymentId": "card_t25",
+    "splits": [
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_t25",
+      "linkedBankId": "",
+      "amount": 30000
+     },
+     {
+      "paymentMethod": "bank",
+      "paymentId": "bank_seed_sbi_shinsei",
+      "linkedBankId": "",
+      "amount": 20000
+     }
+    ],
+    "category": "その他",
+    "memo": "",
+    "linkedBankId": "",
+    "tagIds": [],
+    "createdAt": "2026-11-17T13:00:05.572Z",
+    "updatedAt": "2026-11-17T13:00:05.572Z"
+   },
+   {
+    "id": "lg_opt",
+    "name": "任意の買い物",
+    "date": "2026-11-20",
+    "amount": 7000,
+    "priority": "optional",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "category": "その他",
+    "memo": "",
+    "linkedBankId": "",
+    "tagIds": [],
+    "createdAt": "2026-11-17T13:00:05.572Z",
+    "updatedAt": "2026-11-17T13:00:05.572Z"
+   },
+   {
+    "id": "lg_done",
+    "name": "済んだ買い物",
+    "date": "2026-11-14",
+    "amount": 5000,
+    "priority": "required",
+    "status": "completed",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "category": "その他",
+    "memo": "",
+    "linkedBankId": "",
+    "tagIds": [],
+    "createdAt": "2026-11-17T13:00:05.572Z",
+    "updatedAt": "2026-11-17T13:00:05.572Z"
+   }
+  ],
+  "assetSnapshots": [],
+  "mailImports": [],
+  "cardStatementImports": [],
+  "savedScenarios": [],
+  "salaryAllocations": [],
+  "transferPlans": [],
+  "statementReconciliations": [],
+  "budgetRebalanceHistory": [],
+  "eventGoals": [],
+  "reimbursements": [],
+  "savedSearches": [],
+  "merchantRules": {},
+  "quickInputRules": {},
+  "monthReviews": {},
+  "dayClosings": {},
+  "pushPreferences": {
+   "dayClose": true,
+   "closeTime": "21:00",
+   "atf": true,
+   "mail": true,
+   "spending": false,
+   "spendTimes": [
+    "12:00",
+    "18:00"
+   ],
+   "showAmount": false
+  },
+  "gmailSettings": {
+   "clientId": "",
+   "query": "newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}",
+   "autoSync": true,
+   "syncMinutes": 5,
+   "lastSyncAt": null,
+   "emailAddress": "",
+   "lookbackDays": 30,
+   "sourceIds": []
+  },
+  "atfSettings": {
+   "reserveFloor": 15000,
+   "dailyCardSpend": 500,
+   "birthdayReduction": 0,
+   "birthdayFee": null,
+   "renewPassCash": true,
+   "extraEarlyShifts": false,
+   "extraLateShifts": false,
+   "asOf": "2026-09-26",
+   "source": "seeded-example"
+  },
+  "acfSettings": {
+   "reserveFloor": 15000,
+   "horizon": "next_card_due",
+   "useWeekdayWeights": true,
+   "includeRequiredLargeExpenses": true,
+   "riskNotifications": true,
+   "creditFallbackEnabled": true,
+   "creditDailyLimit": 500,
+   "creditAggressiveness": 100,
+   "creditAllowAllCategories": true,
+   "creditAllowedCategoryIds": [],
+   "creditAllowedMerchants": [],
+   "creditBlockedMerchants": [],
+   "preferredCardId": "",
+   "initialized": false,
+   "indexEndDay": 28,
+   "indexEndDate": ""
+  },
+  "feedbackSettings": {
+   "sound": true,
+   "haptic": true,
+   "motion": true,
+   "volume": 0.45
+  },
+  "notices": [],
+  "notificationSettings": {
+   "goal": true,
+   "salary": true,
+   "payment": true,
+   "unknown": true,
+   "balance": true,
+   "level": "recommended"
+  },
+  "appearance": "system",
+  "security": {
+   "enabled": false,
+   "passcode": "",
+   "relock": "immediate"
+  },
+  "meta": {
+   "legacyMigrated": true,
+   "lastScheduleDate": "2026-11-17",
+   "seedVersion": 4,
+   "atfSeeded": true,
+   "employerTermsV18": true,
+   "shiftGrossV19": true
+  },
+  "shiftPlans": [],
+  "homeViewMode": "today",
+  "sidebarFavorites": [],
+  "sidebarFavoriteOrder": [],
+  "tags": [],
+  "favoriteTagMap": {}
+ },
+ "cycle": [
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-06",
+   "out": {
+    "start": "2026-06-01",
+    "end": "2026-06-30",
+    "label": "2026年6月"
+   }
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-07",
+   "out": {
+    "start": "2026-07-01",
+    "end": "2026-07-31",
+    "label": "2026年7月"
+   }
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-08",
+   "out": {
+    "start": "2026-08-01",
+    "end": "2026-08-31",
+    "label": "2026年8月"
+   }
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-09",
+   "out": {
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "label": "2026年9月"
+   }
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-10",
+   "out": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "label": "2026年10月"
+   }
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-11",
+   "out": {
+    "start": "2026-11-01",
+    "end": "2026-11-30",
+    "label": "2026年11月"
+   }
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-12",
+   "out": {
+    "start": "2026-12-01",
+    "end": "2026-12-31",
+    "label": "2026年12月"
+   }
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2027-01",
+   "out": {
+    "start": "2027-01-01",
+    "end": "2027-01-31",
+    "label": "2027年1月"
+   }
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2027-02",
+   "out": {
+    "start": "2027-02-01",
+    "end": "2027-02-28",
+    "label": "2027年2月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-06",
+   "out": {
+    "start": "2026-06-01",
+    "end": "2026-06-30",
+    "label": "2026年6月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-07",
+   "out": {
+    "start": "2026-07-01",
+    "end": "2026-07-31",
+    "label": "2026年7月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-08",
+   "out": {
+    "start": "2026-08-01",
+    "end": "2026-08-31",
+    "label": "2026年8月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-09",
+   "out": {
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "label": "2026年9月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-10",
+   "out": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "label": "2026年10月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-11",
+   "out": {
+    "start": "2026-11-01",
+    "end": "2026-11-30",
+    "label": "2026年11月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-12",
+   "out": {
+    "start": "2026-12-01",
+    "end": "2026-12-31",
+    "label": "2026年12月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2027-01",
+   "out": {
+    "start": "2027-01-01",
+    "end": "2027-01-31",
+    "label": "2027年1月"
+   }
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2027-02",
+   "out": {
+    "start": "2027-02-01",
+    "end": "2027-02-28",
+    "label": "2027年2月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-06",
+   "out": {
+    "start": "2026-06-01",
+    "end": "2026-06-30",
+    "label": "2026年6月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-07",
+   "out": {
+    "start": "2026-07-01",
+    "end": "2026-07-31",
+    "label": "2026年7月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-08",
+   "out": {
+    "start": "2026-08-01",
+    "end": "2026-08-31",
+    "label": "2026年8月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-09",
+   "out": {
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "label": "2026年9月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-10",
+   "out": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "label": "2026年10月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-11",
+   "out": {
+    "start": "2026-11-01",
+    "end": "2026-11-30",
+    "label": "2026年11月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-12",
+   "out": {
+    "start": "2026-12-01",
+    "end": "2026-12-31",
+    "label": "2026年12月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2027-01",
+   "out": {
+    "start": "2027-01-01",
+    "end": "2027-01-31",
+    "label": "2027年1月"
+   }
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2027-02",
+   "out": {
+    "start": "2027-02-01",
+    "end": "2027-02-28",
+    "label": "2027年2月"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-06",
+   "out": {
+    "start": "2026-05-16",
+    "end": "2026-06-15",
+    "label": "2026/05/16〜2026/06/15"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-07",
+   "out": {
+    "start": "2026-06-16",
+    "end": "2026-07-15",
+    "label": "2026/06/16〜2026/07/15"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-08",
+   "out": {
+    "start": "2026-07-16",
+    "end": "2026-08-15",
+    "label": "2026/07/16〜2026/08/15"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-09",
+   "out": {
+    "start": "2026-08-16",
+    "end": "2026-09-15",
+    "label": "2026/08/16〜2026/09/15"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-10",
+   "out": {
+    "start": "2026-09-16",
+    "end": "2026-10-15",
+    "label": "2026/09/16〜2026/10/15"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-11",
+   "out": {
+    "start": "2026-10-16",
+    "end": "2026-11-15",
+    "label": "2026/10/16〜2026/11/15"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-12",
+   "out": {
+    "start": "2026-11-16",
+    "end": "2026-12-15",
+    "label": "2026/11/16〜2026/12/15"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2027-01",
+   "out": {
+    "start": "2026-12-16",
+    "end": "2027-01-15",
+    "label": "2026/12/16〜2027/01/15"
+   }
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2027-02",
+   "out": {
+    "start": "2027-01-16",
+    "end": "2027-02-15",
+    "label": "2027/01/16〜2027/02/15"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-06",
+   "out": {
+    "start": "2026-05-26",
+    "end": "2026-06-25",
+    "label": "2026/05/26〜2026/06/25"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-07",
+   "out": {
+    "start": "2026-06-26",
+    "end": "2026-07-25",
+    "label": "2026/06/26〜2026/07/25"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-08",
+   "out": {
+    "start": "2026-07-26",
+    "end": "2026-08-25",
+    "label": "2026/07/26〜2026/08/25"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-09",
+   "out": {
+    "start": "2026-08-26",
+    "end": "2026-09-25",
+    "label": "2026/08/26〜2026/09/25"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-10",
+   "out": {
+    "start": "2026-09-26",
+    "end": "2026-10-25",
+    "label": "2026/09/26〜2026/10/25"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-11",
+   "out": {
+    "start": "2026-10-26",
+    "end": "2026-11-25",
+    "label": "2026/10/26〜2026/11/25"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-12",
+   "out": {
+    "start": "2026-11-26",
+    "end": "2026-12-25",
+    "label": "2026/11/26〜2026/12/25"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2027-01",
+   "out": {
+    "start": "2026-12-26",
+    "end": "2027-01-25",
+    "label": "2026/12/26〜2027/01/25"
+   }
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2027-02",
+   "out": {
+    "start": "2027-01-26",
+    "end": "2027-02-25",
+    "label": "2027/01/26〜2027/02/25"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-06",
+   "out": {
+    "start": "2026-06-01",
+    "end": "2026-06-30",
+    "label": "2026/06/01〜2026/06/30"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-07",
+   "out": {
+    "start": "2026-07-01",
+    "end": "2026-07-31",
+    "label": "2026/07/01〜2026/07/31"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-08",
+   "out": {
+    "start": "2026-08-01",
+    "end": "2026-08-31",
+    "label": "2026/08/01〜2026/08/31"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-09",
+   "out": {
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "label": "2026/09/01〜2026/09/30"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-10",
+   "out": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "label": "2026/10/01〜2026/10/31"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-11",
+   "out": {
+    "start": "2026-11-01",
+    "end": "2026-11-30",
+    "label": "2026/11/01〜2026/11/30"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-12",
+   "out": {
+    "start": "2026-12-01",
+    "end": "2026-12-31",
+    "label": "2026/12/01〜2026/12/31"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2027-01",
+   "out": {
+    "start": "2027-01-01",
+    "end": "2027-01-31",
+    "label": "2027/01/01〜2027/01/31"
+   }
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2027-02",
+   "out": {
+    "start": "2027-02-01",
+    "end": "2027-02-28",
+    "label": "2027/02/01〜2027/02/28"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-06",
+   "out": {
+    "start": "2026-06-01",
+    "end": "2026-06-30",
+    "label": "2026年6月"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-07",
+   "out": {
+    "start": "2026-07-01",
+    "end": "2026-07-31",
+    "label": "2026年7月"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-08",
+   "out": {
+    "start": "2026-08-01",
+    "end": "2026-08-31",
+    "label": "2026年8月"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-09",
+   "out": {
+    "start": "2026-09-01",
+    "end": "2026-09-30",
+    "label": "2026年9月"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-10",
+   "out": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "label": "2026年10月"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-11",
+   "out": {
+    "start": "2026-11-01",
+    "end": "2026-11-30",
+    "label": "2026年11月"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-12",
+   "out": {
+    "start": "2026-12-01",
+    "end": "2026-12-31",
+    "label": "2026年12月"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2027-01",
+   "out": {
+    "start": "2027-01-01",
+    "end": "2027-01-31",
+    "label": "2027年1月"
+   }
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2027-02",
+   "out": {
+    "start": "2027-02-01",
+    "end": "2027-02-28",
+    "label": "2027年2月"
+   }
+  }
+ ],
+ "purchase": [
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2026-11-01",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2026-11-15",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2026-11-16",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2026-11-25",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2026-11-26",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2026-11-30",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2027-02-28",
+   "out": "2027-02"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2028-02-29",
+   "out": "2028-02"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "date": "2026-12-31",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2026-11-01",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2026-11-15",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2026-11-16",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2026-11-25",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2026-11-26",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2026-11-30",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2027-02-28",
+   "out": "2027-02"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2028-02-29",
+   "out": "2028-02"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "date": "2026-12-31",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2026-11-01",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2026-11-15",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2026-11-16",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2026-11-25",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2026-11-26",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2026-11-30",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2027-02-28",
+   "out": "2027-02"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2028-02-29",
+   "out": "2028-02"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "date": "2026-12-31",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2026-11-01",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2026-11-15",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2026-11-16",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2026-11-25",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2026-11-26",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2026-11-30",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2027-02-28",
+   "out": "2027-03"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2028-02-29",
+   "out": "2028-03"
+  },
+  {
+   "cardId": "card_t15",
+   "date": "2026-12-31",
+   "out": "2027-01"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2026-11-01",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2026-11-15",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2026-11-16",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2026-11-25",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2026-11-26",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2026-11-30",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2027-02-28",
+   "out": "2027-03"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2028-02-29",
+   "out": "2028-03"
+  },
+  {
+   "cardId": "card_t25",
+   "date": "2026-12-31",
+   "out": "2027-01"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2026-11-01",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2026-11-15",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2026-11-16",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2026-11-25",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2026-11-26",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2026-11-30",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2027-02-28",
+   "out": "2027-02"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2028-02-29",
+   "out": "2028-02"
+  },
+  {
+   "cardId": "card_t31",
+   "date": "2026-12-31",
+   "out": "2026-12"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2026-11-01",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2026-11-15",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2026-11-16",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2026-11-25",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2026-11-26",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2026-11-30",
+   "out": "2026-11"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2027-02-28",
+   "out": "2027-02"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2028-02-29",
+   "out": "2028-02"
+  },
+  {
+   "cardId": "card_nodue",
+   "date": "2026-12-31",
+   "out": "2026-12"
+  }
+ ],
+ "payDate": [
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-06",
+   "out": "2026-07-26"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-07",
+   "out": "2026-08-26"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-08",
+   "out": "2026-09-26"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-09",
+   "out": "2026-10-26"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-10",
+   "out": "2026-11-26"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-11",
+   "out": "2026-12-26"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-12",
+   "out": "2027-01-26"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2027-01",
+   "out": "2027-02-26"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2027-02",
+   "out": "2027-03-26"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-06",
+   "out": "2026-07-21"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-07",
+   "out": "2026-08-21"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-08",
+   "out": "2026-09-21"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-09",
+   "out": "2026-10-21"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-10",
+   "out": "2026-11-21"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-11",
+   "out": "2026-12-21"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-12",
+   "out": "2027-01-21"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2027-01",
+   "out": "2027-02-21"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2027-02",
+   "out": "2027-03-21"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-06",
+   "out": "2026-07-27"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-07",
+   "out": "2026-08-27"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-08",
+   "out": "2026-09-27"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-09",
+   "out": "2026-10-27"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-10",
+   "out": "2026-11-27"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-11",
+   "out": "2026-12-27"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-12",
+   "out": "2027-01-27"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2027-01",
+   "out": "2027-02-27"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2027-02",
+   "out": "2027-03-27"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-06",
+   "out": "2026-07-10"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-07",
+   "out": "2026-08-10"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-08",
+   "out": "2026-09-10"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-09",
+   "out": "2026-10-10"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-10",
+   "out": "2026-11-10"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-11",
+   "out": "2026-12-10"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-12",
+   "out": "2027-01-10"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2027-01",
+   "out": "2027-02-10"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2027-02",
+   "out": "2027-03-10"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-06",
+   "out": "2026-06-27"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-07",
+   "out": "2026-07-27"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-08",
+   "out": "2026-08-27"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-09",
+   "out": "2026-09-27"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-10",
+   "out": "2026-10-27"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-11",
+   "out": "2026-11-27"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-12",
+   "out": "2026-12-27"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2027-01",
+   "out": "2027-01-27"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2027-02",
+   "out": "2027-02-27"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-06",
+   "out": "2026-07-05"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-07",
+   "out": "2026-08-05"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-08",
+   "out": "2026-09-05"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-09",
+   "out": "2026-10-05"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-10",
+   "out": "2026-11-05"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-11",
+   "out": "2026-12-05"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-12",
+   "out": "2027-01-05"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2027-01",
+   "out": "2027-02-05"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2027-02",
+   "out": "2027-03-05"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-06",
+   "out": null
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-07",
+   "out": null
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-08",
+   "out": null
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-09",
+   "out": null
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-10",
+   "out": null
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-11",
+   "out": null
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-12",
+   "out": null
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2027-01",
+   "out": null
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2027-02",
+   "out": null
+  }
+ ],
+ "usage": [
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-06",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-07",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-08",
+   "base": 0,
+   "amount": 27528,
+   "newUse": 0,
+   "status": "confirmed"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-09",
+   "base": 8400,
+   "amount": 34364,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-10",
+   "base": 9600,
+   "amount": 9600,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-11",
+   "base": 9600,
+   "amount": 9600,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-12",
+   "base": 7200,
+   "amount": 7200,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2027-01",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2027-02",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-06",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-07",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-08",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-09",
+   "base": 0,
+   "amount": 3000,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-10",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-11",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-12",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2027-01",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2027-02",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-06",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-07",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-08",
+   "base": 0,
+   "amount": 42142,
+   "newUse": 0,
+   "status": "confirmed"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-09",
+   "base": 0,
+   "amount": 41923,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-10",
+   "base": 13000,
+   "amount": 13000,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-11",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-12",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2027-01",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2027-02",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-06",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-07",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-08",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-09",
+   "base": 4068,
+   "amount": 4068,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-10",
+   "base": 8197,
+   "amount": 13600,
+   "newUse": 1255,
+   "status": "confirmed"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-11",
+   "base": 11048,
+   "amount": 11048,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-12",
+   "base": 11137,
+   "amount": 11137,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2027-01",
+   "base": 5193,
+   "amount": 5193,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2027-02",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-06",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-07",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-08",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-09",
+   "base": 1134,
+   "amount": 1134,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-10",
+   "base": 1512,
+   "amount": 1512,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-11",
+   "base": 1989,
+   "amount": 1777,
+   "newUse": 0,
+   "status": "paid"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-12",
+   "base": 3177,
+   "amount": 3177,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2027-01",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2027-02",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-06",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-07",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-08",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-09",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-10",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-11",
+   "base": -400,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-12",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2027-01",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2027-02",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-06",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-07",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-08",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-09",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-10",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-11",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-12",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2027-01",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2027-02",
+   "base": 0,
+   "amount": 0,
+   "newUse": 0,
+   "status": "estimated"
+  }
+ ],
+ "statements": [
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-06",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-05",
+     "paymentMonth": "2026-06",
+     "paymentDate": "2026-06-26",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-07",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-06",
+     "paymentMonth": "2026-07",
+     "paymentDate": "2026-07-26",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-08",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-07",
+     "paymentMonth": "2026-08",
+     "paymentDate": "2026-08-26",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-09",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-28",
+     "amount": 27528,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-10",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-26",
+     "amount": 34364,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-11",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-26",
+     "amount": 9600,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2026-12",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-26",
+     "amount": 9600,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2027-01",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-26",
+     "amount": 7200,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_smbc",
+   "month": "2027-02",
+   "out": [
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-26",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-06",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-05",
+     "paymentMonth": "2026-06",
+     "paymentDate": "2026-06-21",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-07",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-06",
+     "paymentMonth": "2026-07",
+     "paymentDate": "2026-07-21",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-08",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-07",
+     "paymentMonth": "2026-08",
+     "paymentDate": "2026-08-21",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-09",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-21",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-10",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-21",
+     "amount": 3000,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-11",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-21",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2026-12",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-21",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2027-01",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-21",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "month": "2027-02",
+   "out": [
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-21",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-06",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-05",
+     "paymentMonth": "2026-06",
+     "paymentDate": "2026-06-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-07",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-06",
+     "paymentMonth": "2026-07",
+     "paymentDate": "2026-07-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-08",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-07",
+     "paymentMonth": "2026-08",
+     "paymentDate": "2026-08-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-09",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-28",
+     "amount": 42142,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-10",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-27",
+     "amount": 41923,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-11",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-27",
+     "amount": 13000,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2026-12",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2027-01",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "month": "2027-02",
+   "out": [
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-06",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-05",
+     "paymentMonth": "2026-06",
+     "paymentDate": "2026-06-10",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-07",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-06",
+     "paymentMonth": "2026-07",
+     "paymentDate": "2026-07-10",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-08",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-07",
+     "paymentMonth": "2026-08",
+     "paymentDate": "2026-08-10",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-09",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-10",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-10",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-10",
+     "amount": 4068,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-11",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-10",
+     "amount": 13600,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2026-12",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-10",
+     "amount": 11048,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2027-01",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-10",
+     "amount": 11137,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "month": "2027-02",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-10",
+     "amount": 5193,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-06",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-06",
+     "paymentMonth": "2026-06",
+     "paymentDate": "2026-06-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-07",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-07",
+     "paymentMonth": "2026-07",
+     "paymentDate": "2026-07-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-08",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-08",
+     "paymentDate": "2026-08-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-09",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-27",
+     "amount": 1134,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-10",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-27",
+     "amount": 1512,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-11",
+   "out": []
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2026-12",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-03",
+     "amount": 1777,
+     "status": "paid",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-27",
+     "amount": 3177,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2027-01",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "month": "2027-02",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2027-02",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-27",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-06",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2026-05",
+     "paymentMonth": "2026-06",
+     "paymentDate": "2026-06-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-07",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2026-06",
+     "paymentMonth": "2026-07",
+     "paymentDate": "2026-07-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-08",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2026-07",
+     "paymentMonth": "2026-08",
+     "paymentDate": "2026-08-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-09",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-10",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-11",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2026-12",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2027-01",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "month": "2027-02",
+   "out": [
+    {
+     "cardId": "card_t31",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-05",
+     "amount": 0,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-06",
+   "out": []
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-07",
+   "out": []
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-08",
+   "out": []
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-09",
+   "out": []
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-10",
+   "out": []
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-11",
+   "out": []
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2026-12",
+   "out": []
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2027-01",
+   "out": []
+  },
+  {
+   "cardId": "card_nodue",
+   "month": "2027-02",
+   "out": []
+  }
+ ],
+ "inMonth": [
+  {
+   "month": "2026-06",
+   "out": [],
+   "all": []
+  },
+  {
+   "month": "2026-07",
+   "out": [],
+   "all": []
+  },
+  {
+   "month": "2026-08",
+   "out": [],
+   "all": []
+  },
+  {
+   "month": "2026-09",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-27",
+     "amount": 1134,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-28",
+     "amount": 42142,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-28",
+     "amount": 27528,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ],
+   "all": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-27",
+     "amount": 1134,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-28",
+     "amount": 42142,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-28",
+     "amount": 27528,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2026-10",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-10",
+     "amount": 4068,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-21",
+     "amount": 3000,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-26",
+     "amount": 34364,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-27",
+     "amount": 1512,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-27",
+     "amount": 41923,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ],
+   "all": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-10",
+     "amount": 4068,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-21",
+     "amount": 3000,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-26",
+     "amount": 34364,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-27",
+     "amount": 1512,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-27",
+     "amount": 41923,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2026-11",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-10",
+     "amount": 13600,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-26",
+     "amount": 9600,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-27",
+     "amount": 13000,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ],
+   "all": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-10",
+     "amount": 13600,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-26",
+     "amount": 9600,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-27",
+     "amount": 13000,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-12-03",
+     "amount": 1777,
+     "status": "paid",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2026-12",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-10",
+     "amount": 11048,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-26",
+     "amount": 9600,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-27",
+     "amount": 3177,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ],
+   "all": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-03",
+     "amount": 1777,
+     "status": "paid",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-10",
+     "amount": 11048,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-26",
+     "amount": 9600,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-27",
+     "amount": 3177,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2027-01",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-10",
+     "amount": 11137,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-26",
+     "amount": 7200,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ],
+   "all": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-10",
+     "amount": 11137,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-26",
+     "amount": 7200,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2027-02",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-10",
+     "amount": 5193,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ],
+   "all": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-10",
+     "amount": 5193,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": null,
+     "settledBaseAmount": 0
+    }
+   ]
+  }
+ ],
+ "items": [
+  {
+   "month": "2026-06",
+   "out": []
+  },
+  {
+   "month": "2026-07",
+   "out": []
+  },
+  {
+   "month": "2026-08",
+   "out": []
+  },
+  {
+   "month": "2026-09",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-27",
+     "amount": 2114,
+     "status": "estimated",
+     "plannedAmount": 980,
+     "outstandingAmount": 2114,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-28",
+     "amount": 42142,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": 42142,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-08",
+     "paymentMonth": "2026-09",
+     "paymentDate": "2026-09-28",
+     "amount": 27528,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": 27528,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2026-10",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-10",
+     "amount": 4068,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": 4068,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-21",
+     "amount": 3000,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": 3000,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-26",
+     "amount": 34364,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": 34364,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-27",
+     "amount": 2492,
+     "status": "estimated",
+     "plannedAmount": 980,
+     "outstandingAmount": 2492,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-09",
+     "paymentMonth": "2026-10",
+     "paymentDate": "2026-10-27",
+     "amount": 41923,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": 41923,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2026-11",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-10",
+     "amount": 13600,
+     "status": "confirmed",
+     "plannedAmount": 0,
+     "outstandingAmount": 13600,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-21",
+     "amount": 11000,
+     "status": "estimated",
+     "plannedAmount": 11000,
+     "outstandingAmount": 11000,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-26",
+     "amount": 22267,
+     "status": "estimated",
+     "plannedAmount": 12667,
+     "outstandingAmount": 22267,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-10",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-11-27",
+     "amount": 13000,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": 13000,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-11",
+     "paymentDate": "2026-12-03",
+     "amount": 1777,
+     "status": "paid",
+     "plannedAmount": 0,
+     "outstandingAmount": 0,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2026-12",
+   "out": [
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-03",
+     "amount": 1777,
+     "status": "paid",
+     "plannedAmount": 0,
+     "outstandingAmount": 0,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-10",
+     "amount": 11048,
+     "status": "estimated",
+     "plannedAmount": 0,
+     "outstandingAmount": 11048,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_merpay",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-21",
+     "amount": 11000,
+     "status": "estimated",
+     "plannedAmount": 11000,
+     "outstandingAmount": 11000,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-26",
+     "amount": 22267,
+     "status": "estimated",
+     "plannedAmount": 12667,
+     "outstandingAmount": 22267,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-27",
+     "amount": 34157,
+     "status": "estimated",
+     "plannedAmount": 30980,
+     "outstandingAmount": 34157,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-11",
+     "paymentMonth": "2026-12",
+     "paymentDate": "2026-12-27",
+     "amount": 13000,
+     "status": "estimated",
+     "plannedAmount": 13000,
+     "outstandingAmount": 13000,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2027-01",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-10",
+     "amount": 53637,
+     "status": "estimated",
+     "plannedAmount": 42500,
+     "outstandingAmount": 53637,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_smbc",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-26",
+     "amount": 19866,
+     "status": "estimated",
+     "plannedAmount": 12666,
+     "outstandingAmount": 19866,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-27",
+     "amount": 980,
+     "status": "estimated",
+     "plannedAmount": 980,
+     "outstandingAmount": 980,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2026-12",
+     "paymentMonth": "2027-01",
+     "paymentDate": "2027-01-27",
+     "amount": 13000,
+     "status": "estimated",
+     "plannedAmount": 13000,
+     "outstandingAmount": 13000,
+     "settledBaseAmount": 0
+    }
+   ]
+  },
+  {
+   "month": "2027-02",
+   "out": [
+    {
+     "cardId": "card_t15",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-10",
+     "amount": 35193,
+     "status": "estimated",
+     "plannedAmount": 30000,
+     "outstandingAmount": 35193,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_t25",
+     "billingMonth": "2027-02",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-27",
+     "amount": 980,
+     "status": "estimated",
+     "plannedAmount": 980,
+     "outstandingAmount": 980,
+     "settledBaseAmount": 0
+    },
+    {
+     "cardId": "card_seed_paypay",
+     "billingMonth": "2027-01",
+     "paymentMonth": "2027-02",
+     "paymentDate": "2027-02-27",
+     "amount": 13000,
+     "status": "estimated",
+     "plannedAmount": 13000,
+     "outstandingAmount": 13000,
+     "settledBaseAmount": 0
+    }
+   ]
+  }
+ ],
+ "summary": [
+  {
+   "month": "2026-06",
+   "cardTotal": 0,
+   "cardPaid": 0,
+   "plannedCardTotal": 0,
+   "fixedTotal": 40000,
+   "fixedPaid": 0,
+   "largeTotal": 0,
+   "largePaid": 0,
+   "otherTotal": 0,
+   "otherPaid": 0,
+   "total": 40000,
+   "paid": 0,
+   "remaining": 40000,
+   "next": null
+  },
+  {
+   "month": "2026-07",
+   "cardTotal": 0,
+   "cardPaid": 0,
+   "plannedCardTotal": 0,
+   "fixedTotal": 40000,
+   "fixedPaid": 0,
+   "largeTotal": 0,
+   "largePaid": 0,
+   "otherTotal": 0,
+   "otherPaid": 0,
+   "total": 40000,
+   "paid": 0,
+   "remaining": 40000,
+   "next": null
+  },
+  {
+   "month": "2026-08",
+   "cardTotal": 0,
+   "cardPaid": 0,
+   "plannedCardTotal": 0,
+   "fixedTotal": 43000,
+   "fixedPaid": 0,
+   "largeTotal": 0,
+   "largePaid": 0,
+   "otherTotal": 0,
+   "otherPaid": 0,
+   "total": 43000,
+   "paid": 0,
+   "remaining": 43000,
+   "next": null
+  },
+  {
+   "month": "2026-09",
+   "cardTotal": 71784,
+   "cardPaid": 0,
+   "plannedCardTotal": 980,
+   "fixedTotal": 40000,
+   "fixedPaid": 0,
+   "largeTotal": 13000,
+   "largePaid": 0,
+   "otherTotal": 0,
+   "otherPaid": 0,
+   "total": 124784,
+   "paid": 0,
+   "remaining": 124784,
+   "next": {
+    "cardId": "card_t25",
+    "billingMonth": "2026-09",
+    "paymentMonth": "2026-09",
+    "paymentDate": "2026-09-27",
+    "amount": 2114,
+    "status": "estimated",
+    "plannedAmount": 980,
+    "outstandingAmount": 2114,
+    "settledBaseAmount": 0
+   }
+  },
+  {
+   "month": "2026-10",
+   "cardTotal": 85847,
+   "cardPaid": 0,
+   "plannedCardTotal": 980,
+   "fixedTotal": 43000,
+   "fixedPaid": 0,
+   "largeTotal": 56000,
+   "largePaid": 0,
+   "otherTotal": 800,
+   "otherPaid": 800,
+   "total": 185647,
+   "paid": 800,
+   "remaining": 184847,
+   "next": {
+    "cardId": "card_t15",
+    "billingMonth": "2026-09",
+    "paymentMonth": "2026-10",
+    "paymentDate": "2026-10-10",
+    "amount": 4068,
+    "status": "estimated",
+    "plannedAmount": 0,
+    "outstandingAmount": 4068,
+    "settledBaseAmount": 0
+   }
+  },
+  {
+   "month": "2026-11",
+   "cardTotal": 61644,
+   "cardPaid": 1777,
+   "plannedCardTotal": 23667,
+   "fixedTotal": 40000,
+   "fixedPaid": 0,
+   "largeTotal": 50000,
+   "largePaid": 5000,
+   "otherTotal": 7499,
+   "otherPaid": 6699,
+   "total": 159143,
+   "paid": 13476,
+   "remaining": 145667,
+   "next": {
+    "cardId": "card_seed_merpay",
+    "billingMonth": "2026-10",
+    "paymentMonth": "2026-11",
+    "paymentDate": "2026-11-21",
+    "amount": 11000,
+    "status": "estimated",
+    "plannedAmount": 11000,
+    "outstandingAmount": 11000,
+    "settledBaseAmount": 0
+   }
+  },
+  {
+   "month": "2026-12",
+   "cardTotal": 93249,
+   "cardPaid": 1777,
+   "plannedCardTotal": 67647,
+   "fixedTotal": 43000,
+   "fixedPaid": 0,
+   "largeTotal": 20000,
+   "largePaid": 0,
+   "otherTotal": 0,
+   "otherPaid": 0,
+   "total": 156249,
+   "paid": 1777,
+   "remaining": 154472,
+   "next": {
+    "cardId": "card_t15",
+    "billingMonth": "2026-11",
+    "paymentMonth": "2026-12",
+    "paymentDate": "2026-12-10",
+    "amount": 11048,
+    "status": "estimated",
+    "plannedAmount": 0,
+    "outstandingAmount": 11048,
+    "settledBaseAmount": 0
+   }
+  },
+  {
+   "month": "2027-01",
+   "cardTotal": 87483,
+   "cardPaid": 0,
+   "plannedCardTotal": 69146,
+   "fixedTotal": 40000,
+   "fixedPaid": 0,
+   "largeTotal": 0,
+   "largePaid": 0,
+   "otherTotal": 0,
+   "otherPaid": 0,
+   "total": 127483,
+   "paid": 0,
+   "remaining": 127483,
+   "next": {
+    "cardId": "card_t15",
+    "billingMonth": "2026-12",
+    "paymentMonth": "2027-01",
+    "paymentDate": "2027-01-10",
+    "amount": 53637,
+    "status": "estimated",
+    "plannedAmount": 42500,
+    "outstandingAmount": 53637,
+    "settledBaseAmount": 0
+   }
+  },
+  {
+   "month": "2027-02",
+   "cardTotal": 49173,
+   "cardPaid": 0,
+   "plannedCardTotal": 43980,
+   "fixedTotal": 43000,
+   "fixedPaid": 0,
+   "largeTotal": 0,
+   "largePaid": 0,
+   "otherTotal": 0,
+   "otherPaid": 0,
+   "total": 92173,
+   "paid": 0,
+   "remaining": 92173,
+   "next": {
+    "cardId": "card_t15",
+    "billingMonth": "2027-01",
+    "paymentMonth": "2027-02",
+    "paymentDate": "2027-02-10",
+    "amount": 35193,
+    "status": "estimated",
+    "plannedAmount": 30000,
+    "outstandingAmount": 35193,
+    "settledBaseAmount": 0
+   }
+  }
+ ],
+ "fixed": [
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2026-06",
+   "out": []
+  },
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2026-07",
+   "out": []
+  },
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2026-08",
+   "out": []
+  },
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2026-09",
+   "out": []
+  },
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2026-10",
+   "out": [
+    "2026-10-25"
+   ]
+  },
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2026-11",
+   "out": [
+    "2026-11-25"
+   ]
+  },
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2026-12",
+   "out": [
+    "2026-12-25"
+   ]
+  },
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2027-01",
+   "out": [
+    "2027-01-25"
+   ]
+  },
+  {
+   "fixedId": "fixed_seed_pass",
+   "month": "2027-02",
+   "out": [
+    "2027-02-25"
+   ]
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2026-06",
+   "out": []
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2026-07",
+   "out": []
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2026-08",
+   "out": [
+    "2026-08-31"
+   ]
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2026-09",
+   "out": []
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2026-10",
+   "out": [
+    "2026-10-31"
+   ]
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2026-11",
+   "out": []
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2026-12",
+   "out": [
+    "2026-12-31"
+   ]
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2027-01",
+   "out": []
+  },
+  {
+   "fixedId": "fx_bi",
+   "month": "2027-02",
+   "out": [
+    "2027-02-28"
+   ]
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2026-06",
+   "out": []
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2026-07",
+   "out": []
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2026-08",
+   "out": []
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2026-09",
+   "out": []
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2026-10",
+   "out": []
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2026-11",
+   "out": []
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2026-12",
+   "out": [
+    "2026-12-15"
+   ]
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2027-01",
+   "out": []
+  },
+  {
+   "fixedId": "fx_year",
+   "month": "2027-02",
+   "out": []
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2026-06",
+   "out": []
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2026-07",
+   "out": []
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2026-08",
+   "out": []
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2026-09",
+   "out": [
+    "2026-09-03"
+   ]
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2026-10",
+   "out": [
+    "2026-10-03"
+   ]
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2026-11",
+   "out": [
+    "2026-11-03"
+   ]
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2026-12",
+   "out": [
+    "2026-12-03"
+   ]
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2027-01",
+   "out": [
+    "2027-01-03"
+   ]
+  },
+  {
+   "fixedId": "fx_mon",
+   "month": "2027-02",
+   "out": [
+    "2027-02-03"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2026-06",
+   "out": [
+    "2026-06-27"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2026-07",
+   "out": [
+    "2026-07-27"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2026-08",
+   "out": [
+    "2026-08-27"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2026-09",
+   "out": [
+    "2026-09-27"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2026-10",
+   "out": [
+    "2026-10-27"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2026-11",
+   "out": [
+    "2026-11-27"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2026-12",
+   "out": [
+    "2026-12-27"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2027-01",
+   "out": [
+    "2027-01-27"
+   ]
+  },
+  {
+   "fixedId": "fx_cash",
+   "month": "2027-02",
+   "out": [
+    "2027-02-27"
+   ]
+  }
+ ],
+ "events": [
+  {
+   "date": "2026-11-21",
+   "type": "card",
+   "title": "メルペイカード支払",
+   "amount": -11000,
+   "detail": "2026年10月対象・予定含む"
+  },
+  {
+   "date": "2026-11-25",
+   "type": "income",
+   "title": "無印良品給与",
+   "amount": 34300,
+   "detail": "11月勤務分"
+  },
+  {
+   "date": "2026-11-26",
+   "type": "card",
+   "title": "三井住友カード支払",
+   "amount": -22267,
+   "detail": "2026年10月対象・予定含む"
+  },
+  {
+   "date": "2026-11-27",
+   "type": "card",
+   "title": "PayPayカード支払",
+   "amount": -13000,
+   "detail": "2026年10月対象"
+  },
+  {
+   "date": "2026-11-27",
+   "type": "fixed",
+   "title": "家賃",
+   "amount": -40000,
+   "detail": "固定支払い"
+  },
+  {
+   "date": "2026-12-07",
+   "type": "large",
+   "title": "旅行",
+   "amount": -20000,
+   "detail": "必須・SBI新生銀行"
+  },
+  {
+   "date": "2026-12-10",
+   "type": "card",
+   "title": "15日締めカード支払",
+   "amount": -11048,
+   "detail": "2026年11月対象"
+  },
+  {
+   "date": "2026-12-21",
+   "type": "card",
+   "title": "メルペイカード支払",
+   "amount": -11000,
+   "detail": "2026年11月対象・予定含む"
+  },
+  {
+   "date": "2026-12-26",
+   "type": "card",
+   "title": "三井住友カード支払",
+   "amount": -22267,
+   "detail": "2026年11月対象・予定含む"
+  },
+  {
+   "date": "2026-12-27",
+   "type": "card",
+   "title": "25日締め翌月27日支払",
+   "amount": -34157,
+   "detail": "2026年12月対象・予定含む"
+  },
+  {
+   "date": "2026-12-27",
+   "type": "card",
+   "title": "PayPayカード支払",
+   "amount": -13000,
+   "detail": "2026年11月対象・予定含む"
+  },
+  {
+   "date": "2026-12-27",
+   "type": "fixed",
+   "title": "家賃",
+   "amount": -40000,
+   "detail": "固定支払い"
+  },
+  {
+   "date": "2026-12-31",
+   "type": "fixed",
+   "title": "2か月ごと",
+   "amount": -3000,
+   "detail": "固定支払い"
+  },
+  {
+   "date": "2027-01-10",
+   "type": "card",
+   "title": "15日締めカード支払",
+   "amount": -53637,
+   "detail": "2026年12月対象・予定含む"
+  },
+  {
+   "date": "2027-01-26",
+   "type": "card",
+   "title": "三井住友カード支払",
+   "amount": -19866,
+   "detail": "2026年12月対象・予定含む"
+  },
+  {
+   "date": "2027-01-27",
+   "type": "card",
+   "title": "25日締め翌月27日支払",
+   "amount": -980,
+   "detail": "2027年1月対象・予定含む"
+  },
+  {
+   "date": "2027-01-27",
+   "type": "card",
+   "title": "PayPayカード支払",
+   "amount": -13000,
+   "detail": "2026年12月対象・予定含む"
+  },
+  {
+   "date": "2027-01-27",
+   "type": "fixed",
+   "title": "家賃",
+   "amount": -40000,
+   "detail": "固定支払い"
+  },
+  {
+   "date": "2027-02-10",
+   "type": "card",
+   "title": "15日締めカード支払",
+   "amount": -35193,
+   "detail": "2027年1月対象・予定含む"
+  }
+ ],
+ "nextDue": [
+  {
+   "cardId": "card_seed_smbc",
+   "out": "2026-11-26"
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "out": "2026-11-21"
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "out": "2026-11-27"
+  },
+  {
+   "cardId": "card_t15",
+   "out": "2026-12-10"
+  },
+  {
+   "cardId": "card_t25",
+   "out": "2026-12-03"
+  },
+  {
+   "cardId": "card_t31",
+   "out": "2026-12-05"
+  },
+  {
+   "cardId": "card_nodue",
+   "out": null
+  }
+ ],
+ "spentDate": [
+  {
+   "date": "2026-11-17",
+   "out": 1799
+  },
+  {
+   "date": "2026-11-16",
+   "out": -400
+  },
+  {
+   "date": "2026-11-15",
+   "out": 1111
+  },
+  {
+   "date": "2026-11-14",
+   "out": 2979
+  },
+  {
+   "date": "2026-11-13",
+   "out": 0
+  },
+  {
+   "date": "2026-11-12",
+   "out": 800
+  }
+ ],
+ "series": [
+  {
+   "cardId": "card_seed_smbc",
+   "out": [
+    0,
+    0,
+    0,
+    27528,
+    34364,
+    22267
+   ]
+  },
+  {
+   "cardId": "card_seed_merpay",
+   "out": [
+    0,
+    0,
+    0,
+    0,
+    3000,
+    11000
+   ]
+  },
+  {
+   "cardId": "card_seed_paypay",
+   "out": [
+    0,
+    0,
+    0,
+    42142,
+    41923,
+    13000
+   ]
+  },
+  {
+   "cardId": "card_t15",
+   "out": [
+    0,
+    0,
+    0,
+    0,
+    4068,
+    13600
+   ]
+  },
+  {
+   "cardId": "card_t25",
+   "out": [
+    0,
+    0,
+    0,
+    2114,
+    2492,
+    1777
+   ]
+  },
+  {
+   "cardId": "card_t31",
+   "out": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "cardId": "card_nodue",
+   "out": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  }
+ ]
+}

@@ -157,20 +157,43 @@ public struct Transaction: JSONRecord {
     public var raw: JSONValue
     public var id: String
     public var date: String
+    /// 支出は正、返金は負
     public var amount: Double
     public var category: String
     public var merchant: String
+    /// "card" / "debit" / "bank" / "other"
     public var paymentMethod: String
     public var paymentId: String
     public var memo: String
+    /// "manual" / "fixed" / "large_plan" / "gmail" など
+    public var source: String
+    public var fixedId: String
+    public var largePlanId: String
+    public var largePlanPartIndex: Int?
+    public var linkedBankId: String
+    public var bankApplied: Bool
+    public var bankReconciled: Bool
+    public var bankEffectAt: String
+    public var createdAt: String
+    public var updatedAt: String
     public init(json: JSONValue) {
         raw = json
         id = str(json["id"]); date = str(json["date"]); amount = num(json["amount"]); category = str(json["category"])
         merchant = str(json["merchant"]); paymentMethod = str(json["paymentMethod"]); paymentId = str(json["paymentId"]); memo = str(json["memo"])
+        source = str(json["source"]); fixedId = str(json["fixedId"]); largePlanId = str(json["largePlanId"])
+        largePlanPartIndex = optNum(json["largePlanPartIndex"]).map { Int($0) }
+        linkedBankId = str(json["linkedBankId"])
+        bankApplied = json["bankApplied"]?.boolValue ?? false; bankReconciled = json["bankReconciled"]?.boolValue ?? false
+        bankEffectAt = str(json["bankEffectAt"]); createdAt = str(json["createdAt"]); updatedAt = str(json["updatedAt"])
     }
+    public init(id: String) { self.init(json: .object([:])); self.id = id }
     public var known: [String: JSONValue] {
         ["id": .string(id), "date": .string(date), "amount": .number(amount), "category": .string(category), "merchant": .string(merchant),
-         "paymentMethod": .string(paymentMethod), "paymentId": .string(paymentId), "memo": .string(memo)]
+         "paymentMethod": .string(paymentMethod), "paymentId": .string(paymentId), "memo": .string(memo),
+         "source": .string(source), "fixedId": .string(fixedId), "largePlanId": .string(largePlanId),
+         "largePlanPartIndex": largePlanPartIndex.map { .number(Double($0)) } ?? .null,
+         "linkedBankId": .string(linkedBankId), "bankApplied": .bool(bankApplied), "bankReconciled": .bool(bankReconciled),
+         "bankEffectAt": .string(bankEffectAt), "createdAt": .string(createdAt), "updatedAt": .string(updatedAt)]
     }
 }
 
@@ -178,14 +201,21 @@ public struct Bank: JSONRecord {
     public var raw: JSONValue
     public var id: String
     public var name: String
+    public var label: String
     public var balance: Double
     public var threshold: Double
+    /// この時刻の残高として入力した（これより前の取引は残高に含まれている）
+    public var balanceAsOf: String
+    public var updatedAt: String
     public init(json: JSONValue) {
         raw = json
-        id = str(json["id"]); name = str(json["name"]); balance = num(json["balance"]); threshold = num(json["threshold"])
+        id = str(json["id"]); name = str(json["name"]); label = str(json["label"]); balance = num(json["balance"]); threshold = num(json["threshold"])
+        balanceAsOf = str(json["balanceAsOf"]); updatedAt = str(json["updatedAt"])
     }
+    public init(id: String, name: String) { self.init(json: .object([:])); self.id = id; self.name = name }
     public var known: [String: JSONValue] {
-        ["id": .string(id), "name": .string(name), "balance": .number(balance), "threshold": .number(threshold)]
+        ["id": .string(id), "name": .string(name), "label": .string(label), "balance": .number(balance), "threshold": .number(threshold),
+         "balanceAsOf": .string(balanceAsOf), "updatedAt": .string(updatedAt)]
     }
 }
 
@@ -194,20 +224,38 @@ public struct Income: JSONRecord {
     public var id: String
     public var date: String
     public var amount: Double
+    public var sourceName: String
+    /// "bank" / "cash"
+    public var toType: String
+    public var bankId: String
+    public var memo: String
+    /// "salary" / "temporary" など
+    public var kind: String
+    public var employerId: String
     public var salaryRecordId: String
     public var tempIncomeId: String
     public var bankApplied: Bool
     public var bankReconciled: Bool
+    public var bankEffectAt: String
     public var receivedConfirmed: Bool
+    public var createdAt: String
     public init(json: JSONValue) {
         raw = json
-        id = str(json["id"]); date = str(json["date"]); amount = num(json["amount"]); salaryRecordId = str(json["salaryRecordId"]); tempIncomeId = str(json["tempIncomeId"])
+        id = str(json["id"]); date = str(json["date"]); amount = num(json["amount"]); sourceName = str(json["sourceName"])
+        toType = str(json["toType"]); bankId = str(json["bankId"]); memo = str(json["memo"]); kind = str(json["kind"])
+        employerId = str(json["employerId"]); salaryRecordId = str(json["salaryRecordId"]); tempIncomeId = str(json["tempIncomeId"])
         bankApplied = json["bankApplied"]?.boolValue ?? false; bankReconciled = json["bankReconciled"]?.boolValue ?? false
+        bankEffectAt = str(json["bankEffectAt"])
         receivedConfirmed = json["receivedConfirmed"]?.boolValue ?? false
+        createdAt = str(json["createdAt"])
     }
+    public init(id: String) { self.init(json: .object([:])); self.id = id }
     public var known: [String: JSONValue] {
-        ["id": .string(id), "date": .string(date), "amount": .number(amount), "salaryRecordId": .string(salaryRecordId),
-         "bankApplied": .bool(bankApplied), "bankReconciled": .bool(bankReconciled)]
+        ["id": .string(id), "date": .string(date), "amount": .number(amount), "sourceName": .string(sourceName),
+         "toType": .string(toType), "bankId": .string(bankId), "memo": .string(memo), "kind": .string(kind),
+         "employerId": .string(employerId), "salaryRecordId": .string(salaryRecordId), "tempIncomeId": .string(tempIncomeId),
+         "bankApplied": .bool(bankApplied), "bankReconciled": .bool(bankReconciled), "bankEffectAt": .string(bankEffectAt),
+         "createdAt": .string(createdAt)]
     }
 }
 
