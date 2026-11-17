@@ -18,19 +18,6 @@ struct RootView: View {
             PaymentsScreen().tabItem { Label("支払い", systemImage: "creditcard.fill") }.tag(AppModel.Tab.payments)
             MoreScreen().tabItem { Label("その他", systemImage: "square.grid.2x2.fill") }.tag(AppModel.Tab.more)
         }
-        .overlay(alignment: .bottomTrailing) {
-            Button { model.entryMode = .expense } label: {
-                Image(systemName: "plus").font(.title2.weight(.semibold)).foregroundStyle(.white)
-                    .frame(width: 58, height: 58)
-                    .background(Color.accentColor.gradient, in: Circle())
-                    .shadow(color: .black.opacity(0.18), radius: 10, y: 4)
-            }
-            .accessibilityLabel("入力する")
-            .padding(.trailing, 20).padding(.bottom, 92)
-            .contextMenu {
-                ForEach(EntryMode.allCases) { m in Button { model.entryMode = m } label: { Label(m.label, systemImage: m.symbol) } }
-            }
-        }
         .sheet(item: $model.entryMode) { mode in EntrySheet(mode: mode).presentationDetents([.large]) }
         .alert("お知らせ", isPresented: Binding(get: { model.errorMessage != nil }, set: { if !$0 { model.errorMessage = nil } })) {
             Button("OK", role: .cancel) {}
@@ -93,3 +80,24 @@ struct RootView: View {
 #Preview {
     RootView().environment(AppModel.preview())
 }
+
+/// 右下の「＋」（新規入力）。タブの最初の画面だけに出す（先へ進んだ画面では隠れる）
+struct EntryButton: ViewModifier {
+    @Environment(AppModel.self) private var model
+    func body(content: Content) -> some View {
+        content.overlay(alignment: .bottomTrailing) {
+            Button { model.entryMode = .expense } label: {
+                Image(systemName: "plus").font(.title2.weight(.semibold)).foregroundStyle(.white)
+                    .frame(width: 58, height: 58)
+                    .background(Color.accentColor.gradient, in: Circle())
+                    .shadow(color: .black.opacity(0.18), radius: 10, y: 4)
+            }
+            .accessibilityLabel("入力する")
+            .padding(.trailing, 20).padding(.bottom, 16)
+            .contextMenu {
+                ForEach(EntryMode.allCases) { m in Button { model.entryMode = m } label: { Label(m.label, systemImage: m.symbol) } }
+            }
+        }
+    }
+}
+extension View { func entryButton() -> some View { modifier(EntryButton()) } }

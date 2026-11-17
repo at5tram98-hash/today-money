@@ -24,6 +24,9 @@ struct HomeScreen: View {
                     paymentsCard(doc, today: today)
                     highlightsCard(doc, month: month)
                     recentCard(doc, today: today)
+                    if DayClosing.inRange(date, today: today) {
+                        NavigationLink { DayClosingView(date: date) } label: { DayClosingCard(date: date) }
+                    }
                     NavigationLink { MonthCompareView(month: month) } label: { compareCard(doc, month: month) }
                     NavigationLink { LargeExpensesView() } label: { largeCard(doc, today: today) }
                 }
@@ -32,6 +35,7 @@ struct HomeScreen: View {
                 .padding(.bottom, 100)
             }
             .background(Color(.systemGroupedBackground))
+            .entryButton()
             .navigationTitle("ホーム")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -45,9 +49,12 @@ struct HomeScreen: View {
                 case .acfIndex: AcfIndexView()
                 case .acfSettings: AcfSettingsView()
                 case .cashflow: CashFlowView()
+                case .dayClose: DayClosingView(date: model.today)
+                case .goalMonth: GoalPlannerView(type: .monthly, key: model.thisMonth)
+                case .goalDay: GoalPlannerView(type: .daily, key: model.today)
                 }
             }
-            .sheet(isPresented: $goalSheet) { NavigationStack { GoalEditor(period: period, date: date) } }
+            .sheet(isPresented: $goalSheet) { NavigationStack { GoalPlannerView(type: period == "today" ? .daily : .monthly, key: period == "today" ? date : String(date.prefix(7))) } }
             .onChange(of: model.today) { _, t in date = t }
         }
     }
@@ -335,57 +342,6 @@ struct MonthCompareView: View {
             }
         }
         .navigationTitle("今月の比較")
-    }
-}
-
-/// 目標（1日・1か月の使える額）（Web 版 dailyGoals / monthlyGoals の total）
-struct GoalEditor: View {
-    @Environment(AppModel.self) private var model
-    @Environment(\.dismiss) private var dismiss
-    var period: String
-    var date: String
-    @State private var daily = 0.0
-    @State private var monthly = 0.0
-    @State private var spreadDaily = true
-    var body: some View {
-        let month = String(date.prefix(7))
-        Form {
-            Section {
-                AmountField(title: "\(Format.monthLabel(month))の目標", value: $monthly)
-                Toggle("1日の目標を月の目標から自動で決める", isOn: $spreadDaily)
-            } header: { Text("1か月") } footer: {
-                if spreadDaily && monthly > 0 { Text("残りの日数で割ると、1日あたり \((max(0, monthly - model.doc.spentMonth(month)) / Double(max(1, Dates.daysInMonth(month) - Dates.parts(model.today).d + 1))).rounded().yen) です。") }
-            }
-            if !spreadDaily {
-                Section("この日（\(Format.dayLabel(date))）") { AmountField(title: "1日の目標", value: $daily) }
-            }
-        }
-        .navigationTitle("目標").navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) { Button("キャンセル") { dismiss() } }
-            ToolbarItem(placement: .confirmationAction) { Button("保存") { save(month) }.bold() }
-        }
-        .onAppear { daily = model.doc.dailyGoal(date); monthly = model.doc.monthlyGoalTotal(month) }
-    }
-    private func save(_ month: String) {
-        let (m, d, spread, day, today) = (monthly, daily, spreadDaily, date, model.today)
-        model.commit("目標の設定") { doc in
-            var mg = doc["monthlyGoals"]?.objectValue ?? [:]
-            var g = mg[month]?.objectValue ?? ["categories": .object([:]), "daily": .object([:])]
-            g["total"] = .number(m); mg[month] = .object(g); doc["monthlyGoals"] = .object(mg)
-            var dg = doc["dailyGoals"]?.objectValue ?? [:]
-            if spread && m > 0 {
-                let start = max(Dates.parts(today).d, 1), days = Dates.daysInMonth(month)
-                let per = (max(0, m - doc.spentMonth(month)) / Double(max(1, days - start + 1))).rounded()
-                for i in (month == String(today.prefix(7)) ? start : 1)...days {
-                    dg["\(month)-\(i < 10 ? "0" : "")\(i)"] = .object(["total": .number(per), "categories": .object([:]), "origin": .string("monthly")])
-                }
-            } else if !spread {
-                dg[day] = .object(["total": .number(d), "categories": .object([:]), "origin": .string("daily")])
-            }
-            doc["dailyGoals"] = .object(dg)
-        }
-        model.toast = "目標を保存しました"; dismiss()
     }
 }
 

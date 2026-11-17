@@ -6,7 +6,7 @@
 - 初期データでの数値が Web 版と一致：総資産 ¥99,330、今月の給与 ¥83,110、次の給料日 11/25 無印良品 ¥34,300、今月の支払予定 ¥81,667、30日間の最低残高 ¥88,330。
 - 実機（iPhone）ではまだ確認していない。Debug ビルドのシミュレーターでは起動に2〜3秒かかる。
 
-## テスト（`cd ios/Packages/TodayMoneyCore && swift test`）→ 18件すべて成功
+## テスト（`cd ios/Packages/TodayMoneyCore && swift test`）→ 21件すべて成功
 
 | テスト | 内容 |
 |---|---|
@@ -14,6 +14,7 @@
 | LedgerCompatTests（5件） | カードの締め・引落日・請求月、確定後の利用、支払月ごとの請求、予定（固定支払い・大型支出）を含むカードの請求、支払いのまとめ、次の引落、固定支払いの日、予定の入出金 |
 | MutationCompatTests（2件） | 残高の入力→口座払い（今日・昨日・明日）→デビット→カードの支払済み（残高から引く・金額修正・未払いに戻す）→削除の各段階の残高と反映状態、臨時収入 |
 | AcfCompatTests（1件・9通り） | ACF：初期データ／カードのあるデータ／カード利用OFF／比率50%・1日上限／曜日傾向なし・優先カード／カテゴリ限定／目標あり／最低残高が高い／C100。今日使える目安・最大額・月末予測・最低残高・状態・注意点・信頼度・日別の全行（現金余力・計画支出・カードの配分）・ACF指標 |
+| ClosingGoalCompatTests（3件） | 日締め：8日分の照合項目・指紋・署名・状態が Web 版と同じ／Web 版の承認記録が iOS で承認済になる／確認待ちメール・18:00前は承認できない。目標：おすすめ（日・今月・来月）・日別配分・計画の作成・総額変更後の作り直し・1日の変更・保存結果 |
 | PerfTests | 計算の時間の目安 |
 
 照合データは Web 版の実際の関数で作る。Node が無い Mac でも作れるように：
@@ -22,11 +23,12 @@
 python3 ios/tools/fixture-server.py 8766   # Web 版に検査用の入口を差し込んで配信
 # http://localhost:8766/ を開き、コンソールで ios/tools/ledger-fixtures.js を実行 → Fixtures/ledger-compat.json
 # 同じく ios/tools/acf-fixtures.js → Fixtures/acf-compat.json
+# 同じく ios/tools/closing-goal-fixtures.js → Fixtures/closing-goal-compat.json
 ```
 
 ## まだの機能
 
-[feature-map.md](feature-map.md) の ⬜／🟡。主なもの：日締め、目標の計画づくり、iPhone のカレンダーからのシフト取り込み、Gmail 取り込み、Pro 分析・タグ・お気に入り・旅行の計画、PDF。
+[feature-map.md](feature-map.md) の ⬜／🟡。主なもの：iPhone のカレンダーからのシフト取り込み、Gmail 取り込み、Pro 分析・タグ・お気に入り・旅行の計画、PDF。
 
 ## ACF の速さ
 
@@ -34,4 +36,4 @@ ACF の計算（1日ごとに安全に使える最大額を二分探索する）
 
 ## ディープリンク
 
-`mymoney://acf`（ACF）・`mymoney://acf-index`（ACF指標）・`mymoney://acf-settings`・`mymoney://cashflow`・`mymoney://payments`・`mymoney://entry/expense`（新規入力）。ショートカットからも開ける。
+`mymoney://day-close`（日締め）・`mymoney://goal-month`（月間目標）・`mymoney://goal-day`（当日目標）・`mymoney://acf`（ACF）・`mymoney://acf-index`（ACF指標）・`mymoney://acf-settings`・`mymoney://cashflow`・`mymoney://payments`・`mymoney://entry/expense`（新規入力）。ショートカットからも開ける。

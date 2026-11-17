@@ -52,6 +52,7 @@ struct MoreScreen: View {
                     LabeledContent("版", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—")
                 }
             }
+            .entryButton()
             .navigationTitle("その他")
         }
     }

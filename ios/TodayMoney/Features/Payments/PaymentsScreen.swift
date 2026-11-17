@@ -85,6 +85,7 @@ struct PaymentsScreen: View {
                     }
                 }
             }
+            .entryButton()
             .navigationTitle("支払い")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

@@ -377,7 +377,7 @@ struct AcfActionDestination: View {
         if action.hasPrefix("card:") { CardEditor(cardId: String(action.dropFirst(5))) }
         else if action.hasPrefix("bank:") { BankEditor(bankId: String(action.dropFirst(5))) }
         else if action == "salary" { SalaryMonthView(month: model.thisMonth) }
-        else if action == "goal" { GoalEditor(period: "today", date: date.isEmpty ? model.today : date) }
+        else if action == "goal" { GoalPlannerView(type: .daily, key: date.isEmpty ? model.today : date) }
         else if action == "acf" { AcfSettingsView() }
         else if action == "day" { AcfLoader { f in if let r = f.rows.first(where: { $0.date == date }) { AcfDayView(row: r) } else { Text("この日の予測はありません") } } }
         else { ContentUnavailableView("Gmail の取り込みは Web 版で確認してください", systemImage: "envelope") }
