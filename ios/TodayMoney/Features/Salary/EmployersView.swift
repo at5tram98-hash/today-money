@@ -6,6 +6,9 @@ struct EmployersView: View {
     @Environment(AppModel.self) private var model
     var body: some View {
         List {
+            Section {
+                NavigationLink { CalendarShiftView() } label: { Label("カレンダーからシフトを取り込む", systemImage: "calendar.badge.clock") }
+            }
             ForEach(model.doc.employers) { e in
                 NavigationLink { EmployerTermsView(employerId: e.id) } label: {
                     VStack(alignment: .leading, spacing: 3) {

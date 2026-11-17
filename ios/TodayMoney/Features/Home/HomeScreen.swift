@@ -52,6 +52,7 @@ struct HomeScreen: View {
                 case .dayClose: DayClosingView(date: model.today)
                 case .goalMonth: GoalPlannerView(type: .monthly, key: model.thisMonth)
                 case .goalDay: GoalPlannerView(type: .daily, key: model.today)
+                case .shifts: CalendarShiftView()
                 }
             }
             .sheet(isPresented: $goalSheet) { NavigationStack { GoalPlannerView(type: period == "today" ? .daily : .monthly, key: period == "today" ? date : String(date.prefix(7))) } }

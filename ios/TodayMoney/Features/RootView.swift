@@ -57,10 +57,14 @@ struct RootView: View {
         .onOpenURL { model.open($0) }
         .onAppear {
             model.runScheduled()
+            #if DEBUG
+            CalendarShiftService.seedForTesting(today: model.today)
+            #endif
+            Task { await model.syncCalendarShifts(auto: true) }
             if lockEnabled { locked = true; unlock() }
         }
         .onChange(of: phase) { _, p in
-            if p == .active { model.runScheduled() }
+            if p == .active { model.runScheduled(); Task { await model.syncCalendarShifts(auto: true) } }
             if p == .background && lockEnabled { locked = true }
             if p == .active && locked { unlock() }
         }

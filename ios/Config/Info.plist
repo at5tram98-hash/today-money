@@ -13,6 +13,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>シフトボードなどでカレンダーに入れたシフトを読み取り、給料の見込みを計算します。カレンダーを変更することはありません。</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>

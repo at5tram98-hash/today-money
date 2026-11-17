@@ -57,7 +57,7 @@ final class AppModel {
     /// 「＋」の新規入力（開くモード）
     var entryMode: EntryMode?
     /// ディープリンクで開く画面（mymoney://acf など）
-    enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day" }
+    enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day", shifts }
     var route: Route?
     /// 支払いタブで表示する月
     var paymentMonth: String = Dates.ym()

@@ -43,7 +43,9 @@ public enum ShiftSync {
     }
 
     @discardableResult
-    public static func apply(_ shifts: [Shift], to doc: inout MoneyDocument, replace: Bool = true, now: Date = Date()) -> Result {
+    /// - replaceFrom: 置き換える範囲の始まり。nil なら取り込んだシフトの最初の日（Web 版と同じ）。
+    ///   カレンダーを今日から全部読む時は今日を渡すと、最初のシフトより前で消えたシフトにも気づける
+    public static func apply(_ shifts: [Shift], to doc: inout MoneyDocument, replace: Bool = true, replaceFrom: String? = nil, now: Date = Date()) -> Result {
         let settings = doc.shiftSettings
         let employers = Dictionary(doc.employers.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         var mapped: [Shift] = [], unmatched: [String] = []
@@ -56,7 +58,8 @@ public enum ShiftSync {
         }
         guard !mapped.isEmpty else { return Result(count: 0, total: 0, states: [], unmatched: unmatched) }
 
-        let from = mapped.map(\.date).min()!
+        let firstShift = mapped.map(\.date).min()!
+        let from = min(replaceFrom ?? firstShift, firstShift)
         let keepFrom = Dates.addMonths(String(from.prefix(7)), -2) + "-01"
         let plans = doc.shiftPlans
         let before = plans.filter { $0.date < from && $0.date >= keepFrom && employers[$0.employerId] != nil }
