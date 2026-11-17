@@ -1,0 +1,1661 @@
+{
+ "today": "2026-11-17",
+ "document": {
+  "version": 18,
+  "profile": {
+   "name": "",
+   "icon": ""
+  },
+  "categories": [
+   {
+    "id": "food",
+    "name": "食費",
+    "icon": "fork",
+    "color": "#34C759"
+   },
+   {
+    "id": "transport",
+    "name": "交通費",
+    "icon": "tram",
+    "color": "#007AFF"
+   },
+   {
+    "id": "daily",
+    "name": "日用品",
+    "icon": "bag",
+    "color": "#30B0C7"
+   },
+   {
+    "id": "clothes",
+    "name": "衣服費",
+    "icon": "tshirt",
+    "color": "#AF52DE"
+   },
+   {
+    "id": "fun",
+    "name": "娯楽費",
+    "icon": "ticket",
+    "color": "#FF9500"
+   },
+   {
+    "id": "subscription",
+    "name": "サブスク",
+    "icon": "repeat",
+    "color": "#5856D6"
+   },
+   {
+    "id": "education",
+    "name": "教育費",
+    "icon": "book",
+    "color": "#64D2FF"
+   },
+   {
+    "id": "utilities",
+    "name": "光熱費",
+    "icon": "bolt",
+    "color": "#FFCC00"
+   },
+   {
+    "id": "other",
+    "name": "その他",
+    "icon": "ellipsis",
+    "color": "#8E8E93"
+   }
+  ],
+  "transactions": [
+   {
+    "id": "tx_mwkp47ty_wsncbv",
+    "date": "2026-10-25",
+    "amount": 13000,
+    "category": "その他",
+    "merchant": "定期券 13,000円（カード予定）",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "memo": "",
+    "source": "fixed",
+    "mailImportId": "",
+    "fixedId": "fixed_seed_pass",
+    "largePlanId": "",
+    "largePlanPartIndex": null,
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "createdAt": "2026-11-17T12:55:55.558Z",
+    "bankEffectAt": "2026-11-17T12:55:55.558Z"
+   }
+  ],
+  "incomes": [],
+  "dailyGoals": {},
+  "monthlyGoals": {},
+  "dailyCorrections": {},
+  "monthlyCorrections": {},
+  "cardAdjustments": {
+   "2026-08|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 27528,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-08|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 42142,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 34364,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-26",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 41923,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-27",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_merpay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 3000,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-21",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   }
+  },
+  "banks": [
+   {
+    "id": "bank_seed_sbi_shinsei",
+    "name": "SBI新生銀行",
+    "label": "現金7,000円を含む合算残高",
+    "balance": 99330,
+    "threshold": 15000,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_yucho",
+    "name": "ゆうちょ銀行",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_paypay",
+    "name": "PayPay銀行",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_smbc_olive",
+    "name": "三井住友銀行 Olive",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "cards": [
+   {
+    "id": "card_seed_smbc",
+    "company": "三井住友カード",
+    "name": "三井住友カード",
+    "closingDay": "月末",
+    "dueDay": 26,
+    "limit": 100000,
+    "availableSnapshot": 11000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_merpay",
+    "company": "メルペイカード",
+    "name": "メルペイカード",
+    "closingDay": "月末",
+    "dueDay": 21,
+    "limit": 100000,
+    "availableSnapshot": 86000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_paypay",
+    "company": "PayPayカード",
+    "name": "PayPayカード",
+    "closingDay": "月末",
+    "dueDay": 27,
+    "limit": 100000,
+    "availableSnapshot": 5000,
+    "bankId": "bank_seed_paypay",
+    "tagIds": []
+   }
+  ],
+  "debitCards": [
+   {
+    "id": "debit_seed_olive",
+    "name": "Oliveデビットカード",
+    "bankId": "bank_seed_smbc_olive",
+    "createdAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "employers": [
+   {
+    "id": "emp_seed_gu",
+    "name": "GU",
+    "hourly": 1300,
+    "transport": 840,
+    "closingType": "month_end",
+    "closingDay": null,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 10,
+    "payMonthOffset": 1,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 0,
+    "breakRules": [
+     {
+      "from": 240,
+      "to": 420,
+      "minutes": 30
+     },
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "ジーユー"
+    ],
+    "tagIds": []
+   },
+   {
+    "id": "emp_seed_muji",
+    "name": "無印良品",
+    "hourly": 1250,
+    "transport": 980,
+    "closingType": "day",
+    "closingDay": 10,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 25,
+    "payMonthOffset": 0,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 10000,
+    "breakRules": [
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "MUJI",
+     "無印"
+    ],
+    "tagIds": []
+   }
+  ],
+  "salaryRecords": [
+   {
+    "id": "salary_seed_gu_202610",
+    "employerId": "emp_seed_gu",
+    "month": "2026-09",
+    "date": "2026-10-10",
+    "gross": 28452,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202610",
+    "employerId": "emp_seed_muji",
+    "month": "2026-10",
+    "date": "2026-10-25",
+    "gross": 57640,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_gu_202611",
+    "employerId": "emp_seed_gu",
+    "month": "2026-10",
+    "date": "2026-11-10",
+    "gross": 48810,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202611",
+    "employerId": "emp_seed_muji",
+    "month": "2026-11",
+    "date": "2026-11-25",
+    "gross": 34300,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   }
+  ],
+  "tempIncomes": [
+   {
+    "id": "temp_seed_20261005",
+    "date": "2026-10-05",
+    "amount": 45000,
+    "sourceName": "臨時収入（10/5までの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   },
+   {
+    "id": "temp_seed_20261020",
+    "date": "2026-10-20",
+    "amount": 6000,
+    "sourceName": "臨時収入（10/20ごろの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   }
+  ],
+  "fixedPayments": [
+   {
+    "id": "fixed_seed_pass",
+    "name": "定期券 13,000円（カード予定）",
+    "amount": 13000,
+    "day": 25,
+    "frequency": "monthly",
+    "startMonth": "2026-10",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "skippedDates": [],
+    "tagIds": [],
+    "annualMonth": 10
+   }
+  ],
+  "largeExpensePlans": [
+   {
+    "id": "large_seed_pass_now",
+    "name": "定期券の更新（現金で払う場合）",
+    "date": "2026-09-26",
+    "amount": 13000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "other",
+    "paymentId": "",
+    "splits": [],
+    "atfOptionalPass": true,
+    "memo": "現金更新する場合の仮定。まだ購入済み扱いにはしない。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_birthday",
+    "name": "誕生日代（仮の分割案）",
+    "date": "2026-10-06",
+    "amount": 60000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "splits": [
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_smbc",
+      "linkedBankId": "",
+      "amount": 38000
+     },
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_merpay",
+      "linkedBankId": "",
+      "amount": 22000
+     }
+    ],
+    "atfInstallments": {
+     "card_seed_smbc": 3,
+     "card_seed_merpay": 2
+    },
+    "memo": "38,000円/22,000円の仮案。手数料は未確認。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_fw_oct",
+    "name": "FW 10月（前半の最終日を仮置き）",
+    "date": "2026-10-15",
+    "amount": 56000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_fw_nov",
+    "name": "FW 11月",
+    "date": "2026-11-08",
+    "amount": 45000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   }
+  ],
+  "assetSnapshots": [],
+  "mailImports": [],
+  "cardStatementImports": [],
+  "savedScenarios": [],
+  "salaryAllocations": [],
+  "transferPlans": [],
+  "statementReconciliations": [],
+  "budgetRebalanceHistory": [],
+  "eventGoals": [],
+  "reimbursements": [],
+  "savedSearches": [],
+  "merchantRules": {},
+  "quickInputRules": {},
+  "monthReviews": {},
+  "dayClosings": {},
+  "pushPreferences": {
+   "dayClose": true,
+   "closeTime": "21:00",
+   "atf": true,
+   "mail": true,
+   "spending": false,
+   "spendTimes": [
+    "12:00",
+    "18:00"
+   ],
+   "showAmount": false
+  },
+  "gmailSettings": {
+   "clientId": "",
+   "query": "newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}",
+   "autoSync": true,
+   "syncMinutes": 5,
+   "lastSyncAt": null,
+   "emailAddress": "",
+   "lookbackDays": 30,
+   "sourceIds": []
+  },
+  "atfSettings": {
+   "reserveFloor": 15000,
+   "dailyCardSpend": 500,
+   "birthdayReduction": 0,
+   "birthdayFee": null,
+   "renewPassCash": true,
+   "extraEarlyShifts": false,
+   "extraLateShifts": false,
+   "asOf": "2026-09-26",
+   "source": "seeded-example"
+  },
+  "acfSettings": {
+   "reserveFloor": 15000,
+   "horizon": "next_card_due",
+   "useWeekdayWeights": true,
+   "includeRequiredLargeExpenses": true,
+   "riskNotifications": true,
+   "creditFallbackEnabled": true,
+   "creditDailyLimit": 500,
+   "creditAggressiveness": 100,
+   "creditAllowAllCategories": true,
+   "creditAllowedCategoryIds": [],
+   "creditAllowedMerchants": [],
+   "creditBlockedMerchants": [],
+   "preferredCardId": "",
+   "initialized": false,
+   "indexEndDay": 28,
+   "indexEndDate": ""
+  },
+  "feedbackSettings": {
+   "sound": true,
+   "haptic": true,
+   "motion": true,
+   "volume": 0.45
+  },
+  "notices": [],
+  "notificationSettings": {
+   "goal": true,
+   "salary": true,
+   "payment": true,
+   "unknown": true,
+   "balance": true,
+   "level": "recommended"
+  },
+  "appearance": "system",
+  "security": {
+   "enabled": false,
+   "passcode": "",
+   "relock": "immediate"
+  },
+  "meta": {
+   "legacyMigrated": true,
+   "lastScheduleDate": "2026-11-17",
+   "seedVersion": 4,
+   "atfSeeded": true,
+   "employerTermsV18": true,
+   "shiftGrossV19": true
+  },
+  "shiftPlans": [],
+  "homeViewMode": "today",
+  "sidebarFavorites": [],
+  "sidebarFavoriteOrder": [],
+  "tags": [],
+  "favoriteTagMap": {}
+ },
+ "steps": [
+  {
+   "name": "reconcile",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 50000
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": 0
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "expense today",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 48800
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": 0
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "今日の口座払い",
+     "amount": 1200,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "expense yesterday",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 48800
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": 0
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "今日の口座払い",
+     "amount": 1200,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "昨日の口座払い",
+     "amount": 500,
+     "bankApplied": false,
+     "bankReconciled": true,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "expense tomorrow",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 48800
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": 0
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "今日の口座払い",
+     "amount": 1200,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "昨日の口座払い",
+     "amount": 500,
+     "bankApplied": false,
+     "bankReconciled": true,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "明日のデビット",
+     "amount": 700,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "debit today",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 48800
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": -300
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "今日の口座払い",
+     "amount": 1200,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "昨日の口座払い",
+     "amount": 500,
+     "bankApplied": false,
+     "bankReconciled": true,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "明日のデビット",
+     "amount": 700,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    },
+    {
+     "merchant": "今日のデビット",
+     "amount": 300,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "card paid apply",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 28800
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": -300
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "今日の口座払い",
+     "amount": 1200,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "昨日の口座払い",
+     "amount": 500,
+     "bankApplied": false,
+     "bankReconciled": true,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "明日のデビット",
+     "amount": 700,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    },
+    {
+     "merchant": "今日のデビット",
+     "amount": 300,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-10|card_seed_smbc": {
+     "confirmedTotal": 20000,
+     "status": "paid",
+     "bankApplied": true,
+     "bankReconciled": false,
+     "paidAmount": 20000,
+     "bankIdAtPayment": "bank_seed_sbi_shinsei"
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "card paid change",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 27800
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": -300
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "今日の口座払い",
+     "amount": 1200,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "昨日の口座払い",
+     "amount": 500,
+     "bankApplied": false,
+     "bankReconciled": true,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "明日のデビット",
+     "amount": 700,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    },
+    {
+     "merchant": "今日のデビット",
+     "amount": 300,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-10|card_seed_smbc": {
+     "confirmedTotal": 21000,
+     "status": "paid",
+     "bankApplied": true,
+     "bankReconciled": false,
+     "paidAmount": 21000,
+     "bankIdAtPayment": "bank_seed_sbi_shinsei"
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "card unpaid",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 48800
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": -300
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "今日の口座払い",
+     "amount": 1200,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "昨日の口座払い",
+     "amount": 500,
+     "bankApplied": false,
+     "bankReconciled": true,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "明日のデビット",
+     "amount": 700,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    },
+    {
+     "merchant": "今日のデビット",
+     "amount": 300,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-10|card_seed_smbc": {
+     "confirmedTotal": 21000,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "card confirm",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 48800
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": -300
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "今日の口座払い",
+     "amount": 1200,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "昨日の口座払い",
+     "amount": 500,
+     "bankApplied": false,
+     "bankReconciled": true,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "明日のデビット",
+     "amount": 700,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    },
+    {
+     "merchant": "今日のデビット",
+     "amount": 300,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-10|card_seed_smbc": {
+     "confirmedTotal": 21000,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-11|card_seed_paypay": {
+     "confirmedTotal": 5000,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": "bank_seed_paypay"
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  },
+  {
+   "name": "delete",
+   "banks": [
+    {
+     "id": "bank_seed_sbi_shinsei",
+     "balance": 50000
+    },
+    {
+     "id": "bank_seed_yucho",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_paypay",
+     "balance": 0
+    },
+    {
+     "id": "bank_seed_smbc_olive",
+     "balance": -300
+    }
+   ],
+   "tx": [
+    {
+     "merchant": "定期券 13,000円（カード予定）",
+     "amount": 13000,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": ""
+    },
+    {
+     "merchant": "昨日の口座払い",
+     "amount": 500,
+     "bankApplied": false,
+     "bankReconciled": true,
+     "linkedBankId": "bank_seed_sbi_shinsei"
+    },
+    {
+     "merchant": "明日のデビット",
+     "amount": 700,
+     "bankApplied": false,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    },
+    {
+     "merchant": "今日のデビット",
+     "amount": 300,
+     "bankApplied": true,
+     "bankReconciled": false,
+     "linkedBankId": "bank_seed_smbc_olive"
+    }
+   ],
+   "adj": {
+    "2026-08|card_seed_smbc": {
+     "confirmedTotal": 27528,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-08|card_seed_paypay": {
+     "confirmedTotal": 42142,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_smbc": {
+     "confirmedTotal": 34364,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_paypay": {
+     "confirmedTotal": 41923,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-09|card_seed_merpay": {
+     "confirmedTotal": 3000,
+     "status": "estimated",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-10|card_seed_smbc": {
+     "confirmedTotal": 21000,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": ""
+    },
+    "2026-11|card_seed_paypay": {
+     "confirmedTotal": 5000,
+     "status": "confirmed",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "paidAmount": 0,
+     "bankIdAtPayment": "bank_seed_paypay"
+    }
+   },
+   "temps": [
+    {
+     "sourceName": "臨時収入（10/5までの見込み）",
+     "amount": 45000
+    },
+    {
+     "sourceName": "臨時収入（10/20ごろの見込み）",
+     "amount": 6000
+    }
+   ],
+   "incomes": []
+  }
+ ]
+}
