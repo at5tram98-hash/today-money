@@ -34,6 +34,7 @@ struct MoreScreen: View {
                     row("ACF", "chart.line.uptrend.xyaxis", .teal, doc.acfStoredSettings.initialized ? "最低 \(doc.acfStoredSettings.reserveFloor.yen)" : "未設定") { AcfSettingsView() }
                     row("給与の記録", "yensign.circle.fill", .green, "") { SalaryMonthView(month: model.thisMonth) }
                 }
+                ProMenuSection(month: model.thisMonth)
                 Section("通知") {
                     row("通知設定", "bell.badge.fill", .red, "") { NotificationSettingsView() }
                     row("システムのお知らせ", "exclamationmark.bubble.fill", .orange, "\((doc["notices"]?.arrayValue ?? []).count)件") { NoticesView() }

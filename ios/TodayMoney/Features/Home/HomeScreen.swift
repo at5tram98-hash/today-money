@@ -9,10 +9,12 @@ struct HomeScreen: View {
     @State private var date = Dates.ymd()
     @State private var goalSheet = false
     @State private var searching = false
+    /// 画面の行き先（リンクで開いた時に、いったん最初の画面に戻してから開く）
+    @State private var path = NavigationPath()
 
     var body: some View {
         let doc = model.doc, today = model.today, month = model.thisMonth
-        NavigationStack {
+        NavigationStack(path: $path) {
             ScrollView {
                 VStack(spacing: 14) {
                     spendCard(doc, today: today, month: month)
@@ -29,6 +31,7 @@ struct HomeScreen: View {
                     }
                     NavigationLink { MonthCompareView(month: month) } label: { compareCard(doc, month: month) }
                     NavigationLink { LargeExpensesView() } label: { largeCard(doc, today: today) }
+                    NavigationLink { EventGoalsView() } label: { goalsCard(doc, today: today) }
                 }
                 .buttonStyle(.plain)
                 .padding(.horizontal, 16)
@@ -53,10 +56,15 @@ struct HomeScreen: View {
                 case .goalMonth: GoalPlannerView(type: .monthly, key: model.thisMonth)
                 case .goalDay: GoalPlannerView(type: .daily, key: model.today)
                 case .shifts: CalendarShiftView()
+                case .analysis: ReasonAnalysisView(kind: "expense", month: model.thisMonth)
+                case .timeline: MoneyTimelineView()
+                case .goals: EventGoalsView()
+                case .review: MonthReviewView(month: model.thisMonth)
                 }
             }
             .sheet(isPresented: $goalSheet) { NavigationStack { GoalPlannerView(type: period == "today" ? .daily : .monthly, key: period == "today" ? date : String(date.prefix(7))) } }
             .onChange(of: model.today) { _, t in date = t }
+            .onChange(of: model.route) { _, r in if r != nil && !path.isEmpty { let keep = r; path = NavigationPath(); model.route = nil; DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { model.route = keep } } }
         }
     }
 
@@ -264,6 +272,14 @@ struct HomeScreen: View {
         }
     }
 
+    private func goalsCard(_ doc: MoneyDocument, today: String) -> some View {
+        let goals = doc.eventGoals.filter { $0.status != "cancelled" }
+        let own = goals.reduce(0) { $0 + doc.eventGoalSummary($1, today: today).ownShare }
+        return SummaryCard(title: "旅行・プレゼントの目標", systemImage: "gift.fill", tint: .purple) {
+            Text(goals.isEmpty ? "割り勘・立替・回収までまとめて管理" : "\(goals.count)件・自分の負担予定 \(own.yen)").font(goals.isEmpty ? .footnote : .headline).foregroundStyle(goals.isEmpty ? .secondary : .primary)
+        }
+    }
+
     private func largeCard(_ doc: MoneyDocument, today: String) -> some View {
         let planned = doc.largeExpensePlans.filter { $0.status == "planned" }.sorted { $0.date < $1.date }
         return SummaryCard(title: "大型支出の計画", systemImage: "cart.fill", tint: .pink) {
@@ -311,6 +327,7 @@ struct MonthSpendingView: View {
                 }
             }
             Section { NavigationLink { TransactionListView(title: "\(Format.monthLabel(month))の取引", month: month) } label: { Text("取引をすべて見る（\(txs.count)件）") } }
+            ProMenuSection(month: month)
         }
         .navigationTitle("今月の支出")
     }
