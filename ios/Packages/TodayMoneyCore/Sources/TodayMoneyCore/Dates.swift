@@ -99,6 +99,12 @@ public enum Format {
         let p = Dates.parts(s), w = Array("日月火水木金土")[Dates.weekday(s)]
         return "\(p.m)月\(p.d)日（\(w)）"
     }
+    /// ISO 日時 → "11/14 09:05"（Web 版 compactDateTime）
+    public static func dateTime(_ iso: String) -> String {
+        guard let ms = ISODate.ms(iso) else { return iso }
+        let c = Calendar(identifier: .gregorian).dateComponents([.month, .day, .hour, .minute], from: Date(timeIntervalSince1970: ms / 1000))
+        return String(format: "%d/%d %02d:%02d", c.month ?? 0, c.day ?? 0, c.hour ?? 0, c.minute ?? 0)
+    }
     /// "11/14" のような短い日付
     public static func shortDay(_ s: String) -> String {
         let p = Dates.parts(s)

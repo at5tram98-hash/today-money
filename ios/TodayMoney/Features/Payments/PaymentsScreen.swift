@@ -247,6 +247,7 @@ struct CardDetailView: View {
                             .disabled((st?.amount ?? 0) <= 0)
                     }
                 }
+                StatementImportSection(cardId: cardId, paymentMonth: paymentMonth, billingMonth: bm)
                 if c.limit > 0 {
                     Section("利用枠") {
                         LabeledContent("利用限度額", value: c.limit.yen)

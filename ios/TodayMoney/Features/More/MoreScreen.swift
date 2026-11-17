@@ -42,6 +42,7 @@ struct MoreScreen: View {
                     row("検索", "magnifyingglass", .gray, "") { GlobalSearchView() }
                     row("臨時収入", "yensign.circle.fill", .green, "\(doc.tempIncomes.count)件") { TempIncomeHistoryView() }
                     row("金額をまとめて更新", "square.and.pencil", .indigo, "") { FinancialUpdatesView(kind: "banks") }
+                    row("メール取引センター", "envelope.fill", .orange, doc.pendingMailIds.isEmpty ? "" : "確認待ち\(doc.pendingMailIds.count)件") { MailCenterView() }
                 }
                 Section("通知") {
                     row("通知設定", "bell.badge.fill", .red, "") { NotificationSettingsView() }

@@ -65,18 +65,23 @@ final class AppModel {
     // MARK: 変更
 
     /// データを変える。変える前の状態を復元ポイントに残してから保存する
-    func commit(_ reason: String, _ mutate: (inout MoneyDocument) throws -> Void) {
+    @discardableResult
+    func commit(_ reason: String, _ mutate: (inout MoneyDocument) throws -> Void) -> Bool {
         let before = doc
         do {
             var next = doc
             try mutate(&next)
-            guard next != before else { return }
+            guard next != before else { return true }
             snapshot(before, reason: reason)
             doc = next
             persist()
+            return true
+        } catch let e as StatementError {
+            errorMessage = e.message
         } catch {
             errorMessage = "保存できませんでした。変更は取り消しました。（\(error)）"
         }
+        return false
     }
 
     /// mymoney://<画面> を開く（ショートカットなどから）。entry/<種類> は新規入力
@@ -104,9 +109,10 @@ final class AppModel {
     }
 
     /// データを変える（今日の日付と時刻を渡す）。変える前の状態は復元ポイントに残る
-    func change(_ reason: String, _ mutate: (inout MoneyDocument, _ now: Date, _ today: String) throws -> Void) {
+    @discardableResult
+    func change(_ reason: String, _ mutate: (inout MoneyDocument, _ now: Date, _ today: String) throws -> Void) -> Bool {
         let now = Date(), today = Dates.ymd(now)
-        commit(reason) { try mutate(&$0, now, today) }
+        return commit(reason) { try mutate(&$0, now, today) }
     }
 
     private func persist() {

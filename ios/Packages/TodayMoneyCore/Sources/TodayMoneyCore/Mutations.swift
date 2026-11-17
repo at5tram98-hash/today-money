@@ -121,7 +121,7 @@ public extension MoneyDocument {
         return t
     }
 
-    private mutating func applyBankEffect(_ t: inout Transaction, eventAt: String = "", now: Date, today: String) {
+    mutating func applyBankEffect(_ t: inout Transaction, eventAt: String = "", now: Date, today: String) {
         let bankId = transactionBankId(t)
         guard !bankId.isEmpty, bank(bankId) != nil else { t.bankApplied = false; t.bankReconciled = false; return }
         if withinBaseline(bankId, date: t.date, createdAt: t.createdAt, eventAt: eventAt) {

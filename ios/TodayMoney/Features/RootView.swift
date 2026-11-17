@@ -59,6 +59,7 @@ struct RootView: View {
             model.runScheduled()
             #if DEBUG
             CalendarShiftService.seedForTesting(today: model.today)
+            Self.seedStatementForTesting(model)
             #endif
             Task { await model.syncCalendarShifts(auto: true) }
             if lockEnabled { locked = true; unlock() }
@@ -105,3 +106,21 @@ struct EntryButton: ViewModifier {
     }
 }
 extension View { func entryButton() -> some View { modifier(EntryButton()) } }
+
+#if DEBUG
+extension RootView {
+    /// シミュレーターでの確認用（起動引数 -seedStatement <CSVのパス>）：カード明細を1件取り込む。Release には入らない
+    static func seedStatementForTesting(_ model: AppModel) {
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-seedStatement"), i + 1 < args.count,
+              let text = try? String(contentsOfFile: args[i + 1], encoding: .utf8) else { return }
+        let hash = "debug-\(text.hashValue)"
+        guard !model.doc.cardStatementImports.contains(where: { $0.fileName == "debug.csv" }) else { return }
+        model.change("確認用のカード明細") { d, _, today in
+            let p = try d.parsePayPayStatementCsv(text, today: today)
+            let card = d.providerCard(p.provider)?.id ?? d.cards.first?.id ?? ""
+            try d.addStatementImport(p, cardId: card, fileName: "debug.csv", fileHash: hash)
+        }
+    }
+}
+#endif

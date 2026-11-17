@@ -286,7 +286,7 @@ public extension MoneyDocument {
     /// Web 版 normalizeMerchantKey
     static func merchantKey(_ v: String) -> String {
         let drop = Set(" \u{3000}・･ー-_/\\()（）[]【】")
-        return String(v.lowercased().filter { !drop.contains($0) }).trimmingCharacters(in: .whitespaces)
+        return String(v.lowercased().filter { !drop.contains($0) && !$0.isWhitespace })
     }
 
     // MARK: ATF / ACF の設定（Web 版 mm3AtfOptions のうち支払いで使う部分）

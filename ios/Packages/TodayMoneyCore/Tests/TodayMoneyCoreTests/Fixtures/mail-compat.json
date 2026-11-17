@@ -1,0 +1,2047 @@
+{
+ "today": "2026-11-18",
+ "messages": [
+  {
+   "id": "m1",
+   "threadId": "th_m1",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "PayPayカード <no-reply@paypay-card.co.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "【PayPayカード】ご利用のお知らせ"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "44GU5Yip55So5pel5pmC77yaMjAyNi8xMS8xNSAxMjozNArjgZTliKnnlKjph5HpoY3vvJoxLDI4MOWGhgrjgZTliKnnlKjlhYjvvJrjgrvjg5bjg7Mt44Kk44Os44OW44Oz5Lqs6YO95bqXCg"
+    }
+   }
+  },
+  {
+   "id": "m2",
+   "threadId": "th_m2",
+   "payload": {
+    "mimeType": "text/html",
+    "headers": [
+     {
+      "name": "From",
+      "value": "三井住友カード <statement@vpass.ne.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "ご利用のお知らせ【三井住友カード】"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "PHA-44GU5Yip55So5pel77yaMTEvMTQ8L3A-PHA-44GU5Yip55So5YWI77ya44K544K_44O844OQ44OD44Kv44K5JmFtcDvjgrPjg7zjg5Ljg7w8L3A-PHA-44GU5Yip55So6YeR6aGN77yaNDgw5YaGPC9wPjxzY3JpcHQ-eD0xPC9zY3JpcHQ-"
+    }
+   }
+  },
+  {
+   "id": "m3",
+   "threadId": "th_m3",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "三井住友カード <statement@vpass.ne.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "ご利用のお知らせ"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "5piO57Sw44GvVnBhc3PjgafjgZTnorroqo3jgY_jgaDjgZXjgYQ"
+    }
+   }
+  },
+  {
+   "id": "m4",
+   "threadId": "th_m4",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "PayPayカード <no-reply@paypay-card.co.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "【PayPayカード】ご請求金額確定のお知らせ"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "44GU6KuL5rGC6YeR6aGN77yaMjMsNDU25YaGCuOBiuaUr-aJleaXpe-8mjIwMjYvMTEvMjc"
+    }
+   }
+  },
+  {
+   "id": "m5",
+   "threadId": "th_m5",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "三井住友銀行 <info@smbc.co.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "口座引落のお知らせ"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "5byV6JC96YeR6aGN77yaMTIsMDAw5YaGCuaRmOimge-8muS4ieS6leS9j-WPi-OCq-ODvOODiQ"
+    }
+   }
+  },
+  {
+   "id": "m6",
+   "threadId": "th_m6",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "Shop <a@shop.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "返金のお知らせ"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "6YeR6aGN77yawqUzLDAwMArliKnnlKjlhYjvvJrjg6bjg4vjgq_jg60"
+    }
+   }
+  },
+  {
+   "id": "m7",
+   "threadId": "th_m7",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "友だち <f@example.com>"
+     },
+     {
+      "name": "Subject",
+      "value": "こんにちは"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "5YWD5rCX77yf"
+    }
+   }
+  },
+  {
+   "id": "m8",
+   "threadId": "th_m8",
+   "payload": {
+    "mimeType": "multipart/alternative",
+    "headers": [
+     {
+      "name": "From",
+      "value": "Olive <x@smbc.co.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "デビットカードご利用のお知らせ"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "parts": [
+     {
+      "mimeType": "text/html",
+      "body": {
+       "data": "PGRpdj5IVE1M44Gg44GR44Gu5paHPC9kaXY-"
+      }
+     },
+     {
+      "mimeType": "text/plain",
+      "body": {
+       "data": "44GU5Yip55So5pel5pmCIDIwMjblubQxMeaciDEw5pelCuOBlOWIqeeUqOmHkemhjSAyLDIwMOWGhgrjgZTliKnnlKjlhYgg44Ot44O844K944OzIOeDj-S4uOW6lw"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "m9",
+   "threadId": "th_m9",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "JCB <info@jcb.co.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "カードご利用のお知らせ"
+     }
+    ],
+    "body": {
+     "data": "44GU5Yip55So6YeR6aGN77yaNSwwMDDlhoYK5Yip55So5YWI77ya44Gq44Ge44Gu5bqX772c44Kr44O844OJ55Wq5Y-3KioqKg"
+    }
+   },
+   "internalDate": "1767398400000"
+  },
+  {
+   "id": "m10",
+   "threadId": "th_m10",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "PayPay銀行 <bank@paypay-bank.co.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "口座振替のお知らせ"
+     },
+     {
+      "name": "Date",
+      "value": "Mon, 16 Nov 2026 10:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "5Y-j5bqn5oyv5pu_6aGN77yaOCw4MDDlhoYK5pGY6KaB77ya6Zai6KW_6Zu75Yqb"
+    }
+   }
+  },
+  {
+   "id": "m11",
+   "threadId": "th_m11",
+   "payload": {
+    "mimeType": "text/plain",
+    "headers": [
+     {
+      "name": "From",
+      "value": "楽天カード <info@rakuten-card.co.jp>"
+     },
+     {
+      "name": "Subject",
+      "value": "カード利用速報"
+     },
+     {
+      "name": "Date",
+      "value": "Fri, 02 Jan 2026 08:00:00 +0900"
+     }
+    ],
+    "body": {
+     "data": "MTIvMzAg44GU5Yip55SoIOmHkemhjSAxNTAwMOWGhiDjgZTliKnnlKjlupfvvJpBbWF6b24g44Oe44O844Kx44OD44OI44OX44Os44Kk44K5"
+    }
+   }
+  }
+ ],
+ "runs": [
+  {
+   "document": {
+    "version": 18,
+    "profile": {
+     "name": "",
+     "icon": ""
+    },
+    "categories": [
+     {
+      "id": "food",
+      "name": "食費",
+      "icon": "fork",
+      "color": "#34C759"
+     },
+     {
+      "id": "transport",
+      "name": "交通費",
+      "icon": "tram",
+      "color": "#007AFF"
+     },
+     {
+      "id": "daily",
+      "name": "日用品",
+      "icon": "bag",
+      "color": "#30B0C7"
+     },
+     {
+      "id": "clothes",
+      "name": "衣服費",
+      "icon": "tshirt",
+      "color": "#AF52DE"
+     },
+     {
+      "id": "fun",
+      "name": "娯楽費",
+      "icon": "ticket",
+      "color": "#FF9500"
+     },
+     {
+      "id": "subscription",
+      "name": "サブスク",
+      "icon": "repeat",
+      "color": "#5856D6"
+     },
+     {
+      "id": "education",
+      "name": "教育費",
+      "icon": "book",
+      "color": "#64D2FF"
+     },
+     {
+      "id": "utilities",
+      "name": "光熱費",
+      "icon": "bolt",
+      "color": "#FFCC00"
+     },
+     {
+      "id": "other",
+      "name": "その他",
+      "icon": "ellipsis",
+      "color": "#8E8E93"
+     }
+    ],
+    "transactions": [
+     {
+      "id": "tx_mwkp47ty_wsncbv",
+      "date": "2026-10-25",
+      "amount": 13000,
+      "category": "その他",
+      "merchant": "定期券 13,000円（カード予定）",
+      "paymentMethod": "card",
+      "paymentId": "card_seed_paypay",
+      "memo": "",
+      "source": "fixed",
+      "mailImportId": "",
+      "fixedId": "fixed_seed_pass",
+      "largePlanId": "",
+      "largePlanPartIndex": null,
+      "linkedBankId": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "createdAt": "2026-11-17T12:55:55.558Z",
+      "bankEffectAt": "2026-11-17T12:55:55.558Z"
+     }
+    ],
+    "incomes": [],
+    "dailyGoals": {},
+    "monthlyGoals": {},
+    "dailyCorrections": {},
+    "monthlyCorrections": {},
+    "cardAdjustments": {
+     "2026-08|card_seed_smbc": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 27528,
+      "baseAtEdit": 0,
+      "status": "confirmed",
+      "paymentDateOverride": "2026-09-28",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     },
+     "2026-08|card_seed_paypay": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 42142,
+      "baseAtEdit": 0,
+      "status": "confirmed",
+      "paymentDateOverride": "2026-09-28",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     },
+     "2026-09|card_seed_smbc": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 34364,
+      "baseAtEdit": 0,
+      "status": "estimated",
+      "paymentDateOverride": "2026-10-26",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     },
+     "2026-09|card_seed_paypay": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 41923,
+      "baseAtEdit": 0,
+      "status": "estimated",
+      "paymentDateOverride": "2026-10-27",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     },
+     "2026-09|card_seed_merpay": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 3000,
+      "baseAtEdit": 0,
+      "status": "estimated",
+      "paymentDateOverride": "2026-10-21",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     }
+    },
+    "banks": [
+     {
+      "id": "bank_seed_sbi_shinsei",
+      "name": "SBI新生銀行",
+      "label": "現金7,000円を含む合算残高",
+      "balance": 99330,
+      "threshold": 15000,
+      "balanceAsOf": "2026-11-17T12:55:55.544Z",
+      "updatedAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     },
+     {
+      "id": "bank_seed_yucho",
+      "name": "ゆうちょ銀行",
+      "label": "",
+      "balance": 0,
+      "threshold": 0,
+      "balanceAsOf": "2026-11-17T12:55:55.544Z",
+      "updatedAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     },
+     {
+      "id": "bank_seed_paypay",
+      "name": "PayPay銀行",
+      "label": "",
+      "balance": 0,
+      "threshold": 0,
+      "balanceAsOf": "2026-11-17T12:55:55.544Z",
+      "updatedAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     },
+     {
+      "id": "bank_seed_smbc_olive",
+      "name": "三井住友銀行 Olive",
+      "label": "",
+      "balance": 0,
+      "threshold": 0,
+      "balanceAsOf": "2026-11-17T12:55:55.544Z",
+      "updatedAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     }
+    ],
+    "cards": [
+     {
+      "id": "card_seed_smbc",
+      "company": "三井住友カード",
+      "name": "三井住友カード",
+      "closingDay": "月末",
+      "dueDay": 26,
+      "limit": 100000,
+      "availableSnapshot": 11000,
+      "bankId": "bank_seed_sbi_shinsei",
+      "tagIds": []
+     },
+     {
+      "id": "card_seed_merpay",
+      "company": "メルペイカード",
+      "name": "メルペイカード",
+      "closingDay": "月末",
+      "dueDay": 21,
+      "limit": 100000,
+      "availableSnapshot": 86000,
+      "bankId": "bank_seed_sbi_shinsei",
+      "tagIds": []
+     },
+     {
+      "id": "card_seed_paypay",
+      "company": "PayPayカード",
+      "name": "PayPayカード",
+      "closingDay": "月末",
+      "dueDay": 27,
+      "limit": 100000,
+      "availableSnapshot": 5000,
+      "bankId": "bank_seed_paypay",
+      "tagIds": []
+     }
+    ],
+    "debitCards": [
+     {
+      "id": "debit_seed_olive",
+      "name": "Oliveデビットカード",
+      "bankId": "bank_seed_smbc_olive",
+      "createdAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     }
+    ],
+    "employers": [
+     {
+      "id": "emp_seed_gu",
+      "name": "GU",
+      "hourly": 1300,
+      "transport": 840,
+      "closingType": "month_end",
+      "closingDay": null,
+      "closingMonthOffset": 0,
+      "payType": "day",
+      "payDay": 10,
+      "payMonthOffset": 1,
+      "bankId": "",
+      "transportUnit": "per_shift",
+      "transportCap": 0,
+      "breakRules": [
+       {
+        "from": 240,
+        "to": 420,
+        "minutes": 30
+       },
+       {
+        "from": 420,
+        "to": null,
+        "minutes": 60
+       }
+      ],
+      "aliases": [
+       "ジーユー"
+      ],
+      "tagIds": []
+     },
+     {
+      "id": "emp_seed_muji",
+      "name": "無印良品",
+      "hourly": 1250,
+      "transport": 980,
+      "closingType": "day",
+      "closingDay": 10,
+      "closingMonthOffset": 0,
+      "payType": "day",
+      "payDay": 25,
+      "payMonthOffset": 0,
+      "bankId": "",
+      "transportUnit": "per_shift",
+      "transportCap": 10000,
+      "breakRules": [
+       {
+        "from": 420,
+        "to": null,
+        "minutes": 60
+       }
+      ],
+      "aliases": [
+       "MUJI",
+       "無印"
+      ],
+      "tagIds": []
+     }
+    ],
+    "salaryRecords": [
+     {
+      "id": "salary_seed_gu_202610",
+      "employerId": "emp_seed_gu",
+      "month": "2026-09",
+      "date": "2026-10-10",
+      "gross": 28452,
+      "transport": 0,
+      "status": "予定",
+      "amountBasis": "net"
+     },
+     {
+      "id": "salary_seed_muji_202610",
+      "employerId": "emp_seed_muji",
+      "month": "2026-10",
+      "date": "2026-10-25",
+      "gross": 57640,
+      "transport": 0,
+      "status": "予定",
+      "amountBasis": "net"
+     },
+     {
+      "id": "salary_seed_gu_202611",
+      "employerId": "emp_seed_gu",
+      "month": "2026-10",
+      "date": "2026-11-10",
+      "gross": 48810,
+      "transport": 0,
+      "status": "予定",
+      "amountBasis": "net"
+     },
+     {
+      "id": "salary_seed_muji_202611",
+      "employerId": "emp_seed_muji",
+      "month": "2026-11",
+      "date": "2026-11-25",
+      "gross": 34300,
+      "transport": 0,
+      "status": "予定",
+      "amountBasis": "net"
+     }
+    ],
+    "tempIncomes": [
+     {
+      "id": "temp_seed_20261005",
+      "date": "2026-10-05",
+      "amount": 45000,
+      "sourceName": "臨時収入（10/5までの見込み）",
+      "status": "予定",
+      "incomeId": ""
+     },
+     {
+      "id": "temp_seed_20261020",
+      "date": "2026-10-20",
+      "amount": 6000,
+      "sourceName": "臨時収入（10/20ごろの見込み）",
+      "status": "予定",
+      "incomeId": ""
+     }
+    ],
+    "fixedPayments": [
+     {
+      "id": "fixed_seed_pass",
+      "name": "定期券 13,000円（カード予定）",
+      "amount": 13000,
+      "day": 25,
+      "frequency": "monthly",
+      "startMonth": "2026-10",
+      "paymentMethod": "card",
+      "paymentId": "card_seed_paypay",
+      "skippedDates": [],
+      "tagIds": [],
+      "annualMonth": 10
+     }
+    ],
+    "largeExpensePlans": [
+     {
+      "id": "large_seed_pass_now",
+      "name": "定期券の更新（現金で払う場合）",
+      "date": "2026-09-26",
+      "amount": 13000,
+      "priority": "required",
+      "status": "planned",
+      "paymentMethod": "other",
+      "paymentId": "",
+      "splits": [],
+      "atfOptionalPass": true,
+      "memo": "現金更新する場合の仮定。まだ購入済み扱いにはしない。",
+      "tagIds": [],
+      "category": "その他",
+      "linkedBankId": "",
+      "createdAt": "2026-11-17T13:00:05.651Z",
+      "updatedAt": "2026-11-17T13:00:05.651Z"
+     },
+     {
+      "id": "large_seed_birthday",
+      "name": "誕生日代（仮の分割案）",
+      "date": "2026-10-06",
+      "amount": 60000,
+      "priority": "required",
+      "status": "planned",
+      "paymentMethod": "card",
+      "paymentId": "card_seed_smbc",
+      "splits": [
+       {
+        "paymentMethod": "card",
+        "paymentId": "card_seed_smbc",
+        "linkedBankId": "",
+        "amount": 38000
+       },
+       {
+        "paymentMethod": "card",
+        "paymentId": "card_seed_merpay",
+        "linkedBankId": "",
+        "amount": 22000
+       }
+      ],
+      "atfInstallments": {
+       "card_seed_smbc": 3,
+       "card_seed_merpay": 2
+      },
+      "memo": "38,000円/22,000円の仮案。手数料は未確認。",
+      "tagIds": [],
+      "category": "その他",
+      "linkedBankId": "",
+      "createdAt": "2026-11-17T13:00:05.651Z",
+      "updatedAt": "2026-11-17T13:00:05.651Z"
+     },
+     {
+      "id": "large_seed_fw_oct",
+      "name": "FW 10月（前半の最終日を仮置き）",
+      "date": "2026-10-15",
+      "amount": 56000,
+      "priority": "required",
+      "status": "planned",
+      "paymentMethod": "bank",
+      "paymentId": "bank_seed_sbi_shinsei",
+      "splits": [],
+      "tagIds": [],
+      "category": "その他",
+      "linkedBankId": "",
+      "memo": "",
+      "createdAt": "2026-11-17T13:00:05.651Z",
+      "updatedAt": "2026-11-17T13:00:05.651Z"
+     },
+     {
+      "id": "large_seed_fw_nov",
+      "name": "FW 11月",
+      "date": "2026-11-08",
+      "amount": 45000,
+      "priority": "required",
+      "status": "planned",
+      "paymentMethod": "bank",
+      "paymentId": "bank_seed_sbi_shinsei",
+      "splits": [],
+      "tagIds": [],
+      "category": "その他",
+      "linkedBankId": "",
+      "memo": "",
+      "createdAt": "2026-11-17T13:00:05.651Z",
+      "updatedAt": "2026-11-17T13:00:05.651Z"
+     }
+    ],
+    "assetSnapshots": [],
+    "mailImports": [],
+    "cardStatementImports": [],
+    "savedScenarios": [],
+    "salaryAllocations": [],
+    "transferPlans": [],
+    "statementReconciliations": [],
+    "budgetRebalanceHistory": [],
+    "eventGoals": [],
+    "reimbursements": [],
+    "savedSearches": [],
+    "merchantRules": {},
+    "quickInputRules": {},
+    "monthReviews": {},
+    "dayClosings": {},
+    "pushPreferences": {
+     "dayClose": true,
+     "closeTime": "21:00",
+     "atf": true,
+     "mail": true,
+     "spending": false,
+     "spendTimes": [
+      "12:00",
+      "18:00"
+     ],
+     "showAmount": false
+    },
+    "gmailSettings": {
+     "clientId": "",
+     "query": "newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}",
+     "autoSync": true,
+     "syncMinutes": 5,
+     "lastSyncAt": null,
+     "emailAddress": "",
+     "lookbackDays": 30,
+     "sourceIds": []
+    },
+    "atfSettings": {
+     "reserveFloor": 15000,
+     "dailyCardSpend": 500,
+     "birthdayReduction": 0,
+     "birthdayFee": null,
+     "renewPassCash": true,
+     "extraEarlyShifts": false,
+     "extraLateShifts": false,
+     "asOf": "2026-09-26",
+     "source": "seeded-example"
+    },
+    "acfSettings": {
+     "reserveFloor": 15000,
+     "horizon": "next_card_due",
+     "useWeekdayWeights": true,
+     "includeRequiredLargeExpenses": true,
+     "riskNotifications": true,
+     "creditFallbackEnabled": true,
+     "creditDailyLimit": 500,
+     "creditAggressiveness": 100,
+     "creditAllowAllCategories": true,
+     "creditAllowedCategoryIds": [],
+     "creditAllowedMerchants": [],
+     "creditBlockedMerchants": [],
+     "preferredCardId": "",
+     "initialized": false,
+     "indexEndDay": 28,
+     "indexEndDate": ""
+    },
+    "feedbackSettings": {
+     "sound": true,
+     "haptic": true,
+     "motion": true,
+     "volume": 0.45
+    },
+    "notices": [],
+    "notificationSettings": {
+     "goal": true,
+     "salary": true,
+     "payment": true,
+     "unknown": true,
+     "balance": true,
+     "level": "recommended"
+    },
+    "appearance": "system",
+    "security": {
+     "enabled": false,
+     "passcode": "",
+     "relock": "immediate"
+    },
+    "meta": {
+     "legacyMigrated": true,
+     "lastScheduleDate": "2026-11-17",
+     "seedVersion": 4,
+     "atfSeeded": true,
+     "employerTermsV18": true,
+     "shiftGrossV19": true
+    },
+    "shiftPlans": [],
+    "homeViewMode": "today",
+    "sidebarFavorites": [],
+    "sidebarFavoriteOrder": [],
+    "tags": [],
+    "favoriteTagMap": {}
+   },
+   "parsed": [
+    {
+     "id": "mail_mwktsys2_8yqrg0",
+     "emailId": "m1",
+     "threadId": "th_m1",
+     "date": "2026-11-15",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "PayPayカード <no-reply@paypay-card.co.jp>",
+     "subject": "【PayPayカード】ご利用のお知らせ",
+     "sourceName": "PayPayカード",
+     "type": "credit_card",
+     "amount": 1280,
+     "merchant": "セブン-イレブン京都店",
+     "category": "食費",
+     "categorySource": "rules",
+     "status": "imported",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "card_seed_paypay",
+     "linkedBankId": "",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.690Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "paypay",
+     "mailRole": "transaction",
+     "rawSourceHint": "PayPayカード"
+    },
+    {
+     "id": "mail_mwktsys6_d0rlt9",
+     "emailId": "m2",
+     "threadId": "th_m2",
+     "date": "2026-11-14",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "三井住友カード <statement@vpass.ne.jp>",
+     "subject": "ご利用のお知らせ【三井住友カード】",
+     "sourceName": "三井住友カード",
+     "type": "credit_card",
+     "amount": 480,
+     "merchant": "三井住友カード",
+     "category": "食費",
+     "categorySource": "rules",
+     "status": "imported",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "card_seed_smbc",
+     "linkedBankId": "",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.694Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "smbc",
+     "mailRole": "transaction",
+     "rawSourceHint": "三井住友カード"
+    },
+    {
+     "id": "mail_mwktsys6_0k7bpf",
+     "emailId": "m3",
+     "threadId": "th_m3",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "三井住友カード <statement@vpass.ne.jp>",
+     "subject": "ご利用のお知らせ",
+     "sourceName": "三井住友カード",
+     "type": "credit_card",
+     "amount": 0,
+     "merchant": "",
+     "category": "",
+     "categorySource": "",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "",
+     "excludedByUser": false,
+     "ignoredReason": "三井住友カード金額なし",
+     "createdAt": "2026-11-17T15:07:08.694Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "smbc",
+     "mailRole": "transaction",
+     "rawSourceHint": "三井住友カード"
+    },
+    {
+     "id": "mail_mwktsys6_o501nk",
+     "emailId": "m4",
+     "threadId": "th_m4",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "PayPayカード <no-reply@paypay-card.co.jp>",
+     "subject": "【PayPayカード】ご請求金額確定のお知らせ",
+     "sourceName": "PayPayカード",
+     "type": "card_statement",
+     "amount": 23456,
+     "merchant": "PayPayカード",
+     "category": "",
+     "categorySource": "",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "bank",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.694Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "ignoredReason": "カード請求確定通知（支出としては登録しない）",
+     "parserStrategy": "paypay",
+     "mailRole": "statement_confirmation",
+     "rawSourceHint": "PayPayカード"
+    },
+    {
+     "id": "mail_mwktsys6_j8njp8",
+     "emailId": "m5",
+     "threadId": "th_m5",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "三井住友銀行 <info@smbc.co.jp>",
+     "subject": "口座引落のお知らせ",
+     "sourceName": "三井住友カード",
+     "type": "card_settlement",
+     "amount": 12000,
+     "merchant": "三井住友カード",
+     "category": "",
+     "categorySource": "",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "bank",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.694Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "smbc",
+     "mailRole": "card_settlement",
+     "rawSourceHint": "三井住友カード"
+    },
+    {
+     "id": "mail_mwktsys7_slx4ko",
+     "emailId": "m6",
+     "threadId": "th_m6",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "Shop <a@shop.jp>",
+     "subject": "返金のお知らせ",
+     "sourceName": "Shop",
+     "type": "refund",
+     "amount": 3000,
+     "merchant": "ユニクロ",
+     "category": "衣服費",
+     "categorySource": "rules",
+     "status": "imported",
+     "direction": "refund",
+     "paymentMethod": "bank",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.695Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "generic",
+     "mailRole": "refund",
+     "rawSourceHint": "Shop"
+    },
+    null,
+    {
+     "id": "mail_mwktsys7_hd31f1",
+     "emailId": "m8",
+     "threadId": "th_m8",
+     "date": "2026-11-10",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "Olive <x@smbc.co.jp>",
+     "subject": "デビットカードご利用のお知らせ",
+     "sourceName": "三井住友カード",
+     "type": "debit_card",
+     "amount": 2200,
+     "merchant": "ローソン 烏丸店",
+     "category": "食費",
+     "categorySource": "rules",
+     "status": "imported",
+     "direction": "expense",
+     "paymentMethod": "debit",
+     "paymentId": "debit_seed_olive",
+     "linkedBankId": "bank_seed_smbc_olive",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.695Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "smbc",
+     "mailRole": "transaction",
+     "rawSourceHint": "三井住友銀行"
+    },
+    {
+     "id": "mail_mwktsys7_4py73u",
+     "emailId": "m9",
+     "threadId": "th_m9",
+     "date": "2026-01-03",
+     "receivedAt": "2026-01-03T00:00:00.000Z",
+     "from": "JCB <info@jcb.co.jp>",
+     "subject": "カードご利用のお知らせ",
+     "sourceName": "JCB",
+     "type": "credit_card",
+     "amount": 5000,
+     "merchant": "なぞの店",
+     "category": "",
+     "categorySource": "",
+     "status": "pending",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.695Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "generic",
+     "mailRole": "transaction",
+     "rawSourceHint": "JCB"
+    },
+    {
+     "id": "mail_mwktsys7_ba7efg",
+     "emailId": "m10",
+     "threadId": "th_m10",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "PayPay銀行 <bank@paypay-bank.co.jp>",
+     "subject": "口座振替のお知らせ",
+     "sourceName": "PayPay銀行",
+     "type": "bank_debit",
+     "amount": 8800,
+     "merchant": "関西電力",
+     "category": "光熱費",
+     "categorySource": "rules",
+     "status": "imported",
+     "direction": "expense",
+     "paymentMethod": "bank",
+     "paymentId": "bank_seed_paypay",
+     "linkedBankId": "bank_seed_paypay",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.695Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "bank",
+     "mailRole": "transaction",
+     "rawSourceHint": "PayPay銀行"
+    },
+    {
+     "id": "mail_mwktsys7_mkdupd",
+     "emailId": "m11",
+     "threadId": "th_m11",
+     "date": "2026-01-02",
+     "receivedAt": "2026-01-01T23:00:00.000Z",
+     "from": "楽天カード <info@rakuten-card.co.jp>",
+     "subject": "カード利用速報",
+     "sourceName": "楽天カード",
+     "type": "credit_card",
+     "amount": 15000,
+     "merchant": "Amazon マーケットプレイス",
+     "category": "",
+     "categorySource": "",
+     "status": "pending",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.695Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "generic",
+     "mailRole": "transaction",
+     "rawSourceHint": "楽天カード"
+    }
+   ]
+  },
+  {
+   "document": {
+    "version": 18,
+    "profile": {
+     "name": "",
+     "icon": ""
+    },
+    "categories": [
+     {
+      "id": "food",
+      "name": "食費",
+      "icon": "fork",
+      "color": "#34C759"
+     },
+     {
+      "id": "transport",
+      "name": "交通費",
+      "icon": "tram",
+      "color": "#007AFF"
+     },
+     {
+      "id": "daily",
+      "name": "日用品",
+      "icon": "bag",
+      "color": "#30B0C7"
+     },
+     {
+      "id": "clothes",
+      "name": "衣服費",
+      "icon": "tshirt",
+      "color": "#AF52DE"
+     },
+     {
+      "id": "fun",
+      "name": "娯楽費",
+      "icon": "ticket",
+      "color": "#FF9500"
+     },
+     {
+      "id": "subscription",
+      "name": "サブスク",
+      "icon": "repeat",
+      "color": "#5856D6"
+     },
+     {
+      "id": "education",
+      "name": "教育費",
+      "icon": "book",
+      "color": "#64D2FF"
+     },
+     {
+      "id": "utilities",
+      "name": "光熱費",
+      "icon": "bolt",
+      "color": "#FFCC00"
+     },
+     {
+      "id": "other",
+      "name": "その他",
+      "icon": "ellipsis",
+      "color": "#8E8E93"
+     }
+    ],
+    "transactions": [
+     {
+      "id": "tx_mwkp47ty_wsncbv",
+      "date": "2026-10-25",
+      "amount": 13000,
+      "category": "その他",
+      "merchant": "定期券 13,000円（カード予定）",
+      "paymentMethod": "card",
+      "paymentId": "card_seed_paypay",
+      "memo": "",
+      "source": "fixed",
+      "mailImportId": "",
+      "fixedId": "fixed_seed_pass",
+      "largePlanId": "",
+      "largePlanPartIndex": null,
+      "linkedBankId": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "createdAt": "2026-11-17T12:55:55.558Z",
+      "bankEffectAt": "2026-11-17T12:55:55.558Z"
+     }
+    ],
+    "incomes": [],
+    "dailyGoals": {},
+    "monthlyGoals": {},
+    "dailyCorrections": {},
+    "monthlyCorrections": {},
+    "cardAdjustments": {
+     "2026-08|card_seed_smbc": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 27528,
+      "baseAtEdit": 0,
+      "status": "confirmed",
+      "paymentDateOverride": "2026-09-28",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     },
+     "2026-08|card_seed_paypay": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 42142,
+      "baseAtEdit": 0,
+      "status": "confirmed",
+      "paymentDateOverride": "2026-09-28",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     },
+     "2026-09|card_seed_smbc": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 34364,
+      "baseAtEdit": 0,
+      "status": "estimated",
+      "paymentDateOverride": "2026-10-26",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     },
+     "2026-09|card_seed_paypay": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 41923,
+      "baseAtEdit": 0,
+      "status": "estimated",
+      "paymentDateOverride": "2026-10-27",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     },
+     "2026-09|card_seed_merpay": {
+      "mode": "confirmed_total",
+      "confirmedTotal": 3000,
+      "baseAtEdit": 0,
+      "status": "estimated",
+      "paymentDateOverride": "2026-10-21",
+      "paidAt": "",
+      "bankApplied": false,
+      "bankReconciled": false,
+      "bankEffectAt": "",
+      "bankIdAtPayment": "",
+      "paidAmount": 0
+     }
+    },
+    "banks": [
+     {
+      "id": "bank_seed_sbi_shinsei",
+      "name": "SBI新生銀行",
+      "label": "現金7,000円を含む合算残高",
+      "balance": 99330,
+      "threshold": 15000,
+      "balanceAsOf": "2026-11-17T12:55:55.544Z",
+      "updatedAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     },
+     {
+      "id": "bank_seed_yucho",
+      "name": "ゆうちょ銀行",
+      "label": "",
+      "balance": 0,
+      "threshold": 0,
+      "balanceAsOf": "2026-11-17T12:55:55.544Z",
+      "updatedAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     },
+     {
+      "id": "bank_seed_paypay",
+      "name": "PayPay銀行",
+      "label": "",
+      "balance": 0,
+      "threshold": 0,
+      "balanceAsOf": "2026-11-17T12:55:55.544Z",
+      "updatedAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     },
+     {
+      "id": "bank_seed_smbc_olive",
+      "name": "三井住友銀行 Olive",
+      "label": "",
+      "balance": 0,
+      "threshold": 0,
+      "balanceAsOf": "2026-11-17T12:55:55.544Z",
+      "updatedAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     }
+    ],
+    "cards": [
+     {
+      "id": "card_seed_smbc",
+      "company": "三井住友カード",
+      "name": "三井住友カード",
+      "closingDay": "月末",
+      "dueDay": 26,
+      "limit": 100000,
+      "availableSnapshot": 11000,
+      "bankId": "bank_seed_sbi_shinsei",
+      "tagIds": []
+     },
+     {
+      "id": "card_seed_merpay",
+      "company": "メルペイカード",
+      "name": "メルペイカード",
+      "closingDay": "月末",
+      "dueDay": 21,
+      "limit": 100000,
+      "availableSnapshot": 86000,
+      "bankId": "bank_seed_sbi_shinsei",
+      "tagIds": []
+     },
+     {
+      "id": "card_seed_paypay",
+      "company": "PayPayカード",
+      "name": "PayPayカード",
+      "closingDay": "月末",
+      "dueDay": 27,
+      "limit": 100000,
+      "availableSnapshot": 5000,
+      "bankId": "bank_seed_paypay",
+      "tagIds": []
+     }
+    ],
+    "debitCards": [
+     {
+      "id": "debit_seed_olive",
+      "name": "Oliveデビットカード",
+      "bankId": "bank_seed_smbc_olive",
+      "createdAt": "2026-11-17T12:55:55.544Z",
+      "tagIds": []
+     }
+    ],
+    "employers": [
+     {
+      "id": "emp_seed_gu",
+      "name": "GU",
+      "hourly": 1300,
+      "transport": 840,
+      "closingType": "month_end",
+      "closingDay": null,
+      "closingMonthOffset": 0,
+      "payType": "day",
+      "payDay": 10,
+      "payMonthOffset": 1,
+      "bankId": "",
+      "transportUnit": "per_shift",
+      "transportCap": 0,
+      "breakRules": [
+       {
+        "from": 240,
+        "to": 420,
+        "minutes": 30
+       },
+       {
+        "from": 420,
+        "to": null,
+        "minutes": 60
+       }
+      ],
+      "aliases": [
+       "ジーユー"
+      ],
+      "tagIds": []
+     },
+     {
+      "id": "emp_seed_muji",
+      "name": "無印良品",
+      "hourly": 1250,
+      "transport": 980,
+      "closingType": "day",
+      "closingDay": 10,
+      "closingMonthOffset": 0,
+      "payType": "day",
+      "payDay": 25,
+      "payMonthOffset": 0,
+      "bankId": "",
+      "transportUnit": "per_shift",
+      "transportCap": 10000,
+      "breakRules": [
+       {
+        "from": 420,
+        "to": null,
+        "minutes": 60
+       }
+      ],
+      "aliases": [
+       "MUJI",
+       "無印"
+      ],
+      "tagIds": []
+     }
+    ],
+    "salaryRecords": [
+     {
+      "id": "salary_seed_gu_202610",
+      "employerId": "emp_seed_gu",
+      "month": "2026-09",
+      "date": "2026-10-10",
+      "gross": 28452,
+      "transport": 0,
+      "status": "予定",
+      "amountBasis": "net"
+     },
+     {
+      "id": "salary_seed_muji_202610",
+      "employerId": "emp_seed_muji",
+      "month": "2026-10",
+      "date": "2026-10-25",
+      "gross": 57640,
+      "transport": 0,
+      "status": "予定",
+      "amountBasis": "net"
+     },
+     {
+      "id": "salary_seed_gu_202611",
+      "employerId": "emp_seed_gu",
+      "month": "2026-10",
+      "date": "2026-11-10",
+      "gross": 48810,
+      "transport": 0,
+      "status": "予定",
+      "amountBasis": "net"
+     },
+     {
+      "id": "salary_seed_muji_202611",
+      "employerId": "emp_seed_muji",
+      "month": "2026-11",
+      "date": "2026-11-25",
+      "gross": 34300,
+      "transport": 0,
+      "status": "予定",
+      "amountBasis": "net"
+     }
+    ],
+    "tempIncomes": [
+     {
+      "id": "temp_seed_20261005",
+      "date": "2026-10-05",
+      "amount": 45000,
+      "sourceName": "臨時収入（10/5までの見込み）",
+      "status": "予定",
+      "incomeId": ""
+     },
+     {
+      "id": "temp_seed_20261020",
+      "date": "2026-10-20",
+      "amount": 6000,
+      "sourceName": "臨時収入（10/20ごろの見込み）",
+      "status": "予定",
+      "incomeId": ""
+     }
+    ],
+    "fixedPayments": [
+     {
+      "id": "fixed_seed_pass",
+      "name": "定期券 13,000円（カード予定）",
+      "amount": 13000,
+      "day": 25,
+      "frequency": "monthly",
+      "startMonth": "2026-10",
+      "paymentMethod": "card",
+      "paymentId": "card_seed_paypay",
+      "skippedDates": [],
+      "tagIds": [],
+      "annualMonth": 10
+     }
+    ],
+    "largeExpensePlans": [
+     {
+      "id": "large_seed_pass_now",
+      "name": "定期券の更新（現金で払う場合）",
+      "date": "2026-09-26",
+      "amount": 13000,
+      "priority": "required",
+      "status": "planned",
+      "paymentMethod": "other",
+      "paymentId": "",
+      "splits": [],
+      "atfOptionalPass": true,
+      "memo": "現金更新する場合の仮定。まだ購入済み扱いにはしない。",
+      "tagIds": [],
+      "category": "その他",
+      "linkedBankId": "",
+      "createdAt": "2026-11-17T13:00:05.651Z",
+      "updatedAt": "2026-11-17T13:00:05.651Z"
+     },
+     {
+      "id": "large_seed_birthday",
+      "name": "誕生日代（仮の分割案）",
+      "date": "2026-10-06",
+      "amount": 60000,
+      "priority": "required",
+      "status": "planned",
+      "paymentMethod": "card",
+      "paymentId": "card_seed_smbc",
+      "splits": [
+       {
+        "paymentMethod": "card",
+        "paymentId": "card_seed_smbc",
+        "linkedBankId": "",
+        "amount": 38000
+       },
+       {
+        "paymentMethod": "card",
+        "paymentId": "card_seed_merpay",
+        "linkedBankId": "",
+        "amount": 22000
+       }
+      ],
+      "atfInstallments": {
+       "card_seed_smbc": 3,
+       "card_seed_merpay": 2
+      },
+      "memo": "38,000円/22,000円の仮案。手数料は未確認。",
+      "tagIds": [],
+      "category": "その他",
+      "linkedBankId": "",
+      "createdAt": "2026-11-17T13:00:05.651Z",
+      "updatedAt": "2026-11-17T13:00:05.651Z"
+     },
+     {
+      "id": "large_seed_fw_oct",
+      "name": "FW 10月（前半の最終日を仮置き）",
+      "date": "2026-10-15",
+      "amount": 56000,
+      "priority": "required",
+      "status": "planned",
+      "paymentMethod": "bank",
+      "paymentId": "bank_seed_sbi_shinsei",
+      "splits": [],
+      "tagIds": [],
+      "category": "その他",
+      "linkedBankId": "",
+      "memo": "",
+      "createdAt": "2026-11-17T13:00:05.651Z",
+      "updatedAt": "2026-11-17T13:00:05.651Z"
+     },
+     {
+      "id": "large_seed_fw_nov",
+      "name": "FW 11月",
+      "date": "2026-11-08",
+      "amount": 45000,
+      "priority": "required",
+      "status": "planned",
+      "paymentMethod": "bank",
+      "paymentId": "bank_seed_sbi_shinsei",
+      "splits": [],
+      "tagIds": [],
+      "category": "その他",
+      "linkedBankId": "",
+      "memo": "",
+      "createdAt": "2026-11-17T13:00:05.651Z",
+      "updatedAt": "2026-11-17T13:00:05.651Z"
+     }
+    ],
+    "assetSnapshots": [],
+    "mailImports": [],
+    "cardStatementImports": [],
+    "savedScenarios": [],
+    "salaryAllocations": [],
+    "transferPlans": [],
+    "statementReconciliations": [],
+    "budgetRebalanceHistory": [],
+    "eventGoals": [],
+    "reimbursements": [],
+    "savedSearches": [],
+    "merchantRules": {},
+    "quickInputRules": {},
+    "monthReviews": {},
+    "dayClosings": {},
+    "pushPreferences": {
+     "dayClose": true,
+     "closeTime": "21:00",
+     "atf": true,
+     "mail": true,
+     "spending": false,
+     "spendTimes": [
+      "12:00",
+      "18:00"
+     ],
+     "showAmount": false
+    },
+    "gmailSettings": {
+     "clientId": "",
+     "query": "newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}",
+     "autoSync": true,
+     "syncMinutes": 5,
+     "lastSyncAt": null,
+     "emailAddress": "",
+     "lookbackDays": 30,
+     "sourceIds": [
+      "card_seed_paypay"
+     ]
+    },
+    "atfSettings": {
+     "reserveFloor": 15000,
+     "dailyCardSpend": 500,
+     "birthdayReduction": 0,
+     "birthdayFee": null,
+     "renewPassCash": true,
+     "extraEarlyShifts": false,
+     "extraLateShifts": false,
+     "asOf": "2026-09-26",
+     "source": "seeded-example"
+    },
+    "acfSettings": {
+     "reserveFloor": 15000,
+     "horizon": "next_card_due",
+     "useWeekdayWeights": true,
+     "includeRequiredLargeExpenses": true,
+     "riskNotifications": true,
+     "creditFallbackEnabled": true,
+     "creditDailyLimit": 500,
+     "creditAggressiveness": 100,
+     "creditAllowAllCategories": true,
+     "creditAllowedCategoryIds": [],
+     "creditAllowedMerchants": [],
+     "creditBlockedMerchants": [],
+     "preferredCardId": "",
+     "initialized": false,
+     "indexEndDay": 28,
+     "indexEndDate": ""
+    },
+    "feedbackSettings": {
+     "sound": true,
+     "haptic": true,
+     "motion": true,
+     "volume": 0.45
+    },
+    "notices": [],
+    "notificationSettings": {
+     "goal": true,
+     "salary": true,
+     "payment": true,
+     "unknown": true,
+     "balance": true,
+     "level": "recommended"
+    },
+    "appearance": "system",
+    "security": {
+     "enabled": false,
+     "passcode": "",
+     "relock": "immediate"
+    },
+    "meta": {
+     "legacyMigrated": true,
+     "lastScheduleDate": "2026-11-17",
+     "seedVersion": 4,
+     "atfSeeded": true,
+     "employerTermsV18": true,
+     "shiftGrossV19": true
+    },
+    "shiftPlans": [],
+    "homeViewMode": "today",
+    "sidebarFavorites": [],
+    "sidebarFavoriteOrder": [],
+    "tags": [],
+    "favoriteTagMap": {}
+   },
+   "parsed": [
+    {
+     "id": "mail_mwktsysb_q4ohjr",
+     "emailId": "m1",
+     "threadId": "th_m1",
+     "date": "2026-11-15",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "PayPayカード <no-reply@paypay-card.co.jp>",
+     "subject": "【PayPayカード】ご利用のお知らせ",
+     "sourceName": "PayPayカード",
+     "type": "credit_card",
+     "amount": 1280,
+     "merchant": "セブン-イレブン京都店",
+     "category": "食費",
+     "categorySource": "rules",
+     "status": "imported",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "card_seed_paypay",
+     "linkedBankId": "",
+     "excludedByUser": false,
+     "createdAt": "2026-11-17T15:07:08.699Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "paypay",
+     "mailRole": "transaction",
+     "rawSourceHint": "PayPayカード"
+    },
+    {
+     "id": "mail_mwktsysb_kd29p2",
+     "emailId": "m2",
+     "threadId": "th_m2",
+     "date": "2026-11-14",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "三井住友カード <statement@vpass.ne.jp>",
+     "subject": "ご利用のお知らせ【三井住友カード】",
+     "sourceName": "三井住友カード",
+     "type": "credit_card",
+     "amount": 480,
+     "merchant": "三井住友カード",
+     "category": "食費",
+     "categorySource": "rules",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "card_seed_smbc",
+     "linkedBankId": "",
+     "excludedByUser": true,
+     "createdAt": "2026-11-17T15:07:08.699Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "smbc",
+     "mailRole": "transaction",
+     "rawSourceHint": "三井住友カード"
+    },
+    {
+     "id": "mail_mwktsysb_7lpz21",
+     "emailId": "m3",
+     "threadId": "th_m3",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "三井住友カード <statement@vpass.ne.jp>",
+     "subject": "ご利用のお知らせ",
+     "sourceName": "三井住友カード",
+     "type": "credit_card",
+     "amount": 0,
+     "merchant": "",
+     "category": "",
+     "categorySource": "",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "",
+     "excludedByUser": false,
+     "ignoredReason": "三井住友カード金額なし",
+     "createdAt": "2026-11-17T15:07:08.699Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "smbc",
+     "mailRole": "transaction",
+     "rawSourceHint": "三井住友カード"
+    },
+    {
+     "id": "mail_mwktsysb_uyflk1",
+     "emailId": "m4",
+     "threadId": "th_m4",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "PayPayカード <no-reply@paypay-card.co.jp>",
+     "subject": "【PayPayカード】ご請求金額確定のお知らせ",
+     "sourceName": "PayPayカード",
+     "type": "card_statement",
+     "amount": 23456,
+     "merchant": "PayPayカード",
+     "category": "",
+     "categorySource": "",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "bank",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": true,
+     "createdAt": "2026-11-17T15:07:08.699Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "ignoredReason": "カード請求確定通知（支出としては登録しない）",
+     "parserStrategy": "paypay",
+     "mailRole": "statement_confirmation",
+     "rawSourceHint": "PayPayカード"
+    },
+    {
+     "id": "mail_mwktsysb_ebyjuv",
+     "emailId": "m5",
+     "threadId": "th_m5",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "三井住友銀行 <info@smbc.co.jp>",
+     "subject": "口座引落のお知らせ",
+     "sourceName": "三井住友カード",
+     "type": "card_settlement",
+     "amount": 12000,
+     "merchant": "三井住友カード",
+     "category": "",
+     "categorySource": "",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "bank",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": true,
+     "createdAt": "2026-11-17T15:07:08.699Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "smbc",
+     "mailRole": "card_settlement",
+     "rawSourceHint": "三井住友カード"
+    },
+    {
+     "id": "mail_mwktsysb_trf1wt",
+     "emailId": "m6",
+     "threadId": "th_m6",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "Shop <a@shop.jp>",
+     "subject": "返金のお知らせ",
+     "sourceName": "Shop",
+     "type": "refund",
+     "amount": 3000,
+     "merchant": "ユニクロ",
+     "category": "衣服費",
+     "categorySource": "rules",
+     "status": "ignored",
+     "direction": "refund",
+     "paymentMethod": "bank",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": true,
+     "createdAt": "2026-11-17T15:07:08.699Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "generic",
+     "mailRole": "refund",
+     "rawSourceHint": "Shop"
+    },
+    null,
+    {
+     "id": "mail_mwktsysb_3v2uda",
+     "emailId": "m8",
+     "threadId": "th_m8",
+     "date": "2026-11-10",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "Olive <x@smbc.co.jp>",
+     "subject": "デビットカードご利用のお知らせ",
+     "sourceName": "三井住友カード",
+     "type": "debit_card",
+     "amount": 2200,
+     "merchant": "ローソン 烏丸店",
+     "category": "食費",
+     "categorySource": "rules",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "debit",
+     "paymentId": "debit_seed_olive",
+     "linkedBankId": "bank_seed_smbc_olive",
+     "excludedByUser": true,
+     "createdAt": "2026-11-17T15:07:08.699Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "smbc",
+     "mailRole": "transaction",
+     "rawSourceHint": "三井住友銀行"
+    },
+    {
+     "id": "mail_mwktsysb_33x922",
+     "emailId": "m9",
+     "threadId": "th_m9",
+     "date": "2026-01-03",
+     "receivedAt": "2026-01-03T00:00:00.000Z",
+     "from": "JCB <info@jcb.co.jp>",
+     "subject": "カードご利用のお知らせ",
+     "sourceName": "JCB",
+     "type": "credit_card",
+     "amount": 5000,
+     "merchant": "なぞの店",
+     "category": "",
+     "categorySource": "",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": true,
+     "createdAt": "2026-11-17T15:07:08.699Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "generic",
+     "mailRole": "transaction",
+     "rawSourceHint": "JCB"
+    },
+    {
+     "id": "mail_mwktsysc_b9rt6i",
+     "emailId": "m10",
+     "threadId": "th_m10",
+     "date": "2026-11-16",
+     "receivedAt": "2026-11-16T01:00:00.000Z",
+     "from": "PayPay銀行 <bank@paypay-bank.co.jp>",
+     "subject": "口座振替のお知らせ",
+     "sourceName": "PayPay銀行",
+     "type": "bank_debit",
+     "amount": 8800,
+     "merchant": "関西電力",
+     "category": "光熱費",
+     "categorySource": "rules",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "bank",
+     "paymentId": "bank_seed_paypay",
+     "linkedBankId": "bank_seed_paypay",
+     "excludedByUser": true,
+     "createdAt": "2026-11-17T15:07:08.700Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "bank",
+     "mailRole": "transaction",
+     "rawSourceHint": "PayPay銀行"
+    },
+    {
+     "id": "mail_mwktsysc_y8n2u7",
+     "emailId": "m11",
+     "threadId": "th_m11",
+     "date": "2026-01-02",
+     "receivedAt": "2026-01-01T23:00:00.000Z",
+     "from": "楽天カード <info@rakuten-card.co.jp>",
+     "subject": "カード利用速報",
+     "sourceName": "楽天カード",
+     "type": "credit_card",
+     "amount": 15000,
+     "merchant": "Amazon マーケットプレイス",
+     "category": "",
+     "categorySource": "",
+     "status": "ignored",
+     "direction": "expense",
+     "paymentMethod": "card",
+     "paymentId": "",
+     "linkedBankId": "",
+     "excludedByUser": true,
+     "createdAt": "2026-11-17T15:07:08.700Z",
+     "transactionId": "",
+     "bankApplied": false,
+     "bankReconciled": false,
+     "parserVersion": 8,
+     "parserStrategy": "generic",
+     "mailRole": "transaction",
+     "rawSourceHint": "楽天カード"
+    }
+   ]
+  }
+ ],
+ "confidence": [
+  {
+   "mi": {
+    "amount": 0,
+    "merchant": "",
+    "category": ""
+   },
+   "c": {
+    "label": "金額・利用先・カテゴリ要確認",
+    "tone": "warn",
+    "ready": false
+   }
+  },
+  {
+   "mi": {
+    "amount": 100,
+    "merchant": "a",
+    "category": "食費",
+    "categorySource": "rules"
+   },
+   "c": {
+    "label": "高い確度",
+    "tone": "good",
+    "ready": true
+   }
+  },
+  {
+   "mi": {
+    "amount": 100,
+    "merchant": "a",
+    "category": "食費",
+    "categorySource": ""
+   },
+   "c": {
+    "label": "確認推奨",
+    "tone": "warn",
+    "ready": true
+   }
+  }
+ ]
+}
