@@ -61,6 +61,7 @@ struct HomeScreen: View {
                 case .timeline: MoneyTimelineView()
                 case .goals: EventGoalsView()
                 case .review: MonthReviewView(month: model.thisMonth)
+                case .mail: MailCenterView()
                 }
             }
             .sheet(isPresented: $goalSheet) { NavigationStack { GoalPlannerView(type: period == "today" ? .daily : .monthly, key: period == "today" ? date : String(date.prefix(7))) } }

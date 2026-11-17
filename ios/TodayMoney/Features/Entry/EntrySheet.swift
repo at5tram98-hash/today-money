@@ -52,7 +52,7 @@ struct EntrySheet: View {
             .interactiveDismissDisabled(typed && amount > 0)
             .onAppear(perform: setup)
             .onChange(of: mode) { old, new in modeChanged(old, new) }
-            .sensoryFeedback(.selection, trigger: mode)
+            .selectionFeedback(trigger: mode)
     }
 
     private func modeChanged(_ old: EntryMode, _ new: EntryMode) {
@@ -388,7 +388,7 @@ struct Keypad: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(["C": "すべて消す", "⌫": "1文字消す", "÷": "割る", "×": "掛ける", "−": "引く", "+": "足す", "=": "計算する"][k] ?? k)
-        .sensoryFeedback(.selection, trigger: expr)
+        .selectionFeedback(trigger: expr)
     }
     private func press(_ k: String) {
         switch k {

@@ -9,6 +9,8 @@ struct RootView: View {
     @AppStorage("appearance") private var appearance = "system"
     @AppStorage("lockEnabled") private var lockEnabled = false
     @AppStorage("privacyBlur") private var privacyBlur = true
+    @AppStorage("startTab") private var startTab = "home"
+    @State private var launched = false
     @State private var locked = false
 
     var body: some View {
@@ -52,10 +54,14 @@ struct RootView: View {
                 }
             }
         }
-        .animation(.snappy, value: model.toast)
+        .animation(model.doc.feedbackSettings.motion ? .snappy : nil, value: model.toast)
+        // 操作フィードバックで「アニメーション」を切った時は、画面内の動きを止める
+        .transaction { if !model.doc.feedbackSettings.motion { $0.disablesAnimations = true; $0.animation = nil } }
         .preferredColorScheme(appearance == "dark" ? .dark : appearance == "light" ? .light : nil)
         .onOpenURL { model.open($0) }
         .onAppear {
+            // 一般 › 起動時に開く画面（リンクから開いた時は、そちらを優先）
+            if !launched { launched = true; if startTab == "payments" && model.tab == .home && model.route == nil { model.tab = .payments } }
             model.runScheduled()
             #if DEBUG
             CalendarShiftService.seedForTesting(today: model.today)
@@ -65,7 +71,7 @@ struct RootView: View {
             if lockEnabled { locked = true; unlock() }
         }
         .onChange(of: phase) { _, p in
-            if p == .active { model.runScheduled(); Task { await model.syncCalendarShifts(auto: true) } }
+            if p == .active { model.runScheduled(); Task { await model.syncCalendarShifts(auto: true) }; Task { await Notifications.reschedule(doc: model.doc) } }
             if p == .background && lockEnabled { locked = true }
             if p == .active && locked { unlock() }
         }

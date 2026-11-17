@@ -211,7 +211,7 @@ struct DayClosingView: View {
             .padding()
             .background(.bar)
         }
-        .sensoryFeedback(.selection, trigger: review)
+        .selectionFeedback(trigger: review)
         .onChange(of: model.revision) { _, _ in
             // 編集で内容が変わった項目のチェックは外す（Web 版と同じ）
             let live = Dictionary(uniqueKeysWithValues: model.doc.dayClosingItems(date, today: model.today).all.map { ($0.key, $0.fingerprint) })

@@ -19,6 +19,7 @@ final class AppModel {
     init(doc: MoneyDocument, context: ModelContext?) {
         self.doc = doc
         self.context = context
+        Feedback.settings = doc.feedbackSettings
     }
 
     /// 保存先から読み込む。初めて起動した時は Web 版と同じ初期データから始める
@@ -57,7 +58,7 @@ final class AppModel {
     /// 「＋」の新規入力（開くモード）
     var entryMode: EntryMode?
     /// ディープリンクで開く画面（mymoney://acf など）
-    enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day", shifts, analysis, timeline, goals, review }
+    enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day", shifts, analysis, timeline, goals, review, mail }
     var route: Route?
     /// 支払いタブで表示する月
     var paymentMonth: String = Dates.ym()
@@ -66,7 +67,7 @@ final class AppModel {
 
     /// データを変える。変える前の状態を復元ポイントに残してから保存する
     @discardableResult
-    func commit(_ reason: String, _ mutate: (inout MoneyDocument) throws -> Void) -> Bool {
+    func commit(_ reason: String, silent: Bool = false, _ mutate: (inout MoneyDocument) throws -> Void) -> Bool {
         let before = doc
         do {
             var next = doc
@@ -75,12 +76,14 @@ final class AppModel {
             snapshot(before, reason: reason)
             doc = next
             persist()
+            if !silent { Feedback.play(reason.contains("削除") ? .delete : .success) }
             return true
         } catch let e as StatementError {
             errorMessage = e.message
         } catch {
             errorMessage = "保存できませんでした。変更は取り消しました。（\(error)）"
         }
+        Feedback.play(.error)
         return false
     }
 
@@ -105,7 +108,7 @@ final class AppModel {
         next.processScheduled(now: now, today: today)
         guard next != doc else { return }
         let changedOnlyDate = { () -> Bool in var a = next, b = doc; a.meta = [:]; b.meta = [:]; return a == b }()
-        commit(changedOnlyDate ? "日付の更新" : "固定支払い・予定の反映") { $0 = next }
+        commit(changedOnlyDate ? "日付の更新" : "固定支払い・予定の反映", silent: true) { $0 = next }
     }
 
     /// データを変える（今日の日付と時刻を渡す）。変える前の状態は復元ポイントに残る
@@ -117,6 +120,8 @@ final class AppModel {
 
     private func persist() {
         revision += 1
+        Feedback.settings = doc.feedbackSettings
+        Notifications.scheduleSoon(doc: doc)
         guard let context else { return }
         let data = doc.exportJSON().data
         do {

@@ -53,6 +53,7 @@ struct MoreScreen: View {
                         Text("システム").tag("system"); Text("ライト").tag("light"); Text("ダーク").tag("dark")
                     } label: { Label("外観", systemImage: "circle.lefthalf.filled") }
                     Toggle(isOn: $lockEnabled) { Label("Face ID でロック", systemImage: "faceid") }
+                    row("操作フィードバック", "waveform", .blue, "") { FeedbackSettingsView() }
                     row("一般", "gearshape.fill", .gray, "") { GeneralSettingsView() }
                 }
                 Section("データ") {
@@ -268,65 +269,79 @@ struct NoticesView: View {
     }
 }
 
-/// 通知（Web 版の Web Push の代わりに、端末のローカル通知を使う）
+/// 通知（Web 版の Web Push の代わりに、端末のローカル通知を使う。内容の設定は Web 版と同じ pushPreferences）
 struct NotificationSettingsView: View {
     @Environment(AppModel.self) private var model
-    @AppStorage("notifyDayClose") private var dayClose = true
-    @AppStorage("notifyCloseTime") private var closeTime = 21 * 60
     @AppStorage("notifyPayments") private var payments = true
     @AppStorage("notifySalary") private var salary = true
     @State private var status: UNAuthorizationStatus = .notDetermined
+    @State private var pending: [UNNotificationRequest] = []
+
     var body: some View {
+        let p = model.doc.pushPreferences
         Form {
             Section {
                 switch status {
                 case .authorized, .provisional, .ephemeral: Label("通知は許可されています", systemImage: "checkmark.circle.fill").foregroundStyle(.green)
                 case .denied: Label("通知が許可されていません（設定アプリで変更できます）", systemImage: "xmark.circle.fill").foregroundStyle(.red)
-                default: Button("通知を許可する") { Task { _ = try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]); await refresh() } }
+                default: Button("通知を許可する") { Task { _ = try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]); await reschedule() } }
                 }
-            }
-            Section("おすすめ") {
-                Toggle("毎日の記録のリマインド", isOn: $dayClose)
-                if dayClose {
-                    DatePicker("時刻", selection: Binding(get: { Calendar.current.date(bySettingHour: closeTime / 60, minute: closeTime % 60, second: 0, of: .now)! },
-                                                         set: { let c = Calendar.current.dateComponents([.hour, .minute], from: $0); closeTime = (c.hour ?? 21) * 60 + (c.minute ?? 0) }),
-                               displayedComponents: .hourAndMinute)
+            } footer: { Text("通知はこの iPhone の中で予約します。どこにも送信しません。23:00〜7:00 は通知しません。") }
+            Section {
+                Toggle("日締めのリマインド", isOn: pref(\.dayClose))
+                if p.dayClose {
+                    DatePicker("日締めの時刻", selection: Binding(get: { Self.date(p.closeTime) }, set: { v in
+                        let c = Calendar.current.dateComponents([.hour, .minute], from: v)
+                        let h = min(22, max(7, c.hour ?? 21))
+                        update { $0.closeTime = String(format: "%02d:%02d", h, c.minute ?? 0) }
+                    }), displayedComponents: .hourAndMinute)
                 }
+                Toggle("ACFの警告", isOn: pref(\.atf))
+                Toggle("メール取込の承認待ち", isOn: pref(\.mail))
+                Toggle("登録支出の状況（\(p.spendTimes.joined(separator: "・"))）", isOn: pref(\.spending))
+                Toggle("通知に金額を表示", isOn: pref(\.showAmount))
+            } header: { Text("通知する内容") } footer: { Text("ACFの警告は ACF 設定の「予測リスク通知」もオンの時だけ。金額は、ロック画面に出ても良い時だけオンにしてください。") }
+            Section("iPhone だけの通知") {
                 Toggle("カード引落・固定支払いの前日", isOn: $payments)
                 Toggle("給料日", isOn: $salary)
+            }
+            Section("予約中（\(pending.count)件）") {
+                if pending.isEmpty { Text("予約中の通知はありません。").foregroundStyle(.secondary) }
+                ForEach(pending.prefix(8), id: \.identifier) { r in
+                    let c = (r.trigger as? UNCalendarNotificationTrigger)?.dateComponents
+                    LabeledContent(r.content.title, value: c.map { String(format: "%d/%d %02d:%02d", $0.month ?? 0, $0.day ?? 0, $0.hour ?? 0, $0.minute ?? 0) } ?? "")
+                }
             }
         }
         .navigationTitle("通知設定")
         .task { await refresh() }
-        .onDisappear { Notifications.reschedule(doc: model.doc, today: model.today) }
+        .onChange(of: payments) { Task { await reschedule() } }
+        .onChange(of: salary) { Task { await reschedule() } }
+        .onChange(of: model.revision) { Task { await reschedule() } }
     }
-    private func refresh() async { status = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus }
-}
 
-/// ローカル通知の予定を作り直す
-enum Notifications {
-    static func reschedule(doc: MoneyDocument, today: String) {
-        let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
-        let d = UserDefaults.standard
-        func add(_ id: String, _ title: String, _ body: String, _ comps: DateComponents, repeats: Bool = false) {
-            let c = UNMutableNotificationContent(); c.title = title; c.body = body; c.sound = .default
-            center.add(UNNotificationRequest(identifier: id, content: c, trigger: UNCalendarNotificationTrigger(dateMatching: comps, repeats: repeats)))
-        }
-        if d.object(forKey: "notifyDayClose") as? Bool ?? true {
-            let t = d.object(forKey: "notifyCloseTime") as? Int ?? 21 * 60
-            add("dayClose", "今日の支出を記録しましょう", "使った金額を入れると、明日の見通しが正確になります。", DateComponents(hour: t / 60, minute: t % 60), repeats: true)
-        }
-        let events = doc.financialEvents(from: today, days: 30, today: today)
-        for (i, e) in events.enumerated() {
-            let p = Dates.parts(Dates.addDays(e.date, e.type == .income ? 0 : -1))
-            let comps = DateComponents(year: p.y, month: p.m, day: p.d, hour: e.type == .income ? 9 : 19)
-            if e.type == .income, d.object(forKey: "notifySalary") as? Bool ?? true {
-                add("ev\(i)", "今日は給料日です", "\(e.title) \(e.amount.yen) の入金予定です。", comps)
-            } else if e.type != .income, d.object(forKey: "notifyPayments") as? Bool ?? true {
-                add("ev\(i)", "明日は\(e.title)", "\((-e.amount).yen) の支払い予定です。口座残高を確認しましょう。", comps)
-            }
-        }
+    private static func date(_ hm: String) -> Date {
+        let p = hm.split(separator: ":").compactMap { Int($0) }
+        return Calendar.current.date(bySettingHour: p.first ?? 21, minute: p.count > 1 ? p[1] : 0, second: 0, of: .now) ?? .now
+    }
+    private func pref(_ key: WritableKeyPath<PushPreferences, Bool>) -> Binding<Bool> {
+        Binding(get: { model.doc.pushPreferences[keyPath: key] }, set: { v in update { $0[keyPath: key] = v } })
+    }
+    private func update(_ f: (inout PushPreferences) -> Void) {
+        var p = model.doc.pushPreferences
+        f(&p)
+        guard p != model.doc.pushPreferences else { return }
+        let next = p
+        model.commit("通知設定の変更", silent: true) { d in d["pushPreferences"] = (d["pushPreferences"] ?? .object([:])).merging(next.json) }
+    }
+    private func reschedule() async {
+        await Notifications.reschedule(doc: model.doc)
+        await refresh()
+    }
+    private func refresh() async {
+        status = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
+        pending = await UNUserNotificationCenter.current().pendingNotificationRequests()
+            .sorted { ($0.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .distantFuture < ($1.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .distantFuture }
     }
 }
 
@@ -342,6 +357,9 @@ struct DataSettingsView: View {
 
     var body: some View {
         List {
+            Section {
+                NavigationLink { PdfExportView() } label: { Label("PDFで書き出す", systemImage: "doc.richtext") }
+            } footer: { Text("月の家計レポート（集計と明細）をPDFにして共有します。") }
             Section {
                 Button { importing = true } label: { Label("バックアップを読み込む", systemImage: "square.and.arrow.down") }
                 Button { exporting = true } label: { Label("バックアップを書き出す", systemImage: "square.and.arrow.up") }
@@ -390,6 +408,60 @@ struct DataSettingsView: View {
             }
             Button("キャンセル", role: .cancel) {}
         } message: { Text("確認のため「削除」と入力してください。直前の状態は復元ポイントに残ります。") }
+    }
+}
+
+/// 操作フィードバック（Web 版 openFeedbackSettings：操作音・触覚・アニメーション・音量。変更は自動保存）
+struct FeedbackSettingsView: View {
+    @Environment(AppModel.self) private var model
+    @State private var draft = FeedbackSettings()
+    @State private var loaded = false
+
+    var body: some View {
+        List {
+            Section {
+                Toggle(isOn: bind(\.sound)) { title("操作音", "保存・承認・同期などの重要操作で再生") }
+                Toggle(isOn: bind(\.haptic)) { title("触覚", "軽い振動を返します") }
+                Toggle(isOn: bind(\.motion)) { title("アニメーション", "画面の移動や承認の動きを表示") }
+            } header: { Text("音・触覚・動きを、自分に合う使い心地に。").textCase(nil) }
+            Section {
+                HStack(spacing: 12) {
+                    Button { step(-0.05) } label: { Image(systemName: "minus") }.buttonStyle(.bordered).accessibilityLabel("音量を下げる")
+                    Slider(value: $draft.volume, in: 0...1, step: 0.05) { editing in if !editing { save(); if draft.sound { Feedback.play(.commit) } } }
+                        .accessibilityLabel("操作音の音量")
+                    Button { step(0.05) } label: { Image(systemName: "plus") }.buttonStyle(.bordered).accessibilityLabel("音量を上げる")
+                    Text("\(Int((draft.volume * 100).rounded()))%").monospacedDigit().frame(width: 44, alignment: .trailing)
+                }
+                .disabled(!draft.sound)
+            } header: { Text("音量") } footer: {
+                Text("変更は自動保存されます。端末の「視差効果を減らす」設定を優先します。消音モードの時は音が鳴りません。")
+            }
+        }
+        .navigationTitle("操作フィードバック")
+        .onAppear { if !loaded { draft = model.doc.feedbackSettings; loaded = true } }
+    }
+
+    private func title(_ t: String, _ sub: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) { Text(t); Text(sub).font(.caption).foregroundStyle(.secondary) }
+    }
+    private func bind(_ key: WritableKeyPath<FeedbackSettings, Bool>) -> Binding<Bool> {
+        Binding(get: { draft[keyPath: key] }, set: { v in
+            draft[keyPath: key] = v
+            save()
+            if v && key != \.motion { Feedback.play(key == \.sound ? .commit : .selection) }
+        })
+    }
+    private func step(_ d: Double) {
+        draft.volume = min(1, max(0, ((draft.volume + d) * 20).rounded() / 20))
+        save()
+        if draft.sound { Feedback.play(.commit) }
+    }
+    private func save() {
+        guard draft != model.doc.feedbackSettings else { return }
+        let next = draft
+        model.commit("操作フィードバックの変更", silent: true) { d in
+            d["feedbackSettings"] = (d["feedbackSettings"] ?? .object([:])).merging(next.json)
+        }
     }
 }
 

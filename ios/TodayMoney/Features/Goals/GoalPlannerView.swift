@@ -309,7 +309,7 @@ struct GoalPlannerView: View {
             Spacer()
             Button("完了") { dismiss() }.buttonStyle(.borderedProminent).controlSize(.large)
         }
-        .padding().sensoryFeedback(.success, trigger: success)
+        .padding().successFeedback(trigger: success)
     }
     private func errorView(_ e: String) -> some View {
         VStack(spacing: 14) {

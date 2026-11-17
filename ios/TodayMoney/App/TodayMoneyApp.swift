@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct TodayMoneyApp: App {
@@ -20,6 +21,8 @@ struct TodayMoneyApp: App {
         let model = AppModel.live(container: container)
         if let failure { model.errorMessage = failure }
         _model = State(initialValue: model)
+        NotificationRouter.shared.model = model
+        UNUserNotificationCenter.current().delegate = NotificationRouter.shared
     }
 
     var body: some Scene {
