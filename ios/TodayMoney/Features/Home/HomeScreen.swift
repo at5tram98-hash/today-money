@@ -17,25 +17,26 @@ struct HomeScreen: View {
         NavigationStack(path: $path) {
             ScrollView {
                 VStack(spacing: 14) {
-                    spendCard(doc, today: today, month: month)
-                    NavigationLink { AssetsView() } label: { assetsCard(doc) }
-                    NavigationLink { SalaryMonthView(month: month) } label: { salaryCard(doc, today: today, month: month) }
-                    NavigationLink {
-                        if doc.acfStoredSettings.initialized { AcfIndexView() } else { AcfSettingsView() }
-                    } label: { AcfHomeCard() }
+                    spendCard(doc, today: today)
+                    HomeSectionTitle(title: "お金の状態")
+                    assetsCard(doc)
+                    salaryCard(doc, today: today, month: month)
+                    acfCard(doc)
+                    HomeSectionTitle(title: "これからの支払い")
                     paymentsCard(doc, today: today)
-                    highlightsCard(doc, month: month)
+                    if DayClosing.inRange(date, today: today) { dayCloseCard(doc, today: today) }
+                    HomeSectionTitle(title: "記録")
                     recentCard(doc, today: today)
-                    if DayClosing.inRange(date, today: today) {
-                        NavigationLink { DayClosingView(date: date) } label: { DayClosingCard(date: date) }
+                    HStack(spacing: 12) {
+                        smallCard("今月の比較", "arrow.left.arrow.right", .indigo) { MonthCompareView(month: month) } content: { compareContent(doc, month: month) }
+                        smallCard("大型支出", "cart.fill", .pink) { LargeExpensesView() } content: { largeContent(doc) }
                     }
-                    NavigationLink { MonthCompareView(month: month) } label: { compareCard(doc, month: month) }
-                    NavigationLink { LargeExpensesView() } label: { largeCard(doc, today: today) }
-                    NavigationLink { EventGoalsView() } label: { goalsCard(doc, today: today) }
+                    smallCard("旅行・プレゼントの目標", "gift.fill", .purple) { EventGoalsView() } content: { goalsContent(doc, today: today) }
+                    HomeSectionTitle(title: "ハイライト")
+                    highlights(doc, month: month)
                 }
-                .buttonStyle(.plain)
                 .padding(.horizontal, 16)
-                .padding(.bottom, 100)
+                .padding(.bottom, 110)
             }
             .background(Color(.systemGroupedBackground))
             .entryButton()
@@ -68,57 +69,70 @@ struct HomeScreen: View {
         }
     }
 
-    // MARK: 支出
+    // MARK: 支出（いちばん上。期間の切り替えと目標のボタンを持つ）
 
-    @ViewBuilder private func spendCard(_ doc: MoneyDocument, today: String, month: String) -> some View {
+    @ViewBuilder private func spendCard(_ doc: MoneyDocument, today: String) -> some View {
         let isToday = period == "today"
-        let spent = isToday ? doc.spent(on: date) : doc.spentMonth(String(date.prefix(7)))
-        let goal = isToday ? doc.dailyGoal(date) : doc.monthlyGoalTotal(String(date.prefix(7)))
-        VStack(alignment: .leading, spacing: 10) {
+        let m = String(date.prefix(7))
+        let spent = isToday ? doc.spent(on: date) : doc.spentMonth(m)
+        let goal = isToday ? doc.dailyGoal(date) : doc.monthlyGoalTotal(m)
+        VStack(alignment: .leading, spacing: 14) {
+            // 操作の段（ここは押せる部品だけ）
             HStack {
-                Label("支出", systemImage: "flame.fill").font(.subheadline.weight(.semibold)).foregroundStyle(Theme.spending)
-                Spacer()
                 Picker("期間", selection: $period) { Text("今日").tag("today"); Text("今月").tag("month") }
-                    .pickerStyle(.segmented).frame(width: 130)
+                    .pickerStyle(.segmented).frame(width: 140)
+                Spacer()
+                if isToday {
+                    Menu {
+                        Button("今日") { date = today }
+                        ForEach(1..<8, id: \.self) { i in let d = Dates.addDays(today, -i); Button(Format.dayLabel(d)) { date = d } }
+                    } label: {
+                        HStack(spacing: 4) { Image(systemName: "calendar"); Text(date == today ? "今日" : Format.shortDay(date)); Image(systemName: "chevron.down").font(.caption2.weight(.bold)) }
+                            .font(.subheadline.weight(.semibold)).padding(.horizontal, 12).padding(.vertical, 7)
+                            .background(Color.accentColor.opacity(0.14), in: Capsule()).foregroundStyle(Color.accentColor)
+                    }
+                    .accessibilityLabel("日付を選ぶ（\(Format.dayLabel(date))）")
+                }
             }
-            Menu {
-                Button("今日") { date = today }
-                ForEach(1..<8, id: \.self) { i in let d = Dates.addDays(today, -i); Button(Format.dayLabel(d)) { date = d } }
-            } label: {
-                HStack(spacing: 4) {
-                    Text(isToday ? "\(date == today ? "今日・" : "")\(Format.dayLabel(date))" : Format.monthLabel(String(date.prefix(7))))
-                    Image(systemName: "chevron.down").font(.caption2.weight(.bold))
-                }.font(.footnote).foregroundStyle(.secondary)
-            }
+            // 数字の段（押すと明細へ）
             NavigationLink {
-                if isToday { TransactionListView(title: Format.dayLabel(date), date: date) } else { MonthSpendingView(month: String(date.prefix(7))) }
+                if isToday { TransactionListView(title: Format.dayLabel(date), date: date) } else { MonthSpendingView(month: m) }
             } label: {
                 VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text(isToday ? "\(date == today ? "今日" : Format.dayLabel(date))の支出" : "\(Format.monthLabel(m))の支出")
+                            .font(.subheadline.weight(.semibold)).foregroundStyle(Theme.spending)
+                        Spacer()
+                        Image(systemName: "chevron.right").font(.subheadline.weight(.bold)).foregroundStyle(.tertiary)
+                    }
                     if goal > 0 {
-                        MoneyText(value: max(0, goal - spent))
+                        Text(max(0, goal - spent).yen).font(.system(size: 40, weight: .bold, design: .rounded)).monospacedDigit()
                         Text(spent > goal ? "目標を \((spent - goal).yen) 超えています" : "あと使える額（目標 \(goal.yen)・使った額 \(spent.yen)）")
                             .font(.footnote).foregroundStyle(spent > goal ? .red : .secondary)
                         ProgressView(value: min(1, spent / max(goal, 1))).tint(spent > goal ? .red : Theme.spending)
                     } else {
-                        Text(spent > 0 ? spent.yen : "目標未設定").font(.system(size: 30, weight: .bold, design: .rounded)).monospacedDigit()
-                        Text(spent > 0 ? (isToday ? "この日に使った額" : "今月使った額") : "まだ使っていません").font(.footnote).foregroundStyle(.secondary)
+                        Text(spent.yen).font(.system(size: 40, weight: .bold, design: .rounded)).monospacedDigit()
+                        Text(spent > 0 ? "使った額・目標は未設定" : "まだ使っていません・目標は未設定").font(.footnote).foregroundStyle(.secondary)
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
             }
-            Divider()
-            Button { goalSheet = true } label: {
-                HStack { Text(goal > 0 ? "目標を変更" : "目標をつくる"); Spacer(); Image(systemName: "chevron.right").font(.footnote) }
-                    .foregroundStyle(Color.accentColor)
+            .buttonStyle(CardPressStyle())
+            .accessibilityHint("明細を見る")
+            // ボタンの段
+            HStack(spacing: 10) {
+                PillButton(title: goal > 0 ? "目標を変更" : "目標をつくる", systemImage: "target", tint: .orange) { goalSheet = true }
+                PillButton(title: "支出を入力", systemImage: "plus", tint: .accentColor) { model.entryMode = .expense }
             }
         }
-        .cardStyle()
+        .cardSurface()
     }
+
+    // MARK: お金の状態
 
     private func assetsCard(_ doc: MoneyDocument) -> some View {
         let banks = doc.banks.filter { $0.balance > 0 }
-        return SummaryCard(title: "総資産", systemImage: "building.columns.fill", tint: Theme.assets) {
+        return TapCard(title: "総資産", systemImage: "building.columns.fill", tint: Theme.assets) { AssetsView() } content: {
             HStack(alignment: .center) {
                 VStack(alignment: .leading, spacing: 4) {
                     MoneyText(value: doc.totalBankBalance)
@@ -127,9 +141,9 @@ struct HomeScreen: View {
                         .font(.footnote).foregroundStyle(.secondary)
                 }
                 Spacer()
-                if !banks.isEmpty {
+                if banks.count > 1 {
                     Chart(banks) { b in SectorMark(angle: .value("残高", b.balance), innerRadius: .ratio(0.62), angularInset: 1.5).foregroundStyle(by: .value("口座", b.name)) }
-                        .chartLegend(.hidden).frame(width: 64, height: 64).accessibilityHidden(true)
+                        .chartLegend(.hidden).frame(width: 56, height: 56).accessibilityHidden(true)
                 }
             }
         }
@@ -138,163 +152,187 @@ struct HomeScreen: View {
     private func salaryCard(_ doc: MoneyDocument, today: String, month: String) -> some View {
         let s = doc.salarySummary(month, today: today)
         let next = doc.nextSalaryEvent(month, today: today)
-        let hist = (0..<6).map { i -> (String, Double) in let m = Dates.addMonths(month, i - 5); return (m, doc.salarySummary(m, today: today).total) }
-        return SummaryCard(title: "今月の給与", systemImage: "briefcase.fill", tint: Theme.salary) {
-            HStack(alignment: .bottom) {
+        return TapCard(title: "今月の給与", systemImage: "briefcase.fill", tint: Theme.salary) { SalaryMonthView(month: month) } content: {
+            VStack(alignment: .leading, spacing: 4) {
+                MoneyText(value: s.total)
+                Text(next.map { "次の給料日 \(Format.shortDay($0.date))・\($0.name) \($0.amount.yen)" } ?? "今月の受取見込み")
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    @ViewBuilder private func acfCard(_ doc: MoneyDocument) -> some View {
+        let s = doc.acfStoredSettings
+        TapCard(title: "ACF", systemImage: "chart.line.uptrend.xyaxis", tint: Theme.acf) {
+            if s.initialized { AcfIndexView() } else { AcfSettingsView() }
+        } content: {
+            if !s.initialized {
                 VStack(alignment: .leading, spacing: 4) {
-                    MoneyText(value: s.total)
-                    Text("今月の受取見込み").font(.footnote).foregroundStyle(.secondary)
+                    Text("未設定").font(.title2.bold())
+                    Text("押して、最低残したい金額を決めると、ACF指標を計算します").font(.footnote).foregroundStyle(.secondary)
                 }
-                Spacer()
-                Chart(hist, id: \.0) { m, v in BarMark(x: .value("月", m), y: .value("額", v)).foregroundStyle(m == month ? Theme.salary : Theme.salary.opacity(0.35)) }
-                    .chartXAxis(.hidden).chartYAxis(.hidden).frame(width: 90, height: 44).accessibilityHidden(true)
-            }
-            if let next {
-                Divider()
-                LabeledContent("次の給料日", value: "\(Format.shortDay(next.date))・\(next.name) \(next.amount.yen)").font(.subheadline)
-            }
-        }
-    }
-
-    private func cashCard(_ doc: MoneyDocument, today: String) -> some View {
-        let cf = CashFlowModel(doc: doc, today: today, days: 30)
-        return SummaryCard(title: "資金見通し", systemImage: "chart.line.uptrend.xyaxis", tint: Theme.acf) {
-            if let short = cf.firstShort {
-                Text("\(Format.dayLabel(short.date))に不足の見込み").font(.headline).foregroundStyle(.red)
             } else {
-                Text("30日間、残高は足ります").font(.headline)
+                AcfLoader(lightweight: true) { f in
+                    let x = model.doc.acfIndex(f, today: model.today)
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                            Text(x.text).font(.system(size: 34, weight: .bold, design: .rounded)).foregroundStyle(x.color).monospacedDigit()
+                            Text(x.label).font(.subheadline.weight(.semibold)).foregroundStyle(x.color)
+                            if s.c100Mode { Text("C100").font(.caption2.weight(.bold)).padding(.horizontal, 6).padding(.vertical, 2).background(.purple.opacity(0.18), in: Capsule()).foregroundStyle(.purple) }
+                            Spacer()
+                            Text("\(Format.shortDay(x.end)) まで").font(.footnote).foregroundStyle(.secondary)
+                        }
+                        AcfCompareBars(x: x)
+                        Text("\(x.surplus >= 0 ? "余る見込み ＋" : "足りない見込み −")\(abs(x.surplus).yen)").font(.footnote.weight(.semibold)).foregroundStyle(x.surplus >= 0 ? .green : .red)
+                    }
+                }
             }
-            Text("30日間の最低残高 \((cf.minDay?.balance ?? 0).yen)\(cf.reserveFloor > 0 ? "・最低残したい額 \(cf.reserveFloor.yen)" : "")")
-                .font(.footnote).foregroundStyle(.secondary)
         }
     }
 
-    @ViewBuilder private func paymentsCard(_ doc: MoneyDocument, today: String) -> some View {
+    // MARK: これからの支払い
+
+    private func paymentsCard(_ doc: MoneyDocument, today: String) -> some View {
         let events = doc.financialEvents(from: today, days: 30, today: today).filter { $0.amount < 0 }
         let total = events.reduce(0) { $0 - $1.amount }
-        VStack(alignment: .leading, spacing: 10) {
-            Button { model.tab = .payments } label: {
-                HStack {
-                    Label("次の支払い", systemImage: "calendar").font(.subheadline.weight(.semibold)).foregroundStyle(.purple)
-                    Spacer()
-                    Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+        return Button { model.tab = .payments } label: {
+            VStack(alignment: .leading, spacing: 12) {
+                CardHeader(title: "次の支払い", systemImage: "calendar", tint: .purple, trailing: AnyView(Text("支払いタブへ").font(.footnote).foregroundStyle(.secondary)))
+                HStack(alignment: .firstTextBaseline) {
+                    Text(total.yen).font(.system(size: 30, weight: .bold, design: .rounded)).monospacedDigit()
+                    Text("30日以内・\(events.count)件").font(.footnote).foregroundStyle(.secondary)
                 }
-            }
-            HStack(alignment: .firstTextBaseline) {
-                Text("30日以内").font(.footnote).foregroundStyle(.secondary)
-                Spacer()
-                Text(total.yen).font(.title3.weight(.bold)).monospacedDigit()
-                Text("\(events.count)件").font(.footnote).foregroundStyle(.secondary)
-            }
-            if events.isEmpty { Text("30日以内の支払い予定はありません").font(.footnote).foregroundStyle(.secondary) }
-            ForEach(events.prefix(4)) { e in
-                HStack(spacing: 12) {
-                    VStack(spacing: 0) {
-                        Text("\(Dates.parts(e.date).d)").font(.headline).monospacedDigit()
-                        Text("\(Dates.parts(e.date).m)月").font(.caption2).foregroundStyle(.secondary)
-                    }.frame(width: 34)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(e.title).font(.subheadline).lineLimit(1)
-                        Text("\(daysUntilText(e.date, today: today))・\(e.detail)").font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                if events.isEmpty { Text("30日以内の支払い予定はありません").font(.footnote).foregroundStyle(.secondary) }
+                VStack(spacing: 0) {
+                    ForEach(Array(events.prefix(4).enumerated()), id: \.offset) { i, e in
+                        if i > 0 { Divider().padding(.leading, 46) }
+                        HStack(spacing: 12) {
+                            VStack(spacing: 0) {
+                                Text("\(Dates.parts(e.date).d)").font(.headline).monospacedDigit()
+                                Text("\(Dates.parts(e.date).m)月").font(.caption2).foregroundStyle(.secondary)
+                            }.frame(width: 34)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(e.title).font(.subheadline).lineLimit(1)
+                                Text("\(daysUntilText(e.date, today: today))・\(e.detail)").font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                            }
+                            Spacer()
+                            Text((-e.amount).yen).font(.subheadline.weight(.semibold)).monospacedDigit()
+                        }
+                        .padding(.vertical, 8)
                     }
-                    Spacer()
-                    Text((-e.amount).yen).font(.subheadline).monospacedDigit()
                 }
             }
-            Button("すべての支払いを見る") { model.tab = .payments }.font(.subheadline)
+            .cardSurface()
         }
-        .cardStyle()
+        .buttonStyle(CardPressStyle())
+        .accessibilityHint("支払いタブを開く")
     }
 
-    @ViewBuilder private func highlightsCard(_ doc: MoneyDocument, month: String) -> some View {
+    private func dayCloseCard(_ doc: MoneyDocument, today: String) -> some View {
+        let status = doc.dayClosingStatus(date, today: today)
+        let available = DayClosing.available(date)
+        let copy = !available ? "18:00以降に照合・承認できます" : [
+            .open: "収入・取引・残高を順番に照合します", .closed: "承認済・日締めジャーナルに保存しています",
+            .changed: "再確認が必要・承認後に記録が変わりました", .cancelled: "取消済・再照合して承認できます",
+        ][status] ?? ""
+        let tint: Color = status == .closed ? .green : status == .changed ? .orange : .indigo
+        return TapCard(title: "日締め", systemImage: status == .closed ? "checkmark.seal.fill" : "moon.stars.fill", tint: tint) { DayClosingView(date: date) } content: {
+            HStack {
+                Text(copy).font(.subheadline).foregroundStyle(.secondary)
+                Spacer()
+                if available && status != .closed { Text("始める").font(.subheadline.weight(.semibold)).foregroundStyle(tint) }
+            }
+        }
+    }
+
+    // MARK: 記録
+
+    @ViewBuilder private func recentCard(_ doc: MoneyDocument, today: String) -> some View {
+        let recent = Array(doc.transactions.sorted { ($0.date, $0.createdAt) > ($1.date, $1.createdAt) }.prefix(4))
+        let isToday = period == "today"
+        let txs = isToday ? doc.transactions(on: date) : doc.transactions(inMonth: String(date.prefix(7)))
+        let cats = doc.categories.map { c in (c, txs.filter { $0.category == c.name }.reduce(0) { $0 + $1.amount }) }.filter { $0.1 > 0 }
+        VStack(alignment: .leading, spacing: 12) {
+            CardHeader(title: "最近の動き", systemImage: "clock.arrow.circlepath", tint: .blue, showsChevron: false)
+            if !cats.isEmpty {
+                Chart(cats, id: \.0.id) { c, v in BarMark(x: .value("額", v)).foregroundStyle(Color(hex: c.color)) }
+                    .chartXAxis(.hidden).frame(height: 12).clipShape(Capsule()).accessibilityHidden(true)
+                HStack(spacing: 10) {
+                    ForEach(cats.prefix(4), id: \.0.id) { c, v in
+                        HStack(spacing: 4) { Circle().fill(Color(hex: c.color)).frame(width: 7, height: 7); Text("\(c.name) \(v.yen)").font(.caption).foregroundStyle(.secondary) }
+                    }
+                }
+            }
+            if recent.isEmpty { Text("まだ記録がありません").font(.footnote).foregroundStyle(.secondary) }
+            VStack(spacing: 0) {
+                ForEach(Array(recent.enumerated()), id: \.offset) { i, t in
+                    if i > 0 { Divider().padding(.leading, 42) }
+                    NavigationLink { TransactionEditor(draft: t, isNew: false) } label: {
+                        HStack { TransactionRow(t: t, showDate: true); Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary) }
+                            .padding(.vertical, 8).contentShape(Rectangle())
+                    }
+                    .buttonStyle(CardPressStyle())
+                }
+            }
+            PillLink(title: "すべての取引", systemImage: "list.bullet") { TransactionListView() }
+        }
+        .cardSurface()
+    }
+
+    private func smallCard<D: View, C: View>(_ title: String, _ icon: String, _ tint: Color, @ViewBuilder destination: @escaping () -> D, @ViewBuilder content: () -> C) -> some View {
+        TapCard(title: title, systemImage: icon, tint: tint, destination: destination) { content() }
+    }
+    @ViewBuilder private func compareContent(_ doc: MoneyDocument, month: String) -> some View {
+        let diff = doc.spentMonth(month) - doc.spentMonth(Dates.addMonths(month, -1))
+        VStack(alignment: .leading, spacing: 2) {
+            Text(signedYen(diff).replacingOccurrences(of: "-", with: "−")).font(.title3.bold()).foregroundStyle(diff <= 0 ? .green : .red).monospacedDigit()
+            Text("先月より").font(.caption).foregroundStyle(.secondary)
+        }
+    }
+    @ViewBuilder private func largeContent(_ doc: MoneyDocument) -> some View {
+        let planned = doc.largeExpensePlans.filter { $0.status == "planned" }.sorted { $0.date < $1.date }
+        VStack(alignment: .leading, spacing: 2) {
+            Text("\(planned.count)件").font(.title3.bold())
+            Text(planned.first.map { "次は \(Format.shortDay($0.date))" } ?? "予定なし").font(.caption).foregroundStyle(.secondary)
+        }
+    }
+    @ViewBuilder private func goalsContent(_ doc: MoneyDocument, today: String) -> some View {
+        let goals = doc.eventGoals.filter { $0.status != "cancelled" }
+        let own = goals.reduce(0) { $0 + doc.eventGoalSummary($1, today: today).ownShare }
+        Text(goals.isEmpty ? "割り勘・立替・回収までまとめて管理" : "\(goals.count)件・自分の負担予定 \(own.yen)")
+            .font(goals.isEmpty ? .footnote : .headline).foregroundStyle(goals.isEmpty ? .secondary : .primary)
+    }
+
+    // MARK: ハイライト（押せない情報：枠なし・›なし）
+
+    @ViewBuilder private func highlights(_ doc: MoneyDocument, month: String) -> some View {
         let prev = Dates.addMonths(month, -1)
         let elapsed = max(1, Dates.parts(model.today).d)
         let avg = doc.spentMonth(month) / Double(elapsed), prevAvg = doc.spentMonth(prev) / Double(Dates.daysInMonth(prev))
         let salary = doc.salarySummary(month, today: model.today).total, spent = doc.spentMonth(month)
-        VStack(alignment: .leading, spacing: 12) {
-            Label("ハイライト", systemImage: "sparkles").font(.subheadline.weight(.semibold)).foregroundStyle(.pink)
-            VStack(alignment: .leading, spacing: 6) {
-                Text("1日の平均").font(.headline)
-                Text(avg <= prevAvg ? "今月の1日あたりの支出は先月より少なめです。" : "今月の1日あたりの支出は先月より多めです。").font(.footnote).foregroundStyle(.secondary)
-                bar(Format.monthLabel(month), avg, max(avg, prevAvg), .pink)
-                bar(Format.monthLabel(prev), prevAvg, max(avg, prevAvg), .gray)
-            }
-            Divider()
-            VStack(alignment: .leading, spacing: 6) {
-                Text("収入と支出").font(.headline)
-                Text("今月の給与見込みから支出を引くと \((salary - spent).yen) 残ります。").font(.footnote).foregroundStyle(.secondary)
-                bar("給与見込み", salary, max(salary, spent), .green)
-                bar("支出", spent, max(salary, spent), .orange)
-            }
+        InfoBlock(title: "1日の平均", systemImage: "sparkles", tint: .pink) {
+            Text(avg <= prevAvg ? "今月の1日あたりの支出は先月より少なめです。" : "今月の1日あたりの支出は先月より多めです。").font(.subheadline)
+            bar(Format.monthLabel(month), avg, max(avg, prevAvg), .pink)
+            bar(Format.monthLabel(prev), prevAvg, max(avg, prevAvg), .gray)
         }
-        .cardStyle()
+        InfoBlock(title: "収入と支出", systemImage: "arrow.up.arrow.down", tint: .green) {
+            Text("今月の給与見込みから支出を引くと \((salary - spent).yen) 残ります。").font(.subheadline)
+            bar("給与見込み", salary, max(salary, spent), .green)
+            bar("支出", spent, max(salary, spent), .orange)
+        }
     }
     private func bar(_ label: String, _ v: Double, _ maxV: Double, _ c: Color) -> some View {
         HStack {
             Text(label).font(.caption).foregroundStyle(.secondary).frame(width: 84, alignment: .leading)
-            GeometryReader { g in
-                Capsule().fill(c.gradient).frame(width: max(4, g.size.width * (maxV > 0 ? v / maxV : 0)))
-            }.frame(height: 10)
+            GeometryReader { g in Capsule().fill(c.gradient).frame(width: max(4, g.size.width * (maxV > 0 ? v / maxV : 0))) }.frame(height: 10)
             Text(v.yen).font(.caption.weight(.semibold)).monospacedDigit().frame(width: 76, alignment: .trailing)
         }
         .accessibilityElement(children: .combine)
     }
-
-    @ViewBuilder private func recentCard(_ doc: MoneyDocument, today: String) -> some View {
-        let recent = doc.transactions.sorted { ($0.date, $0.createdAt) > ($1.date, $1.createdAt) }.prefix(4)
-        let isToday = period == "today"
-        let txs = isToday ? doc.transactions(on: date) : doc.transactions(inMonth: String(date.prefix(7)))
-        let cats = doc.categories.map { c in (c, txs.filter { $0.category == c.name }.reduce(0) { $0 + $1.amount }) }.filter { $0.1 > 0 }
-        VStack(alignment: .leading, spacing: 10) {
-            Label("最近の動き", systemImage: "clock.arrow.circlepath").font(.subheadline.weight(.semibold)).foregroundStyle(.blue)
-            Text("カテゴリ別支出").font(.headline)
-            if cats.isEmpty { Text(isToday ? "この日の支出はまだありません" : "今月の支出はまだありません").font(.footnote).foregroundStyle(.secondary) }
-            else {
-                Chart(cats, id: \.0.id) { c, v in BarMark(x: .value("額", v)).foregroundStyle(Color(hex: c.color)) }
-                    .chartXAxis(.hidden).frame(height: 14).clipShape(Capsule())
-                ForEach(cats, id: \.0.id) { c, v in
-                    HStack { Circle().fill(Color(hex: c.color)).frame(width: 8, height: 8); Text(c.name).font(.footnote); Spacer(); Text(v.yen).font(.footnote).monospacedDigit() }
-                }
-            }
-            Divider()
-            ForEach(Array(recent)) { t in
-                NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) }
-            }
-            NavigationLink { TransactionListView() } label: { HStack { Text("すべての取引"); Spacer(); Image(systemName: "chevron.right").font(.footnote) }.foregroundStyle(Color.accentColor) }
-        }
-        .cardStyle()
-    }
-
-    private func compareCard(_ doc: MoneyDocument, month: String) -> some View {
-        let diff = doc.spentMonth(month) - doc.spentMonth(Dates.addMonths(month, -1))
-        return SummaryCard(title: "今月の比較", systemImage: "arrow.left.arrow.right", tint: .indigo) {
-            Text("先月より \(signedYen(diff).replacingOccurrences(of: "-", with: "−"))").font(.headline).foregroundStyle(diff <= 0 ? .green : .red)
-        }
-    }
-
-    private func goalsCard(_ doc: MoneyDocument, today: String) -> some View {
-        let goals = doc.eventGoals.filter { $0.status != "cancelled" }
-        let own = goals.reduce(0) { $0 + doc.eventGoalSummary($1, today: today).ownShare }
-        return SummaryCard(title: "旅行・プレゼントの目標", systemImage: "gift.fill", tint: .purple) {
-            Text(goals.isEmpty ? "割り勘・立替・回収までまとめて管理" : "\(goals.count)件・自分の負担予定 \(own.yen)").font(goals.isEmpty ? .footnote : .headline).foregroundStyle(goals.isEmpty ? .secondary : .primary)
-        }
-    }
-
-    private func largeCard(_ doc: MoneyDocument, today: String) -> some View {
-        let planned = doc.largeExpensePlans.filter { $0.status == "planned" }.sorted { $0.date < $1.date }
-        return SummaryCard(title: "大型支出の計画", systemImage: "cart.fill", tint: .pink) {
-            Text("\(planned.count)件").font(.headline)
-            if let n = planned.first { Text("次は \(Format.shortDay(n.date))・\(n.name) \(n.amount.yen)").font(.footnote).foregroundStyle(.secondary) }
-        }
-    }
 }
 
 extension View {
-    func cardStyle() -> some View {
-        padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-    }
+    func cardStyle() -> some View { cardSurface() }
 }
 
 /// 今月の支出（カテゴリ別・日別・取引）（Web 版 renderMonth）
