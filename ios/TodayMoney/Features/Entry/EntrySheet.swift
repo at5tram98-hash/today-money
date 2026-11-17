@@ -36,10 +36,11 @@ struct EntrySheet: View {
     @State private var next: NextStep?
     @State private var confirmDiscard = false
     @State private var plan: PlanKind?
+    @State private var assist: String?
     enum PlanKind: String, Identifiable { case fixed, large; var id: String { rawValue } }
 
-    enum NextStep: Identifiable, Hashable { case salary(String, Double), card(String, Double), detail(Transaction), tempDetail, shifts
-        var id: String { switch self { case .salary: return "s"; case .card: return "c"; case .detail: return "d"; case .tempDetail: return "t"; case .shifts: return "sh" } }
+    enum NextStep: Identifiable, Hashable { case salary(String, Double), card(String, Double), detail(Transaction), tempDetail, shifts, oneLine
+        var id: String { switch self { case .salary: return "s"; case .card: return "c"; case .detail: return "d"; case .tempDetail: return "t"; case .shifts: return "sh"; case .oneLine: return "ol" } }
         static func == (a: NextStep, b: NextStep) -> Bool { a.id == b.id }
         func hash(into h: inout Hasher) { h.combine(id) }
     }
@@ -79,6 +80,7 @@ struct EntrySheet: View {
         case .detail(let t): TransactionEditor(draft: t, isNew: true, onDone: { dismiss() })
         case .tempDetail: TempIncomeEditor(tempId: nil, prefillAmount: amount, prefillDate: date, onDone: { dismiss() })
         case .shifts: CalendarShiftView()
+        case .oneLine: QuickLineView()
         }
     }
 
@@ -109,9 +111,18 @@ struct EntrySheet: View {
                 display
                 context
                 Spacer(minLength: 0)
+                HStack(spacing: 8) {
+                    ForEach([("discount", "割引", "tag"), ("add", "％を加算", "percent"), ("split", "割り勘", "person.2")], id: \.0) { k, l, sym in
+                        Button { assist = k } label: { Label(l, systemImage: sym).font(.footnote.weight(.semibold)).frame(maxWidth: .infinity).padding(.vertical, 7).background(mode.color.opacity(0.12), in: Capsule()).foregroundStyle(mode.color) }
+                            .buttonStyle(.plain).disabled(amount <= 0)
+                    }
+                }.padding(.horizontal)
                 Keypad(expr: $expr, typed: $typed, tint: mode.color)
                     .padding(.horizontal)
                     .padding(.bottom, 8)
+            }
+            .sheet(item: Binding(get: { assist.map(IdBox.init) }, set: { assist = $0?.id })) { k in
+                NavigationStack { CalcAssistSheet(base: amount, kind: k.id) { v in expr = String(Int(v)); typed = true } }.presentationDetents([.medium])
             }
             .sheet(item: $plan) { p in
                 NavigationStack { if p == .fixed { FixedPaymentEditor(fixedId: nil) } else { LargeExpenseEditor(planId: nil) } }
@@ -163,6 +174,7 @@ struct EntrySheet: View {
                         }
                         Divider().frame(height: 22)
                         Chip(on: false) { next = .detail(draftTransaction()) } label: { Image(systemName: "list.bullet"); Text("詳細入力") }
+                        Chip(on: false) { next = .oneLine } label: { Image(systemName: "text.line.first.and.arrowtriangle.forward"); Text("一行入力") }
                         ForEach(Array(recentTemplates.enumerated()), id: \.offset) { _, r in
                             Chip(on: false) {
                                 expr = String(Int(r.amount)); category = r.category; payMethod = r.paymentMethod; payId = r.paymentId; merchant = r.merchant; typed = true

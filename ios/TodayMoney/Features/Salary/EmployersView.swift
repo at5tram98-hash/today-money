@@ -9,6 +9,7 @@ struct EmployersView: View {
             Section {
                 NavigationLink { CalendarShiftView() } label: { Label("カレンダーからシフトを取り込む", systemImage: "calendar.badge.clock") }
             }
+            Section { NavigationLink { EmployerTermsView(employerId: "") } label: { Label("勤務先を追加", systemImage: "plus") } }
             ForEach(model.doc.employers) { e in
                 NavigationLink { EmployerTermsView(employerId: e.id) } label: {
                     VStack(alignment: .leading, spacing: 3) {
@@ -37,11 +38,17 @@ struct EmployerTermsView: View {
     @State private var aliasesText = ""
     @State private var newRule = BreakRule(from: 360, to: nil, minutes: 45)
     @State private var showRule = false
+    @State private var confirmDelete = false
+    @State private var blocked = ""
 
     var body: some View {
         Group {
             if let binding = Binding($e) {
                 Form {
+                    Section("勤務先") {
+                        TextField("会社名（例：GU）", text: binding.name)
+                        Picker("給与の振込先", selection: binding.bankId) { Text("未設定").tag(""); ForEach(model.doc.banks) { Text($0.name).tag($0.id) } }
+                    }
                     Section {
                         AmountField(title: "時給", value: binding.hourly)
                         Picker("交通費の払い方", selection: binding.transportUnit) {
@@ -65,22 +72,50 @@ struct EmployerTermsView: View {
                     } header: { Text("シフトの予定名（別名）") } footer: {
                         Text("シフトボードの予定名にこの言葉が入っていれば、この勤務先のシフトとして計算します。読点（、）かカンマで区切ります。")
                     }
-                    Section("給料日") {
-                        LabeledContent("締め日", value: binding.wrappedValue.closingType == "day" ? "毎月\(binding.wrappedValue.closingDay)日" : "月末")
+                    Section {
+                        Picker("締め日", selection: binding.closingType) { Text("月末").tag("month_end"); Text("日付").tag("day") }.pickerStyle(.segmented)
+                        if binding.wrappedValue.closingType == "day" {
+                            Picker("締める日", selection: binding.closingDay) { ForEach(1...28, id: \.self) { Text("毎月\($0)日").tag($0) } }
+                        }
+                        Picker("給料日の月", selection: binding.payMonthOffset) { Text("当月").tag(0); Text("翌月").tag(1); Text("翌々月").tag(2) }
+                        Picker("給料日", selection: binding.payType) { Text("日付").tag("day"); Text("月末").tag("month_end") }.pickerStyle(.segmented)
+                        if binding.wrappedValue.payType != "month_end" {
+                            Picker("支給日", selection: binding.payDay) { ForEach(1...31, id: \.self) { Text("\($0)日").tag($0) } }
+                        }
                         LabeledContent("今月勤務分の給料日", value: Format.dayLabel(Payroll.payDate(binding.wrappedValue, workMonth: Dates.ym())))
+                    } header: { Text("締め日と給料日") } footer: {
+                        let m = Dates.ym(), e = binding.wrappedValue
+                        Text("例：\(e.closingType == "day" ? "\(Format.shortDay(Dates.addMonths(m, -1) + "-" + String(format: "%02d", min(28, e.closingDay + 1))))〜\(Format.shortDay(m + "-" + String(format: "%02d", e.closingDay)))" : "\(Format.monthLabel(m))1日〜月末")の勤務 → \(Format.dayLabel(Payroll.payDate(e, workMonth: m)))に支給")
+                    }
+                    if !employerId.isEmpty {
+                        Section { Button("この勤務先を削除", role: .destructive) { confirmDelete = true } }
                     }
                 }
-                .navigationTitle(binding.wrappedValue.name)
+                .navigationTitle(employerId.isEmpty ? "勤務先登録" : binding.wrappedValue.name)
                 .toolbar {
                     ToolbarItem(placement: .confirmationAction) { Button("保存") { save() }.bold() }
                 }
                 .sheet(isPresented: $showRule) { ruleSheet(binding) }
+                .confirmationDialog("この勤務先を削除しますか？", isPresented: $confirmDelete, titleVisibility: .visible) {
+                    Button("削除", role: .destructive) {
+                        if model.doc.salaryRecords.contains(where: { $0.employerId == employerId }) { blocked = "この勤務先の給与の記録があります。先に給与の記録を削除してください。"; return }
+                        model.commit("勤務先の削除") { d in d.employers = d.employers.filter { $0.id != employerId }; d.shiftPlans = d.shiftPlans.filter { $0.employerId != employerId } }
+                        dismiss()
+                    }
+                } message: { Text("この勤務先のシフトの記録も削除します。") }
+                .alert("削除できません", isPresented: Binding(get: { !blocked.isEmpty }, set: { if !$0 { blocked = "" } })) { Button("OK") {} } message: { Text(blocked) }
             } else {
                 ContentUnavailableView("勤務先が見つかりません", systemImage: "briefcase")
             }
         }
         .onAppear {
             if e == nil, let found = model.doc.employer(employerId) { e = found; aliasesText = found.aliases.joined(separator: "、") }
+            else if e == nil && employerId.isEmpty {
+                // Web 版 openEmployerCreate の初期値：月末締め・翌月25日払い・交通費は1勤務ごと
+                var n = Employer(json: .object([:]))
+                n.closingType = "month_end"; n.closingDay = 15; n.payType = "day"; n.payDay = 25; n.payMonthOffset = 1; n.transportUnit = "per_shift"
+                e = n
+            }
         }
     }
 
@@ -120,9 +155,17 @@ struct EmployerTermsView: View {
     private func save() {
         guard var edited = e else { return }
         edited.aliases = aliasesText.split(whereSeparator: { ",、，".contains($0) }).map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
-        model.commit("勤務先の条件") { doc in
+        edited.name = edited.name.trimmingCharacters(in: .whitespaces)
+        guard !edited.name.isEmpty else { model.errorMessage = "会社名を入力してください。"; return }
+        let isNew = employerId.isEmpty
+        model.change(isNew ? "勤務先の登録" : "勤務先の条件") { doc, now, _ in
             var list = doc.employers
-            if let i = list.firstIndex(where: { $0.id == employerId }) { list[i] = edited; doc.employers = list }
+            if isNew {
+                edited.id = MoneyDocument.uid("emp", now: now)
+                var raw = edited.json.objectValue ?? [:]; raw["createdAt"] = .string(ISODate.now(now)); raw["tagIds"] = .array([])
+                list.append(Employer(json: .object(raw)))
+            } else if let i = list.firstIndex(where: { $0.id == employerId }) { list[i] = edited }
+            doc.employers = list
         }
         model.toast = "\(edited.name)の条件を保存しました"
         dismiss()

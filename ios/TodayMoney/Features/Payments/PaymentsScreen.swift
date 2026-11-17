@@ -64,8 +64,8 @@ struct PaymentsScreen: View {
                             CardWatchRow(card: c, items: items, series: doc.paymentCardSeries(c.id, month: month))
                         }
                     }
-                    NavigationLink { CardBillingEditor(cardId: nil, billingMonth: nil, paymentMonth: month) } label: {
-                        Label("請求額を更新", systemImage: "square.and.pencil")
+                    NavigationLink { FinancialUpdatesView(kind: "cards") } label: {
+                        Label("請求額をまとめて更新", systemImage: "square.and.pencil")
                     }
                     .disabled(doc.cards.isEmpty)
                 } header: { Text("カード") }

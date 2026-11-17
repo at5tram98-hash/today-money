@@ -35,6 +35,14 @@ struct MoreScreen: View {
                     row("給与の記録", "yensign.circle.fill", .green, "") { SalaryMonthView(month: model.thisMonth) }
                 }
                 ProMenuSection(month: model.thisMonth)
+                Section("整理") {
+                    row("お気に入り", "star.fill", .yellow, "\(doc.favorites.count)件") { FavoritesView() }
+                    row("タグ", "tag.fill", .pink, "\(doc.tags.count)件") { TagsView() }
+                    row("一行入力", "text.line.first.and.arrowtriangle.forward", .blue, "") { QuickLineView() }
+                    row("検索", "magnifyingglass", .gray, "") { GlobalSearchView() }
+                    row("臨時収入", "yensign.circle.fill", .green, "\(doc.tempIncomes.count)件") { TempIncomeHistoryView() }
+                    row("金額をまとめて更新", "square.and.pencil", .indigo, "") { FinancialUpdatesView(kind: "banks") }
+                }
                 Section("通知") {
                     row("通知設定", "bell.badge.fill", .red, "") { NotificationSettingsView() }
                     row("システムのお知らせ", "exclamationmark.bubble.fill", .orange, "\((doc["notices"]?.arrayValue ?? []).count)件") { NoticesView() }

@@ -46,7 +46,7 @@ struct HomeScreen: View {
                     Button { searching = true } label: { Image(systemName: "magnifyingglass") }.accessibilityLabel("検索")
                 }
             }
-            .navigationDestination(isPresented: $searching) { TransactionListView(title: "検索") }
+            .navigationDestination(isPresented: $searching) { GlobalSearchView() }
             .navigationDestination(item: Binding(get: { model.route }, set: { model.route = $0 })) { r in
                 switch r {
                 case .acf: AcfDetailView()
@@ -364,7 +364,11 @@ struct MonthSpendingView: View {
                     }
                 }
             }
-            Section { NavigationLink { TransactionListView(title: "\(Format.monthLabel(month))の取引", month: month) } label: { Text("取引をすべて見る（\(txs.count)件）") } }
+            Section {
+                NavigationLink { TransactionListView(title: "\(Format.monthLabel(month))の取引", month: month) } label: { Text("取引をすべて見る（\(txs.count)件）") }
+                NavigationLink { MonthCalendarView(month: month) } label: { Label("カレンダーで見る", systemImage: "calendar") }
+                NavigationLink { CorrectionView(key: month) } label: { Label("実質支出を確認・修正", systemImage: "slider.horizontal.3") }
+            }
             ProMenuSection(month: month)
         }
         .navigationTitle("今月の支出")
@@ -420,7 +424,7 @@ struct AssetsView: View {
             }
             Section("口座") {
                 ForEach(doc.banks) { b in
-                    Button { editing = b.id } label: {
+                    NavigationLink { BankDetailView(bankId: b.id) } label: {
                         LabeledContent {
                             Text(b.balance.yen).monospacedDigit().foregroundStyle(b.threshold > 0 && b.balance < b.threshold ? .red : .primary)
                         } label: {
