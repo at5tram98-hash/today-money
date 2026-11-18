@@ -21,11 +21,9 @@ struct MoneyText: View {
     var weight: Font.Weight = .bold
     var body: some View {
         Text(value.yen)
-            .font(.system(size: size, weight: weight, design: .rounded))
+            .moneyFont(size, weight: weight)
             .monospacedDigit()
             .contentTransition(.numericText(value: value))
-            .minimumScaleFactor(0.6)
-            .lineLimit(1)
     }
 }
 
@@ -85,4 +83,18 @@ struct AmountField: View {
                 .monospacedDigit()
         }
     }
+}
+
+/// 大きな金額の文字。文字サイズの設定（Dynamic Type）に合わせて大きく・小さくなる
+struct ScaledMoneyFont: ViewModifier {
+    @ScaledMetric private var size: CGFloat
+    let weight: Font.Weight
+    init(size: CGFloat, weight: Font.Weight) { _size = ScaledMetric(wrappedValue: size, relativeTo: .largeTitle); self.weight = weight }
+    func body(content: Content) -> some View {
+        content.font(.system(size: min(size, 96), weight: weight, design: .rounded)).minimumScaleFactor(0.4).lineLimit(1)
+    }
+}
+
+extension View {
+    func moneyFont(_ size: CGFloat, weight: Font.Weight = .bold) -> some View { modifier(ScaledMoneyFont(size: size, weight: weight)) }
 }

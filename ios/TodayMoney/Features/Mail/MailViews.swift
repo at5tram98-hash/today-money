@@ -39,8 +39,22 @@ struct MailCenterView: View {
             }
             Section {
                 if pending.isEmpty { Text("確認待ちの取引はありません。").foregroundStyle(.secondary) }
-                ForEach(pending.map { (str($0["id"]), $0) }, id: \.0) { _, mi in
-                    Button { reviewing = str(mi["id"]) } label: { MailRow(mi: mi) }
+                ForEach(pending.map { (str($0["id"]), $0) }, id: \.0) { id, mi in
+                    let canApply = MoneyDocument.mailConfidence(mi).ready && doc.validPayment(method: str(mi["paymentMethod"]), id: str(mi["paymentId"])) && !doc.mailHistoryStatus(mi).duplicate
+                    Button { reviewing = id } label: { MailRow(mi: mi) }
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                            if canApply {
+                                Button { if model.change("メール取引の反映", { d, now, today in _ = try d.applyMailItems([id], now: now, today: today) }) { model.done("家計に反映しました") } } label: { Label("反映", systemImage: "checkmark") }.tint(.green)
+                            }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button { if model.change("メールを対象外", { d, _, _ in try d.ignoreMail(id) }) { model.done("対象外にしました") } } label: { Label("対象外", systemImage: "nosign") }.tint(.gray)
+                        }
+                        .contextMenu {
+                            Button { reviewing = id } label: { Label("確認・修正", systemImage: "square.and.pencil") }
+                            if canApply { Button { if model.change("メール取引の反映", { d, now, today in _ = try d.applyMailItems([id], now: now, today: today) }) { model.done("家計に反映しました") } } label: { Label("このまま反映", systemImage: "checkmark") } }
+                            Button(role: .destructive) { if model.change("メールを対象外", { d, _, _ in try d.ignoreMail(id) }) { model.done("対象外にしました") } } label: { Label("対象外にする", systemImage: "nosign") }
+                        }
                 }
                 let ready = pending.filter { mi in
                     MoneyDocument.mailConfidence(mi).ready && doc.validPayment(method: str(mi["paymentMethod"]), id: str(mi["paymentId"])) && !doc.mailHistoryStatus(mi).duplicate
@@ -60,6 +74,7 @@ struct MailCenterView: View {
             }
         }
         .navigationTitle("メール取引センター")
+        .refreshable { if connected { await sync() } }
         .sheet(item: Binding(get: { reviewing.map(IdBox.init) }, set: { reviewing = $0?.id })) { b in NavigationStack { MailEditorView(mailId: b.id) } }
     }
 

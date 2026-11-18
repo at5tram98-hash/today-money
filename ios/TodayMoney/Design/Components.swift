@@ -235,7 +235,7 @@ struct TransactionPreview: View {
                     Text(Format.dayLabel(t.date)).font(.caption).foregroundStyle(.secondary)
                 }
             }
-            Text(t.amount < 0 ? "+\((-t.amount).yen)" : t.amount.yen).font(.system(size: 34, weight: .bold, design: .rounded)).monospacedDigit()
+            Text(t.amount < 0 ? "+\((-t.amount).yen)" : t.amount.yen).moneyFont(34, weight: .bold).monospacedDigit()
             LabeledContent("カテゴリ", value: t.category)
             LabeledContent("支払い", value: doc.paymentLabel(method: t.paymentMethod, id: t.paymentId))
             if !t.memo.isEmpty { LabeledContent("メモ", value: t.memo) }

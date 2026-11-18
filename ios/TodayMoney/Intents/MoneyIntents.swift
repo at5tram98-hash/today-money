@@ -176,7 +176,7 @@ struct TodaySnippet: View {
         let today = Dates.ymd(), day = snapshot.day(today), left = snapshot.remaining(today)
         VStack(alignment: .leading, spacing: 8) {
             Text(left == nil ? "今日の支出" : (left! >= 0 ? "今日あと使える額" : "目標オーバー")).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-            Text((left.map { abs($0) } ?? day.spent).yen).font(.system(size: 32, weight: .bold, design: .rounded)).monospacedDigit()
+            Text((left.map { abs($0) } ?? day.spent).yen).moneyFont(32, weight: .bold).monospacedDigit()
                 .foregroundStyle((left ?? 0) < 0 ? .red : .primary)
             if day.goal > 0 { ProgressView(value: min(1, day.spent / max(1, day.goal))).tint((left ?? 0) < 0 ? .red : .orange) }
             HStack {

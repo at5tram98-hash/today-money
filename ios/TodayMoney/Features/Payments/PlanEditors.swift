@@ -160,7 +160,19 @@ struct LargeExpensesView: View {
             }
             Section("予定（\(planned.count)件）") {
                 if planned.isEmpty { Text("予定はありません").foregroundStyle(.secondary) }
-                ForEach(planned) { p in NavigationLink { LargeExpenseEditor(planId: p.id) } label: { row(p, doc: doc, today: today) } }
+                ForEach(planned) { p in
+                    NavigationLink { LargeExpenseEditor(planId: p.id) } label: { row(p, doc: doc, today: today) }
+                        .swipeActions(edge: .leading) {
+                            Button { complete(p) } label: { Label("支払った", systemImage: "checkmark.circle") }.tint(.green)
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) { remove(p) } label: { Label("削除", systemImage: "trash") }
+                        }
+                        .contextMenu {
+                            Button { complete(p) } label: { Label("支払った（支出として記録）", systemImage: "checkmark.circle") }
+                            Button(role: .destructive) { remove(p) } label: { Label("削除", systemImage: "trash") }
+                        }
+                }
             }
             if !others.isEmpty {
                 Section("完了・延期・中止") {
@@ -171,6 +183,16 @@ struct LargeExpensesView: View {
         .navigationTitle("大型支出")
         .toolbar { ToolbarItem(placement: .topBarTrailing) { Button { adding = true } label: { Image(systemName: "plus") }.accessibilityLabel("大型支出を追加") } }
         .sheet(isPresented: $adding) { NavigationStack { LargeExpenseEditor(planId: nil) } }
+    }
+    private func complete(_ p: LargeExpensePlan) {
+        let id = p.id
+        model.change("大型支出の完了") { doc, now, today in doc.completeLargeExpense(id, now: now, today: today) }
+        model.done("\(p.name.isEmpty ? "大型支出" : p.name) を支出として記録しました")
+    }
+    private func remove(_ p: LargeExpensePlan) {
+        let id = p.id
+        model.commit("大型支出の削除") { $0.largeExpensePlans = $0.largeExpensePlans.filter { $0.id != id } }
+        model.done("計画を削除しました")
     }
     private func row(_ p: LargeExpensePlan, doc: MoneyDocument, today: String) -> some View {
         HStack {
