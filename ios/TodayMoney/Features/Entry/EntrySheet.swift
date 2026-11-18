@@ -296,7 +296,7 @@ struct EntrySheet: View {
             model.change("支出の記録") { d, now, today in
                 d.recordExpense(date: date, amount: a, category: category, merchant: m.isEmpty ? category : m, paymentMethod: payMethod, paymentId: payId, now: now, today: today)
             }
-            model.toast = "\(category) \(a.yen) を記録しました"
+            model.done("\(category) \(a.yen) を記録しました")
             dismiss()
         case .income:
             if toType == "bank" && model.doc.bank(bankId) == nil { alert = "入金先の口座を選んでください"; return }
@@ -304,12 +304,12 @@ struct EntrySheet: View {
             model.change("臨時収入の記録") { d, now, today in
                 d.recordTempIncome(date: date, amount: a, sourceName: src.isEmpty ? "臨時収入" : src, toType: toType, bankId: bankId, now: now, today: today)
             }
-            model.toast = "臨時収入 \(a.yen) を記録しました"
+            model.done("臨時収入 \(a.yen) を記録しました")
             dismiss()
         case .bank:
             guard let b = model.doc.bank(bankId) else { alert = "「その他」→「口座とカード」で口座を追加してください。"; return }
             model.change("残高の更新") { d, now, today in d.reconcileBankBalance(b.id, balance: a, memo: "残高の更新", now: now, today: today) }
-            model.toast = "\(b.name)の残高を \(a.yen) にしました"
+            model.done("\(b.name)の残高を \(a.yen) にしました")
             dismiss()
         case .salary:
             guard !model.doc.employers.isEmpty else { alert = "「その他」→「給与・勤務先」で勤務先を追加してください。"; return }

@@ -28,16 +28,22 @@ struct RootView: View {
         }
         .overlay(alignment: .top) {
             if let t = model.toast {
-                Text(t)
-                    .font(.subheadline.weight(.semibold))
-                    .padding(.horizontal, 16).padding(.vertical, 10)
-                    .background(.regularMaterial, in: Capsule())
-                    .padding(.top, 8)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                    .task(id: t) {
-                        try? await Task.sleep(for: .seconds(2.4))
-                        withAnimation { model.toast = nil }
+                HStack(spacing: 12) {
+                    Text(t).font(.subheadline.weight(.semibold)).lineLimit(2)
+                    if model.undoToast, model.undoReason != nil {
+                        Button("元に戻す") { model.undoToast = false; model.undo() }
+                            .font(.subheadline.weight(.bold)).foregroundStyle(Color.accentColor)
                     }
+                }
+                .padding(.horizontal, 16).padding(.vertical, 10)
+                .background(.regularMaterial, in: Capsule())
+                .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
+                .padding(.top, 8).padding(.horizontal, 16)
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .task(id: t) {
+                    try? await Task.sleep(for: .seconds(model.undoToast ? 4.5 : 2.4))
+                    withAnimation { model.toast = nil; model.undoToast = false }
+                }
             }
         }
         .overlay {
@@ -60,9 +66,28 @@ struct RootView: View {
         .preferredColorScheme(appearance == "dark" ? .dark : appearance == "light" ? .light : nil)
         .onOpenURL { model.open($0) }
         .onAppear {
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-runIntents") {
+                Task { @MainActor in
+                    func log(_ s: String) { FileHandle.standardError.write(Data("[intent] \(s)\n".utf8)) }
+                    do {
+                        var r = RecordExpenseIntent(); r.amount = 350; r.category = CategoryEntity(id: "食費"); r.merchant = "テスト"
+                        let a = try await r.perform(); log("record ok \(a)")
+                        let b = try await TodayBudgetIntent().perform(); log("today ok \(b)")
+                        let c = try await NextPaymentsIntent().perform(); log("next ok \(c)")
+                        log("left \(model.doc.widgetSnapshot().remaining(model.today).map { String($0) } ?? "nil")")
+                        model.undo(); log("undone; spent \(model.doc.spent(on: model.today))")
+                    } catch { log("error \(error)") }
+                }
+            }
+            #endif
+            if ProcessInfo.processInfo.arguments.contains("-launchTiming") { FileHandle.standardError.write(Data("[launch] appeared \(Date().timeIntervalSince1970)\n".utf8)) }
             // 一般 › 起動時に開く画面（リンクから開いた時は、そちらを優先）
             if !launched { launched = true; if startTab == "payments" && model.tab == .home && model.route == nil { model.tab = .payments } }
             model.runScheduled()
+            QuickActions.update(doc: model.doc)
+            WidgetBridge.publish(doc: model.doc)
+            if let q = QuickActions.pending { QuickActions.pending = nil; QuickActions.perform(q) }
             #if DEBUG
             CalendarShiftService.seedForTesting(today: model.today)
             Self.seedStatementForTesting(model)

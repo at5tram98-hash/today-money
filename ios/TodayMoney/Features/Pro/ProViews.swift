@@ -76,7 +76,7 @@ struct FilteredTransactionsView: View {
         let list = model.doc.filteredTransactions(month: month, dimension: dimension, key: key)
         List {
             Section { LabeledContent("\(Format.monthLabel(month))・\(list.count)件", value: list.reduce(0) { $0 + $1.amount }.yen).font(.headline) }
-            ForEach(list) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) } }
+            ForEach(list) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) }.transactionActions(t) }
         }
         .navigationTitle("\(key)の明細")
     }
@@ -118,7 +118,7 @@ struct MonthReviewView: View {
             Section {
                 Button(unchanged ? "確認済みとして更新" : "この内容を確認済みにする") {
                     model.commit("月締めレビュー") { $0.recordMonthReview(month, issueCount: issues.count) }
-                    model.toast = "月締めレビューを記録しました"
+                    model.done("月締めレビューを記録しました")
                 }.bold()
             } footer: { Text("月締めはレビュー状態の記録です。過去月の編集は引き続き可能です。") }
         }
@@ -271,7 +271,7 @@ struct BudgetRebalanceView: View {
                     Button("この内容で立て直す") {
                         var id = ""
                         model.change("予算の立て直し") { d, now, today in id = d.applyRebalance(month: month, plan: p.plan, now: now, today: today) }
-                        lastId = id; model.toast = "残り予算を立て直しました"
+                        lastId = id; model.done("残り予算を立て直しました")
                     }.bold().disabled(changes.isEmpty)
                     if let lastId {
                         Button("立て直しを取り消す", role: .destructive) {
@@ -377,10 +377,10 @@ struct EventGoalDetailView: View {
             .sheet(isPresented: $editing) { NavigationStack { EventGoalEditor(goal: g) } }
             .sheet(isPresented: $reimburse) { NavigationStack { ReimbursementView(goalId: g.id, max: s.unrecovered) }.presentationDetents([.medium]) }
             .confirmationDialog("実際の支出として登録しますか？", isPresented: Binding(get: { payItem != nil }, set: { if !$0 { payItem = nil } }), titleVisibility: .visible) {
-                Button("登録") { if let i = payItem { model.change("目標の費目を支出に") { d, now, today in d.completeGoalItem(g.id, itemId: i.id, now: now, today: today) }; model.toast = "実際の支出として記録しました" } }
+                Button("登録") { if let i = payItem { model.change("目標の費目を支出に") { d, now, today in d.completeGoalItem(g.id, itemId: i.id, now: now, today: today) }; model.done("実際の支出として記録しました") } }
             } message: { Text(payItem.map { "\($0.name) \($0.budget.yen) を実績にします。カードの場合は将来の請求へ反映されます。" } ?? "") }
             .confirmationDialog("目標を削除しますか？", isPresented: $confirmDelete, titleVisibility: .visible) {
-                Button("削除", role: .destructive) { model.commit("目標の削除") { $0.deleteEventGoal(g.id) }; model.toast = "目標を削除しました"; dismiss() }
+                Button("削除", role: .destructive) { model.commit("目標の削除") { $0.deleteEventGoal(g.id) }; model.done("目標を削除しました"); dismiss() }
             } message: { Text("この目標から作った未完了の大型支出計画も削除します。実績の取引は削除しません。") }
         } else { ContentUnavailableView("目標が見つかりません", systemImage: "gift") }
     }
@@ -439,7 +439,7 @@ struct EventGoalEditor: View {
         if g.splitMode == "amount" && g.ownShareAmount > total { alert = "自分の負担額を総費用以下にしてください。"; return }
         let x = g
         model.change("旅行・プレゼント目標") { d, now, _ in d.saveEventGoal(x, now: now) }
-        model.toast = "目標を保存しました"; dismiss()
+        model.done("目標を保存しました"); dismiss()
     }
 }
 
@@ -492,7 +492,7 @@ struct ReimbursementView: View {
                 Button("保存") {
                     let (a, b) = (amount, bankId)
                     model.change("割り勘の受取") { d, now, today in try d.recordReimbursement(goalId, amount: a, toType: b.isEmpty ? "cash" : "bank", bankId: b, now: now, today: today) }
-                    model.toast = "受取を記録しました"; dismiss()
+                    model.done("受取を記録しました"); dismiss()
                 }.bold().disabled(amount <= 0 || amount > max)
             }
         }
@@ -576,7 +576,7 @@ struct TransferPlanEditor: View {
                 Button("保存") {
                     let (f, t, a, d) = (from, to, amount, day)
                     model.change("振替計画") { doc, now, _ in try doc.addTransferPlan(from: f, to: t, amount: a, date: d, now: now) }
-                    model.toast = "振替計画を保存しました"; dismiss()
+                    model.done("振替計画を保存しました"); dismiss()
                 }.bold().disabled(from == to || amount <= 0)
             }
         }
@@ -642,14 +642,14 @@ struct SalaryAllocationView: View {
                     Button("残りを生活費へ入れる") { b.living = max(0, amount - b.payments - b.goals - b.reserve) }
                 } footer: { Text("この振り分けは残高を動かしません。同じ給与を「何に使うか」で分ける計画です。残しておく額は、ACFの最低残したい金額に加わります。") }
                 if doc.salaryAllocation(for: recordId) != nil {
-                    Section { Button("この振り分けを解除", role: .destructive) { model.commit("振り分けの解除") { $0.releaseSalaryAllocation(recordId) }; model.toast = "振り分けを解除しました"; dismiss() } }
+                    Section { Button("この振り分けを解除", role: .destructive) { model.commit("振り分けの解除") { $0.releaseSalaryAllocation(recordId) }; model.done("振り分けを解除しました"); dismiss() } }
                 }
             }
             .navigationTitle("給料日の振り分け").navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("保存") {
                 let (x, e) = (b, end)
                 model.change("給与の振り分け") { d, now, _ in d.saveSalaryAllocation(recordId, buckets: x, validUntil: e, now: now) }
-                model.toast = "給与の振り分けを保存しました"; dismiss()
+                model.done("給与の振り分けを保存しました"); dismiss()
             }.bold().disabled(abs(left) > 0.5) } }
             .onAppear {
                 guard !loaded else { return }; loaded = true

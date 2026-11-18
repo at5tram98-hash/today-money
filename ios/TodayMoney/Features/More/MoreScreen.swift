@@ -393,7 +393,7 @@ struct DataSettingsView: View {
         .confirmationDialog("今のデータを、このバックアップに置き換えますか？", isPresented: $confirmImport, titleVisibility: .visible) {
             Button("置き換える", role: .destructive) {
                 guard let data = pending else { return }
-                do { let n = try model.importBackup(data); model.toast = "読み込みました（勤務先\(n.employers)・給与\(n.salary)・支出\(n.transactions)件）" }
+                do { let n = try model.importBackup(data); model.done("読み込みました（勤務先\(n.employers)・給与\(n.salary)・支出\(n.transactions)件）") }
                 catch { model.errorMessage = error.localizedDescription }
                 pending = nil
             }
@@ -404,7 +404,7 @@ struct DataSettingsView: View {
             Button("削除", role: .destructive) {
                 guard wipeText == "削除" else { model.errorMessage = "「削除」と入力した時だけ削除します。"; return }
                 model.commit("すべてのデータを削除") { $0 = AppModel.firstRunDocument() }
-                model.toast = "初期状態に戻しました（直前の状態は復元ポイントに残っています）"
+                model.done("初期状態に戻しました（直前の状態は復元ポイントに残っています）")
             }
             Button("キャンセル", role: .cancel) {}
         } message: { Text("確認のため「削除」と入力してください。直前の状態は復元ポイントに残ります。") }

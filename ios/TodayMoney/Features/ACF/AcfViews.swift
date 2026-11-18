@@ -77,7 +77,7 @@ struct AcfHomeCard: View {
                     let x = model.doc.acfIndex(f, today: model.today)
                     VStack(alignment: .leading, spacing: 10) {
                         HStack(alignment: .firstTextBaseline, spacing: 8) {
-                            Text(x.text).font(.system(size: 34, weight: .bold, design: .rounded)).foregroundStyle(x.color).monospacedDigit()
+                            Text(x.text).moneyFont(34, weight: .bold).foregroundStyle(x.color).monospacedDigit()
                             Text(x.label).font(.subheadline.weight(.semibold)).foregroundStyle(x.color)
                             Spacer()
                             Text("\(Format.shortDay(x.end)) まで").font(.footnote).foregroundStyle(.secondary)
@@ -108,7 +108,7 @@ struct AcfIndexView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("ACF指標").font(.subheadline).foregroundStyle(.secondary)
                         HStack(alignment: .firstTextBaseline) {
-                            Text(x.text).font(.system(size: 52, weight: .heavy, design: .rounded)).foregroundStyle(x.color)
+                            Text(x.text).moneyFont(52, weight: .heavy).foregroundStyle(x.color)
                             Text(x.label).font(.headline).foregroundStyle(x.color)
                         }
                         Text(x.sentence).font(.subheadline)
@@ -608,7 +608,7 @@ struct AcfSettingsView: View {
         guard var x = s else { return }
         x.initialized = true
         model.commit("ACF設定") { $0.saveAcfSettings(x) }
-        model.toast = "ACF設定を保存しました"
+        model.done("ACF設定を保存しました")
         dismiss()
     }
 }

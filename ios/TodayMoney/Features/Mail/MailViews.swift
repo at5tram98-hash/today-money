@@ -39,8 +39,22 @@ struct MailCenterView: View {
             }
             Section {
                 if pending.isEmpty { Text("確認待ちの取引はありません。").foregroundStyle(.secondary) }
-                ForEach(pending.map { (str($0["id"]), $0) }, id: \.0) { _, mi in
-                    Button { reviewing = str(mi["id"]) } label: { MailRow(mi: mi) }
+                ForEach(pending.map { (str($0["id"]), $0) }, id: \.0) { id, mi in
+                    let canApply = MoneyDocument.mailConfidence(mi).ready && doc.validPayment(method: str(mi["paymentMethod"]), id: str(mi["paymentId"])) && !doc.mailHistoryStatus(mi).duplicate
+                    Button { reviewing = id } label: { MailRow(mi: mi) }
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                            if canApply {
+                                Button { if model.change("メール取引の反映", { d, now, today in _ = try d.applyMailItems([id], now: now, today: today) }) { model.done("家計に反映しました") } } label: { Label("反映", systemImage: "checkmark") }.tint(.green)
+                            }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button { if model.change("メールを対象外", { d, _, _ in try d.ignoreMail(id) }) { model.done("対象外にしました") } } label: { Label("対象外", systemImage: "nosign") }.tint(.gray)
+                        }
+                        .contextMenu {
+                            Button { reviewing = id } label: { Label("確認・修正", systemImage: "square.and.pencil") }
+                            if canApply { Button { if model.change("メール取引の反映", { d, now, today in _ = try d.applyMailItems([id], now: now, today: today) }) { model.done("家計に反映しました") } } label: { Label("このまま反映", systemImage: "checkmark") } }
+                            Button(role: .destructive) { if model.change("メールを対象外", { d, _, _ in try d.ignoreMail(id) }) { model.done("対象外にしました") } } label: { Label("対象外にする", systemImage: "nosign") }
+                        }
                 }
                 let ready = pending.filter { mi in
                     MoneyDocument.mailConfidence(mi).ready && doc.validPayment(method: str(mi["paymentMethod"]), id: str(mi["paymentId"])) && !doc.mailHistoryStatus(mi).duplicate
@@ -49,7 +63,7 @@ struct MailCenterView: View {
                     Button("確認済みにして\(ready.count)件を反映") {
                         let ids = ready.map { str($0["id"]) }
                         var n = 0
-                        if model.change("メール取引をまとめて反映", { d, now, today in n = try d.applyMailItems(ids, now: now, today: today) }) { model.toast = "\(n)件を家計に反映しました" }
+                        if model.change("メール取引をまとめて反映", { d, now, today in n = try d.applyMailItems(ids, now: now, today: today) }) { model.done("\(n)件を家計に反映しました") }
                     }.bold()
                 }
             } header: { Text("確認待ち（\(pending.count)件）") } footer: {
@@ -60,6 +74,7 @@ struct MailCenterView: View {
             }
         }
         .navigationTitle("メール取引センター")
+        .refreshable { if connected { await sync() } }
         .sheet(item: Binding(get: { reviewing.map(IdBox.init) }, set: { reviewing = $0?.id })) { b in NavigationStack { MailEditorView(mailId: b.id) } }
     }
 
@@ -168,7 +183,7 @@ struct MailEditorView: View {
                     Section {
                         Button("取引に反映") { save(link: false) }.bold().disabled(match != nil)
                         Button("対象外にする", role: .destructive) {
-                            if model.change("メールを対象外", { d, _, _ in try d.ignoreMail(mailId) }) { model.toast = "対象外にしました"; dismiss() }
+                            if model.change("メールを対象外", { d, _, _ in try d.ignoreMail(mailId) }) { model.done("対象外にしました"); dismiss() }
                         }
                     }
                 }
@@ -347,6 +362,6 @@ struct GmailSettingsView: View {
             }
             // 対象を変えたら、手で決めていないメールは次の同期で読み直す（Web 版と同じ）
             if changedSources { d.resetMailParserVersions() }
-        }) { model.toast = "保存しました"; dismiss() }
+        }) { model.done("保存しました"); dismiss() }
     }
 }

@@ -178,3 +178,74 @@ func daysUntilText(_ date: String, today: String) -> String {
 /// SwiftUI の Transaction（アニメーション）と区別する
 typealias Transaction = TodayMoneyCore.Transaction
 typealias Category = TodayMoneyCore.Category
+
+
+/// 取引の行の操作：右からスワイプで削除、左からスワイプで「もう一度」、長押しでメニュー
+struct TransactionActions: ViewModifier {
+    @Environment(AppModel.self) private var model
+    let t: Transaction
+    @State private var confirmDelete = false
+
+    func body(content: Content) -> some View {
+        content
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                Button(role: .destructive) { delete() } label: { Label("削除", systemImage: "trash") }
+            }
+            .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                if t.amount > 0 { Button { again() } label: { Label("今日もう一度", systemImage: "arrow.clockwise") }.tint(.blue) }
+            }
+            .contextMenu {
+                if t.amount > 0 {
+                    Button { again() } label: { Label("今日もう一度記録（\(t.amount.yen)）", systemImage: "arrow.clockwise") }
+                }
+                Button { UIPasteboard.general.string = String(Int(abs(t.amount).rounded())) } label: { Label("金額をコピー", systemImage: "doc.on.doc") }
+                if !t.merchant.isEmpty { Button { UIPasteboard.general.string = t.merchant } label: { Label("店名をコピー", systemImage: "textformat") } }
+                Divider()
+                Button(role: .destructive) { delete() } label: { Label("削除", systemImage: "trash") }
+            } preview: {
+                TransactionPreview(t: t).environment(model)
+            }
+    }
+
+    private func delete() {
+        let id = t.id
+        model.change("支出の削除") { d, now, today in d.deleteTransaction(id, now: now, today: today) }
+        model.done("\(t.merchant.isEmpty ? t.category : t.merchant) を削除しました")
+    }
+    private func again() {
+        let x = t
+        model.change("支出の記録") { d, now, today in
+            d.recordExpense(date: today, amount: x.amount, category: x.category, merchant: x.merchant, paymentMethod: x.paymentMethod, paymentId: x.paymentId, memo: x.memo, now: now, today: today)
+        }
+        model.done("\(x.merchant.isEmpty ? x.category : x.merchant) \(x.amount.yen) を今日の分として記録しました")
+    }
+}
+
+/// 長押しした時に出る取引のプレビュー
+struct TransactionPreview: View {
+    @Environment(AppModel.self) private var model
+    let t: Transaction
+    var body: some View {
+        let doc = model.doc
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 10) {
+                CategoryIcon(category: doc.category(named: t.category))
+                VStack(alignment: .leading) {
+                    Text(t.merchant.isEmpty ? t.category : t.merchant).font(.headline)
+                    Text(Format.dayLabel(t.date)).font(.caption).foregroundStyle(.secondary)
+                }
+            }
+            Text(t.amount < 0 ? "+\((-t.amount).yen)" : t.amount.yen).moneyFont(34, weight: .bold).monospacedDigit()
+            LabeledContent("カテゴリ", value: t.category)
+            LabeledContent("支払い", value: doc.paymentLabel(method: t.paymentMethod, id: t.paymentId))
+            if !t.memo.isEmpty { LabeledContent("メモ", value: t.memo) }
+        }
+        .font(.subheadline)
+        .padding(20)
+        .frame(width: 300)
+    }
+}
+
+extension View {
+    func transactionActions(_ t: Transaction) -> some View { modifier(TransactionActions(t: t)) }
+}

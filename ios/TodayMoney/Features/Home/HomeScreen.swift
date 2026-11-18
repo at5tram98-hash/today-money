@@ -66,6 +66,7 @@ struct HomeScreen: View {
             }
             .sheet(isPresented: $goalSheet) { NavigationStack { GoalPlannerView(type: period == "today" ? .daily : .monthly, key: period == "today" ? date : String(date.prefix(7))) } }
             .onChange(of: model.today) { _, t in date = t }
+            .onChange(of: model.searchRequested) { _, v in if v { model.searchRequested = false; path = NavigationPath(); searching = true } }
             .onChange(of: model.route) { _, r in if r != nil && !path.isEmpty { let keep = r; path = NavigationPath(); model.route = nil; DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { model.route = keep } } }
         }
     }
@@ -101,18 +102,20 @@ struct HomeScreen: View {
             } label: {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
-                        Text(isToday ? "\(date == today ? "今日" : Format.dayLabel(date))の支出" : "\(Format.monthLabel(m))の支出")
+                        let when = isToday ? (date == today ? "今日" : Format.dayLabel(date)) : Format.monthLabel(m)
+                        Text(goal > 0 && spent <= goal ? "\(when)あと使える額" : "\(when)の支出")
                             .font(.subheadline.weight(.semibold)).foregroundStyle(Theme.spending)
                         Spacer()
                         Image(systemName: "chevron.right").font(.subheadline.weight(.bold)).foregroundStyle(.tertiary)
                     }
                     if goal > 0 {
-                        Text(max(0, goal - spent).yen).font(.system(size: 40, weight: .bold, design: .rounded)).monospacedDigit()
-                        Text(spent > goal ? "目標を \((spent - goal).yen) 超えています" : "あと使える額（目標 \(goal.yen)・使った額 \(spent.yen)）")
+                        Text((spent > goal ? spent : goal - spent).yen).moneyFont(40, weight: .bold).monospacedDigit()
+                            .foregroundStyle(spent > goal ? .red : .primary).contentTransition(.numericText())
+                        Text(spent > goal ? "目標を \((spent - goal).yen) 超えています（使った額 \(spent.yen)）" : "目標 \(goal.yen)・使った額 \(spent.yen)")
                             .font(.footnote).foregroundStyle(spent > goal ? .red : .secondary)
                         ProgressView(value: min(1, spent / max(goal, 1))).tint(spent > goal ? .red : Theme.spending)
                     } else {
-                        Text(spent.yen).font(.system(size: 40, weight: .bold, design: .rounded)).monospacedDigit()
+                        Text(spent.yen).moneyFont(40, weight: .bold).monospacedDigit()
                         Text(spent > 0 ? "使った額・目標は未設定" : "まだ使っていません・目標は未設定").font(.footnote).foregroundStyle(.secondary)
                     }
                 }
@@ -177,7 +180,7 @@ struct HomeScreen: View {
                     let x = model.doc.acfIndex(f, today: model.today)
                     VStack(alignment: .leading, spacing: 10) {
                         HStack(alignment: .firstTextBaseline, spacing: 8) {
-                            Text(x.text).font(.system(size: 34, weight: .bold, design: .rounded)).foregroundStyle(x.color).monospacedDigit()
+                            Text(x.text).moneyFont(34, weight: .bold).foregroundStyle(x.color).monospacedDigit()
                             Text(x.label).font(.subheadline.weight(.semibold)).foregroundStyle(x.color)
                             if s.c100Mode { Text("C100").font(.caption2.weight(.bold)).padding(.horizontal, 6).padding(.vertical, 2).background(.purple.opacity(0.18), in: Capsule()).foregroundStyle(.purple) }
                             Spacer()
@@ -200,7 +203,7 @@ struct HomeScreen: View {
             VStack(alignment: .leading, spacing: 12) {
                 CardHeader(title: "次の支払い", systemImage: "calendar", tint: .purple, trailing: AnyView(Text("支払いタブへ").font(.footnote).foregroundStyle(.secondary)))
                 HStack(alignment: .firstTextBaseline) {
-                    Text(total.yen).font(.system(size: 30, weight: .bold, design: .rounded)).monospacedDigit()
+                    Text(total.yen).moneyFont(30, weight: .bold).monospacedDigit()
                     Text("30日以内・\(events.count)件").font(.footnote).foregroundStyle(.secondary)
                 }
                 if events.isEmpty { Text("30日以内の支払い予定はありません").font(.footnote).foregroundStyle(.secondary) }

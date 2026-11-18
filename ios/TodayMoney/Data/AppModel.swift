@@ -10,6 +10,8 @@ final class AppModel {
     private(set) var doc: MoneyDocument
     var errorMessage: String?
     var toast: String?
+    /// 直前の変更を取り消せる時（トーストに「元に戻す」を出す）
+    var undoReason: String?
     /// 画面の再描画のきっかけ（保存のたびに増える）
     private(set) var revision = 0
 
@@ -57,6 +59,8 @@ final class AppModel {
     var tab: Tab = .home
     /// 「＋」の新規入力（開くモード）
     var entryMode: EntryMode?
+    /// 検索を開く（ショートカット・Spotlight から）
+    var searchRequested = false
     /// ディープリンクで開く画面（mymoney://acf など）
     enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day", shifts, analysis, timeline, goals, review, mail }
     var route: Route?
@@ -74,6 +78,7 @@ final class AppModel {
             try mutate(&next)
             guard next != before else { return true }
             snapshot(before, reason: reason)
+            undoBase = before; undoReason = reason; undoAt = Date()
             doc = next
             persist()
             if !silent { Feedback.play(reason.contains("削除") ? .delete : .success) }
@@ -95,6 +100,7 @@ final class AppModel {
         case "home": tab = .home
         case "payments": tab = .payments
         case "more": tab = .more
+        case "search": tab = .home; searchRequested = true
         case "entry": entryMode = EntryMode(rawValue: url.pathComponents.dropFirst().first ?? "expense") ?? .expense
         default:
             if let r = Route(rawValue: host) { tab = .home; route = r }
@@ -122,6 +128,8 @@ final class AppModel {
         revision += 1
         Feedback.settings = doc.feedbackSettings
         Notifications.scheduleSoon(doc: doc)
+        QuickActions.update(doc: doc)
+        WidgetBridge.publish(doc: doc)
         guard let context else { return }
         let data = doc.exportJSON().data
         do {
@@ -143,6 +151,26 @@ final class AppModel {
             for old in all.dropFirst(Self.snapshotLimit) { context.delete(old) }
         }
     }
+
+    /// 直前の変更の前の状態（「元に戻す」用。アプリを閉じると消える）
+    private var undoBase: MoneyDocument?
+
+    /// 直前の変更を取り消す（その前の状態に戻す。今の状態は復元ポイントに残る）
+    func undo() {
+        guard let base = undoBase, let reason = undoReason else { return }
+        commit("元に戻す（\(reason)）", silent: true) { $0 = base }
+        undoBase = nil; undoReason = nil
+        toast = "「\(reason)」を取り消しました"
+        Feedback.play(.delete)
+    }
+
+    /// 変更のあとに「元に戻す」付きで知らせる
+    func done(_ message: String) {
+        toast = message
+        undoToast = undoAt.map { Date().timeIntervalSince($0) < 3 } ?? false
+    }
+    var undoToast = false
+    private var undoAt: Date?
 
     var snapshots: [StoredSnapshot] {
         (try? context?.fetch(FetchDescriptor<StoredSnapshot>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)]))) ?? []

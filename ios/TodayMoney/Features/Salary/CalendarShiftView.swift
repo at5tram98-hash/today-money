@@ -87,6 +87,7 @@ struct CalendarShiftView: View {
             }
         }
         .navigationTitle("カレンダーからシフト")
+        .refreshable { if CalendarShiftService.canRead { await syncNow() } }
         .onAppear { refresh(); keyword = cs.keyword }
         .onChange(of: model.revision) { _, _ in loadPreview() }
     }

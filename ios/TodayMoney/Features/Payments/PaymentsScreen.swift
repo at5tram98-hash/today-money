@@ -239,7 +239,7 @@ struct CardDetailView: View {
                     LabeledContent("状態", value: st?.status.label ?? "見込み")
                     Button { editBilling = true } label: { Label("請求額を確定・修正", systemImage: "square.and.pencil") }
                     if st?.status == .paid {
-                        Button { model.change("カードの支払いを未払いに戻す") { d, now, today in d.markCardStatementPaid(cardId, billingMonth: bm, paid: false, now: now, today: today) }; model.toast = "未払いに戻しました" } label: {
+                        Button { model.change("カードの支払いを未払いに戻す") { d, now, today in d.markCardStatementPaid(cardId, billingMonth: bm, paid: false, now: now, today: today) }; model.done("未払いに戻しました") } label: {
                             Label("未払いに戻す", systemImage: "arrow.uturn.backward")
                         }
                     } else {
@@ -266,7 +266,7 @@ struct CardDetailView: View {
                 Section("利用明細（\(list.count)件）") {
                     if list.isEmpty { Text("この期間の利用はありません").foregroundStyle(.secondary) }
                     ForEach(list) { t in
-                        NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) }
+                        NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) }.transactionActions(t)
                     }
                 }
             }
@@ -297,7 +297,7 @@ struct CardDetailView: View {
                             Button("支払済みにする") {
                                 let mode = bank == nil ? "none" : applyBank ? "apply" : "reconciled"
                                 model.change("カードの支払済み") { d, now, today in d.markCardStatementPaid(cardId, billingMonth: bm, paid: true, balanceMode: mode, now: now, today: today) }
-                                model.toast = "支払済みにしました"; confirmPaid = false
+                                model.done("支払済みにしました"); confirmPaid = false
                             }.bold()
                         }
                     }
@@ -407,7 +407,7 @@ struct CardBillingEditor: View {
         model.change("カード請求額の更新") { doc, now, today in
             doc.setCardStatement(c, billingMonth: b, amount: a, paymentDate: d, status: s, memo: "クイック請求額入力", balanceMode: s == .paid ? mode : "keep", now: now, today: today)
         }
-        model.toast = "カード請求額を保存しました"
+        model.done("カード請求額を保存しました")
         if let onDone { onDone() } else { dismiss() }
     }
 }
@@ -431,7 +431,7 @@ struct DebitUsageView: View {
             }
             Section("取引（\(list.count)件）") {
                 if list.isEmpty { Text("この月の取引はありません").foregroundStyle(.secondary) }
-                ForEach(list) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) } }
+                ForEach(list) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) }.transactionActions(t) }
             }
         }
         .navigationTitle("デビット・口座払い")

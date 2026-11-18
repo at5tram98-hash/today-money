@@ -38,7 +38,7 @@ struct QuickLineView: View {
                     Button("確認した \(drafts.count) 件を保存") {
                         let ds = drafts
                         model.change("一行入力") { m, now, today in m.saveQuickDrafts(ds, now: now, today: today) }
-                        model.toast = "\(ds.count)件・\(ds.reduce(0) { $0 + $1.amount }.yen)を保存しました"; dismiss()
+                        model.done("\(ds.count)件・\(ds.reduce(0) { $0 + $1.amount }.yen)を保存しました"); dismiss()
                     }.bold().disabled(!drafts.allSatisfy(\.valid))
                 } footer: { if !drafts.allSatisfy(\.valid) { Text("金額、支払い方法、重複候補を確認してください。") } }
             }
@@ -175,7 +175,7 @@ struct BankDetailView: View {
                 }
                 Section("この口座の取引") {
                     if txs.isEmpty { Text("取引はありません").foregroundStyle(.secondary) }
-                    ForEach(Array(txs)) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) } }
+                    ForEach(Array(txs)) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) }.transactionActions(t) }
                 }
                 TagSection(ref: "bank:\(bankId)")
             }
@@ -315,7 +315,7 @@ struct DayInspectorView: View {
             }
             Section("取引（\(txs.count)件）") {
                 if txs.isEmpty { Text("この日の支出はありません").foregroundStyle(.secondary) }
-                ForEach(txs) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t) } }
+                ForEach(txs) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t) }.transactionActions(t) }
             }
             Section {
                 NavigationLink { GoalPlannerView(type: .daily, key: date) } label: { Label("この日の目標を決める", systemImage: "target") }
@@ -439,7 +439,7 @@ struct TagEditor: View {
                 Button("保存") {
                     var t = tag; t.name = t.name.trimmingCharacters(in: .whitespaces)
                     model.change("タグ") { d, now, _ in var l = d.tags; if let i = l.firstIndex(where: { $0.id == t.id && !t.id.isEmpty }) { l[i] = t } else { t.id = MoneyDocument.uid("tag", now: now); l.append(t) }; d.tags = l }
-                    model.toast = "タグを保存しました"; dismiss()
+                    model.done("タグを保存しました"); dismiss()
                 }.bold().disabled(tag.name.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
