@@ -60,9 +60,13 @@ struct RootView: View {
         .preferredColorScheme(appearance == "dark" ? .dark : appearance == "light" ? .light : nil)
         .onOpenURL { model.open($0) }
         .onAppear {
+            if ProcessInfo.processInfo.arguments.contains("-launchTiming") { FileHandle.standardError.write(Data("[launch] appeared \(Date().timeIntervalSince1970)\n".utf8)) }
             // 一般 › 起動時に開く画面（リンクから開いた時は、そちらを優先）
             if !launched { launched = true; if startTab == "payments" && model.tab == .home && model.route == nil { model.tab = .payments } }
             model.runScheduled()
+            QuickActions.update(doc: model.doc)
+            WidgetBridge.publish(doc: model.doc)
+            if let q = QuickActions.pending { QuickActions.pending = nil; QuickActions.perform(q) }
             #if DEBUG
             CalendarShiftService.seedForTesting(today: model.today)
             Self.seedStatementForTesting(model)

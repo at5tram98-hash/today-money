@@ -57,6 +57,8 @@ final class AppModel {
     var tab: Tab = .home
     /// 「＋」の新規入力（開くモード）
     var entryMode: EntryMode?
+    /// 検索を開く（ショートカット・Spotlight から）
+    var searchRequested = false
     /// ディープリンクで開く画面（mymoney://acf など）
     enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day", shifts, analysis, timeline, goals, review, mail }
     var route: Route?
@@ -95,6 +97,7 @@ final class AppModel {
         case "home": tab = .home
         case "payments": tab = .payments
         case "more": tab = .more
+        case "search": tab = .home; searchRequested = true
         case "entry": entryMode = EntryMode(rawValue: url.pathComponents.dropFirst().first ?? "expense") ?? .expense
         default:
             if let r = Route(rawValue: host) { tab = .home; route = r }
@@ -122,6 +125,8 @@ final class AppModel {
         revision += 1
         Feedback.settings = doc.feedbackSettings
         Notifications.scheduleSoon(doc: doc)
+        QuickActions.update(doc: doc)
+        WidgetBridge.publish(doc: doc)
         guard let context else { return }
         let data = doc.exportJSON().data
         do {

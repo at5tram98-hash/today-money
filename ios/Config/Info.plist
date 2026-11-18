@@ -15,6 +15,17 @@
 	</array>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>シフトボードなどでカレンダーに入れたシフトを読み取り、給料の見込みを計算します。カレンダーを変更することはありません。</string>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+		<key>UIImageName</key>
+		<string>LaunchIcon</string>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
+	</dict>
+	<key>MyMoneyAppGroup</key>
+	<string>group.$(MYMONEY_BUNDLE_ID)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>

@@ -66,6 +66,7 @@ struct HomeScreen: View {
             }
             .sheet(isPresented: $goalSheet) { NavigationStack { GoalPlannerView(type: period == "today" ? .daily : .monthly, key: period == "today" ? date : String(date.prefix(7))) } }
             .onChange(of: model.today) { _, t in date = t }
+            .onChange(of: model.searchRequested) { _, v in if v { model.searchRequested = false; path = NavigationPath(); searching = true } }
             .onChange(of: model.route) { _, r in if r != nil && !path.isEmpty { let keep = r; path = NavigationPath(); model.route = nil; DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { model.route = keep } } }
         }
     }
@@ -101,14 +102,16 @@ struct HomeScreen: View {
             } label: {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
-                        Text(isToday ? "\(date == today ? "今日" : Format.dayLabel(date))の支出" : "\(Format.monthLabel(m))の支出")
+                        let when = isToday ? (date == today ? "今日" : Format.dayLabel(date)) : Format.monthLabel(m)
+                        Text(goal > 0 && spent <= goal ? "\(when)あと使える額" : "\(when)の支出")
                             .font(.subheadline.weight(.semibold)).foregroundStyle(Theme.spending)
                         Spacer()
                         Image(systemName: "chevron.right").font(.subheadline.weight(.bold)).foregroundStyle(.tertiary)
                     }
                     if goal > 0 {
-                        Text(max(0, goal - spent).yen).font(.system(size: 40, weight: .bold, design: .rounded)).monospacedDigit()
-                        Text(spent > goal ? "目標を \((spent - goal).yen) 超えています" : "あと使える額（目標 \(goal.yen)・使った額 \(spent.yen)）")
+                        Text((spent > goal ? spent : goal - spent).yen).font(.system(size: 40, weight: .bold, design: .rounded)).monospacedDigit()
+                            .foregroundStyle(spent > goal ? .red : .primary).contentTransition(.numericText())
+                        Text(spent > goal ? "目標を \((spent - goal).yen) 超えています（使った額 \(spent.yen)）" : "目標 \(goal.yen)・使った額 \(spent.yen)")
                             .font(.footnote).foregroundStyle(spent > goal ? .red : .secondary)
                         ProgressView(value: min(1, spent / max(goal, 1))).tint(spent > goal ? .red : Theme.spending)
                     } else {

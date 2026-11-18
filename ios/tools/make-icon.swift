@@ -95,6 +95,35 @@ func draw(_ style: Style, to file: String) {
     try! rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: "\(out)/\(file)"))
 }
 
+/// 起動画面のコイン（背景なし・影つき）
+func drawLaunch(dark: Bool, to file: String) {
+    let W: CGFloat = 360
+    let g = CGContext(data: nil, width: Int(W), height: Int(W), bitsPerComponent: 8, bytesPerRow: 0, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+    g.translateBy(x: 0, y: W); g.scaleBy(x: 1, y: -1)
+    g.scaleBy(x: W / 760, y: W / 760); g.translateBy(x: -132, y: -150)
+    let c = CGPoint(x: 512, y: 520), r: CGFloat = 318
+    let coin = CGRect(x: c.x - r, y: c.y - r, width: 2 * r, height: 2 * r)
+    g.saveGState(); g.setShadow(offset: CGSize(width: 0, height: -24), blur: 50, color: rgb(0x001A55, 0.4)); g.setFillColor(rgb(0xFFFFFF)); g.fillEllipse(in: coin); g.restoreGState()
+    g.saveGState(); g.addEllipse(in: coin); g.clip()
+    g.drawLinearGradient(gradient(dark ? [rgb(0x5AA6FF), rgb(0x2B78F2), rgb(0x1149C4)] : [rgb(0xFFFFFF), rgb(0xEAF2FF), rgb(0xCFDFFB)], [0, 0.55, 1]),
+                         start: CGPoint(x: 0, y: coin.minY), end: CGPoint(x: 0, y: coin.maxY), options: [])
+    g.restoreGState()
+    let s: CGFloat = 3.25, ox = c.x - 96 * s, oy = c.y + 6 - 96.5 * s
+    func p(_ x: CGFloat, _ y: CGFloat) -> CGPoint { CGPoint(x: ox + x * s, y: oy + y * s) }
+    let yen = CGMutablePath()
+    yen.move(to: p(64, 50)); yen.addLine(to: p(96, 94)); yen.addLine(to: p(128, 50))
+    yen.move(to: p(64, 101)); yen.addLine(to: p(128, 101)); yen.move(to: p(64, 121)); yen.addLine(to: p(128, 121))
+    yen.move(to: p(96, 94)); yen.addLine(to: p(96, 145))
+    g.addPath(yen.copy(strokingWithWidth: 13.5 * s, lineCap: .round, lineJoin: .round, miterLimit: 10)); g.clip()
+    g.drawLinearGradient(gradient(dark ? [rgb(0xFFFFFF), rgb(0xDCE8FF)] : [rgb(0x3D93FF), rgb(0x0B52DA)]), start: CGPoint(x: 0, y: c.y - 200), end: CGPoint(x: 0, y: c.y + 220), options: [])
+    let rep = NSBitmapImageRep(cgImage: g.makeImage()!)
+    try! rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: "\(out)/\(file)"))
+}
+
+if CommandLine.arguments.contains("--launch") {
+    drawLaunch(dark: false, to: "LaunchIcon.png"); drawLaunch(dark: true, to: "LaunchIcon-dark.png"); print("ok"); exit(0)
+}
 draw(.light, to: "AppIcon-1024.png")
 draw(.dark, to: "AppIcon-1024-dark.png")
 draw(.tinted, to: "AppIcon-1024-tinted.png")
