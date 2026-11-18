@@ -1,4 +1,4 @@
-# iOS 版の状況（2026-11-18）
+# iOS 版の状況（2026-11-18・作り込み）
 
 ## ビルドと確認
 
@@ -6,7 +6,7 @@
 - 初期データでの数値が Web 版と一致：総資産 ¥99,330、今月の給与 ¥83,110、次の給料日 11/25 無印良品 ¥34,300、今月の支払予定 ¥81,667、30日間の最低残高 ¥88,330。
 - 実機（iPhone）ではまだ確認していない。Debug ビルドのシミュレーターでは起動に2〜3秒かかる。
 
-## テスト（`cd ios/Packages/TodayMoneyCore && swift test`）→ 43件すべて成功
+## テスト（`cd ios/Packages/TodayMoneyCore && swift test`）→ 44件すべて成功
 
 | テスト | 内容 |
 |---|---|
@@ -21,6 +21,7 @@
 | StatementCompatTests（4件） | PayPay カードの CSV・三井住友カードの PDF（行）の読み取り、カテゴリと重複の判定、取込 → 確定 → 取り消しの流れ |
 | MailCompatTests（2件） | Gmail のメール11通の解析（取得元の設定2通り）・確認の要否、同期 → 確認 → 反映 → 再同期の流れ |
 | NotificationPlanTests（2件） | 予約する通知：休止時間・過ぎた時刻・二重予約なし・日締め7日分・支出の状況・金額の非表示・メールの承認待ち・壊れた設定値 |
+| WidgetSnapshotTests（1件） | ウィジェット・Siri に渡す要約（7日分の目標と使った額・残り・今月・総資産・ACF・支払いの並び・書き出して読み戻し） |
 | ReportCompatTests（1件） | PDF の家計レポートの数字（明細の並び・収入・手直し・目標・大型支出・ACF 月末予測・ページ数） |
 | PerfTests | 計算の時間の目安 |
 
@@ -72,3 +73,14 @@ ID は `gmailSettings.iosClientId` に保存する（Web 版の `clientId` は�
 
 - その他 › データとバックアップ ›「PDFで書き出す」：月を選び、共有シートから「ファイルに保存」・メール・AirDrop。PDF は端末の中で作る。
 - その他 › 操作フィードバック：操作音（音量）・触覚・アニメーション。Web 版と同じ設定を使うので、どちらで変えても同じになる。
+
+## アプリ名とビルド
+
+- ビルドしてできるアプリは `MyMoney.app`（ホーム画面の名前は「My Money」のまま）。名前に空白があると Siri・ショートカットがアプリの言い方（AppShortcutsProvider）を見つけられないため。
+- iPhone には Release で入れる（起動が速い）：`xcodebuild -scheme TodayMoney -configuration Release -destination 'id=<端末>' -allowProvisioningUpdates build` → `xcrun devicectl device install app --device <端末> build/.../Release-iphoneos/MyMoney.app`
+- ウィジェットとアプリは App Group（`group.<バンドルID>`）でデータの要約を共有する。無料の Apple アカウントでも使える。
+
+## Siri・ショートカットの確認
+
+- シミュレーターでは、署名が ad-hoc のためショートカットアプリからの実行が「アプリのショートカットを実行できません」になる（linkd がアプリを確認できない）。実機では開発用の署名なので動く想定。
+- 中身の確認は Debug ビルドの起動引数 `-runIntents` で行った（支出の記録 → 今日の残り → 次の支払い → 元に戻す。すべて期待どおり）。
