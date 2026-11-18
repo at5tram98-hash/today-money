@@ -153,7 +153,7 @@ enum IntentError: Error, CustomLocalizedStringResourceConvertible {
 
 // MARK: - Siri の言い方（設定しなくても使える）
 
-struct MoneyShortcuts: AppShortcutsProvider {
+struct TodayMoneyAppShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(intent: RecordExpenseIntent(), phrases: [
             "\(.applicationName)で支出を記録", "\(.applicationName)に支出を記録", "\(.applicationName)で\(\.$category)を記録",
@@ -163,7 +163,7 @@ struct MoneyShortcuts: AppShortcutsProvider {
         ], shortTitle: "今日あと使える額", systemImageName: "yensign.circle")
         AppShortcut(intent: NextPaymentsIntent(), phrases: ["\(.applicationName)で次の支払い", "\(.applicationName)の支払い予定"],
                     shortTitle: "次の支払い", systemImageName: "calendar")
-        AppShortcut(intent: OpenScreenIntent(), phrases: ["\(.applicationName)で\(\.$screen)を開く"], shortTitle: "画面を開く", systemImageName: "rectangle.portrait.and.arrow.right")
+        AppShortcut(intent: OpenScreenIntent(), phrases: ["\(.applicationName)で\(\.$screen)を開く", "\(.applicationName)の画面を開く"], shortTitle: "画面を開く", systemImageName: "rectangle.portrait.and.arrow.right")
     }
     static let shortcutTileColor: ShortcutTileColor = .blue
 }

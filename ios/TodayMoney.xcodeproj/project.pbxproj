@@ -38,7 +38,7 @@
 
 /* Begin PBXFileReference section */
 		A20000000000000000000201 /* TodayMoneyWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TodayMoneyWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		A10000000000000000000201 /* My Money.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Money.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000201 /* MyMoney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMoney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000000000202 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,7 +88,7 @@
 		A10000000000000000000502 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000201 /* My Money.app */,
+				A10000000000000000000201 /* MyMoney.app */,
 				A20000000000000000000201 /* TodayMoneyWidgets.appex */,
 			);
 			name = Products;
@@ -127,7 +127,7 @@
 				A10000000000000000000601 /* TodayMoneyCore */,
 			);
 			productName = TodayMoney;
-			productReference = A10000000000000000000201 /* My Money.app */;
+			productReference = A10000000000000000000201 /* MyMoney.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A20000000000000000000701 /* TodayMoneyWidgets */ = {
@@ -315,7 +315,7 @@
 				);
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MYMONEY_BUNDLE_ID)";
-				PRODUCT_NAME = "My Money";
+				PRODUCT_NAME = MyMoney;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -350,7 +350,7 @@
 				);
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MYMONEY_BUNDLE_ID)";
-				PRODUCT_NAME = "My Money";
+				PRODUCT_NAME = MyMoney;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
