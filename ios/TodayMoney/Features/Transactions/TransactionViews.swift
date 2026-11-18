@@ -26,12 +26,7 @@ struct TransactionListView: View {
             if list.isEmpty { Text(q.isEmpty ? "取引はありません" : "見つかりませんでした").foregroundStyle(.secondary) }
             ForEach(groups, id: \.key) { day, items in
                 Section {
-                    ForEach(items) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t) } }
-                        .onDelete { idx in
-                            let ids = idx.map { items[$0].id }
-                            model.change("支出の削除") { d, now, today in for id in ids { d.deleteTransaction(id, now: now, today: today) } }
-                            model.toast = "削除しました"
-                        }
+                    ForEach(items) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t) }.transactionActions(t) }
                 } header: {
                     HStack { Text(Format.dayLabel(day)); Spacer(); Text(items.reduce(0) { $0 + $1.amount }.yen).monospacedDigit() }
                 }
@@ -98,7 +93,7 @@ struct TransactionEditor: View {
             Button("削除", role: .destructive) {
                 let id = draft.id
                 model.change("支出の削除") { d, now, today in d.deleteTransaction(id, now: now, today: today) }
-                model.toast = "削除しました"; finish()
+                model.done("削除しました"); finish()
             }
         } message: { Text(draft.bankApplied ? "口座残高に反映した分は元に戻します。" : "削除する前の状態は復元ポイントに残ります。") }
         .onAppear { refund = draft.amount < 0 }
@@ -119,10 +114,10 @@ struct TransactionEditor: View {
                 d.recordExpense(date: t.date, amount: t.amount, category: t.category, merchant: t.merchant.isEmpty ? "支出" : t.merchant,
                                 paymentMethod: t.paymentMethod, paymentId: t.paymentId, memo: t.memo, now: now, today: today)
             }
-            model.toast = "支出を保存しました"
+            model.done("支出を保存しました")
         } else {
             model.change("取引の編集") { d, now, today in d.updateTransaction(t, now: now, today: today) }
-            model.toast = "取引を更新しました"
+            model.done("取引を更新しました")
         }
         finish()
     }
@@ -202,12 +197,12 @@ struct TempIncomeEditor: View {
                 }
                 doc.confirmTempIncome(id, received: r, now: now, today: today)
             }
-            model.toast = "臨時収入を更新しました"
+            model.done("臨時収入を更新しました")
         } else {
             model.change("臨時収入の記録") { doc, now, today in
                 doc.recordTempIncome(date: d, amount: a, sourceName: s.isEmpty ? "臨時収入" : s, toType: ty, bankId: b, memo: m, now: now, today: today)
             }
-            model.toast = "臨時収入 \(a.yen) を記録しました"
+            model.done("臨時収入 \(a.yen) を記録しました")
         }
         finish()
     }

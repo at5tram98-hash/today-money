@@ -49,7 +49,7 @@ struct MailCenterView: View {
                     Button("確認済みにして\(ready.count)件を反映") {
                         let ids = ready.map { str($0["id"]) }
                         var n = 0
-                        if model.change("メール取引をまとめて反映", { d, now, today in n = try d.applyMailItems(ids, now: now, today: today) }) { model.toast = "\(n)件を家計に反映しました" }
+                        if model.change("メール取引をまとめて反映", { d, now, today in n = try d.applyMailItems(ids, now: now, today: today) }) { model.done("\(n)件を家計に反映しました") }
                     }.bold()
                 }
             } header: { Text("確認待ち（\(pending.count)件）") } footer: {
@@ -168,7 +168,7 @@ struct MailEditorView: View {
                     Section {
                         Button("取引に反映") { save(link: false) }.bold().disabled(match != nil)
                         Button("対象外にする", role: .destructive) {
-                            if model.change("メールを対象外", { d, _, _ in try d.ignoreMail(mailId) }) { model.toast = "対象外にしました"; dismiss() }
+                            if model.change("メールを対象外", { d, _, _ in try d.ignoreMail(mailId) }) { model.done("対象外にしました"); dismiss() }
                         }
                     }
                 }
@@ -347,6 +347,6 @@ struct GmailSettingsView: View {
             }
             // 対象を変えたら、手で決めていないメールは次の同期で読み直す（Web 版と同じ）
             if changedSources { d.resetMailParserVersions() }
-        }) { model.toast = "保存しました"; dismiss() }
+        }) { model.done("保存しました"); dismiss() }
     }
 }

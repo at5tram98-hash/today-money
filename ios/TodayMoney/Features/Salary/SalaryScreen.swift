@@ -181,7 +181,7 @@ struct SalaryRecordEditor: View {
             .confirmationDialog("この給与の記録を削除しますか？", isPresented: $confirmDelete, titleVisibility: .visible) {
                 Button("削除", role: .destructive) {
                     model.commit("給与の削除") { $0.salaryRecords = $0.salaryRecords.filter { $0.id != r.id } }
-                    model.toast = "給与を削除しました"; dismiss()
+                    model.done("給与を削除しました"); dismiss()
                 }
             } message: { Text("削除する前の状態は復元ポイントに残ります。") }
             .navigationTitle("給与を編集")
@@ -250,7 +250,7 @@ struct SalaryRecordEditor: View {
             if paid { r.receivedAmount = receivedAmount; r.actualReceivedDate = receivedYMD }
             doc.salaryRecords = doc.salaryRecords + [r]
         }
-        model.toast = "給与を追加しました"
+        model.done("給与を追加しました")
         if let onDone { onDone() } else { dismiss() }
     }
 

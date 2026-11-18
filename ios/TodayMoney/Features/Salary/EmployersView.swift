@@ -167,7 +167,7 @@ struct EmployerTermsView: View {
             } else if let i = list.firstIndex(where: { $0.id == employerId }) { list[i] = edited }
             doc.employers = list
         }
-        model.toast = "\(edited.name)の条件を保存しました"
+        model.done("\(edited.name)の条件を保存しました")
         dismiss()
     }
 }
@@ -213,7 +213,7 @@ struct ShiftImportView: View {
                     Button("反映") {
                         var result: ShiftSync.Result?
                         model.commit("シフトの取り込み") { result = ShiftSync.apply(shifts, to: &$0, replace: false) }
-                        if let r = result { model.toast = "シフト\(r.count)件から給料の見込みを更新しました" }
+                        if let r = result { model.done("シフト\(r.count)件から給料の見込みを更新しました") }
                         dismiss()
                     }
                     .bold()

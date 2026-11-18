@@ -414,7 +414,7 @@ struct DayClosingCancelView: View {
                 Button("取り消す", role: .destructive) {
                     let r = reason
                     model.change("日締めの取消") { d, now, today in try d.cancelDayClosing(date, reason: r, now: now, today: today) }
-                    model.toast = "日締めの承認を取り消しました"; dismiss()
+                    model.done("日締めの承認を取り消しました"); dismiss()
                 }.disabled(!acknowledged || text != "取消")
             }
         }

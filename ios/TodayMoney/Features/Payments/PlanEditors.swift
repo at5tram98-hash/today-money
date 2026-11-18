@@ -31,7 +31,7 @@ struct FixedPaymentsView: View {
                         }
                         .swipeActions {
                             if !done {
-                                Button("記録") { model.change("固定支払いの記録") { doc, now, today in doc.recordFixedPayment(row.f.id, date: d, now: now, today: today) }; model.toast = "支出として記録しました" }.tint(.green)
+                                Button("記録") { model.change("固定支払いの記録") { doc, now, today in doc.recordFixedPayment(row.f.id, date: d, now: now, today: today) }; model.done("支出として記録しました") }.tint(.green)
                                 Button("今回は払わない") {
                                     model.commit("固定支払いを1回とばす") { doc in
                                         var list = doc.fixedPayments
@@ -113,7 +113,7 @@ struct FixedPaymentEditor: View {
         .confirmationDialog("この固定支払いを削除しますか？", isPresented: $confirmDelete, titleVisibility: .visible) {
             Button("削除", role: .destructive) {
                 model.commit("固定支払いの削除") { $0.fixedPayments = $0.fixedPayments.filter { $0.id != fixedId } }
-                model.toast = "固定支払いを削除しました"; dismiss()
+                model.done("固定支払いを削除しました"); dismiss()
             }
         } message: { Text("記録済みの支出は残ります。") }
         .onAppear {
@@ -140,7 +140,7 @@ struct FixedPaymentEditor: View {
             doc.fixedPayments = list
             doc.processScheduled(now: now, today: today)
         }
-        model.toast = "固定支払いを保存しました"
+        model.done("固定支払いを保存しました")
         dismiss()
     }
 }
@@ -247,13 +247,13 @@ struct LargeExpenseEditor: View {
                 save(close: false)
                 let id = p.id
                 model.change("大型支出の完了") { doc, now, today in doc.completeLargeExpense(id, now: now, today: today) }
-                model.toast = "支出として登録しました"; dismiss()
+                model.done("支出として登録しました"); dismiss()
             }
         } message: { Text("\(Format.dayLabel(p.date))の支出として、支払い方法ごとに記録します。") }
         .confirmationDialog("この計画を削除しますか？", isPresented: $confirmDelete, titleVisibility: .visible) {
             Button("削除", role: .destructive) {
                 model.commit("大型支出の削除") { $0.largeExpensePlans = $0.largeExpensePlans.filter { $0.id != planId } }
-                model.toast = "計画を削除しました"; dismiss()
+                model.done("計画を削除しました"); dismiss()
             }
         }
         .onAppear {
@@ -280,6 +280,6 @@ struct LargeExpenseEditor: View {
             doc.largeExpensePlans = list
         }
         p = x
-        if close { model.toast = "大型支出を保存しました"; dismiss() }
+        if close { model.done("大型支出を保存しました"); dismiss() }
     }
 }

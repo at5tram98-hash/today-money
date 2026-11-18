@@ -237,7 +237,7 @@ struct StatementReviewView: View {
                 Section {
                     Button("保存可能\(ready)件を取引へ保存") {
                         model.change("カード明細を取引へ保存") { d, now, today in try d.persistStatementRows(importId, now: now, today: today) }
-                        model.toast = "取引へ保存しました"
+                        model.done("取引へ保存しました")
                     }
                     Button("請求金額を最終確認") {
                         if review > 0 { model.errorMessage = "要確認の明細が\(review)件あります。確認してください。"; return }
@@ -388,7 +388,7 @@ struct StatementFinalView: View {
 
     private func finalize() {
         if model.change("カード明細の最終確定", { d, now, today in try d.finalizeStatement(importId, now: now, today: today) }) {
-            model.toast = "カード請求額を最終確定しました"
+            model.done("カード請求額を最終確定しました")
         }
     }
 }
@@ -439,7 +439,7 @@ struct ConfirmedStatementView: View {
             .navigationTitle("確定済みカード明細").navigationBarTitleDisplayMode(.inline)
             .confirmationDialog("確定を解除しますか？", isPresented: $askUnlock, titleVisibility: .visible) {
                 Button("確定を解除") {
-                    if model.change("カード明細の確定解除", { d, now, today in try d.unlockStatement(importId, now: now, today: today) }) { model.toast = "確定を解除しました" }
+                    if model.change("カード明細の確定解除", { d, now, today in try d.unlockStatement(importId, now: now, today: today) }) { model.done("確定を解除しました") }
                 }
                 Button("キャンセル", role: .cancel) {}
             } message: { Text("請求額を「見込み」に戻し、明細を編集できる状態にします。銀行残高は変更しません。") }
@@ -538,7 +538,7 @@ struct StatementReconciliationView: View {
                                 model.change("請求照合センターで請求額を更新") { d, now, today in
                                     d.setCardStatement(cardId, billingMonth: billingMonth, amount: v, paymentDate: pd, status: status, memo: "請求照合センターで更新", balanceMode: "keep", now: now, today: today)
                                 }
-                                model.toast = "確認した請求額を更新しました"; editAmount = false
+                                model.done("確認した請求額を更新しました"); editAmount = false
                             }.bold()
                         }
                     }

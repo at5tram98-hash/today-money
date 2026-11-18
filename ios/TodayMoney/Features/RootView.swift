@@ -28,16 +28,22 @@ struct RootView: View {
         }
         .overlay(alignment: .top) {
             if let t = model.toast {
-                Text(t)
-                    .font(.subheadline.weight(.semibold))
-                    .padding(.horizontal, 16).padding(.vertical, 10)
-                    .background(.regularMaterial, in: Capsule())
-                    .padding(.top, 8)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                    .task(id: t) {
-                        try? await Task.sleep(for: .seconds(2.4))
-                        withAnimation { model.toast = nil }
+                HStack(spacing: 12) {
+                    Text(t).font(.subheadline.weight(.semibold)).lineLimit(2)
+                    if model.undoToast, model.undoReason != nil {
+                        Button("元に戻す") { model.undoToast = false; model.undo() }
+                            .font(.subheadline.weight(.bold)).foregroundStyle(Color.accentColor)
                     }
+                }
+                .padding(.horizontal, 16).padding(.vertical, 10)
+                .background(.regularMaterial, in: Capsule())
+                .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
+                .padding(.top, 8).padding(.horizontal, 16)
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .task(id: t) {
+                    try? await Task.sleep(for: .seconds(model.undoToast ? 4.5 : 2.4))
+                    withAnimation { model.toast = nil; model.undoToast = false }
+                }
             }
         }
         .overlay {

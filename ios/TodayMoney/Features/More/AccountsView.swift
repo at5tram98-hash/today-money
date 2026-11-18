@@ -123,7 +123,7 @@ struct BankEditor: View {
         }
         .deleteGuard(blocked: $blocked, confirm: $confirmDelete, title: "この口座を削除しますか？") {
             model.commit("口座の削除") { $0.banks = $0.banks.filter { $0.id != bankId } }
-            model.toast = "口座を削除しました"; dismiss()
+            model.done("口座を削除しました"); dismiss()
         }
         .onAppear {
             guard !loaded else { return }; loaded = true
@@ -149,7 +149,7 @@ struct BankEditor: View {
                 doc.bankSnapshot(x.id, memo: "口座登録", now: now, today: today)
             }
         }
-        model.toast = "口座を保存しました"; dismiss()
+        model.done("口座を保存しました"); dismiss()
     }
 }
 
@@ -204,7 +204,7 @@ struct CardEditor: View {
         }
         .deleteGuard(blocked: $blocked, confirm: $confirmDelete, title: "このカードを削除しますか？") {
             model.commit("カードの削除") { $0.cards = $0.cards.filter { $0.id != cardId } }
-            model.toast = "カードを削除しました"; dismiss()
+            model.done("カードを削除しました"); dismiss()
         }
         .onAppear {
             guard !loaded else { return }; loaded = true
@@ -245,7 +245,7 @@ struct CardEditor: View {
                 }
             }
         }
-        model.toast = "カードを保存しました"; dismiss()
+        model.done("カードを保存しました"); dismiss()
     }
 }
 
@@ -274,7 +274,7 @@ struct DebitEditor: View {
         }
         .deleteGuard(blocked: $blocked, confirm: $confirmDelete, title: "このデビットカードを削除しますか？") {
             model.commit("デビットカードの削除") { $0.debitCards = $0.debitCards.filter { $0.id != debitId } }
-            model.toast = "デビットカードを削除しました"; dismiss()
+            model.done("デビットカードを削除しました"); dismiss()
         }
         .onAppear {
             guard !loaded else { return }; loaded = true
@@ -289,7 +289,7 @@ struct DebitEditor: View {
             else { x.id = MoneyDocument.uid("debit", now: now); list.append(x) }
             doc.debitCards = list
         }
-        model.toast = "デビットカードを保存しました"; dismiss()
+        model.done("デビットカードを保存しました"); dismiss()
     }
 }
 

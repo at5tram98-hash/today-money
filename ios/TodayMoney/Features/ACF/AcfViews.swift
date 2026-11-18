@@ -608,7 +608,7 @@ struct AcfSettingsView: View {
         guard var x = s else { return }
         x.initialized = true
         model.commit("ACF設定") { $0.saveAcfSettings(x) }
-        model.toast = "ACF設定を保存しました"
+        model.done("ACF設定を保存しました")
         dismiss()
     }
 }
