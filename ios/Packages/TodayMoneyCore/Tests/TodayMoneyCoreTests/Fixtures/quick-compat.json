@@ -1,0 +1,1152 @@
+{
+ "today": "2026-11-17",
+ "document": {
+  "version": 18,
+  "profile": {
+   "name": "",
+   "icon": ""
+  },
+  "categories": [
+   {
+    "id": "food",
+    "name": "食費",
+    "icon": "fork",
+    "color": "#34C759"
+   },
+   {
+    "id": "transport",
+    "name": "交通費",
+    "icon": "tram",
+    "color": "#007AFF"
+   },
+   {
+    "id": "daily",
+    "name": "日用品",
+    "icon": "bag",
+    "color": "#30B0C7"
+   },
+   {
+    "id": "clothes",
+    "name": "衣服費",
+    "icon": "tshirt",
+    "color": "#AF52DE"
+   },
+   {
+    "id": "fun",
+    "name": "娯楽費",
+    "icon": "ticket",
+    "color": "#FF9500"
+   },
+   {
+    "id": "subscription",
+    "name": "サブスク",
+    "icon": "repeat",
+    "color": "#5856D6"
+   },
+   {
+    "id": "education",
+    "name": "教育費",
+    "icon": "book",
+    "color": "#64D2FF"
+   },
+   {
+    "id": "utilities",
+    "name": "光熱費",
+    "icon": "bolt",
+    "color": "#FFCC00"
+   },
+   {
+    "id": "other",
+    "name": "その他",
+    "icon": "ellipsis",
+    "color": "#8E8E93"
+   }
+  ],
+  "transactions": [
+   {
+    "id": "tx_mwkp47ty_wsncbv",
+    "date": "2026-10-25",
+    "amount": 13000,
+    "category": "その他",
+    "merchant": "定期券 13,000円（カード予定）",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "memo": "",
+    "source": "fixed",
+    "mailImportId": "",
+    "fixedId": "fixed_seed_pass",
+    "largePlanId": "",
+    "largePlanPartIndex": null,
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "createdAt": "2026-11-17T12:55:55.558Z",
+    "bankEffectAt": "2026-11-17T12:55:55.558Z"
+   },
+   {
+    "id": "tx_q1",
+    "date": "2026-11-16",
+    "amount": 780,
+    "category": "食費",
+    "merchant": "マック",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-01-01T00:00:00.000Z"
+   },
+   {
+    "id": "tx_q2",
+    "date": "2026-11-17",
+    "amount": 450,
+    "category": "日用品",
+    "merchant": "スーパー玉出",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "source": "manual",
+    "createdAt": "2026-01-02T00:00:00.000Z",
+    "linkedBankId": "",
+    "bankApplied": true,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-01-02T00:00:00.000Z"
+   }
+  ],
+  "incomes": [],
+  "dailyGoals": {},
+  "monthlyGoals": {},
+  "dailyCorrections": {},
+  "monthlyCorrections": {},
+  "cardAdjustments": {
+   "2026-08|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 27528,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-08|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 42142,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 34364,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-26",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 41923,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-27",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_merpay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 3000,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-21",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   }
+  },
+  "banks": [
+   {
+    "id": "bank_seed_sbi_shinsei",
+    "name": "SBI新生銀行",
+    "label": "現金7,000円を含む合算残高",
+    "balance": 99330,
+    "threshold": 15000,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_yucho",
+    "name": "ゆうちょ銀行",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_paypay",
+    "name": "PayPay銀行",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_smbc_olive",
+    "name": "三井住友銀行 Olive",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "cards": [
+   {
+    "id": "card_seed_smbc",
+    "company": "三井住友カード",
+    "name": "三井住友カード",
+    "closingDay": "月末",
+    "dueDay": 26,
+    "limit": 100000,
+    "availableSnapshot": 11000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_merpay",
+    "company": "メルペイカード",
+    "name": "メルペイカード",
+    "closingDay": "月末",
+    "dueDay": 21,
+    "limit": 100000,
+    "availableSnapshot": 86000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_paypay",
+    "company": "PayPayカード",
+    "name": "PayPayカード",
+    "closingDay": "月末",
+    "dueDay": 27,
+    "limit": 100000,
+    "availableSnapshot": 5000,
+    "bankId": "bank_seed_paypay",
+    "tagIds": []
+   }
+  ],
+  "debitCards": [
+   {
+    "id": "debit_seed_olive",
+    "name": "Oliveデビットカード",
+    "bankId": "bank_seed_smbc_olive",
+    "createdAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "employers": [
+   {
+    "id": "emp_seed_gu",
+    "name": "GU",
+    "hourly": 1300,
+    "transport": 840,
+    "closingType": "month_end",
+    "closingDay": null,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 10,
+    "payMonthOffset": 1,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 0,
+    "breakRules": [
+     {
+      "from": 240,
+      "to": 420,
+      "minutes": 30
+     },
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "ジーユー"
+    ],
+    "tagIds": []
+   },
+   {
+    "id": "emp_seed_muji",
+    "name": "無印良品",
+    "hourly": 1250,
+    "transport": 980,
+    "closingType": "day",
+    "closingDay": 10,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 25,
+    "payMonthOffset": 0,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 10000,
+    "breakRules": [
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "MUJI",
+     "無印"
+    ],
+    "tagIds": []
+   }
+  ],
+  "salaryRecords": [
+   {
+    "id": "salary_seed_gu_202610",
+    "employerId": "emp_seed_gu",
+    "month": "2026-09",
+    "date": "2026-10-10",
+    "gross": 28452,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202610",
+    "employerId": "emp_seed_muji",
+    "month": "2026-10",
+    "date": "2026-10-25",
+    "gross": 57640,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_gu_202611",
+    "employerId": "emp_seed_gu",
+    "month": "2026-10",
+    "date": "2026-11-10",
+    "gross": 48810,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202611",
+    "employerId": "emp_seed_muji",
+    "month": "2026-11",
+    "date": "2026-11-25",
+    "gross": 34300,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   }
+  ],
+  "tempIncomes": [
+   {
+    "id": "temp_seed_20261005",
+    "date": "2026-10-05",
+    "amount": 45000,
+    "sourceName": "臨時収入（10/5までの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   },
+   {
+    "id": "temp_seed_20261020",
+    "date": "2026-10-20",
+    "amount": 6000,
+    "sourceName": "臨時収入（10/20ごろの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   }
+  ],
+  "fixedPayments": [
+   {
+    "id": "fixed_seed_pass",
+    "name": "定期券 13,000円（カード予定）",
+    "amount": 13000,
+    "day": 25,
+    "frequency": "monthly",
+    "startMonth": "2026-10",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "skippedDates": [],
+    "tagIds": [],
+    "annualMonth": 10
+   }
+  ],
+  "largeExpensePlans": [
+   {
+    "id": "large_seed_pass_now",
+    "name": "定期券の更新（現金で払う場合）",
+    "date": "2026-09-26",
+    "amount": 13000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "other",
+    "paymentId": "",
+    "splits": [],
+    "atfOptionalPass": true,
+    "memo": "現金更新する場合の仮定。まだ購入済み扱いにはしない。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_birthday",
+    "name": "誕生日代（仮の分割案）",
+    "date": "2026-10-06",
+    "amount": 60000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "splits": [
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_smbc",
+      "linkedBankId": "",
+      "amount": 38000
+     },
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_merpay",
+      "linkedBankId": "",
+      "amount": 22000
+     }
+    ],
+    "atfInstallments": {
+     "card_seed_smbc": 3,
+     "card_seed_merpay": 2
+    },
+    "memo": "38,000円/22,000円の仮案。手数料は未確認。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_fw_oct",
+    "name": "FW 10月（前半の最終日を仮置き）",
+    "date": "2026-10-15",
+    "amount": 56000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_fw_nov",
+    "name": "FW 11月",
+    "date": "2026-11-08",
+    "amount": 45000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   }
+  ],
+  "assetSnapshots": [],
+  "mailImports": [],
+  "cardStatementImports": [],
+  "savedScenarios": [],
+  "salaryAllocations": [],
+  "transferPlans": [],
+  "statementReconciliations": [],
+  "budgetRebalanceHistory": [],
+  "eventGoals": [],
+  "reimbursements": [],
+  "savedSearches": [],
+  "merchantRules": {},
+  "quickInputRules": {
+   "ローソン": {
+    "category": "食費",
+    "paymentMethod": "debit",
+    "paymentId": "debit_seed_olive"
+   }
+  },
+  "monthReviews": {},
+  "dayClosings": {},
+  "pushPreferences": {
+   "dayClose": true,
+   "closeTime": "21:00",
+   "atf": true,
+   "mail": true,
+   "spending": false,
+   "spendTimes": [
+    "12:00",
+    "18:00"
+   ],
+   "showAmount": false
+  },
+  "gmailSettings": {
+   "clientId": "",
+   "query": "newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}",
+   "autoSync": true,
+   "syncMinutes": 5,
+   "lastSyncAt": null,
+   "emailAddress": "",
+   "lookbackDays": 30,
+   "sourceIds": []
+  },
+  "atfSettings": {
+   "reserveFloor": 15000,
+   "dailyCardSpend": 500,
+   "birthdayReduction": 0,
+   "birthdayFee": null,
+   "renewPassCash": true,
+   "extraEarlyShifts": false,
+   "extraLateShifts": false,
+   "asOf": "2026-09-26",
+   "source": "seeded-example"
+  },
+  "acfSettings": {
+   "reserveFloor": 15000,
+   "horizon": "next_card_due",
+   "useWeekdayWeights": true,
+   "includeRequiredLargeExpenses": true,
+   "riskNotifications": true,
+   "creditFallbackEnabled": true,
+   "creditDailyLimit": 500,
+   "creditAggressiveness": 100,
+   "creditAllowAllCategories": true,
+   "creditAllowedCategoryIds": [],
+   "creditAllowedMerchants": [],
+   "creditBlockedMerchants": [],
+   "preferredCardId": "",
+   "initialized": false,
+   "indexEndDay": 28,
+   "indexEndDate": ""
+  },
+  "feedbackSettings": {
+   "sound": true,
+   "haptic": true,
+   "motion": true,
+   "volume": 0.45
+  },
+  "notices": [],
+  "notificationSettings": {
+   "goal": true,
+   "salary": true,
+   "payment": true,
+   "unknown": true,
+   "balance": true,
+   "level": "recommended"
+  },
+  "appearance": "system",
+  "security": {
+   "enabled": false,
+   "passcode": "",
+   "relock": "immediate"
+  },
+  "meta": {
+   "legacyMigrated": true,
+   "lastScheduleDate": "2026-11-17",
+   "seedVersion": 4,
+   "atfSeeded": true,
+   "employerTermsV18": true,
+   "shiftGrossV19": true
+  },
+  "shiftPlans": [],
+  "homeViewMode": "today",
+  "sidebarFavorites": [],
+  "sidebarFavoriteOrder": [],
+  "tags": [],
+  "favoriteTagMap": {}
+ },
+ "lines": [
+  {
+   "line": "昨日 マック 780円 PayPayカード",
+   "date": "2026-11-16",
+   "amount": 780,
+   "merchant": "マック",
+   "category": "食費",
+   "paymentMethod": "card",
+   "paymentId": "card_seed_paypay",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [
+    "同じ日・金額・支出先の既存記録が 1 件あります。"
+   ],
+   "dups": 1
+  },
+  {
+   "line": "今日 JR 230円",
+   "date": "2026-11-17",
+   "amount": 230,
+   "merchant": "JR",
+   "category": "交通費",
+   "paymentMethod": "other",
+   "paymentId": "",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [],
+   "dups": 0
+  },
+  {
+   "line": "11/3 ユニクロ 2,990円 三井住友カード",
+   "date": "2026-11-03",
+   "amount": 2990,
+   "merchant": "ユニクロ",
+   "category": "衣服費",
+   "paymentMethod": "card",
+   "paymentId": "card_seed_smbc",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [],
+   "dups": 0
+  },
+  {
+   "line": "スタバ ¥650 カード",
+   "date": "2026-11-17",
+   "amount": 650,
+   "merchant": "スタバ ¥650",
+   "category": "食費",
+   "paymentMethod": "",
+   "paymentId": "",
+   "ambiguous": true,
+   "candidates": [
+    "card|card_seed_smbc",
+    "card|card_seed_merpay",
+    "card|card_seed_paypay"
+   ],
+   "notes": [
+    "支払い方法に複数候補があります。選択してください。"
+   ],
+   "dups": 0
+  },
+  {
+   "line": "ローソン 320",
+   "date": "2026-11-17",
+   "amount": 320,
+   "merchant": "ローソン 320",
+   "category": "食費",
+   "paymentMethod": "other",
+   "paymentId": "",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [],
+   "dups": 0
+  },
+  {
+   "line": "2026/10/05 映画 1800円 現金",
+   "date": "2026-10-05",
+   "amount": 1800,
+   "merchant": "映画",
+   "category": "娯楽費",
+   "paymentMethod": "other",
+   "paymentId": "",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [],
+   "dups": 0
+  },
+  {
+   "line": "PayPay カラオケ 1200円",
+   "date": "2026-11-17",
+   "amount": 1200,
+   "merchant": "カラオケ",
+   "category": "娯楽費",
+   "paymentMethod": "",
+   "paymentId": "",
+   "ambiguous": true,
+   "candidates": [
+    "card|card_seed_paypay",
+    "bank|bank_seed_paypay"
+   ],
+   "notes": [
+    "支払い方法に複数候補があります。選択してください。"
+   ],
+   "dups": 0
+  },
+  {
+   "line": "GU 1500円",
+   "date": "2026-11-17",
+   "amount": 1500,
+   "merchant": "GU",
+   "category": "衣服費",
+   "paymentMethod": "other",
+   "paymentId": "",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [
+    "GU は勤務先名にも一致します。ここでは支出先として登録します。"
+   ],
+   "dups": 0
+  },
+  {
+   "line": "教科書 3,200円 SBI新生銀行",
+   "date": "2026-11-17",
+   "amount": 3200,
+   "merchant": "教科書",
+   "category": "教育費",
+   "paymentMethod": "bank",
+   "paymentId": "bank_seed_sbi_shinsei",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [],
+   "dups": 0
+  },
+  {
+   "line": "ランチ",
+   "date": "2026-11-17",
+   "amount": 0,
+   "merchant": "ランチ",
+   "category": "食費",
+   "paymentMethod": "other",
+   "paymentId": "",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [
+    "金額を確認してください。"
+   ],
+   "dups": 0
+  },
+  {
+   "line": "スーパー玉出 450円",
+   "date": "2026-11-17",
+   "amount": 450,
+   "merchant": "スーパー玉出",
+   "category": "その他",
+   "paymentMethod": "bank",
+   "paymentId": "bank_seed_sbi_shinsei",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [
+    "同じ日・金額・支出先の既存記録が 1 件あります。"
+   ],
+   "dups": 1
+  },
+  {
+   "line": "2026-02-30 本 900円",
+   "date": "2026-11-17",
+   "amount": 900,
+   "merchant": "本",
+   "category": "その他",
+   "paymentMethod": "other",
+   "paymentId": "",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [],
+   "dups": 0
+  },
+  {
+   "line": "一昨日 タクシー 1,480円 Oliveデビットカード",
+   "date": "2026-11-15",
+   "amount": 1480,
+   "merchant": "タクシー",
+   "category": "交通費",
+   "paymentMethod": "debit",
+   "paymentId": "debit_seed_olive",
+   "ambiguous": false,
+   "candidates": [],
+   "notes": [],
+   "dups": 0
+  }
+ ],
+ "calc": [
+  {
+   "base": 1000,
+   "kind": "discount",
+   "value": 10,
+   "amount": 900,
+   "copy": "10%引き"
+  },
+  {
+   "base": 999,
+   "kind": "discount",
+   "value": 15,
+   "amount": 849,
+   "copy": "15%引き"
+  },
+  {
+   "base": 1234,
+   "kind": "add",
+   "value": 8,
+   "amount": 1333,
+   "copy": "8%を加算（1円単位で四捨五入）"
+  },
+  {
+   "base": 5,
+   "kind": "add",
+   "value": 10,
+   "amount": 6,
+   "copy": "10%を加算（1円単位で四捨五入）"
+  },
+  {
+   "base": 10000,
+   "kind": "split",
+   "value": 3,
+   "amount": 3333,
+   "copy": "3,333円 × 2人、3334円 × 1人（合計10,000円）"
+  },
+  {
+   "base": 1001,
+   "kind": "split",
+   "value": 2,
+   "amount": 500,
+   "copy": "500円 × 1人、501円 × 1人（合計1,001円）"
+  },
+  {
+   "base": 1000,
+   "kind": "split",
+   "value": 1,
+   "amount": null,
+   "copy": null
+  },
+  {
+   "base": 100,
+   "kind": "discount",
+   "value": 120,
+   "amount": null,
+   "copy": null
+  }
+ ],
+ "search": [
+  {
+   "q": "",
+   "t": "all",
+   "ids": [
+    "salary|salary_seed_muji_202611",
+    "transaction|tx_q2",
+    "transaction|tx_q1",
+    "salary|salary_seed_gu_202611",
+    "transaction|tx_mwkp47ty_wsncbv",
+    "salary|salary_seed_muji_202610",
+    "salary|salary_seed_gu_202610",
+    "account|bank_seed_sbi_shinsei",
+    "account|bank_seed_yucho",
+    "account|bank_seed_paypay",
+    "account|bank_seed_smbc_olive",
+    "card|card_seed_smbc",
+    "card|card_seed_merpay",
+    "card|card_seed_paypay"
+   ]
+  },
+  {
+   "q": "",
+   "t": "transaction",
+   "ids": [
+    "transaction|tx_q2",
+    "transaction|tx_q1",
+    "transaction|tx_mwkp47ty_wsncbv"
+   ]
+  },
+  {
+   "q": "",
+   "t": "salary",
+   "ids": [
+    "salary|salary_seed_muji_202611",
+    "salary|salary_seed_gu_202611",
+    "salary|salary_seed_muji_202610",
+    "salary|salary_seed_gu_202610"
+   ]
+  },
+  {
+   "q": "",
+   "t": "account",
+   "ids": [
+    "account|bank_seed_sbi_shinsei",
+    "account|bank_seed_yucho",
+    "account|bank_seed_paypay",
+    "account|bank_seed_smbc_olive"
+   ]
+  },
+  {
+   "q": "",
+   "t": "card",
+   "ids": [
+    "card|card_seed_smbc",
+    "card|card_seed_merpay",
+    "card|card_seed_paypay"
+   ]
+  },
+  {
+   "q": "",
+   "t": "goal",
+   "ids": []
+  },
+  {
+   "q": "マック",
+   "t": "all",
+   "ids": [
+    "transaction|tx_q1"
+   ]
+  },
+  {
+   "q": "マック",
+   "t": "transaction",
+   "ids": [
+    "transaction|tx_q1"
+   ]
+  },
+  {
+   "q": "マック",
+   "t": "salary",
+   "ids": []
+  },
+  {
+   "q": "マック",
+   "t": "account",
+   "ids": []
+  },
+  {
+   "q": "マック",
+   "t": "card",
+   "ids": []
+  },
+  {
+   "q": "マック",
+   "t": "goal",
+   "ids": []
+  },
+  {
+   "q": "食費",
+   "t": "all",
+   "ids": [
+    "transaction|tx_q1"
+   ]
+  },
+  {
+   "q": "食費",
+   "t": "transaction",
+   "ids": [
+    "transaction|tx_q1"
+   ]
+  },
+  {
+   "q": "食費",
+   "t": "salary",
+   "ids": []
+  },
+  {
+   "q": "食費",
+   "t": "account",
+   "ids": []
+  },
+  {
+   "q": "食費",
+   "t": "card",
+   "ids": []
+  },
+  {
+   "q": "食費",
+   "t": "goal",
+   "ids": []
+  },
+  {
+   "q": "GU",
+   "t": "all",
+   "ids": [
+    "salary|salary_seed_gu_202611",
+    "salary|salary_seed_gu_202610"
+   ]
+  },
+  {
+   "q": "GU",
+   "t": "transaction",
+   "ids": []
+  },
+  {
+   "q": "GU",
+   "t": "salary",
+   "ids": [
+    "salary|salary_seed_gu_202611",
+    "salary|salary_seed_gu_202610"
+   ]
+  },
+  {
+   "q": "GU",
+   "t": "account",
+   "ids": []
+  },
+  {
+   "q": "GU",
+   "t": "card",
+   "ids": []
+  },
+  {
+   "q": "GU",
+   "t": "goal",
+   "ids": []
+  },
+  {
+   "q": "銀行",
+   "t": "all",
+   "ids": [
+    "transaction|tx_q2",
+    "account|bank_seed_sbi_shinsei",
+    "account|bank_seed_yucho",
+    "account|bank_seed_paypay",
+    "account|bank_seed_smbc_olive"
+   ]
+  },
+  {
+   "q": "銀行",
+   "t": "transaction",
+   "ids": [
+    "transaction|tx_q2"
+   ]
+  },
+  {
+   "q": "銀行",
+   "t": "salary",
+   "ids": []
+  },
+  {
+   "q": "銀行",
+   "t": "account",
+   "ids": [
+    "account|bank_seed_sbi_shinsei",
+    "account|bank_seed_yucho",
+    "account|bank_seed_paypay",
+    "account|bank_seed_smbc_olive"
+   ]
+  },
+  {
+   "q": "銀行",
+   "t": "card",
+   "ids": []
+  },
+  {
+   "q": "銀行",
+   "t": "goal",
+   "ids": []
+  },
+  {
+   "q": "カード",
+   "t": "all",
+   "ids": [
+    "transaction|tx_q1",
+    "transaction|tx_mwkp47ty_wsncbv",
+    "card|card_seed_smbc",
+    "card|card_seed_merpay",
+    "card|card_seed_paypay"
+   ]
+  },
+  {
+   "q": "カード",
+   "t": "transaction",
+   "ids": [
+    "transaction|tx_q1",
+    "transaction|tx_mwkp47ty_wsncbv"
+   ]
+  },
+  {
+   "q": "カード",
+   "t": "salary",
+   "ids": []
+  },
+  {
+   "q": "カード",
+   "t": "account",
+   "ids": []
+  },
+  {
+   "q": "カード",
+   "t": "card",
+   "ids": [
+    "card|card_seed_smbc",
+    "card|card_seed_merpay",
+    "card|card_seed_paypay"
+   ]
+  },
+  {
+   "q": "カード",
+   "t": "goal",
+   "ids": []
+  },
+  {
+   "q": "2026-11",
+   "t": "all",
+   "ids": [
+    "salary|salary_seed_muji_202611",
+    "transaction|tx_q2",
+    "transaction|tx_q1",
+    "salary|salary_seed_gu_202611"
+   ]
+  },
+  {
+   "q": "2026-11",
+   "t": "transaction",
+   "ids": [
+    "transaction|tx_q2",
+    "transaction|tx_q1"
+   ]
+  },
+  {
+   "q": "2026-11",
+   "t": "salary",
+   "ids": [
+    "salary|salary_seed_muji_202611",
+    "salary|salary_seed_gu_202611"
+   ]
+  },
+  {
+   "q": "2026-11",
+   "t": "account",
+   "ids": []
+  },
+  {
+   "q": "2026-11",
+   "t": "card",
+   "ids": []
+  },
+  {
+   "q": "2026-11",
+   "t": "goal",
+   "ids": []
+  }
+ ]
+}

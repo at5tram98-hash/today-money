@@ -1,0 +1,1125 @@
+{
+ "today": "2026-11-17",
+ "document": {
+  "version": 18,
+  "profile": {
+   "name": "",
+   "icon": ""
+  },
+  "categories": [
+   {
+    "id": "food",
+    "name": "食費",
+    "icon": "fork",
+    "color": "#34C759"
+   },
+   {
+    "id": "transport",
+    "name": "交通費",
+    "icon": "tram",
+    "color": "#007AFF"
+   },
+   {
+    "id": "daily",
+    "name": "日用品",
+    "icon": "bag",
+    "color": "#30B0C7"
+   },
+   {
+    "id": "clothes",
+    "name": "衣服費",
+    "icon": "tshirt",
+    "color": "#AF52DE"
+   },
+   {
+    "id": "fun",
+    "name": "娯楽費",
+    "icon": "ticket",
+    "color": "#FF9500"
+   },
+   {
+    "id": "subscription",
+    "name": "サブスク",
+    "icon": "repeat",
+    "color": "#5856D6"
+   },
+   {
+    "id": "education",
+    "name": "教育費",
+    "icon": "book",
+    "color": "#64D2FF"
+   },
+   {
+    "id": "utilities",
+    "name": "光熱費",
+    "icon": "bolt",
+    "color": "#FFCC00"
+   },
+   {
+    "id": "other",
+    "name": "その他",
+    "icon": "ellipsis",
+    "color": "#8E8E93"
+   }
+  ],
+  "transactions": [
+   {
+    "id": "tx_mwkp47ty_wsncbv",
+    "date": "2026-10-25",
+    "amount": 13000,
+    "category": "その他",
+    "merchant": "定期券 13,000円（カード予定）",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "memo": "",
+    "source": "fixed",
+    "mailImportId": "",
+    "fixedId": "fixed_seed_pass",
+    "largePlanId": "",
+    "largePlanPartIndex": null,
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "createdAt": "2026-11-17T12:55:55.558Z",
+    "bankEffectAt": "2026-11-17T12:55:55.558Z"
+   }
+  ],
+  "incomes": [],
+  "dailyGoals": {},
+  "monthlyGoals": {},
+  "dailyCorrections": {},
+  "monthlyCorrections": {},
+  "cardAdjustments": {
+   "2026-08|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 27528,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-08|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 42142,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 34364,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-26",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 41923,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-27",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_merpay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 3000,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-21",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   }
+  },
+  "banks": [
+   {
+    "id": "bank_seed_sbi_shinsei",
+    "name": "SBI新生銀行",
+    "label": "現金7,000円を含む合算残高",
+    "balance": 99330,
+    "threshold": 15000,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_yucho",
+    "name": "ゆうちょ銀行",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_paypay",
+    "name": "PayPay銀行",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_smbc_olive",
+    "name": "三井住友銀行 Olive",
+    "label": "",
+    "balance": 0,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T12:55:55.544Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "cards": [
+   {
+    "id": "card_seed_smbc",
+    "company": "三井住友カード",
+    "name": "三井住友カード",
+    "closingDay": "月末",
+    "dueDay": 26,
+    "limit": 100000,
+    "availableSnapshot": 11000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_merpay",
+    "company": "メルペイカード",
+    "name": "メルペイカード",
+    "closingDay": "月末",
+    "dueDay": 21,
+    "limit": 100000,
+    "availableSnapshot": 86000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_paypay",
+    "company": "PayPayカード",
+    "name": "PayPayカード",
+    "closingDay": "月末",
+    "dueDay": 27,
+    "limit": 100000,
+    "availableSnapshot": 5000,
+    "bankId": "bank_seed_paypay",
+    "tagIds": []
+   }
+  ],
+  "debitCards": [
+   {
+    "id": "debit_seed_olive",
+    "name": "Oliveデビットカード",
+    "bankId": "bank_seed_smbc_olive",
+    "createdAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "employers": [
+   {
+    "id": "emp_seed_gu",
+    "name": "GU",
+    "hourly": 1300,
+    "transport": 840,
+    "closingType": "month_end",
+    "closingDay": null,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 10,
+    "payMonthOffset": 1,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 0,
+    "breakRules": [
+     {
+      "from": 240,
+      "to": 420,
+      "minutes": 30
+     },
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "ジーユー"
+    ],
+    "tagIds": []
+   },
+   {
+    "id": "emp_seed_muji",
+    "name": "無印良品",
+    "hourly": 1250,
+    "transport": 980,
+    "closingType": "day",
+    "closingDay": 10,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 25,
+    "payMonthOffset": 0,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 10000,
+    "breakRules": [
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "MUJI",
+     "無印"
+    ],
+    "tagIds": []
+   }
+  ],
+  "salaryRecords": [
+   {
+    "id": "salary_seed_gu_202610",
+    "employerId": "emp_seed_gu",
+    "month": "2026-09",
+    "date": "2026-10-10",
+    "gross": 28452,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202610",
+    "employerId": "emp_seed_muji",
+    "month": "2026-10",
+    "date": "2026-10-25",
+    "gross": 57640,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_gu_202611",
+    "employerId": "emp_seed_gu",
+    "month": "2026-10",
+    "date": "2026-11-10",
+    "gross": 48810,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202611",
+    "employerId": "emp_seed_muji",
+    "month": "2026-11",
+    "date": "2026-11-25",
+    "gross": 34300,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   }
+  ],
+  "tempIncomes": [
+   {
+    "id": "temp_seed_20261005",
+    "date": "2026-10-05",
+    "amount": 45000,
+    "sourceName": "臨時収入（10/5までの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   },
+   {
+    "id": "temp_seed_20261020",
+    "date": "2026-10-20",
+    "amount": 6000,
+    "sourceName": "臨時収入（10/20ごろの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   }
+  ],
+  "fixedPayments": [
+   {
+    "id": "fixed_seed_pass",
+    "name": "定期券 13,000円（カード予定）",
+    "amount": 13000,
+    "day": 25,
+    "frequency": "monthly",
+    "startMonth": "2026-10",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "skippedDates": [],
+    "tagIds": [],
+    "annualMonth": 10
+   }
+  ],
+  "largeExpensePlans": [
+   {
+    "id": "large_seed_pass_now",
+    "name": "定期券の更新（現金で払う場合）",
+    "date": "2026-09-26",
+    "amount": 13000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "other",
+    "paymentId": "",
+    "splits": [],
+    "atfOptionalPass": true,
+    "memo": "現金更新する場合の仮定。まだ購入済み扱いにはしない。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_birthday",
+    "name": "誕生日代（仮の分割案）",
+    "date": "2026-10-06",
+    "amount": 60000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "splits": [
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_smbc",
+      "linkedBankId": "",
+      "amount": 38000
+     },
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_merpay",
+      "linkedBankId": "",
+      "amount": 22000
+     }
+    ],
+    "atfInstallments": {
+     "card_seed_smbc": 3,
+     "card_seed_merpay": 2
+    },
+    "memo": "38,000円/22,000円の仮案。手数料は未確認。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_fw_oct",
+    "name": "FW 10月（前半の最終日を仮置き）",
+    "date": "2026-10-15",
+    "amount": 56000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_fw_nov",
+    "name": "FW 11月",
+    "date": "2026-11-08",
+    "amount": 45000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   }
+  ],
+  "assetSnapshots": [],
+  "mailImports": [],
+  "cardStatementImports": [],
+  "savedScenarios": [],
+  "salaryAllocations": [],
+  "transferPlans": [],
+  "statementReconciliations": [],
+  "budgetRebalanceHistory": [],
+  "eventGoals": [],
+  "reimbursements": [],
+  "savedSearches": [],
+  "merchantRules": {
+   "いつものパン屋": "食費",
+   "ジム会費": "娯楽費",
+   "abcマート": "衣服費",
+   "テスト": "存在しないカテゴリ"
+  },
+  "quickInputRules": {},
+  "monthReviews": {},
+  "dayClosings": {},
+  "pushPreferences": {
+   "dayClose": true,
+   "closeTime": "21:00",
+   "atf": true,
+   "mail": true,
+   "spending": false,
+   "spendTimes": [
+    "12:00",
+    "18:00"
+   ],
+   "showAmount": false
+  },
+  "gmailSettings": {
+   "clientId": "",
+   "query": "newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}",
+   "autoSync": true,
+   "syncMinutes": 5,
+   "lastSyncAt": null,
+   "emailAddress": "",
+   "lookbackDays": 30,
+   "sourceIds": []
+  },
+  "atfSettings": {
+   "reserveFloor": 15000,
+   "dailyCardSpend": 500,
+   "birthdayReduction": 0,
+   "birthdayFee": null,
+   "renewPassCash": true,
+   "extraEarlyShifts": false,
+   "extraLateShifts": false,
+   "asOf": "2026-09-26",
+   "source": "seeded-example"
+  },
+  "acfSettings": {
+   "reserveFloor": 15000,
+   "horizon": "next_card_due",
+   "useWeekdayWeights": true,
+   "includeRequiredLargeExpenses": true,
+   "riskNotifications": true,
+   "creditFallbackEnabled": true,
+   "creditDailyLimit": 500,
+   "creditAggressiveness": 100,
+   "creditAllowAllCategories": true,
+   "creditAllowedCategoryIds": [],
+   "creditAllowedMerchants": [],
+   "creditBlockedMerchants": [],
+   "preferredCardId": "",
+   "initialized": false,
+   "indexEndDay": 28,
+   "indexEndDate": ""
+  },
+  "feedbackSettings": {
+   "sound": true,
+   "haptic": true,
+   "motion": true,
+   "volume": 0.45
+  },
+  "notices": [],
+  "notificationSettings": {
+   "goal": true,
+   "salary": true,
+   "payment": true,
+   "unknown": true,
+   "balance": true,
+   "level": "recommended"
+  },
+  "appearance": "system",
+  "security": {
+   "enabled": false,
+   "passcode": "",
+   "relock": "immediate"
+  },
+  "meta": {
+   "legacyMigrated": true,
+   "lastScheduleDate": "2026-11-17",
+   "seedVersion": 4,
+   "atfSeeded": true,
+   "employerTermsV18": true,
+   "shiftGrossV19": true
+  },
+  "shiftPlans": [],
+  "homeViewMode": "today",
+  "sidebarFavorites": [],
+  "sidebarFavoriteOrder": [],
+  "tags": [],
+  "favoriteTagMap": {}
+ },
+ "csv": "利用日/キャンセル日,利用店名・商品名,利用者,支払区分,利用金額,手数料,支払総額,当月支払金額,翌月以降繰越金額,調整額,当月お支払日,決済方法\r\n2026/10/01,セブン－イレブン京都店,本人,1回,\"1,280\",0,\"1,280\",\"1,280\",0,0,2026/11/27,カード\r\n2026/10/02,PayPay いつものパン屋,本人,1回,540,0,540,540,0,0,2026/11/27,PayPay\r\n2026/10/02,PayPay いつものパン屋,本人,1回,540,0,540,540,0,0,2026/11/27,PayPay\r\n2026/10/03,\"（分割変更）ヨドバシカメラ, 梅田\",本人,均等 2/6,\"60,000\",320,\"60,320\",\"10,000\",\"50,000\",0,2026/11/27,カード\r\n2026/10/04,ユニクロ四条店,本人,1回,-2990,0,-2990,-2990,0,0,2026/11/27,カード\r\n2026/10/05,なぞの店,家族,1回,１２３４,0,１２３４,１２３４,0,-34,2026/11/27,カード\r\n,,,,,,,,,,,\r\n2026/10/6,JR西日本 ICOCA チャージ,本人,1回,3000,0,3000,3000,0,0,,カード\r\n2026/10/07,ＡＭＡＺＯＮ．ＣＯ．ＪＰ,本人,1回,\"2,480\",0,\"2,480\",\"2,480\",0,0,2026/11/27,カード\r\n2026/10/08,\"ダブル\"\"クォート\"\"店\",本人,1回,100,0,100,100,0,0,2026/11/27,カード\r\n",
+ "paypay": {
+  "provider": "paypay",
+  "paymentDate": "2026-11-27",
+  "paymentMonth": "2026-11",
+  "officialTotal": 16150,
+  "officialTotalSource": "calculated_csv",
+  "calculatedTotal": 16150,
+  "rows": [
+   {
+    "id": "stmtrow_mwktigsv_jz5khl",
+    "fingerprint": "4ae94eb79bd94c37",
+    "transactionDate": "2026-10-01",
+    "merchant": "セブン-イレブン京都店",
+    "originalMerchant": "セブン－イレブン京都店",
+    "originalAmount": 1280,
+    "currentPaymentAmount": 1280,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "食費",
+    "categorySource": "rule",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "カード",
+    "raw": {
+     "user": "本人",
+     "paymentTotal": 1280
+    }
+   },
+   {
+    "id": "stmtrow_mwktigsw_m0c798",
+    "fingerprint": "54d218d40416aedf",
+    "transactionDate": "2026-10-02",
+    "merchant": "いつものパン屋",
+    "originalMerchant": "PayPay いつものパン屋",
+    "originalAmount": 540,
+    "currentPaymentAmount": 540,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "食費",
+    "categorySource": "rules",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "PayPay",
+    "raw": {
+     "user": "本人",
+     "paymentTotal": 540
+    }
+   },
+   {
+    "id": "stmtrow_mwktigsw_eot31k",
+    "fingerprint": "57d21d8d93913805",
+    "transactionDate": "2026-10-02",
+    "merchant": "いつものパン屋",
+    "originalMerchant": "PayPay いつものパン屋",
+    "originalAmount": 540,
+    "currentPaymentAmount": 540,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "食費",
+    "categorySource": "rules",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "PayPay",
+    "raw": {
+     "user": "本人",
+     "paymentTotal": 540
+    }
+   },
+   {
+    "id": "stmtrow_mwktigsx_md3xs7",
+    "fingerprint": "60b7482e71586c5b",
+    "transactionDate": "2026-10-03",
+    "merchant": "ヨドバシカメラ, 梅田",
+    "originalMerchant": "（分割変更）ヨドバシカメラ, 梅田",
+    "originalAmount": 60000,
+    "currentPaymentAmount": 10000,
+    "fee": 320,
+    "adjustment": 0,
+    "carryOver": 50000,
+    "installmentText": "均等 2/6",
+    "installmentCurrent": 2,
+    "installmentTotal": 6,
+    "category": "その他",
+    "categorySource": "fallback",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "needs_review",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "カード",
+    "raw": {
+     "user": "本人",
+     "paymentTotal": 60320
+    }
+   },
+   {
+    "id": "stmtrow_mwktigsx_v0ps81",
+    "fingerprint": "dcdab93960a0c871",
+    "transactionDate": "2026-10-04",
+    "merchant": "ユニクロ四条店",
+    "originalMerchant": "ユニクロ四条店",
+    "originalAmount": -2990,
+    "currentPaymentAmount": -2990,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "衣服費",
+    "categorySource": "rule",
+    "direction": "refund",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "カード",
+    "raw": {
+     "user": "本人",
+     "paymentTotal": -2990
+    }
+   },
+   {
+    "id": "stmtrow_mwktigsy_u5gsnr",
+    "fingerprint": "aca79da605f66ecb",
+    "transactionDate": "2026-10-05",
+    "merchant": "なぞの店",
+    "originalMerchant": "なぞの店",
+    "originalAmount": 1234,
+    "currentPaymentAmount": 1234,
+    "fee": 0,
+    "adjustment": -34,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "その他",
+    "categorySource": "fallback",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "needs_review",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "カード",
+    "raw": {
+     "user": "家族",
+     "paymentTotal": 1234
+    }
+   },
+   {
+    "id": "stmtrow_mwktigsy_ivv4mt",
+    "fingerprint": "b3298f6062b320cb",
+    "transactionDate": "2026-10-06",
+    "merchant": "JR西日本 ICOCA チャージ",
+    "originalMerchant": "JR西日本 ICOCA チャージ",
+    "originalAmount": 3000,
+    "currentPaymentAmount": 3000,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "交通費",
+    "categorySource": "rule",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "カード",
+    "raw": {
+     "user": "本人",
+     "paymentTotal": 3000
+    }
+   },
+   {
+    "id": "stmtrow_mwktigsz_hh1lb4",
+    "fingerprint": "fefde181c856ba25",
+    "transactionDate": "2026-10-07",
+    "merchant": "AMAZON.CO.JP",
+    "originalMerchant": "ＡＭＡＺＯＮ．ＣＯ．ＪＰ",
+    "originalAmount": 2480,
+    "currentPaymentAmount": 2480,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "その他",
+    "categorySource": "fallback",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "needs_review",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "カード",
+    "raw": {
+     "user": "本人",
+     "paymentTotal": 2480
+    }
+   },
+   {
+    "id": "stmtrow_mwktigsz_m6f29d",
+    "fingerprint": "8298de0729fbe5d8",
+    "transactionDate": "2026-10-08",
+    "merchant": "ダブル\"クォート\"店",
+    "originalMerchant": "ダブル\"クォート\"店",
+    "originalAmount": 100,
+    "currentPaymentAmount": 100,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "その他",
+    "categorySource": "fallback",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "needs_review",
+    "included": true,
+    "memo": "",
+    "paymentMethod": "カード",
+    "raw": {
+     "user": "本人",
+     "paymentTotal": 100
+    }
+   }
+  ]
+ },
+ "paypayErrors": [
+  "CSVにデータがありません。",
+  "PayPayカードの明細CSVとして認識できませんでした。"
+ ],
+ "smbcLines": [
+  "三井住友カード ご利用明細",
+  "お支払い日 2026年12月10日",
+  "お支払い合計額 23,456円",
+  "26/10/01 ローソン 烏丸店 650 1 1 650",
+  "26/10/02 スターバックス コーヒー 480 1 1 480",
+  "26/10/02 スターバックス コーヒー 480 1 1 480",
+  "26/10/03 ビックカメラ 有楽町 120,000 12 3 10,000 120,000 0",
+  "26/10/04 ＧＵ 河原町 −1,990 1 1 −1,990 返品",
+  "26/10/05 ふしぎな店 1,000 1 1 1,000 1,000 0 取消",
+  "99/12/31 昔の店 100 1 1 100",
+  "合計 23,456"
+ ],
+ "smbc": {
+  "provider": "smbc",
+  "paymentDate": "2026-12-10",
+  "paymentMonth": "2026-12",
+  "officialTotal": 23456,
+  "officialTotalSource": "pdf_official",
+  "calculatedTotal": 8720,
+  "rows": [
+   {
+    "id": "stmtrow_mwktigt3_pvqkaz",
+    "fingerprint": "106d9fe7f9132b42",
+    "transactionDate": "2026-10-01",
+    "merchant": "ローソン 烏丸店",
+    "originalMerchant": "ローソン 烏丸店",
+    "originalAmount": 650,
+    "currentPaymentAmount": 650,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "食費",
+    "categorySource": "rule",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "",
+    "raw": {
+     "paymentTotal": 0,
+     "payDiv": 1,
+     "currentCount": 1,
+     "flag": ""
+    }
+   },
+   {
+    "id": "stmtrow_mwktigt4_3f55hd",
+    "fingerprint": "9501f5c62b05ad75",
+    "transactionDate": "2026-10-02",
+    "merchant": "スターバックス コーヒー",
+    "originalMerchant": "スターバックス コーヒー",
+    "originalAmount": 480,
+    "currentPaymentAmount": 480,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "食費",
+    "categorySource": "rule",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "",
+    "raw": {
+     "paymentTotal": 0,
+     "payDiv": 1,
+     "currentCount": 1,
+     "flag": ""
+    }
+   },
+   {
+    "id": "stmtrow_mwktigt4_9x8981",
+    "fingerprint": "9401f43319212397",
+    "transactionDate": "2026-10-02",
+    "merchant": "スターバックス コーヒー",
+    "originalMerchant": "スターバックス コーヒー",
+    "originalAmount": 480,
+    "currentPaymentAmount": 480,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "食費",
+    "categorySource": "rule",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "",
+    "raw": {
+     "paymentTotal": 0,
+     "payDiv": 1,
+     "currentCount": 1,
+     "flag": ""
+    }
+   },
+   {
+    "id": "stmtrow_mwktigt5_l38or8",
+    "fingerprint": "097c3e9672839473",
+    "transactionDate": "2026-10-03",
+    "merchant": "ビックカメラ 有楽町",
+    "originalMerchant": "ビックカメラ 有楽町",
+    "originalAmount": 120000,
+    "currentPaymentAmount": 10000,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "均等 3/12",
+    "installmentCurrent": 3,
+    "installmentTotal": 12,
+    "category": "その他",
+    "categorySource": "fallback",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "needs_review",
+    "included": true,
+    "memo": "",
+    "raw": {
+     "paymentTotal": 120000,
+     "payDiv": 12,
+     "currentCount": 3,
+     "flag": ""
+    }
+   },
+   {
+    "id": "stmtrow_mwktigt6_q6dlk8",
+    "fingerprint": "4f54644215be63f3",
+    "transactionDate": "2026-10-04",
+    "merchant": "GU 河原町",
+    "originalMerchant": "GU 河原町",
+    "originalAmount": -1990,
+    "currentPaymentAmount": -1990,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "衣服費",
+    "categorySource": "rule",
+    "direction": "refund",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "ready",
+    "included": true,
+    "memo": "返品",
+    "raw": {
+     "paymentTotal": 0,
+     "payDiv": 1,
+     "currentCount": 1,
+     "flag": "返品"
+    }
+   },
+   {
+    "id": "stmtrow_mwktigt6_9r0myo",
+    "fingerprint": "0db6a433b88dc14e",
+    "transactionDate": "2026-10-05",
+    "merchant": "ふしぎな店",
+    "originalMerchant": "ふしぎな店",
+    "originalAmount": 1000,
+    "currentPaymentAmount": 1000,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "その他",
+    "categorySource": "fallback",
+    "direction": "refund",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "needs_review",
+    "included": true,
+    "memo": "取消",
+    "raw": {
+     "paymentTotal": 1000,
+     "payDiv": 1,
+     "currentCount": 1,
+     "flag": "取消"
+    }
+   },
+   {
+    "id": "stmtrow_mwktigt7_3pn9er",
+    "fingerprint": "c5e47ec20c9ec590",
+    "transactionDate": "1999-12-31",
+    "merchant": "昔の店",
+    "originalMerchant": "昔の店",
+    "originalAmount": 100,
+    "currentPaymentAmount": 100,
+    "fee": 0,
+    "adjustment": 0,
+    "carryOver": 0,
+    "installmentText": "1回",
+    "installmentCurrent": 0,
+    "installmentTotal": 0,
+    "category": "その他",
+    "categorySource": "fallback",
+    "direction": "expense",
+    "linkedTransactionId": "",
+    "linkedMailImportId": "",
+    "reviewStatus": "needs_review",
+    "included": true,
+    "memo": "",
+    "raw": {
+     "paymentTotal": 0,
+     "payDiv": 1,
+     "currentCount": 1,
+     "flag": ""
+    }
+   }
+  ]
+ },
+ "categories": [
+  {
+   "m": "セブンイレブン",
+   "c": "",
+   "cat": "食費"
+  },
+  {
+   "m": "いつものパン屋 本店",
+   "c": "",
+   "cat": "食費"
+  },
+  {
+   "m": "ABC-MART 梅田",
+   "c": "",
+   "cat": null
+  },
+  {
+   "m": "テスト",
+   "c": "",
+   "cat": null
+  },
+  {
+   "m": "Amazon マーケット",
+   "c": "",
+   "cat": null
+  },
+  {
+   "m": "不明",
+   "c": "JR西日本 きっぷ",
+   "cat": "交通費"
+  },
+  {
+   "m": "ふつうの店",
+   "c": "gu 店",
+   "cat": null
+  },
+  {
+   "m": "",
+   "c": "",
+   "cat": null
+  },
+  {
+   "m": "ジム会費",
+   "c": "",
+   "cat": "娯楽費"
+  }
+ ],
+ "keys": [
+  {
+   "v": "Ａ Ｂ・C（テスト）\t改行\nあり",
+   "key": "ａｂcテスト改行あり"
+  },
+  {
+   "v": "【PayPay】 ショップ-1",
+   "key": "paypayショップ1"
+  }
+ ]
+}
