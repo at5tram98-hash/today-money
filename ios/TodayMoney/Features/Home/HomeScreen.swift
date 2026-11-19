@@ -34,6 +34,7 @@ struct HomeScreen: View {
                         smallCard("今月の比較", "arrow.left.arrow.right", .indigo) { MonthCompareView(month: month) } content: { compareContent(doc, month: month) }
                         smallCard("大型支出", "cart.fill", .pink) { LargeExpensesView() } content: { largeContent(doc) }
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                     smallCard("旅行・プレゼントの目標", "gift.fill", .purple) { EventGoalsView() } content: { goalsContent(doc, today: today) }
                     HomeSectionTitle(title: "ハイライト")
                     highlights(doc, month: month)
@@ -246,8 +247,8 @@ struct HomeScreen: View {
                                 Text("\(Dates.parts(e.date).m)月").font(.caption2).foregroundStyle(.secondary)
                             }.frame(width: 34)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(e.title).font(.subheadline).lineLimit(1)
-                                Text("\(daysUntilText(e.date, today: today))・\(e.detail)").font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                                Text(e.title).font(.subheadline).lineLimit(2)
+                                Text("\(daysUntilText(e.date, today: today))・\(e.detail)").font(.caption).foregroundStyle(.secondary).lineLimit(2)
                             }
                             Spacer()
                             Text((-e.amount).yen).font(.subheadline.weight(.semibold)).monospacedDigit()
@@ -540,7 +541,7 @@ struct MonthSpendingView: View {
                         HStack(spacing: 12) {
                             rank(i, t, doc: doc)
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(t.merchant.isEmpty ? t.category : t.merchant).font(.subheadline.weight(.semibold)).foregroundStyle(.primary).lineLimit(1)
+                                Text(t.merchant.isEmpty ? t.category : t.merchant).font(.subheadline.weight(.semibold)).foregroundStyle(.primary).lineLimit(2)
                                 Text("\(t.category)・\(Format.shortDay(t.date))").font(.caption).foregroundStyle(.secondary)
                             }
                             Spacer()
@@ -615,7 +616,7 @@ struct MonthSpendingView: View {
                         ForEach(rows.prefix(5)) { r in
                             HStack(spacing: 6) {
                                 Circle().fill(Color(hex: r.color)).frame(width: 8, height: 8)
-                                Text(r.name).font(.footnote).lineLimit(1)
+                                Text(r.name).font(.footnote).lineLimit(2)
                                 Spacer(minLength: 4)
                                 Text("\(Int((r.value / total * 100).rounded()))%").font(.footnote.weight(.semibold)).monospacedDigit()
                             }

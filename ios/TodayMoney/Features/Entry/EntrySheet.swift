@@ -182,19 +182,23 @@ struct EntrySheet: View {
                     }
                     .padding(.horizontal)
                 }
-                HStack(spacing: 8) {
-                    DateChip(date: $date, today: model.today)
-                    Menu {
-                        ForEach(PaymentChoice.all(doc)) { c in
-                            Button { payMethod = c.method; payId = c.id } label: { Label(c.label, systemImage: c.key == "\(payMethod)|\(payId)" ? "checkmark" : c.symbol) }
+                // 日付と支払い方法を1段目、店名・メモを2段目に分ける（支払い方法の名前が切れないように）
+                VStack(spacing: 8) {
+                    HStack(spacing: 8) {
+                        DateChip(date: $date, today: model.today)
+                        Menu {
+                            ForEach(PaymentChoice.all(doc)) { c in
+                                Button { payMethod = c.method; payId = c.id } label: { Label(c.label, systemImage: c.key == "\(payMethod)|\(payId)" ? "checkmark" : c.symbol) }
+                            }
+                        } label: {
+                            Label(PaymentChoice.all(doc).first { $0.key == "\(payMethod)|\(payId)" }?.label ?? "現金・その他", systemImage: "creditcard")
+                                .lineLimit(1).minimumScaleFactor(0.8).font(.subheadline).padding(.horizontal, 10).padding(.vertical, 7)
+                                .background(.quaternary.opacity(0.6), in: Capsule())
                         }
-                    } label: {
-                        Label(PaymentChoice.all(doc).first { $0.key == "\(payMethod)|\(payId)" }?.label ?? "現金・その他", systemImage: "creditcard")
-                            .lineLimit(1).font(.subheadline).padding(.horizontal, 10).padding(.vertical, 7)
-                            .background(.quaternary.opacity(0.6), in: Capsule())
+                        Spacer(minLength: 0)
                     }
                     TextField("店名・メモ", text: $merchant)
-                        .font(.subheadline).padding(.horizontal, 10).padding(.vertical, 7)
+                        .font(.subheadline).padding(.horizontal, 12).padding(.vertical, 8)
                         .background(.quaternary.opacity(0.6), in: Capsule())
                 }
                 .padding(.horizontal)

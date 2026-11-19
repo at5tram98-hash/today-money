@@ -28,7 +28,7 @@ struct CardHeader: View {
                 .font(.footnote.weight(.bold)).foregroundStyle(.white)
                 .frame(width: 26, height: 26)
                 .background(tint.gradient, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
-            Text(title).font(.subheadline.weight(.semibold))
+            Text(title).font(.subheadline.weight(.semibold)).lineLimit(1).minimumScaleFactor(0.7)
             Spacer(minLength: 4)
             if let trailing { trailing }
             if showsChevron {
@@ -152,7 +152,7 @@ extension View {
     /// 押せるカードの面（白い面・角丸・薄い影）
     func cardSurface() -> some View {
         padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
             .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
             .contentShape(RoundedRectangle(cornerRadius: 22, style: .continuous))

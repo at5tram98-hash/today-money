@@ -26,7 +26,7 @@ struct StatementImportSection: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("\(imp.providerLabel)・\(imp.rows.count)件")
-                            Text("\(imp.fileName)・\(imp.statusLabel)").font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                            Text("\(imp.fileName)・\(imp.statusLabel)").font(.caption).foregroundStyle(.secondary).lineLimit(2)
                         }
                         Spacer()
                         Text(imp.shownTotal.yen).monospacedDigit()
@@ -218,7 +218,7 @@ struct StatementReviewView: View {
                             Button { editingRow = r.id } label: {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text(r.merchant).fontWeight(.semibold).lineLimit(1)
+                                        Text(r.merchant).fontWeight(.semibold).lineLimit(2)
                                         Text("\(r.transactionDate)・\(r.category)\(r.installmentTotal > 1 ? "・\(r.installmentText)" : "")").font(.caption).foregroundStyle(.secondary)
                                         let dup = !r.linkedTransactionId.isEmpty ? "・照合済み" : !r.duplicateCandidateId.isEmpty ? "・重複候補" : ""
                                         Text("\(r.needsReview ? "要確認" : "分類済み")\(dup)\(r.direction == "refund" ? "・返金" : "")").font(.caption2.weight(.semibold)).foregroundStyle(r.needsReview ? .orange : .green)

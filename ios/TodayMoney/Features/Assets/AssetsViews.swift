@@ -217,7 +217,7 @@ struct AssetsView: View {
         return HStack(spacing: 12) {
             Circle().fill(color).frame(width: 10, height: 10)
             VStack(alignment: .leading, spacing: 3) {
-                Text(b.name).font(.body.weight(.semibold)).foregroundStyle(.primary).lineLimit(1)
+                Text(b.name).font(.body.weight(.semibold)).foregroundStyle(.primary).lineLimit(2)
                 Text(b.balanceAsOf.isEmpty ? (b.label.isEmpty ? "残高未確認" : b.label) : "確認 \(Format.dateTime(b.balanceAsOf))")
                     .font(.caption).foregroundStyle(.secondary)
             }
@@ -399,7 +399,7 @@ struct BankDetailView: View {
                                     ForEach(Array(upcoming.enumerated()), id: \.offset) { _, e in
                                         HStack {
                                             Text(Format.shortDay(e.0)).font(.caption.monospacedDigit()).foregroundStyle(.secondary).frame(width: 44, alignment: .leading)
-                                            Text(e.1.label).font(.footnote).lineLimit(1)
+                                            Text(e.1.label).font(.footnote).lineLimit(2)
                                             Spacer()
                                             Text(signedYen(e.1.amount)).font(.footnote.weight(.semibold)).monospacedDigit().foregroundStyle(e.1.amount >= 0 ? .green : .primary)
                                         }
@@ -447,7 +447,7 @@ struct BankDetailView: View {
             Image(systemName: a.amount >= 0 ? "arrow.down.circle.fill" : "arrow.up.circle.fill")
                 .font(.title3).foregroundStyle(a.amount >= 0 ? .green : .orange)
             VStack(alignment: .leading, spacing: 2) {
-                Text(a.label.isEmpty ? a.sub : a.label).font(.subheadline).lineLimit(1)
+                Text(a.label.isEmpty ? a.sub : a.label).font(.subheadline).lineLimit(2)
                 Text("\(Format.shortDay(a.date))・\(a.sub)").font(.caption).foregroundStyle(.secondary)
             }
             Spacer()
