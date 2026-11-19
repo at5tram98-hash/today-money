@@ -96,59 +96,6 @@ struct AcfHomeCard: View {
     }
 }
 
-/// ACF指標の詳細（Web 版 openAcfIndexDetail）
-struct AcfIndexView: View {
-    @Environment(AppModel.self) private var model
-    @State private var period = false
-    var body: some View {
-        List {
-            AcfLoader(lightweight: true) { f in
-                let x = model.doc.acfIndex(f, today: model.today)
-                Section {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("ACF指標").font(.subheadline).foregroundStyle(.secondary)
-                        HStack(alignment: .firstTextBaseline) {
-                            Text(x.text).moneyFont(52, weight: .heavy).foregroundStyle(x.color)
-                            Text(x.label).font(.headline).foregroundStyle(x.color)
-                        }
-                        Text(x.sentence).font(.subheadline)
-                        Button { period = true } label: {
-                            HStack {
-                                Text("\(Format.dayLabel(x.start))〜\(Format.dayLabel(x.end))\(x.custom ? "（指定した日まで）" : "（カードの支払いが終わる毎月\(model.doc.acfStoredSettings.indexEndDay >= 31 ? "月末" : "\(model.doc.acfStoredSettings.indexEndDay)日")まで）")")
-                                    .font(.footnote).multilineTextAlignment(.leading)
-                                Spacer(); Text("変更").font(.footnote.weight(.semibold))
-                            }
-                        }
-                        AcfCompareBars(x: x, large: true)
-                        HStack {
-                            Text(x.surplus >= 0 ? "余る見込み" : "足りない見込み")
-                            Spacer()
-                            Text("\(x.surplus >= 0 ? "＋" : "−")\(abs(x.surplus).yen)").bold().foregroundStyle(x.surplus >= 0 ? .green : .red)
-                        }
-                    }.padding(.vertical, 4)
-                } footer: { Text("1.0で収支がちょうどです。1.0以上なら黒字、1.0未満なら赤字の見込みです（日々の生活費は含みません）。") }
-                Section("対象期間の入出金") {
-                    if x.events.isEmpty { Text("予定された入出金はありません").foregroundStyle(.secondary) }
-                    ForEach(x.events.prefix(12)) { e in
-                        HStack {
-                            Circle().fill(e.income ? Color.green : Color.orange).frame(width: 8, height: 8)
-                            VStack(alignment: .leading) { Text(e.label); Text(Format.dayLabel(e.date)).font(.caption).foregroundStyle(.secondary) }
-                            Spacer()
-                            Text("\(e.income ? "＋" : "−")\(e.amount.yen)").monospacedDigit().foregroundStyle(e.income ? .green : .primary)
-                        }
-                    }
-                }
-            }
-            Section {
-                NavigationLink { AcfDetailView() } label: { VStack(alignment: .leading) { Text("ACFの日別資金表"); Text("今日使える目安・カード配分・注意点").font(.caption).foregroundStyle(.secondary) } }
-                NavigationLink { AcfSettingsView() } label: { VStack(alignment: .leading) { Text("ACF設定"); Text("最低残高・カード比率").font(.caption).foregroundStyle(.secondary) } }
-            }
-        }
-        .navigationTitle("ACF指標")
-        .sheet(isPresented: $period) { NavigationStack { AcfIndexPeriodView() }.presentationDetents([.medium]) }
-    }
-}
-
 /// ACF指標の期間（Web 版 openAcfIndexPeriod）
 struct AcfIndexPeriodView: View {
     @Environment(AppModel.self) private var model
@@ -182,187 +129,6 @@ struct AcfIndexPeriodView: View {
             let e = model.doc.acfIndexEndDate(start: model.today)
             custom = e.custom; date = e.end
         }
-    }
-}
-
-/// ACF（Web 版 _openAcfDetailImmediate）
-struct AcfDetailView: View {
-    @Environment(AppModel.self) private var model
-    @AppStorage("acfFundsView") private var viewMode = "table"
-    @State private var importantOnly = false
-    @State private var month = ""
-    @State private var selected: AcfRow?
-    @State private var simulator = false
-
-    var body: some View {
-        List {
-            AcfLoader { f in content(f) }
-        }
-        .navigationTitle("ACF")
-        .sheet(item: $selected) { r in NavigationStack { AcfDayView(row: r) }.presentationDetents([.medium, .large]) }
-        .sheet(isPresented: $simulator) { NavigationStack { AcfSimulatorView() } }
-    }
-
-    @ViewBuilder private func content(_ f: AcfForecast) -> some View {
-        let ratio = f.settings.creditFallbackEnabled ? Int(f.settings.creditAggressiveness.rounded()) : 0
-        Section {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("ACF").font(.subheadline).foregroundStyle(.secondary)
-                    MoneyText(value: f.safeTotalBudget, size: 44, weight: .heavy)
-                    Text("今日使える目安").font(.footnote).foregroundStyle(.secondary)
-                }
-                Spacer()
-                Text(f.status).font(.subheadline.weight(.bold)).padding(.horizontal, 10).padding(.vertical, 4)
-                    .background(acfStatusColor(f.status).opacity(0.18), in: Capsule()).foregroundStyle(acfStatusColor(f.status))
-            }
-            HStack {
-                tile("カードで支払う目安", f.safeCreditBudget.yen)
-                tile("現金で支払う目安", f.safeCashBudget.yen)
-                tile("カード比率", "\(ratio)%")
-            }
-        } footer: { Text("設定比率は支払い方法の希望です。カードの限度額・1日上限・禁止カテゴリ・将来の引落残高をACFが確認し、安全な範囲に制限します。") }
-
-        Section {
-            Toggle(isOn: Binding(get: { model.doc.acfStoredSettings.c100Mode }, set: { on in
-                var s = model.doc.acfStoredSettings; s.c100Mode = on
-                model.commit("C100モード") { $0.saveAcfSettings(s) }
-                model.toast = on ? "C100モード：カード100%で試算しています" : "C100モードを終了しました"
-            })) {
-                VStack(alignment: .leading) {
-                    Text("C100モード")
-                    Text(f.settings.c100Mode ? "現金を使わず、すべてカードで払う前提で計算中" : "今日から現金を使わず、すべてカードで払ったら").font(.caption).foregroundStyle(.secondary)
-                }
-            }
-        }
-
-        if f.cashShortage > 0 || f.reserveShortage > 0 {
-            Section {
-                let critical = f.cashShortage > 0
-                let d = critical ? (f.minimumCashShortageDate.isEmpty ? f.minForecastDate : f.minimumCashShortageDate) : (f.firstReserveBreachDate.isEmpty ? f.minForecastDate : f.firstReserveBreachDate)
-                Label {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(critical ? "資金不足" : "安全残高不足").bold()
-                        Text(critical ? "\(Format.dayLabel(d))に予測残高が −\(f.cashShortage.yen) まで不足する見込みです。「今日使える額」が0円でも、不足額は隠さず表示します。"
-                             : "\(Format.dayLabel(d))に最低残したい金額を下回る見込みです。安全余力 −\(f.reserveShortage.yen)。").font(.footnote)
-                    }
-                } icon: { Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(critical ? .red : .orange) }
-            }
-        }
-
-        let visibleEnd = model.doc.acfVisibleEnd(f.startDate)
-        let months = Array(NSOrderedSet(array: f.rows.filter { $0.date <= visibleEnd }.map { String($0.date.prefix(7)) })) as? [String] ?? []
-        let m = months.contains(month) ? month : (months.first ?? model.thisMonth)
-        let rows = f.rows.filter { $0.date.hasPrefix(m) && (!importantOnly || $0.important) }
-        Section {
-            Picker("表示", selection: $viewMode) { Label("表", systemImage: "list.bullet").tag("table"); Label("カレンダー", systemImage: "calendar").tag("calendar") }.pickerStyle(.segmented)
-            Picker("表示月", selection: Binding(get: { m }, set: { month = $0 })) { ForEach(months, id: \.self) { Text(Format.monthLabel($0)).tag($0) } }
-            Picker("日", selection: $importantOnly) { Text("すべての日").tag(false); Text("重要日のみ").tag(true) }.pickerStyle(.segmented)
-            if viewMode == "calendar" {
-                AcfCalendar(month: m, rows: rows, today: model.today) { selected = $0 }
-            } else {
-                AcfTable(rows: rows, today: model.today, firstDeficit: f.firstNegativeDate) { selected = $0 }
-                    .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
-            }
-        } header: { Text("日別資金表") } footer: {
-            Text("\(Format.dayLabel(f.startDate))〜\(Format.dayLabel(visibleEnd))を月ごとに表示。カード利用後の請求は\(Format.dayLabel(f.endDate))まで確認します。現金余力は、必須の入出金後に将来残せる最低残高と安全残高の差です。「計画支出（現金）」は実際の引落しではなく、ACFが想定した生活費を使う場合の金額です。カードで使う目安は利用日の現金からは引かず、後日の請求に反映します。")
-        }
-
-        Section("残高予測") {
-            Chart(f.rows) { r in
-                LineMark(x: .value("日", Dates.date(r.date)), y: .value("計画後の残高", r.forecastBalance)).foregroundStyle(.teal).interpolationMethod(.stepEnd)
-                if f.reserveFloor > 0 { RuleMark(y: .value("最低残高", f.reserveFloor)).foregroundStyle(.orange).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3])) }
-                RuleMark(y: .value("0", 0)).foregroundStyle(.secondary.opacity(0.4))
-            }
-            .frame(height: 190)
-            .accessibilityLabel("残高予測のグラフ。最低 \(f.minForecastBalance.yen)")
-            let trend = f.rows.filter { $0.date <= "\(f.startDate.prefix(7))-31" }.prefix(14)
-            if trend.count > 1 {
-                Text("日別の生活費目安").font(.subheadline.weight(.semibold))
-                Chart(Array(trend)) { r in
-                    BarMark(x: .value("日", Dates.date(r.date), unit: .day), y: .value("カード", r.safeCreditBudget)).foregroundStyle(by: .value("支払い", "カード"))
-                    BarMark(x: .value("日", Dates.date(r.date), unit: .day), y: .value("現金", r.safeCashBudget)).foregroundStyle(by: .value("支払い", "現金"))
-                }
-                .chartForegroundStyleScale(["カード": Color.purple, "現金": Color.teal])
-                .frame(height: 140)
-            }
-        }
-
-        Section("次の重要な資金イベント") {
-            let monthEnd = "\(f.startDate.prefix(7))-\(Dates.daysInMonth(String(f.startDate.prefix(7))))"
-            let items = f.rows.filter { $0.date == f.startDate || !$0.events.isEmpty || $0.flexibleCardDue > 0 || $0.date == monthEnd || $0.headroom < 0 }.prefix(20)
-            ForEach(Array(items)) { r in
-                let delta = r.income - r.mandatoryOutflow - r.flexibleCardDue
-                Button { selected = r } label: {
-                    HStack(alignment: .top) {
-                        Text(Format.shortDay(r.date)).font(.subheadline.monospacedDigit()).frame(width: 44, alignment: .leading)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(r.events.map(\.label).joined(separator: "・").nonEmpty ?? (r.flexibleCardDue > 0 ? "カード支払いの引落" : r.date == f.startDate ? "現在" : "月末")).lineLimit(2)
-                            Text("終了予測 \(r.forecastBalance.yen)\(r.headroom < 0 ? "・安全ラインを下回る見込み" : "")").font(.caption).foregroundStyle(r.headroom < 0 ? .red : .secondary)
-                        }
-                        Spacer()
-                        Text(delta != 0 ? signedYen(delta) : r.forecastBalance.yen).monospacedDigit().foregroundStyle(delta > 0 ? .green : delta < 0 ? .red : .primary)
-                    }
-                }
-                .tint(.primary)
-            }
-        }
-
-        Section("計算内訳") {
-            LabeledContent("現在預金", value: f.currentDeposits.yen)
-            LabeledContent("確保しておく金額", value: f.protectedCashNow.yen)
-            LabeledContent("最低残したい金額", value: f.reserveFloor.yen)
-            LabeledContent("月末予測", value: f.monthEndForecast.yen)
-            LabeledContent("今後のカード引落", value: f.mandatoryBreakdown.card.yen)
-            LabeledContent("固定支払い（カード以外）", value: f.mandatoryBreakdown.fixed.yen)
-            LabeledContent("必須の大型支出（カード以外）", value: f.mandatoryBreakdown.large.yen)
-            if let n = f.nextCardPayment { LabeledContent("次のカード引落", value: "\(Format.dayLabel(n.date)) \(n.amount.yen)") }
-            LabeledContent("今日の最大（現金＋カード）", value: f.maxSpendToday.yen)
-        }
-
-        Section("もし使ったら？") {
-            Button { simulator = true } label: { VStack(alignment: .leading) { Text("購入前シミュレーション"); Text("保存前に現在と使用後のお金の流れを比較").font(.caption).foregroundStyle(.secondary) } }
-            if num(model.doc["monthlyGoals"]?[model.thisMonth]?["total"]) > 0 {
-                Button("ACFの安全予算を日別計画へ反映") {
-                    var n: Int?
-                    model.commit("ACFの安全予算を日別計画へ") { d in n = d.applyAcfSafeBudgetToMonthlyPlan(month: model.thisMonth, forecast: f, today: model.today) }
-                    model.toast = (n ?? 0) > 0 ? "\(n!)日分の日別計画へ反映しました" : "今日以降の安全予算がすべて0円のため、反映する金額はありません"
-                }
-            }
-        }
-
-        Section {
-            VStack(alignment: .leading, spacing: 6) {
-                HStack { Text("予測の信頼度 \(f.confidence.label)").bold(); Spacer(); Text("\(f.confidence.score)%").bold() }
-                ProgressView(value: Double(f.confidence.score), total: 100).tint(f.confidence.score >= 85 ? .green : f.confidence.score >= 65 ? .orange : .red)
-                Text("登録情報の鮮度と完全性から算出").font(.caption).foregroundStyle(.secondary)
-            }
-            ForEach(f.confidence.reasons, id: \.text) { r in
-                NavigationLink { AcfActionDestination(action: r.action) } label: { Text(r.text).font(.subheadline) }
-            }
-            if f.confidence.reasons.isEmpty { Text("大きな未確認項目はありません。").foregroundStyle(.secondary) }
-        } header: { Text("予測の信頼度") }
-
-        Section("注意点") {
-            if f.risks.isEmpty { Label("大きな注意点はありません", systemImage: "checkmark.circle").foregroundStyle(.green) }
-            ForEach(f.risks) { r in
-                NavigationLink { AcfActionDestination(action: r.action, date: r.date) } label: {
-                    Label {
-                        VStack(alignment: .leading, spacing: 2) { Text(r.title).font(.subheadline.weight(.semibold)); Text(r.detail).font(.caption).foregroundStyle(.secondary) }
-                    } icon: {
-                        Image(systemName: r.severity == "critical" ? "exclamationmark.octagon.fill" : r.severity == "warning" ? "exclamationmark.triangle.fill" : "eye.fill")
-                            .foregroundStyle(r.severity == "critical" ? .red : r.severity == "warning" ? .orange : .blue)
-                    }
-                }
-            }
-        }
-
-        Section { NavigationLink { AcfSettingsView() } label: { VStack(alignment: .leading) { Text("ACF設定"); Text("最低残高・カード比率・詳細条件").font(.caption).foregroundStyle(.secondary) } } }
-    }
-
-    private func tile(_ t: String, _ v: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) { Text(t).font(.caption2).foregroundStyle(.secondary); Text(v).font(.subheadline.weight(.semibold)).monospacedDigit() }
-            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -552,16 +318,7 @@ struct AcfSettingsView: View {
     var body: some View {
         Form {
             if let binding = Binding($s) {
-                Section("基本設定") {
-                    AmountField(title: "最低残したい金額", value: binding.reserveFloor)
-                    Toggle("カードを利用", isOn: binding.creditFallbackEnabled)
-                    VStack(alignment: .leading) {
-                        HStack { Text("カードで支払う割合"); Spacer(); Text(binding.wrappedValue.creditFallbackEnabled ? "\(Int(binding.wrappedValue.creditAggressiveness))%" : "OFF").bold().monospacedDigit() }
-                        Slider(value: binding.creditAggressiveness, in: 0...100, step: 1).disabled(!binding.wrappedValue.creditFallbackEnabled)
-                        Text("100%なら、カードで支払える生活費は安全な範囲で原則100%カードになります。").font(.caption).foregroundStyle(.secondary)
-                    }
-                }
-                Section("リアルタイム試算") {
+                Section {
                     if let p = preview {
                         AcfLoader(lightweight: true, settings: p) { f in
                             HStack {
@@ -569,8 +326,17 @@ struct AcfSettingsView: View {
                             }
                         }
                     }
-                }
+                } header: { Label("リアルタイム試算", systemImage: "waveform.path.ecg") } footer: { Text("下の設定を変えると、保存する前にここで結果が変わります。") }
                 Section {
+                    AmountField(title: "最低残したい金額", value: binding.reserveFloor)
+                } header: { Label("守るお金", systemImage: "lock.shield") } footer: { Text("どの日もこの金額を下回らないように、今日使える額を計算します。") }
+                Section {
+                    Toggle("カードを利用", isOn: binding.creditFallbackEnabled)
+                    VStack(alignment: .leading) {
+                        HStack { Text("カードで支払う割合"); Spacer(); Text(binding.wrappedValue.creditFallbackEnabled ? "\(Int(binding.wrappedValue.creditAggressiveness))%" : "OFF").bold().monospacedDigit() }
+                        Slider(value: binding.creditAggressiveness, in: 0...100, step: 1).disabled(!binding.wrappedValue.creditFallbackEnabled)
+                        Text("100%なら、カードで支払える生活費は安全な範囲で原則100%カードになります。").font(.caption).foregroundStyle(.secondary)
+                    }
                     AmountField(title: "カード1日上限", value: binding.creditDailyLimit)
                     Picker("優先して使うカード", selection: binding.preferredCardId) {
                         Text("自動").tag("")
@@ -579,12 +345,17 @@ struct AcfSettingsView: View {
                     NavigationLink { CreditUsageRulesView(s: binding) } label: {
                         LabeledContent("カードを使っていい場所", value: model.doc.acfAllowedCategorySummary(binding.wrappedValue))
                     }
-                } header: { Text("カード詳細") } footer: { Text("日別表は翌々月末まで表示し、その後に到来するカード支払日も確認します。") }
-                Section("予測") {
+                } header: { Label("カードの使い方", systemImage: "creditcard") } footer: { Text("日別表は翌々月末まで表示し、その後に来るカードの支払日も確かめます。") }
+                Section {
                     Toggle("曜日傾向を利用", isOn: binding.useWeekdayWeights)
                     Toggle("必須の大型支出を含める", isOn: binding.includeRequiredLargeExpenses)
                     Toggle("予測リスク通知", isOn: binding.riskNotifications)
-                }
+                } header: { Label("予測", systemImage: "chart.line.uptrend.xyaxis") } footer: { Text("曜日傾向：よく使う曜日に多めに配分します。予測リスク通知：不足しそうな日をお知らせします。") }
+                Section {
+                    NavigationLink { AcfIndexPeriodView() } label: {
+                        LabeledContent("ACF指標の期間", value: binding.wrappedValue.indexEndDay >= 31 ? "毎月 月末まで" : "毎月\(binding.wrappedValue.indexEndDay)日まで")
+                    }
+                } header: { Label("ACF指標", systemImage: "gauge.with.dots.needle.67percent") }
             }
         }
         .navigationTitle("ACF設定")
@@ -607,6 +378,9 @@ struct AcfSettingsView: View {
     private func save() {
         guard var x = s else { return }
         x.initialized = true
+        // 期間は「ACF指標の期間」の画面で別に保存しているので、いまの値を使う
+        let cur = model.doc.acfStoredSettings
+        x.indexEndDay = cur.indexEndDay; x.indexEndDate = cur.indexEndDate; x.c100Mode = cur.c100Mode
         model.commit("ACF設定") { $0.saveAcfSettings(x) }
         model.done("ACF設定を保存しました")
         dismiss()
@@ -649,67 +423,3 @@ struct CreditUsageRulesView: View {
     }
 }
 
-/// 購入前シミュレーション（Web 版 openAcfSimulator：保存する前に、使った場合の見通しと比べる）
-struct AcfSimulatorView: View {
-    @Environment(AppModel.self) private var model
-    @Environment(\.dismiss) private var dismiss
-    @State private var name = ""
-    @State private var amount = 0.0
-    @State private var date = Dates.ymd()
-    @State private var method = "other"
-    @State private var payId = ""
-    @State private var result: (before: AcfForecast, after: AcfForecast)?
-    @State private var running = false
-
-    var body: some View {
-        Form {
-            Section("買いたいもの") {
-                TextField("名前（例：イヤホン）", text: $name)
-                AmountField(title: "金額", value: $amount)
-                YMDPicker(title: "日付", value: $date)
-                PaymentPicker(method: $method, paymentId: $payId)
-            }
-            Section {
-                Button { run() } label: { if running { ProgressView() } else { Text("比べる") } }.disabled(amount <= 0 || running)
-            }
-            if let r = result {
-                Section("結果") {
-                    compare("今日使える目安", r.before.safeTotalBudget, r.after.safeTotalBudget)
-                    compare("月末予測", r.before.monthEndForecast, r.after.monthEndForecast)
-                    compare("最低残高", r.before.minForecastBalance, r.after.minForecastBalance)
-                    LabeledContent("状態", value: "\(r.before.status) → \(r.after.status)")
-                    if r.after.minForecastBalance < r.after.reserveFloor {
-                        Label("使うと、最低残したい金額を下回る日があります", systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange)
-                    } else {
-                        Label("使っても、最低残したい金額は保てる見込みです", systemImage: "checkmark.circle.fill").foregroundStyle(.green)
-                    }
-                }
-            }
-        }
-        .navigationTitle("購入前シミュレーション").navigationBarTitleDisplayMode(.inline)
-        .toolbar { ToolbarItem(placement: .cancellationAction) { Button("閉じる") { dismiss() } } }
-    }
-    private func compare(_ t: String, _ a: Double, _ b: Double) -> some View {
-        LabeledContent(t) {
-            VStack(alignment: .trailing) {
-                Text("\(a.yen) → \(b.yen)").monospacedDigit()
-                Text(signedYen(b - a)).font(.caption).foregroundStyle(b - a < 0 ? .red : .green)
-            }
-        }
-    }
-    private func run() {
-        running = true
-        let doc = model.doc, today = model.today
-        var plan = LargeExpensePlan(id: "scenario")
-        plan.name = name.isEmpty ? "What-if" : name; plan.date = date; plan.amount = amount; plan.priority = "required"; plan.status = "planned"
-        plan.paymentMethod = method; plan.paymentId = payId; plan.category = "その他"
-        Task.detached(priority: .userInitiated) {
-            var copy = doc
-            copy.largeExpensePlans = copy.largeExpensePlans + [plan]
-            var s = copy.acfSettings; s.includeRequiredLargeExpenses = true
-            let before = doc.acfForecast(today: today, lightweight: true)
-            let after = copy.acfForecast(today: today, settings: s, lightweight: true)
-            await MainActor.run { result = (before, after); running = false }
-        }
-    }
-}

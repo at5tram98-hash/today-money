@@ -143,61 +143,6 @@ struct TempIncomeHistoryView: View {
 
 // MARK: - 金額をまとめて更新（Web 版 openFinancialUpdates：給与・カード請求・銀行残高）
 
-struct FinancialUpdatesView: View {
-    @Environment(AppModel.self) private var model
-    /// salary / cards / banks
-    @State var kind: String
-    @State private var month = Dates.ym()
-    @State private var sheet: Sheet?
-    enum Sheet: Identifiable { case bank(String), card(String, String), salary(String)
-        var id: String { switch self { case .bank(let a): return "b\(a)"; case .card(let a, let b): return "c\(a)\(b)"; case .salary(let a): return "s\(a)" } }
-    }
-    var body: some View {
-        let doc = model.doc
-        List {
-            Section {
-                Picker("種類", selection: $kind) { Text("銀行残高").tag("banks"); Text("カード請求").tag("cards"); Text("給与").tag("salary") }.pickerStyle(.segmented)
-                if kind != "banks" { MonthSwitcher(month: $month, thisMonth: model.thisMonth) }
-            } footer: {
-                Text(kind == "salary" ? "入金済みの給与は実際の受取額を、予定の給与は予定額を更新します。" : kind == "cards" ? "対象請求ごとに金額を更新します。支払い状態と口座への反映方法も確認できます。" : "最新の口座残高を確認して更新します。")
-            }
-            Section {
-                switch kind {
-                case "banks":
-                    ForEach(doc.banks) { b in row(b.name, b.balanceAsOf.isEmpty ? "残高未確認" : "確認 \(dateText(b.balanceAsOf))", b.balance) { sheet = .bank(b.id) } }
-                case "cards":
-                    ForEach(doc.cards) { c in
-                        let s = doc.statements(c.id, paymentMonth: month)
-                        let items = s.isEmpty ? [doc.statement(c.id, paymentMonth: month)].compactMap { $0 } : s
-                        ForEach(items) { st in row(c.name, "\(Format.monthLabel(st.billingMonth))対象・\(st.paymentDate.isEmpty ? "" : Format.dayLabel(st.paymentDate) + "・")\(st.status.label)", st.amount) { sheet = .card(c.id, st.billingMonth) } }
-                    }
-                default:
-                    ForEach(doc.salaryRecords(payableIn: month)) { r in row(doc.employer(r.employerId)?.name ?? "勤務先", "\(Format.dayLabel(doc.effectiveDate(r)))・\(doc.status(r, today: model.today).rawValue)", doc.expectedOrReceived(r, today: model.today)) { sheet = .salary(r.id) } }
-                }
-            }
-        }
-        .navigationTitle("金額を更新")
-        .sheet(item: $sheet) { s in
-            NavigationStack {
-                switch s {
-                case .bank(let id): BankEditor(bankId: id)
-                case .card(let id, let bm): CardBillingEditor(cardId: id, billingMonth: bm, paymentMonth: month)
-                case .salary(let id): SalaryRecordEditor(recordId: id)
-                }
-            }
-        }
-    }
-    private func row(_ title: String, _ sub: String, _ amount: Double, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                VStack(alignment: .leading, spacing: 2) { Text(title).foregroundStyle(.primary); Text(sub).font(.caption).foregroundStyle(.secondary) }
-                Spacer()
-                Text(amount.yen).monospacedDigit().foregroundStyle(.primary)
-                Image(systemName: "square.and.pencil").foregroundStyle(Color.accentColor)
-            }
-        }
-    }
-}
 
 // MARK: - 月のカレンダー（Web 版 renderMonth のカレンダーと openFinancialDayInspector）
 
@@ -333,7 +278,7 @@ struct FavoriteDestination: View {
     var body: some View {
         let p = key.split(separator: ":", maxSplits: 1).map(String.init)
         switch p.first ?? "" {
-        case "acf": AcfDetailView()
+        case "acf": AcfCenterLauncher(tab: .overview)
         case "quickExpense": TransactionEditor(draft: { var t = Transaction(id: ""); t.date = model.today; t.category = model.doc.categories.first?.name ?? "その他"; t.paymentMethod = "other"; return t }(), isNew: true)
         case "quickBank", "assetTrend": AssetsView()
         case "cardBilling": CardBillingEditor(cardId: nil, billingMonth: nil, paymentMonth: model.thisMonth)

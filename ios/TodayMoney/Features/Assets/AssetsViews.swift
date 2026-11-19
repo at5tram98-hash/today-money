@@ -43,7 +43,7 @@ struct AssetsView: View {
                 Menu {
                     Button { model.entryMode = .bank } label: { Label("銀行残高をクイック更新", systemImage: "building.columns") }
                     NavigationLink { AssetHistoryView() } label: { Label("残高履歴", systemImage: "clock.arrow.circlepath") }
-                    NavigationLink { AcfDetailView() } label: { Label("ACF", systemImage: "chart.line.uptrend.xyaxis") }
+                    Button { model.openAcf(.overview) } label: { Label("ACFセンター", systemImage: "chart.line.uptrend.xyaxis") }
                     NavigationLink { NoticesView() } label: { Label("お知らせ", systemImage: "bell") }
                 } label: { Image(systemName: "ellipsis.circle") }
                 .accessibilityLabel("メニュー")
@@ -246,9 +246,8 @@ struct AssetsView: View {
             }
             Text("資金計画").font(.title3.bold()).padding(.top, 6)
             LinkGroup {
-                LinkRow(title: "お金のタイムライン", sub: "30 / 60 / 90日の資金推移", symbol: "chart.bar.fill", tint: .indigo) { MoneyTimelineView() }
-                LinkRow(title: "引落準備", sub: "不足しそうな口座と振替計画", symbol: "arrow.left.arrow.right", tint: .teal) { TransferPlansView() }
-                LinkRow(title: "ACF", sub: "安全に使える額と残高の見通し", symbol: "chart.line.uptrend.xyaxis", tint: .orange) { AcfDetailView() }
+                LinkRow(title: "口座ごとの見通し・引落準備", sub: "30 / 60 / 90日の資金推移と振替計画", symbol: "chart.bar.fill", tint: .indigo, action: { model.openAcf(.accounts) })
+                LinkRow(title: "ACFセンター", sub: "安全に使える額と残高の見通し", symbol: "chart.line.uptrend.xyaxis", tint: .orange, action: { model.openAcf(.overview) })
             }
         }
     }

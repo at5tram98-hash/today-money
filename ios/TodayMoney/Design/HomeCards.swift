@@ -59,6 +59,27 @@ struct TapCard<Content: View, Destination: View>: View {
     }
 }
 
+/// 押すと動作をするカード（画面を積まずに開くもの：ACFセンターなど）
+struct ActionCard<Content: View>: View {
+    var title: String
+    var systemImage: String
+    var tint: Color
+    var accessibilityHint: String = "開く"
+    var action: () -> Void
+    @ViewBuilder var content: Content
+    var body: some View {
+        Button(action: action) {
+            VStack(alignment: .leading, spacing: 12) {
+                CardHeader(title: title, systemImage: systemImage, tint: tint, showsChevron: true)
+                content
+            }
+            .cardSurface()
+        }
+        .buttonStyle(CardPressStyle())
+        .accessibilityHint(accessibilityHint)
+    }
+}
+
 /// 押せない情報のかたまり（枠を付けない）
 struct InfoBlock<Content: View>: View {
     var title: String

@@ -9,7 +9,6 @@ struct ProMenuSection: View {
         Section("分析と計画") {
             NavigationLink { ReasonAnalysisView(kind: "expense", month: month) } label: { Label("理由が分かる分析", systemImage: "chart.bar.xaxis") }
             NavigationLink { ReasonAnalysisView(kind: "salary", month: month) } label: { Label("給与分析", systemImage: "yensign.circle") }
-            NavigationLink { MoneyTimelineView() } label: { Label("お金のタイムライン", systemImage: "chart.line.uptrend.xyaxis") }
             NavigationLink { BudgetRebalanceView(month: month) } label: { Label("予算を立て直す", systemImage: "target") }
             NavigationLink { EventGoalsView() } label: { Label("旅行・プレゼント目標", systemImage: "gift") }
             NavigationLink { MonthReviewView(month: month) } label: { Label("月締めレビュー", systemImage: "checkmark.seal") }
@@ -138,71 +137,6 @@ struct MonthReviewView: View {
 
 // MARK: - お金のタイムライン
 
-struct MoneyTimelineView: View {
-    @Environment(AppModel.self) private var model
-    @State private var days = 30
-    @State private var scope = "all"
-    @State private var all: AcfForecast?
-    var body: some View {
-        let doc = model.doc, today = model.today
-        let bankF = scope == "all" ? nil : doc.bankForecast(scope, days: days, today: today)
-        let rows: [(date: String, opening: Double, bal: Double, income: Double, outflow: Double, labels: [String])] = {
-            if let f = bankF { return f.rows.map { ($0.date, $0.openingBalance, $0.forecastBalance, $0.income, $0.outflow, $0.events.map(\.label)) } }
-            return (all?.rows ?? []).map { ($0.date, $0.openingBalance, $0.forecastBalance, $0.income, $0.mandatoryOutflow + $0.flexibleCardDue + $0.flexibleCash, $0.events.map(\.label)) }
-        }()
-        let floor = scope == "all" ? (all?.reserveFloor ?? 0) : max(0, doc.bank(scope)?.threshold ?? 0)
-        let minRow = rows.min { $0.bal < $1.bal }
-        List {
-            Section {
-                Picker("期間", selection: $days) { Text("30日").tag(30); Text("60日").tag(60); Text("90日").tag(90) }.pickerStyle(.segmented)
-                Picker("口座", selection: $scope) { Text("全口座合計").tag("all"); ForEach(doc.banks) { Text($0.name).tag($0.id) } }
-                if rows.isEmpty { HStack { ProgressView(); Text("計算しています…") } }
-                else {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(scope == "all" ? "全口座の生活資金" : doc.bank(scope)?.name ?? "").font(.caption).foregroundStyle(.secondary)
-                            Text((minRow?.bal ?? 0).yen).font(.title.bold()).foregroundStyle((minRow?.bal ?? 0) < floor ? .red : .primary)
-                            Text("\(Format.dayLabel(minRow?.date ?? today))の最低予測残高\(floor > 0 ? "・確保ライン \(floor.yen)" : "")").font(.caption).foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Text((minRow?.bal ?? 0) < floor ? "不足見込み" : "範囲内").font(.caption.bold()).foregroundStyle((minRow?.bal ?? 0) < floor ? .red : .green)
-                    }
-                    Chart {
-                        ForEach(Array(rows.enumerated()), id: \.offset) { i, r in
-                            LineMark(x: .value("日", Dates.date(r.date)), y: .value("残高", i == 0 ? r.opening : r.bal)).interpolationMethod(.stepEnd).foregroundStyle(.teal)
-                        }
-                        if floor > 0 { RuleMark(y: .value("確保ライン", floor)).foregroundStyle(.orange).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3])) }
-                    }.frame(height: 180)
-                    HStack {
-                        LabeledContent("現在", value: (rows.first?.opening ?? 0).yen)
-                        LabeledContent("\(days)日後", value: (rows.last?.bal ?? 0).yen)
-                    }.font(.footnote)
-                }
-            }
-            Section("重要な日") {
-                ForEach(Array(rows.enumerated()).filter { i, r in i == 0 || i == rows.count - 1 || r.income > 0 || r.outflow > 0 || !r.labels.isEmpty || r.bal < floor }.prefix(50), id: \.offset) { _, r in
-                    let delta = r.income - r.outflow
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(r.labels.joined(separator: "・").nonEmpty ?? (r.date == today ? "現在" : "予測")).lineLimit(2)
-                            Text("\(Format.dayLabel(r.date))・終了 \(r.bal.yen)").font(.caption).foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Text(delta != 0 ? signedYen(delta) : r.bal.yen).monospacedDigit().foregroundStyle(delta > 0 ? .green : delta < 0 ? .red : .primary)
-                    }
-                }
-            }
-            if scope != "all" {
-                Section { NavigationLink { TransferPlanEditor(toBankId: scope, suggested: max(0, floor - (minRow?.bal ?? 0)), date: minRow?.date ?? today) } label: { Label("この口座へ振替を計画", systemImage: "arrow.left.arrow.right") } }
-            }
-        }
-        .navigationTitle("お金のタイムライン")
-        .task(id: "\(days)|\(model.revision)") {
-            let doc = model.doc, today = model.today, d = days
-            all = await Task.detached { doc.acfForecast(today: today, plan: [:], horizonEnd: Dates.addDays(today, d - 1)) }.value
-        }
-    }
-}
 
 // MARK: - 予算を立て直す
 

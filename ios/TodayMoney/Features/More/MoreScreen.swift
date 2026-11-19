@@ -34,18 +34,7 @@ struct MoreScreen: View {
                 Section("お金") {
                     row("カテゴリ", "square.grid.2x2.fill", .orange, "\(doc.categories.count)件") { CategoriesView() }
                     row("初期データ・現在値", "building.columns.fill", .indigo, "") { InitialValuesView() }
-                    row("ACF", "chart.line.uptrend.xyaxis", .teal, doc.acfStoredSettings.initialized ? "最低 \(doc.acfStoredSettings.reserveFloor.yen)" : "未設定") { AcfSettingsView() }
-                    row("給与の記録", "yensign.circle.fill", .green, "") { SalaryMonthView(month: model.thisMonth) }
-                }
-                ProMenuSection(month: model.thisMonth)
-                Section("整理") {
-                    row("お気に入り", "star.fill", .yellow, "\(doc.favorites.count)件") { FavoritesView() }
-                    row("タグ", "tag.fill", .pink, "\(doc.tags.count)件") { TagsView() }
-                    row("一行入力", "text.line.first.and.arrowtriangle.forward", .blue, "") { QuickLineView() }
-                    row("検索", "magnifyingglass", .gray, "") { GlobalSearchView() }
-                    row("臨時収入", "yensign.circle.fill", .green, "\(doc.tempIncomes.count)件") { TempIncomeHistoryView() }
-                    row("金額をまとめて更新", "square.and.pencil", .indigo, "") { FinancialUpdatesView(kind: "banks") }
-                    row("メール取引センター", "envelope.fill", .orange, doc.pendingMailIds.isEmpty ? "" : "確認待ち\(doc.pendingMailIds.count)件") { MailCenterView() }
+                    row("ACFの設定", "chart.line.uptrend.xyaxis", .teal, doc.acfStoredSettings.initialized ? "最低 \(doc.acfStoredSettings.reserveFloor.yen)" : "未設定") { AcfSettingsView() }
                 }
                 Section {
                     row("通知設定", "bell.badge.fill", .red, "") { NotificationSettingsView() }
