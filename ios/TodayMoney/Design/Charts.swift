@@ -148,7 +148,7 @@ struct StatTile: View {
             Text(value).font(.subheadline.weight(.bold)).monospacedDigit().foregroundStyle(tint).lineLimit(1).minimumScaleFactor(0.6)
             if let sub { Text(sub).font(.caption2).foregroundStyle(tint == .primary ? .secondary : tint).monospacedDigit() }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(10)
         .background(Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .accessibilityElement(children: .combine)
@@ -161,11 +161,12 @@ struct RangeStats: View {
     var body: some View {
         if let f = points.first, let l = points.last, points.count > 1 {
             let d = l.value - f.value, pct = f.value != 0 ? d / abs(f.value) * 100 : nil
-            HStack(spacing: 8) {
+            HStack(alignment: .top, spacing: 8) {
                 StatTile(title: "期間の変化", value: signedYen(d), sub: pct.map { String(format: "%+.1f%%", $0) }, tint: d >= 0 ? .green : .red)
                 StatTile(title: "最高", value: (points.map(\.value).max() ?? 0).yen)
                 StatTile(title: "最低", value: (points.map(\.value).min() ?? 0).yen)
             }
+            .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

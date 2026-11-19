@@ -1,3 +1,4 @@
+import Charts
 import SwiftUI
 import TodayMoneyCore
 
@@ -11,9 +12,29 @@ struct FixedPaymentsView: View {
     var body: some View {
         let doc = model.doc
         let scheduled = doc.fixedScheduled(month: month)
+        let year = (0..<12).map { i -> (month: String, total: Double) in
+            let m = Dates.addMonths(month, i)
+            return (m, doc.fixedScheduled(month: m).reduce(0) { $0 + $1.f.amount * Double($1.dates.count) })
+        }
+        let monthTotal = scheduled.reduce(0) { $0 + $1.f.amount * Double($1.dates.count) }
+        let yearTotal = year.reduce(0) { $0 + $1.total }
         List {
             Section {
-                LabeledContent("\(Format.monthLabel(month))の固定支払い", value: scheduled.reduce(0) { $0 + $1.f.amount * Double($1.dates.count) }.yen).font(.headline)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("\(Format.monthLabel(month))の固定支払い").font(.subheadline).foregroundStyle(.secondary)
+                    MoneyText(value: monthTotal, size: 34, weight: .heavy)
+                    Text("今後12か月で \(yearTotal.yen)・月平均 \((yearTotal / 12).rounded().yen)").font(.footnote).foregroundStyle(.secondary)
+                }
+                .padding(.vertical, 4)
+                Chart(year, id: \.month) { r in
+                    BarMark(x: .value("月", r.month), y: .value("金額", r.total), width: .ratio(0.6))
+                        .cornerRadius(4)
+                        .foregroundStyle(r.month == month ? Color.indigo : Color.indigo.opacity(0.3))
+                }
+                .chartXAxis { AxisMarks { v in AxisValueLabel { if let m = v.as(String.self) { Text("\(Dates.parts(m + "-01").m)") } } } }
+                .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
+                .frame(height: 120)
+                .accessibilityLabel("今後12か月の固定支払い")
             }
             Section("この月の支払日") {
                 if scheduled.isEmpty { Text("この月の固定支払いはありません").foregroundStyle(.secondary) }
@@ -52,8 +73,12 @@ struct FixedPaymentsView: View {
                             Text(f.name.isEmpty ? "固定支払い" : f.name).foregroundStyle(.primary)
                             Text("\(f.frequencyLabel)\(f.frequency == "yearly" ? " \(f.annualMonth)月" : "") \(f.day)日・\(doc.paymentLabel(method: f.paymentMethod, id: f.paymentId))")
                                 .font(.caption).foregroundStyle(.secondary)
+                            if let next = year.lazy.flatMap({ y in doc.fixedDueDates(f, month: y.month) }).first(where: { $0 >= model.today && !f.skippedDates.contains($0) }) {
+                                Text("次回 \(Format.dayLabel(next))・\(daysUntilText(next, today: model.today))").font(.caption2).foregroundStyle(.indigo)
+                            }
                         }
                     }
+                    .tint(.primary)
                 }
             }
         }
@@ -161,7 +186,7 @@ struct LargeExpensesView: View {
             Section("予定（\(planned.count)件）") {
                 if planned.isEmpty { Text("予定はありません").foregroundStyle(.secondary) }
                 ForEach(planned) { p in
-                    NavigationLink { LargeExpenseEditor(planId: p.id) } label: { row(p, doc: doc, today: today) }
+                    NavigationLink { LargeExpenseDetailView(planId: p.id) } label: { row(p, doc: doc, today: today) }
                         .swipeActions(edge: .leading) {
                             Button { complete(p) } label: { Label("支払った", systemImage: "checkmark.circle") }.tint(.green)
                         }
@@ -176,7 +201,7 @@ struct LargeExpensesView: View {
             }
             if !others.isEmpty {
                 Section("完了・延期・中止") {
-                    ForEach(others) { p in NavigationLink { LargeExpenseEditor(planId: p.id) } label: { row(p, doc: doc, today: today) } }
+                    ForEach(others) { p in NavigationLink { LargeExpenseDetailView(planId: p.id) } label: { row(p, doc: doc, today: today) } }
                 }
             }
         }
@@ -303,5 +328,155 @@ struct LargeExpenseEditor: View {
         }
         p = x
         if close { model.done("大型支出を保存しました"); dismiss() }
+    }
+}
+
+/// 大型支出の詳細（Web 版 openLargeExpenseDetail：概要・ACFへの影響・編集・完了・削除）
+/// Web 版は「入れた場合」の数字だけだが、こちらは入れない場合と並べて差を出す。
+struct LargeExpenseDetailView: View {
+    @Environment(AppModel.self) private var model
+    @Environment(\.dismiss) private var dismiss
+    var planId: String
+    @State private var editing = false
+    @State private var confirmComplete = false
+    @State private var confirmDelete = false
+    @State private var impact: (with: AcfForecast, without: AcfForecast)?
+
+    var body: some View {
+        let doc = model.doc
+        if let p = doc.largeExpensePlans.first(where: { $0.id == planId }) {
+            let parts = doc.largeExpenseParts(p)
+            List {
+                Section {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 6) {
+                            Text(p.priority == "required" ? "必須" : "検討中")
+                                .font(.caption.weight(.bold)).padding(.horizontal, 8).padding(.vertical, 3)
+                                .background((p.priority == "required" ? Color.pink : Color.orange).opacity(0.15), in: Capsule())
+                                .foregroundStyle(p.priority == "required" ? .pink : .orange)
+                            Text(p.statusLabel).font(.caption).foregroundStyle(.secondary)
+                        }
+                        Text(p.name.isEmpty ? "大型支出" : p.name).font(.title3.weight(.semibold))
+                        MoneyText(value: p.amount, size: 36, weight: .heavy)
+                        Text(p.date.isEmpty ? "日付未定" : "\(Format.dayLabel(p.date))・\(daysUntilText(p.date, today: model.today))")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 4)
+                }
+                Section("内容") {
+                    LabeledContent("カテゴリ", value: p.category.isEmpty ? "—" : p.category)
+                    LabeledContent("支払い方法", value: doc.largeExpensePaymentLabel(p))
+                    LabeledContent("メモ", value: p.memo.isEmpty ? "—" : p.memo)
+                }
+                if parts.count > 1 {
+                    Section("支払いの内訳（\(parts.count)件）") {
+                        ForEach(Array(parts.enumerated()), id: \.offset) { i, part in
+                            let tx = doc.largeExpensePartTransaction(p, part: part, index: i)
+                            LabeledContent {
+                                Text(part.amount.yen).monospacedDigit()
+                            } label: {
+                                Text(doc.paymentLabel(method: part.paymentMethod, id: part.paymentId))
+                                Text(tx == nil ? "未記録" : "記録済み").font(.caption).foregroundStyle(tx == nil ? Color.secondary : Color.green)
+                            }
+                        }
+                    }
+                }
+                if p.status == "planned" && !p.date.isEmpty && p.date < model.today {
+                    Section {
+                        Label("予定日を過ぎています。支払ったら「実際の支出として登録して完了」、まだなら日付を変えてください。予定日を過ぎた計画は ACF の見通しに入りません。", systemImage: "calendar.badge.exclamationmark")
+                            .font(.footnote).foregroundStyle(.orange)
+                    }
+                } else if p.status == "planned" {
+                    Section {
+                        if let impact {
+                            impactView(impact.with, impact.without)
+                        } else {
+                            HStack(spacing: 8) { ProgressView(); Text("ACFを計算しています…").foregroundStyle(.secondary) }
+                        }
+                    } header: { Text("ACFへの影響") } footer: {
+                        Text(p.priority == "required" ? "この計画を入れた場合と入れない場合の見通しです。" : "検討中の計画は通常ACFに含みません。必須にした場合の見通しと比べています。")
+                    }
+                }
+                Section {
+                    Button { editing = true } label: { Label("編集", systemImage: "pencil") }
+                    if p.status == "planned" {
+                        Button { confirmComplete = true } label: { Label("実際の支出として登録して完了", systemImage: "checkmark.circle") }
+                    }
+                    Button(role: .destructive) { confirmDelete = true } label: { Label("削除", systemImage: "trash") }
+                }
+            }
+            .navigationTitle("大型支出計画")
+            .navigationBarTitleDisplayMode(.inline)
+            .task(id: "\(model.revision)|\(model.today)") { await computeImpact(p) }
+            .sheet(isPresented: $editing) { NavigationStack { LargeExpenseEditor(planId: planId) } }
+            .alert("実際の支出として登録しますか？", isPresented: $confirmComplete) {
+                Button("キャンセル", role: .cancel) {}
+                Button("登録") {
+                    model.change("大型支出の完了") { doc, now, today in doc.completeLargeExpense(planId, now: now, today: today) }
+                    model.done("\(p.name.isEmpty ? "大型支出" : p.name) を支出として記録しました")
+                }
+            } message: { Text("計画は完了になり、ACFで計画と取引を二重に数えません。") }
+            .alert("大型支出計画を削除しますか？", isPresented: $confirmDelete) {
+                Button("キャンセル", role: .cancel) {}
+                Button("削除", role: .destructive) {
+                    model.commit("大型支出の削除") { $0.largeExpensePlans = $0.largeExpensePlans.filter { $0.id != planId } }
+                    model.done("計画を削除しました")
+                    dismiss()
+                }
+            } message: { Text("実際の取引は削除しません。") }
+        } else {
+            ContentUnavailableView("計画が見つかりません", systemImage: "cart")
+        }
+    }
+
+    private func computeImpact(_ p: LargeExpensePlan) async {
+        guard p.status == "planned" else { return }
+        let doc = model.doc, today = model.today
+        let r = await Task.detached(priority: .userInitiated) { () -> (AcfForecast, AcfForecast) in
+            var without = doc
+            without.largeExpensePlans = doc.largeExpensePlans.filter { $0.id != p.id }
+            var with = without
+            var q = p; q.priority = "required"
+            with.largeExpensePlans.append(q)
+            return (with.acfForecast(today: today, lightweight: true), without.acfForecast(today: today, lightweight: true))
+        }.value
+        impact = (r.0, r.1)
+    }
+
+    @ViewBuilder private func impactView(_ w: AcfForecast, _ wo: AcfForecast) -> some View {
+        Grid(alignment: .trailing, horizontalSpacing: 12, verticalSpacing: 8) {
+            GridRow {
+                Text("").gridColumnAlignment(.leading)
+                Text("入れない").font(.caption).foregroundStyle(.secondary)
+                Text("入れる").font(.caption.weight(.semibold))
+            }
+            Divider().gridCellUnsizedAxes(.horizontal)
+            impactRow("月末予測", wo.monthEndForecast, w.monthEndForecast, warn: w.monthEndForecast < w.reserveFloor)
+            impactRow("最小予測残高", wo.minMandatoryBalance, w.minMandatoryBalance, warn: w.minMandatoryBalance < w.reserveFloor)
+            impactRow("今日使える額", wo.remainingToday, w.remainingToday, warn: w.remainingToday <= 0)
+        }
+        .monospacedDigit()
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 4)
+        let drop = wo.remainingToday - w.remainingToday
+        if w.minMandatoryBalance < w.reserveFloor {
+            Label("入れると、守りたい残高 \(w.reserveFloor.yen) を下回る日があります（\(w.minMandatoryDate.isEmpty ? "—" : Format.dayLabel(w.minMandatoryDate))）。", systemImage: "exclamationmark.triangle.fill")
+                .font(.footnote).foregroundStyle(.red)
+        } else if drop > 0 {
+            Label("今日使える額が \(drop.yen) 減ります。守りたい残高は下回りません。", systemImage: "checkmark.shield")
+                .font(.footnote).foregroundStyle(.secondary)
+        } else {
+            Label("守りたい残高は下回りません。", systemImage: "checkmark.shield").font(.footnote).foregroundStyle(.green)
+        }
+    }
+    private func impactRow(_ title: String, _ a: Double, _ b: Double, warn: Bool) -> some View {
+        GridRow {
+            Text(title).font(.subheadline)
+            Text(a.yen).font(.subheadline).foregroundStyle(.secondary)
+            VStack(alignment: .trailing, spacing: 0) {
+                Text(b.yen).font(.subheadline.weight(.semibold)).foregroundStyle(warn ? .red : .primary)
+                if b != a { Text(signedYen(b - a)).font(.caption2).foregroundStyle(b < a ? .red : .green) }
+            }
+        }
     }
 }
