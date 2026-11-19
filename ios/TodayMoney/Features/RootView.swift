@@ -11,7 +11,9 @@ struct RootView: View {
     @AppStorage("privacyBlur") private var privacyBlur = true
     @AppStorage("startTab") private var startTab = "home"
     @State private var launched = false
+    @AppStorage("relock") private var relock = Relock.immediate.rawValue
     @State private var locked = false
+    @State private var backgroundAt: Date?
 
     var body: some View {
         @Bindable var model = model
@@ -100,8 +102,13 @@ struct RootView: View {
         }
         .onChange(of: phase) { _, p in
             if p == .active { model.runScheduled(); Task { await Notifications.reschedule(doc: model.doc) } }
-            if p == .background && lockEnabled { locked = true }
-            if p == .active && locked { unlock() }
+            // 再ロック：バックグラウンドにいた時間が設定以上ならロック（Web 版 security.relock）
+            if p == .background && backgroundAt == nil { backgroundAt = Date() }
+            if p == .active {
+                if lockEnabled, let at = backgroundAt, let limit = (Relock(rawValue: relock) ?? .immediate).seconds, Date().timeIntervalSince(at) >= limit { locked = true }
+                backgroundAt = nil
+                if locked { unlock() }
+            }
         }
     }
 

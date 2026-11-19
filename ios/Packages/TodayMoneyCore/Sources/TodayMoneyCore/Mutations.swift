@@ -300,11 +300,16 @@ public extension MoneyDocument {
 
     // MARK: お知らせ
 
-    mutating func addNotice(title: String, body: String, kind: String = "info", now: Date = Date(), today: String) {
+    /// お知らせを足す（Web 版 addNotice と同じ形：key・message・date は ISO・80件まで。同じ日の同じ内容は足さない）
+    @discardableResult
+    mutating func addNotice(title: String, body message: String, kind: String = "info", now: Date = Date(), today: String) -> Bool {
         var list = root["notices"]?.arrayValue ?? []
-        list.insert(.object(["id": .string(Self.uid("notice", now: now)), "title": .string(title), "body": .string(body), "type": .string(kind),
-                             "date": .string(today), "createdAt": .string(ISODate.now(now)), "read": .bool(false), "source": .string("system")]), at: 0)
-        self["notices"] = .array(Array(list.prefix(200)))
+        let key = "\(title)|\(message)|\(today)"
+        if list.contains(where: { str($0["key"]) == key }) { return false }
+        list.insert(.object(["id": .string(Self.uid("note", now: now)), "key": .string(key), "title": .string(title), "message": .string(message),
+                             "type": .string(kind), "source": .string("system"), "date": .string(ISODate.now(now)), "read": .bool(false)]), at: 0)
+        self["notices"] = .array(Array(list.prefix(80)))
+        return true
     }
 }
 
