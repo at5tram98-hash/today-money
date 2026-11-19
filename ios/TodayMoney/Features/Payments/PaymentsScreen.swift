@@ -158,7 +158,7 @@ struct StatementRow: View {
     }
 }
 
-/// カードの行（今月の請求・推移の小さな線）
+/// カードの行（券面の色・今月の請求・推移の小さな線）
 struct CardWatchRow: View {
     var card: Card
     var items: [CardStatement]
@@ -166,149 +166,26 @@ struct CardWatchRow: View {
     var body: some View {
         let total = items.reduce(0) { $0 + $1.amount }
         HStack(spacing: 12) {
-            Image(systemName: "creditcard.fill").foregroundStyle(.white).frame(width: 30, height: 30)
-                .background(LinearGradient(colors: [.purple, .indigo], startPoint: .topLeading, endPoint: .bottomTrailing), in: RoundedRectangle(cornerRadius: 7))
-            VStack(alignment: .leading, spacing: 2) {
-                Text(card.name).lineLimit(1)
-                Text(items.first.map { "\(Format.shortDay($0.paymentDate))引落・\(items.contains { $0.plannedAmount > 0 } ? "予定を含む" : $0.status.label)" } ?? "この月の請求なし")
-                    .font(.caption).foregroundStyle(.secondary)
-            }
-            Spacer()
-            if series.contains(where: { $0 > 0 }) {
-                Chart(Array(series.enumerated()), id: \.offset) { i, v in
-                    LineMark(x: .value("月", i), y: .value("額", v)).interpolationMethod(.monotone)
+            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(CardArt.gradient(card))
+                .frame(width: 40, height: 27)
+                .overlay(alignment: .topLeading) {
+                    RoundedRectangle(cornerRadius: 1.5).fill(Color(hex: "#E8C565")).frame(width: 8, height: 6).padding(5)
                 }
-                .chartXAxis(.hidden).chartYAxis(.hidden)
-                .foregroundStyle(.purple)
-                .frame(width: 56, height: 24)
                 .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(card.name).lineLimit(1).minimumScaleFactor(0.85)
+                Text(items.first.map { "\(Format.shortDay($0.paymentDate))引落・\(items.contains { $0.plannedAmount > 0 } ? "予定込み" : $0.status.label)" } ?? "この月の請求なし")
+                    .font(.caption).foregroundStyle(.secondary).lineLimit(1)
             }
-            Text(total.yen).monospacedDigit()
-        }
-    }
-}
-
-/// カードの詳細（Web 版 cardDetailHtml：支払月ごとの請求・対象期間・利用明細・確定・支払済み）
-struct CardDetailView: View {
-    @Environment(AppModel.self) private var model
-    var cardId: String
-    @State var paymentMonth: String
-    @State private var selectedBM: String?
-    @State private var editing = false
-    @State private var editBilling = false
-    @State private var confirmPaid = false
-    @State private var applyBank = true
-
-    var body: some View {
-        let doc = model.doc
-        if let c = doc.card(cardId) {
-            let items: [CardStatement] = {
-                let s = doc.statements(cardId, paymentMonth: paymentMonth)
-                return s.isEmpty ? [doc.statement(cardId, paymentMonth: paymentMonth)].compactMap { $0 } : s
-            }()
-            let st = items.first { $0.billingMonth == selectedBM } ?? items.first { $0.status != .paid } ?? items.first
-            let bm = st?.billingMonth ?? doc.billingMonth(c, forPaymentMonth: paymentMonth)
-            let cycle = doc.billingCycle(c, month: bm)
-            let list = doc.cardTransactions(cardId, billingMonth: bm).sorted { $0.date > $1.date }
-            let total = items.reduce(0) { $0 + $1.amount }
-            let bank = doc.bank(c.bankId)
-            List {
-                Section {
-                    MonthSwitcher(month: $paymentMonth, thisMonth: model.thisMonth)
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("\(Format.monthLabel(paymentMonth))支払い").font(.subheadline).foregroundStyle(.secondary)
-                        MoneyText(value: total, size: 40, weight: .heavy)
-                        Text(items.count > 1 ? "\(items.count)件の請求" : "\(st?.status.label ?? "見込み")\(st.map { $0.paymentDate.isEmpty ? "" : "・\(Format.dayLabel($0.paymentDate))" } ?? "")")
-                            .font(.footnote.weight(.semibold)).foregroundStyle(items.allSatisfy { $0.status == .paid } ? .green : .secondary)
-                        Text("対象利用期間 \(cycle.start.replacingOccurrences(of: "-", with: "/"))〜\(cycle.end.replacingOccurrences(of: "-", with: "/"))")
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    .padding(.vertical, 4)
-                    if items.count > 1 {
-                        Picker("対象請求", selection: Binding(get: { bm }, set: { selectedBM = $0 })) {
-                            ForEach(items) { x in Text("\(Format.monthLabel(x.billingMonth))対象・\(x.amount.yen)").tag(x.billingMonth) }
-                        }
-                    }
-                }
-                Section("請求") {
-                    LabeledContent("利用の合計", value: doc.cardBaseUsage(cardId, billingMonth: bm).yen)
-                    if let a = doc.cardAdjustment(cardId, billingMonth: bm) {
-                        LabeledContent("確定した請求額", value: a.confirmedTotal.yen)
-                        let n = doc.cardNewUsageAfterConfirmation(cardId, billingMonth: bm)
-                        if n != 0 { LabeledContent("確定後の利用", value: signedYen(n)) }
-                    }
-                    LabeledContent("引落日", value: st.map { $0.paymentDate.isEmpty ? "未設定" : Format.dayLabel($0.paymentDate) } ?? "未設定")
-                    LabeledContent("引落口座", value: bank?.name ?? "未設定")
-                    LabeledContent("状態", value: st?.status.label ?? "見込み")
-                    Button { editBilling = true } label: { Label("請求額を確定・修正", systemImage: "square.and.pencil") }
-                    if st?.status == .paid {
-                        Button { model.change("カードの支払いを未払いに戻す") { d, now, today in d.markCardStatementPaid(cardId, billingMonth: bm, paid: false, now: now, today: today) }; model.done("未払いに戻しました") } label: {
-                            Label("未払いに戻す", systemImage: "arrow.uturn.backward")
-                        }
-                    } else {
-                        Button { applyBank = bank != nil; confirmPaid = true } label: { Label("支払済みにする", systemImage: "checkmark.circle") }
-                            .disabled((st?.amount ?? 0) <= 0)
-                    }
-                }
-                StatementImportSection(cardId: cardId, paymentMonth: paymentMonth, billingMonth: bm)
-                if c.limit > 0 {
-                    Section("利用枠") {
-                        LabeledContent("利用限度額", value: c.limit.yen)
-                        if let a = c.availableSnapshot { LabeledContent("利用可能額（最後に入力）", value: a.yen) }
-                    }
-                }
-                let cats = doc.categories.map { cat in (cat, list.filter { $0.category == cat.name }.reduce(0) { $0 + $1.amount }) }.filter { $0.1 > 0 }
-                if !cats.isEmpty {
-                    Section("カテゴリ別") {
-                        Chart(cats, id: \.0.id) { cat, v in
-                            BarMark(x: .value("金額", v), y: .value("カテゴリ", cat.name)).foregroundStyle(Color(hex: cat.color))
-                        }
-                        .frame(height: CGFloat(cats.count) * 28 + 20)
-                    }
-                }
-                Section("利用明細（\(list.count)件）") {
-                    if list.isEmpty { Text("この期間の利用はありません").foregroundStyle(.secondary) }
-                    ForEach(list) { t in
-                        NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) }.transactionActions(t)
-                    }
+            .layoutPriority(1)
+            Spacer(minLength: 4)
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(total.yen).monospacedDigit()
+                if series.contains(where: { $0 > 0 }) {
+                    Sparkline(points: series.enumerated().map { ValuePoint(date: "\($0.offset)", value: $0.element) }, tint: CardArt.colors(card)[0])
+                        .frame(width: 52, height: 16)
                 }
             }
-            .navigationTitle(c.name)
-            .toolbar { ToolbarItem(placement: .topBarTrailing) { Button("編集") { editing = true } } }
-            .sheet(isPresented: $editing) { NavigationStack { CardEditor(cardId: cardId) } }
-            .sheet(isPresented: $editBilling) { NavigationStack { CardBillingEditor(cardId: cardId, billingMonth: bm, paymentMonth: paymentMonth) } }
-            .sheet(isPresented: $confirmPaid) {
-                NavigationStack {
-                    Form {
-                        Section {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("\(c.name)・\(st.map { Format.dayLabel($0.paymentDate) } ?? "")").foregroundStyle(.secondary)
-                                MoneyText(value: st?.amount ?? 0)
-                                Text("\(Format.monthLabel(bm))対象の請求だけを支払済みにします。").font(.footnote).foregroundStyle(.secondary)
-                            }
-                        }
-                        Section {
-                            Toggle("口座残高にも反映する", isOn: $applyBank).disabled(bank == nil)
-                        } footer: {
-                            Text(bank == nil ? "引落口座が未設定です。支払済みの状態だけを保存します。" : applyBank ? "\(bank!.name)の残高から1回だけ差し引きます。" : "\(bank!.name)の今の残高に、この支払いはすでに含まれているものとして扱います。")
-                        }
-                    }
-                    .navigationTitle("支払いを確認").navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) { Button("キャンセル") { confirmPaid = false } }
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("支払済みにする") {
-                                let mode = bank == nil ? "none" : applyBank ? "apply" : "reconciled"
-                                model.change("カードの支払済み") { d, now, today in d.markCardStatementPaid(cardId, billingMonth: bm, paid: true, balanceMode: mode, now: now, today: today) }
-                                model.done("支払済みにしました"); confirmPaid = false
-                            }.bold()
-                        }
-                    }
-                }
-                .presentationDetents([.medium])
-            }
-        } else {
-            ContentUnavailableView("カードが見つかりません", systemImage: "creditcard")
         }
     }
 }

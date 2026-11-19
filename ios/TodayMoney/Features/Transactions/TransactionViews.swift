@@ -8,6 +8,8 @@ struct TransactionListView: View {
     var month: String? = nil
     var date: String? = nil
     var initialCategory = ""
+    /// この取引だけを出す（カードの利用期間など）
+    var onlyIds: Set<String>? = nil
     @State private var query = ""
     @State private var category = ""
     @State private var loaded = false
@@ -15,7 +17,7 @@ struct TransactionListView: View {
     var body: some View {
         let doc = model.doc
         let base = doc.transactions.filter { t in
-            (month == nil || t.date.hasPrefix(month!)) && (date == nil || t.date == date!) && (category.isEmpty || t.category == category)
+            (onlyIds == nil || onlyIds!.contains(t.id)) && (month == nil || t.date.hasPrefix(month!)) && (date == nil || t.date == date!) && (category.isEmpty || t.category == category)
         }
         let q = query.trimmingCharacters(in: .whitespaces).lowercased()
         let list = base.filter { q.isEmpty || "\($0.merchant) \($0.category) \($0.memo) \(Int($0.amount))".lowercased().contains(q) }
