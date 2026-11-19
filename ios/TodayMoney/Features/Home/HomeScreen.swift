@@ -200,7 +200,7 @@ struct HomeScreen: View {
         let total = events.reduce(0) { $0 - $1.amount }
         return Button { model.tab = .payments } label: {
             VStack(alignment: .leading, spacing: 12) {
-                CardHeader(title: "次の支払い", systemImage: "calendar", tint: .purple, trailing: AnyView(Text("支払いタブへ").font(.footnote).foregroundStyle(.secondary)))
+                CardHeader(title: "次の支払い", systemImage: "calendar", tint: .purple, showsChevron: true, trailing: AnyView(Text("支払いタブへ").font(.footnote).foregroundStyle(.secondary)))
                 HStack(alignment: .firstTextBaseline) {
                     Text(total.yen).moneyFont(30, weight: .bold).monospacedDigit()
                     Text("30日以内・\(events.count)件").font(.footnote).foregroundStyle(.secondary)
@@ -379,43 +379,245 @@ extension View {
     func cardStyle() -> some View { cardSurface() }
 }
 
-/// 今月の支出（カテゴリ別・日別・取引）（Web 版 renderMonth）
+/// 月の支出・月間詳細分析（Web 版 renderMonth・openMonthAnalysis：使った額・目標・日別・計画と実績・3か月推移・カテゴリの割合・高額支出 TOP5・急に増えたカテゴリ）
 struct MonthSpendingView: View {
     @Environment(AppModel.self) private var model
     @State var month: String
+    @State private var pickedDay: Int?
+
     var body: some View {
-        let doc = model.doc
+        let doc = model.doc, today = model.today
+        let a = doc.monthAnalysis(month, today: today)
         let txs = doc.transactions(inMonth: month)
-        let goal = doc.monthlyGoalTotal(month), spent = doc.spentMonth(month)
-        let daily = (1...Dates.daysInMonth(month)).map { d -> (Int, Double) in (d, doc.spent(on: "\(month)-\(d < 10 ? "0" : "")\(d)")) }
-        List {
-            Section {
+        let goal = a.plan, spent = a.actual
+        let days = Dates.daysInMonth(month)
+        let daily = (1...days).map { d -> (day: Int, value: Double, goal: Double) in (d, doc.spent(on: "\(month)-\(pad(d))"), doc.dayGoalForMonth(month, day: d)) }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
                 MonthSwitcher(month: $month, thisMonth: model.thisMonth)
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("この月に使った金額").font(.subheadline).foregroundStyle(.secondary)
-                    MoneyText(value: spent, size: 40, weight: .heavy)
-                    if goal > 0 { ProgressView(value: min(1, spent / goal)).tint(spent > goal ? .red : .orange); Text("目標 \(goal.yen)・\(Int(spent / goal * 100))%").font(.footnote).foregroundStyle(.secondary) }
-                    LabeledContent("先月", value: doc.spentMonth(Dates.addMonths(month, -1)).yen).font(.footnote)
+
+                // 使った額と目標
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("\(Format.monthLabel(month))に使った金額").font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
+                    MoneyText(value: spent, size: 44, weight: .heavy)
+                    if let c = a.change, a.months[1].value > 0 {
+                        Label("先月より \(signedYen(spent - a.months[1].value))（\(c >= 0 ? "+" : "")\(c)%）", systemImage: c > 0 ? "arrow.up.right" : "arrow.down.right")
+                            .font(.subheadline.weight(.semibold)).foregroundStyle(c > 0 ? .red : .green)
+                    }
+                    if goal > 0 {
+                        ProgressView(value: min(1, spent / goal)).tint(spent > goal ? .red : .orange)
+                        Text(spent > goal ? "目標 \(goal.yen) を \((spent - goal).yen) 超えています" : "目標 \(goal.yen)・あと \((goal - spent).yen)")
+                            .font(.footnote).foregroundStyle(spent > goal ? .red : .secondary)
+                    }
+                    // 日別（目標の線つき・なぞると日付と金額）
+                    VStack(alignment: .leading, spacing: 4) {
+                        if let d = pickedDay, let row = daily.first(where: { $0.day == d }) {
+                            Text("\(Format.dayLabel("\(month)-\(pad(d))"))  \(row.value.yen)\(row.goal > 0 ? "（目標 \(row.goal.yen)）" : "")").font(.footnote.weight(.semibold)).monospacedDigit()
+                        } else {
+                            Text("日別の支出・なぞると金額が出ます").font(.footnote).foregroundStyle(.secondary)
+                        }
+                        Chart {
+                            ForEach(daily, id: \.day) { r in
+                                BarMark(x: .value("日", r.day), y: .value("支出", r.value))
+                                    .foregroundStyle(r.goal > 0 && r.value > r.goal ? Color.red.gradient : (pickedDay == r.day ? Color.orange.gradient : Color.orange.opacity(0.65).gradient))
+                                    .cornerRadius(2)
+                                if r.goal > 0 {
+                                    LineMark(x: .value("日", r.day), y: .value("目標", r.goal)).foregroundStyle(.secondary).lineStyle(StrokeStyle(lineWidth: 1, dash: [2, 3]))
+                                }
+                            }
+                        }
+                        .chartXScale(domain: 0.5...(Double(days) + 0.5))
+                        .chartXAxis { AxisMarks(values: [1, 10, 20, days]) { v in AxisValueLabel { if let n = v.as(Int.self) { Text("\(n)日") } } } }
+                        .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
+                        .chartXSelection(value: Binding(get: { pickedDay }, set: { v in if v != pickedDay { pickedDay = v; if v != nil { Feedback.selection() } } }))
+                        .frame(height: 150)
+                    }
+                    .padding(.top, 4)
                 }
-                Chart(daily, id: \.0) { d, v in BarMark(x: .value("日", d), y: .value("額", v)).foregroundStyle(.orange) }
-                    .frame(height: 120)
+                .cardSurface()
+
+                // 計画と実績
+                VStack(alignment: .leading, spacing: 10) {
+                    CardHeader(title: "計画と実績", systemImage: "target", tint: .orange)
+                    HStack(spacing: 8) {
+                        StatTile(title: "計画", value: a.plan > 0 ? a.plan.yen : "未設定", tint: a.plan > 0 ? .primary : .secondary)
+                        StatTile(title: "実績", value: a.actual.yen)
+                    }
+                    HStack(spacing: 8) {
+                        StatTile(title: "今日までの想定", value: a.expected > 0 ? a.expected.yen : "—")
+                        StatTile(title: "差", value: a.expected > 0 ? signedYen(a.variance) : "—", tint: a.variance > 0 ? .red : a.variance < 0 ? .green : .primary)
+                    }
+                    if a.expected > 0 {
+                        Text(a.variance > 0 ? "日別の計画より \(a.variance.yen) 多く使っています。" : "日別の計画の範囲に収まっています。").font(.footnote).foregroundStyle(a.variance > 0 ? .red : .secondary)
+                    } else if a.plan == 0 {
+                        NavigationLink { GoalPlannerView(type: .monthly, key: month) } label: { Label("月間目標をつくる", systemImage: "plus.circle").font(.subheadline.weight(.semibold)) }
+                    }
+                }
+                .cardSurface()
+
+                // 過去3か月
+                VStack(alignment: .leading, spacing: 10) {
+                    CardHeader(title: "過去3か月の支出", systemImage: "chart.bar.fill", tint: .blue)
+                    Text("前月比 \(a.change.map { "\($0 >= 0 ? "+" : "")\($0)%" } ?? "—")・前年同月比 \(a.yoy.map { "\($0 >= 0 ? "+" : "")\($0)%" } ?? "—")")
+                        .font(.footnote).foregroundStyle(.secondary)
+                    Chart(a.months) { p in
+                        BarMark(x: .value("月", "\(Dates.parts(p.date).m)月"), y: .value("支出", p.value))
+                            .foregroundStyle(p.date.hasPrefix(month) ? Color.blue.gradient : Color.blue.opacity(0.35).gradient).cornerRadius(6)
+                            .annotation(position: .top) { Text(compactYen(p.value)).font(.caption2.weight(.semibold)).foregroundStyle(.secondary) }
+                    }
+                    .chartYAxis(.hidden)
+                    .frame(height: 140)
+                }
+                .cardSurface()
+
+                // カテゴリ
+                categoryCard(a, txs: txs)
+
+                topFive(a, doc: doc)
+
+                surgingCard(a)
+
+                LinkGroup {
+                    LinkRow(title: "取引をすべて見る", sub: "\(txs.count)件・検索とカテゴリで絞り込み", symbol: "list.bullet", tint: .blue) { TransactionListView(title: "\(Format.monthLabel(month))の取引", month: month) }
+                    LinkRow(title: "カレンダーで見る", sub: "日ごとの支出と目標", symbol: "calendar", tint: .red) { MonthCalendarView(month: month) }
+                    LinkRow(title: "月次比較", sub: "カテゴリごとの増減", symbol: "arrow.left.arrow.right", tint: .indigo) { MonthCompareView(month: month) }
+                    LinkRow(title: "理由が分かる分析", sub: "カテゴリ・店舗・曜日・支払い方法", symbol: "magnifyingglass", tint: .purple) { ReasonAnalysisView(kind: "expense", month: month) }
+                    LinkRow(title: "実質支出を確認・修正", sub: "記録と実際の差を直す", symbol: "slider.horizontal.3", tint: .gray) { CorrectionView(key: month) }
+                }
             }
-            Section("カテゴリ別") {
-                ForEach(doc.categories) { c in
-                    let v = txs.filter { $0.category == c.name }.reduce(0) { $0 + $1.amount }
-                    if v != 0 {
-                        HStack { CategoryIcon(category: c, size: 26); Text(c.name); Spacer(); Text(v.yen).monospacedDigit() }
+            .padding(16)
+            .padding(.bottom, 90)
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle("月間詳細分析")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func pad(_ d: Int) -> String { d < 10 ? "0\(d)" : "\(d)" }
+
+    @ViewBuilder private func topFive(_ a: MonthAnalysis, doc: MoneyDocument) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("高額支出 TOP5").font(.title3.bold())
+            VStack(spacing: 0) {
+                if a.top.isEmpty { Text("支出がありません。").font(.footnote).foregroundStyle(.secondary).padding() }
+                ForEach(Array(a.top.enumerated()), id: \.element.id) { i, t in
+                    if i > 0 { Divider().padding(.leading, 56) }
+                    NavigationLink { TransactionEditor(draft: t, isNew: false) } label: {
+                        HStack(spacing: 12) {
+                            rank(i, t, doc: doc)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(t.merchant.isEmpty ? t.category : t.merchant).font(.subheadline.weight(.semibold)).foregroundStyle(.primary).lineLimit(1)
+                                Text("\(t.category)・\(Format.shortDay(t.date))").font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Text(t.amount.yen).font(.subheadline.weight(.semibold)).monospacedDigit().foregroundStyle(.primary)
+                            Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary)
+                        }
+                        .padding(.horizontal, 14).padding(.vertical, 10).contentShape(Rectangle())
+                    }
+                    .buttonStyle(CardPressStyle())
+                    .transactionActions(t)
+                }
+            }
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        }
+
+    }
+
+    private func rank(_ i: Int, _ t: Transaction, doc: MoneyDocument) -> some View {
+        let color = Color(hex: doc.category(named: t.category).color)
+        return Text("\(i + 1)").font(.headline.monospacedDigit()).foregroundStyle(.white)
+            .frame(width: 28, height: 28).background(color.gradient, in: Circle())
+    }
+
+    @ViewBuilder private func surgingCard(_ a: MonthAnalysis) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("急に増えたカテゴリ").font(.title3.bold())
+            VStack(spacing: 0) {
+                if a.surging.isEmpty {
+                    Label("先月より大きく増えたカテゴリはありません", systemImage: "checkmark.circle.fill").font(.subheadline).foregroundStyle(.green).padding(14)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                ForEach(Array(a.surging.enumerated()), id: \.element.id) { i, c in
+                    if i > 0 { Divider().padding(.leading, 56) }
+                    NavigationLink { TransactionListView(title: "\(c.name)・\(Format.monthLabel(month))", month: month, initialCategory: c.name) } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "exclamationmark").font(.subheadline.weight(.bold)).foregroundStyle(.white).frame(width: 28, height: 28).background(Color.orange.gradient, in: Circle())
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(c.name).font(.subheadline.weight(.semibold)).foregroundStyle(.primary)
+                                Text("先月より \(Int(((c.value - c.prev) / c.prev * 100).rounded()))% 増加（先月 \(c.prev.yen)）").font(.caption).foregroundStyle(.orange)
+                            }
+                            Spacer()
+                            Text(c.value.yen).font(.subheadline.weight(.semibold)).monospacedDigit().foregroundStyle(.primary)
+                            Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary)
+                        }
+                        .padding(.horizontal, 14).padding(.vertical, 10).contentShape(Rectangle())
+                    }
+                    .buttonStyle(CardPressStyle())
+                }
+            }
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        }
+
+    }
+
+
+    private func categoryCard(_ a: MonthAnalysis, txs: [Transaction]) -> some View {
+        let rows = a.categories.filter { $0.value > 0 }
+        let total = max(1, rows.reduce(0) { $0 + $1.value })
+        return VStack(alignment: .leading, spacing: 12) {
+            CardHeader(title: "カテゴリ別", systemImage: "chart.pie.fill", tint: .purple)
+            if rows.isEmpty {
+                Text("この月の支出はまだありません。").font(.footnote).foregroundStyle(.secondary)
+            } else {
+                HStack(spacing: 16) {
+                    Chart(rows) { r in
+                        SectorMark(angle: .value("金額", r.value), innerRadius: .ratio(0.62), angularInset: 1.5).cornerRadius(3)
+                            .foregroundStyle(Color(hex: r.color))
+                    }
+                    .chartBackground { _ in VStack(spacing: 0) { Text("\(rows.count)").font(.headline); Text("カテゴリ").font(.caption2).foregroundStyle(.secondary) } }
+                    .frame(width: 110, height: 110)
+                    VStack(alignment: .leading, spacing: 6) {
+                        ForEach(rows.prefix(5)) { r in
+                            HStack(spacing: 6) {
+                                Circle().fill(Color(hex: r.color)).frame(width: 8, height: 8)
+                                Text(r.name).font(.footnote).lineLimit(1)
+                                Spacer(minLength: 4)
+                                Text("\(Int((r.value / total * 100).rounded()))%").font(.footnote.weight(.semibold)).monospacedDigit()
+                            }
+                        }
+                    }
+                }
+                VStack(spacing: 0) {
+                    ForEach(Array(rows.enumerated()), id: \.element.id) { i, r in
+                        if i > 0 { Divider() }
+                        NavigationLink { TransactionListView(title: "\(r.name)・\(Format.monthLabel(month))", month: month, initialCategory: r.name) } label: {
+                            HStack(spacing: 10) {
+                                CategoryIcon(category: model.doc.category(named: r.name), size: 26)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack {
+                                        Text(r.name).font(.subheadline.weight(.semibold)).foregroundStyle(.primary)
+                                        Spacer()
+                                        Text(r.value.yen).font(.subheadline.weight(.semibold)).monospacedDigit().foregroundStyle(.primary)
+                                    }
+                                    GeometryReader { g in
+                                        Capsule().fill(Color(hex: r.color).gradient).frame(width: max(4, g.size.width * r.value / (rows.first?.value ?? 1)))
+                                    }
+                                    .frame(height: 5)
+                                    if r.prev > 0 {
+                                        Text("先月 \(r.prev.yen)・\(signedYen(r.value - r.prev))").font(.caption2).foregroundStyle(r.value > r.prev ? .red : .green)
+                                    }
+                                }
+                                Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary)
+                            }
+                            .padding(.vertical, 8).contentShape(Rectangle())
+                        }
+                        .buttonStyle(CardPressStyle())
                     }
                 }
             }
-            Section {
-                NavigationLink { TransactionListView(title: "\(Format.monthLabel(month))の取引", month: month) } label: { Text("取引をすべて見る（\(txs.count)件）") }
-                NavigationLink { MonthCalendarView(month: month) } label: { Label("カレンダーで見る", systemImage: "calendar") }
-                NavigationLink { CorrectionView(key: month) } label: { Label("実質支出を確認・修正", systemImage: "slider.horizontal.3") }
-            }
-            ProMenuSection(month: month)
         }
-        .navigationTitle("今月の支出")
+        .cardSurface()
     }
 }
 

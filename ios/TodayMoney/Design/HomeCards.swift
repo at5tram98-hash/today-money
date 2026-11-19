@@ -20,7 +20,7 @@ struct CardHeader: View {
     var title: String
     var systemImage: String
     var tint: Color
-    var showsChevron = true
+    var showsChevron = false
     var trailing: AnyView? = nil
     var body: some View {
         HStack(spacing: 8) {
@@ -49,7 +49,7 @@ struct TapCard<Content: View, Destination: View>: View {
     var body: some View {
         NavigationLink(destination: destination) {
             VStack(alignment: .leading, spacing: 12) {
-                CardHeader(title: title, systemImage: systemImage, tint: tint)
+                CardHeader(title: title, systemImage: systemImage, tint: tint, showsChevron: true)
                 content
             }
             .cardSurface()
