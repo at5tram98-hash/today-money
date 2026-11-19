@@ -64,6 +64,12 @@ final class AppModel {
     /// ディープリンクで開く画面（mymoney://acf など）
     enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day", analysis, timeline, goals, review, mail }
     var route: Route?
+    /// ACFセンター（開いている時はそのタブ。nil なら閉じている）
+    var acfCenter: AcfCenterTab?
+    /// ACFセンターを開く（ACF・資金見通し・お金のタイムライン・引落準備の入口はすべてここ）
+    func openAcf(_ tab: AcfCenterTab = .overview) { acfCenter = tab }
+    /// ACFセンターで設定を開く（通知・リンクから）
+    var acfSettingsRequested = false
     /// 支払いタブで表示する月
     var paymentMonth: String = Dates.ym()
 
@@ -103,7 +109,14 @@ final class AppModel {
         case "search": tab = .home; searchRequested = true
         case "entry": entryMode = EntryMode(rawValue: url.pathComponents.dropFirst().first ?? "expense") ?? .expense
         default:
-            if let r = Route(rawValue: host) { tab = .home; route = r }
+            if let r = Route(rawValue: host) {
+                switch r {
+                case .acf, .acfIndex: openAcf(.overview)
+                case .cashflow, .timeline: openAcf(.events)
+                case .acfSettings: openAcf(.overview); acfSettingsRequested = true
+                default: tab = .home; route = r
+                }
+            }
         }
     }
 

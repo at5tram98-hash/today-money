@@ -7,8 +7,11 @@ struct HomeScreen: View {
     @Environment(AppModel.self) private var model
     @AppStorage("homePeriod") private var period = "today"
     @State private var date = Dates.ymd()
-    @State private var goalSheet = false
+    @State private var goalTarget: GoalTarget?
+    enum GoalTarget: String, Identifiable { case day, month; var id: String { rawValue } }
     @State private var searching = false
+    /// ナビゲーションバーのメニューから開く画面
+    @State private var tool: HomeTool?
     /// 画面の行き先（リンクで開いた時に、いったん最初の画面に戻してから開く）
     @State private var path = NavigationPath()
 
@@ -41,36 +44,69 @@ struct HomeScreen: View {
             .background(Color(.systemGroupedBackground))
             .entryButton()
             .navigationTitle("ホーム")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button { searching = true } label: { Image(systemName: "magnifyingglass") }.accessibilityLabel("検索")
-                }
-            }
+            .toolbar { homeToolbar(doc, today: today) }
+            .navigationDestination(item: $tool) { t in t.view(month: month) }
             .navigationDestination(isPresented: $searching) { GlobalSearchView() }
             .navigationDestination(item: Binding(get: { model.route }, set: { model.route = $0 })) { r in
                 switch r {
-                case .acf: AcfDetailView()
-                case .acfIndex: AcfIndexView()
+                case .acf, .acfIndex: AcfCenterLauncher(tab: .overview)
                 case .acfSettings: AcfSettingsView()
-                case .cashflow: CashFlowView()
+                case .cashflow, .timeline: AcfCenterLauncher(tab: .events)
                 case .dayClose: DayClosingView(date: model.today)
                 case .goalMonth: GoalPlannerView(type: .monthly, key: model.thisMonth)
                 case .goalDay: GoalPlannerView(type: .daily, key: model.today)
                 case .analysis: ReasonAnalysisView(kind: "expense", month: model.thisMonth)
-                case .timeline: MoneyTimelineView()
                 case .goals: EventGoalsView()
                 case .review: MonthReviewView(month: model.thisMonth)
                 case .mail: MailCenterView()
                 }
             }
-            .sheet(isPresented: $goalSheet) { NavigationStack { GoalPlannerView(type: period == "today" ? .daily : .monthly, key: period == "today" ? date : String(date.prefix(7))) } }
+            .sheet(item: $goalTarget) { g in NavigationStack { GoalPlannerView(type: g == .day ? .daily : .monthly, key: g == .day ? date : String(date.prefix(7))) } }
             .onChange(of: model.today) { _, t in date = t }
             .onChange(of: model.searchRequested) { _, v in if v { model.searchRequested = false; path = NavigationPath(); searching = true } }
             .onChange(of: model.route) { _, r in if r != nil && !path.isEmpty { let keep = r; path = NavigationPath(); model.route = nil; DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { model.route = keep } } }
         }
     }
 
-    // MARK: 支出（いちばん上。期間の切り替えと目標のボタンを持つ）
+    // MARK: ナビゲーションバー（左：記録・整理・分析のメニュー、右：目標・ACFセンター・検索）
+
+    @ToolbarContentBuilder private func homeToolbar(_ doc: MoneyDocument, today: String) -> some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Menu {
+                Section("記録") {
+                    Button { tool = .quickLine } label: { Label("一行入力", systemImage: "text.line.first.and.arrowtriangle.forward") }
+                    Button { tool = .bulkUpdate } label: { Label("金額をまとめて更新", systemImage: "square.and.pencil") }
+                    Button { tool = .tempIncome } label: { Label("臨時収入", systemImage: "yensign.circle") }
+                    Button { tool = .mail } label: { Label(doc.pendingMailIds.isEmpty ? "メール取引センター" : "メール取引センター（\(doc.pendingMailIds.count)）", systemImage: "envelope") }
+                }
+                Section("整理") {
+                    Button { tool = .transactions } label: { Label("すべての取引", systemImage: "list.bullet") }
+                    Button { tool = .favorites } label: { Label("お気に入り", systemImage: "star") }
+                    Button { tool = .tags } label: { Label("タグ", systemImage: "tag") }
+                }
+                Section("分析と計画") {
+                    Button { tool = .reasonExpense } label: { Label("理由が分かる分析", systemImage: "chart.bar.xaxis") }
+                    Button { tool = .reasonSalary } label: { Label("給与分析", systemImage: "yensign.circle") }
+                    Button { tool = .rebalance } label: { Label("予算を立て直す", systemImage: "target") }
+                    Button { tool = .eventGoals } label: { Label("旅行・プレゼント目標", systemImage: "gift") }
+                    Button { tool = .review } label: { Label("月締めレビュー", systemImage: "checkmark.seal") }
+                    Button { tool = .allocation } label: { Label("給料日の振り分け", systemImage: "square.split.2x2") }
+                }
+            } label: { Image(systemName: "square.grid.2x2") }
+            .accessibilityLabel("記録・整理・分析のメニュー")
+        }
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            Menu {
+                Button { goalTarget = .day } label: { Label(doc.dailyGoal(date) > 0 ? "\(date == today ? "今日" : Format.shortDay(date))の目標を変更" : "\(date == today ? "今日" : Format.shortDay(date))の目標をつくる", systemImage: "sun.max") }
+                Button { goalTarget = .month } label: { Label(doc.monthlyGoalTotal(String(date.prefix(7))) > 0 ? "今月の目標を変更" : "今月の目標をつくる", systemImage: "calendar") }
+            } label: { Image(systemName: "target") }
+            .accessibilityLabel("目標")
+            Button { model.openAcf(.overview) } label: { Image(systemName: "chart.line.uptrend.xyaxis") }.accessibilityLabel("ACFセンター")
+            Button { searching = true } label: { Image(systemName: "magnifyingglass") }.accessibilityLabel("検索")
+        }
+    }
+
+    // MARK: 支出（いちばん上。期間の切り替えを持つ。目標と入力はナビゲーションバー・＋から）
 
     @ViewBuilder private func spendCard(_ doc: MoneyDocument, today: String) -> some View {
         let isToday = period == "today"
@@ -122,11 +158,6 @@ struct HomeScreen: View {
             }
             .buttonStyle(CardPressStyle())
             .accessibilityHint("明細を見る")
-            // ボタンの段
-            HStack(spacing: 10) {
-                PillButton(title: goal > 0 ? "目標を変更" : "目標をつくる", systemImage: "target", tint: .orange) { goalSheet = true }
-                PillButton(title: "支出を入力", systemImage: "plus", tint: .accentColor) { model.entryMode = .expense }
-            }
         }
         .cardSurface()
     }
@@ -166,8 +197,8 @@ struct HomeScreen: View {
 
     @ViewBuilder private func acfCard(_ doc: MoneyDocument) -> some View {
         let s = doc.acfStoredSettings
-        TapCard(title: "ACF", systemImage: "chart.line.uptrend.xyaxis", tint: Theme.acf) {
-            if s.initialized { AcfIndexView() } else { AcfSettingsView() }
+        ActionCard(title: "ACFセンター", systemImage: "chart.line.uptrend.xyaxis", tint: Theme.acf, accessibilityHint: "ACFセンターを開く") {
+            model.openAcf(.overview)
         } content: {
             if !s.initialized {
                 VStack(alignment: .leading, spacing: 4) {
@@ -625,6 +656,29 @@ struct MonthSpendingView: View {
 }
 
 /// 今月と先月の比較（カテゴリごと）
+/// ホームのナビゲーションバーのメニューから開く画面（以前は「その他」に並んでいたもの）
+enum HomeTool: String, Hashable, Identifiable {
+    case quickLine, bulkUpdate, tempIncome, mail, transactions, favorites, tags, reasonExpense, reasonSalary, rebalance, eventGoals, review, allocation
+    var id: String { rawValue }
+    @ViewBuilder func view(month: String) -> some View {
+        switch self {
+        case .quickLine: QuickLineView()
+        case .bulkUpdate: FinancialUpdatesView(kind: "banks")
+        case .tempIncome: TempIncomeHistoryView()
+        case .mail: MailCenterView()
+        case .transactions: TransactionListView()
+        case .favorites: FavoritesView()
+        case .tags: TagsView()
+        case .reasonExpense: ReasonAnalysisView(kind: "expense", month: month)
+        case .reasonSalary: ReasonAnalysisView(kind: "salary", month: month)
+        case .rebalance: BudgetRebalanceView(month: month)
+        case .eventGoals: EventGoalsView()
+        case .review: MonthReviewView(month: month)
+        case .allocation: SalaryAllocationListView()
+        }
+    }
+}
+
 /// 口座の残高（総資産）
 #Preview {
     HomeScreen().environment(AppModel.preview())

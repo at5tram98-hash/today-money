@@ -43,10 +43,14 @@ struct PaymentsScreen: View {
                     }
                 }
                 Section {
-                    NavigationLink { AcfDetailView() } label: { AcfPaymentsPreview() }
-                    NavigationLink { CashFlowView() } label: { Label("予定の入出金と残高（90日）", systemImage: "list.bullet.rectangle") }
-                } header: { Text("支払い後の資金見通し・ACF") } footer: {
-                    Text("給与・振込・カード引落を日別に試算。ACFを開くと、日別資金表・カレンダー・カードの配分を確認できます。")
+                    Button { model.openAcf(.overview) } label: {
+                        HStack { AcfPaymentsPreview(); Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(.tertiary) }
+                    }
+                    .tint(.primary)
+                    Button { model.openAcf(.events) } label: { Label("予定の入出金と残高", systemImage: "list.bullet.rectangle") }
+                    Button { model.openAcf(.table) } label: { Label("日別資金表", systemImage: "tablecells") }
+                } header: { Text("支払い後の資金見通し・ACFセンター") } footer: {
+                    Text("給与・振込・カード引落を日別に試算。ACFセンターで、日別資金表・予定・口座ごとの見通し・購入前の試算をまとめて確認できます。")
                 }
 
                 Section("次の引落") {
@@ -363,7 +367,7 @@ struct PaymentRiskBanner: View {
             if let r = f.risks.first(where: { ($0.severity == "critical" || $0.severity == "warning") && !$0.date.isEmpty && $0.date >= model.today }), dismissed != r.id {
                 Section {
                     HStack(alignment: .top, spacing: 12) {
-                        NavigationLink { AcfDetailView() } label: {
+                        Button { model.openAcf(.overview) } label: {
                             HStack(alignment: .top, spacing: 12) {
                                 Image(systemName: "exclamationmark.triangle.fill").font(.title3).foregroundStyle(r.severity == "critical" ? .red : .orange)
                                 VStack(alignment: .leading, spacing: 3) {

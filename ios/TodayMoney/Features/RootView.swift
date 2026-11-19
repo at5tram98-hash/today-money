@@ -22,6 +22,16 @@ struct RootView: View {
             PaymentsScreen().tabItem { Label("支払い", systemImage: "creditcard.fill") }.tag(AppModel.Tab.payments)
             MoreScreen().tabItem { Label("その他", systemImage: "square.grid.2x2.fill") }.tag(AppModel.Tab.more)
         }
+        // ACFセンター：ふだんのタブの上に重ねる（下から上がってきて、下タブは左の丸いボタンにしまわれる）
+        .overlay {
+            if model.acfCenter != nil {
+                AcfCenterView()
+                    .transition(.asymmetric(insertion: .move(edge: .bottom).combined(with: .opacity),
+                                            removal: .move(edge: .bottom).combined(with: .opacity)))
+                    .zIndex(1)
+            }
+        }
+        .animation(.spring(response: 0.48, dampingFraction: 0.88), value: model.acfCenter == nil)
         .sheet(item: $model.entryMode) { mode in EntrySheet(mode: mode).presentationDetents([.large]) }
         .alert("お知らせ", isPresented: Binding(get: { model.errorMessage != nil }, set: { if !$0 { model.errorMessage = nil } })) {
             Button("OK", role: .cancel) {}

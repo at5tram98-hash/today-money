@@ -76,13 +76,44 @@ struct AmountField: View {
     var title: String
     @Binding var value: Double
     var body: some View {
-        LabeledContent(title) {
-            TextField("0", value: $value, format: .number.grouping(.automatic))
-                .keyboardType(.numberPad)
-                .multilineTextAlignment(.trailing)
-                .monospacedDigit()
-        }
+        LabeledContent(title) { AmountInput(value: $value).multilineTextAlignment(.trailing) }
     }
+}
+
+/// 金額の入力欄。押すと新しく打ち直す（今の金額は薄く見えたまま）。打つたびに値が決まるので、
+/// 数字キーボードのまま「保存」を押しても打った金額で保存される（前は欄を離れるまで反映されず、
+/// 既存の「13,000」の後ろに数字が付いて「13,00020000」のような値になることがあった）
+struct AmountInput: View {
+    @Binding var value: Double
+    var font: Font = .body
+    var allowNegative = false
+    @State private var text = ""
+    @State private var editing = false
+    @FocusState private var focused: Bool
+
+    var body: some View {
+        TextField(Self.grouped(value), text: $text)
+            .keyboardType(allowNegative ? .numbersAndPunctuation : .numberPad)
+            .font(font)
+            .monospacedDigit()
+            .focused($focused)
+            .onAppear { if !focused { text = value == 0 ? "" : Self.grouped(value) } }
+            .onChange(of: focused) { _, f in
+                editing = f
+                text = f ? "" : (value == 0 ? "" : Self.grouped(value))
+            }
+            .onChange(of: text) { _, t in
+                guard editing else { return }
+                var digits = t.filter(\.isNumber).map { String($0) }.joined()
+                digits = String(digits.prefix(12))
+                let neg = allowNegative && (t.hasPrefix("-") || t.hasPrefix("−"))
+                let shown = (neg ? "-" : "") + digits
+                if shown != t { text = shown; return }
+                if let n = Double(digits) { value = neg ? -n : n }
+            }
+            .onChange(of: value) { _, v in if !focused { text = v == 0 ? "" : Self.grouped(v) } }
+    }
+    static func grouped(_ v: Double) -> String { v.formatted(.number.grouping(.automatic).precision(.fractionLength(0))) }
 }
 
 /// 大きな金額の文字。文字サイズの設定（Dynamic Type）に合わせて大きく・小さくなる
