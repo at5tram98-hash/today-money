@@ -132,7 +132,7 @@ struct PaymentsScreen: View {
                 Text(sub).font(.caption).foregroundStyle(.secondary)
             }
             Spacer()
-            Text(value.yen).monospacedDigit()
+            Text(value.yen).monospacedDigit().fixedSize()
         }
     }
 }
@@ -150,13 +150,13 @@ struct StatementRow: View {
             }
             .frame(width: 40)
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(st.cardName)支払").lineLimit(1)
-                Text([showDays ? daysUntilText(st.paymentDate, today: today) : nil, "\(Format.monthLabel(st.billingMonth))対象", st.plannedAmount > 0 ? "予定含む" : nil, st.status.label]
+                Text("\(st.cardName)支払").lineLimit(2)
+                Text([showDays ? daysUntilText(st.paymentDate, today: today) : nil, "\(Dates.parts(st.billingMonth + "-01").m)月利用分", st.plannedAmount > 0 ? "予定含む" : nil, st.status.label]
                     .compactMap { $0 }.joined(separator: "・"))
-                    .font(.caption).foregroundStyle(.secondary).lineLimit(2)
+                    .font(.caption).foregroundStyle(.secondary).lineLimit(3)
             }
             Spacer()
-            Text((st.outstandingAmount > 0 ? st.outstandingAmount : st.amount).yen).font(.body.weight(.semibold)).monospacedDigit()
+            Text((st.outstandingAmount > 0 ? st.outstandingAmount : st.amount).yen).font(.body.weight(.semibold)).monospacedDigit().fixedSize()
         }
         .accessibilityElement(children: .combine)
     }
@@ -177,14 +177,14 @@ struct CardWatchRow: View {
                 }
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
-                Text(card.name).lineLimit(1).minimumScaleFactor(0.85)
+                Text(card.name).lineLimit(2).minimumScaleFactor(0.85)
                 Text(items.first.map { "\(Format.shortDay($0.paymentDate))引落・\(items.contains { $0.plannedAmount > 0 } ? "予定込み" : $0.status.label)" } ?? "この月の請求なし")
-                    .font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                    .font(.caption).foregroundStyle(.secondary).lineLimit(2)
             }
             .layoutPriority(1)
             Spacer(minLength: 4)
             VStack(alignment: .trailing, spacing: 2) {
-                Text(total.yen).monospacedDigit()
+                Text(total.yen).monospacedDigit().fixedSize()
                 if series.contains(where: { $0 > 0 }) {
                     Sparkline(points: series.enumerated().map { ValuePoint(date: "\($0.offset)", value: $0.element) }, tint: CardArt.colors(card)[0])
                         .frame(width: 52, height: 16)

@@ -305,7 +305,7 @@ struct CategoryDetailView: View {
                     ForEach(c.merchants.prefix(8)) { m in
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(m.name).lineLimit(1)
+                                Text(m.name).lineLimit(2)
                                 Text("\(m.count)回").font(.caption).foregroundStyle(.secondary)
                             }
                             Spacer()

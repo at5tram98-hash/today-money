@@ -34,6 +34,8 @@ enum AcfCenterDest: Hashable {
 @Observable final class AcfCenterData {
     var forecast: AcfForecast?
     var key = ""
+    /// 計算し直している間（前の結果は出したまま、上に印を出す）
+    var computing = false
 }
 
 struct AcfCenterView: View {
@@ -60,6 +62,9 @@ struct AcfCenterView: View {
                     .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 72) }
             }
             .environment(data)
+            .overlay(alignment: .top) {
+                if data.computing && data.forecast != nil { AcfRecalcPill().padding(.top, 54) }
+            }
             AcfCenterBar(selection: Binding(get: { model.acfCenter ?? .overview }, set: { t in
                 if t == model.acfCenter { if !path.isEmpty { path = NavigationPath() } } else { model.acfCenter = t }
             }), origin: origin) { leave($0) }
@@ -102,11 +107,7 @@ struct AcfCenterView: View {
             case .simulate: AcfSimulateTab(base: f)
             }
         } else {
-            VStack(spacing: 12) {
-                ProgressView().controlSize(.large)
-                Text("ACFを計算しています…").foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            AcfCalculatingView().transition(.opacity)
         }
     }
 
@@ -124,8 +125,13 @@ struct AcfCenterView: View {
         guard force || data.key != key else { return }
         let doc = model.doc, today = model.today
         guard doc.acfStoredSettings.initialized else { return }
+        let first = data.forecast == nil, started = Date()
+        withAnimation(.snappy) { data.computing = true }
         let f = await Task.detached(priority: .userInitiated) { doc.acfForecast(today: today) }.value
-        withAnimation(.snappy) { data.forecast = f }
+        // 初めて開く時は、計算の流れが目で追えるよう少しだけ見せる
+        if first { let wait = 1.2 - Date().timeIntervalSince(started); if wait > 0 { try? await Task.sleep(for: .seconds(wait)) } }
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.86)) { data.forecast = f; data.computing = false }
+        if first { Feedback.play(.success) }
         data.key = key
     }
 

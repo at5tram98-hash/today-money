@@ -53,6 +53,9 @@ final class AcfCompatTests: XCTestCase {
             XCTAssertEqual([x.have, x.need, x.income, x.out], [num(wi["have"]), num(wi["need"]), num(wi["income"]), num(wi["out"])], "\(name) index parts")
             XCTAssertEqual(x.end, str(wi["end"]), "\(name) index end")
             XCTAssertEqual(x.events.count, Int(num(wi["events"])), "\(name) index events")
+            // ホームのカード（軽い計算）と ACFセンター（全部の計算）で指標が同じになる
+            let light = doc.acfIndex(doc.acfForecast(today: today, settings: f.settings, lightweight: true, now: now), today: today)
+            XCTAssertEqual([light.have, light.need], [x.have, x.need], "\(name) index lightweight")
         }
     }
 }

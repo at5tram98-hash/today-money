@@ -112,14 +112,15 @@ struct TransactionRow: View {
         HStack(spacing: 12) {
             CategoryIcon(category: doc.category(named: t.category))
             VStack(alignment: .leading, spacing: 2) {
-                Text(t.merchant.isEmpty ? t.category : t.merchant).lineLimit(1)
+                Text(t.merchant.isEmpty ? t.category : t.merchant).lineLimit(2)
                 Text([showDate ? Format.shortDay(t.date) : nil, t.category, doc.paymentLabel(method: t.paymentMethod, id: t.paymentId)].compactMap { $0 }.joined(separator: "・"))
-                    .font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                    .font(.caption).foregroundStyle(.secondary).lineLimit(2)
             }
             Spacer(minLength: 8)
             Text(t.amount < 0 ? "+\((-t.amount).yen)" : t.amount.yen)
                 .monospacedDigit()
                 .foregroundStyle(t.amount < 0 ? .green : .primary)
+                .fixedSize()
         }
         .accessibilityElement(children: .combine)
     }

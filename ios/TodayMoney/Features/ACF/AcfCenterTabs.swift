@@ -285,16 +285,16 @@ struct AcfEventsTab: View {
             .font(.caption.weight(.semibold)).monospacedDigit()
             Chart {
                 ForEach(rows) { r in
-                    if r.income > 0 { BarMark(x: .value("日", Dates.date(r.date), unit: .day), y: .value("入金", r.income)).foregroundStyle(Color.green.gradient) }
+                    if r.income > 0 { BarMark(x: .value("日", Dates.date(r.date), unit: .day), y: .value("入金", r.income), width: .fixed(6)).foregroundStyle(Color.green.gradient) }
                     if r.mandatoryOutflow + r.flexibleCardDue > 0 {
-                        BarMark(x: .value("日", Dates.date(r.date), unit: .day), y: .value("支払い", -(r.mandatoryOutflow + r.flexibleCardDue))).foregroundStyle(Color.orange.gradient)
+                        BarMark(x: .value("日", Dates.date(r.date), unit: .day), y: .value("支払い", -(r.mandatoryOutflow + r.flexibleCardDue)), width: .fixed(6)).foregroundStyle(Color.orange.gradient)
                     }
                 }
                 RuleMark(y: .value("0", 0)).foregroundStyle(Color.secondary.opacity(0.4))
                 if let s = sel { RuleMark(x: .value("日", Dates.date(s.date), unit: .day)).foregroundStyle(Color.primary.opacity(0.2)) }
             }
             .chartXScale(domain: Dates.date(rows.first?.date ?? model.today)...Dates.date(Dates.addDays(rows.last?.date ?? model.today, 1)))
-            .chartXAxis { AxisMarks(values: .stride(by: .day, count: 14)) { v in AxisGridLine().foregroundStyle(.clear); AxisValueLabel { if let d = v.as(Date.self) { Text(d.formatted(.dateTime.month(.defaultDigits).day())) } } } }
+            .chartXAxis { AxisMarks(values: .stride(by: .day, count: 21)) { v in AxisGridLine().foregroundStyle(.clear); AxisValueLabel(anchor: .top) { if let d = v.as(Date.self) { Text(d.formatted(.dateTime.month(.defaultDigits).day())) } } } }
             .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
             .chartXSelection(value: $flowScrub)
             .onChange(of: sel?.date) { _, d in if d != nil { Feedback.selection() } }
@@ -505,7 +505,7 @@ struct AcfBankForecastView: View {
                             }
                             ForEach(Array(r.events.enumerated()), id: \.offset) { _, e in
                                 HStack {
-                                    Text(e.label).font(.footnote).lineLimit(1)
+                                    Text(e.label).font(.footnote).lineLimit(2)
                                     Spacer()
                                     Text(signedYen(e.amount)).font(.footnote).monospacedDigit().foregroundStyle(e.amount > 0 ? .green : .primary)
                                 }

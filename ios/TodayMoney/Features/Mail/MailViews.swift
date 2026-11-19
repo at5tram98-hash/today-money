@@ -114,7 +114,7 @@ struct MailRow: View {
             Image(systemName: st.key == "pending" ? "envelope.badge" : st.key == "imported" ? "checkmark.circle.fill" : "envelope.open")
                 .foregroundStyle(st.key == "pending" ? .orange : st.key == "imported" ? .green : .secondary)
             VStack(alignment: .leading, spacing: 2) {
-                Text(str(mi["merchant"]).isEmpty ? (str(mi["subject"]).isEmpty ? "利用先不明" : str(mi["subject"])) : str(mi["merchant"])).foregroundStyle(.primary).lineLimit(1)
+                Text(str(mi["merchant"]).isEmpty ? (str(mi["subject"]).isEmpty ? "利用先不明" : str(mi["subject"])) : str(mi["merchant"])).foregroundStyle(.primary).lineLimit(2)
                 Text("\(str(mi["date"]).isEmpty ? "日付不明" : str(mi["date"]))・\(str(mi["sourceName"]).isEmpty ? "Gmail" : str(mi["sourceName"]))").font(.caption).foregroundStyle(.secondary)
                 Text(st.key == "pending" ? "\(st.duplicate ? "重複候補・" : "")\(conf.label)" : st.label)
                     .font(.caption2.weight(.semibold)).foregroundStyle(st.key == "pending" ? (conf.good && !st.duplicate ? .green : .orange) : .secondary)

@@ -145,7 +145,7 @@ struct SalaryMonthView: View {
                             HStack(alignment: .firstTextBaseline, spacing: 8) {
                                 Circle().fill(ChartPalette.color(i)).frame(width: 9, height: 9)
                                 VStack(alignment: .leading, spacing: 1) {
-                                    Text(x.name).font(.subheadline.weight(.semibold)).lineLimit(1)
+                                    Text(x.name).font(.subheadline.weight(.semibold)).lineLimit(2)
                                     Text(x.amount.yen).font(.caption).foregroundStyle(.secondary).monospacedDigit()
                                 }
                                 Spacer(minLength: 4)
@@ -240,22 +240,23 @@ struct SalaryMonthView: View {
                     if i > 0 { Divider().padding(.leading, 16) }
                     let color = colorIndex[r.employer.id].map(ChartPalette.color) ?? .gray
                     NavigationLink { EmployerTermsView(employerId: r.employer.id) } label: {
-                        HStack(spacing: 12) {
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(r.employer.name).font(.body.weight(.semibold)).foregroundStyle(.primary)
-                                Text(r.records.isEmpty ? "この月の給与は未登録" : (r.date.isEmpty ? r.status : "\(Format.dayLabel(r.date))・\(r.status)"))
-                                    .font(.caption).foregroundStyle(r.status.contains("未確認") ? .orange : .secondary)
-                                Text("時給 \(r.employer.hourly.yen)・交通費 \(r.employer.transport.yen)\(r.employer.transportUnit == "per_shift" ? "／勤務" : "")")
-                                    .font(.caption2).foregroundStyle(.secondary)
+                        // 上段：名前・推移・金額、下段：日付と状態・時給と交通費（横に詰めない）
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack(spacing: 12) {
+                                Text(r.employer.name).font(.body.weight(.semibold)).foregroundStyle(.primary).lineLimit(2)
+                                Spacer(minLength: 6)
+                                Sparkline(points: r.series.enumerated().map { ValuePoint(date: String($0.offset), value: $0.element) }, tint: color)
+                                    .frame(width: 56, height: 24)
+                                VStack(alignment: .trailing, spacing: 1) {
+                                    Text(r.records.isEmpty ? "—" : r.amount.yen).font(.body.weight(.semibold)).monospacedDigit().foregroundStyle(.primary).fixedSize()
+                                    Text(r.records.isEmpty ? "—" : "\(r.pct)%").font(.caption.weight(.semibold)).foregroundStyle(color)
+                                }
+                                Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary)
                             }
-                            Spacer(minLength: 6)
-                            Sparkline(points: r.series.enumerated().map { ValuePoint(date: String($0.offset), value: $0.element) }, tint: color)
-                                .frame(width: 60, height: 28)
-                            VStack(alignment: .trailing, spacing: 3) {
-                                Text(r.records.isEmpty ? "—" : r.amount.yen).font(.body.weight(.semibold)).monospacedDigit().foregroundStyle(.primary)
-                                Text(r.records.isEmpty ? "—" : "\(r.pct)%").font(.caption.weight(.semibold)).foregroundStyle(color)
-                            }
-                            Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary)
+                            Text(r.records.isEmpty ? "この月の給与は未登録" : (r.date.isEmpty ? r.status : "\(Format.dayLabel(r.date))・\(r.status)"))
+                                .font(.caption).foregroundStyle(r.status.contains("未確認") ? .orange : .secondary)
+                            Text("時給 \(r.employer.hourly.yen)・交通費 \(r.employer.transport.yen)\(r.employer.transportUnit == "per_shift" ? "／勤務" : "")")
+                                .font(.caption2).foregroundStyle(.secondary)
                         }
                         .padding(.horizontal, 16).padding(.vertical, 12)
                         .contentShape(Rectangle())

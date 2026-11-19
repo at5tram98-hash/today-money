@@ -114,7 +114,7 @@ struct FinancialUpdatesView: View {
                 Image(systemName: r.symbol).font(.footnote.weight(.semibold)).foregroundStyle(.white)
                     .frame(width: 30, height: 30).background(r.tint, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(r.title).font(.body.weight(.semibold)).lineLimit(1)
+                    Text(r.title).font(.body.weight(.semibold)).lineLimit(2)
                     Text(r.sub).font(.caption).foregroundStyle(.secondary).lineLimit(2)
                 }
                 Spacer(minLength: 8)

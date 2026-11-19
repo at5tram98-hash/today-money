@@ -122,7 +122,7 @@ struct CardDetailView: View {
                     .frame(width: 34, height: 25)
                     .accessibilityHidden(true)
             }
-            Text(c.name).font(.title3.weight(.bold)).lineLimit(1)
+            Text(c.name).font(.title3.weight(.bold)).lineLimit(2)
             if !c.company.isEmpty && c.company != c.name { Text(c.company).font(.caption).opacity(0.75) }
             Spacer(minLength: 6)
             Text("\(Format.monthLabel(paymentMonth))支払い").font(.caption).opacity(0.8)

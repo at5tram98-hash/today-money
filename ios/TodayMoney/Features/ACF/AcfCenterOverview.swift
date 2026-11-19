@@ -122,11 +122,12 @@ struct AcfIndexCard: View {
                 }
             }
             Button(action: openPeriod) {
-                HStack {
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Image(systemName: "calendar")
-                    Text(x.custom ? "\(Format.dayLabel(x.end))まで（指定した日）" : "カードの支払いが終わる毎月\(model.doc.acfStoredSettings.indexEndDay >= 31 ? "月末" : "\(model.doc.acfStoredSettings.indexEndDay)日")まで")
-                    Spacer()
-                    Text("期間を変更").fontWeight(.semibold)
+                    Text(x.custom ? "\(Format.shortDay(x.end))まで（指定）" : "毎月\(model.doc.acfStoredSettings.indexEndDay >= 31 ? "月末" : "\(model.doc.acfStoredSettings.indexEndDay)日")まで")
+                        .multilineTextAlignment(.leading)
+                    Spacer(minLength: 8)
+                    Text("期間を変更").fontWeight(.semibold).fixedSize()
                 }
                 .font(.footnote)
             }
@@ -136,7 +137,7 @@ struct AcfIndexCard: View {
                     ForEach(x.events.prefix(12)) { e in
                         HStack {
                             Circle().fill(e.income ? Color.green : Color.orange).frame(width: 8, height: 8)
-                            Text(e.label).font(.subheadline).lineLimit(1)
+                            Text(e.label).font(.subheadline).lineLimit(2)
                             Spacer()
                             Text(Format.shortDay(e.date)).font(.caption).foregroundStyle(.secondary)
                             Text("\(e.income ? "＋" : "−")\(e.amount.yen)").font(.subheadline).monospacedDigit().foregroundStyle(e.income ? .green : .primary)
@@ -309,7 +310,7 @@ struct AcfBalanceCard: View {
                         Text(r.forecastBalance.yen).font(.title2.weight(.bold)).monospacedDigit().foregroundStyle(r.forecastBalance < 0 ? .red : .primary)
                             .contentTransition(.numericText(value: r.forecastBalance))
                         Text(r.events.isEmpty ? "予定だけ \(r.mandatoryBalance.yen)" : r.events.prefix(2).map { "\($0.label) \($0.amount == 0 ? "" : signedYen($0.amount))" }.joined(separator: "・"))
-                            .font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                            .font(.caption).foregroundStyle(.secondary).lineLimit(2)
                     }
                     Spacer()
                     Label("内訳", systemImage: "chevron.right").labelStyle(.titleOnly).font(.caption.weight(.semibold))

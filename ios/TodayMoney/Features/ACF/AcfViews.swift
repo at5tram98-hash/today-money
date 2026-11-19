@@ -16,7 +16,7 @@ struct AcfLoader<Content: View>: View {
     var body: some View {
         Group {
             if let forecast { content(forecast) }
-            else { HStack(spacing: 8) { ProgressView(); Text("ACFを計算しています…").foregroundStyle(.secondary) }.frame(maxWidth: .infinity, minHeight: 80) }
+            else { AcfCalculatingInline() }
         }
         .task(id: "\(model.revision)|\(model.today)|\(lightweight)|\(settings.map { "\($0.json)" } ?? "")") {
             let doc = model.doc, today = model.today, light = lightweight, s = settings

@@ -277,8 +277,8 @@ struct DayClosingView: View {
                     .buttonStyle(.plain).disabled(item.pending)
                     .accessibilityLabel("\(item.title)を照合")
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(item.title).lineLimit(1)
-                        Text(item.subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                        Text(item.title).lineLimit(2)
+                        Text(item.subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(2)
                         if item.pending { Text("承認または対象外の確認が必要です").font(.caption).foregroundStyle(.orange) }
                     }
                     Spacer()
