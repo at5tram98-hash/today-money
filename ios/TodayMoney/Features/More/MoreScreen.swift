@@ -115,9 +115,10 @@ struct CategoriesView: View {
         let doc = model.doc
         List {
             ForEach(doc.categories) { c in
-                Button { editing = c.id } label: {
-                    HStack { CategoryIcon(category: c); Text(c.name).foregroundStyle(.primary); Spacer(); Text(doc.categorySpent(month: model.thisMonth, category: c.name).yen).foregroundStyle(.secondary).monospacedDigit() }
+                NavigationLink { CategoryDetailView(name: c.name, month: model.thisMonth) } label: {
+                    HStack { CategoryIcon(category: c); Text(c.name); Spacer(); Text(doc.categorySpent(month: model.thisMonth, category: c.name).yen).foregroundStyle(.secondary).monospacedDigit() }
                 }
+                .swipeActions { Button("編集") { editing = c.id }.tint(.blue) }
             }
             .onMove { from, to in model.commit("カテゴリの並べ替え") { var l = $0.categories; l.move(fromOffsets: from, toOffset: to); $0.categories = l } }
         }
