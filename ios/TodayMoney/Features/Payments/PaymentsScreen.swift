@@ -17,6 +17,9 @@ struct PaymentsScreen: View {
         let next = doc.paymentNextCard(s, today: today)
         NavigationStack {
             List {
+                if doc.acfStoredSettings.initialized && month == model.thisMonth {
+                    PaymentRiskBanner()
+                }
                 Section {
                     MonthSwitcher(month: $model.paymentMonth, thisMonth: model.thisMonth)
                     VStack(alignment: .leading, spacing: 6) {
@@ -451,6 +454,7 @@ struct AcfPaymentsPreview: View {
                     if f.reserveFloor > 0 { RuleMark(y: .value("最低残高", f.reserveFloor)).foregroundStyle(.orange).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3])) }
                 }
                 .chartXAxis { AxisMarks(values: .stride(by: .day, count: 14)) { AxisValueLabel(format: .dateTime.month(.defaultDigits).day()) } }
+                .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
                 .frame(height: 120)
                 .accessibilityLabel("残高予測のグラフ")
                 let risk = f.risks.first { $0.action == "day" }
@@ -469,5 +473,34 @@ struct AcfPaymentsPreview: View {
             Text(t).font(.caption).foregroundStyle(.secondary)
             Text(v).font(.subheadline.weight(.semibold)).monospacedDigit().foregroundStyle(warn ? .red : .primary)
         }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+
+/// 支払いのいちばん上の警告（Web 版 renderPayRoot の「引落予定に対して残高が不足しています」。iOS は ACF の注意点から出す）
+struct PaymentRiskBanner: View {
+    @Environment(AppModel.self) private var model
+    @AppStorage("dismissedPaymentRisk") private var dismissed = ""
+    var body: some View {
+        AcfLoader(lightweight: true) { f in
+            if let r = f.risks.first(where: { ($0.severity == "critical" || $0.severity == "warning") && !$0.date.isEmpty && $0.date >= model.today }), dismissed != r.id {
+                Section {
+                    HStack(alignment: .top, spacing: 12) {
+                        NavigationLink { AcfDetailView() } label: {
+                            HStack(alignment: .top, spacing: 12) {
+                                Image(systemName: "exclamationmark.triangle.fill").font(.title3).foregroundStyle(r.severity == "critical" ? .red : .orange)
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(r.severity == "critical" ? "引落予定に対して残高が不足しています" : "残しておきたい金額を下回りそうです").font(.subheadline.weight(.bold))
+                                    Text("\(Format.dayLabel(r.date))：\(r.detail.isEmpty ? r.title : r.detail)").font(.caption).foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                        Button { withAnimation { dismissed = r.id } } label: { Image(systemName: "xmark.circle.fill").font(.title3).foregroundStyle(.tertiary) }
+                            .buttonStyle(.plain).accessibilityLabel("この警告を閉じる（不足は解決しません）")
+                    }
+                }
+                .listRowBackground((r.severity == "critical" ? Color.red : Color.orange).opacity(0.12))
+            }
+        }
     }
 }

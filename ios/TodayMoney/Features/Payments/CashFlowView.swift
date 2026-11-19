@@ -37,6 +37,7 @@ struct CashFlowPreview: View {
                 if cf.reserveFloor > 0 { RuleMark(y: .value("最低残高", cf.reserveFloor)).foregroundStyle(.orange).lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3])) }
             }
             .chartXAxis { AxisMarks(values: .stride(by: .day, count: 14)) { AxisValueLabel(format: .dateTime.month(.defaultDigits).day()) } }
+                .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
             .frame(height: 120)
             .accessibilityLabel("45日間の残高の見通し")
             HStack {
