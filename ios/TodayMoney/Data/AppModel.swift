@@ -114,6 +114,13 @@ final class AppModel {
         // 廃止した「カレンダーからシフト」の設定（iOS 版だけの項目）を消す。Web 版の設定は触らない
         if var ss = next["shiftSettings"]?.objectValue, ss["iosCalendar"] != nil { ss.removeValue(forKey: "iosCalendar"); next["shiftSettings"] = .object(ss) }
         next.processScheduled(now: now, today: today)
+        // アプリ内のお知らせ（Web 版 renderAll の pruneExpiredSystemNotices・generateSystemNotices）
+        next.pruneExpiredSystemNotices(today: today)
+        let acf = next.acfStoredSettings
+        let risk = acf.initialized && acf.riskNotifications
+            ? next.acfForecast(today: today, lightweight: true, now: now).risks.first { $0.severity == "critical" || $0.severity == "warning" } : nil
+        next.generateSystemNotices(today: today, now: now, acfRisk: risk)
+        next.checkGoalNotice(today, now: now, today: today)
         guard next != doc else { return }
         let changedOnlyDate = { () -> Bool in var a = next, b = doc; a.meta = [:]; b.meta = [:]; return a == b }()
         commit(changedOnlyDate ? "日付の更新" : "固定支払い・予定の反映", silent: true) { $0 = next }
@@ -123,7 +130,19 @@ final class AppModel {
     @discardableResult
     func change(_ reason: String, _ mutate: (inout MoneyDocument, _ now: Date, _ today: String) throws -> Void) -> Bool {
         let now = Date(), today = Dates.ymd(now)
-        return commit(reason) { try mutate(&$0, now, today) }
+        return commit(reason) { d in
+            let before = d.transactions
+            try mutate(&d, now, today)
+            // 支出が変わったら目標に届いたかを見る（Web 版 checkGoalNotice）
+            if d.transactions != before {
+                let old = Dictionary(before.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+                let new = Dictionary(d.transactions.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+                var days: Set<String> = []
+                for (id, t) in new where old[id] != t { days.insert(t.date) }
+                for (id, t) in old where new[id] == nil { days.insert(t.date) }
+                for day in days.sorted() where day <= today { d.checkGoalNotice(day, now: now, today: today) }
+            }
+        }
     }
 
     private func persist() {

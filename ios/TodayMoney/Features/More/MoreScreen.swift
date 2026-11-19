@@ -16,10 +16,10 @@ struct MoreScreen: View {
                 Section {
                     NavigationLink { ProfileView() } label: {
                         HStack(spacing: 14) {
-                            Image(systemName: "person.crop.circle.fill").font(.system(size: 46)).foregroundStyle(.gray)
+                            ProfileAvatar(icon: str(doc["profile"]?["icon"]), size: 56)
                             VStack(alignment: .leading) {
                                 Text(profileName.isEmpty ? "プロフィール" : profileName).font(.title3.weight(.semibold))
-                                Text("名前").font(.footnote).foregroundStyle(.secondary)
+                                Text("名前と写真").font(.footnote).foregroundStyle(.secondary)
                             }
                         }.padding(.vertical, 4)
                     }
@@ -28,6 +28,9 @@ struct MoreScreen: View {
                     row("口座とカード", "building.columns.fill", .blue, "\(doc.banks.count + doc.cards.count + doc.debitCards.count)件") { AccountsView() }
                     row("給与・勤務先", "briefcase.fill", .cyan, "\(doc.employers.count)件") { EmployersView() }
                 } header: { Text("登録") } footer: { Text("口座・カード・勤務先の追加と編集はここで行います。") }
+                Section("連携") {
+                    row("Gmail連携", "envelope.badge.fill", .red, gmailStatus) { GmailSettingsView() }
+                }
                 Section("お金") {
                     row("カテゴリ", "square.grid.2x2.fill", .orange, "\(doc.categories.count)件") { CategoriesView() }
                     row("初期データ・現在値", "building.columns.fill", .indigo, "") { InitialValuesView() }
@@ -44,17 +47,25 @@ struct MoreScreen: View {
                     row("金額をまとめて更新", "square.and.pencil", .indigo, "") { FinancialUpdatesView(kind: "banks") }
                     row("メール取引センター", "envelope.fill", .orange, doc.pendingMailIds.isEmpty ? "" : "確認待ち\(doc.pendingMailIds.count)件") { MailCenterView() }
                 }
-                Section("通知") {
+                Section {
                     row("通知設定", "bell.badge.fill", .red, "") { NotificationSettingsView() }
-                    row("システムのお知らせ", "exclamationmark.bubble.fill", .orange, "\((doc["notices"]?.arrayValue ?? []).count)件") { NoticesView() }
-                }
+                    row("システムのお知らせ", "exclamationmark.bubble.fill", .orange, unreadNotices > 0 ? "未読 \(unreadNotices)件" : "") { NoticesView() }
+                } header: { Text("通知") } footer: { Text("今日のお知らせを残し、昨日以前のお知らせは自動で消えます。ホームで閉じた警告もここで確認できます。") }
                 Section("アプリ") {
                     Picker(selection: $appearance) {
                         Text("システム").tag("system"); Text("ライト").tag("light"); Text("ダーク").tag("dark")
-                    } label: { Label("外観", systemImage: "circle.lefthalf.filled") }
-                    Toggle(isOn: $lockEnabled) { Label("Face ID でロック", systemImage: "faceid") }
+                    } label: {
+                        Label {
+                            Text("外観")
+                        } icon: {
+                            Image(systemName: "circle.lefthalf.filled").font(.footnote.weight(.semibold)).foregroundStyle(.white)
+                                .frame(width: 28, height: 28).background(Color.indigo, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+                        }
+                    }
                     row("操作フィードバック", "waveform", .blue, "") { FeedbackSettingsView() }
+                    row("セキュリティ", "lock.fill", .gray, lockEnabled ? "ロック ON" : "ロック OFF") { SecuritySettingsView() }
                     row("一般", "gearshape.fill", .gray, "") { GeneralSettingsView() }
+                    row("ヘルプ", "questionmark.circle.fill", .teal, "") { HelpView() }
                 }
                 Section("データ") {
                     row("データとバックアップ", "externaldrive.fill", .gray, "") { DataSettingsView() }
@@ -69,6 +80,15 @@ struct MoreScreen: View {
     }
 
     private var profileName: String { str(model.doc["profile"]?["name"]) }
+    private var unreadNotices: Int { NoticesView.visible(model.doc, today: model.today).filter { $0["read"]?.boolValue != true }.count }
+    /// Web 版 gmailStatusLabel
+    private var gmailStatus: String {
+        let g = model.doc["gmailSettings"]
+        if !str(g?["refreshToken"]).isEmpty || !str(g?["accessToken"]).isEmpty {
+            return str(g?["emailAddress"]).isEmpty ? "接続中" : "\(str(g?["emailAddress"])) 接続中"
+        }
+        return str(g?["clientId"]).isEmpty ? "初期設定が必要" : "未接続"
+    }
 
     private func row<D: View>(_ title: String, _ sym: String, _ color: Color, _ value: String, @ViewBuilder dest: @escaping () -> D) -> some View {
         NavigationLink(destination: dest) {
@@ -81,26 +101,6 @@ struct MoreScreen: View {
                     Image(systemName: sym).font(.footnote.weight(.semibold)).foregroundStyle(.white)
                         .frame(width: 28, height: 28).background(color, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
                 }
-            }
-        }
-    }
-}
-
-/// プロフィール（名前）
-struct ProfileView: View {
-    @Environment(AppModel.self) private var model
-    @State private var name = ""
-    var body: some View {
-        Form {
-            Section("名前") { TextField("名前", text: $name) }
-        }
-        .navigationTitle("プロフィール")
-        .onAppear { name = str(model.doc["profile"]?["name"]) }
-        .onDisappear {
-            let n = name.trimmingCharacters(in: .whitespaces)
-            guard n != str(model.doc["profile"]?["name"]) else { return }
-            model.commit("プロフィールの変更") { d in
-                var p = d["profile"]?.objectValue ?? [:]; p["name"] = .string(n); d["profile"] = .object(p)
             }
         }
     }
@@ -251,28 +251,62 @@ struct GeneralSettingsView: View {
     }
 }
 
-/// システムのお知らせ（今日の分を残し、昨日以前は自動で消す：Web 版 retainedSystemNotices）
+/// システムのお知らせ（今日の分を残し、昨日以前は自動で消す：Web 版 retainedSystemNotices）。開くと既読にする
 struct NoticesView: View {
     @Environment(AppModel.self) private var model
+    static func visible(_ doc: MoneyDocument, today: String) -> [JSONValue] {
+        (doc["notices"]?.arrayValue ?? []).filter { str($0["date"]).isEmpty || str($0["date"]) >= today || str($0["source"]) != "system" }
+    }
     var body: some View {
-        let list = (model.doc["notices"]?.arrayValue ?? []).filter { str($0["date"]).isEmpty || str($0["date"]) >= model.today || str($0["source"]) != "system" }
+        let list = Self.visible(model.doc, today: model.today)
         List {
-            if list.isEmpty { Text("今日のお知らせはありません").foregroundStyle(.secondary) }
+            if list.isEmpty {
+                ContentUnavailableView("今日のお知らせはありません", systemImage: "bell.slash", description: Text("残高不足の見込みや、確認が必要な取引があるとここに出ます。"))
+            }
             ForEach(Array(list.enumerated()), id: \.offset) { _, n in
-                VStack(alignment: .leading, spacing: 4) {
-                    Label(str(n["title"]), systemImage: str(n["type"]) == "warning" ? "exclamationmark.triangle.fill" : "bell.fill")
-                        .foregroundStyle(str(n["type"]) == "warning" ? .orange : .primary)
-                    Text(str(n["body"])).font(.footnote).foregroundStyle(.secondary)
+                let warn = str(n["type"]) == "warning"
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: warn ? "exclamationmark.triangle.fill" : "bell.fill").foregroundStyle(warn ? .orange : .accentColor).frame(width: 22)
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text(str(n["title"])).font(.subheadline.weight(.semibold))
+                            Spacer()
+                            if !str(n["createdAt"]).isEmpty { Text(Format.dateTime(str(n["createdAt"]))).font(.caption2).foregroundStyle(.secondary) }
+                        }
+                        Text(str(n["message"]).isEmpty ? str(n["body"]) : str(n["message"])).font(.footnote).foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 2)
+                .swipeActions {
+                    Button(role: .destructive) { remove(str(n["id"])) } label: { Label("削除", systemImage: "trash") }
                 }
             }
         }
         .navigationTitle("システムのお知らせ")
+        .onAppear {
+            guard (model.doc["notices"]?.arrayValue ?? []).contains(where: { $0["read"]?.boolValue == false }) else { return }
+            model.commit("お知らせを既読にする", silent: true) { d in
+                d["notices"] = .array((d["notices"]?.arrayValue ?? []).map { n in
+                    guard var o = n.objectValue else { return n }
+                    o["read"] = .bool(true); return .object(o)
+                })
+            }
+        }
+    }
+    private func remove(_ id: String) {
+        guard !id.isEmpty else { return }
+        model.commit("お知らせの削除") { d in d["notices"] = .array((d["notices"]?.arrayValue ?? []).filter { str($0["id"]) != id }) }
     }
 }
 
 /// 通知（Web 版の Web Push の代わりに、端末のローカル通知を使う。内容の設定は Web 版と同じ pushPreferences）
 struct NotificationSettingsView: View {
     @Environment(AppModel.self) private var model
+    private func notice<V>(_ kp: WritableKeyPath<MoneyDocument.NoticeSettings, V>) -> Binding<V> {
+        Binding(get: { model.doc.noticeSettings[keyPath: kp] }, set: { v in
+            model.commit("お知らせの設定", silent: true) { d in var n = d.noticeSettings; n[keyPath: kp] = v; d.noticeSettings = n }
+        })
+    }
     @AppStorage("notifyPayments") private var payments = true
     @AppStorage("notifySalary") private var salary = true
     @State private var status: UNAuthorizationStatus = .notDetermined
@@ -305,6 +339,19 @@ struct NotificationSettingsView: View {
             Section("iPhone だけの通知") {
                 Toggle("カード引落・固定支払いの前日", isOn: $payments)
                 Toggle("給料日", isOn: $salary)
+            }
+            Section {
+                Picker("アプリを開いている間", selection: notice(\.level)) {
+                    Text("おすすめ").tag("recommended"); Text("多め").tag("many"); Text("最小限").tag("minimal")
+                }
+                .pickerStyle(.segmented)
+                Toggle("目標達成／超過", isOn: notice(\.goal))
+                Toggle("給料日の前日", isOn: notice(\.salary))
+                Toggle("支払日の前日", isOn: notice(\.payment))
+                Toggle("カテゴリー不明の取引", isOn: notice(\.unknown))
+                Toggle("残高低下アラート", isOn: notice(\.balance))
+            } header: { Text("アプリ内のお知らせ") } footer: {
+                Text("「その他 › システムのお知らせ」に出す内容です（Web 版と同じ設定）。「おすすめ」ではカード引落日の当日にも知らせます。")
             }
             Section("予約中（\(pending.count)件）") {
                 if pending.isEmpty { Text("予約中の通知はありません。").foregroundStyle(.secondary) }
