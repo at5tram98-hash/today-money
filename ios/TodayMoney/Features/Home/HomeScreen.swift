@@ -309,28 +309,69 @@ struct HomeScreen: View {
     // MARK: ハイライト（押せない情報：枠なし・›なし）
 
     @ViewBuilder private func highlights(_ doc: MoneyDocument, month: String) -> some View {
-        let prev = Dates.addMonths(month, -1)
-        let elapsed = max(1, Dates.parts(model.today).d)
-        let avg = doc.spentMonth(month) / Double(elapsed), prevAvg = doc.spentMonth(prev) / Double(Dates.daysInMonth(prev))
-        let salary = doc.salarySummary(month, today: model.today).total, spent = doc.spentMonth(month)
-        InfoBlock(title: "1日の平均", systemImage: "sparkles", tint: .pink) {
-            Text(avg <= prevAvg ? "今月の1日あたりの支出は先月より少なめです。" : "今月の1日あたりの支出は先月より多めです。").font(.subheadline)
-            bar(Format.monthLabel(month), avg, max(avg, prevAvg), .pink)
-            bar(Format.monthLabel(prev), prevAvg, max(avg, prevAvg), .gray)
+        let list = doc.highlights(today: model.today)
+        if list.isEmpty {
+            Text("支出や給与を記録すると、先月との比べ方がここに出ます。").font(.footnote).foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).cardSurface()
         }
-        InfoBlock(title: "収入と支出", systemImage: "arrow.up.arrow.down", tint: .green) {
-            Text("今月の給与見込みから支出を引くと \((salary - spent).yen) 残ります。").font(.subheadline)
-            bar("給与見込み", salary, max(salary, spent), .green)
-            bar("支出", spent, max(salary, spent), .orange)
+        ForEach(list) { h in
+            NavigationLink { highlightDestination(h, month: month) } label: { HighlightCard(h: h) }
+                .buttonStyle(CardPressStyle())
         }
     }
-    private func bar(_ label: String, _ v: Double, _ maxV: Double, _ c: Color) -> some View {
-        HStack {
-            Text(label).font(.caption).foregroundStyle(.secondary).frame(width: 84, alignment: .leading)
-            GeometryReader { g in Capsule().fill(c.gradient).frame(width: max(4, g.size.width * (maxV > 0 ? v / maxV : 0))) }.frame(height: 10)
-            Text(v.yen).font(.caption.weight(.semibold)).monospacedDigit().frame(width: 76, alignment: .trailing)
+
+    @ViewBuilder private func highlightDestination(_ h: Highlight, month: String) -> some View {
+        switch h.key {
+        case "category": TransactionListView(title: "\(h.category)・\(Format.monthLabel(month))", month: month, initialCategory: h.category)
+        case "balance": SalaryMonthView(month: month)
+        default: MonthSpendingView(month: month)
         }
-        .accessibilityElement(children: .combine)
+    }
+}
+
+/// ハイライトの1枚（ヘルスケアのハイライトのように：色のついた見出し・短い文・2本の棒）
+struct HighlightCard: View {
+    let h: Highlight
+    private var tint: Color { ["pace": .orange, "average": .blue, "category": .purple, "balance": .green][h.key] ?? .accentColor }
+    private var symbol: String { ["pace": "cart.fill", "average": "chart.bar.fill", "category": "square.grid.2x2.fill", "balance": "wallet.bifold.fill"][h.key] ?? "sparkles" }
+
+    var body: some View {
+        let maxV = max(1, h.bars.map { abs($0.value) }.max() ?? 1)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 6) {
+                Image(systemName: symbol)
+                Text(h.label)
+                Spacer()
+                Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+            }
+            .font(.subheadline.weight(.semibold)).foregroundStyle(tint)
+            Text(h.text).font(.title3.weight(.semibold)).foregroundStyle(.primary).fixedSize(horizontal: false, vertical: true)
+            Divider()
+            VStack(alignment: .leading, spacing: 10) {
+                ForEach(Array(h.bars.enumerated()), id: \.offset) { i, b in
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(alignment: .firstTextBaseline, spacing: 2) {
+                            Text(b.value.yen).font(.title2.weight(.bold)).monospacedDigit().foregroundStyle(i == 0 ? .primary : .secondary)
+                            if !b.unit.isEmpty { Text(b.unit).font(.subheadline.weight(.semibold)).foregroundStyle(.secondary) }
+                        }
+                        GeometryReader { g in
+                            let w = max(64, g.size.width * abs(b.value) / maxV)
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                    .fill(i == 0 ? AnyShapeStyle(tint.gradient) : AnyShapeStyle(Color(.systemGray4)))
+                                    .frame(width: w)
+                                Text(b.label).font(.caption.weight(.semibold)).foregroundStyle(i == 0 ? .white : .primary).lineLimit(1)
+                                    .padding(.horizontal, 8).frame(width: w, alignment: .leading)
+                            }
+                        }
+                        .frame(height: 26)
+                    }
+                }
+            }
+        }
+        .cardSurface()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(h.label)。\(h.text)。" + h.bars.map { "\($0.label) \($0.value.yen)\($0.unit)" }.joined(separator: "、"))
+        .accessibilityHint("詳しく見る")
     }
 }
 

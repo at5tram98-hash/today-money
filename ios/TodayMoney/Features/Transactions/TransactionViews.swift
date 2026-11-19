@@ -7,8 +7,10 @@ struct TransactionListView: View {
     var title: String = "すべての取引"
     var month: String? = nil
     var date: String? = nil
+    var initialCategory = ""
     @State private var query = ""
     @State private var category = ""
+    @State private var loaded = false
 
     var body: some View {
         let doc = model.doc
@@ -45,6 +47,7 @@ struct TransactionListView: View {
             }
         }
         .navigationTitle(title)
+        .onAppear { if !loaded { category = initialCategory; loaded = true } }
     }
 }
 
