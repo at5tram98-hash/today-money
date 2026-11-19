@@ -97,7 +97,7 @@ struct HomeScreen: View {
             }
             // 数字の段（押すと明細へ）
             NavigationLink {
-                if isToday { TransactionListView(title: Format.dayLabel(date), date: date) } else { MonthSpendingView(month: m) }
+                if isToday { DaySpendingView(date: date) } else { MonthSpendingView(month: m) }
             } label: {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
@@ -286,17 +286,20 @@ struct HomeScreen: View {
         TapCard(title: title, systemImage: icon, tint: tint, destination: destination) { content() }
     }
     @ViewBuilder private func compareContent(_ doc: MoneyDocument, month: String) -> some View {
-        let diff = doc.spentMonth(month) - doc.spentMonth(Dates.addMonths(month, -1))
+        let p = doc.monthPace(month, today: model.today), diff = p.currentToDay - p.previousToDay
         VStack(alignment: .leading, spacing: 2) {
             Text(signedYen(diff).replacingOccurrences(of: "-", with: "−")).font(.title3.bold()).foregroundStyle(diff <= 0 ? .green : .red).monospacedDigit()
-            Text("先月より").font(.caption).foregroundStyle(.secondary)
+            Text("先月の同じ日より").font(.caption).foregroundStyle(.secondary)
         }
     }
     @ViewBuilder private func largeContent(_ doc: MoneyDocument) -> some View {
         let planned = doc.largeExpensePlans.filter { $0.status == "planned" }.sorted { $0.date < $1.date }
+        let overdue = planned.filter { !$0.date.isEmpty && $0.date < model.today }.count
+        let next = planned.first { $0.date >= model.today }
         VStack(alignment: .leading, spacing: 2) {
             Text("\(planned.count)件").font(.title3.bold())
-            Text(planned.first.map { "次は \(Format.shortDay($0.date))" } ?? "予定なし").font(.caption).foregroundStyle(.secondary)
+            Text(overdue > 0 ? "予定日を過ぎた\(overdue)件" : next.map { "次は \(Format.shortDay($0.date))" } ?? "予定なし")
+                .font(.caption).foregroundStyle(overdue > 0 ? .orange : .secondary)
         }
     }
     @ViewBuilder private func goalsContent(_ doc: MoneyDocument, today: String) -> some View {
@@ -321,7 +324,7 @@ struct HomeScreen: View {
 
     @ViewBuilder private func highlightDestination(_ h: Highlight, month: String) -> some View {
         switch h.key {
-        case "category": TransactionListView(title: "\(h.category)・\(Format.monthLabel(month))", month: month, initialCategory: h.category)
+        case "category": CategoryDetailView(name: h.category, month: month)
         case "balance": SalaryMonthView(month: month)
         default: MonthSpendingView(month: month)
         }
@@ -622,35 +625,6 @@ struct MonthSpendingView: View {
 }
 
 /// 今月と先月の比較（カテゴリごと）
-struct MonthCompareView: View {
-    @Environment(AppModel.self) private var model
-    var month: String
-    var body: some View {
-        let doc = model.doc, prev = Dates.addMonths(month, -1)
-        List {
-            Section {
-                LabeledContent(Format.monthLabel(month), value: doc.spentMonth(month).yen)
-                LabeledContent(Format.monthLabel(prev), value: doc.spentMonth(prev).yen)
-            }
-            Section("カテゴリ別の差") {
-                ForEach(doc.categories) { c in
-                    let a = doc.categorySpent(month: month, category: c.name), b = doc.categorySpent(month: prev, category: c.name)
-                    if a != 0 || b != 0 {
-                        HStack {
-                            CategoryIcon(category: c, size: 26); Text(c.name); Spacer()
-                            VStack(alignment: .trailing) {
-                                Text(a.yen).monospacedDigit()
-                                Text(signedYen(a - b)).font(.caption).foregroundStyle(a - b <= 0 ? .green : .red)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        .navigationTitle("今月の比較")
-    }
-}
-
 /// 口座の残高（総資産）
 #Preview {
     HomeScreen().environment(AppModel.preview())
