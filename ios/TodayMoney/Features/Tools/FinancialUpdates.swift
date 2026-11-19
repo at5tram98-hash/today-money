@@ -105,42 +105,51 @@ struct FinancialUpdatesView: View {
             : "いまの口座残高を打ちます。打った後に記録した取引だけが、この残高から増減します。"
     }
 
+    /// 1行を2段に分ける：上に名前と状態、下に金額の欄（名前や「¥」が詰まって切れないように）
     @ViewBuilder private func rowView(_ r: Row) -> some View {
         let draft = drafts[r.id]
         let diff = (draft ?? r.current) - r.current
-        HStack(spacing: 12) {
-            Image(systemName: r.symbol).font(.footnote.weight(.semibold)).foregroundStyle(.white)
-                .frame(width: 30, height: 30).background(r.tint, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
-            VStack(alignment: .leading, spacing: 2) {
-                Text(r.title).lineLimit(1)
-                Text(r.sub).font(.caption).foregroundStyle(.secondary).lineLimit(1)
-                if diff != 0 {
-                    Text("いま \(r.current.yen) → \(signedYen(diff))").font(.caption2.weight(.semibold))
-                        .foregroundStyle(diff > 0 ? Color.orange : Color.green).monospacedDigit()
-                        .transition(.opacity)
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 12) {
+                Image(systemName: r.symbol).font(.footnote.weight(.semibold)).foregroundStyle(.white)
+                    .frame(width: 30, height: 30).background(r.tint, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(r.title).font(.body.weight(.semibold)).lineLimit(1)
+                    Text(r.sub).font(.caption).foregroundStyle(.secondary).lineLimit(2)
                 }
+                Spacer(minLength: 8)
+                Menu {
+                    Button { detail = r.sheet } label: { Label(kind == "cards" ? "支払日・状態も変える" : "詳しく編集", systemImage: "slider.horizontal.3") }
+                    if draft != nil { Button { drafts[r.id] = nil } label: { Label("この行を元に戻す", systemImage: "arrow.uturn.backward") } }
+                } label: { Image(systemName: "ellipsis.circle").font(.title3).foregroundStyle(.secondary) }
+                .accessibilityLabel("\(r.title)のその他の操作")
             }
-            .layoutPriority(1)
-            Spacer(minLength: 8)
-            HStack(spacing: 2) {
-                Text("¥").foregroundStyle(.secondary)
-                AmountInput(value: Binding(get: { drafts[r.id] ?? r.current }, set: { drafts[r.id] = $0 }), font: .title3.weight(.semibold))
-                    .multilineTextAlignment(.trailing)
-                    .focused($focus, equals: r.id)
-                    .frame(width: 118)
+            HStack(spacing: 10) {
+                if diff != 0 {
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("いま \(r.current.yen)").font(.caption2).foregroundStyle(.secondary)
+                        Text(signedYen(diff)).font(.caption.weight(.bold)).foregroundStyle(diff > 0 ? Color.orange : Color.green)
+                    }
+                    .monospacedDigit()
+                    .transition(.opacity)
+                }
+                Spacer(minLength: 0)
+                HStack(spacing: 6) {
+                    Text("¥").font(.title3.weight(.semibold)).foregroundStyle(.secondary).fixedSize()
+                    AmountInput(value: Binding(get: { drafts[r.id] ?? r.current }, set: { drafts[r.id] = $0 }), font: .title2.weight(.semibold))
+                        .multilineTextAlignment(.trailing)
+                        .focused($focus, equals: r.id)
+                        .frame(maxWidth: .infinity)
+                }
+                .padding(.horizontal, 14).padding(.vertical, 8)
+                .frame(width: 210)
+                .background(focus == r.id ? Color.accentColor.opacity(0.12) : Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(focus == r.id ? Color.accentColor : .clear, lineWidth: 1.5))
+                .contentShape(Rectangle())
+                .onTapGesture { focus = r.id }
             }
-            .padding(.horizontal, 10).padding(.vertical, 6)
-            .background(focus == r.id ? Color.accentColor.opacity(0.12) : Color(.tertiarySystemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(focus == r.id ? Color.accentColor : .clear, lineWidth: 1.5))
-            .contentShape(Rectangle())
-            .onTapGesture { focus = r.id }
-            Menu {
-                Button { detail = r.sheet } label: { Label(kind == "cards" ? "支払日・状態も変える" : "詳しく編集", systemImage: "slider.horizontal.3") }
-                if draft != nil { Button { drafts[r.id] = nil } label: { Label("この行を元に戻す", systemImage: "arrow.uturn.backward") } }
-            } label: { Image(systemName: "ellipsis.circle").foregroundStyle(.secondary) }
-            .accessibilityLabel("\(r.title)のその他の操作")
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 6)
         .accessibilityElement(children: .contain)
     }
 
