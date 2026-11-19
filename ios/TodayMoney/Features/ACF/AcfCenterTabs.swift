@@ -34,7 +34,7 @@ struct AcfTableTab: View {
                                 Text(Format.monthLabel(x)).font(.subheadline.weight(.semibold))
                                     .padding(.horizontal, 14).padding(.vertical, 8)
                                     .foregroundStyle(x == m ? Color.white : Color.primary)
-                                    .background(x == m ? Color.teal : Color(.secondarySystemGroupedBackground), in: Capsule())
+                                    .background(x == m ? Color.teal : Color.acfCard, in: Capsule())
                             }
                             .buttonStyle(.plain)
                         }
@@ -47,7 +47,7 @@ struct AcfTableTab: View {
                 if viewMode == "calendar" {
                     AcfCalendar(month: m, rows: rows, today: model.today) { openDay($0) }
                         .padding(12)
-                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                        .acfSurface(radius: 22)
                 } else {
                     AcfMonthStrip(rows: monthRows, today: model.today, focus: $focusDate)
                     AcfPinnedTable(rows: rows, today: model.today, firstDeficit: f.firstNegativeDate, focus: focusDate) { openDay($0) }
@@ -101,7 +101,7 @@ struct AcfMonthStrip: View {
             .frame(height: 64)
         }
         .padding(12)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .acfSurface(radius: 18)
     }
 }
 
@@ -128,7 +128,7 @@ struct AcfPinnedTable: View {
                 }
                 .padding(.leading, 12)
                 .frame(width: labelW, alignment: .leading)
-                .background(Color(.secondarySystemGroupedBackground))
+                .background(Color.acfCard)
                 .shadow(color: .black.opacity(0.08), radius: 4, x: 3)
                 .zIndex(1)
                 ScrollViewReader { proxy in
@@ -151,8 +151,9 @@ struct AcfPinnedTable: View {
                     ForEach(0..<AcfTable.fields.count, id: \.self) { i in (i % 2 == 0 ? Color.primary.opacity(0.035) : Color.clear).frame(height: cellH) }
                 }
             )
-            .background(Color(.secondarySystemGroupedBackground))
+            .background(Color.acfCard)
             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .acfSurface(radius: 18)
         }
     }
 
@@ -300,7 +301,7 @@ struct AcfEventsTab: View {
             .frame(height: 140)
         }
         .padding(14)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .acfSurface(radius: 22)
     }
 
     private func weekCard(_ start: String, _ items: [Item], open: Bool) -> some View {
@@ -350,7 +351,7 @@ struct AcfEventsTab: View {
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .acfSurface(radius: 20)
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
     static func firstTwo(start: String) -> [String] { [start, Dates.addDays(start, 7)] }
@@ -415,7 +416,7 @@ struct AcfAccountsTab: View {
                         Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary)
                     }
                     .padding(14)
-                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .acfSurface(radius: 20)
                 }
                 .buttonStyle(.plain)
                 Text("口座ごとに、給与の入金・カード引落・固定支払い・振替計画を日付順に足し引きした見通しです（日々の生活費は含みません）。").font(.caption2).foregroundStyle(.secondary)
@@ -452,7 +453,7 @@ struct AcfAccountsTab: View {
             .font(.caption).monospacedDigit()
         }
         .padding(14)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .acfSurface(radius: 20)
         .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(warn ? Color.red.opacity(0.35) : .clear))
     }
 }

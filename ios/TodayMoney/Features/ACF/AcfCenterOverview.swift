@@ -36,9 +36,10 @@ struct AcfCard<Content: View>: View {
     @ViewBuilder var content: Content
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 6) {
-                Image(systemName: symbol).font(.subheadline.weight(.semibold)).foregroundStyle(tint)
-                Text(title).font(.subheadline.weight(.semibold)).foregroundStyle(tint)
+            HStack(spacing: 8) {
+                Image(systemName: symbol).font(.footnote.weight(.bold)).foregroundStyle(tint)
+                    .frame(width: 28, height: 28).background(tint.opacity(0.16), in: Circle())
+                Text(title).font(.subheadline.weight(.bold)).foregroundStyle(.primary)
                 Spacer()
                 if let trailing { Text(trailing).font(.caption).foregroundStyle(.secondary) }
             }
@@ -46,8 +47,36 @@ struct AcfCard<Content: View>: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .acfSurface(tint)
     }
+}
+
+/// ACFセンターのカードの面：背景より一段明るい面・細い縁・やわらかい影・上に見出しの色をうっすら
+struct AcfSurface: ViewModifier {
+    var tint: Color?
+    var radius: CGFloat = 22
+    @Environment(\.colorScheme) private var scheme
+    func body(content: Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
+        content
+            .background {
+                ZStack {
+                    shape.fill(Color.acfCard)
+                    if let tint {
+                        shape.fill(LinearGradient(colors: [tint.opacity(scheme == .dark ? 0.16 : 0.09), .clear], startPoint: .top, endPoint: .init(x: 0.5, y: 0.45)))
+                    }
+                }
+            }
+            .overlay(shape.strokeBorder(Color.primary.opacity(scheme == .dark ? 0.12 : 0.06), lineWidth: 1))
+            .shadow(color: .black.opacity(scheme == .dark ? 0 : 0.07), radius: 12, y: 4)
+    }
+}
+extension Color {
+    /// ACFセンターのカードの色（ダークでは背景の黒より明るい灰色）
+    static let acfCard = Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(white: 0.13, alpha: 1) : .white })
+}
+extension View {
+    func acfSurface(_ tint: Color? = nil, radius: CGFloat = 22) -> some View { modifier(AcfSurface(tint: tint, radius: radius)) }
 }
 
 // MARK: ACF指標（輪のゲージ）
@@ -294,7 +323,7 @@ struct AcfBalanceCard: View {
     private func legend(_ c: Color, _ t: String, dashed: Bool = false, dot: Bool = false) -> some View {
         HStack(spacing: 4) {
             if dot { Circle().fill(c).frame(width: 7, height: 7) }
-            else { Capsule().fill(c).frame(width: 14, height: dashed ? 1.5 : 3).overlay(dashed ? Rectangle().fill(Color(.secondarySystemGroupedBackground)).frame(width: 3) : nil) }
+            else { Capsule().fill(c).frame(width: 14, height: dashed ? 1.5 : 3).overlay(dashed ? Rectangle().fill(Color.acfCard).frame(width: 3) : nil) }
             Text(t).font(.caption2).foregroundStyle(.secondary)
         }
     }
@@ -353,7 +382,7 @@ struct AcfRiskCarousel: View {
             if f.risks.isEmpty {
                 Label("大きな注意点はありません", systemImage: "checkmark.circle.fill").foregroundStyle(.green)
                     .padding(16).frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    .acfSurface(radius: 22)
             } else {
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: 12) {
@@ -373,7 +402,7 @@ struct AcfRiskCarousel: View {
                                 }
                                 .padding(14)
                                 .frame(width: 250, height: 150, alignment: .topLeading)
-                                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                .acfSurface(radius: 20)
                                 .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(color(r).opacity(0.35)))
                             }
                             .buttonStyle(.plain)
