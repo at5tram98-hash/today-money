@@ -62,7 +62,7 @@ final class AppModel {
     /// 検索を開く（ショートカット・Spotlight から）
     var searchRequested = false
     /// ディープリンクで開く画面（mymoney://acf など）
-    enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day", shifts, analysis, timeline, goals, review, mail }
+    enum Route: String, Hashable { case acf, acfIndex = "acf-index", acfSettings = "acf-settings", cashflow, dayClose = "day-close", goalMonth = "goal-month", goalDay = "goal-day", analysis, timeline, goals, review, mail }
     var route: Route?
     /// 支払いタブで表示する月
     var paymentMonth: String = Dates.ym()
@@ -111,6 +111,8 @@ final class AppModel {
     func runScheduled() {
         let now = Date(), today = Dates.ymd(now)
         var next = doc
+        // 廃止した「カレンダーからシフト」の設定（iOS 版だけの項目）を消す。Web 版の設定は触らない
+        if var ss = next["shiftSettings"]?.objectValue, ss["iosCalendar"] != nil { ss.removeValue(forKey: "iosCalendar"); next["shiftSettings"] = .object(ss) }
         next.processScheduled(now: now, today: today)
         guard next != doc else { return }
         let changedOnlyDate = { () -> Bool in var a = next, b = doc; a.meta = [:]; b.meta = [:]; return a == b }()

@@ -56,7 +56,6 @@ struct HomeScreen: View {
                 case .dayClose: DayClosingView(date: model.today)
                 case .goalMonth: GoalPlannerView(type: .monthly, key: model.thisMonth)
                 case .goalDay: GoalPlannerView(type: .daily, key: model.today)
-                case .shifts: CalendarShiftView()
                 case .analysis: ReasonAnalysisView(kind: "expense", month: model.thisMonth)
                 case .timeline: MoneyTimelineView()
                 case .goals: EventGoalsView()
@@ -410,41 +409,6 @@ struct MonthCompareView: View {
 }
 
 /// 口座の残高（総資産）
-struct AssetsView: View {
-    @Environment(AppModel.self) private var model
-    @State private var editing: String?
-    var body: some View {
-        let doc = model.doc
-        let snaps = (doc["assetSnapshots"]?.arrayValue ?? []).suffix(120).compactMap { s -> (Date, Double)? in
-            guard let ms = ISODate.ms(str(s["createdAt"])) else { return nil }; return (Date(timeIntervalSince1970: ms / 1000), num(s["bankTotal"]))
-        }
-        List {
-            Section {
-                MoneyText(value: doc.totalBankBalance, size: 40, weight: .heavy)
-                if snaps.count > 1 {
-                    Chart(snaps, id: \.0) { d, v in LineMark(x: .value("日時", d), y: .value("合計", v)).interpolationMethod(.stepEnd) }
-                        .frame(height: 140)
-                }
-            }
-            Section("口座") {
-                ForEach(doc.banks) { b in
-                    NavigationLink { BankDetailView(bankId: b.id) } label: {
-                        LabeledContent {
-                            Text(b.balance.yen).monospacedDigit().foregroundStyle(b.threshold > 0 && b.balance < b.threshold ? .red : .primary)
-                        } label: {
-                            Text(b.name).foregroundStyle(.primary)
-                            if let ms = ISODate.ms(b.balanceAsOf) { Text("残高入力 \(Date(timeIntervalSince1970: ms / 1000).formatted(date: .abbreviated, time: .shortened))").font(.caption) }
-                        }
-                    }
-                }
-            }
-            Section { NavigationLink { AccountsView() } label: { Label("口座とカードを管理", systemImage: "building.columns") } }
-        }
-        .navigationTitle("総資産")
-        .sheet(item: Binding(get: { editing.map(IdBox.init) }, set: { editing = $0?.id })) { b in NavigationStack { BankEditor(bankId: b.id) } }
-    }
-}
-
 #Preview {
     HomeScreen().environment(AppModel.preview())
 }

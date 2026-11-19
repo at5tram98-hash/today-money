@@ -7,7 +7,6 @@ struct EmployersView: View {
     var body: some View {
         List {
             Section {
-                NavigationLink { CalendarShiftView() } label: { Label("カレンダーからシフトを取り込む", systemImage: "calendar.badge.clock") }
             }
             Section { NavigationLink { EmployerTermsView(employerId: "") } label: { Label("勤務先を追加", systemImage: "plus") } }
             ForEach(model.doc.employers) { e in

@@ -103,7 +103,6 @@ struct SalaryMonthView: View {
                 Button { withAnimation { month = Dates.addMonths(month, 1) } } label: { Image(systemName: "chevron.right") }
                     .accessibilityLabel("次の月")
                 Menu {
-                    NavigationLink { CalendarShiftView() } label: { Label("カレンダーからシフト", systemImage: "calendar.badge.clock") }
                     Button { showImport = true } label: { Label("シフトを貼り付けて取り込む", systemImage: "doc.on.clipboard") }
                     NavigationLink { EmployersView() } label: { Label("勤務先と給与の条件", systemImage: "briefcase") }
                     if month != model.thisMonth { Button { month = model.thisMonth } label: { Label("今月に戻る", systemImage: "arrow.uturn.backward") } }
