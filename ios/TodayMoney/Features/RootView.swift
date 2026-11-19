@@ -67,6 +67,11 @@ struct RootView: View {
         .onOpenURL { model.open($0) }
         .onAppear {
             #if DEBUG
+            // 画面確認用：-loadDocument <パス> で、そのバックアップに置き換える（復元ポイントに残る）
+            let args = ProcessInfo.processInfo.arguments
+            if let i = args.firstIndex(of: "-loadDocument"), i + 1 < args.count, let data = FileManager.default.contents(atPath: args[i + 1]) {
+                _ = try? model.importBackup(data)
+            }
             if ProcessInfo.processInfo.arguments.contains("-runIntents") {
                 Task { @MainActor in
                     func log(_ s: String) { FileHandle.standardError.write(Data("[intent] \(s)\n".utf8)) }
@@ -89,14 +94,12 @@ struct RootView: View {
             WidgetBridge.publish(doc: model.doc)
             if let q = QuickActions.pending { QuickActions.pending = nil; QuickActions.perform(q) }
             #if DEBUG
-            CalendarShiftService.seedForTesting(today: model.today)
             Self.seedStatementForTesting(model)
             #endif
-            Task { await model.syncCalendarShifts(auto: true) }
             if lockEnabled { locked = true; unlock() }
         }
         .onChange(of: phase) { _, p in
-            if p == .active { model.runScheduled(); Task { await model.syncCalendarShifts(auto: true) }; Task { await Notifications.reschedule(doc: model.doc) } }
+            if p == .active { model.runScheduled(); Task { await Notifications.reschedule(doc: model.doc) } }
             if p == .background && lockEnabled { locked = true }
             if p == .active && locked { unlock() }
         }

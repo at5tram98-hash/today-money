@@ -1,0 +1,6655 @@
+{
+ "today": "2026-11-19",
+ "document": {
+  "version": 18,
+  "profile": {
+   "name": "",
+   "icon": ""
+  },
+  "categories": [
+   {
+    "id": "food",
+    "name": "食費",
+    "icon": "fork",
+    "color": "#34C759"
+   },
+   {
+    "id": "transport",
+    "name": "交通費",
+    "icon": "tram",
+    "color": "#007AFF"
+   },
+   {
+    "id": "daily",
+    "name": "日用品",
+    "icon": "bag",
+    "color": "#30B0C7"
+   },
+   {
+    "id": "clothes",
+    "name": "衣服費",
+    "icon": "tshirt",
+    "color": "#AF52DE"
+   },
+   {
+    "id": "fun",
+    "name": "娯楽費",
+    "icon": "ticket",
+    "color": "#FF9500"
+   },
+   {
+    "id": "subscription",
+    "name": "サブスク",
+    "icon": "repeat",
+    "color": "#5856D6"
+   },
+   {
+    "id": "education",
+    "name": "教育費",
+    "icon": "book",
+    "color": "#64D2FF"
+   },
+   {
+    "id": "utilities",
+    "name": "光熱費",
+    "icon": "bolt",
+    "color": "#FFCC00"
+   },
+   {
+    "id": "other",
+    "name": "その他",
+    "icon": "ellipsis",
+    "color": "#8E8E93"
+   }
+  ],
+  "transactions": [
+   {
+    "id": "tx_mwkp47ty_wsncbv",
+    "date": "2026-10-25",
+    "amount": 13000,
+    "category": "その他",
+    "merchant": "定期券 13,000円（カード予定）",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "memo": "",
+    "source": "fixed",
+    "mailImportId": "",
+    "fixedId": "fixed_seed_pass",
+    "largePlanId": "",
+    "largePlanPartIndex": null,
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "createdAt": "2026-11-17T12:55:55.558Z",
+    "bankEffectAt": "2026-11-17T12:55:55.558Z"
+   },
+   {
+    "id": "demo_tx_90_0",
+    "date": "2026-08-21",
+    "amount": 2740,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-08-21T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-21T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_90_1",
+    "date": "2026-08-21",
+    "amount": 3130,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-08-21T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-21T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_90_2",
+    "date": "2026-08-21",
+    "amount": 2330,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-08-21T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-21T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_89_0",
+    "date": "2026-08-22",
+    "amount": 2600,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-08-22T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-22T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_88_0",
+    "date": "2026-08-23",
+    "amount": 1810,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-08-23T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-23T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_88_1",
+    "date": "2026-08-23",
+    "amount": 1010,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-08-23T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-23T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_87_0",
+    "date": "2026-08-24",
+    "amount": 890,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-08-24T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-24T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_86_0",
+    "date": "2026-08-25",
+    "amount": 550,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-08-25T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-25T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_86_1",
+    "date": "2026-08-25",
+    "amount": 680,
+    "category": "食費",
+    "merchant": "セブンイレブン",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-08-25T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-25T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_86_2",
+    "date": "2026-08-25",
+    "amount": 840,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-08-25T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-25T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_85_0",
+    "date": "2026-08-26",
+    "amount": 250,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-08-26T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-26T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_84_0",
+    "date": "2026-08-27",
+    "amount": 2340,
+    "category": "日用品",
+    "merchant": "マツキヨ",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-08-27T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-27T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_83_0",
+    "date": "2026-08-28",
+    "amount": 2400,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-08-28T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-28T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_83_1",
+    "date": "2026-08-28",
+    "amount": 870,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-08-28T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-28T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_83_2",
+    "date": "2026-08-28",
+    "amount": 2090,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_smbc_olive",
+    "memo": "",
+    "createdAt": "2026-08-28T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-28T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_82_0",
+    "date": "2026-08-29",
+    "amount": 1420,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-08-29T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-29T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_81_0",
+    "date": "2026-08-30",
+    "amount": 1700,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-08-30T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-30T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_80_0",
+    "date": "2026-08-31",
+    "amount": 2920,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-08-31T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-31T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_80_1",
+    "date": "2026-08-31",
+    "amount": 580,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-08-31T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-31T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_80_2",
+    "date": "2026-08-31",
+    "amount": 510,
+    "category": "食費",
+    "merchant": "すき家",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "createdAt": "2026-08-31T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-31T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_79_0",
+    "date": "2026-09-01",
+    "amount": 290,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-01T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-01T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_78_0",
+    "date": "2026-09-02",
+    "amount": 880,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-02T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-02T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_77_0",
+    "date": "2026-09-03",
+    "amount": 2620,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-03T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-03T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_77_1",
+    "date": "2026-09-03",
+    "amount": 2040,
+    "category": "日用品",
+    "merchant": "マツキヨ",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-03T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-03T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_76_0",
+    "date": "2026-09-04",
+    "amount": 2610,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-09-04T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-04T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_76_1",
+    "date": "2026-09-04",
+    "amount": 1490,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-04T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-04T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_76_2",
+    "date": "2026-09-04",
+    "amount": 280,
+    "category": "食費",
+    "merchant": "セブンイレブン",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-04T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-04T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_75_0",
+    "date": "2026-09-05",
+    "amount": 580,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-05T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-05T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_74_0",
+    "date": "2026-09-06",
+    "amount": 1120,
+    "category": "食費",
+    "merchant": "ローソン",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-06T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-06T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_74_1",
+    "date": "2026-09-06",
+    "amount": 230,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-09-06T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-06T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_74_2",
+    "date": "2026-09-06",
+    "amount": 300,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-06T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-06T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_73_0",
+    "date": "2026-09-07",
+    "amount": 2640,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-07T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-07T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_72_0",
+    "date": "2026-09-08",
+    "amount": 2810,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-08T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-08T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_71_0",
+    "date": "2026-09-09",
+    "amount": 2480,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-09T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-09T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_71_1",
+    "date": "2026-09-09",
+    "amount": 1170,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_smbc_olive",
+    "memo": "",
+    "createdAt": "2026-09-09T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-09T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_71_2",
+    "date": "2026-09-09",
+    "amount": 2650,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-09T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-09T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_70_0",
+    "date": "2026-09-10",
+    "amount": 790,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-10T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-10T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_69_0",
+    "date": "2026-09-11",
+    "amount": 2800,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-11T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-11T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_69_1",
+    "date": "2026-09-11",
+    "amount": 1360,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-11T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-11T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_68_0",
+    "date": "2026-09-12",
+    "amount": 930,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "createdAt": "2026-09-12T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-12T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_68_1",
+    "date": "2026-09-12",
+    "amount": 2040,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-12T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-12T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_67_0",
+    "date": "2026-09-13",
+    "amount": 1920,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-13T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-13T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_66_0",
+    "date": "2026-09-14",
+    "amount": 600,
+    "category": "食費",
+    "merchant": "松屋",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-14T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-14T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_65_0",
+    "date": "2026-09-15",
+    "amount": 1390,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-15T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-15T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_65_1",
+    "date": "2026-09-15",
+    "amount": 1330,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-09-15T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-15T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_64_0",
+    "date": "2026-09-16",
+    "amount": 1210,
+    "category": "食費",
+    "merchant": "ローソン",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-16T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-16T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_64_1",
+    "date": "2026-09-16",
+    "amount": 1510,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-16T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-16T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_63_0",
+    "date": "2026-09-17",
+    "amount": 1680,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_63_1",
+    "date": "2026-09-17",
+    "amount": 2410,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_63_2",
+    "date": "2026-09-17",
+    "amount": 3180,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-09-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_62_0",
+    "date": "2026-09-18",
+    "amount": 2370,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-18T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-18T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_62_1",
+    "date": "2026-09-18",
+    "amount": 760,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-18T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-18T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_62_2",
+    "date": "2026-09-18",
+    "amount": 1120,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-18T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-18T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_61_0",
+    "date": "2026-09-19",
+    "amount": 2250,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-19T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-19T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_61_1",
+    "date": "2026-09-19",
+    "amount": 2240,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_smbc_olive",
+    "memo": "",
+    "createdAt": "2026-09-19T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-19T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_60_0",
+    "date": "2026-09-20",
+    "amount": 270,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-20T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-20T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_60_1",
+    "date": "2026-09-20",
+    "amount": 2430,
+    "category": "日用品",
+    "merchant": "マツキヨ",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-20T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-20T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_59_0",
+    "date": "2026-09-21",
+    "amount": 1540,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-21T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-21T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_58_0",
+    "date": "2026-09-22",
+    "amount": 460,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-22T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-22T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_58_1",
+    "date": "2026-09-22",
+    "amount": 1070,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "createdAt": "2026-09-22T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-22T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_58_2",
+    "date": "2026-09-22",
+    "amount": 1710,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-22T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-22T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_57_0",
+    "date": "2026-09-23",
+    "amount": 1590,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-23T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-23T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_57_1",
+    "date": "2026-09-23",
+    "amount": 2080,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-23T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-23T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_57_2",
+    "date": "2026-09-23",
+    "amount": 530,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-23T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-23T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_56_0",
+    "date": "2026-09-24",
+    "amount": 1110,
+    "category": "食費",
+    "merchant": "ローソン",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-09-24T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-24T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_55_0",
+    "date": "2026-09-25",
+    "amount": 2930,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-25T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-25T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_54_0",
+    "date": "2026-09-26",
+    "amount": 1380,
+    "category": "食費",
+    "merchant": "スーパー玉出",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-26T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-26T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_53_0",
+    "date": "2026-09-27",
+    "amount": 2570,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-27T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-27T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_53_1",
+    "date": "2026-09-27",
+    "amount": 460,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-27T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-27T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_53_2",
+    "date": "2026-09-27",
+    "amount": 2090,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-09-27T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-27T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_52_0",
+    "date": "2026-09-28",
+    "amount": 680,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-28T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-28T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_52_1",
+    "date": "2026-09-28",
+    "amount": 1460,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-28T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-28T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_51_0",
+    "date": "2026-09-29",
+    "amount": 510,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-29T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-29T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_51_1",
+    "date": "2026-09-29",
+    "amount": 3190,
+    "category": "日用品",
+    "merchant": "マツキヨ",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-09-29T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-29T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_50_0",
+    "date": "2026-09-30",
+    "amount": 850,
+    "category": "食費",
+    "merchant": "すき家",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_smbc_olive",
+    "memo": "",
+    "createdAt": "2026-09-30T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-30T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_50_1",
+    "date": "2026-09-30",
+    "amount": 960,
+    "category": "食費",
+    "merchant": "スーパー玉出",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-09-30T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-30T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_49_0",
+    "date": "2026-10-01",
+    "amount": 2360,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-01T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-01T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_48_0",
+    "date": "2026-10-02",
+    "amount": 2230,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-02T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-02T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_48_1",
+    "date": "2026-10-02",
+    "amount": 270,
+    "category": "食費",
+    "merchant": "スーパー玉出",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-02T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-02T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_48_2",
+    "date": "2026-10-02",
+    "amount": 2160,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "createdAt": "2026-10-02T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-02T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_47_0",
+    "date": "2026-10-03",
+    "amount": 2790,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-03T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-03T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_47_1",
+    "date": "2026-10-03",
+    "amount": 1980,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-03T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-03T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_47_2",
+    "date": "2026-10-03",
+    "amount": 1420,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-03T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-03T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_46_0",
+    "date": "2026-10-04",
+    "amount": 3080,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-04T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-04T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_46_1",
+    "date": "2026-10-04",
+    "amount": 2880,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-10-04T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-04T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_46_2",
+    "date": "2026-10-04",
+    "amount": 2440,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-04T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-04T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_45_0",
+    "date": "2026-10-05",
+    "amount": 1880,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-05T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-05T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_44_0",
+    "date": "2026-10-06",
+    "amount": 2200,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-06T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-06T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_43_0",
+    "date": "2026-10-07",
+    "amount": 1110,
+    "category": "食費",
+    "merchant": "ローソン",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-07T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-07T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_43_1",
+    "date": "2026-10-07",
+    "amount": 440,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-10-07T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-07T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_43_2",
+    "date": "2026-10-07",
+    "amount": 240,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-07T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-07T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_42_0",
+    "date": "2026-10-08",
+    "amount": 730,
+    "category": "食費",
+    "merchant": "スーパー玉出",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-08T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-08T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_42_1",
+    "date": "2026-10-08",
+    "amount": 680,
+    "category": "食費",
+    "merchant": "セブンイレブン",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-08T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-08T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_42_2",
+    "date": "2026-10-08",
+    "amount": 3110,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-08T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-08T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_41_0",
+    "date": "2026-10-09",
+    "amount": 1050,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_smbc_olive",
+    "memo": "",
+    "createdAt": "2026-10-09T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-09T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_41_1",
+    "date": "2026-10-09",
+    "amount": 220,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-09T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-09T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_40_0",
+    "date": "2026-10-10",
+    "amount": 460,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-10T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-10T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_39_0",
+    "date": "2026-10-11",
+    "amount": 3020,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-11T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-11T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_39_1",
+    "date": "2026-10-11",
+    "amount": 1180,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-11T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-11T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_39_2",
+    "date": "2026-10-11",
+    "amount": 3110,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "createdAt": "2026-10-11T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-11T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_38_0",
+    "date": "2026-10-12",
+    "amount": 2220,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-12T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-12T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_37_0",
+    "date": "2026-10-13",
+    "amount": 1540,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-13T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-13T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_36_0",
+    "date": "2026-10-14",
+    "amount": 2240,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-14T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-14T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_36_1",
+    "date": "2026-10-14",
+    "amount": 610,
+    "category": "食費",
+    "merchant": "すき家",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-14T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-14T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_36_2",
+    "date": "2026-10-14",
+    "amount": 1400,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-10-14T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-14T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_35_0",
+    "date": "2026-10-15",
+    "amount": 210,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-15T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-15T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_34_0",
+    "date": "2026-10-16",
+    "amount": 760,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-16T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-16T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_33_0",
+    "date": "2026-10-17",
+    "amount": 2620,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_33_1",
+    "date": "2026-10-17",
+    "amount": 1360,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_33_2",
+    "date": "2026-10-17",
+    "amount": 300,
+    "category": "食費",
+    "merchant": "セブンイレブン",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-10-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_32_0",
+    "date": "2026-10-18",
+    "amount": 220,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-18T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-18T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_32_1",
+    "date": "2026-10-18",
+    "amount": 2660,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-18T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-18T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_32_2",
+    "date": "2026-10-18",
+    "amount": 400,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-18T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-18T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_31_0",
+    "date": "2026-10-19",
+    "amount": 2120,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-19T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-19T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_31_1",
+    "date": "2026-10-19",
+    "amount": 240,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_smbc_olive",
+    "memo": "",
+    "createdAt": "2026-10-19T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-19T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_30_0",
+    "date": "2026-10-20",
+    "amount": 460,
+    "category": "食費",
+    "merchant": "セブンイレブン",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-20T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-20T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_29_0",
+    "date": "2026-10-21",
+    "amount": 2750,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-21T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-21T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_29_1",
+    "date": "2026-10-21",
+    "amount": 1220,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-21T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-21T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_28_0",
+    "date": "2026-10-22",
+    "amount": 440,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-22T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-22T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_27_0",
+    "date": "2026-10-23",
+    "amount": 2010,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "createdAt": "2026-10-23T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-23T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_27_1",
+    "date": "2026-10-23",
+    "amount": 2040,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-23T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-23T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_27_2",
+    "date": "2026-10-23",
+    "amount": 2660,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-23T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-23T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_26_0",
+    "date": "2026-10-24",
+    "amount": 1820,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-24T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-24T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_25_0",
+    "date": "2026-10-25",
+    "amount": 2720,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-25T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-25T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_25_1",
+    "date": "2026-10-25",
+    "amount": 350,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-10-25T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-25T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_24_0",
+    "date": "2026-10-26",
+    "amount": 930,
+    "category": "食費",
+    "merchant": "すき家",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-26T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-26T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_24_1",
+    "date": "2026-10-26",
+    "amount": 2520,
+    "category": "日用品",
+    "merchant": "マツキヨ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-26T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-26T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_24_2",
+    "date": "2026-10-26",
+    "amount": 1230,
+    "category": "食費",
+    "merchant": "すき家",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-26T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-26T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_23_0",
+    "date": "2026-10-27",
+    "amount": 2430,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-27T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-27T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_23_1",
+    "date": "2026-10-27",
+    "amount": 710,
+    "category": "食費",
+    "merchant": "すき家",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-10-27T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-27T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_22_0",
+    "date": "2026-10-28",
+    "amount": 2410,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-28T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-28T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_22_1",
+    "date": "2026-10-28",
+    "amount": 1730,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-28T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-28T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_22_2",
+    "date": "2026-10-28",
+    "amount": 2850,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-28T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-28T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_21_0",
+    "date": "2026-10-29",
+    "amount": 850,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-10-29T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-29T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_20_0",
+    "date": "2026-10-30",
+    "amount": 1010,
+    "category": "食費",
+    "merchant": "すき家",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_smbc_olive",
+    "memo": "",
+    "createdAt": "2026-10-30T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-30T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_20_1",
+    "date": "2026-10-30",
+    "amount": 750,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-30T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-30T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_20_2",
+    "date": "2026-10-30",
+    "amount": 1990,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-30T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-30T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_19_0",
+    "date": "2026-10-31",
+    "amount": 500,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-10-31T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-31T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_18_0",
+    "date": "2026-11-01",
+    "amount": 890,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-01T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-01T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_18_1",
+    "date": "2026-11-01",
+    "amount": 320,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "createdAt": "2026-11-01T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-01T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_18_2",
+    "date": "2026-11-01",
+    "amount": 2090,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-01T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-01T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_17_0",
+    "date": "2026-11-02",
+    "amount": 200,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-02T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-02T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_17_1",
+    "date": "2026-11-02",
+    "amount": 2360,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-02T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-02T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_17_2",
+    "date": "2026-11-02",
+    "amount": 2520,
+    "category": "教育費",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-02T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-02T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_16_0",
+    "date": "2026-11-03",
+    "amount": 1160,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-11-03T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-03T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_16_1",
+    "date": "2026-11-03",
+    "amount": 2650,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-03T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-03T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_16_2",
+    "date": "2026-11-03",
+    "amount": 1430,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-03T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-03T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_15_0",
+    "date": "2026-11-04",
+    "amount": 1570,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-04T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-04T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_14_0",
+    "date": "2026-11-05",
+    "amount": 250,
+    "category": "食費",
+    "merchant": "セブンイレブン",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-05T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-05T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_14_1",
+    "date": "2026-11-05",
+    "amount": 820,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-11-05T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-05T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_13_0",
+    "date": "2026-11-06",
+    "amount": 1830,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-06T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-06T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_13_1",
+    "date": "2026-11-06",
+    "amount": 2400,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-06T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-06T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_13_2",
+    "date": "2026-11-06",
+    "amount": 660,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-06T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-06T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_12_0",
+    "date": "2026-11-07",
+    "amount": 1720,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-07T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-07T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_11_0",
+    "date": "2026-11-08",
+    "amount": 1690,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_smbc_olive",
+    "memo": "",
+    "createdAt": "2026-11-08T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-08T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_11_1",
+    "date": "2026-11-08",
+    "amount": 1250,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-08T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-08T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_10_0",
+    "date": "2026-11-09",
+    "amount": 2600,
+    "category": "日用品",
+    "merchant": "マツキヨ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-09T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-09T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_10_1",
+    "date": "2026-11-09",
+    "amount": 2610,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-09T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-09T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_9_0",
+    "date": "2026-11-10",
+    "amount": 1160,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-10T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-10T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_9_1",
+    "date": "2026-11-10",
+    "amount": 530,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "memo": "",
+    "createdAt": "2026-11-10T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-10T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_9_2",
+    "date": "2026-11-10",
+    "amount": 1980,
+    "category": "日用品",
+    "merchant": "マツキヨ",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-10T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-10T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_8_0",
+    "date": "2026-11-11",
+    "amount": 2930,
+    "category": "衣服費",
+    "merchant": "ユニクロ",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-11T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-11T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_7_0",
+    "date": "2026-11-12",
+    "amount": 1530,
+    "category": "衣服費",
+    "merchant": "GU",
+    "paymentMethod": "cash",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-12T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-12T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_6_0",
+    "date": "2026-11-13",
+    "amount": 720,
+    "category": "食費",
+    "merchant": "松屋",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-13T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-13T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_5_0",
+    "date": "2026-11-14",
+    "amount": 2840,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_yucho",
+    "memo": "",
+    "createdAt": "2026-11-14T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-14T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_4_0",
+    "date": "2026-11-15",
+    "amount": 960,
+    "category": "日用品",
+    "merchant": "ダイソー",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-15T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-15T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_4_1",
+    "date": "2026-11-15",
+    "amount": 1350,
+    "category": "娯楽費",
+    "merchant": "カラオケ",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-15T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-15T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_4_2",
+    "date": "2026-11-15",
+    "amount": 1210,
+    "category": "食費",
+    "merchant": "松屋",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-15T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-15T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_3_0",
+    "date": "2026-11-16",
+    "amount": 3160,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-16T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-16T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_3_1",
+    "date": "2026-11-16",
+    "amount": 1960,
+    "category": "交通費",
+    "merchant": "JR西日本",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_paypay",
+    "memo": "",
+    "createdAt": "2026-11-16T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-16T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_2_0",
+    "date": "2026-11-17",
+    "amount": 2470,
+    "category": "交通費",
+    "merchant": "阪急電鉄",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_2_1",
+    "date": "2026-11-17",
+    "amount": 2200,
+    "category": "サブスク",
+    "merchant": "お店",
+    "paymentMethod": "cash",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_2_2",
+    "date": "2026-11-17",
+    "amount": 230,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "memo": "",
+    "createdAt": "2026-11-17T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-17T10:00:00.000Z"
+   },
+   {
+    "id": "demo_tx_1_0",
+    "date": "2026-11-18",
+    "amount": 2110,
+    "category": "娯楽費",
+    "merchant": "映画館",
+    "paymentMethod": "card",
+    "paymentId": "",
+    "memo": "",
+    "createdAt": "2026-11-18T10:00:00.000Z",
+    "source": "manual",
+    "linkedBankId": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-11-18T10:00:00.000Z"
+   }
+  ],
+  "incomes": [
+   {
+    "id": "demo_inc_1",
+    "date": "2026-10-25",
+    "amount": 92122,
+    "sourceName": "GU",
+    "toType": "bank",
+    "bankId": "bank_seed_sbi_shinsei",
+    "kind": "salary",
+    "memo": "",
+    "createdAt": "2026-10-25T09:00:00.000Z",
+    "bankApplied": true,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-10-25T09:00:00.000Z"
+   },
+   {
+    "id": "demo_inc_2",
+    "date": "2026-09-25",
+    "amount": 107759,
+    "sourceName": "GU",
+    "toType": "bank",
+    "bankId": "bank_seed_sbi_shinsei",
+    "kind": "salary",
+    "memo": "",
+    "createdAt": "2026-09-25T09:00:00.000Z",
+    "bankApplied": true,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-09-25T09:00:00.000Z"
+   },
+   {
+    "id": "demo_inc_3",
+    "date": "2026-08-26",
+    "amount": 90571,
+    "sourceName": "GU",
+    "toType": "bank",
+    "bankId": "bank_seed_sbi_shinsei",
+    "kind": "salary",
+    "memo": "",
+    "createdAt": "2026-08-26T09:00:00.000Z",
+    "bankApplied": true,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-08-26T09:00:00.000Z"
+   },
+   {
+    "id": "demo_inc_4",
+    "date": "2026-07-27",
+    "amount": 90470,
+    "sourceName": "GU",
+    "toType": "bank",
+    "bankId": "bank_seed_sbi_shinsei",
+    "kind": "salary",
+    "memo": "",
+    "createdAt": "2026-07-27T09:00:00.000Z",
+    "bankApplied": true,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-07-27T09:00:00.000Z"
+   },
+   {
+    "id": "demo_inc_5",
+    "date": "2026-06-27",
+    "amount": 106750,
+    "sourceName": "GU",
+    "toType": "bank",
+    "bankId": "bank_seed_sbi_shinsei",
+    "kind": "salary",
+    "memo": "",
+    "createdAt": "2026-06-27T09:00:00.000Z",
+    "bankApplied": true,
+    "bankReconciled": false,
+    "bankEffectAt": "2026-06-27T09:00:00.000Z"
+   }
+  ],
+  "dailyGoals": {
+   "2026-10-20": {
+    "total": 1500
+   },
+   "2026-10-21": {
+    "total": 1500
+   },
+   "2026-10-22": {
+    "total": 1500
+   },
+   "2026-10-23": {
+    "total": 1500
+   },
+   "2026-10-24": {
+    "total": 1500
+   },
+   "2026-10-25": {
+    "total": 1500
+   },
+   "2026-10-26": {
+    "total": 1500
+   },
+   "2026-10-27": {
+    "total": 1500
+   },
+   "2026-10-28": {
+    "total": 1500
+   },
+   "2026-10-29": {
+    "total": 1500
+   },
+   "2026-10-30": {
+    "total": 1500
+   },
+   "2026-10-31": {
+    "total": 1500
+   },
+   "2026-11-01": {
+    "total": 1500
+   },
+   "2026-11-02": {
+    "total": 1500
+   },
+   "2026-11-03": {
+    "total": 1500
+   },
+   "2026-11-04": {
+    "total": 1500
+   },
+   "2026-11-05": {
+    "total": 1500
+   },
+   "2026-11-06": {
+    "total": 1500
+   },
+   "2026-11-07": {
+    "total": 1500
+   },
+   "2026-11-08": {
+    "total": 1500
+   },
+   "2026-11-09": {
+    "total": 1500
+   },
+   "2026-11-10": {
+    "total": 1500
+   },
+   "2026-11-11": {
+    "total": 1500
+   },
+   "2026-11-12": {
+    "total": 1500
+   },
+   "2026-11-13": {
+    "total": 1500
+   },
+   "2026-11-14": {
+    "total": 1500
+   },
+   "2026-11-15": {
+    "total": 1500
+   },
+   "2026-11-16": {
+    "total": 1500
+   },
+   "2026-11-17": {
+    "total": 1500
+   },
+   "2026-11-18": {
+    "total": 1500
+   },
+   "2026-11-19": {
+    "total": 1500
+   },
+   "2026-11-20": {
+    "total": 1500
+   },
+   "2026-11-21": {
+    "total": 1500
+   },
+   "2026-11-22": {
+    "total": 1500
+   },
+   "2026-11-23": {
+    "total": 1500
+   },
+   "2026-11-24": {
+    "total": 1500
+   },
+   "2026-11-25": {
+    "total": 1500
+   },
+   "2026-11-26": {
+    "total": 1500
+   },
+   "2026-11-27": {
+    "total": 1500
+   },
+   "2026-11-28": {
+    "total": 1500
+   },
+   "2026-11-29": {
+    "total": 1500
+   },
+   "2026-11-30": {
+    "total": 1500
+   },
+   "2026-12-01": {
+    "total": 1500
+   },
+   "2026-12-02": {
+    "total": 1500
+   },
+   "2026-12-03": {
+    "total": 1500
+   },
+   "2026-12-04": {
+    "total": 1500
+   },
+   "2026-12-05": {
+    "total": 1500
+   },
+   "2026-12-06": {
+    "total": 1500
+   },
+   "2026-12-07": {
+    "total": 1500
+   },
+   "2026-12-08": {
+    "total": 1500
+   },
+   "2026-12-09": {
+    "total": 1500
+   },
+   "2026-12-10": {
+    "total": 1500
+   },
+   "2026-12-11": {
+    "total": 1500
+   },
+   "2026-12-12": {
+    "total": 1500
+   },
+   "2026-12-13": {
+    "total": 1500
+   },
+   "2026-12-14": {
+    "total": 1500
+   },
+   "2026-12-15": {
+    "total": 1500
+   },
+   "2026-12-16": {
+    "total": 1500
+   },
+   "2026-12-17": {
+    "total": 1500
+   },
+   "2026-12-18": {
+    "total": 1500
+   }
+  },
+  "monthlyGoals": {},
+  "dailyCorrections": {},
+  "monthlyCorrections": {},
+  "cardAdjustments": {
+   "2026-08|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 27528,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-08|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 42142,
+    "baseAtEdit": 0,
+    "status": "confirmed",
+    "paymentDateOverride": "2026-09-28",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_smbc": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 34364,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-26",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_paypay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 41923,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-27",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   },
+   "2026-09|card_seed_merpay": {
+    "mode": "confirmed_total",
+    "confirmedTotal": 3000,
+    "baseAtEdit": 0,
+    "status": "estimated",
+    "paymentDateOverride": "2026-10-21",
+    "paidAt": "",
+    "bankApplied": false,
+    "bankReconciled": false,
+    "bankEffectAt": "",
+    "bankIdAtPayment": "",
+    "paidAmount": 0
+   }
+  },
+  "banks": [
+   {
+    "id": "bank_seed_sbi_shinsei",
+    "name": "SBI新生銀行",
+    "label": "現金7,000円を含む合算残高",
+    "balance": 99330,
+    "threshold": 15000,
+    "balanceAsOf": "2026-11-19T09:00:00.000Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_yucho",
+    "name": "ゆうちょ銀行",
+    "label": "",
+    "balance": 46200,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-18T09:00:00.000Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_paypay",
+    "name": "PayPay銀行",
+    "label": "",
+    "balance": 128400,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-17T09:00:00.000Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   },
+   {
+    "id": "bank_seed_smbc_olive",
+    "name": "三井住友銀行 Olive",
+    "label": "",
+    "balance": 23800,
+    "threshold": 0,
+    "balanceAsOf": "2026-11-19T09:00:00.000Z",
+    "updatedAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "cards": [
+   {
+    "id": "card_seed_smbc",
+    "company": "三井住友カード",
+    "name": "三井住友カード",
+    "closingDay": "月末",
+    "dueDay": 26,
+    "limit": 100000,
+    "availableSnapshot": 11000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_merpay",
+    "company": "メルペイカード",
+    "name": "メルペイカード",
+    "closingDay": "月末",
+    "dueDay": 21,
+    "limit": 100000,
+    "availableSnapshot": 86000,
+    "bankId": "bank_seed_sbi_shinsei",
+    "tagIds": []
+   },
+   {
+    "id": "card_seed_paypay",
+    "company": "PayPayカード",
+    "name": "PayPayカード",
+    "closingDay": "月末",
+    "dueDay": 27,
+    "limit": 100000,
+    "availableSnapshot": 5000,
+    "bankId": "bank_seed_paypay",
+    "tagIds": []
+   }
+  ],
+  "debitCards": [
+   {
+    "id": "debit_seed_olive",
+    "name": "Oliveデビットカード",
+    "bankId": "bank_seed_smbc_olive",
+    "createdAt": "2026-11-17T12:55:55.544Z",
+    "tagIds": []
+   }
+  ],
+  "employers": [
+   {
+    "id": "emp_seed_gu",
+    "name": "GU",
+    "hourly": 1300,
+    "transport": 840,
+    "closingType": "month_end",
+    "closingDay": null,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 10,
+    "payMonthOffset": 1,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 0,
+    "breakRules": [
+     {
+      "from": 240,
+      "to": 420,
+      "minutes": 30
+     },
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "ジーユー"
+    ],
+    "tagIds": []
+   },
+   {
+    "id": "emp_seed_muji",
+    "name": "無印良品",
+    "hourly": 1250,
+    "transport": 980,
+    "closingType": "day",
+    "closingDay": 10,
+    "closingMonthOffset": 0,
+    "payType": "day",
+    "payDay": 25,
+    "payMonthOffset": 0,
+    "bankId": "",
+    "transportUnit": "per_shift",
+    "transportCap": 10000,
+    "breakRules": [
+     {
+      "from": 420,
+      "to": null,
+      "minutes": 60
+     }
+    ],
+    "aliases": [
+     "MUJI",
+     "無印"
+    ],
+    "tagIds": []
+   }
+  ],
+  "salaryRecords": [
+   {
+    "id": "salary_seed_gu_202610",
+    "employerId": "emp_seed_gu",
+    "month": "2026-09",
+    "date": "2026-10-10",
+    "gross": 28452,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202610",
+    "employerId": "emp_seed_muji",
+    "month": "2026-10",
+    "date": "2026-10-25",
+    "gross": 57640,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_gu_202611",
+    "employerId": "emp_seed_gu",
+    "month": "2026-10",
+    "date": "2026-11-10",
+    "gross": 48810,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "salary_seed_muji_202611",
+    "employerId": "emp_seed_muji",
+    "month": "2026-11",
+    "date": "2026-11-25",
+    "gross": 34300,
+    "transport": 0,
+    "status": "予定",
+    "amountBasis": "net"
+   },
+   {
+    "id": "demo_sal_0",
+    "employerId": "emp_seed_gu",
+    "month": "2026-03",
+    "date": "2026-04-10",
+    "gross": 45838,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 44638,
+    "actualReceivedDate": "2026-04-10",
+    "createdAt": "2026-04-10T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_1",
+    "employerId": "emp_seed_muji",
+    "month": "2026-03",
+    "date": "2026-04-25",
+    "gross": 49139,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 47939,
+    "actualReceivedDate": "2026-04-25",
+    "createdAt": "2026-04-25T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_2",
+    "employerId": "emp_seed_gu",
+    "month": "2026-04",
+    "date": "2026-05-10",
+    "gross": 53757,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 52557,
+    "actualReceivedDate": "2026-05-10",
+    "createdAt": "2026-05-10T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_3",
+    "employerId": "emp_seed_muji",
+    "month": "2026-04",
+    "date": "2026-05-25",
+    "gross": 57058,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 55858,
+    "actualReceivedDate": "2026-05-25",
+    "createdAt": "2026-05-25T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_4",
+    "employerId": "emp_seed_gu",
+    "month": "2026-05",
+    "date": "2026-06-10",
+    "gross": 61676,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 60476,
+    "actualReceivedDate": "2026-06-10",
+    "createdAt": "2026-06-10T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_5",
+    "employerId": "emp_seed_muji",
+    "month": "2026-05",
+    "date": "2026-06-25",
+    "gross": 64977,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 63777,
+    "actualReceivedDate": "2026-06-25",
+    "createdAt": "2026-06-25T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_6",
+    "employerId": "emp_seed_gu",
+    "month": "2026-06",
+    "date": "2026-07-10",
+    "gross": 69595,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 68395,
+    "actualReceivedDate": "2026-07-10",
+    "createdAt": "2026-07-10T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_7",
+    "employerId": "emp_seed_muji",
+    "month": "2026-06",
+    "date": "2026-07-25",
+    "gross": 32896,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 31696,
+    "actualReceivedDate": "2026-07-25",
+    "createdAt": "2026-07-25T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_8",
+    "employerId": "emp_seed_gu",
+    "month": "2026-07",
+    "date": "2026-08-10",
+    "gross": 37514,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 36314,
+    "actualReceivedDate": "2026-08-10",
+    "createdAt": "2026-08-10T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_9",
+    "employerId": "emp_seed_muji",
+    "month": "2026-07",
+    "date": "2026-08-25",
+    "gross": 40815,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 39615,
+    "actualReceivedDate": "2026-08-25",
+    "createdAt": "2026-08-25T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_10",
+    "employerId": "emp_seed_gu",
+    "month": "2026-08",
+    "date": "2026-09-10",
+    "gross": 45433,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 44233,
+    "actualReceivedDate": "2026-09-10",
+    "createdAt": "2026-09-10T00:00:00.000Z"
+   },
+   {
+    "id": "demo_sal_11",
+    "employerId": "emp_seed_muji",
+    "month": "2026-08",
+    "date": "2026-09-25",
+    "gross": 48734,
+    "transport": 0,
+    "status": "入金済",
+    "source": "manual",
+    "receivedAmount": 47534,
+    "actualReceivedDate": "2026-09-25",
+    "createdAt": "2026-09-25T00:00:00.000Z"
+   }
+  ],
+  "tempIncomes": [
+   {
+    "id": "temp_seed_20261005",
+    "date": "2026-10-05",
+    "amount": 45000,
+    "sourceName": "臨時収入（10/5までの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   },
+   {
+    "id": "temp_seed_20261020",
+    "date": "2026-10-20",
+    "amount": 6000,
+    "sourceName": "臨時収入（10/20ごろの見込み）",
+    "status": "予定",
+    "incomeId": ""
+   },
+   {
+    "id": "demo_t1",
+    "date": "2026-11-13",
+    "amount": 12000,
+    "sourceName": "フリマ売上",
+    "toType": "cash",
+    "bankId": "",
+    "status": "入金済",
+    "memo": "",
+    "createdAt": "2026-11-13T00:00:00.000Z",
+    "incomeId": ""
+   },
+   {
+    "id": "demo_t2",
+    "date": "2026-11-23",
+    "amount": 5000,
+    "sourceName": "謝礼",
+    "toType": "cash",
+    "bankId": "",
+    "status": "予定",
+    "memo": "",
+    "createdAt": "2026-11-19T00:00:00.000Z",
+    "incomeId": ""
+   }
+  ],
+  "fixedPayments": [
+   {
+    "id": "fixed_seed_pass",
+    "name": "定期券 13,000円（カード予定）",
+    "amount": 13000,
+    "day": 25,
+    "frequency": "monthly",
+    "startMonth": "2026-10",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_paypay",
+    "skippedDates": [],
+    "tagIds": [],
+    "annualMonth": 10
+   }
+  ],
+  "largeExpensePlans": [
+   {
+    "id": "large_seed_pass_now",
+    "name": "定期券の更新（現金で払う場合）",
+    "date": "2026-09-26",
+    "amount": 13000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "other",
+    "paymentId": "",
+    "splits": [],
+    "atfOptionalPass": true,
+    "memo": "現金更新する場合の仮定。まだ購入済み扱いにはしない。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_birthday",
+    "name": "誕生日代（仮の分割案）",
+    "date": "2026-10-06",
+    "amount": 60000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "card",
+    "paymentId": "card_seed_smbc",
+    "splits": [
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_smbc",
+      "linkedBankId": "",
+      "amount": 38000
+     },
+     {
+      "paymentMethod": "card",
+      "paymentId": "card_seed_merpay",
+      "linkedBankId": "",
+      "amount": 22000
+     }
+    ],
+    "atfInstallments": {
+     "card_seed_smbc": 3,
+     "card_seed_merpay": 2
+    },
+    "memo": "38,000円/22,000円の仮案。手数料は未確認。",
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_fw_oct",
+    "name": "FW 10月（前半の最終日を仮置き）",
+    "date": "2026-10-15",
+    "amount": 56000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   },
+   {
+    "id": "large_seed_fw_nov",
+    "name": "FW 11月",
+    "date": "2026-11-08",
+    "amount": 45000,
+    "priority": "required",
+    "status": "planned",
+    "paymentMethod": "bank",
+    "paymentId": "bank_seed_sbi_shinsei",
+    "splits": [],
+    "tagIds": [],
+    "category": "その他",
+    "linkedBankId": "",
+    "memo": "",
+    "createdAt": "2026-11-17T13:00:05.651Z",
+    "updatedAt": "2026-11-17T13:00:05.651Z"
+   }
+  ],
+  "assetSnapshots": [
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-05-23",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 87760,
+    "date": "2026-05-23",
+    "createdAt": "2026-05-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-05-26",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 86820,
+    "date": "2026-05-26",
+    "createdAt": "2026-05-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-05-29",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 84290,
+    "date": "2026-05-29",
+    "createdAt": "2026-05-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-01",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 86610,
+    "date": "2026-06-01",
+    "createdAt": "2026-06-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-04",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 86250,
+    "date": "2026-06-04",
+    "createdAt": "2026-06-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-07",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 86530,
+    "date": "2026-06-07",
+    "createdAt": "2026-06-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-10",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 86510,
+    "date": "2026-06-10",
+    "createdAt": "2026-06-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-13",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 86530,
+    "date": "2026-06-13",
+    "createdAt": "2026-06-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-16",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 85410,
+    "date": "2026-06-16",
+    "createdAt": "2026-06-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-19",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 83910,
+    "date": "2026-06-19",
+    "createdAt": "2026-06-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-22",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 88850,
+    "date": "2026-06-22",
+    "createdAt": "2026-06-22T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-25",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 88320,
+    "date": "2026-06-25",
+    "createdAt": "2026-06-25T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-06-28",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 89020,
+    "date": "2026-06-28",
+    "createdAt": "2026-06-28T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-01",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 91150,
+    "date": "2026-07-01",
+    "createdAt": "2026-07-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-04",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 90620,
+    "date": "2026-07-04",
+    "createdAt": "2026-07-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-07",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 88330,
+    "date": "2026-07-07",
+    "createdAt": "2026-07-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-10",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 86820,
+    "date": "2026-07-10",
+    "createdAt": "2026-07-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-13",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 88400,
+    "date": "2026-07-13",
+    "createdAt": "2026-07-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-16",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 89130,
+    "date": "2026-07-16",
+    "createdAt": "2026-07-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-19",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 89640,
+    "date": "2026-07-19",
+    "createdAt": "2026-07-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-22",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 95520,
+    "date": "2026-07-22",
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-25",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 94550,
+    "date": "2026-07-25",
+    "createdAt": "2026-07-25T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-28",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 96500,
+    "date": "2026-07-28",
+    "createdAt": "2026-07-28T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-07-31",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 93770,
+    "date": "2026-07-31",
+    "createdAt": "2026-07-31T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-03",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 92120,
+    "date": "2026-08-03",
+    "createdAt": "2026-08-03T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-06",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 92750,
+    "date": "2026-08-06",
+    "createdAt": "2026-08-06T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-09",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 94200,
+    "date": "2026-08-09",
+    "createdAt": "2026-08-09T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-12",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 91480,
+    "date": "2026-08-12",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-15",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 90960,
+    "date": "2026-08-15",
+    "createdAt": "2026-08-15T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-18",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 93450,
+    "date": "2026-08-18",
+    "createdAt": "2026-08-18T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-21",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 96170,
+    "date": "2026-08-21",
+    "createdAt": "2026-08-21T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-24",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 97000,
+    "date": "2026-08-24",
+    "createdAt": "2026-08-24T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-27",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 99920,
+    "date": "2026-08-27",
+    "createdAt": "2026-08-27T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-08-30",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 99030,
+    "date": "2026-08-30",
+    "createdAt": "2026-08-30T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-02",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 101600,
+    "date": "2026-09-02",
+    "createdAt": "2026-09-02T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-05",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 98910,
+    "date": "2026-09-05",
+    "createdAt": "2026-09-05T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-08",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 100380,
+    "date": "2026-09-08",
+    "createdAt": "2026-09-08T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-11",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 102400,
+    "date": "2026-09-11",
+    "createdAt": "2026-09-11T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-14",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 105260,
+    "date": "2026-09-14",
+    "createdAt": "2026-09-14T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-17",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 104160,
+    "date": "2026-09-17",
+    "createdAt": "2026-09-17T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-20",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 122210,
+    "date": "2026-09-20",
+    "createdAt": "2026-09-20T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-23",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 125060,
+    "date": "2026-09-23",
+    "createdAt": "2026-09-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-26",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 126620,
+    "date": "2026-09-26",
+    "createdAt": "2026-09-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-09-29",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 129780,
+    "date": "2026-09-29",
+    "createdAt": "2026-09-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-02",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 131750,
+    "date": "2026-10-02",
+    "createdAt": "2026-10-02T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-05",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 131520,
+    "date": "2026-10-05",
+    "createdAt": "2026-10-05T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-08",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 130240,
+    "date": "2026-10-08",
+    "createdAt": "2026-10-08T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-11",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 131100,
+    "date": "2026-10-11",
+    "createdAt": "2026-10-11T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-14",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 128450,
+    "date": "2026-10-14",
+    "createdAt": "2026-10-14T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-17",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 131320,
+    "date": "2026-10-17",
+    "createdAt": "2026-10-17T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-20",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 142210,
+    "date": "2026-10-20",
+    "createdAt": "2026-10-20T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-23",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 144610,
+    "date": "2026-10-23",
+    "createdAt": "2026-10-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-26",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 141820,
+    "date": "2026-10-26",
+    "createdAt": "2026-10-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-10-29",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 142990,
+    "date": "2026-10-29",
+    "createdAt": "2026-10-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-11-01",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 145860,
+    "date": "2026-11-01",
+    "createdAt": "2026-11-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-11-04",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 146330,
+    "date": "2026-11-04",
+    "createdAt": "2026-11-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-11-07",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 147580,
+    "date": "2026-11-07",
+    "createdAt": "2026-11-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-11-10",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 147820,
+    "date": "2026-11-10",
+    "createdAt": "2026-11-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-11-13",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 150100,
+    "date": "2026-11-13",
+    "createdAt": "2026-11-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-11-16",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 149880,
+    "date": "2026-11-16",
+    "createdAt": "2026-11-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_sbi_shinsei2026-11-19",
+    "bankId": "bank_seed_sbi_shinsei",
+    "bankBalance": 99330,
+    "date": "2026-11-19",
+    "createdAt": "2026-11-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-05-23",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 49760,
+    "date": "2026-05-23",
+    "createdAt": "2026-05-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-05-26",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 49630,
+    "date": "2026-05-26",
+    "createdAt": "2026-05-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-05-29",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 50580,
+    "date": "2026-05-29",
+    "createdAt": "2026-05-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-01",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 50680,
+    "date": "2026-06-01",
+    "createdAt": "2026-06-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-04",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 50010,
+    "date": "2026-06-04",
+    "createdAt": "2026-06-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-07",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 48840,
+    "date": "2026-06-07",
+    "createdAt": "2026-06-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-10",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 47680,
+    "date": "2026-06-10",
+    "createdAt": "2026-06-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-13",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 48670,
+    "date": "2026-06-13",
+    "createdAt": "2026-06-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-16",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 47670,
+    "date": "2026-06-16",
+    "createdAt": "2026-06-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-19",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 47340,
+    "date": "2026-06-19",
+    "createdAt": "2026-06-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-22",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 51910,
+    "date": "2026-06-22",
+    "createdAt": "2026-06-22T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-25",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 51920,
+    "date": "2026-06-25",
+    "createdAt": "2026-06-25T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-06-28",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 50910,
+    "date": "2026-06-28",
+    "createdAt": "2026-06-28T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-01",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 50660,
+    "date": "2026-07-01",
+    "createdAt": "2026-07-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-04",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 49840,
+    "date": "2026-07-04",
+    "createdAt": "2026-07-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-07",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 50120,
+    "date": "2026-07-07",
+    "createdAt": "2026-07-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-10",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 50350,
+    "date": "2026-07-10",
+    "createdAt": "2026-07-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-13",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 51610,
+    "date": "2026-07-13",
+    "createdAt": "2026-07-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-16",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 50580,
+    "date": "2026-07-16",
+    "createdAt": "2026-07-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-19",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 51990,
+    "date": "2026-07-19",
+    "createdAt": "2026-07-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-22",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 62380,
+    "date": "2026-07-22",
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-25",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 62650,
+    "date": "2026-07-25",
+    "createdAt": "2026-07-25T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-28",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 62370,
+    "date": "2026-07-28",
+    "createdAt": "2026-07-28T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-07-31",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 63450,
+    "date": "2026-07-31",
+    "createdAt": "2026-07-31T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-03",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 63940,
+    "date": "2026-08-03",
+    "createdAt": "2026-08-03T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-06",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 64030,
+    "date": "2026-08-06",
+    "createdAt": "2026-08-06T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-09",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 63580,
+    "date": "2026-08-09",
+    "createdAt": "2026-08-09T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-12",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 63750,
+    "date": "2026-08-12",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-15",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 63160,
+    "date": "2026-08-15",
+    "createdAt": "2026-08-15T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-18",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 64520,
+    "date": "2026-08-18",
+    "createdAt": "2026-08-18T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-21",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 75310,
+    "date": "2026-08-21",
+    "createdAt": "2026-08-21T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-24",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 74420,
+    "date": "2026-08-24",
+    "createdAt": "2026-08-24T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-27",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 73560,
+    "date": "2026-08-27",
+    "createdAt": "2026-08-27T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-08-30",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 74920,
+    "date": "2026-08-30",
+    "createdAt": "2026-08-30T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-02",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 75530,
+    "date": "2026-09-02",
+    "createdAt": "2026-09-02T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-05",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 75030,
+    "date": "2026-09-05",
+    "createdAt": "2026-09-05T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-08",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 76020,
+    "date": "2026-09-08",
+    "createdAt": "2026-09-08T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-11",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 75720,
+    "date": "2026-09-11",
+    "createdAt": "2026-09-11T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-14",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 76860,
+    "date": "2026-09-14",
+    "createdAt": "2026-09-14T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-17",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 76890,
+    "date": "2026-09-17",
+    "createdAt": "2026-09-17T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-20",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 79670,
+    "date": "2026-09-20",
+    "createdAt": "2026-09-20T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-23",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 78650,
+    "date": "2026-09-23",
+    "createdAt": "2026-09-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-26",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 79560,
+    "date": "2026-09-26",
+    "createdAt": "2026-09-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-09-29",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 80670,
+    "date": "2026-09-29",
+    "createdAt": "2026-09-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-02",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 80100,
+    "date": "2026-10-02",
+    "createdAt": "2026-10-02T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-05",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 80900,
+    "date": "2026-10-05",
+    "createdAt": "2026-10-05T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-08",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 80540,
+    "date": "2026-10-08",
+    "createdAt": "2026-10-08T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-11",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 81620,
+    "date": "2026-10-11",
+    "createdAt": "2026-10-11T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-14",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 81520,
+    "date": "2026-10-14",
+    "createdAt": "2026-10-14T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-17",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 80220,
+    "date": "2026-10-17",
+    "createdAt": "2026-10-17T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-20",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 79360,
+    "date": "2026-10-20",
+    "createdAt": "2026-10-20T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-23",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 79600,
+    "date": "2026-10-23",
+    "createdAt": "2026-10-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-26",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 79120,
+    "date": "2026-10-26",
+    "createdAt": "2026-10-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-10-29",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 80050,
+    "date": "2026-10-29",
+    "createdAt": "2026-10-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-11-01",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 79630,
+    "date": "2026-11-01",
+    "createdAt": "2026-11-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-11-04",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 80100,
+    "date": "2026-11-04",
+    "createdAt": "2026-11-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-11-07",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 81540,
+    "date": "2026-11-07",
+    "createdAt": "2026-11-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-11-10",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 81600,
+    "date": "2026-11-10",
+    "createdAt": "2026-11-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-11-13",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 82400,
+    "date": "2026-11-13",
+    "createdAt": "2026-11-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-11-16",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 81570,
+    "date": "2026-11-16",
+    "createdAt": "2026-11-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_yucho2026-11-19",
+    "bankId": "bank_seed_yucho",
+    "bankBalance": 46200,
+    "date": "2026-11-19",
+    "createdAt": "2026-11-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-05-23",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 120020,
+    "date": "2026-05-23",
+    "createdAt": "2026-05-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-05-26",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 118280,
+    "date": "2026-05-26",
+    "createdAt": "2026-05-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-05-29",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 116700,
+    "date": "2026-05-29",
+    "createdAt": "2026-05-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-01",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 116910,
+    "date": "2026-06-01",
+    "createdAt": "2026-06-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-04",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 118080,
+    "date": "2026-06-04",
+    "createdAt": "2026-06-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-07",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 118000,
+    "date": "2026-06-07",
+    "createdAt": "2026-06-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-10",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 116700,
+    "date": "2026-06-10",
+    "createdAt": "2026-06-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-13",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 116860,
+    "date": "2026-06-13",
+    "createdAt": "2026-06-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-16",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 117170,
+    "date": "2026-06-16",
+    "createdAt": "2026-06-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-19",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 114450,
+    "date": "2026-06-19",
+    "createdAt": "2026-06-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-22",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 141890,
+    "date": "2026-06-22",
+    "createdAt": "2026-06-22T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-25",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 142090,
+    "date": "2026-06-25",
+    "createdAt": "2026-06-25T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-06-28",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 142790,
+    "date": "2026-06-28",
+    "createdAt": "2026-06-28T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-01",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 140810,
+    "date": "2026-07-01",
+    "createdAt": "2026-07-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-04",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 143150,
+    "date": "2026-07-04",
+    "createdAt": "2026-07-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-07",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 142410,
+    "date": "2026-07-07",
+    "createdAt": "2026-07-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-10",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 139590,
+    "date": "2026-07-10",
+    "createdAt": "2026-07-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-13",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 140380,
+    "date": "2026-07-13",
+    "createdAt": "2026-07-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-16",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 139730,
+    "date": "2026-07-16",
+    "createdAt": "2026-07-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-19",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 137630,
+    "date": "2026-07-19",
+    "createdAt": "2026-07-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-22",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 167550,
+    "date": "2026-07-22",
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-25",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 166960,
+    "date": "2026-07-25",
+    "createdAt": "2026-07-25T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-28",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 164600,
+    "date": "2026-07-28",
+    "createdAt": "2026-07-28T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-07-31",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 167440,
+    "date": "2026-07-31",
+    "createdAt": "2026-07-31T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-03",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 170240,
+    "date": "2026-08-03",
+    "createdAt": "2026-08-03T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-06",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 172210,
+    "date": "2026-08-06",
+    "createdAt": "2026-08-06T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-09",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 170450,
+    "date": "2026-08-09",
+    "createdAt": "2026-08-09T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-12",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 169000,
+    "date": "2026-08-12",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-15",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 167200,
+    "date": "2026-08-15",
+    "createdAt": "2026-08-15T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-18",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 165980,
+    "date": "2026-08-18",
+    "createdAt": "2026-08-18T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-21",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 191630,
+    "date": "2026-08-21",
+    "createdAt": "2026-08-21T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-24",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 192340,
+    "date": "2026-08-24",
+    "createdAt": "2026-08-24T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-27",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 191980,
+    "date": "2026-08-27",
+    "createdAt": "2026-08-27T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-08-30",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 192310,
+    "date": "2026-08-30",
+    "createdAt": "2026-08-30T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-02",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 192100,
+    "date": "2026-09-02",
+    "createdAt": "2026-09-02T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-05",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 194200,
+    "date": "2026-09-05",
+    "createdAt": "2026-09-05T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-08",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 190690,
+    "date": "2026-09-08",
+    "createdAt": "2026-09-08T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-11",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 193110,
+    "date": "2026-09-11",
+    "createdAt": "2026-09-11T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-14",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 195510,
+    "date": "2026-09-14",
+    "createdAt": "2026-09-14T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-17",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 192030,
+    "date": "2026-09-17",
+    "createdAt": "2026-09-17T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-20",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 210060,
+    "date": "2026-09-20",
+    "createdAt": "2026-09-20T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-23",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 211170,
+    "date": "2026-09-23",
+    "createdAt": "2026-09-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-26",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 207610,
+    "date": "2026-09-26",
+    "createdAt": "2026-09-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-09-29",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 210500,
+    "date": "2026-09-29",
+    "createdAt": "2026-09-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-02",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 214390,
+    "date": "2026-10-02",
+    "createdAt": "2026-10-02T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-05",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 217690,
+    "date": "2026-10-05",
+    "createdAt": "2026-10-05T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-08",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 215990,
+    "date": "2026-10-08",
+    "createdAt": "2026-10-08T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-11",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 213660,
+    "date": "2026-10-11",
+    "createdAt": "2026-10-11T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-14",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 212870,
+    "date": "2026-10-14",
+    "createdAt": "2026-10-14T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-17",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 212920,
+    "date": "2026-10-17",
+    "createdAt": "2026-10-17T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-20",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 241100,
+    "date": "2026-10-20",
+    "createdAt": "2026-10-20T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-23",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 241100,
+    "date": "2026-10-23",
+    "createdAt": "2026-10-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-26",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 238900,
+    "date": "2026-10-26",
+    "createdAt": "2026-10-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-10-29",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 239630,
+    "date": "2026-10-29",
+    "createdAt": "2026-10-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-11-01",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 240670,
+    "date": "2026-11-01",
+    "createdAt": "2026-11-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-11-04",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 244700,
+    "date": "2026-11-04",
+    "createdAt": "2026-11-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-11-07",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 243500,
+    "date": "2026-11-07",
+    "createdAt": "2026-11-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-11-10",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 240530,
+    "date": "2026-11-10",
+    "createdAt": "2026-11-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-11-13",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 240490,
+    "date": "2026-11-13",
+    "createdAt": "2026-11-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-11-16",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 244270,
+    "date": "2026-11-16",
+    "createdAt": "2026-11-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_paypay2026-11-19",
+    "bankId": "bank_seed_paypay",
+    "bankBalance": 128400,
+    "date": "2026-11-19",
+    "createdAt": "2026-11-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-05-23",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 19980,
+    "date": "2026-05-23",
+    "createdAt": "2026-05-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-05-26",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 20140,
+    "date": "2026-05-26",
+    "createdAt": "2026-05-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-05-29",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 20500,
+    "date": "2026-05-29",
+    "createdAt": "2026-05-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-01",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 21060,
+    "date": "2026-06-01",
+    "createdAt": "2026-06-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-04",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 21100,
+    "date": "2026-06-04",
+    "createdAt": "2026-06-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-07",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 20950,
+    "date": "2026-06-07",
+    "createdAt": "2026-06-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-10",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 20540,
+    "date": "2026-06-10",
+    "createdAt": "2026-06-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-13",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 21170,
+    "date": "2026-06-13",
+    "createdAt": "2026-06-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-16",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 21440,
+    "date": "2026-06-16",
+    "createdAt": "2026-06-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-19",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 20960,
+    "date": "2026-06-19",
+    "createdAt": "2026-06-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-22",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 23130,
+    "date": "2026-06-22",
+    "createdAt": "2026-06-22T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-25",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 23370,
+    "date": "2026-06-25",
+    "createdAt": "2026-06-25T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-06-28",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 23900,
+    "date": "2026-06-28",
+    "createdAt": "2026-06-28T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-01",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 23270,
+    "date": "2026-07-01",
+    "createdAt": "2026-07-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-04",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 23400,
+    "date": "2026-07-04",
+    "createdAt": "2026-07-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-07",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 23980,
+    "date": "2026-07-07",
+    "createdAt": "2026-07-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-10",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 24460,
+    "date": "2026-07-10",
+    "createdAt": "2026-07-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-13",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 24890,
+    "date": "2026-07-13",
+    "createdAt": "2026-07-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-16",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 24450,
+    "date": "2026-07-16",
+    "createdAt": "2026-07-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-19",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 24070,
+    "date": "2026-07-19",
+    "createdAt": "2026-07-19T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-22",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 29080,
+    "date": "2026-07-22",
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-25",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 28550,
+    "date": "2026-07-25",
+    "createdAt": "2026-07-25T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-28",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 28900,
+    "date": "2026-07-28",
+    "createdAt": "2026-07-28T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-07-31",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 29440,
+    "date": "2026-07-31",
+    "createdAt": "2026-07-31T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-03",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 29310,
+    "date": "2026-08-03",
+    "createdAt": "2026-08-03T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-06",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 29130,
+    "date": "2026-08-06",
+    "createdAt": "2026-08-06T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-09",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 29180,
+    "date": "2026-08-09",
+    "createdAt": "2026-08-09T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-12",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 28780,
+    "date": "2026-08-12",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-15",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 28230,
+    "date": "2026-08-15",
+    "createdAt": "2026-08-15T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-18",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 28310,
+    "date": "2026-08-18",
+    "createdAt": "2026-08-18T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-21",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 34620,
+    "date": "2026-08-21",
+    "createdAt": "2026-08-21T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-24",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 34700,
+    "date": "2026-08-24",
+    "createdAt": "2026-08-24T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-27",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 35400,
+    "date": "2026-08-27",
+    "createdAt": "2026-08-27T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-08-30",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 35980,
+    "date": "2026-08-30",
+    "createdAt": "2026-08-30T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-02",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 35840,
+    "date": "2026-09-02",
+    "createdAt": "2026-09-02T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-05",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 36470,
+    "date": "2026-09-05",
+    "createdAt": "2026-09-05T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-08",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 36470,
+    "date": "2026-09-08",
+    "createdAt": "2026-09-08T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-11",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 36740,
+    "date": "2026-09-11",
+    "createdAt": "2026-09-11T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-14",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 37070,
+    "date": "2026-09-14",
+    "createdAt": "2026-09-14T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-17",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 37590,
+    "date": "2026-09-17",
+    "createdAt": "2026-09-17T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-20",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 42320,
+    "date": "2026-09-20",
+    "createdAt": "2026-09-20T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-23",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 41670,
+    "date": "2026-09-23",
+    "createdAt": "2026-09-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-26",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 41470,
+    "date": "2026-09-26",
+    "createdAt": "2026-09-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-09-29",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 42210,
+    "date": "2026-09-29",
+    "createdAt": "2026-09-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-02",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 42520,
+    "date": "2026-10-02",
+    "createdAt": "2026-10-02T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-05",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 43190,
+    "date": "2026-10-05",
+    "createdAt": "2026-10-05T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-08",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 43630,
+    "date": "2026-10-08",
+    "createdAt": "2026-10-08T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-11",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 42970,
+    "date": "2026-10-11",
+    "createdAt": "2026-10-11T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-14",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 42310,
+    "date": "2026-10-14",
+    "createdAt": "2026-10-14T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-17",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 42360,
+    "date": "2026-10-17",
+    "createdAt": "2026-10-17T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-20",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44730,
+    "date": "2026-10-20",
+    "createdAt": "2026-10-20T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-23",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44910,
+    "date": "2026-10-23",
+    "createdAt": "2026-10-23T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-26",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44970,
+    "date": "2026-10-26",
+    "createdAt": "2026-10-26T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-10-29",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44990,
+    "date": "2026-10-29",
+    "createdAt": "2026-10-29T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-11-01",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44690,
+    "date": "2026-11-01",
+    "createdAt": "2026-11-01T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-11-04",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44300,
+    "date": "2026-11-04",
+    "createdAt": "2026-11-04T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-11-07",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44770,
+    "date": "2026-11-07",
+    "createdAt": "2026-11-07T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-11-10",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44260,
+    "date": "2026-11-10",
+    "createdAt": "2026-11-10T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-11-13",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 43650,
+    "date": "2026-11-13",
+    "createdAt": "2026-11-13T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-11-16",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 44260,
+    "date": "2026-11-16",
+    "createdAt": "2026-11-16T12:00:00.000Z",
+    "memo": "残高更新"
+   },
+   {
+    "id": "snap_bank_seed_smbc_olive2026-11-19",
+    "bankId": "bank_seed_smbc_olive",
+    "bankBalance": 23800,
+    "date": "2026-11-19",
+    "createdAt": "2026-11-19T12:00:00.000Z",
+    "memo": "残高更新"
+   }
+  ],
+  "mailImports": [],
+  "cardStatementImports": [],
+  "savedScenarios": [],
+  "salaryAllocations": [],
+  "transferPlans": [],
+  "statementReconciliations": [],
+  "budgetRebalanceHistory": [],
+  "eventGoals": [],
+  "reimbursements": [],
+  "savedSearches": [],
+  "merchantRules": {},
+  "quickInputRules": {},
+  "monthReviews": {},
+  "dayClosings": {},
+  "pushPreferences": {
+   "dayClose": true,
+   "closeTime": "21:00",
+   "atf": true,
+   "mail": true,
+   "spending": false,
+   "spendTimes": [
+    "12:00",
+    "18:00"
+   ],
+   "showAmount": false
+  },
+  "gmailSettings": {
+   "clientId": "",
+   "query": "newer_than:30d {subject:(ご利用) subject:(利用) subject:(デビット) subject:(カード) subject:(口座振替) subject:(引落) subject:(決済)}",
+   "autoSync": true,
+   "syncMinutes": 5,
+   "lastSyncAt": null,
+   "emailAddress": "",
+   "lookbackDays": 30,
+   "sourceIds": []
+  },
+  "atfSettings": {
+   "reserveFloor": 15000,
+   "dailyCardSpend": 500,
+   "birthdayReduction": 0,
+   "birthdayFee": null,
+   "renewPassCash": true,
+   "extraEarlyShifts": false,
+   "extraLateShifts": false,
+   "asOf": "2026-09-26",
+   "source": "seeded-example"
+  },
+  "acfSettings": {
+   "reserveFloor": 15000,
+   "horizon": "next_card_due",
+   "useWeekdayWeights": true,
+   "includeRequiredLargeExpenses": true,
+   "riskNotifications": true,
+   "creditFallbackEnabled": true,
+   "creditDailyLimit": 500,
+   "creditAggressiveness": 100,
+   "creditAllowAllCategories": true,
+   "creditAllowedCategoryIds": [],
+   "creditAllowedMerchants": [],
+   "creditBlockedMerchants": [],
+   "preferredCardId": "",
+   "initialized": false,
+   "indexEndDay": 28,
+   "indexEndDate": ""
+  },
+  "feedbackSettings": {
+   "sound": true,
+   "haptic": true,
+   "motion": true,
+   "volume": 0.45
+  },
+  "notices": [],
+  "notificationSettings": {
+   "goal": true,
+   "salary": true,
+   "payment": true,
+   "unknown": true,
+   "balance": true,
+   "level": "recommended"
+  },
+  "appearance": "system",
+  "security": {
+   "enabled": false,
+   "passcode": "",
+   "relock": "immediate"
+  },
+  "meta": {
+   "legacyMigrated": true,
+   "lastScheduleDate": "2026-11-19",
+   "seedVersion": 4,
+   "atfSeeded": true,
+   "employerTermsV18": true,
+   "shiftGrossV19": true
+  },
+  "shiftPlans": [],
+  "homeViewMode": "today",
+  "sidebarFavorites": [],
+  "sidebarFavoriteOrder": [],
+  "tags": [],
+  "favoriteTagMap": {}
+ },
+ "months": {
+  "2026-08": {
+   "total": 75929,
+   "received": 75929,
+   "planned": 0,
+   "overdue": 0,
+   "delta": {
+    "prev": 100091,
+    "diff": -24162,
+    "pct": -24.140032570360972
+   },
+   "composition": [
+    {
+     "id": "emp_seed_gu",
+     "name": "GU",
+     "amount": 36314,
+     "pct": 48
+    },
+    {
+     "id": "emp_seed_muji",
+     "name": "無印良品",
+     "amount": 39615,
+     "pct": 52
+    }
+   ],
+   "rows": [
+    {
+     "id": "emp_seed_gu",
+     "amount": 36314,
+     "status": "入金済み",
+     "date": "2026-08-10",
+     "series": [
+      0,
+      44638,
+      52557,
+      60476,
+      68395,
+      36314
+     ]
+    },
+    {
+     "id": "emp_seed_muji",
+     "amount": 39615,
+     "status": "入金済み",
+     "date": "2026-08-25",
+     "series": [
+      0,
+      47939,
+      55858,
+      63777,
+      31696,
+      39615
+     ]
+    }
+   ],
+   "trend": {
+    "1M": [
+     {
+      "month": "2026-08",
+      "value": 75929
+     }
+    ],
+    "3M": [
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     }
+    ],
+    "6M": [
+     {
+      "month": "2026-03",
+      "value": 0
+     },
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     }
+    ],
+    "1Y": [
+     {
+      "month": "2025-09",
+      "value": 0
+     },
+     {
+      "month": "2025-10",
+      "value": 0
+     },
+     {
+      "month": "2025-11",
+      "value": 0
+     },
+     {
+      "month": "2025-12",
+      "value": 0
+     },
+     {
+      "month": "2026-01",
+      "value": 0
+     },
+     {
+      "month": "2026-02",
+      "value": 0
+     },
+     {
+      "month": "2026-03",
+      "value": 0
+     },
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     }
+    ],
+    "ALL": [
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     }
+    ]
+   }
+  },
+  "2026-09": {
+   "total": 91767,
+   "received": 91767,
+   "planned": 0,
+   "overdue": 0,
+   "delta": {
+    "prev": 75929,
+    "diff": 15838,
+    "pct": 20.85896034453239
+   },
+   "composition": [
+    {
+     "id": "emp_seed_gu",
+     "name": "GU",
+     "amount": 44233,
+     "pct": 48
+    },
+    {
+     "id": "emp_seed_muji",
+     "name": "無印良品",
+     "amount": 47534,
+     "pct": 52
+    }
+   ],
+   "rows": [
+    {
+     "id": "emp_seed_gu",
+     "amount": 44233,
+     "status": "入金済み",
+     "date": "2026-09-10",
+     "series": [
+      44638,
+      52557,
+      60476,
+      68395,
+      36314,
+      44233
+     ]
+    },
+    {
+     "id": "emp_seed_muji",
+     "amount": 47534,
+     "status": "入金済み",
+     "date": "2026-09-25",
+     "series": [
+      47939,
+      55858,
+      63777,
+      31696,
+      39615,
+      47534
+     ]
+    }
+   ],
+   "trend": {
+    "1M": [
+     {
+      "month": "2026-09",
+      "value": 91767
+     }
+    ],
+    "3M": [
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     }
+    ],
+    "6M": [
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     }
+    ],
+    "1Y": [
+     {
+      "month": "2025-10",
+      "value": 0
+     },
+     {
+      "month": "2025-11",
+      "value": 0
+     },
+     {
+      "month": "2025-12",
+      "value": 0
+     },
+     {
+      "month": "2026-01",
+      "value": 0
+     },
+     {
+      "month": "2026-02",
+      "value": 0
+     },
+     {
+      "month": "2026-03",
+      "value": 0
+     },
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     }
+    ],
+    "ALL": [
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     }
+    ]
+   }
+  },
+  "2026-10": {
+   "total": 137092,
+   "received": 0,
+   "planned": 0,
+   "overdue": 137092,
+   "delta": {
+    "prev": 91767,
+    "diff": 45325,
+    "pct": 49.391393420292694
+   },
+   "composition": [
+    {
+     "id": "emp_seed_gu",
+     "name": "GU",
+     "amount": 28452,
+     "pct": 21
+    },
+    {
+     "id": "emp_seed_muji",
+     "name": "無印良品",
+     "amount": 57640,
+     "pct": 42
+    },
+    {
+     "id": "temp",
+     "name": "臨時収入",
+     "amount": 51000,
+     "pct": 37
+    }
+   ],
+   "rows": [
+    {
+     "id": "emp_seed_gu",
+     "amount": 28452,
+     "status": "入金日を過ぎた未確認",
+     "date": "2026-10-10",
+     "series": [
+      52557,
+      60476,
+      68395,
+      36314,
+      44233,
+      28452
+     ]
+    },
+    {
+     "id": "emp_seed_muji",
+     "amount": 57640,
+     "status": "入金日を過ぎた未確認",
+     "date": "2026-10-25",
+     "series": [
+      55858,
+      63777,
+      31696,
+      39615,
+      47534,
+      57640
+     ]
+    }
+   ],
+   "trend": {
+    "1M": [
+     {
+      "month": "2026-10",
+      "value": 137092
+     }
+    ],
+    "3M": [
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     }
+    ],
+    "6M": [
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     }
+    ],
+    "1Y": [
+     {
+      "month": "2025-11",
+      "value": 0
+     },
+     {
+      "month": "2025-12",
+      "value": 0
+     },
+     {
+      "month": "2026-01",
+      "value": 0
+     },
+     {
+      "month": "2026-02",
+      "value": 0
+     },
+     {
+      "month": "2026-03",
+      "value": 0
+     },
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     }
+    ],
+    "ALL": [
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     }
+    ]
+   }
+  },
+  "2026-11": {
+   "total": 100110,
+   "received": 0,
+   "planned": 39300,
+   "overdue": 60810,
+   "delta": {
+    "prev": 137092,
+    "diff": -36982,
+    "pct": -26.976045283459282
+   },
+   "composition": [
+    {
+     "id": "emp_seed_gu",
+     "name": "GU",
+     "amount": 48810,
+     "pct": 49
+    },
+    {
+     "id": "emp_seed_muji",
+     "name": "無印良品",
+     "amount": 34300,
+     "pct": 34
+    },
+    {
+     "id": "temp",
+     "name": "臨時収入",
+     "amount": 17000,
+     "pct": 17
+    }
+   ],
+   "rows": [
+    {
+     "id": "emp_seed_gu",
+     "amount": 48810,
+     "status": "入金日を過ぎた未確認",
+     "date": "2026-11-10",
+     "series": [
+      60476,
+      68395,
+      36314,
+      44233,
+      28452,
+      48810
+     ]
+    },
+    {
+     "id": "emp_seed_muji",
+     "amount": 34300,
+     "status": "入金予定",
+     "date": "2026-11-25",
+     "series": [
+      63777,
+      31696,
+      39615,
+      47534,
+      57640,
+      34300
+     ]
+    }
+   ],
+   "trend": {
+    "1M": [
+     {
+      "month": "2026-11",
+      "value": 100110
+     }
+    ],
+    "3M": [
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     },
+     {
+      "month": "2026-11",
+      "value": 100110
+     }
+    ],
+    "6M": [
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     },
+     {
+      "month": "2026-11",
+      "value": 100110
+     }
+    ],
+    "1Y": [
+     {
+      "month": "2025-12",
+      "value": 0
+     },
+     {
+      "month": "2026-01",
+      "value": 0
+     },
+     {
+      "month": "2026-02",
+      "value": 0
+     },
+     {
+      "month": "2026-03",
+      "value": 0
+     },
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     },
+     {
+      "month": "2026-11",
+      "value": 100110
+     }
+    ],
+    "ALL": [
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     },
+     {
+      "month": "2026-11",
+      "value": 100110
+     }
+    ]
+   }
+  },
+  "2026-12": {
+   "total": 0,
+   "received": 0,
+   "planned": 0,
+   "overdue": 0,
+   "delta": {
+    "prev": 100110,
+    "diff": -100110,
+    "pct": -100
+   },
+   "composition": [],
+   "rows": [
+    {
+     "id": "emp_seed_gu",
+     "amount": 0,
+     "status": "未登録",
+     "date": "",
+     "series": [
+      68395,
+      36314,
+      44233,
+      28452,
+      48810,
+      0
+     ]
+    },
+    {
+     "id": "emp_seed_muji",
+     "amount": 0,
+     "status": "未登録",
+     "date": "",
+     "series": [
+      31696,
+      39615,
+      47534,
+      57640,
+      34300,
+      0
+     ]
+    }
+   ],
+   "trend": {
+    "1M": [
+     {
+      "month": "2026-12",
+      "value": 0
+     }
+    ],
+    "3M": [
+     {
+      "month": "2026-10",
+      "value": 137092
+     },
+     {
+      "month": "2026-11",
+      "value": 100110
+     },
+     {
+      "month": "2026-12",
+      "value": 0
+     }
+    ],
+    "6M": [
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     },
+     {
+      "month": "2026-11",
+      "value": 100110
+     },
+     {
+      "month": "2026-12",
+      "value": 0
+     }
+    ],
+    "1Y": [
+     {
+      "month": "2026-01",
+      "value": 0
+     },
+     {
+      "month": "2026-02",
+      "value": 0
+     },
+     {
+      "month": "2026-03",
+      "value": 0
+     },
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     },
+     {
+      "month": "2026-11",
+      "value": 100110
+     },
+     {
+      "month": "2026-12",
+      "value": 0
+     }
+    ],
+    "ALL": [
+     {
+      "month": "2026-04",
+      "value": 92577
+     },
+     {
+      "month": "2026-05",
+      "value": 108415
+     },
+     {
+      "month": "2026-06",
+      "value": 124253
+     },
+     {
+      "month": "2026-07",
+      "value": 100091
+     },
+     {
+      "month": "2026-08",
+      "value": 75929
+     },
+     {
+      "month": "2026-09",
+      "value": 91767
+     },
+     {
+      "month": "2026-10",
+      "value": 137092
+     },
+     {
+      "month": "2026-11",
+      "value": 100110
+     },
+     {
+      "month": "2026-12",
+      "value": 0
+     }
+    ]
+   }
+  }
+ }
+}

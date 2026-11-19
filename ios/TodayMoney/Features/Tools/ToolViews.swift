@@ -141,51 +141,6 @@ struct TempIncomeHistoryView: View {
 
 // MARK: - 口座の詳細（Web 版 openBankDetail：残高・推移・この口座の取引・60日の見通し）
 
-struct BankDetailView: View {
-    @Environment(AppModel.self) private var model
-    var bankId: String
-    @State private var editing = false
-    var body: some View {
-        let doc = model.doc
-        if let b = doc.bank(bankId) {
-            let snaps = (doc["assetSnapshots"]?.arrayValue ?? []).filter { str($0["bankId"]) == bankId }.suffix(60).compactMap { s -> (Date, Double)? in
-                guard let ms = ISODate.ms(str(s["createdAt"])) else { return nil }; return (Date(timeIntervalSince1970: ms / 1000), num(s["bankBalance"]))
-            }
-            let txs = doc.transactions.filter { doc.transactionBankId($0) == bankId }.sorted { $0.date > $1.date }.prefix(30)
-            let f = doc.bankForecast(bankId, days: 60, today: model.today)
-            List {
-                Section {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(b.label.isEmpty ? "銀行口座" : b.label).font(.subheadline).foregroundStyle(.secondary)
-                        MoneyText(value: b.balance, size: 40, weight: .heavy)
-                        Text(ISODate.ms(b.balanceAsOf).map { "残高確認 \(Date(timeIntervalSince1970: $0 / 1000).formatted(date: .abbreviated, time: .shortened))" } ?? "残高の確認日時なし").font(.footnote).foregroundStyle(.secondary)
-                        if b.threshold > 0 { Text("残高アラート \(b.threshold.yen)").font(.footnote).foregroundStyle(b.balance < b.threshold ? .red : .secondary) }
-                    }
-                    if snaps.count > 1 {
-                        Chart(snaps, id: \.0) { d, v in LineMark(x: .value("日時", d), y: .value("残高", v)).interpolationMethod(.stepEnd) }.frame(height: 130)
-                    }
-                    Button { editing = true } label: { Label("残高を更新", systemImage: "square.and.pencil") }
-                }
-                if let f {
-                    Section("60日の見通し") {
-                        LabeledContent("最低予測残高") { Text("\(f.minBalance.yen)（\(Format.shortDay(f.minDate))）").foregroundStyle(f.minBalance < 0 ? .red : .primary) }
-                        LabeledContent("60日後", value: f.endBalance.yen)
-                        NavigationLink { MoneyTimelineView() } label: { Text("お金のタイムラインで見る") }
-                    }
-                }
-                Section("この口座の取引") {
-                    if txs.isEmpty { Text("取引はありません").foregroundStyle(.secondary) }
-                    ForEach(Array(txs)) { t in NavigationLink { TransactionEditor(draft: t, isNew: false) } label: { TransactionRow(t: t, showDate: true) }.transactionActions(t) }
-                }
-                TagSection(ref: "bank:\(bankId)")
-            }
-            .navigationTitle(b.name)
-            .toolbar { ToolbarItem(placement: .topBarTrailing) { FavoriteButton(key: "bank:\(bankId)") } }
-            .sheet(isPresented: $editing) { NavigationStack { BankEditor(bankId: bankId) } }
-        } else { ContentUnavailableView("口座が見つかりません", systemImage: "building.columns") }
-    }
-}
-
 // MARK: - 金額をまとめて更新（Web 版 openFinancialUpdates：給与・カード請求・銀行残高）
 
 struct FinancialUpdatesView: View {

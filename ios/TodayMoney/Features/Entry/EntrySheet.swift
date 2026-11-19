@@ -39,8 +39,8 @@ struct EntrySheet: View {
     @State private var assist: String?
     enum PlanKind: String, Identifiable { case fixed, large; var id: String { rawValue } }
 
-    enum NextStep: Identifiable, Hashable { case salary(String, Double), card(String, Double), detail(Transaction), tempDetail, shifts, oneLine
-        var id: String { switch self { case .salary: return "s"; case .card: return "c"; case .detail: return "d"; case .tempDetail: return "t"; case .shifts: return "sh"; case .oneLine: return "ol" } }
+    enum NextStep: Identifiable, Hashable { case salary(String, Double), card(String, Double), detail(Transaction), tempDetail, oneLine
+        var id: String { switch self { case .salary: return "s"; case .card: return "c"; case .detail: return "d"; case .tempDetail: return "t"; case .oneLine: return "ol" } }
         static func == (a: NextStep, b: NextStep) -> Bool { a.id == b.id }
         func hash(into h: inout Hasher) { h.combine(id) }
     }
@@ -79,7 +79,6 @@ struct EntrySheet: View {
         case .card(let card, let amount): CardBillingEditor(cardId: card, billingMonth: nil, prefillAmount: amount, onDone: { dismiss() })
         case .detail(let t): TransactionEditor(draft: t, isNew: true, onDone: { dismiss() })
         case .tempDetail: TempIncomeEditor(tempId: nil, prefillAmount: amount, prefillDate: date, onDone: { dismiss() })
-        case .shifts: CalendarShiftView()
         case .oneLine: QuickLineView()
         }
     }
@@ -232,7 +231,6 @@ struct EntrySheet: View {
             if doc.employers.isEmpty { empty("勤務先がありません。「その他」→「給与・勤務先」で追加できます。") } else {
                 VStack(alignment: .leading, spacing: 8) {
                     chips(doc.employers.map { ($0.id, $0.name, "briefcase") }, selected: employerId) { employerId = $0 }
-                    Button { next = .shifts } label: { Label("シフトから（カレンダー）", systemImage: "calendar.badge.clock").font(.subheadline) }.padding(.horizontal)
                 }
             }
         case .card:
