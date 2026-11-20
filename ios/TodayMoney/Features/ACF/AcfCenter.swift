@@ -45,6 +45,7 @@ struct AcfCenterView: View {
     @State private var day: AcfRow?
     @State private var indexPeriod = false
     @State private var origin: AppModel.Tab = .home
+    @State private var orbOpen = false
 
     var body: some View {
         let tab = model.acfCenter ?? .overview
@@ -65,11 +66,17 @@ struct AcfCenterView: View {
             .overlay(alignment: .top) {
                 if data.computing && data.forecast != nil { AcfRecalcPill().padding(.top, 54) }
             }
-            AcfCenterBar(selection: Binding(get: { model.acfCenter ?? .overview }, set: { t in
+            if orbOpen {
+                Rectangle().fill(.black.opacity(0.45)).ignoresSafeArea()
+                    .transition(.opacity)
+                    .allowsHitTesting(false)
+            }
+            AcfCenterBar(orbOpen: $orbOpen, selection: Binding(get: { model.acfCenter ?? .overview }, set: { t in
                 if t == model.acfCenter { if !path.isEmpty { path = NavigationPath() } } else { model.acfCenter = t }
             }), origin: origin) { leave($0) }
         }
         .background(Color(.systemGroupedBackground))
+        .animation(.easeInOut(duration: 0.2), value: orbOpen)
         .sheet(item: $day) { r in NavigationStack { AcfDayView(row: r) }.presentationDetents([.medium, .large]) }
         .sheet(isPresented: $indexPeriod) { NavigationStack { AcfIndexPeriodView() }.presentationDetents([.medium]) }
         .task(id: "\(model.revision)|\(model.today)") { await load() }
@@ -101,13 +108,13 @@ struct AcfCenterView: View {
         } else if let f = data.forecast {
             switch tab {
             case .overview: AcfOverviewTab(f: f)
-            case .table: AcfTableTab(f: f)
-            case .events: AcfEventsTab(f: f)
-            case .accounts: AcfAccountsTab(f: f)
-            case .simulate: AcfSimulateTab(base: f)
+            case .table: AcfTableTab(f: f).acfReveal(0)
+            case .events: AcfEventsTab(f: f).acfReveal(0)
+            case .accounts: AcfAccountsTab(f: f).acfReveal(0)
+            case .simulate: AcfSimulateTab(base: f).acfReveal(0)
             }
         } else {
-            AcfCalculatingView().transition(.opacity)
+            AcfCalculatingView().transition(.asymmetric(insertion: .opacity, removal: .opacity.combined(with: .scale(scale: 0.85))))
         }
     }
 
@@ -184,16 +191,18 @@ extension View {
 // MARK: - 下のバー（ふだんのタブの丸ボタン ＋ ACFのタブ）
 
 struct AcfCenterBar: View {
+    @Binding var orbOpen: Bool
     @Binding var selection: AcfCenterTab
     var origin: AppModel.Tab
     var leave: (AppModel.Tab) -> Void
     @Namespace private var pill
     @State private var morphed = false
+    /// 丸ボタンを長押しして ホーム・支払い・その他 を開いている間は、ACF の下タブを隠す（文字が重ならないように）
 
     var body: some View {
         HStack(spacing: 10) {
-            MainTabOrb(origin: origin, morphed: morphed, leave: leave)
-            if morphed {
+            MainTabOrb(origin: origin, morphed: morphed, expanded: $orbOpen, leave: leave)
+            if morphed && !orbOpen {
                 HStack(spacing: 0) {
                     ForEach(AcfCenterTab.allCases) { t in
                         Button {
@@ -221,9 +230,13 @@ struct AcfCenterBar: View {
                 }
                 .padding(4)
                 .acfGlass(Capsule(), interactive: true)
-                .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
+                .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity),
+                                        removal: .move(edge: .trailing).combined(with: .opacity).combined(with: .scale(scale: 0.9, anchor: .leading))))
+            } else {
+                Spacer(minLength: 0)
             }
         }
+        .animation(.spring(response: 0.34, dampingFraction: 0.84), value: orbOpen)
         .padding(.horizontal, 14)
         .padding(.bottom, 2)
         .onAppear {
@@ -236,8 +249,8 @@ struct AcfCenterBar: View {
 struct MainTabOrb: View {
     var origin: AppModel.Tab
     var morphed: Bool
+    @Binding var expanded: Bool
     var leave: (AppModel.Tab) -> Void
-    @State private var expanded = false
     @State private var hover: Int?
     @State private var pressStart: Date?
     @State private var pressToken: UUID?

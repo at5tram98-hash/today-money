@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key><string>com.fujiiyuuki.mymoney.resign</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/zsh</string>
+        <string>/Users/fujiiyuuki/Library/Application Support/MyMoneyResign/mymoney-resign.sh</string>
+    </array>
+    <!-- 3時間ごと・ログインしたとき。署名の期限が近いときだけ入れ直す -->
+    <key>StartInterval</key><integer>10800</integer>
+    <key>RunAtLoad</key><true/>
+    <key>StandardOutPath</key><string>/Users/fujiiyuuki/Library/Logs/MyMoney/launchd.out.log</string>
+    <key>StandardErrorPath</key><string>/Users/fujiiyuuki/Library/Logs/MyMoney/launchd.err.log</string>
+    <key>ProcessType</key><string>Background</string>
+</dict>
+</plist>

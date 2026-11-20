@@ -102,7 +102,14 @@ struct HomeScreen: View {
                 Button { goalTarget = .month } label: { Label(doc.monthlyGoalTotal(String(date.prefix(7))) > 0 ? "今月の目標を変更" : "今月の目標をつくる", systemImage: "calendar") }
             } label: { Image(systemName: "target") }
             .accessibilityLabel("目標")
-            Button { model.openAcf(.overview) } label: { Image(systemName: "chart.line.uptrend.xyaxis") }.accessibilityLabel("ACFセンター")
+            let unread = NoticesView.visible(doc, today: today).filter { $0["read"]?.boolValue != true }.count
+            Button { tool = .notices } label: {
+                Image(systemName: unread > 0 ? "bell.badge" : "bell")
+                    .symbolRenderingMode(unread > 0 ? .palette : .monochrome)
+                    .foregroundStyle(unread > 0 ? Color.red : Color.primary, Color.primary)
+                    .symbolEffect(.bounce, value: unread)
+            }
+            .accessibilityLabel(unread > 0 ? "システムのお知らせ（未読 \(unread)件）" : "システムのお知らせ")
             Button { searching = true } label: { Image(systemName: "magnifyingglass") }.accessibilityLabel("検索")
         }
     }
@@ -659,10 +666,11 @@ struct MonthSpendingView: View {
 /// 今月と先月の比較（カテゴリごと）
 /// ホームのナビゲーションバーのメニューから開く画面（以前は「その他」に並んでいたもの）
 enum HomeTool: String, Hashable, Identifiable {
-    case quickLine, bulkUpdate, tempIncome, mail, transactions, favorites, tags, reasonExpense, reasonSalary, rebalance, eventGoals, review, allocation
+    case notices, quickLine, bulkUpdate, tempIncome, mail, transactions, favorites, tags, reasonExpense, reasonSalary, rebalance, eventGoals, review, allocation
     var id: String { rawValue }
     @ViewBuilder func view(month: String) -> some View {
         switch self {
+        case .notices: NoticesView()
         case .quickLine: QuickLineView()
         case .bulkUpdate: FinancialUpdatesView(kind: "banks")
         case .tempIncome: TempIncomeHistoryView()
