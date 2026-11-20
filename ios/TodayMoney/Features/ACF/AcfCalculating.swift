@@ -101,3 +101,25 @@ struct AcfRecalcPill: View {
         .transition(.move(edge: .top).combined(with: .opacity))
     }
 }
+
+/// 計算が終わった後、カードを上から順に、下からふわっと浮かび上がらせる
+struct AcfReveal: ViewModifier {
+    var index: Int
+    @State private var shown = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    func body(content: Content) -> some View {
+        content
+            .opacity(shown ? 1 : 0)
+            .offset(y: shown ? 0 : 36)
+            .scaleEffect(shown ? 1 : 0.96, anchor: .top)
+            .blur(radius: shown ? 0 : 6)
+            .onAppear {
+                guard !shown else { return }
+                if reduceMotion { shown = true; return }
+                withAnimation(.spring(response: 0.55, dampingFraction: 0.82).delay(0.06 + Double(index) * 0.07)) { shown = true }
+            }
+    }
+}
+extension View {
+    func acfReveal(_ index: Int) -> some View { modifier(AcfReveal(index: index)) }
+}

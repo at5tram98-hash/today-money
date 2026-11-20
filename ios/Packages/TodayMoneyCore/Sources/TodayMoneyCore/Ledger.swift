@@ -362,6 +362,21 @@ public extension MoneyDocument {
             map[st.key] = st
         }
         for ex in plannedCardExtras(paymentMonth: month) {
+            // 同じカード・同じ請求月の請求を探す（支払日を手で直していると key が違うので、請求月で合わせる）
+            let sameBill = order.first { k in map[k].map { $0.cardId == ex.cardId && $0.billingMonth == ex.billingMonth && !$0.planned } ?? false }
+            // 請求額を「確定」「支払済み」にした請求は、入力した金額がすべて。予定（未記録の固定支払いなど）を足さない
+            // （Web 版 mm3PaymentCardItems は足してしまい、入力した額と違う金額になる）
+            if let k = sameBill, let b = map[k], b.baseStatus == .confirmed || b.baseStatus == .paid { continue }
+            if let k = sameBill, k != ex.key, var old = map[k] {
+                let baseAmount = old.amount
+                old.amount = baseAmount + ex.amount
+                old.outstandingAmount = baseAmount + ex.amount
+                old.plannedAmount += ex.amount
+                old.plannedLabels += ex.plannedLabels
+                old.status = .estimated
+                map[k] = old
+                continue
+            }
             if var old = map[ex.key] {
                 let baseStatus = old.baseStatus, baseAmount = old.amount
                 old.settledBaseAmount = baseStatus == .paid ? baseAmount : 0

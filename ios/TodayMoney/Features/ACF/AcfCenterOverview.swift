@@ -11,14 +11,14 @@ struct AcfOverviewTab: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                AcfIndexCard(f: f)
-                AcfTodayCard(f: f)
-                if f.cashShortage > 0 || f.reserveShortage > 0 { AcfShortageBanner(f: f) }
-                AcfBalanceCard(f: f)
-                AcfLivingBudgetCard(f: f)
-                AcfRiskCarousel(f: f)
-                AcfConfidenceCard(f: f)
-                AcfBreakdownCard(f: f)
+                AcfIndexCard(f: f).acfReveal(0)
+                AcfTodayCard(f: f).acfReveal(1)
+                if f.cashShortage > 0 || f.reserveShortage > 0 { AcfShortageBanner(f: f).acfReveal(2) }
+                AcfBalanceCard(f: f).acfReveal(3)
+                AcfLivingBudgetCard(f: f).acfReveal(4)
+                AcfRiskCarousel(f: f).acfReveal(5)
+                AcfConfidenceCard(f: f).acfReveal(6)
+                AcfBreakdownCard(f: f).acfReveal(7)
             }
             .padding(.horizontal, 16)
             .padding(.top, 4)

@@ -108,3 +108,22 @@ final class LedgerCompatTests: XCTestCase {
         for c in list("spentDate") { XCTAssertEqual(doc.spent(on: str(c["date"])), num(c["out"]), str(c["date"])) }
     }
 }
+
+/// 確定した請求に、未記録の固定支払い（カード払い）の予定を足さない（PayPay カードで入力した額と違う額が出た不具合）
+final class ConfirmedBillTests: XCTestCase {
+    func testConfirmedBillShownAsEntered() throws {
+        let url = Bundle.module.url(forResource: "card-compat", withExtension: "json", subdirectory: "Fixtures")!
+        let fx = try JSONValue.parse(try Data(contentsOf: url))
+        var d = try MoneyDocument(json: fx["document"]!); let today = str(fx["today"])
+        let id = "card_seed_paypay", c = d.card(id)!
+        // 定期券（カード払いの固定支払い）は記録していないので、見込みのうちは予定として足される
+        let pm = Dates.addMonths(String(today.prefix(7)), 1), bm = d.billingMonth(c, forPaymentMonth: pm)
+        XCTAssertGreaterThan(d.paymentCardItems(month: pm).filter { $0.cardId == id }.reduce(0) { $0 + $1.plannedAmount }, 0)
+        // 支払日を手で別の日にして確定すると、入力した額だけになる
+        d.setCardStatement(id, billingMonth: bm, amount: 38_556, paymentDate: "\(pm)-26", status: .confirmed, today: today)
+        let items = d.paymentCardItems(month: pm).filter { $0.cardId == id }
+        XCTAssertEqual(items.reduce(0) { $0 + $1.amount }, 38_556)
+        XCTAssertEqual(items.count, 1)
+        XCTAssertEqual(d.paymentSummary(month: pm, today: today).statements.filter { $0.cardId == id }.reduce(0) { $0 + $1.amount }, 38_556)
+    }
+}

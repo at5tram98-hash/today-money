@@ -8,13 +8,15 @@ final class NoticeCompatTests: XCTestCase {
         let fx = try JSONValue.parse(try Data(contentsOf: url))
         var d = try MoneyDocument(json: fx["document"]!)
         let today = str(fx["today"]), yesterday = str(fx["yesterday"])
-        d.generateSystemNotices(today: today)
-        d.checkGoalNotice(yesterday, today: today)
+        // 照合データの「今日」の正午（日本時間）に作ったことにする（実行した日に左右されない）
+        let now = Dates.date(today).addingTimeInterval(12 * 3600)
+        d.generateSystemNotices(today: today, now: now)
+        d.checkGoalNotice(yesterday, now: now, today: today)
         let got = (d["notices"]?.arrayValue ?? []).map { "\(str($0["title"]))|\(str($0["message"]))|\(str($0["type"]))|\(str($0["key"]))" }
         let want = fx["notices"]!.arrayValue!.map { "\(str($0["title"]))|\(str($0["message"]))|\(str($0["type"]))|\(str($0["key"]))" }
         XCTAssertEqual(got, want)
         // 同じ日にもう一度作っても増えない
-        d.generateSystemNotices(today: today); d.checkGoalNotice(yesterday, today: today)
+        d.generateSystemNotices(today: today, now: now); d.checkGoalNotice(yesterday, now: now, today: today)
         XCTAssertEqual(d["notices"]?.arrayValue?.count, want.count)
         // 翌日になると昨日のお知らせは消える
         d.pruneExpiredSystemNotices(today: Dates.addDays(today, 1))
