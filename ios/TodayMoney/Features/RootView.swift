@@ -40,7 +40,10 @@ struct RootView: View {
         }
         .overlay(alignment: .top) {
             if let t = model.toast {
-                HStack(spacing: 12) {
+                HStack(spacing: 10) {
+                    Image(systemName: model.undoToast ? "checkmark.circle.fill" : "info.circle.fill")
+                        .font(.title3).foregroundStyle(model.undoToast ? Color.green : Color.accentColor)
+                        .symbolEffect(.bounce, value: t)
                     Text(t).font(.subheadline.weight(.semibold)).lineLimit(2)
                     if model.undoToast, model.undoReason != nil {
                         Button("元に戻す") { model.undoToast = false; model.undo() }
@@ -51,7 +54,7 @@ struct RootView: View {
                 .background(.regularMaterial, in: Capsule())
                 .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
                 .padding(.top, 8).padding(.horizontal, 16)
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .transition(.move(edge: .top).combined(with: .opacity).combined(with: .scale(scale: 0.8, anchor: .top)))
                 .task(id: t) {
                     try? await Task.sleep(for: .seconds(model.undoToast ? 4.5 : 2.4))
                     withAnimation { model.toast = nil; model.undoToast = false }

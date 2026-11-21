@@ -282,7 +282,7 @@ struct AcfBalanceCard: View {
             .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 4)) { v in AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [2, 3])); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
             .chartXSelection(value: $scrub)
             .onChange(of: current?.date) { _, d in if d != nil { Feedback.selection() } }
-            .frame(height: 220)
+            .frame(height: 220).revealFromLeading(delay: 0.2)
             .animation(.snappy, value: range)
             .accessibilityLabel("残高の予測。最低 \(f.minForecastBalance.yen)")
             HStack(spacing: 14) {
@@ -362,7 +362,7 @@ struct AcfLivingBudgetCard: View {
                 .chartLegend(position: .top, alignment: .trailing)
                 .chartXSelection(value: $scrub)
                 .onChange(of: scrub) { _, s in if s != nil { Feedback.selection() } }
-                .frame(height: 150)
+                .frame(height: 150).growFromBottom(delay: 0.3)
             }
         }
     }

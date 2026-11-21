@@ -5,6 +5,7 @@ import TodayMoneyCore
 struct AccountsView: View {
     @Environment(AppModel.self) private var model
     @State private var sheet: Sheet?
+    @State private var billing: String?
     enum Sheet: Identifiable { case bank(String?), card(String?), debit(String?)
         var id: String { switch self { case .bank(let i): return "b\(i ?? "")"; case .card(let i): return "c\(i ?? "")"; case .debit(let i): return "d\(i ?? "")" } }
     }
@@ -20,6 +21,13 @@ struct AccountsView: View {
                             Label { Text(b.name).foregroundStyle(.primary); if !b.label.isEmpty { Text(b.label) } } icon: { Image(systemName: "building.columns.fill").foregroundStyle(.blue) }
                         }
                     }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button { model.entryMode = .bank } label: { Label("残高", systemImage: "yensign.circle") }.tint(.green)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button { sheet = .bank(b.id) } label: { Label("編集", systemImage: "pencil") }.tint(.blue)
+                        Button { model.openAcf(.accounts) } label: { Label("見通し", systemImage: "chart.line.uptrend.xyaxis") }.tint(.teal)
+                    }
                 }
                 .onMove { from, to in model.commit("口座の並べ替え") { var l = $0.banks; l.move(fromOffsets: from, toOffset: to); $0.banks = l } }
                 .tint(.primary)
@@ -34,6 +42,12 @@ struct AccountsView: View {
                             Label { Text(c.name).foregroundStyle(.primary); Text("引落 \(doc.bank(c.bankId)?.name ?? "未設定")") } icon: { Image(systemName: "creditcard.fill").foregroundStyle(.purple) }
                         }
                     }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button { billing = c.id } label: { Label("請求額", systemImage: "square.and.pencil") }.tint(.purple)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button { sheet = .card(c.id) } label: { Label("編集", systemImage: "pencil") }.tint(.blue)
+                    }
                 }
                 .onMove { from, to in model.commit("カードの並べ替え") { var l = $0.cards; l.move(fromOffsets: from, toOffset: to); $0.cards = l } }
                 .tint(.primary)
@@ -44,12 +58,14 @@ struct AccountsView: View {
                     Button { sheet = .debit(d.id) } label: {
                         Label { Text(d.name).foregroundStyle(.primary); Text("紐づく口座 \(doc.bank(d.bankId)?.name ?? "未設定")") } icon: { Image(systemName: "creditcard.and.123").foregroundStyle(.teal) }
                     }
+                    .swipeActions { Button { sheet = .debit(d.id) } label: { Label("編集", systemImage: "pencil") }.tint(.blue) }
                 }
                 .tint(.primary)
                 Button { sheet = .debit(nil) } label: { Label("デビットカードを追加", systemImage: "plus") }
             } header: { Text("デビットカード") }
         }
         .navigationTitle("口座とカード")
+        .sheet(item: Binding(get: { billing.map(IdBox.init) }, set: { billing = $0?.id })) { b in NavigationStack { CardBillingEditor(cardId: b.id, billingMonth: nil) } }
         .toolbar { EditButton() }
         .sheet(item: $sheet) { s in
             NavigationStack {

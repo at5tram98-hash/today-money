@@ -44,6 +44,7 @@ struct SalaryMonthView: View {
             .padding(.bottom, 90)
         }
         .background(Color(.systemGroupedBackground))
+        .refreshable { await model.refresh() }
         .navigationTitle("給与")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -191,7 +192,7 @@ struct SalaryMonthView: View {
                             .onEnded { _ in scrub = nil })
                 }
             }
-            .frame(height: 170)
+            .frame(height: 170).growFromBottom()
         }
     }
 
@@ -233,39 +234,40 @@ struct SalaryMonthView: View {
                 Spacer()
                 NavigationLink { ReasonAnalysisView(kind: "salary", month: month) } label: { Text("分析 ›").font(.subheadline.weight(.semibold)) }
             }
-            VStack(spacing: 0) {
-                let rows = doc.salaryEmployerRows(month, today: today)
-                if rows.isEmpty { Text("勤務先がありません。").font(.footnote).foregroundStyle(.secondary).padding() }
-                ForEach(Array(rows.enumerated()), id: \.element.id) { i, r in
-                    if i > 0 { Divider().padding(.leading, 16) }
+            // 勤務先は横にめくるカード（推移のグラフを大きく見せる）
+            let rows = doc.salaryEmployerRows(month, today: today)
+            if rows.isEmpty {
+                Text("勤務先がありません。").font(.footnote).foregroundStyle(.secondary).padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            } else {
+                PagedCarousel(items: rows, widthRatio: rows.count == 1 ? 1 : 0.82) { r in
                     let color = colorIndex[r.employer.id].map(ChartPalette.color) ?? .gray
                     NavigationLink { EmployerTermsView(employerId: r.employer.id) } label: {
-                        // 上段：名前・推移・金額、下段：日付と状態・時給と交通費（横に詰めない）
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack(spacing: 12) {
-                                Text(r.employer.name).font(.body.weight(.semibold)).foregroundStyle(.primary).lineLimit(2)
-                                Spacer(minLength: 6)
-                                Sparkline(points: r.series.enumerated().map { ValuePoint(date: String($0.offset), value: $0.element) }, tint: color)
-                                    .frame(width: 56, height: 24)
-                                VStack(alignment: .trailing, spacing: 1) {
-                                    Text(r.records.isEmpty ? "—" : r.amount.yen).font(.body.weight(.semibold)).monospacedDigit().foregroundStyle(.primary).fixedSize()
-                                    Text(r.records.isEmpty ? "—" : "\(r.pct)%").font(.caption.weight(.semibold)).foregroundStyle(color)
-                                }
-                                Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary)
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Circle().fill(color).frame(width: 10, height: 10)
+                                Text(r.employer.name).font(.headline).foregroundStyle(.primary).lineLimit(1)
+                                Spacer()
+                                Text(r.records.isEmpty ? "—" : "\(r.pct)%").font(.subheadline.weight(.bold)).foregroundStyle(color)
                             }
+                            if r.records.isEmpty { Text("—").font(.title2.weight(.bold)).foregroundStyle(.secondary) }
+                            else { CountingYen(value: r.amount, font: .title2.weight(.bold)) }
+                            Sparkline(points: r.series.enumerated().map { ValuePoint(date: String($0.offset), value: $0.element) }, tint: color)
+                                .frame(height: 44)
                             Text(r.records.isEmpty ? "この月の給与は未登録" : (r.date.isEmpty ? r.status : "\(Format.dayLabel(r.date))・\(r.status)"))
                                 .font(.caption).foregroundStyle(r.status.contains("未確認") ? .orange : .secondary)
                             Text("時給 \(r.employer.hourly.yen)・交通費 \(r.employer.transport.yen)\(r.employer.transportUnit == "per_shift" ? "／勤務" : "")")
                                 .font(.caption2).foregroundStyle(.secondary)
                         }
-                        .padding(.horizontal, 16).padding(.vertical, 12)
-                        .contentShape(Rectangle())
+                        .padding(14)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                     }
-                    .buttonStyle(CardPressStyle())
-                    .accessibilityElement(children: .combine)
+                    .buttonStyle(PressScale())
                 }
+                .padding(.horizontal, -16)
             }
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
     }
 
@@ -314,6 +316,28 @@ struct SalaryRecordsView: View {
                             Text(doc.expectedOrReceived(r, today: today).yen).monospacedDigit().font(.body.weight(.semibold))
                         }
                     }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        if r.status != "入金済" {
+                            Button {
+                                let id = r.id
+                                model.commit("給与を入金済みにする") { d in
+                                    var l = d.salaryRecords
+                                    guard let i = l.firstIndex(where: { $0.id == id }) else { return }
+                                    l[i].status = "入金済"; l[i].actualReceivedDate = Dates.ymd()
+                                    if l[i].receivedAmount == nil { l[i].receivedAmount = d.expectedOrReceived(l[i], today: Dates.ymd()) }
+                                    d.salaryRecords = l
+                                }
+                                model.done("入金済みにしました")
+                            } label: { Label("入金済み", systemImage: "checkmark.circle.fill") }.tint(.green)
+                        }
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            let id = r.id
+                            model.commit("給与の削除") { $0.salaryRecords = $0.salaryRecords.filter { $0.id != id } }
+                            model.done("給与を削除しました")
+                        } label: { Label("削除", systemImage: "trash") }
+                    }
                 }
             } header: { Text("給与（\(s.records.count)件）") }
             if !s.temps.isEmpty {
@@ -332,6 +356,7 @@ struct SalaryRecordsView: View {
                 Section { Text("シフトから計算した給与は、総支給額に交通費を含みます。手で直した金額は7日間、自動の計算で上書きしません。").font(.footnote).foregroundStyle(.secondary) }
             }
         }
+        .refreshable { await model.refresh() }
         .navigationTitle("給与記録")
     }
 }

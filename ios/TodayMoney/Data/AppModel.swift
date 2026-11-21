@@ -121,6 +121,19 @@ final class AppModel {
     }
 
     /// 起動時・画面に戻った時：日付が来た固定支払い・口座への反映を処理する（Web 版 processScheduled）
+    /// 引っぱって更新：日付の切り替わり・予定の反映・お知らせ・通知・ウィジェットをやり直し、ACF を計算し直させる
+    func refresh() async {
+        let started = Date()
+        runScheduled()
+        revision += 1
+        await Notifications.reschedule(doc: doc)
+        WidgetBridge.publish(doc: doc)
+        // すぐ終わっても、引っぱった手応えが分かるよう少しだけ待つ
+        let wait = 0.6 - Date().timeIntervalSince(started)
+        if wait > 0 { try? await Task.sleep(for: .seconds(wait)) }
+        Feedback.play(.sync)
+    }
+
     func runScheduled() {
         let now = Date(), today = Dates.ymd(now)
         var next = doc

@@ -133,6 +133,13 @@ struct TempIncomeHistoryView: View {
                         Text("\(t.date)・\(str(t.raw["toType"]) == "bank" ? (doc.bank(str(t.raw["bankId"]))?.name ?? "銀行口座") : "未入金・手持ち")").font(.caption)
                     }
                 }
+                .swipeActions {
+                    Button(role: .destructive) {
+                        let id = t.id
+                        model.commit("臨時収入の削除") { $0.tempIncomes = $0.tempIncomes.filter { $0.id != id } }
+                        model.done("臨時収入を削除しました")
+                    } label: { Label("削除", systemImage: "trash") }
+                }
             }
         }
         .navigationTitle("臨時収入")
@@ -257,7 +264,12 @@ struct FavoritesView: View {
         List {
             Section {
                 if favs.isEmpty { Text("まだありません。下の一覧の ☆ で追加します（8件まで）。").foregroundStyle(.secondary) }
-                ForEach(favs, id: \.self) { k in NavigationLink { FavoriteDestination(key: k) } label: { Label(doc.favoriteLabel(k) ?? k, systemImage: "star.fill") } }
+                ForEach(favs, id: \.self) { k in
+                    NavigationLink { FavoriteDestination(key: k) } label: { Label(doc.favoriteLabel(k) ?? k, systemImage: "star.fill") }
+                        .swipeActions {
+                            Button(role: .destructive) { model.commit("お気に入りから外す") { $0.setFavorites(favs.filter { $0 != k }) } } label: { Label("外す", systemImage: "star.slash") }
+                        }
+                }
                     .onMove { from, to in var l = favs; l.move(fromOffsets: from, toOffset: to); model.commit("お気に入りの並べ替え") { $0.setFavorites(l) } }
                     .onDelete { idx in var l = favs; l.remove(atOffsets: idx); model.commit("お気に入り") { $0.setFavorites(l) } }
             } header: { Text("お気に入り（\(favs.count)/8）") }
@@ -307,6 +319,14 @@ struct TagsView: View {
                 ForEach(doc.tags) { t in
                     NavigationLink { TagItemsView(tagId: t.id) } label: {
                         HStack { Circle().fill(Color(hex: t.color)).frame(width: 12, height: 12); Text(t.name); Spacer(); Text("\(doc.taggableItems.filter { doc.tagsFor($0.ref).contains(t.id) }.count)件").foregroundStyle(.secondary) }
+                    }
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            let id = t.id
+                            model.commit("タグの削除") { $0.tags = $0.tags.filter { $0.id != id } }
+                            model.done("タグを削除しました")
+                        } label: { Label("削除", systemImage: "trash") }
+                        Button { editing = t } label: { Label("編集", systemImage: "pencil") }.tint(.blue)
                     }
                 }
             }

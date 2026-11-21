@@ -98,7 +98,7 @@ struct AcfMonthStrip: View {
             .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 2)) { v in AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)).font(.system(size: 9)) } } } }
             .chartXSelection(value: $scrub)
             .onChange(of: scrub) { _, s in if let s { focus = s; Feedback.selection() } }
-            .frame(height: 64)
+            .frame(height: 64).growFromBottom()
         }
         .padding(12)
         .acfSurface(radius: 18)
@@ -298,7 +298,7 @@ struct AcfEventsTab: View {
             .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
             .chartXSelection(value: $flowScrub)
             .onChange(of: sel?.date) { _, d in if d != nil { Feedback.selection() } }
-            .frame(height: 140)
+            .frame(height: 140).growFromBottom(delay: 0.1)
         }
         .padding(14)
         .acfSurface(radius: 22)
@@ -556,6 +556,9 @@ struct AcfSimulateTab: View {
                 }
                 .disabled(amount <= 0 || running)
             }
+            if running && after == nil {
+                Section("結果") { SkeletonCard(chart: true, lines: 3).padding(.vertical, 4) }
+            }
             if let a = after {
                 Section {
                     chart(a)
@@ -598,7 +601,7 @@ struct AcfSimulateTab: View {
             .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
             .chartXSelection(value: $scrub)
             .onChange(of: b0?.date) { _, d in if d != nil { Feedback.selection() } }
-            .frame(height: 180)
+            .frame(height: 180).revealFromLeading()
             HStack(spacing: 12) {
                 HStack(spacing: 4) { Capsule().fill(.teal).frame(width: 14, height: 3); Text("いま") }
                 HStack(spacing: 4) { Capsule().fill(.pink).frame(width: 14, height: 3); Text("使うと") }
