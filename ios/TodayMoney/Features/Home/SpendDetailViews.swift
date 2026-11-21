@@ -69,6 +69,7 @@ struct DaySpendingView: View {
                 NavigationLink { MonthSpendingView(month: String(date.prefix(7))) } label: { Label("\(Format.monthLabel(String(date.prefix(7))))の詳細分析", systemImage: "chart.bar.xaxis") }
             }
         }
+        .refreshable { await model.refresh() }
         .navigationTitle("1日の支出")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -136,7 +137,7 @@ struct DaySpendingView: View {
                 }
             }
             .onChange(of: scrub) { _, s in if s != nil { Feedback.selection() } }
-            .frame(height: 150)
+            .frame(height: 150).growFromBottom()
             .accessibilityLabel("14日間の支出。平均 \(avg.rounded().yen)")
         }
         .padding(.vertical, 4)
@@ -215,6 +216,7 @@ struct MonthCompareView: View {
                 NavigationLink { MonthSpendingView(month: month) } label: { Label("\(Format.monthLabel(month))の詳細分析", systemImage: "chart.bar.xaxis") }
             }
         }
+        .refreshable { await model.refresh() }
         .navigationTitle("今月の比較")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -251,7 +253,7 @@ struct MonthCompareView: View {
             .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
             .chartXSelection(value: $scrubDay)
             .onChange(of: scrubDay) { _, d in if d != nil { Feedback.selection() } }
-            .frame(height: 190)
+            .frame(height: 190).revealFromLeading()
             .accessibilityLabel("今月の累計 \(p.currentToDay.yen)、先月の同じ日まで \(p.previousToDay.yen)")
         }
         .padding(.vertical, 4)
@@ -293,7 +295,7 @@ struct CategoryDetailView: View {
                 }
                 .chartXAxis { AxisMarks { v in AxisValueLabel { if let m = v.as(String.self) { Text("\(Dates.parts(m + "-01").m)月") } } } }
                 .chartYAxis(.hidden)
-                .frame(height: 140)
+                .frame(height: 140).growFromBottom()
                 if c.sixMonthAverage > 0 {
                     let d = c.amount - c.sixMonthAverage
                     LabeledContent("前の月の平均", value: c.sixMonthAverage.rounded().yen)
@@ -321,6 +323,7 @@ struct CategoryDetailView: View {
                 Button { editing = true } label: { Label("カテゴリを編集", systemImage: "pencil") }
             }
         }
+        .refreshable { await model.refresh() }
         .navigationTitle(name)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $editing) { NavigationStack { CategoryEditor(categoryId: cat.id) } }

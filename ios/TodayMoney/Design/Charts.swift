@@ -94,6 +94,7 @@ struct ValueLineChart: View {
             .chartXSelection(value: $scrubDate)
             .onChange(of: current) { _, c in selected = c; if c != nil { Feedback.selection() } }
             .frame(height: height)
+            .revealFromLeading()
             .accessibilityLabel("推移のグラフ。\(Format.dayLabel(points.first!.date))の\(points.first!.value.yen)から\(Format.dayLabel(points.last!.date))の\(points.last!.value.yen)")
         }
     }
@@ -115,6 +116,7 @@ struct Sparkline: View {
             }
             .chartXAxis(.hidden).chartYAxis(.hidden)
             .chartYScale(domain: lo...(hi == lo ? lo + 1 : hi))
+            .revealFromLeading(delay: 0.15)
             .accessibilityHidden(true)
         }
     }
@@ -124,6 +126,7 @@ struct Sparkline: View {
 struct DonutChart<Center: View>: View {
     var parts: [(name: String, value: Double)]
     var center: Center
+    @State private var p: CGFloat = 0
     init(parts: [(name: String, value: Double)], @ViewBuilder center: () -> Center) { self.parts = parts; self.center = center() }
     var body: some View {
         Chart(Array(parts.enumerated()), id: \.offset) { i, p in
@@ -131,7 +134,11 @@ struct DonutChart<Center: View>: View {
                 .cornerRadius(3)
                 .foregroundStyle(ChartPalette.color(i))
         }
-        .chartBackground { _ in center }
+        .chartBackground { _ in center.opacity(p) }
+        .scaleEffect(0.7 + 0.3 * p)
+        .rotationEffect(.degrees(-120 * (1 - p)))
+        .opacity(Double(p))
+        .appearProgress($p, duration: 1.0)
         .accessibilityLabel(parts.map { "\($0.name) \($0.value.yen)" }.joined(separator: "、"))
     }
 }
@@ -146,6 +153,8 @@ struct StatTile: View {
         VStack(alignment: .leading, spacing: 3) {
             Text(title).font(.caption).foregroundStyle(.secondary)
             Text(value).font(.subheadline.weight(.bold)).monospacedDigit().foregroundStyle(tint).lineLimit(1).minimumScaleFactor(0.6)
+                .contentTransition(.numericText())
+                .animation(.snappy, value: value)
             if let sub { Text(sub).font(.caption2).foregroundStyle(tint == .primary ? .secondary : tint).monospacedDigit() }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

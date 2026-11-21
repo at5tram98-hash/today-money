@@ -47,7 +47,15 @@ struct FinancialUpdatesView: View {
             }
             Section {
                 if rows.isEmpty { Text("この条件の登録はありません。").foregroundStyle(.secondary) }
-                ForEach(rows) { r in rowView(r) }
+                ForEach(rows) { r in
+                    rowView(r)
+                        .swipeActions(edge: .leading) {
+                            if drafts[r.id] != nil { Button { withAnimation(.snappy) { drafts[r.id] = nil } } label: { Label("元に戻す", systemImage: "arrow.uturn.backward") }.tint(.orange) }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button { detail = r.sheet } label: { Label("詳しく", systemImage: "slider.horizontal.3") }.tint(.blue)
+                        }
+                }
             } header: {
                 HStack {
                     Text(kind == "banks" ? "口座" : kind == "cards" ? "\(Format.monthLabel(month))支払いの請求" : "\(Format.monthLabel(month))の給与")

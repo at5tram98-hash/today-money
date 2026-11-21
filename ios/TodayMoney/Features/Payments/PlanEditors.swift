@@ -33,7 +33,7 @@ struct FixedPaymentsView: View {
                 }
                 .chartXAxis { AxisMarks { v in AxisValueLabel { if let m = v.as(String.self) { Text("\(Dates.parts(m + "-01").m)") } } } }
                 .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
-                .frame(height: 120)
+                .frame(height: 120).growFromBottom()
                 .accessibilityLabel("今後12か月の固定支払い")
             }
             Section("この月の支払日") {
@@ -79,6 +79,14 @@ struct FixedPaymentsView: View {
                         }
                     }
                     .tint(.primary)
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            let id = f.id
+                            model.commit("固定支払いの削除") { $0.fixedPayments = $0.fixedPayments.filter { $0.id != id } }
+                            model.done("固定支払いを削除しました")
+                        } label: { Label("削除", systemImage: "trash") }
+                        Button { editing = f.id } label: { Label("編集", systemImage: "pencil") }.tint(.blue)
+                    }
                 }
             }
         }
@@ -201,7 +209,21 @@ struct LargeExpensesView: View {
             }
             if !others.isEmpty {
                 Section("完了・延期・中止") {
-                    ForEach(others) { p in NavigationLink { LargeExpenseDetailView(planId: p.id) } label: { row(p, doc: doc, today: today) } }
+                    ForEach(others) { p in
+                        NavigationLink { LargeExpenseDetailView(planId: p.id) } label: { row(p, doc: doc, today: today) }
+                            .swipeActions(edge: .leading) {
+                                if p.status != "completed" {
+                                    Button {
+                                        let id = p.id
+                                        model.commit("大型支出を予定に戻す") { d in
+                                            var l = d.largeExpensePlans
+                                            if let i = l.firstIndex(where: { $0.id == id }) { l[i].status = "planned"; d.largeExpensePlans = l }
+                                        }
+                                        model.done("予定に戻しました")
+                                    } label: { Label("予定に戻す", systemImage: "arrow.uturn.backward") }.tint(.orange)
+                                }
+                            }
+                    }
                 }
             }
         }
@@ -391,7 +413,10 @@ struct LargeExpenseDetailView: View {
                         if let impact {
                             impactView(impact.with, impact.without)
                         } else {
-                            HStack(spacing: 8) { ProgressView(); Text("ACFを計算しています…").foregroundStyle(.secondary) }
+                            VStack(alignment: .leading, spacing: 10) {
+                                ForEach(0..<3, id: \.self) { _ in HStack { SkeletonBar(width: 90); Spacer(); SkeletonBar(width: 70); SkeletonBar(width: 80) } }
+                            }
+                            .padding(.vertical, 4).shimmer()
                         }
                     } header: { Text("ACFへの影響") } footer: {
                         Text(p.priority == "required" ? "この計画を入れた場合と入れない場合の見通しです。" : "検討中の計画は通常ACFに含みません。必須にした場合の見通しと比べています。")

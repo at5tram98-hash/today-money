@@ -30,12 +30,15 @@ struct HomeScreen: View {
                     if DayClosing.inRange(date, today: today) { dayCloseCard(doc, today: today) }
                     HomeSectionTitle(title: "記録")
                     recentCard(doc, today: today)
-                    HStack(spacing: 12) {
-                        smallCard("今月の比較", "arrow.left.arrow.right", .indigo) { MonthCompareView(month: month) } content: { compareContent(doc, month: month) }
-                        smallCard("大型支出", "cart.fill", .pink) { LargeExpensesView() } content: { largeContent(doc) }
+                    // 今月の比較・大型支出・旅行の目標は横にめくるカードにまとめる（縦に長くしない）
+                    PagedCarousel(items: HomeMini.allCases, widthRatio: 0.62) { m in
+                        switch m {
+                        case .compare: smallCard("今月の比較", "arrow.left.arrow.right", .indigo) { MonthCompareView(month: month) } content: { compareContent(doc, month: month) }
+                        case .large: smallCard("大型支出", "cart.fill", .pink) { LargeExpensesView() } content: { largeContent(doc) }
+                        case .goals: smallCard("旅行・プレゼント", "gift.fill", .purple) { EventGoalsView() } content: { goalsContent(doc, today: today) }
+                        }
                     }
-                    .fixedSize(horizontal: false, vertical: true)
-                    smallCard("旅行・プレゼントの目標", "gift.fill", .purple) { EventGoalsView() } content: { goalsContent(doc, today: today) }
+                    .padding(.horizontal, -16)
                     HomeSectionTitle(title: "ハイライト")
                     highlights(doc, month: month)
                 }
@@ -43,6 +46,7 @@ struct HomeScreen: View {
                 .padding(.bottom, 110)
             }
             .background(Color(.systemGroupedBackground))
+            .refreshable { await model.refresh() }
             .entryButton()
             .navigationTitle("ホーム")
             .toolbar { homeToolbar(doc, today: today) }
@@ -152,11 +156,12 @@ struct HomeScreen: View {
                         Image(systemName: "chevron.right").font(.subheadline.weight(.bold)).foregroundStyle(.tertiary)
                     }
                     if goal > 0 {
-                        Text((spent > goal ? spent : goal - spent).yen).moneyFont(40, weight: .bold).monospacedDigit()
+                        CountUpYen(value: spent > goal ? spent : goal - spent).moneyFont(40, weight: .bold)
+                            .animation(.easeOut(duration: 0.7), value: spent)
                             .foregroundStyle(spent > goal ? .red : .primary).contentTransition(.numericText())
                         Text(spent > goal ? "目標を \((spent - goal).yen) 超えています（使った額 \(spent.yen)）" : "目標 \(goal.yen)・使った額 \(spent.yen)")
                             .font(.footnote).foregroundStyle(spent > goal ? .red : .secondary)
-                        ProgressView(value: min(1, spent / max(goal, 1))).tint(spent > goal ? .red : Theme.spending)
+                        GrowBar(fraction: min(1, spent / max(goal, 1)), tint: spent > goal ? .red : Theme.spending, height: 6, delay: 0.2)
                     } else {
                         Text(spent.yen).moneyFont(40, weight: .bold).monospacedDigit()
                         Text(spent > 0 ? "使った額・目標は未設定" : "まだ使っていません・目標は未設定").font(.footnote).foregroundStyle(.secondary)
@@ -355,10 +360,12 @@ struct HomeScreen: View {
         if list.isEmpty {
             Text("支出や給与を記録すると、先月との比べ方がここに出ます。").font(.footnote).foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).cardSurface()
         }
-        ForEach(list) { h in
-            NavigationLink { highlightDestination(h, month: month) } label: { HighlightCard(h: h) }
+        // ハイライトは横にめくるカード（4枚を縦に並べると長いので）
+        PagedCarousel(items: list, widthRatio: 0.88) { h in
+            NavigationLink { highlightDestination(h, month: month) } label: { HighlightCard(h: h).frame(maxHeight: .infinity, alignment: .top) }
                 .buttonStyle(CardPressStyle())
         }
+        .padding(.horizontal, -16)
     }
 
     @ViewBuilder private func highlightDestination(_ h: Highlight, month: String) -> some View {
@@ -373,6 +380,7 @@ struct HomeScreen: View {
 /// ハイライトの1枚（ヘルスケアのハイライトのように：色のついた見出し・短い文・2本の棒）
 struct HighlightCard: View {
     let h: Highlight
+    @State private var p: CGFloat = 0
     private var tint: Color { ["pace": .orange, "average": .blue, "category": .purple, "balance": .green][h.key] ?? .accentColor }
     private var symbol: String { ["pace": "cart.fill", "average": "chart.bar.fill", "category": "square.grid.2x2.fill", "balance": "wallet.bifold.fill"][h.key] ?? "sparkles" }
 
@@ -396,7 +404,7 @@ struct HighlightCard: View {
                             if !b.unit.isEmpty { Text(b.unit).font(.subheadline.weight(.semibold)).foregroundStyle(.secondary) }
                         }
                         GeometryReader { g in
-                            let w = max(64, g.size.width * abs(b.value) / maxV)
+                            let w = max(64, g.size.width * abs(b.value) / maxV * (i == 0 ? p : min(1, p * 1.2)))
                             ZStack(alignment: .leading) {
                                 RoundedRectangle(cornerRadius: 6, style: .continuous)
                                     .fill(i == 0 ? AnyShapeStyle(tint.gradient) : AnyShapeStyle(Color(.systemGray4)))
@@ -411,6 +419,7 @@ struct HighlightCard: View {
             }
         }
         .cardSurface()
+        .appearProgress($p, delay: 0.15)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(h.label)。\(h.text)。" + h.bars.map { "\($0.label) \($0.value.yen)\($0.unit)" }.joined(separator: "、"))
         .accessibilityHint("詳しく見る")
@@ -472,7 +481,7 @@ struct MonthSpendingView: View {
                         .chartXAxis { AxisMarks(values: [1, 10, 20, days]) { v in AxisValueLabel { if let n = v.as(Int.self) { Text("\(n)日") } } } }
                         .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
                         .chartXSelection(value: Binding(get: { pickedDay }, set: { v in if v != pickedDay { pickedDay = v; if v != nil { Feedback.selection() } } }))
-                        .frame(height: 150)
+                        .frame(height: 150).growFromBottom()
                     }
                     .padding(.top, 4)
                 }
@@ -508,7 +517,7 @@ struct MonthSpendingView: View {
                             .annotation(position: .top) { Text(compactYen(p.value)).font(.caption2.weight(.semibold)).foregroundStyle(.secondary) }
                     }
                     .chartYAxis(.hidden)
-                    .frame(height: 140)
+                    .frame(height: 140).growFromBottom(delay: 0.1)
                 }
                 .cardSurface()
 
@@ -531,40 +540,49 @@ struct MonthSpendingView: View {
             .padding(.bottom, 90)
         }
         .background(Color(.systemGroupedBackground))
+        .refreshable { await model.refresh() }
         .navigationTitle("月間詳細分析")
         .navigationBarTitleDisplayMode(.inline)
     }
 
     private func pad(_ d: Int) -> String { d < 10 ? "0\(d)" : "\(d)" }
 
+    /// 高額支出 TOP5：順位つきのカードを横にめくる
     @ViewBuilder private func topFive(_ a: MonthAnalysis, doc: MoneyDocument) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("高額支出 TOP5").font(.title3.bold())
-            VStack(spacing: 0) {
-                if a.top.isEmpty { Text("支出がありません。").font(.footnote).foregroundStyle(.secondary).padding() }
-                ForEach(Array(a.top.enumerated()), id: \.element.id) { i, t in
-                    if i > 0 { Divider().padding(.leading, 56) }
-                    NavigationLink { TransactionEditor(draft: t, isNew: false) } label: {
-                        HStack(spacing: 12) {
-                            rank(i, t, doc: doc)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(t.merchant.isEmpty ? t.category : t.merchant).font(.subheadline.weight(.semibold)).foregroundStyle(.primary).lineLimit(2)
-                                Text("\(t.category)・\(Format.shortDay(t.date))").font(.caption).foregroundStyle(.secondary)
+            if a.top.isEmpty {
+                Text("支出がありません。").font(.footnote).foregroundStyle(.secondary).padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            } else {
+                let maxV = max(1, a.top.first?.amount ?? 1)
+                PagedCarousel(items: Array(a.top.enumerated()).map { RankedTx(rank: $0.offset, t: $0.element) }, widthRatio: 0.7) { x in
+                    NavigationLink { TransactionEditor(draft: x.t, isNew: false) } label: {
+                        let cat = doc.category(named: x.t.category)
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Text("\(x.rank + 1)").font(.title.weight(.heavy)).foregroundStyle(x.rank == 0 ? .orange : .secondary)
+                                Spacer()
+                                CategoryIcon(category: cat, size: 30)
                             }
-                            Spacer()
-                            Text(t.amount.yen).font(.subheadline.weight(.semibold)).monospacedDigit().foregroundStyle(.primary)
-                            Image(systemName: "chevron.right").font(.caption.weight(.bold)).foregroundStyle(.tertiary)
+                            Text(x.t.merchant.isEmpty ? x.t.category : x.t.merchant).font(.headline).foregroundStyle(.primary).lineLimit(2)
+                            Text("\(x.t.category)・\(Format.shortDay(x.t.date))").font(.caption).foregroundStyle(.secondary)
+                            Spacer(minLength: 0)
+                            CountingYen(value: x.t.amount, font: .title2.weight(.bold))
+                            GrowBar(fraction: x.t.amount / maxV, tint: Color(hex: cat.color), delay: Double(x.rank) * 0.08)
                         }
-                        .padding(.horizontal, 14).padding(.vertical, 10).contentShape(Rectangle())
+                        .padding(14)
+                        .frame(height: 190)
+                        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                     }
-                    .buttonStyle(CardPressStyle())
-                    .transactionActions(t)
+                    .buttonStyle(PressScale())
                 }
+                .padding(.horizontal, -16)
             }
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
-
     }
+
 
     private func rank(_ i: Int, _ t: Transaction, doc: MoneyDocument) -> some View {
         let color = Color(hex: doc.category(named: t.category).color)
@@ -664,6 +682,11 @@ struct MonthSpendingView: View {
 }
 
 /// 今月と先月の比較（カテゴリごと）
+struct RankedTx: Identifiable { var rank: Int; var t: Transaction; var id: String { t.id } }
+
+/// ホームの横にめくる小さなカード
+enum HomeMini: String, CaseIterable, Identifiable { case compare, large, goals; var id: String { rawValue } }
+
 /// ホームのナビゲーションバーのメニューから開く画面（以前は「その他」に並んでいたもの）
 enum HomeTool: String, Hashable, Identifiable {
     case notices, quickLine, bulkUpdate, tempIncome, mail, transactions, favorites, tags, reasonExpense, reasonSalary, rebalance, eventGoals, review, allocation

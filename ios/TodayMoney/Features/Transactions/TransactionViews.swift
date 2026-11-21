@@ -48,6 +48,7 @@ struct TransactionListView: View {
                 .accessibilityLabel("カテゴリで絞り込む")
             }
         }
+        .refreshable { await model.refresh() }
         .navigationTitle(title)
         .onAppear { if !loaded { category = initialCategory; loaded = true } }
     }

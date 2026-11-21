@@ -52,6 +52,7 @@ struct AcfCenterView: View {
         ZStack(alignment: .bottom) {
             NavigationStack(path: $path) {
                 content(tab)
+                    .refreshable { await model.refresh(); data.key = ""; await load(force: true) }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(.systemGroupedBackground).ignoresSafeArea())
                     .id(tab)
@@ -212,6 +213,7 @@ struct AcfCenterBar: View {
                         } label: {
                             VStack(spacing: 2) {
                                 Image(systemName: t.symbol).font(.system(size: 17, weight: .semibold)).frame(height: 22)
+                                    .symbolEffect(.bounce, value: t == selection)
                                 Text(t.label).font(.system(size: 10, weight: .semibold))
                             }
                             .foregroundStyle(t == selection ? Color.teal : Color.primary.opacity(0.75))

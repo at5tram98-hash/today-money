@@ -36,6 +36,7 @@ struct AssetsView: View {
             }
         }
         .background(Color(.systemGroupedBackground))
+        .refreshable { await model.refresh() }
         .navigationTitle("資産")
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
@@ -428,6 +429,7 @@ struct BankDetailView: View {
                 .padding(.bottom, 90)
             }
             .background(Color(.systemGroupedBackground))
+            .refreshable { await model.refresh() }
             .navigationTitle(b.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

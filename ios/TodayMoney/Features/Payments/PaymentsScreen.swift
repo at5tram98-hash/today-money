@@ -6,6 +6,8 @@ import TodayMoneyCore
 struct PaymentsScreen: View {
     @Environment(AppModel.self) private var model
     @State private var adding: AddKind?
+    @State private var billing: IdBox?
+    @State private var editCard: IdBox?
 
     enum AddKind: String, Identifiable { case card, debit, fixed, large; var id: String { rawValue } }
 
@@ -58,6 +60,15 @@ struct PaymentsScreen: View {
                         NavigationLink { CardDetailView(cardId: n.cardId, paymentMonth: month) } label: {
                             StatementRow(st: n, today: today, showDays: true)
                         }
+                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                            if let c = doc.card(n.cardId), n.status != .paid {
+                                Button { markPaid(c, n) } label: { Label("支払済み", systemImage: "checkmark.circle.fill") }.tint(.green)
+                            }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button { billing = IdBox(id: "\(n.cardId)|\(n.billingMonth)") } label: { Label("請求額", systemImage: "square.and.pencil") }.tint(.blue)
+                            Button { model.openAcf(.events) } label: { Label("予定", systemImage: "calendar") }.tint(.teal)
+                        }
                     } else {
                         Text("この月の引落予定はありません").foregroundStyle(.secondary)
                     }
@@ -65,11 +76,25 @@ struct PaymentsScreen: View {
 
                 Section {
                     if doc.cards.isEmpty { Text("カードはまだありません").foregroundStyle(.secondary) }
-                    ForEach(doc.cards) { c in
-                        let items = s.statements.filter { $0.cardId == c.id }
-                        NavigationLink { CardDetailView(cardId: c.id, paymentMonth: month) } label: {
-                            CardWatchRow(card: c, items: items, series: doc.paymentCardSeries(c.id, month: month))
+                    else {
+                        // 財布のように横にめくるカード（券面・今月の請求・推移）
+                        PagedCarousel(items: doc.cards, widthRatio: 0.8) { c in
+                            let items = s.statements.filter { $0.cardId == c.id }
+                            NavigationLink { CardDetailView(cardId: c.id, paymentMonth: month) } label: {
+                                WalletCard(card: c, items: items, series: doc.paymentCardSeries(c.id, month: month))
+                            }
+                            .buttonStyle(PressScale())
+                            .contextMenu {
+                                if let st = items.first(where: { $0.status != .paid && $0.amount > 0 }) {
+                                    Button { markPaid(c, st) } label: { Label("支払済みにする", systemImage: "checkmark.circle") }
+                                }
+                                Button { billing = IdBox(id: "\(c.id)|\(items.first?.billingMonth ?? "")") } label: { Label("請求額を更新", systemImage: "square.and.pencil") }
+                                Button { editCard = IdBox(id: c.id) } label: { Label("カードを編集", systemImage: "slider.horizontal.3") }
+                            }
                         }
+                        .padding(.vertical, 8)
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
                     }
                     NavigationLink { FinancialUpdatesView(kind: "cards") } label: {
                         Label("請求額をまとめて更新", systemImage: "square.and.pencil")
@@ -105,6 +130,12 @@ struct PaymentsScreen: View {
                     .accessibilityLabel("追加")
                 }
             }
+            .sheet(item: $billing) { b in
+                let p = b.id.split(separator: "|", omittingEmptySubsequences: false).map(String.init)
+                NavigationStack { CardBillingEditor(cardId: p[0], billingMonth: p[1].isEmpty ? nil : p[1], paymentMonth: model.paymentMonth) }
+            }
+            .sheet(item: $editCard) { b in NavigationStack { CardEditor(cardId: b.id) } }
+            .refreshable { await model.refresh() }
             .sheet(item: $adding) { kind in
                 NavigationStack {
                     switch kind {
@@ -116,6 +147,13 @@ struct PaymentsScreen: View {
                 }
             }
         }
+    }
+
+    /// 左にスワイプ：この月の請求を支払済みにする（口座残高には反映済み扱い。反映したい時はカード詳細から）
+    private func markPaid(_ c: Card, _ st: CardStatement) {
+        let id = c.id, bm = st.billingMonth
+        model.change("カードの支払済み") { d, now, today in d.markCardStatementPaid(id, billingMonth: bm, paid: true, balanceMode: "reconciled", now: now, today: today) }
+        model.done("\(c.name)を支払済みにしました")
     }
 
     private func tile(_ title: String, _ v: Double) -> some View {
@@ -158,6 +196,52 @@ struct StatementRow: View {
             Spacer()
             Text((st.outstandingAmount > 0 ? st.outstandingAmount : st.amount).yen).font(.body.weight(.semibold)).monospacedDigit().fixedSize()
         }
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// 横にめくる券面のカード（支払いタブ）
+struct WalletCard: View {
+    var card: Card
+    var items: [CardStatement]
+    var series: [Double]
+    @State private var shine: CGFloat = -0.6
+    var body: some View {
+        let total = items.reduce(0) { $0 + $1.amount }
+        let paid = !items.isEmpty && items.allSatisfy { $0.status == .paid }
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                RoundedRectangle(cornerRadius: 3).fill(LinearGradient(colors: [Color(hex: "#F5D77A"), Color(hex: "#B8923A")], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 30, height: 22)
+                Spacer()
+                if paid { Label("支払済み", systemImage: "checkmark.seal.fill").font(.caption2.weight(.bold)).padding(.horizontal, 7).padding(.vertical, 3).background(.white.opacity(0.22), in: Capsule()) }
+            }
+            Spacer(minLength: 4)
+            Text(card.name).font(.subheadline.weight(.semibold)).lineLimit(1).opacity(0.9)
+            CountingYen(value: total, font: .system(size: 28, weight: .heavy, design: .rounded))
+            HStack {
+                Text(items.first.map { "\(Format.shortDay($0.paymentDate))引落・\(items.contains { $0.plannedAmount > 0 } ? "予定込み" : $0.status.label)" } ?? "この月の請求なし")
+                    .font(.caption).opacity(0.85)
+                Spacer()
+                if series.contains(where: { $0 > 0 }) {
+                    Sparkline(points: series.enumerated().map { ValuePoint(date: "\($0.offset)", value: $0.element) }, tint: .white)
+                        .frame(width: 60, height: 20)
+                }
+            }
+        }
+        .foregroundStyle(.white)
+        .padding(16)
+        .frame(height: 170)
+        .background(CardArt.gradient(card), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay {
+            // 表面を光が一度だけ流れる
+            LinearGradient(colors: [.clear, .white.opacity(0.25), .clear], startPoint: .topLeading, endPoint: .bottomTrailing)
+                .offset(x: shine * 400)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .allowsHitTesting(false)
+        }
+        .shadow(color: CardArt.colors(card)[1].opacity(0.35), radius: 10, y: 6)
+        .onAppear { withAnimation(.easeInOut(duration: 1.1).delay(0.2)) { shine = 0.9 } }
         .accessibilityElement(children: .combine)
     }
 }
@@ -336,7 +420,7 @@ struct AcfPaymentsPreview: View {
                 }
                 .chartXAxis { AxisMarks(values: .stride(by: .day, count: 14)) { AxisValueLabel(format: .dateTime.month(.defaultDigits).day()) } }
                 .chartYAxis { AxisMarks(position: .trailing, values: .automatic(desiredCount: 3)) { v in AxisGridLine(); AxisValueLabel { if let n = v.as(Double.self) { Text(compactYen(n)) } } } }
-                .frame(height: 120)
+                .frame(height: 120).revealFromLeading()
                 .accessibilityLabel("残高予測のグラフ")
                 let risk = f.risks.first { $0.action == "day" }
                 Text(risk.map { $0.title } ?? "登録済みの期間内に不足日はありません").font(.footnote).foregroundStyle(risk == nil ? Color.secondary : Color.red)

@@ -16,7 +16,17 @@ struct AcfLoader<Content: View>: View {
     var body: some View {
         Group {
             if let forecast { content(forecast) }
-            else { AcfCalculatingInline() }
+            else {
+                // 計算が終わるまで、結果と同じくらいの形を出しておく（画面が跳ねない）
+                VStack(alignment: .leading, spacing: 10) {
+                    SkeletonBar(width: 140, height: 28)
+                    SkeletonBar(height: 10)
+                    SkeletonBar(width: 200, height: 10)
+                }
+                .padding(.vertical, 4)
+                .shimmer()
+                .accessibilityLabel("ACFを計算しています")
+            }
         }
         .task(id: "\(model.revision)|\(model.today)|\(lightweight)|\(settings.map { "\($0.json)" } ?? "")") {
             let doc = model.doc, today = model.today, light = lightweight, s = settings
@@ -35,12 +45,14 @@ func acfStatusColor(_ s: String) -> Color { s == "不足" ? .red : s == "危険"
 struct AcfCompareBars: View {
     var x: AcfIndex
     var large = false
+    @State private var p: CGFloat = 0
     var body: some View {
         let mx = max(1, x.have, x.need)
         VStack(alignment: .leading, spacing: 8) {
             bar("使えるお金", x.have, mx, .green, large ? "残高 \(x.balance.yen)・入金予定 \(x.income.yen)" : nil)
             bar("予定の支払い", x.need, mx, .orange, large ? "支払い \(x.out.yen)・最低残高 \(x.reserve.yen)" : nil)
         }
+        .appearProgress($p, delay: 0.15)
     }
     private func bar(_ label: String, _ v: Double, _ mx: Double, _ c: Color, _ sub: String?) -> some View {
         VStack(alignment: .leading, spacing: 3) {
@@ -48,7 +60,7 @@ struct AcfCompareBars: View {
             GeometryReader { g in
                 ZStack(alignment: .leading) {
                     Capsule().fill(.quaternary)
-                    Capsule().fill(c.gradient).frame(width: max(6, g.size.width * v / mx))
+                    Capsule().fill(c.gradient).frame(width: max(6, g.size.width * v / mx * p))
                 }
             }.frame(height: large ? 12 : 8)
             if let sub { Text(sub).font(.caption).foregroundStyle(.secondary) }

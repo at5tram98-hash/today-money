@@ -252,10 +252,26 @@ struct EventGoalsView: View {
                         }
                     }.padding(.vertical, 4)
                 }
+                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    if g.status != "completed" {
+                        Button { setGoal(g.id, "completed") } label: { Label("完了", systemImage: "checkmark.seal.fill") }.tint(.green)
+                    }
+                }
+                .swipeActions(edge: .trailing) {
+                    Button(role: .destructive) { setGoal(g.id, "cancelled") } label: { Label("中止", systemImage: "xmark.circle") }
+                }
             }
         }
         .navigationTitle("旅行・プレゼント")
         .sheet(isPresented: $adding) { NavigationStack { EventGoalEditor(goal: nil) } }
+    }
+    private func setGoal(_ id: String, _ status: String) {
+        model.commit(status == "completed" ? "目標を完了" : "目標を中止") { d in
+            var l = d.eventGoals
+            guard let i = l.firstIndex(where: { $0.id == id }) else { return }
+            l[i].status = status; d.eventGoals = l
+        }
+        model.done(status == "completed" ? "完了にしました" : "中止にしました")
     }
     private func metric(_ t: String, _ v: Double) -> some View {
         VStack(alignment: .leading) { Text(t).font(.caption2).foregroundStyle(.secondary); Text(v.yen).font(.subheadline.bold()).monospacedDigit() }.frame(maxWidth: .infinity, alignment: .leading)
@@ -454,6 +470,18 @@ struct TransferPlansView: View {
                         Text("\(Format.dayLabel(p.date))・\(p.status == "planned" ? "予定" : p.status == "executed" ? "実行済み" : "取消済み")").font(.caption).foregroundStyle(.secondary)
                         if p.status == "planned" { Button("実行済みにする") { target = (p, true) }.buttonStyle(.bordered) }
                         if p.status == "executed" { Button("実行を取り消す") { target = (p, false) }.buttonStyle(.bordered) }
+                    }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        if p.status == "planned" { Button { target = (p, true) } label: { Label("実行済み", systemImage: "checkmark.circle.fill") }.tint(.green) }
+                    }
+                    .swipeActions(edge: .trailing) {
+                        if p.status == "planned" {
+                            Button(role: .destructive) {
+                                let id = p.id
+                                model.commit("振替計画の削除") { $0.transferPlans = $0.transferPlans.filter { $0.id != id } }
+                                model.done("振替計画を削除しました")
+                            } label: { Label("削除", systemImage: "trash") }
+                        }
                     }
                 }
             }

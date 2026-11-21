@@ -35,6 +35,7 @@ struct CardDetailView: View {
     @State private var applyBank = false
     @State private var scrubMonth: String?
     @State private var reconcile = false
+    @State private var gauge: CGFloat = 0
 
     var body: some View {
         let doc = model.doc, today = model.today
@@ -90,6 +91,7 @@ struct CardDetailView: View {
                     }
                 }
             }
+            .refreshable { await model.refresh() }
             .navigationTitle(c.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .topBarTrailing) { Button("編集") { editing = true } } }
@@ -177,7 +179,7 @@ struct CardDetailView: View {
                 }
             }
             .onChange(of: scrubMonth) { _, m in if m != nil { Feedback.selection() } }
-            .frame(height: 150)
+            .frame(height: 150).growFromBottom()
             .accessibilityLabel(rows.map { "\(Format.monthLabel($0.month)) \($0.amount.yen)" }.joined(separator: "、"))
         }
         .padding(.vertical, 4)
@@ -198,7 +200,7 @@ struct CardDetailView: View {
             }
             .fixedSize(horizontal: false, vertical: true)
             if c.limit > 0 {
-                let used = min(1, ex.max / c.limit), now = min(1, ex.current / c.limit)
+                let used = min(1, ex.max / c.limit) * gauge, now = min(1, ex.current / c.limit) * gauge
                 VStack(alignment: .leading, spacing: 4) {
                     GeometryReader { g in
                         ZStack(alignment: .leading) {
@@ -208,10 +210,11 @@ struct CardDetailView: View {
                         }
                     }
                     .frame(height: 8)
+                    .appearProgress($gauge, delay: 0.25)
                     HStack {
                         Text("いまの利用 \(ex.current.yen)")
                         Spacer()
-                        Text("最大 \(ex.max.yen)（\(Int((used * 100).rounded()))%）")
+                        Text("最大 \(ex.max.yen)（\(Int((min(1, ex.max / c.limit) * 100).rounded()))%）")
                     }
                     .font(.caption2).foregroundStyle(.secondary).monospacedDigit()
                 }
